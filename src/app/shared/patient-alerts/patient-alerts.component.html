@@ -1,0 +1,64 @@
+<div id="alerts" tabindex="-1" class="alert_modal highalert_modal">
+    <div class="alerthover_modal border rounded-2 overflow-hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Notifications</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn-close" (click)="close()" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-0">
+                <div class="mt-3 bg-white p-2 rounded-2">
+                    <div class="row quick_order gx-2 horizontalScroll">
+                        <div class="order_block rounded-2 alert" *ngFor="let alert of FetchPatientAlertsDataList">
+                            <div class="block_header p-2 rounded-top d-flex align-items-center justify-content-between">
+                                <h5 class="m-0">{{alert.AlertType}}</h5>
+                            </div>
+                            <div class="block_body">
+                                <div class="block_list selected border-bottom p-2 d-flex justify-content-between">
+                                    <div class="d-flex align-items-center gap-1 col-11">
+                                        <div class="col-lg-4 col-md-4">
+                                            {{alert.Alterdate | date: 'dd-MMM-yyyy'}}
+                                             {{alert.Remarks}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+           
+                <div class="modal-header" *ngIf="FetchPatientAlertsobjPatientAllergyList!=''">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9ZM14.6357 14.9314C13.1684 16.326 11.1841 17.1818 9 17.1818C4.48131 17.1818 0.818182 13.5187 0.818182 9C0.818182 6.8682 1.63349 4.92682 2.9693 3.47066C2.98784 3.53491 3.02242 3.5955 3.07305 3.64613L6.69884 7.27191L5.15865 8.82341C5.05292 8.93001 4.99331 9.07389 4.99268 9.22403V12.1943L3.44173 13.7452C3.38809 13.7984 3.34552 13.8617 3.31646 13.9315C3.28741 14.0012 3.27245 14.076 3.27245 14.1516C3.27245 14.2271 3.28741 14.3019 3.31646 14.3717C3.34552 14.4414 3.38809 14.5047 3.44173 14.5579C3.49494 14.6116 3.55823 14.6541 3.62797 14.6832C3.69772 14.7122 3.77252 14.7272 3.84807 14.7272C3.92362 14.7272 3.99842 14.7122 4.06817 14.6832C4.13791 14.6541 4.2012 14.6116 4.25441 14.5579L5.80536 13.007H8.77562C8.92576 13.0063 9.06964 12.9467 9.17624 12.841L10.7277 11.3008L14.25 14.823C14.3546 14.9276 14.5017 14.9637 14.6357 14.9314ZM14.9369 14.6299C14.9691 14.496 14.933 14.349 14.8285 14.2445L11.3084 10.7244L13.8863 8.16526C14.1528 7.89945 14.3642 7.58368 14.5085 7.23603C14.6527 6.88838 14.727 6.51569 14.727 6.1393C14.727 5.76291 14.6527 5.39022 14.5085 5.04257C14.3642 4.69492 14.1528 4.37915 13.8863 4.11334C13.6205 3.84685 13.3047 3.63543 12.9571 3.49117C12.6094 3.34691 12.2367 3.27266 11.8603 3.27266C11.484 3.27266 11.1113 3.34691 10.7636 3.49117C10.416 3.63543 10.1002 3.84685 9.83439 4.11334L7.27526 6.69126L3.65159 3.06758C3.60106 3.01706 3.54061 2.98251 3.47651 2.96394C4.93201 1.63131 6.87104 0.818182 9 0.818182C13.5187 0.818182 17.1818 4.48131 17.1818 9C17.1818 11.1812 16.3283 13.1631 14.9369 14.6299ZM6.13729 9.45867L7.50796 8.08104L8.30695 8.88003L7.44787 9.7391C7.39423 9.7923 7.35166 9.8556 7.3226 9.92534C7.29355 9.99508 7.27859 10.0699 7.27859 10.1454C7.27859 10.221 7.29355 10.2958 7.3226 10.3655C7.35166 10.4353 7.39423 10.4986 7.44787 10.5518C7.50108 10.6054 7.56437 10.648 7.63411 10.677C7.70386 10.7061 7.77866 10.7211 7.85421 10.7211C7.92976 10.7211 8.00456 10.7061 8.07431 10.677C8.14405 10.648 8.20734 10.6054 8.26055 10.5518L9.11962 9.6927L9.9186 10.4917L8.54098 11.8624H6.13729V9.45867ZM8.08504 7.50104L8.88549 8.30149L11.454 5.73296C11.5618 5.62519 11.7079 5.56465 11.8603 5.56465C12.0128 5.56465 12.1589 5.62519 12.2667 5.73296C12.3745 5.84073 12.435 5.98689 12.435 6.1393C12.435 6.2917 12.3745 6.43787 12.2667 6.54564L9.69816 9.11416L10.4986 9.91461L13.0736 7.35259C13.3769 7.02712 13.542 6.59664 13.5342 6.15184C13.5263 5.70704 13.3461 5.28265 13.0316 4.96808C12.717 4.65351 12.2926 4.47332 11.8478 4.46548C11.403 4.45763 10.9725 4.62273 10.6471 4.92601L8.08504 7.50104Z"
+                            fill="#4155BE" />
+                    </svg>
+                    <p class="m-0 ms-2 fw-semibold fs-6">{{langData?.common?.Allergies}}</p>
+                    <div class="actions ms-auto d-flex align-items-center gap-2">
+                        <button class="btn btn-main-outline"
+                            data-bs-dismiss="modal">{{langData?.casesheet?.Acknowledge}}</button>                       
+                    </div>
+                </div>
+                <div class="allergies rounded-3" *ngIf="FetchPatientAlertsobjPatientAllergyList!=''">
+                    <div class="p-3 row mx-0 allergy_table">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr *ngFor="let al of FetchPatientAlertsobjPatientAllergyList;let i=index">
+                                    <td style="width: 15rem;">{{al.Type}}</td>
+                                    <td>{{al.Allergy}}</td>
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                </div>
+    
+           
+        </div>
+    </div>    
+</div>
+

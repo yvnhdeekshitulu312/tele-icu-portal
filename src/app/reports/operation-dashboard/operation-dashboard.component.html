@@ -1,0 +1,785 @@
+<div class="page-header justify-content-start sticky-top shadow-sm">
+    <h2 class="page-heading">Operation KPI Dashboard</h2>
+</div>
+<div class="container-fluid p-0 analytics_graphs populationHealth_graph IP_graph">
+    <div class="p-2">
+        <div class="row g-2 mx-0">
+            <div class="col-2" style="width: 13%;">
+                <div class="left_nav">
+                    <div class="sidebar-container rounded mt-2">
+                        <form [formGroup]="datesForm" class="d-flex flex-column gap-2">
+                            <label class="form-label m-0">From Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="fromPicker" placeholder="From Date"
+                                    formControlName="fromdate" />
+                                <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #fromPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <label class="form-label m-0">To Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="toPicker" placeholder="To Date"
+                                    formControlName="todate" />
+                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #toPicker></mat-datepicker>
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn btn-main-outline w-100 mt-2" (click)="fetchData()">
+                            Fetch
+                        </button>
+                        <button type="button" class="btn btn-outline-danger w-100 mt-2" (click)="clearFilters()">
+                            Clear
+                        </button>
+                    </div>
+                    <div class="sidebar-container rounded mt-2">
+                        <label class="form-label">Location</label>
+                        <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                            <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_9239_2779)">
+                                    <path
+                                        d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                        fill="#368796" />
+                                </g>
+                            </svg>
+                            <input type="text" class="form-control" [matAutocomplete]="roleAuto2" placeholder="Search">
+                            <mat-autocomplete #roleAuto2="matAutocomplete">
+                                <mat-option *ngFor="let item of locations">
+                                    <div (click)="locationOptionClicked($event, item);">
+                                        <mat-checkbox [checked]="item.selected" (change)="toggleLocationSelection(item)"
+                                            (click)="$event.stopPropagation()">
+                                            {{ item.label }}
+                                        </mat-checkbox>
+                                    </div>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-3">
+                        <!-- <div class="totalPatients_card bg-white p-2 py-3 rounded text-center">
+                            <h6 class="m-0 fw-bold">Admissions </h6>
+                            <h3 class="fs-4 fw-bold mt-2">{{(operationalStatistics?.TotalAdmissions | number) || '-'}}
+                            </h3>
+                        </div> -->
+                        <div class="readmissionCard d-flex flex-column border rounded mt-2">
+                           <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                <div class="col text-white text-center py-2 fw-bold"
+                                    style="font-size: 0.9rem;">
+                                Admissions
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom text-center my-1"
+                                        style="font-size: 1.5rem; font-weight: 700;">
+                                        {{operationalStatistics?.TotalAdmissions  | number }}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="readmissionCard d-flex flex-column border rounded mt-2">
+                           <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                <div class="col text-white text-center py-2 fw-bold"
+                                    style="font-size: 0.9rem;">
+                                Discharges
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom text-center my-1"
+                                        style="font-size: 1.5rem; font-weight: 700;">
+                                        {{operationalStatistics?.TotalDischarges  | number }}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="readmissionCard d-flex flex-column border rounded mt-2">
+                           <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                <div class="col text-white text-center py-2 fw-bold"
+                                    style="font-size: 0.9rem;">
+                                Admission Days
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom text-center my-1"
+                                        style="font-size: 1.5rem; font-weight: 700;">
+                                        {{operationalStatistics?.AdmissionDays  | number }}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                         
+
+                         <div class="readmissionCard d-flex flex-column border rounded mt-2">
+                           <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                <div class="col text-white text-center py-2 fw-bold"
+                                    style="font-size: 0.9rem;">
+                                Average Lenth of Stay
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom text-center my-1"
+                                        style="font-size: 1.5rem; font-weight: 700;">
+                                        {{operationalStatistics?.AverageLenthofStay  | number }}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+
+
+                         <div class="readmissionCard d-flex flex-column border rounded mt-2">
+                           <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                <div class="col text-white text-center py-2 fw-bold"
+                                    style="font-size: 0.9rem;">
+                                Bed Turnover Rate
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom text-center my-1"
+                                        style="font-size: 1.5rem; font-weight: 700;">
+                                        {{operationalStatistics?.BedTurnoverRate  | number }}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="readmissionCard d-flex flex-column border rounded mt-2">
+                           <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                <div class="col text-white text-center py-2 fw-bold"
+                                    style="font-size: 0.9rem;">
+                                Surgeries
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom text-center my-1"
+                                        style="font-size: 1.5rem; font-weight: 700;">
+                                        {{operationalStatistics?.TotalSurgeryProcedures  | number }}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+
+                          <div class="readmissionCard d-flex flex-column border rounded mt-2">
+                           <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                <div class="col text-white text-center py-2 fw-bold"
+                                    style="font-size: 0.9rem;">
+                                Surgery Cancellations
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom text-center my-1"
+                                        style="font-size: 1.5rem; font-weight: 700;">
+                                        {{operationalStatistics?.SurgeryCancellation  | number }}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col dashboardHeight">
+                <div class="row mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="row gx-2 mx-0 h-100">
+                            <div class="col-3 mb-2">
+                                <div class="bg-white p-2 h-100 d-flex flex-column justify-content-between border shadow-sm rounded text-center populationCard mb-0">
+                                    <img class="mb-3" style="height: 3rem" src="assets/images/populationDashboard/activePatients.svg" alt="">
+                                    <div class="rounded p-2 text-center populationFooter">
+                                        <h6 class="mb-1 fw-bold fs-6">{{(operationalStatistics?.TotalOutPatient |
+                                            number) || '-'}}</h6>
+                                        <p class="m-0 fw-semibold">ACTIVE PATIENTS</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-2">
+                                <div class="bg-white p-2 h-100 d-flex flex-column justify-content-between border shadow-sm rounded text-center populationCard mb-0">
+                                    <img class="mb-3" style="height: 3rem" src="assets/images/populationDashboard/monthlyVisits.svg" alt="">
+                                    <div class="rounded p-2 text-center populationFooter">
+                                        <h6 class="mb-1 fw-bold fs-6">{{(operationalStatistics?.AvarageMonthlyVisits |
+                                            number) || '-'}}</h6>
+                                        <p class="m-0 fw-semibold">AVERAGE MONTHLY VISITS</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-2">
+                                <div class="bg-white p-2 h-100 d-flex flex-column justify-content-between border shadow-sm rounded text-center populationCard mb-0">
+                                    <img class="mb-3" style="height: 3rem" src="assets/images/populationDashboard/dailyVisits.svg" alt="">
+                                    <div class="rounded p-2 text-center populationFooter">
+                                        <h6 class="mb-1 fw-bold fs-6">{{(operationalStatistics?.AvarageDailyVisits |
+                                            number) || '-'}}</h6>
+                                        <p class="m-0 fw-semibold">AVERAGE DAILY VISITS</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-2">
+                                <div class="bg-white p-2 h-100 d-flex flex-column justify-content-between border shadow-sm rounded text-center populationCard mb-0">
+                                    <img class="mb-3" style="height: 3rem" src="assets/images/populationDashboard/immunization.svg" alt="">
+                                    <div class="rounded p-2 text-center populationFooter">
+                                        <h6 class="mb-1 fw-bold fs-6">{{(operationalStatistics?.TotalImmunization |
+                                            number) || '-'}}</h6>
+                                        <p class="m-0 fw-semibold">IMMUNIZATION</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="bg-white p-2 h-100 d-flex flex-column justify-content-between border shadow-sm rounded text-center populationCard mb-0">
+                                    <img class="mb-3" style="height: 3rem" src="assets/images/populationDashboard/treatmentCost.svg" alt="">
+                                    <div class="rounded p-2 text-center populationFooter">
+                                        <h6 class="mb-1 fw-bold fs-6">{{(operationalStatistics?.AVERAGETREATMENTCOST |
+                                            number:'1.2-2') || '-'}}</h6>
+                                        <p class="m-0 fw-semibold">AVERAGE TREATMENT COST</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="bg-white p-2 h-100 d-flex flex-column justify-content-between border shadow-sm rounded text-center populationCard mb-0">
+                                    <img class="mb-3" style="height: 3rem" src="assets/images/populationDashboard/activeBeds.svg" alt="">
+                                    <div class="rounded p-2 text-center populationFooter">
+                                        <h6 class="mb-1 fw-bold fs-6">{{(operationalStatistics?.ActiveBeds | number) ||
+                                            '-'}}</h6>
+                                        <p class="m-0 fw-semibold">ACTIVE BEDS</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="bg-white p-2 h-100 d-flex flex-column justify-content-between border shadow-sm rounded text-center populationCard mb-0">
+                                    <img class="mb-3" style="height: 3rem" src="assets/images/populationDashboard/activeDoctors.svg" alt="">
+                                    <div class="rounded p-2 text-center populationFooter">
+                                        <h6 class="mb-1 fw-bold fs-6">{{(operationalStatistics?.TotalDoctors | number)
+                                            || '-'}}</h6>
+                                        <p class="m-0 fw-semibold">ACTIVE DOCTORS</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-3">
+                                <div class="bg-white p-2 h-100 d-flex flex-column justify-content-between border shadow-sm rounded text-center populationCard mb-0">
+                                    <img class="mb-3" style="height: 3rem" src="assets/images/populationDashboard/activeNurses.svg" alt="">
+                                    <div class="rounded p-2 text-center populationFooter">
+                                        <h6 class="mb-1 fw-bold fs-6">{{(operationalStatistics?.TotalNurse | number) ||
+                                            '-'}}</h6>
+                                        <p class="m-0 fw-semibold">ACTIVE NURSES</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="rounded bg-white d-flex flex-column border shadow-sm h-100">
+                            <div class="d-flex justify-content-between align-items-center p-2">
+                                <h6 class="m-0 fw-semibold" style="color: #383A88;">OPD Visits</h6>
+                                <div class="custom_tooltip custom_tooltip_left" (click)="exportOPDVisitsToCSV()"
+                                    style="cursor: pointer;">
+                                    <svg _ngcontent-dyy-c491=""
+                                        class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                        aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export"
+                                        role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
+                                        data-fa-i2svg="">
+                                        <path fill="#8967B3"
+                                            d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                        </path>
+                                    </svg>
+                                    <div class="tooltip">
+                                        <p class="m-0">Export</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="surgery_records graph_fixed_alter_list rounded-top-0 d-flex flex-column justify-content-between h-100">
+                                <div class="fixed_alter_header rounded-top-0">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-8 m-0">
+                                            <p class="fw-semibold fs-9">Month</p>
+                                        </div>
+                                        <div class="col-4 m-0">
+                                            <p class="fw-semibold fs-9 d-flex align-items-center"
+                                                style="cursor: pointer;" (click)="sortOPDVisits()">
+                                                OPD Patients
+                                                <span class="ms-1" style="font-size: 12px;">{{
+                                                    getOPDVisitsSortIcon()
+                                                    }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body" style="height: 200px;">
+                                    <div class="row gx-2 p-2 alter_div mx-0" *ngFor="let item of opdVisitsData">
+                                        <div class="col-8">
+                                            <p class="m-0 fw-semibold">
+                                                {{ item.MonthName }}
+                                            </p>
+                                        </div>
+                                        <div class="col-4">
+                                            <p class="m-0">{{ item.Total | number }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_footer bg-grey-50 border-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-8 m-0">
+                                            <p class="fw-semibold">Total</p>
+                                        </div>
+                                        <div class="col-4 m-0 d-flex gap-1 align-items-center">
+                                            <p class="fw-semibold">{{ getTotalOPDVisitsCount() | number }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 row mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded text-center h-100">
+                            <apx-chart *ngIf="opdVisitsChartData" [series]="opdVisitsChartData.series"
+                                [chart]="opdVisitsChartData.chart" [xaxis]="opdVisitsChartData.xaxis"
+                                [yaxis]="opdVisitsChartData.yaxis" [dataLabels]="opdVisitsChartData.dataLabels"
+                                [plotOptions]="opdVisitsChartData.plotOptions" [fill]="opdVisitsChartData.fill"
+                                [title]="opdVisitsChartData.title" [tooltip]="opdVisitsChartData.tooltip"
+                                [stroke]="opdVisitsChartData.stroke" [colors]="opdVisitsChartData.colors"
+                                [legend]="opdVisitsChartData.legend">
+                            </apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="bg-white p-2 border shadow-sm rounded d-flex align-items-center justify-content-center">
+                            <apx-chart *ngIf="payerStayChartData" [series]="payerStayChartData.series"
+                                [chart]="payerStayChartData.chart" [labels]="payerStayChartData.labels"
+                                [colors]="payerStayChartData.colors" [fill]="payerStayChartData.fill"
+                                [stroke]="payerStayChartData.stroke" [legend]="payerStayChartData.legend"
+                                [tooltip]="payerStayChartData.tooltip" [dataLabels]="payerStayChartData.dataLabels"
+                                [title]="payerStayChartData.title" [responsive]="payerStayChartData.responsive"
+                                [plotOptions]="payerStayChartData.plotOptions || {}">
+                            </apx-chart>
+                        </div>
+                        <div class="mt-2">
+                            <div class="rounded bg-white d-flex flex-column border shadow-sm h-100">
+                                <div class="d-flex justify-content-between align-items-center p-2">
+                                    <h6 class="m-0 fw-semibold" style="color: #383A88;">Stay By Payers
+                                        Wise</h6>
+                                    <div class="custom_tooltip custom_tooltip_left"
+                                        (click)="exportPayerStayDataToCSV()" style="cursor: pointer;">
+                                        <svg _ngcontent-dyy-c491=""
+                                            class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                            aria-hidden="true" focusable="false" data-prefix="fas"
+                                            data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 576 512" data-fa-i2svg="">
+                                            <path fill="#8967B3"
+                                                d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                            </path>
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p class="m-0">Export</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="surgery_records graph_fixed_alter_list rounded-top-0 d-flex flex-column justify-content-between h-100 border shadow-sm">
+                                    <div class="fixed_alter_header rounded-top-0">
+                                        <div class="row gx-2 p-2 mx-0">
+                                            <div class="col-8 m-0">
+                                                <p class="fw-semibold fs-9">BillType</p>
+                                            </div>
+                                            <div class="col-4 m-0">
+                                                <p class="fw-semibold fs-9 d-flex align-items-center"
+                                                    style="cursor: pointer;" (click)="sortPayerStayData()">
+                                                    Days
+                                                    <span class="ms-1" style="font-size: 12px;">{{
+                                                        getPayerStaySortIcon()
+                                                        }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fixed_alter_body" style="height: 150px;">
+                                        <div class="row gx-2 p-2 alter_div mx-0" *ngFor="let item of payerStayData">
+                                            <div class="col-8">
+                                                <p class="m-0 fw-semibold">
+                                                    {{ item.CompanyType }}
+                                                </p>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="m-0">{{ item.AdmissionDays | number }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fixed_alter_footer bg-grey-50 border-top">
+                                        <div class="row gx-2 p-2 mx-0">
+                                            <div class="col-8 m-0">
+                                                <p class="fw-semibold">Total</p>
+                                            </div>
+                                            <div class="col-4 m-0 d-flex gap-1 align-items-center">
+                                                <p class="fw-semibold">{{ getTotalPayerStayCount() | number }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded h-100">
+                            <h6 class="mb-2 title_clr fw-bold">Clinic Visits by Department</h6>
+                            <apx-chart *ngIf="clinicVisitsChartData" [series]="clinicVisitsChartData.series"
+                                [chart]="clinicVisitsChartData.chart" [plotOptions]="clinicVisitsChartData.plotOptions"
+                                [dataLabels]="clinicVisitsChartData.dataLabels"></apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="rounded bg-white d-flex flex-column border shadow-sm h-100">
+                            <div class="d-flex justify-content-between align-items-center p-2">
+                                <h6 class="m-0 fw-semibold" style="color: #383A88;">Clinic Visits</h6>
+                                <div class="custom_tooltip custom_tooltip_left" (click)="exportClinicVisitsToCSV()"
+                                    style="cursor: pointer;">
+                                    <svg _ngcontent-dyy-c491=""
+                                        class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                        aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export"
+                                        role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
+                                        data-fa-i2svg="">
+                                        <path fill="#8967B3"
+                                            d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                        </path>
+                                    </svg>
+                                    <div class="tooltip">
+                                        <p class="m-0">Export</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="surgery_records graph_fixed_alter_list rounded-top-0 d-flex flex-column justify-content-between h-100">
+                                <div class="fixed_alter_header rounded-top-0">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-8 m-0">
+                                            <p class="fw-semibold fs-9">Specialisation</p>
+                                        </div>
+                                        <div class="col-4 m-0">
+                                            <p class="fw-semibold fs-9 d-flex align-items-center"
+                                                style="cursor: pointer;" (click)="sortClinicVisits()">
+                                                Total Patients
+                                                <span class="ms-1" style="font-size: 12px;">{{
+                                                    getClinicVisitsSortIcon()
+                                                    }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body" style="height: 300px;">
+                                    <div class="row gx-2 p-2 alter_div mx-0" *ngFor="let item of clinicVisitsData">
+                                        <div class="col-8">
+                                            <p class="m-0 fw-semibold">
+                                                {{ item.Department }}
+                                            </p>
+                                        </div>
+                                        <div class="col-4">
+                                            <p class="m-0">{{ item.Total | number }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_footer bg-grey-50 border-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-8 m-0">
+                                            <p class="fw-semibold">Total</p>
+                                        </div>
+                                        <div class="col-4 m-0 d-flex gap-1 align-items-center">
+                                            <p class="fw-semibold">{{ getTotalClinicVisitsCount() | number }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 row mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded text-center">
+                            <apx-chart *ngIf="bedTurnOverChartData" [series]="bedTurnOverChartData.series"
+                                [chart]="bedTurnOverChartData.chart" [xaxis]="bedTurnOverChartData.xaxis"
+                                [yaxis]="bedTurnOverChartData.yaxis" [dataLabels]="bedTurnOverChartData.dataLabels"
+                                [plotOptions]="bedTurnOverChartData.plotOptions" [fill]="bedTurnOverChartData.fill"
+                                [title]="bedTurnOverChartData.title" [tooltip]="bedTurnOverChartData.tooltip"
+                                [stroke]="bedTurnOverChartData.stroke" [colors]="bedTurnOverChartData.colors"
+                                [legend]="bedTurnOverChartData.legend" [markers]="bedTurnOverChartData.markers">
+                            </apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="rounded bg-white d-flex flex-column border shadow-sm h-100">
+                            <div class="d-flex justify-content-between align-items-center p-2">
+                                <h6 class="m-0 fw-semibold" style="color: #383A88;">Average Length of Stay and Bed Turnover
+                                </h6>
+                                <div class="custom_tooltip custom_tooltip_left" (click)="exportBedTurnOverDataToCSV()"
+                                    style="cursor: pointer;">
+                                    <svg _ngcontent-dyy-c491=""
+                                        class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7" aria-hidden="true"
+                                        focusable="false" data-prefix="fas" data-icon="file-export" role="img"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg="">
+                                        <path fill="#8967B3"
+                                            d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                        </path>
+                                    </svg>
+                                    <div class="tooltip">
+                                        <p class="m-0">Export</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="surgery_records graph_fixed_alter_list rounded-top-0 d-flex flex-column justify-content-between h-100">
+                                <div class="fixed_alter_header rounded-top-0">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-2">
+                                            <p class="fw-semibold">Month</p>
+                                        </div>
+                                        <div class="col-2">
+                                            <p class="fw-semibold">Admission days</p>
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="fw-semibold">Discharges</p>
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="fw-semibold">Average Length of Stay</p>
+                                        </div>
+                                        <div class="col-2">
+                                            <p class="fw-semibold">Turnover Rate</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body" style="height: 300px;">
+                                    <div class="row gx-2 p-2 alter_div mx-0" *ngFor="let item of bedTurnOverData">
+                                        <div class="col-2">
+                                            <p class="fw-semibold">{{item.MonthName}}</p>
+                                        </div>
+                                        <div class="col-2">
+                                            <p class="">{{item.AdmissionDays | number}}</p>
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="">{{item.TotalDischarges | number}}</p>
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="">{{item.AverageLenthofStay | number}}</p>
+                                        </div>
+                                        <div class="col-2">
+                                            <p class="">{{item.BedTurnOver | number}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_footer bg-grey-50 border-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-4 m-0">
+                                            <p class="fw-semibold">Total</p>
+                                        </div>
+                                        <div class="col-2 m-0">
+                                            <p class="fw-semibold">{{ getBedTurnOverCount('AdmissionDays') | number }}</p>
+                                        </div>
+                                        <div class="col-2 m-0">
+                                            <p class="fw-semibold">{{ getBedTurnOverCount('TotalDischarges') | number }}</p>
+                                        </div>
+                                        <div class="col-2 m-0">
+                                            <p class="fw-semibold">{{ getBedTurnOverCount('AverageLenthofStay') | number }}
+                                            </p>
+                                        </div>
+                                        <div class="col-2 m-0">
+                                            <p class="fw-semibold">{{ getBedTurnOverCount('BedTurnOver') | number }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="row mx-0 gx-2">
+                        <div class="col-8">
+                            <div class="bg-white p-2 border shadow-sm rounded h-100">
+                                <h6 class="mb-2 title_clr fw-bold">Average Lenth of Stay - Ward Wise</h6>
+                                <apx-chart *ngIf="wardwiseChartData" [series]="wardwiseChartData.series"
+                                    [chart]="wardwiseChartData.chart" [plotOptions]="wardwiseChartData.plotOptions"
+                                    [dataLabels]="wardwiseChartData.dataLabels"></apx-chart>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="rounded bg-white d-flex flex-column border shadow-sm h-100">
+                                <div class="d-flex justify-content-between align-items-center p-2">
+                                    <h6 class="m-0 fw-semibold" style="color: #383A88;">Average Lenth of Stay - Ward
+                                        Wise</h6>
+                                    <div class="custom_tooltip custom_tooltip_left" (click)="exportWardwiseDataToCSV()"
+                                        style="cursor: pointer;">
+                                        <svg _ngcontent-dyy-c491=""
+                                            class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                            aria-hidden="true" focusable="false" data-prefix="fas"
+                                            data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 576 512" data-fa-i2svg="">
+                                            <path fill="#8967B3"
+                                                d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                            </path>
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p class="m-0">Export</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="surgery_records graph_fixed_alter_list rounded-top-0 d-flex flex-column justify-content-between h-100">
+                                    <div class="fixed_alter_header rounded-top-0">
+                                        <div class="row gx-2 p-2 mx-0">
+                                            <div class="col-8 m-0">
+                                                <p class="fw-semibold fs-9">Ward</p>
+                                            </div>
+                                            <div class="col-4 m-0">
+                                                <p class="fw-semibold fs-9 d-flex align-items-center"
+                                                    style="cursor: pointer;" (click)="sortWardWiseData()">
+                                                    Ave. Length Of Stay
+                                                    <span class="ms-1" style="font-size: 12px;">{{
+                                                        getWardwiseSortIcon()
+                                                        }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fixed_alter_body" style="height: 300px;">
+                                        <div class="row gx-2 p-2 alter_div mx-0" *ngFor="let item of wardwiseData">
+                                            <div class="col-8">
+                                                <p class="m-0 fw-semibold">
+                                                    {{ item.DischargedWard }}
+                                                </p>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="m-0">{{ item.AverageLenthofStay | number }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fixed_alter_footer bg-grey-50 border-top">
+                                        <div class="row gx-2 p-2 mx-0">
+                                            <div class="col-8 m-0">
+                                                <p class="fw-semibold">Total</p>
+                                            </div>
+                                            <div class="col-4 m-0 d-flex gap-1 align-items-center">
+                                                <p class="fw-semibold">{{ getTotalWardWiseCount() | number }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 row mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded text-center h-100">
+                            <apx-chart *ngIf="surgeryChartData" [series]="surgeryChartData.series"
+                                [chart]="surgeryChartData.chart" [xaxis]="surgeryChartData.xaxis"
+                                [yaxis]="surgeryChartData.yaxis" [dataLabels]="surgeryChartData.dataLabels"
+                                [plotOptions]="surgeryChartData.plotOptions" [fill]="surgeryChartData.fill"
+                                [title]="surgeryChartData.title" [tooltip]="surgeryChartData.tooltip"
+                                [stroke]="surgeryChartData.stroke" [colors]="surgeryChartData.colors"
+                                [legend]="surgeryChartData.legend" [markers]="surgeryChartData.markers">
+                            </apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="rounded bg-white d-flex flex-column border shadow-sm h-100">
+                            <div class="d-flex justify-content-between align-items-center p-2">
+                                <h6 class="m-0 fw-semibold" style="color: #383A88;">Surgery Booking VS Cancellations
+                                </h6>
+                                <div class="custom_tooltip custom_tooltip_left" (click)="exportSurgeryDataToCSV()"
+                                    style="cursor: pointer;">
+                                    <svg _ngcontent-dyy-c491=""
+                                        class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7" aria-hidden="true"
+                                        focusable="false" data-prefix="fas" data-icon="file-export" role="img"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg="">
+                                        <path fill="#8967B3"
+                                            d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                        </path>
+                                    </svg>
+                                    <div class="tooltip">
+                                        <p class="m-0">Export</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="surgery_records graph_fixed_alter_list rounded-top-0 d-flex flex-column justify-content-between h-100">
+                                <div class="fixed_alter_header rounded-top-0">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-5">
+                                            <p class="fw-semibold">Department</p>
+                                        </div>
+                                        <div class="col-2">
+                                            <p class="fw-semibold">Surgery Booking</p>
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="fw-semibold">Cancellation</p>
+                                        </div>
+                                        <div class="col-1">
+                                            <p class="fw-semibold">Rate</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body" style="height: 330px;">
+                                    <div class="row gx-2 p-2 alter_div mx-0" *ngFor="let item of surgeryData">
+                                        <div class="col-5">
+                                            <p class="fw-semibold">{{item.Department}}</p>
+                                        </div>
+                                        <div class="col-2">
+                                            <p class="">{{item.TotalSurgeries | number}}</p>
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="">{{item.TotalCancelSurgeries | number}}</p>
+                                        </div>
+                                        <div class="col-1">
+                                            <p class="">{{getCancellationRatio(item) | number : '1.2-2'}}%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_footer bg-grey-50 border-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-5 m-0">
+                                            <p class="fw-semibold">Total</p>
+                                        </div>
+                                        <div class="col-2 m-0">
+                                            <p class="fw-semibold">{{ getSurgeryCount('TotalSurgeries') | number }}</p>
+                                        </div>
+                                        <div class="col-3 m-0">
+                                            <p class="fw-semibold">{{ getSurgeryCount('TotalCancelSurgeries') | number }}
+                                            </p>
+                                        </div>
+                                        <div class="col-1 m-0">
+                                            <p class="fw-semibold">{{ getTotalSurgeryRatio() | number : '1.2-2'}}%
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{ errorMsg }}</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-main-outline" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

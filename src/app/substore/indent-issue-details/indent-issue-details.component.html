@@ -1,0 +1,414 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+<div class="page-header sticky-top shadow-sm justify-content-start">
+    <h2 class="page-heading">Indent Issue</h2>
+    <div class="actions ms-auto d-flex align-items-center gap-2">
+        <!-- <button class="btn btn-main-outline">View Receipts</button> -->
+        <button class="btn btn-main-outline" (click)="onBackClick()">Back</button>
+        <button class="btn btn-main-outline" (click)="PatientPrintCard()" [disabled]="SaveDisable==0">Print</button>
+        <button class="btn btn-main-outline" (click)="PatientPrintCardOrder()">Print Order</button>
+        <!-- 
+        <button class="btn btn-main-outline">Print Order</button>
+        <button class="btn btn-main-outline">Print Label</button>
+        <button class="btn btn-danger-outline">Clear</button>-->
+        <button class="btn btn-main-outline" (click)="onSaveClick()"
+            [disabled]="SaveDisable==1">Save</button>
+    </div>
+</div>
+
+<div class="p-2">
+    <div class="row g-2 align-items-end">
+        <div class="col">
+            <label for="" class="form-label">Indent Issue To</label>
+            <input type="text" class="form-control" disabled [ngModel]="issuingOrderData?.IndentIssueTo">
+        </div>
+        <div class="col">
+            <label for="" class="form-label">Indent No.</label>
+            <input type="text" class="form-control" disabled [ngModel]="issuingOrderData?.IndentNo">
+        </div>
+        <div class="col">
+            <label for="" class="form-label">Date</label>
+            <input type="text" class="form-control" disabled [ngModel]="currentDate">
+        </div>
+        <div class="col">
+            <label for="" class="form-label">Delivery by Date</label>
+            <input type="text" class="form-control" disabled [ngModel]="issuingOrderData?.DeliveryByDate">
+        </div>
+        <div class="col">
+            <label for="" class="form-label">Indent Ref. No.</label>
+            <input type="text" class="form-control" disabled [ngModel]="issuingOrderData?.IndentRefNo">
+        </div>
+        <div class="col">
+            <label for="" class="form-label">Issue No</label>
+            <input type="text" class="form-control" disabled [ngModel]="issuingOrderData?.IssueNo">
+        </div>
+        <div class="col d-none">
+            <div class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                <button class="btn selected">System Issue Mode</button>
+                <button class="btn">Manual Mode</button>
+            </div>
+        </div>
+    </div>
+    <div class="mt-2">
+
+        <div class="fixed_alter_list indentIssue_TableForm">
+            <div class="fixed_alter_header bg-primary-50">
+                <div class="row gx-2 p-2 mx-0">                               
+                    <div class="" style="width: 3%;">
+                        <p class="label m-0">Sl.No</p>
+                    </div>
+                    <div class="" style="width: 18%;">
+                        <p class="label m-0">Item</p>
+                    </div>
+                    <div class="" style="width: 5%;">
+                        <p class="label m-0">Ord. Qty</p>
+                    </div>
+                    <div class="" style="width: 5%;">
+                        <p class="label m-0">App. Qty</p>
+                    </div>                          
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">QOH</p>
+                    </div>                          
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">Select Batch</p>
+                    </div>                          
+                    <div class="" style="width: 5%;">
+                        <p class="label m-0">Expiry</p>
+                    </div>                          
+                    <div class="" style="width: 6%;">
+                        <p class="label m-0">Qty</p>
+                    </div>                          
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Units</p>
+                    </div>                          
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">Pr.IssQty</p>
+                    </div>                          
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Remarks</p>
+                    </div>                          
+                    <div class="" style="width: 13%;">
+                        <p class="label m-0">Substitute Item</p>
+                    </div>                          
+                    <div class="" style="width: 5%;">
+                        <p class="label m-0">RDS</p>
+                    </div>                          
+                </div>
+            </div>
+          
+            <div class="fixed_alter_body">
+                <div class="row gx-2 p-2 mx-0 alter_div align-items-center" *ngFor="let item of FetchIndentOrdersForIssuingDataDataList; let i = index;">
+                    <div class="" style="width: 3%;">
+                        <p class="m-0">{{i+1}}</p>
+                    </div>
+                    <div class="" style="width: 18%;">
+                        <div class="d-flex">
+                            <p>{{item.Item}}</p>
+                            <div (click)="FetchlastIndentIssueItems(item)">
+                                <svg width="41" height="25" viewBox="0 0 41 40" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="0.523438" width="40" height="40" rx="20" fill="#badfe3" />
+                                    <path
+                                        d="M24.8616 11.6245C24.8616 11.7211 24.8385 11.8162 24.7944 11.9021C24.7503 11.9879 24.6864 12.0621 24.608 12.1184L21.7906 14.1388C21.6998 14.2034 21.5929 14.2417 21.4817 14.2497C21.3705 14.2577 21.2592 14.2349 21.1601 14.184C21.0609 14.133 20.9777 14.0558 20.9194 13.9607C20.8612 13.8656 20.8302 13.7564 20.8298 13.6449V12.4259C20.7494 12.4483 20.6664 12.4604 20.5829 12.4618C19.017 12.4621 17.4832 12.9065 16.1597 13.7434C14.8361 14.5803 13.7771 15.7754 13.1054 17.1899C12.4338 18.6045 12.1771 20.1806 12.3651 21.7352C12.5532 23.2898 13.1783 24.7592 14.1679 25.9728C15.1575 27.1865 16.4709 28.0946 17.9559 28.5917C19.4408 29.0889 21.0363 29.1547 22.5571 28.7815C24.0779 28.4084 25.4617 27.6116 26.5479 26.4836C27.6341 25.3556 28.3781 23.9427 28.6936 22.4089C28.7101 22.273 28.7545 22.142 28.8241 22.0241C28.8937 21.9063 28.987 21.8042 29.0981 21.7242C29.2092 21.6442 29.3357 21.5882 29.4695 21.5596C29.6034 21.531 29.7417 21.5304 29.8758 21.558C30.0099 21.5856 30.1368 21.6406 30.2485 21.7197C30.3602 21.7988 30.4543 21.9002 30.5249 22.0175C30.5954 22.1348 30.6408 22.2654 30.6583 22.4012C30.6758 22.537 30.665 22.6749 30.6265 22.8062C30.2358 24.7072 29.3139 26.4584 27.9678 27.8564C26.6218 29.2545 24.9068 30.2421 23.022 30.7045C21.1372 31.1669 19.1598 31.0853 17.3196 30.469C15.4793 29.8527 13.8516 28.727 12.6254 27.2228C11.3993 25.7185 10.6249 23.8972 10.3923 21.9705C10.1597 20.0438 10.4784 18.0906 11.3114 16.3377C12.1443 14.5848 13.4574 13.1042 15.0981 12.0677C16.7389 11.0311 18.6399 10.4813 20.5807 10.4819C20.6642 10.4833 20.7472 10.4953 20.8276 10.5178V9.60637C20.828 9.49488 20.859 9.38563 20.9172 9.29057C20.9754 9.1955 21.0587 9.11826 21.1578 9.06729C21.257 9.01633 21.3682 8.99359 21.4795 9.00156C21.5907 9.00953 21.6975 9.04791 21.7884 9.1125L24.6057 11.1329C24.6843 11.1887 24.7484 11.2624 24.7929 11.3479C24.8374 11.4333 24.861 11.5281 24.8616 11.6245ZM28.7565 19.4344C28.7941 19.6657 28.9123 19.8761 29.0902 20.0285C29.2681 20.181 29.4942 20.2655 29.7285 20.2673C29.7804 20.2684 29.8322 20.2646 29.8834 20.256C30.0776 20.2273 30.2589 20.1414 30.4042 20.0093C30.5495 19.8773 30.6522 19.705 30.6994 19.5144C30.7465 19.3238 30.7359 19.1235 30.6689 18.9389C30.6019 18.7543 30.4815 18.5939 30.3231 18.4779C30.1646 18.3619 29.9753 18.2957 29.7791 18.2876C29.5829 18.2795 29.3888 18.3299 29.2213 18.4325C29.0539 18.535 28.9207 18.685 28.8387 18.8634C28.7568 19.0418 28.7297 19.2406 28.761 19.4344H28.7565ZM26.4892 14.5877C26.7223 14.587 26.9476 14.5041 27.1256 14.3535C27.3035 14.203 27.4226 13.9944 27.4619 13.7647C27.5012 13.5349 27.4582 13.2986 27.3404 13.0975C27.2226 12.8964 27.0376 12.7432 26.818 12.6651C26.5984 12.5869 26.3583 12.5888 26.1399 12.6703C25.9215 12.7518 25.7389 12.9078 25.6242 13.1107C25.5096 13.3136 25.4702 13.5505 25.513 13.7796C25.5558 14.0088 25.6781 14.2154 25.8584 14.3633C26.0362 14.5091 26.2592 14.5884 26.4892 14.5877ZM28.1391 15.2836C27.9686 15.3804 27.8307 15.5255 27.7427 15.7007C27.6548 15.8759 27.6209 16.0733 27.6452 16.2678C27.6696 16.4623 27.7511 16.6452 27.8795 16.7933C28.0079 16.9414 28.1774 17.0481 28.3665 17.0997C28.5556 17.1514 28.7558 17.1458 28.9417 17.0836C29.1276 17.0214 29.2908 16.9054 29.4107 16.7503C29.5306 16.5953 29.6018 16.4081 29.6152 16.2125C29.6286 16.0169 29.5837 15.8218 29.4861 15.6518C29.3558 15.4249 29.141 15.2588 28.8886 15.1898C28.6362 15.1208 28.3667 15.1546 28.1391 15.2836ZM25.8359 20.7342C25.8359 21.7705 25.5286 22.7835 24.9529 23.6451C24.3772 24.5068 23.5589 25.1783 22.6015 25.5749C21.6441 25.9715 20.5906 26.0752 19.5742 25.8731C18.5578 25.6709 17.6242 25.1719 16.8915 24.4391C16.1587 23.7063 15.6597 22.7728 15.4575 21.7564C15.2553 20.74 15.3591 19.6865 15.7557 18.7291C16.1522 17.7717 16.8238 16.9534 17.6854 16.3777C18.5471 15.802 19.5601 15.4947 20.5964 15.4947C21.986 15.4947 23.3187 16.0467 24.3013 17.0293C25.2839 18.0119 25.8359 19.3446 25.8359 20.7342ZM22.6774 21.9128L21.2339 20.4693V18.2379C21.2339 18.0688 21.1667 17.9067 21.0472 17.7871C20.9276 17.6675 20.7655 17.6004 20.5964 17.6004C20.4273 17.6004 20.2651 17.6675 20.1456 17.7871C20.026 17.9067 19.9588 18.0688 19.9588 18.2379V20.9991L21.7749 22.8152C21.8317 22.8832 21.9019 22.9387 21.9813 22.978C22.0606 23.0174 22.1473 23.0398 22.2358 23.0438C22.3243 23.0478 22.4126 23.0333 22.4952 23.0012C22.5778 22.9692 22.6527 22.9203 22.7154 22.8577C22.778 22.7951 22.8269 22.7201 22.8589 22.6375C22.891 22.5549 22.9055 22.4666 22.9015 22.3781C22.8975 22.2896 22.8751 22.2029 22.8357 22.1236C22.7964 22.0442 22.7409 21.974 22.6729 21.9172L22.6774 21.9128Z"
+                                        fill="#286571" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="" style="width: 5%;">
+                        <p class="m-0">{{item.OrQty}}</p>
+                    </div>
+                    <div class="" style="width: 5%;">
+                        <p class="m-0">{{item.AppQty}}</p>
+                    </div>                          
+                    <div class="" style="width: 7%;">
+                        <p class="m-0">{{item.QOH}}</p>
+                    </div>                          
+                    <div class="" style="width: 7%;">
+                        <button class="btn btn-main-outline fs-8 lh-sm">BX</button>
+                    </div>                          
+                    <div class="" style="width: 5%;">
+                        <p class="m-0">{{item.Expiry}}</p>
+                    </div>                          
+                    <div class="" style="width: 6%;">
+                        <input type="number" class="form-control fs-8" [(ngModel)]="item.DueQty"
+                        (ngModelChange)="onQuantityChange(item)" (change)="onQuantityChange(item)">
+                    </div>                          
+                    <div class="" style="width: 8%;">
+                        <select name="" class="form-select pe-4 fs-8" [(ngModel)]="item.UID" (change)="onUnitChange(item)">
+                            <option value="{{unit.UoMID}}" *ngFor="let unit of item.unitsList">
+                                {{unit.FullUoM}}</option>
+                        </select>
+                    </div>                          
+                    <div class="" style="width: 7%;">
+                        <p class="m-0">{{item.IssQty}}</p>
+                    </div>                          
+                    <div class="" style="width: 10%;">
+                        <p class="m-0">{{ item.REM }}</p>
+                    </div>                          
+                    <div class="" style="width: 13%;">
+                        <div class="input-group">
+                            <input type="text" class="form-control pe-2 fs-8" placeholder=""
+                                [(ngModel)]="item.SubstituteItem">
+                            <button class="btn btn-secondary-fill btn-icon" type="button" id="button-addon2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" viewBox="0 0 10 16"
+                                    fill="none">
+                                    <path
+                                        d="M5.05989 15.11C4.12656 15.11 3.28656 14.95 2.53989 14.63C1.79323 14.2967 1.20656 13.83 0.779893 13.23C0.353226 12.63 0.139893 11.93 0.139893 11.13H2.57989C2.63323 11.73 2.86656 12.2233 3.27989 12.61C3.70656 12.9967 4.29989 13.19 5.05989 13.19C5.84656 13.19 6.45989 13.0033 6.89989 12.63C7.33989 12.2433 7.55989 11.75 7.55989 11.15C7.55989 10.6833 7.41989 10.3033 7.13989 10.01C6.87323 9.71667 6.53323 9.49 6.11989 9.33C5.71989 9.17 5.15989 8.99667 4.43989 8.81C3.53323 8.57 2.79323 8.33 2.21989 8.09C1.65989 7.83667 1.17989 7.45 0.779893 6.93C0.379893 6.41 0.179893 5.71667 0.179893 4.85C0.179893 4.05 0.379893 3.35 0.779893 2.75C1.17989 2.15 1.73989 1.69 2.45989 1.37C3.17989 1.05 4.01323 0.889999 4.95989 0.889999C6.30656 0.889999 7.40656 1.23 8.25989 1.91C9.12656 2.57667 9.60656 3.49667 9.69989 4.67H7.17989C7.13989 4.16333 6.89989 3.73 6.45989 3.37C6.01989 3.01 5.43989 2.83 4.71989 2.83C4.06656 2.83 3.53323 2.99667 3.11989 3.33C2.70656 3.66333 2.49989 4.14333 2.49989 4.77C2.49989 5.19667 2.62656 5.55 2.87989 5.83C3.14656 6.09667 3.47989 6.31 3.87989 6.47C4.27989 6.63 4.82656 6.80333 5.51989 6.99C6.43989 7.24333 7.18656 7.49667 7.75989 7.75C8.34656 8.00333 8.83989 8.39667 9.23989 8.93C9.65323 9.45 9.85989 10.15 9.85989 11.03C9.85989 11.7367 9.66656 12.4033 9.27989 13.03C8.90656 13.6567 8.35323 14.1633 7.61989 14.55C6.89989 14.9233 6.04656 15.11 5.05989 15.11Z"
+                                        fill="#fff" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>                          
+                    <div class="" style="width: 5%;">
+                        <a  (click)="openRDS(item)">{{item.RDS}}</a>
+                        <!-- <button class="btn btn-link" (click)="openRDS(item)">
+                            {{item.RDS}}
+                        </button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="indent_return_TableForm">
+            <table class="table m-0">
+                <thead>
+                    <tr>
+                        <th>Sl.No</th>
+                        <th>Item</th>
+                        <th class="text-nowrap">Ord. Qty</th>
+                        <th class="text-nowrap">App. Qty</th>
+                        <th>QOH</th>
+                        <th>Select Batch</th>
+                        <th>Expiry</th>
+                        <th>Qty</th>
+                        <th>Units</th>
+                        <th>Pr.IssQty</th>
+                        <th style="width: 13rem;">Remarks</th>
+                        <th>Substitute Item</th>
+                        <th>RDS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of FetchIndentOrdersForIssuingDataDataList; let i = index;">
+                        <td>{{i+1}}</td>
+                        <td class="d-flex">{{item.Item}}
+                            <div (click)="FetchlastIndentIssueItems(item)">
+                                <svg width="41" height="25" viewBox="0 0 41 40" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="0.523438" width="40" height="40" rx="20" fill="#badfe3" />
+                                                    <path
+                                                        d="M24.8616 11.6245C24.8616 11.7211 24.8385 11.8162 24.7944 11.9021C24.7503 11.9879 24.6864 12.0621 24.608 12.1184L21.7906 14.1388C21.6998 14.2034 21.5929 14.2417 21.4817 14.2497C21.3705 14.2577 21.2592 14.2349 21.1601 14.184C21.0609 14.133 20.9777 14.0558 20.9194 13.9607C20.8612 13.8656 20.8302 13.7564 20.8298 13.6449V12.4259C20.7494 12.4483 20.6664 12.4604 20.5829 12.4618C19.017 12.4621 17.4832 12.9065 16.1597 13.7434C14.8361 14.5803 13.7771 15.7754 13.1054 17.1899C12.4338 18.6045 12.1771 20.1806 12.3651 21.7352C12.5532 23.2898 13.1783 24.7592 14.1679 25.9728C15.1575 27.1865 16.4709 28.0946 17.9559 28.5917C19.4408 29.0889 21.0363 29.1547 22.5571 28.7815C24.0779 28.4084 25.4617 27.6116 26.5479 26.4836C27.6341 25.3556 28.3781 23.9427 28.6936 22.4089C28.7101 22.273 28.7545 22.142 28.8241 22.0241C28.8937 21.9063 28.987 21.8042 29.0981 21.7242C29.2092 21.6442 29.3357 21.5882 29.4695 21.5596C29.6034 21.531 29.7417 21.5304 29.8758 21.558C30.0099 21.5856 30.1368 21.6406 30.2485 21.7197C30.3602 21.7988 30.4543 21.9002 30.5249 22.0175C30.5954 22.1348 30.6408 22.2654 30.6583 22.4012C30.6758 22.537 30.665 22.6749 30.6265 22.8062C30.2358 24.7072 29.3139 26.4584 27.9678 27.8564C26.6218 29.2545 24.9068 30.2421 23.022 30.7045C21.1372 31.1669 19.1598 31.0853 17.3196 30.469C15.4793 29.8527 13.8516 28.727 12.6254 27.2228C11.3993 25.7185 10.6249 23.8972 10.3923 21.9705C10.1597 20.0438 10.4784 18.0906 11.3114 16.3377C12.1443 14.5848 13.4574 13.1042 15.0981 12.0677C16.7389 11.0311 18.6399 10.4813 20.5807 10.4819C20.6642 10.4833 20.7472 10.4953 20.8276 10.5178V9.60637C20.828 9.49488 20.859 9.38563 20.9172 9.29057C20.9754 9.1955 21.0587 9.11826 21.1578 9.06729C21.257 9.01633 21.3682 8.99359 21.4795 9.00156C21.5907 9.00953 21.6975 9.04791 21.7884 9.1125L24.6057 11.1329C24.6843 11.1887 24.7484 11.2624 24.7929 11.3479C24.8374 11.4333 24.861 11.5281 24.8616 11.6245ZM28.7565 19.4344C28.7941 19.6657 28.9123 19.8761 29.0902 20.0285C29.2681 20.181 29.4942 20.2655 29.7285 20.2673C29.7804 20.2684 29.8322 20.2646 29.8834 20.256C30.0776 20.2273 30.2589 20.1414 30.4042 20.0093C30.5495 19.8773 30.6522 19.705 30.6994 19.5144C30.7465 19.3238 30.7359 19.1235 30.6689 18.9389C30.6019 18.7543 30.4815 18.5939 30.3231 18.4779C30.1646 18.3619 29.9753 18.2957 29.7791 18.2876C29.5829 18.2795 29.3888 18.3299 29.2213 18.4325C29.0539 18.535 28.9207 18.685 28.8387 18.8634C28.7568 19.0418 28.7297 19.2406 28.761 19.4344H28.7565ZM26.4892 14.5877C26.7223 14.587 26.9476 14.5041 27.1256 14.3535C27.3035 14.203 27.4226 13.9944 27.4619 13.7647C27.5012 13.5349 27.4582 13.2986 27.3404 13.0975C27.2226 12.8964 27.0376 12.7432 26.818 12.6651C26.5984 12.5869 26.3583 12.5888 26.1399 12.6703C25.9215 12.7518 25.7389 12.9078 25.6242 13.1107C25.5096 13.3136 25.4702 13.5505 25.513 13.7796C25.5558 14.0088 25.6781 14.2154 25.8584 14.3633C26.0362 14.5091 26.2592 14.5884 26.4892 14.5877ZM28.1391 15.2836C27.9686 15.3804 27.8307 15.5255 27.7427 15.7007C27.6548 15.8759 27.6209 16.0733 27.6452 16.2678C27.6696 16.4623 27.7511 16.6452 27.8795 16.7933C28.0079 16.9414 28.1774 17.0481 28.3665 17.0997C28.5556 17.1514 28.7558 17.1458 28.9417 17.0836C29.1276 17.0214 29.2908 16.9054 29.4107 16.7503C29.5306 16.5953 29.6018 16.4081 29.6152 16.2125C29.6286 16.0169 29.5837 15.8218 29.4861 15.6518C29.3558 15.4249 29.141 15.2588 28.8886 15.1898C28.6362 15.1208 28.3667 15.1546 28.1391 15.2836ZM25.8359 20.7342C25.8359 21.7705 25.5286 22.7835 24.9529 23.6451C24.3772 24.5068 23.5589 25.1783 22.6015 25.5749C21.6441 25.9715 20.5906 26.0752 19.5742 25.8731C18.5578 25.6709 17.6242 25.1719 16.8915 24.4391C16.1587 23.7063 15.6597 22.7728 15.4575 21.7564C15.2553 20.74 15.3591 19.6865 15.7557 18.7291C16.1522 17.7717 16.8238 16.9534 17.6854 16.3777C18.5471 15.802 19.5601 15.4947 20.5964 15.4947C21.986 15.4947 23.3187 16.0467 24.3013 17.0293C25.2839 18.0119 25.8359 19.3446 25.8359 20.7342ZM22.6774 21.9128L21.2339 20.4693V18.2379C21.2339 18.0688 21.1667 17.9067 21.0472 17.7871C20.9276 17.6675 20.7655 17.6004 20.5964 17.6004C20.4273 17.6004 20.2651 17.6675 20.1456 17.7871C20.026 17.9067 19.9588 18.0688 19.9588 18.2379V20.9991L21.7749 22.8152C21.8317 22.8832 21.9019 22.9387 21.9813 22.978C22.0606 23.0174 22.1473 23.0398 22.2358 23.0438C22.3243 23.0478 22.4126 23.0333 22.4952 23.0012C22.5778 22.9692 22.6527 22.9203 22.7154 22.8577C22.778 22.7951 22.8269 22.7201 22.8589 22.6375C22.891 22.5549 22.9055 22.4666 22.9015 22.3781C22.8975 22.2896 22.8751 22.2029 22.8357 22.1236C22.7964 22.0442 22.7409 21.974 22.6729 21.9172L22.6774 21.9128Z"
+                                                        fill="#286571" />
+                                                </svg>
+                            </div>
+                        </td>
+                        <td>{{item.OrQty}}</td>
+                        <td>{{item.AppQty}}</td>
+                        <td>{{item.QOH}}</td>
+                        <td>
+                            <button class="btn btn-main-outline fs-8 lh-sm">BX</button>
+                        </td>
+                        <td>{{item.Expiry}}</td>
+                        <td style="width: 6rem;">
+                            <input type="number" class="form-control fs-8" [(ngModel)]="item.DueQty"
+                                (ngModelChange)="onQuantityChange(item)" (change)="onQuantityChange(item)">
+                        </td>
+                        <td>
+                            <select name="" class="form-select pe-4 fs-8" style="width: 9rem;" [(ngModel)]="item.UID" (change)="onUnitChange(item)">
+                                <option value="{{unit.UoMID}}" *ngFor="let unit of item.unitsList">
+                                    {{unit.FullUoM}}</option>
+                            </select>
+                        </td>
+                        <td>{{item.IssQty}}</td>
+                        <td>
+                            <p class="fs-8">{{ item.REM }}</p>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" class="form-control pe-2 fs-8" placeholder=""
+                                    [(ngModel)]="item.SubstituteItem">
+                                <button class="btn btn-secondary-fill btn-icon" type="button" id="button-addon2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" viewBox="0 0 10 16"
+                                        fill="none">
+                                        <path
+                                            d="M5.05989 15.11C4.12656 15.11 3.28656 14.95 2.53989 14.63C1.79323 14.2967 1.20656 13.83 0.779893 13.23C0.353226 12.63 0.139893 11.93 0.139893 11.13H2.57989C2.63323 11.73 2.86656 12.2233 3.27989 12.61C3.70656 12.9967 4.29989 13.19 5.05989 13.19C5.84656 13.19 6.45989 13.0033 6.89989 12.63C7.33989 12.2433 7.55989 11.75 7.55989 11.15C7.55989 10.6833 7.41989 10.3033 7.13989 10.01C6.87323 9.71667 6.53323 9.49 6.11989 9.33C5.71989 9.17 5.15989 8.99667 4.43989 8.81C3.53323 8.57 2.79323 8.33 2.21989 8.09C1.65989 7.83667 1.17989 7.45 0.779893 6.93C0.379893 6.41 0.179893 5.71667 0.179893 4.85C0.179893 4.05 0.379893 3.35 0.779893 2.75C1.17989 2.15 1.73989 1.69 2.45989 1.37C3.17989 1.05 4.01323 0.889999 4.95989 0.889999C6.30656 0.889999 7.40656 1.23 8.25989 1.91C9.12656 2.57667 9.60656 3.49667 9.69989 4.67H7.17989C7.13989 4.16333 6.89989 3.73 6.45989 3.37C6.01989 3.01 5.43989 2.83 4.71989 2.83C4.06656 2.83 3.53323 2.99667 3.11989 3.33C2.70656 3.66333 2.49989 4.14333 2.49989 4.77C2.49989 5.19667 2.62656 5.55 2.87989 5.83C3.14656 6.09667 3.47989 6.31 3.87989 6.47C4.27989 6.63 4.82656 6.80333 5.51989 6.99C6.43989 7.24333 7.18656 7.49667 7.75989 7.75C8.34656 8.00333 8.83989 8.39667 9.23989 8.93C9.65323 9.45 9.85989 10.15 9.85989 11.03C9.85989 11.7367 9.66656 12.4033 9.27989 13.03C8.90656 13.6567 8.35323 14.1633 7.61989 14.55C6.89989 14.9233 6.04656 15.11 5.05989 15.11Z"
+                                            fill="#fff" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-link" (click)="openRDS(item)">
+                                {{item.RDS}}
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> -->
+    </div>
+</div>
+
+<div class="modal" id="successMsgModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{errorMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="rdsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+        <div class="modal-content">
+            <div class="modal-header p-2">
+                <h5 class="modal-title clr-primary-600 fs-6" translate>{{rdsModalLabel}}</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-3">
+
+                <div class="fixed_alter_list">
+                    <div class="fixed_alter_header bg-primary-50">
+                        <div class="row gx-2 p-2 mx-0">                               
+                            <div class="col-4">
+                                <p class="label m-0">ItemName</p>
+                            </div>
+                            <div class="col-4">
+                                <p class="label m-0">Batch No.</p>
+                            </div>
+                            <div class="col-4">
+                                <p class="label m-0">Expiry Date</p>
+                            </div>
+                            <div class="col-4">
+                                <p class="label m-0">UoM</p>
+                            </div>                          
+                        </div>
+                    </div>
+                  
+                    <div class="fixed_alter_body">
+                        <div class="row gx-2 p-2 mx-0 alter_div align-items-center" *ngFor="let item of FetchDeptItemStockRDSDataList;let i=index">
+                            <div class="col-4">
+                                <p class="label m-0">{{ item.Quantity }}</p>
+                            </div>
+                            <div class="col-4">
+                                <p class="label m-0">{{ item.BatchNo }}</p>
+                            </div>
+                            <div class="col-4">
+                                <p class="label m-0">{{ item.Expirydate }}</p>
+                            </div>
+                            <div class="col-4">
+                                <p class="label m-0">{{ item.UoM }}</p>
+                            </div>        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal prev_used_modal" id="previousDiagnosis" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:90%">
+        <div class="modal-content">
+            <div class="modal-header border-bottom">
+                <h5 translate="" class="modal-title">Issued History --{{rdsModalLabel}}</h5>
+                <div class="ms-auto d-flex align-items-center">
+                   
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-0">
+                <div class="w-100">
+                    
+
+                    <div class="fixed_alter_list">
+                        <div class="fixed_alter_header bg-primary-50">
+                            <div class="row gx-2 p-2 mx-0">                               
+                                <div class="" style="width: 30%;">
+                                    <p class="label m-0">ItemName</p>
+                                </div>
+                                <div class="" style="width: 10%;">
+                                    <p class="label m-0">Sub Item</p>
+                                </div>
+                                <div class="" style="width: 10%;">
+                                    <p class="label m-0">Issued Date</p>
+                                </div>
+                                <div class="" style="width:5%;">
+                                    <p class="label m-0">Quantity</p>
+                                </div>
+                                <div class="" style="width: 10%;">
+                                    <p class="label m-0">Issued UOM</p>
+                                </div>  
+                                <div class="" style="width: 10%;">
+                                    <p class="label m-0">Order UOM</p>
+                                </div>                             
+                            </div>
+                        </div>
+                      
+                        <div class="fixed_alter_body">
+                            <div class="row gx-2 p-2 mx-0 alter_div align-items-center" *ngFor="let item of FetchlastIndentIssueItemsDataList; let i = index">
+                                
+                                <div class="" style="width: 30%;">
+                                    <p class="m-0">{{item.ItemCode}}-{{item.ItemName}}</p>
+                                </div>
+                                <div class="" style="width: 10%;">
+                                    <p class="m-0">{{item.SItemCode}}-{{item.SItemName}}</p>
+                                </div>
+                                <div class="" style="width: 10%;">
+                                    <p class="m-0">{{item.IssueDate}}</p>
+                                </div>
+                                <div class="" style="width: 5%;">
+                                    <p class="m-0">{{item.IssueQTY}}</p>
+                                </div>
+                                <div class="" style="width: 10%;">
+                                    <p class="m-0">{{item.IssueUOM}}</p>
+                                </div>
+                                <div class="" style="width: 10%;">
+                                    <p class="m-0">{{item.OrderUOM}}</p>
+                                </div>                               
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="caseRecordModal">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Print Label</h5>                    
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="trustedUrl = ''"></button>
+            </div>
+            <div class="modal-body">
+                <iframe *ngIf="trustedUrl" height="600" width="100%" [src]="(trustedUrl ? trustedUrl :'')| safeUrl"
+                    frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>

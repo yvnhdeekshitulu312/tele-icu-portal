@@ -1,0 +1,101 @@
+<app-header [InputHome]="true" [IsSwitchWard]="false"></app-header>
+<div class="page-header sticky-top justify-content-between rounded-3 shadow-sm">
+    <div class="d-flex align-items-center gap-2">
+        <h2 class="page-heading">Discharge Cases</h2>
+    </div>
+
+    <div class="d-flex align-items-center gap-2 waiting_count ms-3">
+        <div class="d-flex align-items-center">
+            <label for="" class="form-label mb-0 px-2">{{langData?.common?.Facility}}</label>
+            <select name="" id="" class="form-select" [(ngModel)]="wardID" (change)="onWardChange()">
+                <option value="{{item.WardID}}" *ngFor="let item of facilities;let i=index">
+                    {{item.WardName}}</option>
+            </select>
+        </div>
+        <button class="btn btn-danger-outline" (click)="clear()">Clear</button>
+    </div>
+</div>
+<div class="p-2">
+    <div class="row mx-0 g-3">
+        <div *ngFor="let room of getKeys(groupedByRoom)" class="col-4">
+            <div class="room_cards_row d-flex flex-column h-100">
+                <div class="tagline">
+                    <h6 class="clr-primary-600 m-0 bg-primary-100 p-2">{{ room }}</h6>
+                </div>
+                <div class="row mx-0 gx-3 justify-content-start p-3 w-100 h-100">
+                    <div class="col-6 position-relative" (click)="setSelectedRoom(item)"
+                        *ngFor="let item of groupedByRoom[room]">
+                        <div class="room_card_details_hover">
+                            <div class="room_card primary" [class.active]="item.selected">
+                                <p class="m-0 fs-6 p-2 bedNum">{{item.Bed}} </p>
+
+                                <div class="bed_card_circle p-3 pb-0">
+                                    <svg class="bed_card" width="50" height="51" viewBox="0 0 50 51" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="25" cy="25.9221" r="25" fill="#DAEEF1" />
+                                        <path
+                                            d="M15.6464 25.0903C17.0508 25.0903 18.1894 23.9518 18.1894 22.5474C18.1894 21.143 17.0513 20.0059 15.6464 20.0059C14.2438 20.0059 13.1049 21.1433 13.1049 22.5474C13.1049 23.9515 14.2438 25.0903 15.6464 25.0903ZM40.1316 26.4568C40.1316 24.4439 38.4986 22.8112 36.4857 22.8112H26.1929V30.1979H38.3914V33.7619H40.1312L40.1302 26.4566L40.1316 26.4568ZM18.189 25.935H25.1494V22.8114H21.7929C19.9562 22.8117 18.4421 24.1704 18.189 25.935ZM11.6082 18.2227H9.86841V33.7628H11.6082V30.1985H25.1494V26.9792L11.6082 26.9794V18.2227Z"
+                                            fill="#368796" />
+                                    </svg>
+                                </div>
+                                <div class="bed-info-label rounded-0 py-2"> {{item.BedStatusName}} </div>
+                                <svg class="check_img" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                    viewBox="0 0 20 20" fill="none">
+                                    <g opacity="0.24">
+                                        <circle cx="10" cy="10" r="10" fill="#43BC94" />
+                                        <path
+                                            d="M13.4244 5.94153L8.52215 10.6858L6.63665 8.86533C6.53421 8.74984 6.40814 8.65603 6.26637 8.58981C6.1246 8.52358 5.97018 8.48637 5.81281 8.4805C5.65543 8.47463 5.4985 8.50023 5.35186 8.5557C5.20522 8.61117 5.07204 8.69531 4.96067 8.80283C4.84931 8.91035 4.76217 9.03895 4.70472 9.18053C4.64727 9.32211 4.62075 9.47363 4.62683 9.62558C4.63291 9.77753 4.67145 9.92663 4.74004 10.0635C4.80863 10.2004 4.90579 10.3221 5.02541 10.421L7.71081 13.0249C7.81759 13.1271 7.94422 13.208 8.08345 13.2629C8.22267 13.3178 8.37176 13.3457 8.52215 13.3448C8.82193 13.3436 9.10921 13.2287 9.32205 13.0249L15.0357 7.50825C15.1428 7.40568 15.2278 7.28365 15.2858 7.1492C15.3438 7.01476 15.3737 6.87054 15.3737 6.72489C15.3737 6.57924 15.3438 6.43503 15.2858 6.30058C15.2278 6.16613 15.1428 6.0441 15.0357 5.94153C14.8216 5.73604 14.5319 5.6207 14.2301 5.6207C13.9282 5.6207 13.6385 5.73604 13.4244 5.94153Z"
+                                            fill="white" />
+                                    </g>
+                                </svg>
+                                <p class="mb-2">Name : {{item.PatientName}}</p>
+                                <p class="mb-2">ID No. : {{item.SSN}} | {{item.Gender}}</p>
+                                
+                                <div class="d-flex mb-2 align-items-center gap-2 px-1" (click)="$event.stopPropagation()">
+                                    <button class="btn btn-main-outline" (click)="onStartCleaning(item)">Start Cleaning</button>
+                                    <p>{{item.startTime}}</p>
+                                </div>
+                                <div class="d-flex mb-2 align-items-center gap-2 px-1" (click)="$event.stopPropagation()">
+                                    <button class="btn btn-main-outline" (click)="onEndCleaning(item)">End Cleaning</button>
+                                    <p>{{item.endTime}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="validationMessage" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>Please select status in following selected Rooms</p>
+                <p class="p-2 px-3 rounded-4 bg-primary-100 my-2 clr-primary-600"
+                    *ngFor="let error of errorMessages; let i = index"> {{error}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Status updated Successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

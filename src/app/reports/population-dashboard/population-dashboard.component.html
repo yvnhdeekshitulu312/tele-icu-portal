@@ -1,0 +1,1961 @@
+<div class="page-header justify-content-start sticky-top shadow-sm">
+    <h2 class="page-heading">Population KPI Dashboard</h2>
+</div>
+<div class="container-fluid p-0 analytics_graphs population_graph IP_graph">
+    <div class="p-2">
+        <div class="row gx-2">
+            <div class="col-2 mt-0" style="width: 13%;">
+                <div class="left_nav">
+                    <div class="sidebar-container rounded">
+                        <form [formGroup]="datesForm" class="d-flex flex-column gap-1">
+                            <label class="form-label m-0">From Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="fromPicker" placeholder="From Date"
+                                    formControlName="fromdate" />
+                                <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #fromPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <label class="form-label m-0">To Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="toPicker" placeholder="To Date"
+                                    formControlName="todate" />
+                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #toPicker></mat-datepicker>
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 my-2">
+                        <button type="button" class="btn btn-main-outline w-100" (click)="fetchData()">
+                            Fetch
+                        </button>
+                        <button type="button" class="btn btn-outline-danger w-100" (click)="clearAllFilters()">
+                            Clear
+                        </button>
+                    </div>
+                    <h5 class="fs-6">Filters</h5>
+                    <div class="d-flex flex-column gap-2">
+                        <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                            <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_9239_2779)">
+                                    <path
+                                        d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                        fill="#368796" />
+                                </g>
+                            </svg>
+                            <input type="text" class="form-control" [matAutocomplete]="roleAuto2" placeholder="Search">
+                            <mat-autocomplete #roleAuto2="matAutocomplete">
+                                <mat-option *ngFor="let item of locations">
+                                    <div (click)="locationOptionClicked($event, item);">
+                                        <mat-checkbox [checked]="item.selected" (change)="toggleLocationSelection(item)"
+                                            (click)="$event.stopPropagation()">
+                                            {{ item.label }}
+                                        </mat-checkbox>
+                                    </div>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                    <div class="py-3 dropdown custom_outline_dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            {{ selectedCategory.label }}
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li *ngFor="let category of topCategories">
+                                <a class="dropdown-item" (click)="onSelectCategory(category)">
+                                    {{ category.label }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col dashboardHeight Population_health_page">
+                <div class="rounded">
+                    <div class="row gx-2 mx-0">
+                        <div class="col-2" *ngFor="let item of populationData">
+                            <div class="readmissionCard d-flex flex-column border rounded">
+                                <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                    <div class="col text-white text-center py-2 fw-bold">
+                                        {{ item.POPULATIONTYPE }}
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <div class="col">
+                                        <h4 class="rounded-bottom text-center my-3"
+                                            style="font-size: 1.5rem; font-weight: 700;">
+                                            {{ item.TotalCount }}
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-4">
+                            <div class="bg-white p-2 rounded h-100">
+                                <apx-chart *ngIf="seriesPopulationStats?.length" [series]="seriesPopulationStats"
+                                    [chart]="chartPopulationStats" [xaxis]="xaxisPopulationStats"
+                                    [yaxis]="yaxisPopulationStats" [dataLabels]="dataLabelsPopulationStats"
+                                    [plotOptions]="plotOptionsPopulationStats" [fill]="fillPopulationStats"
+                                    [title]="titlePopulationStats" [tooltip]="tooltipPopulationStats"
+                                    [colors]="colorsPopulationStats" [legend]="legendPopulationStats">
+                                </apx-chart>
+                            </div>
+                        </div> -->
+                        <!-- <div class="col-4">
+                            <div class="surgery_records graph_fixed_alter_list rounded mt-2">
+                                <div class="fixed_alter_header rounded-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-2">
+                                            <p class="fw-semibold">Condition</p>
+                                        </div>
+                                        <div class="col-2">
+                                            <p class="fw-semibold">Count</p>
+                                        </div>
+                                        <div class="col ms-auto text-end">
+                                            <div class="custom_tooltip custom_tooltip_left d-inline-block"
+                                                (click)="exportGridData('csv', populationData, 'PopulationData')">
+                                                <svg width="15" height="15"
+                                                    class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                    aria-hidden="true" focusable="false" data-prefix="fas"
+                                                    data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 576 512">
+                                                    <path fill="#8967B3"
+                                                        d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                    </path>
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p class="m-0">Export</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body" style="height: 40vh;">
+                                    <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of populationData">
+                                        <div class="col-2">
+                                            <p class="">{{ item.POPULATIONTYPE }}</p>
+                                        </div>
+                                        <div class="col-2">
+                                            <p class="">{{ item.TotalCount }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="row mx-0 gx-2 mt-2" *ngIf="selectedCategory.value=='asthma'">
+                        <div class="col-6">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                <apx-chart *ngIf="asthmaSeries?.length" [series]="asthmaSeries"
+                                    [chart]="asthmaChart" [xaxis]="asthmaXAxis" [plotOptions]="asthmaPlotOptions"
+                                    [fill]="asthmaFill" [colors]="asthmaColors" [title]="asthmaTitle"
+                                    [legend]="asthmaLegend" [dataLabels]="asthmaDataLabels">
+                                </apx-chart>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                <apx-chart *ngIf="copdSeries?.length" [series]="copdSeries" [chart]="copdChart"
+                                    [xaxis]="copdXAxis" [plotOptions]="copdPlotOptions" [fill]="copdFill"
+                                    [colors]="copdColors" [title]="copdTitle" [legend]="copdLegend"
+                                    [dataLabels]="copdDataLabels">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mx-0 gx-2 mt-2" *ngIf="selectedCategory.value=='Diabetes'">
+                        <div class="col-12">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                <apx-chart *ngIf="diabetesSeries?.length" [series]="diabetesSeries"
+                                    [chart]="diabetesChart" [xaxis]="diabetesXAxis" [plotOptions]="diabetesPlotOptions"
+                                    [fill]="diabetesFill" [colors]="diabetesColors" [title]="diabetesTitle"
+                                    [legend]="diabetesLegend" [dataLabels]="diabetesDataLabels">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mx-0 gx-2 mt-2" *ngIf="selectedCategory.value=='hypertension'">
+                        <div class="col-12">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                <apx-chart *ngIf="hypertensionSeries?.length" [series]="hypertensionSeries"
+                                    [chart]="hypertensionChart" [xaxis]="hypertensionXAxis"
+                                    [plotOptions]="hypertensionPlotOptions" [fill]="hypertensionFill"
+                                    [colors]="hypertensionColors" [title]="hypertensionTitle"
+                                    [legend]="hypertensionLegend" [dataLabels]="hypertensionDataLabels">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mx-0 gx-2 mt-2" *ngIf="selectedCategory.value=='Coronary'">
+                        <div class="col-12">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                <apx-chart *ngIf="cadSeries?.length" [series]="cadSeries" [chart]="cadChart"
+                                    [xaxis]="cadXAxis" [plotOptions]="cadPlotOptions" [fill]="cadFill"
+                                    [colors]="cadColors" [title]="cadTitle" [legend]="cadLegend"
+                                    [dataLabels]="cadDataLabels">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="selectedCategory.value=='asthma'">
+                    <div class="population_health_header mt-2 mx-2">
+                        <h5 class="m-0">Asthma & COPD</h5>
+                    </div>
+                    <div class="mt-2">
+                        <div class="row mx-0 gx-2">
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded overflow-hidden">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Asthma
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 700;">
+                                                {{asthmaCOPDStatistics?.Asthma || 0 | number}}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded overflow-hidden">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            ER
+                                        </div>
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            IP
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2 h-100">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                {{asthmaCOPDStatistics?.ASTHMA_ER || 0 |
+                                                number}}
+                                            </h4>
+                                        </div>
+                                        <div class="col" style="background-color: #ececec;">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                {{asthmaCOPDStatistics?.ASTHMA_IP || 0 |
+                                                number}}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded overflow-hidden">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Smoker
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 700;">
+                                                {{asthmaCOPDStatistics?.ASTHMA_SMOKER ||
+                                                0 | number}} | {{asthmaCOPDStatistics?.ASTHMA_SMOKER_Per
+                                                ||
+                                                0 |
+                                                number:'1.0-2'}}%
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded overflow-hidden">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Non-Smoker
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 700;">
+                                                {{asthmaCOPDStatistics?.ASTHMA_NONSMOKER
+                                                || 0 | number}} |
+                                                {{asthmaCOPDStatistics?.ASTHMA_NONSMOKER_Per || 0 |
+                                                number:'1.0-2'}}%
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mx-0 gx-2 mt-2">
+                            <div class="col-6">
+                                <div class="bg-white p-2 border shadow-sm rounded h-100">
+                                    <apx-chart *ngIf="asthmaAdmissionChartData"
+                                        [series]="asthmaAdmissionChartData.series"
+                                        [chart]="asthmaAdmissionChartData.chart"
+                                        [xaxis]="asthmaAdmissionChartData.xaxis"
+                                        [yaxis]="asthmaAdmissionChartData.yaxis"
+                                        [dataLabels]="asthmaAdmissionChartData.dataLabels"
+                                        [plotOptions]="asthmaAdmissionChartData.plotOptions"
+                                        [title]="asthmaAdmissionChartData.title"
+                                        [tooltip]="asthmaAdmissionChartData.tooltip"
+                                        [colors]="asthmaAdmissionChartData.colors"
+                                        [legend]="asthmaAdmissionChartData.legend"
+                                        [fill]="asthmaAdmissionChartData.fill">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                    <apx-chart *ngIf="inhalerChartData" [series]="inhalerChartData.series"
+                                        [chart]="inhalerChartData.chart" [xaxis]="inhalerChartData.xaxis"
+                                        [yaxis]="inhalerChartData.yaxis" [dataLabels]="inhalerChartData.dataLabels"
+                                        [plotOptions]="inhalerChartData.plotOptions" [title]="inhalerChartData.title"
+                                        [tooltip]="inhalerChartData.tooltip" [colors]="inhalerChartData.colors"
+                                        [legend]="inhalerChartData.legend" [fill]="inhalerChartData.fill">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mx-0 gx-2 mt-2">
+                            <div class="col-8">
+                                <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm h-100">
+                                    <div class="fixed_alter_header rounded-top">
+                                        <div class="row gx-2 p-2 mx-0">
+                                            <div class="col-1">
+                                                <p class="fw-semibold">Month</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="fw-semibold">Asthma</p>
+                                            </div>
+                                            <div class="col-2">
+                                                <p class="fw-semibold">Admitted</p>
+                                            </div>
+                                            <div class="col-2">
+                                                <p class="fw-semibold">ER Visits</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="fw-semibold">Near Fatal</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="fw-semibold">Smoker</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="fw-semibold">Inhaler</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="fw-semibold">Target</p>
+                                            </div>
+                                            <div class="col-2">
+                                                <div class="d-flex justify-content-end align-items-center">
+                                                    <div class="custom_tooltip custom_tooltip_left ms-auto d-flex"
+                                                        (click)="exportGridData('csv', gridRows, 'AsthmaData')">
+                                                        <svg width="15" height="15"
+                                                            class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                            aria-hidden="true" focusable="false" data-prefix="fas"
+                                                            data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 576 512">
+                                                            <path fill="#8967B3"
+                                                                d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                            </path>
+                                                        </svg>
+                                                        <div class="tooltip">
+                                                            <p class="m-0">Export</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="fixed_alter_body" style="height: auto;">
+                                        <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let row of gridRows">
+                                            <div class="col-1">
+                                                <p>{{ row.month }}</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p>{{ row.asthma }}</p>
+                                            </div>
+                                            <div class="col-2">
+                                                <p>{{ row.admitted }}</p>
+                                            </div>
+                                            <div class="col-2">
+                                                <p>{{ row.erVisits }}</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p>{{ row.nearFatal }}</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p>{{ row.smoker }}</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p>{{ row.inhaler}}</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p>{{ row.target }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="bg-white p-2 rounded border shadow-sm h-100">
+                                    <apx-chart *ngIf="asthmaCOPDDonutChartData"
+                                        [series]="asthmaCOPDDonutChartData.series"
+                                        [chart]="asthmaCOPDDonutChartData.chart"
+                                        [labels]="asthmaCOPDDonutChartData.labels"
+                                        [colors]="asthmaCOPDDonutChartData.colors"
+                                        [fill]="asthmaCOPDDonutChartData.fill"
+                                        [stroke]="asthmaCOPDDonutChartData.stroke"
+                                        [legend]="asthmaCOPDDonutChartData.legend"
+                                        [tooltip]="asthmaCOPDDonutChartData.tooltip"
+                                        [dataLabels]="asthmaCOPDDonutChartData.dataLabels"
+                                        [title]="asthmaCOPDDonutChartData.title"
+                                        [responsive]="asthmaCOPDDonutChartData.responsive"
+                                        [plotOptions]="asthmaCOPDDonutChartData.plotOptions || {}">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="mt-2">
+                        <div class="row mx-0 g-2">
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            COPD
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 700;">
+                                                {{asthmaCOPDStatistics?.COPD || 0 | number}}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Female
+                                        </div>
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Male
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2 h-100">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                {{asthmaCOPDStatistics?.COPD_FEMALE || 0
+                                                | number}}
+                                            </h4>
+                                        </div>
+                                        <div class="col" style="background-color: #ececec;">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                {{asthmaCOPDStatistics?.COPD_MALE || 0 |
+                                                number}}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Smoker
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 700;">
+                                                {{asthmaCOPDStatistics?.COPD_SMOKER || 0
+                                                | number}} | {{asthmaCOPDStatistics?.COPD_SMOKER_Per || 0 |
+                                                number:'1.0-2'}}%
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Non-Smoker
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 700;">
+                                                {{asthmaCOPDStatistics?.COPD_NONSMOKER
+                                                || 0 | number}} | {{asthmaCOPDStatistics?.COPD_NONSMOKER_Per || 0 |
+                                                number:'1.0-2'}}%
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                    <apx-chart *ngIf="causesChartData" [series]="causesChartData.series"
+                                        [chart]="causesChartData.chart" [xaxis]="causesChartData.xaxis"
+                                        [yaxis]="causesChartData.yaxis"
+                                        [dataLabels]="causesChartData.dataLabels"
+                                        [plotOptions]="causesChartData.plotOptions"
+                                        [title]="causesChartData.title" [tooltip]="causesChartData.tooltip"
+                                        [colors]="causesChartData.colors" [legend]="causesChartData.legend"
+                                        [fill]="causesChartData.fill">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                    <apx-chart [series]="controllersChartData.series"
+                                        [chart]="controllersChartData.chart" [xaxis]="controllersChartData.xaxis"
+                                        [yaxis]="controllersChartData.yaxis"
+                                        [dataLabels]="controllersChartData.dataLabels"
+                                        [plotOptions]="controllersChartData.plotOptions"
+                                        [fill]="controllersChartData.fill" [title]="controllersChartData.title"
+                                        [tooltip]="controllersChartData.tooltip" [colors]="controllersChartData.colors"
+                                        [legend]="controllersChartData.legend">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm">
+                                    <div class="fixed_alter_header rounded-top">
+                                        <div class="row gx-2 p-2 mx-0">
+                                            <div class="col-2">
+                                                <p class="fw-semibold">Month</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="fw-semibold">COPD</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="fw-semibold">Smoker</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="fw-semibold">Alpha-1</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="fw-semibold">Age&gt;40</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="fw-semibold">OPD</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="fw-semibold">ER Visits</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="fw-semibold">Admission</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="fw-semibold">Inhaler</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="fw-semibold">Target</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <div class="custom_tooltip custom_tooltip_left ms-auto d-flex"
+                                                    (click)="exportGridData('csv', asthmaCopdGridRows, 'COPDData')">
+                                                    <svg width="15" height="15"
+                                                        class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                        aria-hidden="true" focusable="false" data-prefix="fas"
+                                                        data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 576 512">
+                                                        <path fill="#8967B3"
+                                                            d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                        </path>
+                                                    </svg>
+                                                    <div class="tooltip">
+                                                        <p class="m-0">Export</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fixed_alter_body" style="height: auto;">
+                                        <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let row of asthmaCopdGridRows">
+                                            <div class="col-2">
+                                                <p class="">{{ row.month }}</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="">{{ row.copd }}</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="">{{ row.smoker }}</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="">{{ row.alpha1 }}</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="">{{ row.ageGreaterThan40 }}</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="">{{ row.opd }}</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="">{{ row.erVisits }}</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="">{{ row.admission }}</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="">{{ row.inhaler }}</p>
+                                                
+                                            </div>
+                                            <div class="col-1">
+                                                <p class="">{{ row.target }}</p>
+                                            </div>
+                                            <div class="col-1">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div *ngIf="selectedCategory.value=='Diabetes'">
+                    <div class="population_health_header mt-2 mx-2">
+                        <h5 class="m-0">Diabetes Mellitus</h5>
+                    </div>
+                    <div class="mt-2">
+                        <div class="row mx-0 g-2">
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            DIABETES MELLITUS
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 700;">
+                                                {{diabetesStatistics?.TotalDMCount || 0 |
+                                                number}}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="readmissionCard d-flex flex-column border rounded mt-2">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Female
+                                        </div>
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Male
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2 h-100">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-4"
+                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                {{diabetesStatistics?.TotalDM_FEMALE || 0 | number}}
+                                            </h4>
+                                        </div>
+                                        <div class="col" style="background-color: #ececec;">
+                                            <h4 class="rounded-bottom text-center my-4"
+                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                {{diabetesStatistics?.TotalDM_MALE || 0 | number}}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-9">
+                                <div class="readmissionCard d-flex flex-column border rounded h-100">
+                                    <div
+                                        class="readmissionCard_header bg-transparent border-bottom rounded-top d-flex gap-2">
+                                        <div class="col title_clr p-2 fw-bold">
+                                            DIABETIC PATIENTS  CLINICAL SCREENING COMPLIANCE
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2 h-100 p-2">
+                                        <div class="row g-2 w-100">
+                                            <div class="col-4">
+                                                <div class="readmissionCard d-flex flex-column border rounded">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            Eye Exam
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center"
+                                                                style="font-size: 1.1rem; font-weight: 700;">
+                                                                {{diabetesStatistics?.TotalDM_EyeExam || 0 |
+                                                                number}} ({{diabetesStatistics?.TotalDM_EyeExamPer
+                                                                || 0
+                                                                |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="readmissionCard d-flex flex-column border rounded">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            HBa1C
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center"
+                                                                style="font-size: 1.1rem; font-weight: 700;">
+                                                                {{diabetesStatistics?.HBa1cCount || 0 |
+                                                                number}} ({{diabetesStatistics?.HBa1cCountPer || 0 |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="readmissionCard d-flex flex-column border rounded">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            HBa1C &lt; 7
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center"
+                                                                style="font-size: 1.1rem; font-weight: 700;">
+                                                                {{diabetesStatistics?.HbA1CLess7Count ||
+                                                                0 |
+                                                                number}} ({{diabetesStatistics?.HbA1CLess7CountPer
+                                                                || 0
+                                                                |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="readmissionCard d-flex flex-column border rounded">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            Lipid Profile
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center"
+                                                                style="font-size: 1.1rem; font-weight: 700;">
+                                                                {{diabetesStatistics?.LipidProfileCount ||
+                                                                0 |
+                                                                number}} ({{diabetesStatistics?.LipidProfileCountPer
+                                                                ||
+                                                                0 |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="readmissionCard d-flex flex-column border rounded">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            LDL ≤100mg/dl
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center"
+                                                                style="font-size: 1.1rem; font-weight: 700;">
+                                                                {{diabetesStatistics?.LDLLess100Count ||
+                                                                0 |
+                                                                number}} ({{diabetesStatistics?.LDLLess100CountPer
+                                                                || 0
+                                                                |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="readmissionCard d-flex flex-column border rounded">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            Urine albumin creatinine ratio
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center"
+                                                                style="font-size: 1.1rem; font-weight: 700;">
+                                                                {{diabetesStatistics?.CREATININECount ||
+                                                                0 |
+                                                                number}} ({{diabetesStatistics?.CREATININECountPer
+                                                                || 0
+                                                                |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <div class="row mx-0 g-2">
+                            <div class="col-12 d-flex gap-2">
+                                <div class="col-6 bg-white p-2 border shadow-sm rounded" style="height: 300px;">
+                                    <apx-chart *ngIf="diabeticHBa1CChartData" [series]="diabeticHBa1CChartData.series"
+                                        [chart]="diabeticHBa1CChartData.chart" [xaxis]="diabeticHBa1CChartData.xaxis"
+                                        [yaxis]="diabeticHBa1CChartData.yaxis"
+                                        [dataLabels]="diabeticHBa1CChartData.dataLabels"
+                                        [plotOptions]="diabeticHBa1CChartData.plotOptions"
+                                        [title]="diabeticHBa1CChartData.title"
+                                        [tooltip]="diabeticHBa1CChartData.tooltip"
+                                        [colors]="diabeticHBa1CChartData.colors"
+                                        [legend]="diabeticHBa1CChartData.legend" [fill]="diabeticHBa1CChartData.fill">
+                                    </apx-chart>
+                                </div>
+                                <div class="col-6  bg-white p-2 border shadow-sm rounded" style="height: 300px;">
+                                    <apx-chart *ngIf="diabeticLDLChartData" [series]="diabeticLDLChartData.series"
+                                        [chart]="diabeticLDLChartData.chart" [xaxis]="diabeticLDLChartData.xaxis"
+                                        [yaxis]="diabeticLDLChartData.yaxis"
+                                        [dataLabels]="diabeticLDLChartData.dataLabels"
+                                        [plotOptions]="diabeticLDLChartData.plotOptions"
+                                        [title]="diabeticLDLChartData.title" [tooltip]="diabeticLDLChartData.tooltip"
+                                        [colors]="diabeticLDLChartData.colors" [legend]="diabeticLDLChartData.legend"
+                                        [fill]="diabeticLDLChartData.fill">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div>
+                            <div class="col-12 mt-2">
+                                <div class="bg-white p-2 border shadow-sm rounded h-100">
+                                    <apx-chart *ngIf="diabeticScreeningChartData"
+                                        [series]="diabeticScreeningChartData.series"
+                                        [chart]="diabeticScreeningChartData.chart"
+                                        [xaxis]="diabeticScreeningChartData.xaxis"
+                                        [yaxis]="diabeticScreeningChartData.yaxis"
+                                        [dataLabels]="diabeticScreeningChartData.dataLabels"
+                                        [plotOptions]="diabeticScreeningChartData.plotOptions"
+                                        [title]="diabeticScreeningChartData.title"
+                                        [tooltip]="diabeticScreeningChartData.tooltip"
+                                        [colors]="diabeticScreeningChartData.colors"
+                                        [legend]="diabeticScreeningChartData.legend"
+                                        [fill]="diabeticScreeningChartData.fill">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2 mx-2">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="col-1">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">Diabetes</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">Eye Exam</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">Eye Exam %</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">HBA1C</p>
+                                    </div>
+                                    <div class="col-1" style="width: 5%;">
+                                        <p class="fw-semibold">HBA1C %</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">HBa1C &lt;7 </p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">LDL Cholesterol</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">Cholesterol %</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">LDL Cholesterol ≤100mg/dl</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">uACR </p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">uACR %</p>
+                                    </div>
+                                    <div class="d-flex justify-content-end align-items-center" style="width: 2%;">
+                                        <div class="custom_tooltip custom_tooltip_left ms-auto"
+                                            (click)="exportGridData('csv', diabetesGridRows, 'DiabetesData')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body" style="height: auto;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let row of diabetesGridRows">
+                                    <div class="col-1">
+                                        <p>{{ row.month }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.diabetes }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.eyeExam }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.eyeExamPercent }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.hba1c }}</p>
+                                    </div>
+                                    <div class="col-1" style="width: 5%;">
+                                        <p>{{ row.hba1cPercent }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.hba1cLessThan7 }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.ldl }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.ldlPercent }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.ldlLessThan100 }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.uacr }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.uacrPercent }}</p>
+                                    </div>
+                                    <div class="col-1" style="width: 2%;">
+                                       
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="selectedCategory.value=='hypertension'">
+                    <div class="population_health_header mt-2 mx-2">
+                        <h5 class="m-0">Hypertension</h5>
+                    </div>
+
+                    <div class="mt-2">
+                        <div class="row mx-0 g-2">
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Patients with Hypertension
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 700;">
+                                                {{hypertensionData?.TotalHTNCount}}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Female
+                                        </div>
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Male
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2 h-100">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                {{hypertensionData?.TotalHTN_FEMALE}}
+                                            </h4>
+                                        </div>
+                                        <div class="col" style="background-color: #ececec;">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                {{hypertensionData?.TotalHTN_MALE}}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Controlled
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 700;">
+                                                {{hypertensionData?.CONTROLLED ||
+                                                0 |
+                                                number}} ({{hypertensionData?.CONTROLLEDPer || 0 |
+                                                number:'1.0-2'}}%)
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Uncontrolled
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 700;">
+                                                {{hypertensionData?.UNCONTROLLED ||
+                                                0 |
+                                                number}} ({{hypertensionData?.UNCONTROLLEDPer || 0 |
+                                                number:'1.0-2'}}%)
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <div class="readmissionCard d-flex flex-column border rounded h-100">
+                                    <div
+                                        class="readmissionCard_header bg-transparent border-bottom rounded-top d-flex gap-2">
+                                        <div class="col title_clr p-2 fw-bold">
+                                            PATIENTS WITH HYPERTENSION CLINCIAL SCREENING COMPLIANCE
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2 h-100 p-2">
+                                        <div class="row g-2 w-100">
+                                            <div class="col">
+                                                <div class="readmissionCard d-flex flex-column border rounded">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            Lipid Testing
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2 h-100">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center my-3"
+                                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                                {{hypertensionData?.LipidProfileCount ||
+                                                                0 |
+                                                                number}} ({{hypertensionData?.LipidProfileCountPer
+                                                                || 0
+                                                                |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="readmissionCard d-flex flex-column border rounded">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            eGFR
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2 h-100">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center my-3"
+                                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                                {{hypertensionData?.eGFR ||
+                                                                0 |
+                                                                number}} ({{hypertensionData?.eGFRPer || 0 |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="readmissionCard d-flex flex-column border rounded">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            ACR
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2 h-100">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center my-3"
+                                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                                {{hypertensionData?.ACRCount ||
+                                                                0 |
+                                                                number}} ({{hypertensionData?.ACRCountPer || 0 |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="readmissionCard d-flex flex-column border rounded">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            Fasting Blood Sugar
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2 h-100">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center my-3"
+                                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                                {{hypertensionData?.FastingBloodSugarCount
+                                                                ||
+                                                                0 |
+                                                                number}}
+                                                                ({{hypertensionData?.FastingBloodSugarCountPer
+                                                                || 0
+                                                                |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
+                        <div class="row mx-0 g-2">
+                            <div class="col-12 d-flex gap-2">
+                                <div class="col-6 bg-white p-2 border shadow-sm rounded" style="height: 300px;">
+                                    <div>
+                                        <apx-chart *ngIf="hypertensionEGFRChartData"
+                                            [series]="hypertensionEGFRChartData.series"
+                                            [chart]="hypertensionEGFRChartData.chart"
+                                            [xaxis]="hypertensionEGFRChartData.xaxis"
+                                            [yaxis]="hypertensionEGFRChartData.yaxis"
+                                            [dataLabels]="hypertensionEGFRChartData.dataLabels"
+                                            [plotOptions]="hypertensionEGFRChartData.plotOptions"
+                                            [title]="hypertensionEGFRChartData.title"
+                                            [tooltip]="hypertensionEGFRChartData.tooltip"
+                                            [colors]="hypertensionEGFRChartData.colors"
+                                            [legend]="hypertensionEGFRChartData.legend"
+                                            [fill]="hypertensionEGFRChartData.fill">
+                                        </apx-chart>
+
+                                    </div>
+                                </div>
+                                <div class="col-6 bg-white p-2 border shadow-sm rounded" style="height: 300px;">
+                                    <div>
+                                        <apx-chart *ngIf="hypertensionLDLChartData"
+                                            [series]="hypertensionLDLChartData.series"
+                                            [chart]="hypertensionLDLChartData.chart"
+                                            [xaxis]="hypertensionLDLChartData.xaxis"
+                                            [yaxis]="hypertensionLDLChartData.yaxis"
+                                            [dataLabels]="hypertensionLDLChartData.dataLabels"
+                                            [plotOptions]="hypertensionLDLChartData.plotOptions"
+                                            [title]="hypertensionLDLChartData.title"
+                                            [tooltip]="hypertensionLDLChartData.tooltip"
+                                            [colors]="hypertensionLDLChartData.colors"
+                                            [legend]="hypertensionLDLChartData.legend"
+                                            [fill]="hypertensionLDLChartData.fill">
+                                        </apx-chart>
+
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        <div class="col-12">
+                             <div class="col-12 p-2">
+                                <div class="bg-white p-2 border shadow-sm rounded h-100">
+                                    <div>
+                                        <apx-chart *ngIf="hypertensionScreeningChartData"
+                                            [series]="hypertensionScreeningChartData.series"
+                                            [chart]="hypertensionScreeningChartData.chart"
+                                            [xaxis]="hypertensionScreeningChartData.xaxis"
+                                            [yaxis]="hypertensionScreeningChartData.yaxis"
+                                            [dataLabels]="hypertensionScreeningChartData.dataLabels"
+                                            [plotOptions]="hypertensionScreeningChartData.plotOptions"
+                                            [title]="hypertensionScreeningChartData.title"
+                                            [tooltip]="hypertensionScreeningChartData.tooltip"
+                                            [colors]="hypertensionScreeningChartData.colors"
+                                            [legend]="hypertensionScreeningChartData.legend"
+                                            [fill]="hypertensionScreeningChartData.fill">
+                                        </apx-chart>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2 mx-2">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="col-1">
+                                        <p class="fw-semibold">MONTH</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">HTN</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">LDL</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">LDL %</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">LDL ≤100mg</p>
+                                    </div>
+                                    <div class="col-1" style="width: 5%;">
+                                        <p class="fw-semibold">eGFR</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">eGFR %</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">eGFR &lt; 60</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">ACR</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">ACR %</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">FBS</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">FBS %</p>
+                                    </div>
+                                    <div class="d-flex justify-content-end align-items-center" style="width: 2%;">
+                                        <div class="custom_tooltip custom_tooltip_left ms-auto"
+                                            (click)="exportGridData('csv', hypertensionGridRows, 'HypertensionData')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="fixed_alter_body" style="height: auto;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let row of hypertensionGridRows">
+                                    <div class="col-1">
+                                        <p>{{ row.month }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.htn }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.ldl }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.ldlPercent }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.ldlLessThan100 }}</p>
+                                    </div>
+                                    <div class="col-1" style="width: 5%;">
+                                        <p>{{ row.egfr }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.egfrPercent }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.egfrLess60 }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.acr }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.acrPercent }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.fbs }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.fbsPercent }}</p>
+                                    </div>
+                                    <div class="col-1" style="width: 2%;">
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div *ngIf="selectedCategory.value=='Coronary'">
+                    <div class="mt-2">
+                        <div class="row mx-0 g-2">
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            CAD PATIENTS
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 700;">
+                                                {{cadData?.TotalCADCount}}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Female
+                                        </div>
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Male
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2 h-100">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                {{cadData?.TotalCAD_FEMALE}}
+                                            </h4>
+                                        </div>
+                                        <div class="col" style="background-color: #ececec;">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                {{cadData?.TotalCAD_MALE}}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Controlled
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 700;">
+                                                {{cadData?.CONTROLLED
+                                                ||
+                                                0 |
+                                                number}} ({{cadData?.CONTROLLEDPer || 0 |
+                                                number:'1.0-2'}}%)
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="readmissionCard d-flex flex-column border rounded">
+                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                        <div class="col text-white text-center py-2 fw-bold">
+                                            Uncontrolled
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <div class="col">
+                                            <h4 class="rounded-bottom text-center my-3"
+                                                style="font-size: 1.5rem; font-weight: 700;">
+                                                {{cadData?.UNCONTROLLED
+                                                ||
+                                                0 |
+                                                number}} ({{cadData?.UNCONTROLLEDPer || 0 |
+                                                number:'1.0-2'}}%)
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="readmissionCard d-flex flex-column border rounded h-100">
+                                    <div
+                                        class="readmissionCard_header bg-transparent border-bottom rounded-top d-flex gap-2">
+                                        <div class="col title_clr p-2 fw-bold">
+                                            PATIENTS WITH CORONARY ARTERY DISEASE CLINICAL SCREENING COMPLIANCE
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-2 h-100 p-2">
+                                        <div class="row g-2 w-100">
+                                            <div class="col">
+                                                <div class="readmissionCard d-flex flex-column border rounded">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            LDL & LDL &lt; 70mg /dl
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2 h-100">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center my-3"
+                                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                                {{cadData?.LDLCount
+                                                                ||
+                                                                0 |
+                                                                number}} ({{cadData?.LDLCountPer || 0 |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                        <div class="col" style="background-color: #ececec;">
+                                                            <h4 class="rounded-bottom text-center my-3"
+                                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                                {{cadData?.LDLLess70Count
+                                                                ||
+                                                                0 |
+                                                                number}} ({{cadData?.LDLLess70Per || 0 |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="readmissionCard d-flex flex-column border rounded">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            HBA1C & HBA1C &lt; 7%
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2 h-100">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center my-3"
+                                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                                {{cadData?.HBa1CCount
+                                                                ||
+                                                                0 |
+                                                                number}} ({{cadData?.HBa1CCountPer || 0 |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                        <div class="col" style="background-color: #ececec;">
+                                                            <h4 class="rounded-bottom text-center my-3"
+                                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                                {{cadData?.HbA1CLess7Count
+                                                                ||
+                                                                0 |
+                                                                number}} ({{cadData?.HbA1CLess7CountPer || 0 |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="readmissionCard d-flex flex-column border rounded">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            Stress Test
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2 h-100">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center my-3"
+                                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                                {{cadData?.STRESSTEST
+                                                                ||
+                                                                0 |
+                                                                number}} ({{cadData?.STRESSTESTPer || 0 |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="readmissionCard d-flex flex-column border rounded">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            Echocardiogram
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2 h-100">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center my-3"
+                                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                                {{cadData?.ECHO_CARDIOGRAM
+                                                                ||
+                                                                0 |
+                                                                number}} ({{cadData?.ECHO_CARDIOGRAMPer || 0 |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="readmissionCard d-flex flex-column border rounded">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            CT Angiogram
+                                                        </div>
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            Echocardiogram
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2 h-100">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center my-3"
+                                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                                {{cadData?.CT_ANGIOGRAM
+                                                                ||
+                                                                0 |
+                                                                number}} ({{cadData?.CT_ANGIOGRAMPer || 0 |
+                                                                number:'1.0-2'}}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="row gx-2">
+                                    <div class="col-4">
+                                        <div class="readmissionCard d-flex flex-column border rounded shadow-sm">
+                                            <div
+                                                class="readmissionCard_header bg-transparent border-bottom rounded-top d-flex gap-2">
+                                                <div class="col title_clr p-2 fw-bold">
+                                                    LIFESTYLE COMPLIANCE
+                                                </div>
+                                            </div>
+                                            <div class="row gx-2 h-100 p-2">
+                                                <div class="col-6">
+                                                    <div class="readmissionCard d-flex flex-column border rounded">
+                                                        <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                            <div class="col text-white text-center py-2 fw-bold">
+                                                                BMI
+                                                            </div>
+                                                        </div>
+                                                        <div class="row gx-2 h-100">
+                                                            <div class="col">
+                                                                <h4 class="rounded-bottom text-center my-3"
+                                                                    style="font-size: 1.5rem; font-weight: 600;">
+                                                                    {{ cadData?.BMI || 0 | number }} ({{
+                                                                    cadData?.BMIPer
+                                                                    ||
+                                                                    0 | number: '1.0-2'
+                                                                    }}%)
+                                                                </h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="readmissionCard d-flex flex-column border rounded">
+                                                        <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                            <div class="col text-white text-center py-2 fw-bold">
+                                                                Smoking
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex gap-2 h-100">
+                                                            <div class="col">
+                                                                <h4 class="rounded-bottom text-center my-3"
+                                                                    style="font-size: 1.5rem; font-weight: 600;">
+                                                                    {{ cadData?.Smoke || 0 | number }} ({{
+                                                                    cadData?.SmokePer
+                                                                    || 0 | number:
+                                                                    '1.0-2' }}%)
+                                                                </h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="readmissionCard d-flex flex-column border rounded shadow-sm mt-2">
+                                            <div
+                                                class="readmissionCard_header bg-transparent border-bottom rounded-top d-flex gap-2">
+                                                <div class="col title_clr p-2 fw-bold">
+                                                    CAD Beta Blockers
+                                                </div>
+                                            </div>
+                                            <div class="d-flex gap-2 h-100 p-2">
+                                                <div class="readmissionCard d-flex flex-column border rounded w-100">
+                                                    <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                        <div class="col text-white text-center py-2 fw-bold">
+                                                            CAD Beta Blockers
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2 h-100">
+                                                        <div class="col">
+                                                            <h4 class="rounded-bottom text-center my-3"
+                                                                style="font-size: 1.5rem; font-weight: 600;">
+                                                                {{ cadData?.CAD_BETA_BLOCKERSCount || 0 | number }}
+                                                                ({{
+                                                                cadData?.CAD_BETA_BLOCKERSPer || 0 | number: '1.0-2'
+                                                                }}%)
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="readmissionCard d-flex flex-column border rounded shadow-sm h-100">
+                                            <div
+                                                class="readmissionCard_header bg-transparent border-bottom rounded-top d-flex gap-2">
+                                                <div class="col title_clr p-2 fw-bold">
+                                                    TREATMENT COMPLIANCE & OUTCOME
+                                                </div>
+                                            </div>
+                                            <div class="row mx-0 g-2 h-100 p-2">
+                                                <div class="col-6">
+                                                    <div class="readmissionCard d-flex flex-column border rounded">
+                                                        <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                            <div class="col text-white text-center py-2 fw-bold">
+                                                                Follow-ups
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex gap-2 h-100">
+                                                            <div class="col">
+                                                                <h4 class="rounded-bottom text-center my-3"
+                                                                    style="font-size: 1.5rem; font-weight: 600;">
+                                                                    {{ cadData?.FOLLOWUPS || 0 | number }} ({{
+                                                                    cadData?.FOLLOWUPSPer || 0 |
+                                                                    number: '1.0-2' }}%)
+                                                                </h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="readmissionCard d-flex flex-column border rounded">
+                                                        <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                            <div class="col text-white text-center py-2 fw-bold">
+                                                                ER Visit (Chest Pain)
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex gap-2 h-100">
+                                                            <div class="col">
+                                                                <h4 class="rounded-bottom text-center my-3"
+                                                                    style="font-size: 1.5rem; font-weight: 600;">
+                                                                    {{ cadData?.ERVISIT_CHESTPAIN || 0 | number }}
+                                                                    ({{
+                                                                    cadData?.ERVISIT_CHESTPAINPer || 0 | number:
+                                                                    '1.0-2'
+                                                                    }}%)
+                                                                </h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="readmissionCard d-flex flex-column border rounded">
+                                                        <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                            <div class="col text-white text-center py-2 fw-bold">
+                                                                CORONARY ARTERY DISEASE READMISSION RATE
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex gap-2 h-100">
+                                                            <div class="col">
+                                                                <h4 class="rounded-bottom text-center my-3"
+                                                                    style="font-size: 1.5rem; font-weight: 600;">
+                                                                    {{ cadData?.CAD_ReAdmitWith30DaysCnt || 0 |
+                                                                    number
+                                                                    }}
+                                                                    ({{
+                                                                    cadData?.CAD_ReAdmitWith30DaysCntPer || 0 |
+                                                                    number:
+                                                                    '1.0-2' }}%)
+                                                                </h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="readmissionCard d-flex flex-column border rounded">
+                                                        <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                                            <div class="col text-white text-center py-2 fw-bold">
+                                                                 CORONARY ARTERY DISEASE Mortality RATE
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex gap-2 h-100">
+                                                            <div class="col">
+                                                                <h4 class="rounded-bottom text-center my-3"
+                                                                    style="font-size: 1.5rem; font-weight: 600;">
+                                                                    {{ cadData?.CAD_MORTALITYCount || 0 | number }}
+                                                                    ({{
+                                                                    cadData?.CAD_MORTALITYCountPer || 0 | number:
+                                                                    '1.0-2'
+                                                                    }}%)
+                                                                </h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
+                        <div class="row mx-0">
+                            
+                            <div class="col-12 d-flex mt-1 gap-2">
+                                <div class="col-8 bg-white p-2 border shadow-sm rounded">
+                                    <div>
+                                        <apx-chart *ngIf="cadComorbiditiesChartData"
+                                            [series]="cadComorbiditiesChartData.series"
+                                            [chart]="cadComorbiditiesChartData.chart"
+                                            [xaxis]="cadComorbiditiesChartData.xaxis"
+                                            [yaxis]="cadComorbiditiesChartData.yaxis"
+                                            [dataLabels]="cadComorbiditiesChartData.dataLabels"
+                                            [plotOptions]="cadComorbiditiesChartData.plotOptions"
+                                            [title]="cadComorbiditiesChartData.title"
+                                            [tooltip]="cadComorbiditiesChartData.tooltip"
+                                            [colors]="cadComorbiditiesChartData.colors"
+                                            [legend]="cadComorbiditiesChartData.legend"
+                                            [fill]="cadComorbiditiesChartData.fill">
+                                        </apx-chart>
+
+                                    </div>
+                                </div>
+                                <div class="col-4 surgery_records graph_fixed_alter_list rounded border shadow-sm">
+                                    <div class="fixed_alter_header rounded-top">
+                                        <div class="row gx-2 p-2 mx-0">
+                                            <div class="col-5">
+                                                <p class="fw-semibold">Doctor</p>
+                                            </div>
+                                            <div class="col-5">
+                                                <p class="fw-semibold">Count</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <div class="custom_tooltip custom_tooltip_left ms-auto d-flex"
+                                                    (click)="exportGridData('csv', cadComorbidities, 'CAD_Comorbidities')">
+                                                    <svg width="15" height="15"
+                                                        class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                        aria-hidden="true" focusable="false" data-prefix="fas"
+                                                        data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 576 512">
+                                                        <path fill="#8967B3"
+                                                            d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                        </path>
+                                                    </svg>
+                                                    <div class="tooltip">
+                                                        <p class="m-0">Export</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fixed_alter_body" style="height: 271px;" *ngIf="cadComorbidities">
+                                        <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of cadComorbidities">
+                                            <div class="col-6">
+                                                <p class="">{{ item.name }}</p>
+                                            </div>
+                                            <div class="col-6">
+                                                <p class="">{{ item.count }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-12 mt-2">
+                                <div class="bg-white p-2 border shadow-sm rounded h-100">
+                                    <div>
+                                        <apx-chart *ngIf="cadScreeningChartData" [series]="cadScreeningChartData.series"
+                                            [chart]="cadScreeningChartData.chart" [xaxis]="cadScreeningChartData.xaxis"
+                                            [yaxis]="cadScreeningChartData.yaxis"
+                                            [dataLabels]="cadScreeningChartData.dataLabels"
+                                            [plotOptions]="cadScreeningChartData.plotOptions"
+                                            [title]="cadScreeningChartData.title"
+                                            [tooltip]="cadScreeningChartData.tooltip"
+                                            [colors]="cadScreeningChartData.colors"
+                                            [legend]="cadScreeningChartData.legend" [fill]="cadScreeningChartData.fill">
+                                        </apx-chart>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2 mx-2">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="col-1">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div class="col-1" style="width: 5%;">
+                                        <p class="fw-semibold">CAD</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">LDL</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">LDL ≤70</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">HBA1C</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">Stress Test</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">Echo</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">CT Angio</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">Smoker</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">BMI &lt;25</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">Beta Blockers</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p class="fw-semibold">FBS %</p>
+                                    </div>
+                                    <div class="d-flex justify-content-end align-items-center" style="width: 2%;">
+                                        <div class="custom_tooltip custom_tooltip_left ms-auto d-flex"
+                                            (click)="exportGridData('csv', cadGridRows, 'CADData')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="fixed_alter_body" style="height: auto;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let row of cadGridRows">
+                                    <div class="col-1">
+                                        <p>{{ row.month }}</p>
+                                    </div>
+                                    <div class="col-1" style="width: 5%;">
+                                        <p>{{ row.cad }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.ldl }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.ldlLess70 }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.hba1c }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.stressTest }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.echo }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.ctAngio }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.smoker }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.bmi }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.betaBlockers }}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <p>{{ row.fbsPercent }}</p>
+                                    </div>
+                                    <div class="col-1" style="width: 2%;">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

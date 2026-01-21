@@ -1,0 +1,53 @@
+<button *ngIf="!inSession" class="btn btn-primary video_call_btn rounded d-flex align-items-center gap-2 py-2"
+    (click)="getVideoSDKJWT()">
+    <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M15.957 2.40178C15.6198 2.22083 14.9124 2.03164 13.9501 2.70612L12.741 3.56155C12.6505 1.00348 11.5401 0 8.84218 0H3.90701C1.09396 0 0 1.09396 0 3.90701V10.4872C0 12.3791 1.02816 14.3942 3.90701 14.3942H8.84218C11.5401 14.3942 12.6505 13.3908 12.741 10.8327L13.9501 11.6881C14.46 12.05 14.9042 12.1652 15.2579 12.1652C15.5622 12.1652 15.8008 12.0747 15.957 11.9925C16.2943 11.8197 16.8618 11.3509 16.8618 10.1747V4.21957C16.8618 3.04335 16.2943 2.57451 15.957 2.40178ZM7.60839 6.68715C6.76118 6.68715 6.06203 5.99623 6.06203 5.1408C6.06203 4.28537 6.76118 3.59445 7.60839 3.59445C8.45559 3.59445 9.15474 4.28537 9.15474 5.1408C9.15474 5.99623 8.45559 6.68715 7.60839 6.68715Z"
+            fill="white" />
+    </svg>
+    Start Call
+</button>
+<button *ngIf="inSession" class="btn btn-primary video_call_btn rounded d-flex align-items-center gap-2 py-2"
+    (click)="closeSession()">
+    <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M15.957 2.40178C15.6198 2.22083 14.9124 2.03164 13.9501 2.70612L12.741 3.56155C12.6505 1.00348 11.5401 0 8.84218 0H3.90701C1.09396 0 0 1.09396 0 3.90701V10.4872C0 12.3791 1.02816 14.3942 3.90701 14.3942H8.84218C11.5401 14.3942 12.6505 13.3908 12.741 10.8327L13.9501 11.6881C14.46 12.05 14.9042 12.1652 15.2579 12.1652C15.5622 12.1652 15.8008 12.0747 15.957 11.9925C16.2943 11.8197 16.8618 11.3509 16.8618 10.1747V4.21957C16.8618 3.04335 16.2943 2.57451 15.957 2.40178ZM7.60839 6.68715C6.76118 6.68715 6.06203 5.99623 6.06203 5.1408C6.06203 4.28537 6.76118 3.59445 7.60839 3.59445C8.45559 3.59445 9.15474 4.28537 9.15474 5.1408C9.15474 5.99623 8.45559 6.68715 7.60839 6.68715Z"
+            fill="white" />
+    </svg>
+    Stop Call
+</button>
+
+<div *ngIf="inSession" class="zoom-floating-popup card border-0"
+    [ngClass]="{ minimized: isMinimized, maximized: !isMinimized }" (mousedown)="onDragStart($event)"
+    (document:mousemove)="onDragMove($event)" (document:mouseup)="onDragEnd()" #popupRef>
+    <div class="card-header d-flex justify-content-between align-items-center bg-white py-1 px-2">
+        <span>Zoom Session</span>
+        <div>
+            <button class="btn btn-sm btn-white me-2 p-0 min-width-unset" (click)="toggleMinMax()">
+                <svg *ngIf="!isMinimized" width="16" height="5" viewBox="0 0 9 2" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0.398985" y="0.398985" width="7.93949" height="0.79797" fill="black" stroke="black"
+                        stroke-width="0.79797" />
+                </svg>
+
+                <!-- <i  class="bi bi-dash"></i> -->
+                <svg *ngIf="isMinimized" width="16" height="16" viewBox="0 0 9 9" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0.458453" y="0.458453" width="7.82056" height="7.82056" stroke="black"
+                        stroke-width="0.916905" />
+                </svg>
+                <!-- <i class="bi bi-fullscreen"></i> -->
+            </button>
+            <button class="btn btn-sm p-0 min-width-unset" (click)="closeSession()">
+                <svg width="16" height="16" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.324219 0.324219L9.05004 9.04992M9.05004 0.324219L0.324219 9.04992" stroke="black"
+                        stroke-width="0.916905" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="card-body p-0 w-100 h-100">
+        <div #sessionContainer class="zoom-session-container"></div>
+    </div>
+</div>

@@ -1,0 +1,504 @@
+<div class="" style="background-color: #fff;">
+    <div class="page-header sticky-top rounded-0 shadow-sm">
+        <h2 class="page-heading">Daycare Visual Triage</h2>
+        <div class="actions ms-auto d-flex gap-2">
+            <button class="btn btn-danger-outline" (click)="clearVisualTriage()">{{langData?.common?.Clear}}</button>
+            <button class="btn btn-main-outline" (click)="saveVisualTriage()" *ngIf="!selectedPatientDYC?.VTOrderID">Save</button>
+        </div>
+    </div>
+    <div class="">
+        <div class="row p-2 gx-0 mx-0">
+            <!-- Patient Details -->
+            <div class="col-md-12">
+                <div class="card card-style-1">
+                    <div class="card-header page-header border-bottom-primary-200 py-1">
+                        <div class="d-flex align-items-center gap-3">
+                            <h2 class="page-heading d-flex align-items-center m-0">Patient Details</h2>  
+                            <div class="d-flex align-items-center gap-2">
+                                <h2 class="text-nowrap d-flex align-items-center clr-primary-600 fs-6 fw-normal m-0">Patient looks : </h2>
+
+                                <div class="d-flex align-items-center gap-2">
+                                    <div [class]="isIll ? 'd-flex align-items-center gap-2 selctIcon active' : 'd-flex align-items-center gap-2 selctIcon'" (click)="isIllOrWell('ill')">
+                                        <!-- <input type="radio" class="form-check-input m-0"> -->
+                                        <svg width="15" height="15" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g opacity="0.4">
+                                                <circle cx="9.42578" cy="9.86621" r="9" fill="#43A9BC"/>
+                                                <path d="M12.5085 6.56469L8.0964 10.987L6.39945 9.29009C6.30725 9.18243 6.19379 9.09499 6.0662 9.03326C5.93861 8.97153 5.79963 8.93684 5.65799 8.93137C5.51635 8.9259 5.37511 8.94976 5.24314 9.00147C5.11116 9.05317 4.9913 9.1316 4.89107 9.23183C4.79084 9.33206 4.71242 9.45192 4.66071 9.5839C4.60901 9.71587 4.58514 9.85711 4.59061 9.99875C4.59608 10.1404 4.63077 10.2794 4.6925 10.407C4.75423 10.5346 4.84167 10.648 4.94933 10.7402L7.3662 13.1674C7.46229 13.2627 7.57626 13.3381 7.70157 13.3893C7.82687 13.4404 7.96105 13.4664 8.0964 13.4656C8.3662 13.4645 8.62476 13.3574 8.81631 13.1674L13.9586 8.02509C14.055 7.92949 14.1315 7.81574 14.1837 7.69041C14.2359 7.56509 14.2628 7.43066 14.2628 7.29489C14.2628 7.15913 14.2359 7.0247 14.1837 6.89937C14.1315 6.77405 14.055 6.6603 13.9586 6.56469C13.7659 6.37314 13.5052 6.26562 13.2335 6.26562C12.9618 6.26562 12.7012 6.37314 12.5085 6.56469Z" fill="#ECF6F8"/>
+                                                </g>
+                                            </svg> 
+                                        <label for="" class="form-label m-0 fs-6">ill</label>
+                                    </div>
+                                    <div [class]="isWell ? 'd-flex align-items-center gap-2 selctIcon active' : 'd-flex align-items-center gap-2 selctIcon'" (click)="isIllOrWell('well')">
+                                        <!-- <input type="radio" class="form-check-input m-0"> -->
+                                        <svg width="15" height="15" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <g opacity="0.4">
+                                            <circle cx="9.42578" cy="9.86621" r="9" fill="#43A9BC"/>
+                                            <path d="M12.5085 6.56469L8.0964 10.987L6.39945 9.29009C6.30725 9.18243 6.19379 9.09499 6.0662 9.03326C5.93861 8.97153 5.79963 8.93684 5.65799 8.93137C5.51635 8.9259 5.37511 8.94976 5.24314 9.00147C5.11116 9.05317 4.9913 9.1316 4.89107 9.23183C4.79084 9.33206 4.71242 9.45192 4.66071 9.5839C4.60901 9.71587 4.58514 9.85711 4.59061 9.99875C4.59608 10.1404 4.63077 10.2794 4.6925 10.407C4.75423 10.5346 4.84167 10.648 4.94933 10.7402L7.3662 13.1674C7.46229 13.2627 7.57626 13.3381 7.70157 13.3893C7.82687 13.4404 7.96105 13.4664 8.0964 13.4656C8.3662 13.4645 8.62476 13.3574 8.81631 13.1674L13.9586 8.02509C14.055 7.92949 14.1315 7.81574 14.1837 7.69041C14.2359 7.56509 14.2628 7.43066 14.2628 7.29489C14.2628 7.15913 14.2359 7.0247 14.1837 6.89937C14.1315 6.77405 14.055 6.6603 13.9586 6.56469C13.7659 6.37314 13.5052 6.26562 13.2335 6.26562C12.9618 6.26562 12.7012 6.37314 12.5085 6.56469Z" fill="#ECF6F8"/>
+                                            </g>
+                                        </svg> 
+                                        <label for="" class="form-label m-0 fs-6">Well</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex align-items-center gap-2 ms-3">
+                                    <h2 class="text-nowrap d-flex align-items-center clr-primary-600 fs-6 fw-normal m-0">Patient Mode of Arrival :</h2>
+                                    <select class="form-select pe-4" id="modeofTravel">
+                                        <option dir="ltr" value="0" translate>{{langData?.common?.Select}}</option>
+                                        <option dir="ltr" *ngFor="let mode of modeofTravel" [value]="mode.ModeOfTravelID">
+                                            {{mode.ModeOfTravel}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>   
+                        </div>                  
+                        <div class="actions ms-auto d-flex gap-2">
+                            <h2 class="page-heading d-flex align-items-center m-0">
+                                <span [class]="ctasScoreDesc == 'Resuscitation' || ctasScoreDesc == 'Emergent' ? 'ctas_score' : ''">{{ctasScoreDesc}}</span>
+                            </h2>    
+                            <div class="d-flex align-items-center justify-content-end gap-2">
+                                <h2 class="text-nowrap d-flex align-items-center clr-primary-600 fs-6 m-0 fw-normal">
+                                    CTAS Score:
+                                </h2>
+                                <div class="d-flex align-items-center cta_circles gap-2">
+                                    <div class="custom_tooltip custom_tooltip_left">
+                                        <div [class]="ctasScore1Class" (click)="calcCtasScore('1','Resuscitation')">1</div>
+                                        <div class="tooltip">
+                                            <p>Resuscitation</p>
+                                        </div>
+                                    </div>
+                                    <div class="custom_tooltip custom_tooltip_left">
+                                        <div [class]="ctasScore2Class" (click)="calcCtasScore('2','Emergent')">2</div>
+                                        <div class="tooltip">
+                                            <p>Emergent</p>
+                                        </div>
+                                    </div>
+                                    <div class="custom_tooltip custom_tooltip_left">
+                                        <div [class]="ctasScore3Class" (click)="calcCtasScore('3','Urgent')">3</div>
+                                        <div class="tooltip">
+                                            <p>Urgent</p>
+                                        </div>
+                                    </div>
+                                    <div class="custom_tooltip custom_tooltip_left">
+                                        <div [class]="ctasScore4Class" (click)="calcCtasScore('4','Less Urgent')">4</div>
+                                        <div class="tooltip">
+                                            <p>Less Urgent</p>
+                                        </div>
+                                    </div>
+                                    <div class="custom_tooltip custom_tooltip_left">
+                                        <div [class]="ctasScore5Class" (click)="calcCtasScore('5','Non Urgent')">5</div>
+                                        <div class="tooltip">
+                                            <p>Non Urgent</p>
+                                        </div>
+                                    </div>
+                                </div>                                    
+                            </div>                     
+                        </div>
+                    </div>
+
+                    <div class="card-3d-body p-2">
+                        <div class="row  gx-lg-2 gx-md-3 align-items-end border-bottom pb-3">
+                            <div class="col-md-3">
+                                <div class="d-flex flex-column px-2">
+                                    <label for="" class="form-label">ID No.</label>
+                                    <div class="d-flex input-group w-100">
+                                        <input autofocus numbersOnly maxlength="10" type="text" (keypress)="omit_special_char($event)" class="form-control" disabled="true" id="nationalId" [value]="patientData?.SSN" (keydown.enter)="onEnterPress($event, 'ssn')" placeholder="">
+                                        <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                            <img src="assets/images/icons/icon-search.svg" alt="">
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 d-none">
+                                <div class="d-flex flex-column px-2">
+                                    <label for="" class="form-label">National ID / Passport No.</label>
+                                    <div class="row gx-1 align-items-center">
+                                        <input type="text" class="form-control" id="" placeholder="xxxx">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="d-flex flex-column px-2">
+                                    <label for="" class="form-label">Mobile</label>
+                                    <div class="row gx-1 align-items-center">
+                                        <input type="text" numbersOnly maxlength="10" class="form-control" id="mobileNo" disabled="true" [value]="patientData?.MobileNo" (keydown.enter)="onEnterPress($event, 'mobileno')" 
+                                         placeholder="" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 custom_check d-none">
+                                <button class="btn btn-secondary-outline fs-8 px-2" [class.active]="isUnkownPatient"
+                                    (click)="patientUnknownClick()">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path opacity="0.4"
+                                            d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                            fill="#B4DDE4"></path>
+                                        <path
+                                            d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                            fill="#8ECBD7"></path>
+                                    </svg>
+                                    Unknown Patient
+                                </button>                                
+                            </div>
+                            <div class="col">
+                                <div class="d-flex align-items-center gap-1" *ngIf="showHidePregnancyToggle">
+                                    <label for="" class="form-label">{{langData?.patients?.pregnancy}}</label>
+                                    <div class="custom_toggle" (click)="togglePregnancy()">
+                                        <input type="checkbox" class="toggle" id="toggle5" [checked]="pregnancyToggle ? 'true' : ''" />
+                                        <label for="toggle5" (click)="togglePregnancy()">
+                                            <span class="on" *ngIf="pregnancyToggle">{{langData?.common?.yes}}</span>
+                                            <span class="off" *ngIf="!pregnancyToggle">{{langData?.common?.no}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col d-flex justify-content-end">
+                                <div class="clinical_toggle toggle__switch switch-sm  d-inline-flex" *ngIf="!noPatientData">
+                                    <button [class]="patientData?.Gender == 'Male' ? 'btn selected' : 'btn'">Male</button>
+                                    <button [class]="patientData?.Gender == 'Female' ? 'btn selected' : 'btn'">Female</button>
+                                    <button [class]="patientData?.Gender == 'Pediatric' ? 'btn selected' : 'btn'">Pediatric</button>
+                                </div>
+                                <div class="clinical_toggle toggle__switch switch-sm  d-inline-flex" *ngIf="noPatientData">
+                                    <button [class]="gender == '1' ? 'btn selected' : 'btn'" (click)="selectGender('1')">Male</button>
+                                    <button [class]="gender == '2' ? 'btn selected' : 'btn'" (click)="selectGender('2')">Female</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row gx-1 p-2 mx-0">
+                            <div class="col-md-2">
+                                <p class="value fs-7 fw-bold w-100">ID No.</p>
+                                <p class="text-wrap">{{patientData?.SSN}}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p class="value fs-7 fw-bold w-100">Patient Name</p>
+                                <p>{{patientData?.PatientName}}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p class="value fs-7 fw-bold w-100">Age | Gender</p>
+                                <p>{{patientData?.Age_Gender}}</p>
+                            </div>
+                            <div class="col-md-2">
+                                <p class="value fs-7 fw-bold w-100">Nationality</p>
+                                <p>{{patientData?.Nationality}}</p>
+                            </div>
+                            <div class="col-md-2">
+                                <p class="value fs-7 fw-bold w-100">MobileNo</p>
+                                <p>{{patientData?.MobileNo}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--Total Score -->
+            <div class="visualTriageComponents_list">
+                <div class="col-md-12 mt-2">
+                    <div class="card card-style-1">
+                        <div class="card-header page-header py-2">
+                            <!-- <h2 class="page-heading d-flex align-items-center">
+                                <span>Score >=4 Indicates ISOLATION</span>
+                            </h2> -->
+                            <div class="d-flex align-items-center gap-2">
+                                <label for="" class="form-label m-0 text-nowrap">{{langData?.casesheet?.pain_score}}</label>
+                                <div class="painreaction_dropdown">
+                                
+                                    <div class="dropdown custom_dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <img class="pain_img" src="assets/images/image1.png" alt="">
+                                            {{getPainScoreName(selectedPainScoreId).split('-')[0]}}
+                                            <div class="score_count clr-primary-600">{{getPainScoreName(selectedPainScoreId).split('-')[1]}}</div>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li *ngFor="let ps of painScore" (click)="setPainScorevalue(ps)" 
+                                                class="dropdown-item d-flex justify-content-between gap-2 p-0">
+                                                <div class="p-2 d-flex align-items-center gap-2">
+                                                    <img class="pain_img" [src]="ps.imgsrc" alt="">
+                                                    <p class="text-nowrap">{{ ps?.name?.split('-')[0] }}</p>
+                                                </div>
+                                                <div class="score_count clr-primary-600">{{ ps?.code }}</div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="actions ms-auto">
+                                <h2 class="page-heading d-flex align-items-center fs-7" *ngIf="totalScore>=4">
+                                    <span class="isolate_patient_anim">Isolate patient</span>                              
+                                </h2>
+                            </div>
+                        </div>
+                        <!-- <div class="card-header bg-light page-header rounded-2 d-flex align-items-center painscore_row justify-content-start"> -->
+                            <!-- <label for=""
+                                class="form-label m-0 me-3 text-nowrap">{{langData?.casesheet?.pain_score}}</label>
+                            <div class="d-flex flex-wrap align-items-center gap-3 w-100 position-relative py-1">
+                                <div [class]="ps.Class" *ngFor="let ps of painScore"
+                                    (click)="painScoreClick(ps)">
+                                    <img class="pain_img" [src]="ps.imgsrc" alt="">
+                                    <p class="m-0 text-start">{{ps.name }}</p>
+                                    <img class="position-absolute check"
+                                        src="assets/images/icons/toast-success.svg" alt="">
+                                </div>
+                            </div> -->
+
+                            <!-- <div class="d-flex align-items-start flex-column">
+                                <label for="" class="form-label m-0 me-3 text-nowrap">{{langData?.casesheet?.pain_score}}</label>
+                                <div class="d-flex flex-wrap align-items-center gap-3 w-100 position-relative py-1">
+                                    <div [class]="ps.Class" *ngFor="let ps of painScore"
+                                        (click)="painScoreClick(ps)">
+                                        <div class="d-flex align-items-start flex-column p-2">
+                                            <img class="pain_img" [src]="ps.imgsrc" alt="">
+                                            <p class="m-0 text-start mt-1">{{ ps?.name?.split('-')[0] }}</p>
+                                        </div>
+                                        <div class="p-2 bg-primary-100 d-flex align-items-center score_value">
+                                            <span class="clr-primary-600 m-0">{{ps?.code}}</span>
+                                        </div>
+                                        <svg class="position-absolute check" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg> 
+                                    </div>
+                                </div>
+                            </div> -->
+
+                        <!-- </div> -->
+                        <div class="card-3d-body p-2">
+                            <!-- Table-->
+                            <table class=" table-cards">
+                                <tr *ngFor="let comp of visualTriageComponents; let i = index">
+                                    <!-- <td style="vertical-align: top;">
+                                        <p class="label">Sl.No.</p>
+                                        <p>{{i + 1}}</p>
+                                    </td> -->
+                                    <!-- <td style="vertical-align: top;">
+                                        <p class="label text-nowrap">Code</p>
+                                        <p >{{comp.CODE}}</p>
+                                    </td> -->
+                                    <td style="vertical-align: top;">
+                                        <!-- <p class="label text-nowrap"></p> -->
+                                        <p class="text-wrap">{{comp.VTComponent}}</p>
+                                    </td>
+                                    <!-- <td style="vertical-align: top;">
+                                        <p class="label text-nowrap">Child Value</p>
+                                        <p class="text-center" >{{comp.ChildValue}}</p>
+                                    </td>
+                                    <td style="vertical-align: top;">
+                                        <p class="label text-nowrap">Adult Value</p>
+                                        <p class="text-center">{{comp.AdultValue}}</p>
+                                    </td> -->
+                                    <td class="text-center" style="vertical-align: top;">
+                                        <!-- <p class="label">Select</p> -->
+                                        <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start">
+                                            <button [class]="comp.ClassNo" (click)="calculateScore(comp, 'No')">No</button>
+                                            <button [class]="comp.ClassYes" (click)="calculateScore(comp, 'Yes')">Yes</button>
+                                        </div>
+                                    </td>
+                                    <td class="text-center" style="vertical-align: top;">
+                                        <!-- <p class="label">Score</p> -->
+                                        <div class="d-flex align-items-center cta_circles gap-2">
+                                        <div [class]="comp.Score > 0 ? 'cursor-pointer circle active d-flex align-items-center justify-content-center' : 'cursor-pointer circle d-flex align-items-center justify-content-center'">{{comp.Score}}</div>
+                                        <!-- <div [class]="comp.Score == '1' ? 'cursor-pointer circle active d-flex align-items-center justify-content-center' : 'cursor-pointer circle d-flex align-items-center justify-content-center'">1</div>
+                                        <div [class]="comp.Score == '2' ? 'cursor-pointer circle active d-flex align-items-center justify-content-center' : 'cursor-pointer circle d-flex align-items-center justify-content-center'">2</div>
+                                        <div [class]="comp.Score == '3' ? 'cursor-pointer circle active d-flex align-items-center justify-content-center' : 'cursor-pointer circle d-flex align-items-center justify-content-center'">3</div>
+                                        <div [class]="comp.Score == '4' ? 'cursor-pointer circle active d-flex align-items-center justify-content-center' : 'cursor-pointer circle d-flex align-items-center justify-content-center'">4</div> -->
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="actions ms-auto">                           
+                            <h2 class="py-2 d-flex align-items-center clr-primary-600">
+                                <span class="">Total Score </span>
+                                <button class="bg-primary-200 clr-primary-600 mx-2 fw-bold fs-5  px-4 py-1 rounded-5">{{totalScore}}</button>
+                            </h2>
+                            <!-- <label for="" required class="fs-6 label">Score >=4 Indicates ISOLATION</label> -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="row mx-0 gx-2 mt-2">
+                        <!-- <div class="mt-3 d-flex align-items-center gap-2 border-primary-200 p-3 rounded-3 bg-white">
+                            <h2 class="text-nowrap d-flex align-items-center clr-primary-600 fs-6 fw-normal">Chief Complaint :</h2>
+                            <div class="row mx-0 align-items-center gx-2 w-100">
+                                <div class="col-3">
+                                    <select class="form-select pe-4">
+                                        <option dir="ltr" value="" translate>{{langData?.common?.Select}}</option>
+                                        <option dir="ltr" *ngFor="let comp of nurseCheifComplaints" [value]="comp.NurseChiefComplaintID">
+                                            {{comp.NurseChiefComplaint}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-9">
+                                    <input type="text" id="chiefComplaints" class="form-control">
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="col-8">
+                            <div class="bg-white rounded-2">
+                                <div class="bg-primary-20 border-primary-200 gap-2 p-2 rounded-2">
+                                    <h6 class="clr-primary-600 m-0 fs-7">Chief Complaint :</h6>
+                                    <div class="clin_imp mt-2 d-flex align-items-center gap-2 flex-wrap">
+                                        <button [class]="comp.ccClass" *ngFor="let comp of nurseCheifComplaints" (click)="selectedCheifComplaints(comp)">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                            </svg>                                            
+                                            {{comp.NurseChiefComplaint}}
+                                        </button>
+                                        
+                                    </div>
+                                    
+                                </div>
+                                <div class="mt-3" *ngIf="showCcRemarks">
+                                    <!-- <input type="text" class="form-control"> -->
+                                    <textarea name="" type="text"  id="chiefComplaints" class="form-control resize-none" id="" cols="" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="bg-white rounded-2 h-100">
+                                <div class="d-flex flex-column">
+                                    <div class="d-flex align-items-center position-relative">
+                                        <label for="" class="form-label">{{langData?.casesheet?.duration_of_illness}}</label>
+                                    </div>
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <input type="text" id="DurationOfIllness"(keypress)="($event.charCode >= 48 && $event.charCode < 58)"  maxlength="2" 
+                                        class="form-control w-50" placeholder="" autocomplete="off">
+                                        <select name="" class="form-select w-50" id="" id="DurationOfIllnessUOMID">
+                                            <option value="0">{{langData?.common?.Select}}</option>
+                                            <option value="4">{{langData?.casesheet?.Hours}}</option>
+                                            <option value="3">{{langData?.casesheet?.days}}</option>
+                                            <option value="7">{{langData?.casesheet?.weeks}}</option>
+                                            <option value="2">{{langData?.casesheet?.months}}</option>
+                                            <option value="2">{{langData?.casesheet?.years}}</option>
+                                        </select>
+                                    </div>                                                            
+                                </div>
+                            </div> 
+                        </div> 
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="saveVisualTriageMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+    <div class="modal-content">
+        <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+        <div class="modal-body">
+        <p>Visual Triage Saved Successfully</p>
+        <div class="modal-footer">
+            <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+             (click)="clearVisualTriage()" data-bs-dismiss="modal" >{{langData?.common?.Ok}}</a>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>
+<div class="modal" id="errorMessageModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <!-- <ul *ngIf="errorMessages.length > 0">
+                    <li *ngFor="let error of errorMessages; let i = index"> {{error}}</li>
+                </ul> -->
+               
+                <p>{{errorMessages}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                     data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="validationMessageModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <ul *ngIf="validationMessages.length > 0">
+                    <li *ngFor="let error of validationMessages; let i = index"> {{error}}</li>
+                </ul>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                      (click)="clearValidationMessages()" data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal mapDiagnosisMedicationdiv" data-bs-backdrop="static" data-bs-keyboard="false" id="divMultiplePatients" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" translate>Select Patients</h5>
+                <div class="ms-auto d-flex align-items-center">
+                    <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body px-0">
+                <div class="mapDiagnosisMedicationdiv_table px-3">
+                    <div class="card-3d p-2 mb-3" *ngFor="let pat of multiplePatient;let i=index">
+                        <div class="row mx-0 align-items-start">
+                            <div class="col-md-1">
+                                <p class="label text-nowrap"></p>
+                                <img src="assets/images/icons/toast-success.svg" [class]="pat.Class"
+                                    (click)="selectPatient(pat)">
+                            </div>
+                            <div class="col-md-2">
+                                <p class="label text-nowrap">SSN</p>
+                                <p class="text-break">{{pat.SSN}}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p class="label text-nowrap">PatientName</p>
+                                <p class="text-break">{{pat.PatientName}}</p>
+                            </div>
+                            <div class="col-md-2">
+                                <p class="label text-nowrap">MobileNo</p>
+                                <p class="text-break">{{pat.MobileNo}}</p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="label text-nowrap">Gender</p>
+                                <p class="text-break">{{pat.Gender}}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p class="label text-nowrap">Age</p>
+                                <p class="text-break">{{pat.FullAge}}</p>
+                            </div>
+                            <!-- <div class="col-md-3">
+                                <p class="label text-nowrap">RegCode</p>
+                                <p class="text-break">{{pat.RegCode}}</p>
+                            </div> -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="patientAlreadySelected" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>Patient already selected. Do you want to close and proceed with Unknown patient ?</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal"
+                        (click)="continueOrClosePatientSelected('clear')">{{langData?.common?.yes}}</a>
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal"
+                        (click)="continueOrClosePatientSelected('continue')">{{langData?.common?.no}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

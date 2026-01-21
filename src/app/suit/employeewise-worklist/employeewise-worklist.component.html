@@ -1,0 +1,643 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+<div class="page-header sticky-top shadow-sm justify-content-start">
+    <h2 class="page-heading text-nowrap">Employee Wise Worklist</h2>
+    <div class="row gx-2 pharmacist_token rad mx-0 w-100 ms-3">
+        <div class="col-3 cursor-pointer">
+            <div class="walkin_cards height-unset p-1 border shadow-sm green d-flex align-items-center">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color: #06aeae;">{{ResultsEntered}}</h4>
+                    <p class="m-0 fs-7 fw-bold">To be Result Entered</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 cursor-pointer">
+            <div class="walkin_cards height-unset p-1 border shadow-sm green d-flex align-items-center">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color: #737965;">{{ResultsVerified}}</h4>
+                    <p class="m-0 fs-7 fw-bold">To be Verified</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ms-auto d-flex align-items-center gap-2">
+        <!-- <div class="custom_check d-flex align-items-center gap-2">
+            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                class="check_svg">
+                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                <path
+                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                    fill="white" stroke="white" stroke-width="0.25"></path>
+            </svg>
+            <p class="m-0 fs-7">Stat</p>
+        </div> -->
+        <div class="form-check form-switch gap-2">
+            <input class="form-check-input" type="checkbox" (click)="toggleFilter()"
+                role="switch" id="flexSwitchCheckChecked" [checked]="showDischargeMedication"
+                >
+            <label class="form-check-label" for="flexSwitchCheckChecked">STAT</label>
+        </div>
+        <!-- <button class="btn btn-main-outline">Print</button> -->
+        <button class="btn btn-main-outline" (click)="onAssignToMeClick()">Assign to me</button>
+        <button class="btn btn-danger-outline" (click)="onClearClick()">Clear</button>
+    </div>
+</div>
+
+<div class="p-2">
+
+    <div class="row gx-2 pharmacist_token rad mx-0 mt-1">
+        <div class="col cursor-pointer" (click)="filterSurgeryRequests('1','New Request')">
+            <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color: #F592EC;">{{getTasksCount('1')}}</h4>
+                    <p class="m-0 fs-7 fw-bold">New Request</p>
+                </div>
+            </div>
+        </div>
+        <div class="col cursor-pointer" (click)="filterSurgeryRequests('3','Sample Collected')">
+            <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color: #C896C8;">{{getTasksCount('3')}}</h4>
+                    <p class="m-0 fs-7 fw-bold">Sample Collected</p>
+                </div>
+            </div>
+        </div>
+        <div class="col cursor-pointer" (click)="filterSurgeryRequests('4','Sample Acknowledged')">
+            <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color: #00AEAE;">{{getTasksCount('4')}}</h4>
+                    <p class="m-0 fs-7 fw-bold">Sample Acknowledged</p>
+                </div>
+            </div>
+        </div>
+        <div class="col cursor-pointer" (click)="filterSurgeryRequests('7','Results Entered')">
+            <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color: #A7AC9B;">{{getTasksCount('7')}}</h4>
+                    <p class="m-0 fs-7 fw-bold">Results Entered</p>
+                </div>
+            </div>
+        </div>
+        <div class="col cursor-pointer" (click)="filterSurgeryRequests('8','Results Verified')">
+            <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color: #66CB4D;">{{getTasksCount('8')}}</h4>
+                    <p class="m-0 fs-7 fw-bold">Results Verified</p>
+                </div>
+            </div>
+        </div>
+        <div class="col cursor-pointer" (click)="filterSurgeryRequests('13','Sample Rejected')">
+            <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color: #F2CD4A;">{{getTasksCount('13')}}</h4>
+                    <p class="m-0 fs-7 fw-bold">Sample Rejected</p>
+                </div>
+            </div>
+        </div>
+     </div>
+
+    <form [formGroup]="worklistForm">
+        <div class="row g-2 align-items-start">
+            <div class="col-2   ">
+                <label for="" class="form-label">Requisition Date</label>
+                <button class="date_range_calendar p-0 position-relative" style="width: 227px;">
+                    <mat-date-range-input class="btn btn-main-outline" [rangePicker]="picker">
+                        <input matStartDate formControlName="FromDate">
+                        <input matEndDate formControlName="ToDate" (dateChange)="onDateChange()">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </button>
+            </div>
+            <!-- <div class="col-2  ">
+                <label for="" class="form-label">Requisition To Date</label>
+                <input type="date" class="form-control">
+            </div> -->
+            <div class="col-2   ">
+                <label for="" class="form-label">Doctor Speciality</label>
+                <select name="" class="form-select" formControlName="DocSpecialityId">
+                    <option value="">Select</option>
+                    <option *ngFor="let option of doctorSpecialities" [value]="option.ID">{{option.Name}}</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <label for="" class="form-label">Ward</label>
+                <div class="mat-select-group">
+                    <mat-form-field appearance="fill">
+                        <mat-select multiple formControlName="WardId">
+                            <mat-option *ngFor="let option of wardsList"
+                                [value]="option">{{option.WardName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-2">
+                <label for="" class="form-label">Specimen</label>
+                <div class="mat-select-group">
+                    <mat-form-field appearance="fill">
+                        <mat-select multiple formControlName="Specimen">
+                            <mat-option *ngFor="let option of specimensList"
+                                [value]="option">{{option.Name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <!-- <div class="col-2  ">
+                <label for="" class="form-label">Test Name</label>
+                <div class="d-flex input-group">
+                    <input type="text" class="form-control">
+                    <button type="button" class="btn btn-secondary-fill btn-icon">
+                        <img src="assets/images/icons/icon-search.svg" alt="">
+                    </button>
+                </div>
+            </div> -->
+            <div class="col-2">
+                <label for="" class="form-label">Sample No.</label>
+                <input type="text" class="form-control" formControlName="SampleNumber">
+            </div>
+            <!-- <div class="col-2">
+                <label for="" class="form-label">UHID</label>
+                <input type="text" class="form-control">
+            </div> -->
+            <div class="col-2">
+                <label for="" class="form-label">SSN</label>
+                <input type="text" class="form-control" formControlName="SSN" (keydown.enter)="onSSNEnterPress($event)" (change)="onchangeSSN()">
+            </div>
+            <!-- <div class="col-2">
+                <label for="" class="form-label">Blood Unit Number</label>
+                <input type="text" class="form-control" formControlName="BloodUnitNumber">
+            </div> -->
+            <div class="col-5 d-flex align-items-center gap-1">
+                <label for="" class="form-label text-nowrap m-0">Test Name :</label>
+                <div class="d-flex align-items-center gap-2 w-100" style="position: relative;">
+                    <input type="text" class="form-control" placeholder="Test Name" aria-label="Test Name"
+                        formControlName="TestName" [matAutocomplete]="autoMed"
+                        (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchTest($event)">
+                    <span type="button" style="position: absolute; right: 10px;" (click)="clearTestNameInput()">X</span>
+                    <mat-autocomplete #autoMed="matAutocomplete">
+                        <mat-option *ngFor="let item of listOfTest"
+                            (onSelectionChange)="onItemSelected(item)" [value]="item.ServiceItemName.trim()">
+                            {{item.ServiceItemName}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+            </div>
+            <div class="col d-flex align-self-center justify-content-end gap-2">
+                <div class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                    <button [class]="classEd" (click)="FetchTestRequisitionsN('3')">ED</button>
+                    <button [class]="classIp" (click)="FetchTestRequisitionsN('2')">IP</button>
+                    <button [class]="classOp" (click)="FetchTestRequisitionsN('1')">OP</button>
+                    <!-- <button [class]="classOpIOP" (click)="FetchTestRequisitionsN('0')">All</button> -->
+                </div>             
+                <!-- <button class="btn btn-main-outline fs-8" (click)="showAssignedToMe()">Show Only Assigned to me</button> -->
+                <button class="btn btn-main-fill fs-8" (click)="openPatientSummary()">EHR</button>
+                <button class="btn btn-main-outline fs-8" (click)="FetchTestRequisitions()">Search</button>
+                <div class="custom_check d-flex align-items-center gap-2">
+                    <button class="btn btn-secondary-outline fs-8 px-2"
+                        [class.active]="IsFitForDischarge"
+                        (click)="showAssignedToMe()">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.4"
+                                d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                fill="#B4DDE4"></path>
+                            <path
+                                d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                fill="#8ECBD7"></path>
+                        </svg>
+                        Show Only Assigned to Me
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+    </form>
+    <div class="mt-2">
+        <div class="fixed_alter_list employeeWorklist_table rounded rounded-bottom-0 border-primary-200">
+            <div class="fixed_alter_header bg-primary-50 rounded-top">
+                <div class="row gx-2 p-2 mx-0">
+                    <div class="" style="width: 3%;">
+                        <p class="label m-0">Sl.No.</p>
+                    </div>
+                    <div class="" style="width: 2%;">
+                        <div class="custom_check d-flex align-items-center gap-2" (click)="onSelectAllClick()" [class.active]="isSelectAll">
+                            <svg style="min-width: 1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div style="width: 8%;">
+                        <p class="label m-0">Sample Number</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Req. Number</p>
+                    </div>
+                    <div class="" style="width: 9%;">
+                        <p class="label m-0">Req. Date</p>
+                    </div>
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">SSN</p>
+                    </div>
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">Patient Name</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Age</p>
+                    </div>
+                    <div class="" style="width: 5%;">
+                        <p class="label m-0">Gender</p>
+                    </div>
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">Patient Type</p>
+                    </div>
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">Ward |Bed </p>
+                    </div>
+                    <div class="" style="width: 12%;">
+                        <p class="label m-0">Test Name</p>
+                    </div>
+                    <div class="" style="width: 2%;">
+                        <p class="label m-0"></p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Specimen</p>
+                    </div>
+                    <div class="d-none" style="width: 5%;">
+                        <p class="label m-0">Add On Test</p>
+                    </div>
+                    <div class="" style="width: 6%;">
+                        <p class="label m-0"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="fixed_alter_body">
+                <div class="alter_div" *ngFor="let item of fetchTestRequisitionsList; let i = index;">
+                    <div class="rounded">
+                    <div class="row gx-2 p-2 mx-0 rounded-0">
+                        <div class="" style="width: 3%;">
+                            <p class="m-0">{{i+1}}</p>
+                        </div>
+                        <div class="" style="width: 2%;">
+                            <div class="custom_check d-flex align-items-center gap-2" [class.active]="item.selected"
+                                (click)="item.selected = !item.selected;">
+                                <svg style="min-width: 1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                    <path
+                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div style="width: 8%;">
+                            <p class="label m-0">{{item.SampleNumber}}</p>
+                        </div>
+                        <div class="" style="width: 8%;">
+                            <p class="m-0">{{item.ORDERSLNO}}</p>
+                        </div>
+                        <div class="" style="width: 9%;">
+                            <p class="m-0">{{item.OrderDate}}</p>
+                        </div>
+                        <div class="" style="width: 7%;">
+                            <p class="m-0">{{item.UHID}}</p>
+                        </div>
+                        <div class="" style="width: 7%;">
+                            <p class="m-0">{{item.PatientName}}</p>
+                        </div>
+                        <div class="" style="width: 8%;">
+                            <p class="m-0">{{item.Age}}</p>
+                        </div>
+                        <div class="" style="width: 5%;">
+                            <p class="m-0">{{item.Gender}}</p>
+                        </div>
+                        <div class="" style="width: 7%;">
+                            <p class="m-0">{{item.PatientType}}</p>
+                        </div>
+                        <div class="" style="width: 7%;">
+                            <p class="m-0">{{item.Department}} | {{item.BedName}}</p>
+                        </div>
+                        <div class="" style="width: 14%;">
+                            <p class="m-0 d-flex align-items-center justify-content-between gap-1">
+                                {{item.TestName}}
+                                <span class="custom_tooltip custom_tooltip_right" (click)="onHistoryClick(item)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="13" viewBox="0 0 20 13"
+                                        fill="none"  class="cursor-pointer">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M17.7279 8.84668C17.7279 8.48849 18.0183 8.19787 18.3767 8.19787C18.7349 8.19787 19.0255 8.48821 19.0255 8.84668V11.4367C19.0255 11.8676 18.85 12.2583 18.5672 12.5412C18.2843 12.8241 17.8936 12.9995 17.4627 12.9995H14.8724C14.5142 12.9995 14.2236 12.709 14.2236 12.3506C14.2236 11.9925 14.5141 11.7018 14.8724 11.7018L17.4624 11.702C17.5349 11.702 17.6014 11.6719 17.6495 11.6239C17.6979 11.5755 17.7277 11.5094 17.7277 11.4367L17.7275 8.84673L17.7279 8.84668ZM4.48163 10.3614H4.85407L4.85421 7.14866H6.15158V10.3617H7.9823V7.14866H9.27967V10.3617H11.1104V7.14866H12.4078V10.3617H14.2385V7.14866H15.5358V10.3617H15.9247C16.148 10.3617 16.3302 10.1795 16.3302 9.9562V7.1487H19.3514C19.7095 7.1487 20.0002 6.85836 20.0002 6.49989C20.0002 6.1417 19.7097 5.85108 19.3514 5.85108H1.18787C0.829683 5.85108 0.539062 6.14156 0.539062 6.49989C0.539062 6.85808 0.829547 7.1487 1.18787 7.1487H4.07565V9.9562C4.07607 10.1794 4.25809 10.3614 4.48159 10.3614H4.48163ZM4.85422 4.55382V2.6383H4.48177C4.25842 2.6383 4.07627 2.82046 4.07627 3.0438V4.55397L4.85422 4.55411V4.55382ZM7.98231 4.55382V2.6383H6.15158V4.55382H7.98231ZM11.1105 4.55382V2.6383H9.27978V4.55382H11.1105ZM14.2386 4.55382V2.6383H12.4079V4.55382H14.2386ZM16.3303 4.55382V3.04365C16.3303 2.8203 16.1481 2.63815 15.9248 2.63815H15.536V4.55368H16.3303L16.3303 4.55382ZM5.66785 11.7024C6.02604 11.7024 6.31666 11.9929 6.31666 12.3512C6.31666 12.7094 6.02617 13 5.66785 13L3.07786 12.9999C2.64696 12.9999 2.25627 12.8244 1.97334 12.5416C1.69041 12.2587 1.51507 11.868 1.51507 11.4371V8.84679C1.51507 8.4886 1.80556 8.19798 2.16388 8.19798C2.52207 8.19798 2.81269 8.48832 2.81269 8.84679V11.4368C2.81269 11.5093 2.84277 11.5758 2.8908 11.6239C2.93912 11.6722 3.00526 11.702 3.07809 11.702H5.66782L5.66785 11.7024ZM2.89268 4.15317C2.89268 4.51137 2.60219 4.80199 2.24387 4.80199C1.88568 4.80199 1.59506 4.51164 1.59506 4.15317L1.5952 1.56319C1.5952 1.13229 1.77066 0.741602 2.05346 0.458666C2.3364 0.175735 2.72709 0.000401437 3.15799 0.000401437H5.74797C6.10616 0.000401437 6.39678 0.290886 6.39678 0.649212C6.39678 1.0074 6.1063 1.29802 5.74797 1.29802L3.1581 1.29788C3.08554 1.29788 3.01912 1.32795 2.9708 1.37599C2.92249 1.42431 2.8927 1.49044 2.8927 1.56328L2.89268 4.15317ZM14.9523 1.29762C14.5941 1.29762 14.3035 1.00714 14.3035 0.64881C14.3035 0.29062 14.594 0 14.9523 0H17.5423C17.9732 0 18.3639 0.175461 18.6468 0.458265C18.9297 0.741197 19.1051 1.13189 19.1051 1.56279V4.15277C19.1051 4.51096 18.8146 4.80158 18.4562 4.80158C18.0981 4.80158 17.8074 4.51124 17.8074 4.15277L17.8076 1.56319C17.8076 1.49064 17.7775 1.42422 17.7295 1.37604C17.6812 1.32772 17.615 1.29793 17.5423 1.29793H14.9523L14.9523 1.29762Z"
+                                            fill="#368796" />
+                                    </svg>
+                                    <div class="tooltip">
+                                        <p>History
+                                        </p>
+                                    </div>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="" style="width: 10%;">
+                            <p class="m-0">{{item.Specimen}}</p>
+                        </div>
+                        <div class="text-center d-none" style="width: 5%;">
+                            <svg class="cursor-pointer" width="18" height="18" viewBox="0 0 21 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" (click)="addOnTestClick(item)">
+                                <g clip-path="url(#clip0_8023_1349)">
+                                    <circle cx="10.6558" cy="10.5579" r="9.25" fill="url(#paint0_radial_8023_1349)"
+                                        stroke="#0AC285" stroke-width="1.5" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M9.84503 6.49567C9.776 6.49567 9.72003 6.55164 9.72003 6.62067V9.51801H6.82227C6.75323 9.51801 6.69727 9.57397 6.69727 9.64301V11.2656C6.69727 11.3346 6.75323 11.3906 6.82227 11.3906H9.72003V14.288C9.72003 14.357 9.776 14.413 9.84503 14.413H11.4676C11.5366 14.413 11.5926 14.357 11.5926 14.288V11.3906H14.4896C14.5586 11.3906 14.6146 11.3346 14.6146 11.2656V9.64301C14.6146 9.57397 14.5586 9.51801 14.4896 9.51801H11.5926V6.62067C11.5926 6.55164 11.5366 6.49567 11.4676 6.49567H9.84503Z"
+                                        fill="#43BC94" />
+                                </g>
+                            </svg>
+                            
+                        </div>
+                        <!-- <div class="" style="width: 6%;">
+                            <button class="btn btn-main-outline fs-8 p-1 px-2 lh-1" (click)="onResultEntryClick(item)">Result Entry</button>
+                        </div> -->
+                        <div class="custom_tooltip custom_tooltip_right active" style="width:5%;"                      
+                        (click)="onResultEntryClick(item)">
+                        <svg width="30" height="30" viewBox="0 0 32 33" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_9203_4814)">
+                                <circle cx="16" cy="16.2" r="16" fill="#badfe3" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M19.4655 10.2288V8.87651C19.4655 8.87429 19.4633 8.83445 19.4611 8.83003C19.4589 8.8256 19.4589 8.82117 19.4589 8.82117C19.4522 8.80126 19.4478 8.78355 19.4434 8.76363C19.4434 8.76142 19.4412 8.75478 19.439 8.74814C19.4368 8.74391 19.4347 8.73817 19.4329 8.73308C19.4308 8.72751 19.4291 8.72273 19.4279 8.72158C19.419 8.7083 19.4124 8.69723 19.4058 8.68395C19.3991 8.67288 19.3925 8.66182 19.3836 8.65075C19.3836 8.64964 19.3831 8.64909 19.3825 8.64854C19.382 8.64798 19.3814 8.64743 19.3814 8.64632C19.3637 8.62641 19.3438 8.60649 19.3239 8.58878C19.3289 8.59511 19.3159 8.58552 19.3009 8.57449C19.2897 8.56623 19.2774 8.55716 19.2708 8.55337C19.2575 8.54451 19.2442 8.53566 19.2287 8.52902C19.2278 8.52902 19.2265 8.52864 19.225 8.5282C19.2228 8.52757 19.2202 8.52681 19.2176 8.52681L19.138 8.50689C19.1405 8.50814 19.1266 8.50726 19.1109 8.50626C19.0989 8.5055 19.0859 8.50467 19.0782 8.50467H19.045H18.8967H17.6418C17.4736 8.50467 17.2943 8.35196 17.3098 8.17268C17.3186 8.06644 17.3164 7.9602 17.3076 7.85397C17.3088 7.87302 17.3055 7.85042 17.3015 7.82306L17.3015 7.82303L17.3015 7.82302C17.298 7.79954 17.2941 7.77259 17.2921 7.76544C17.2832 7.72117 17.2722 7.6769 17.2589 7.63485C17.2456 7.5928 17.2323 7.55296 17.2168 7.51312L17.2105 7.49937C17.2005 7.47762 17.1819 7.43728 17.177 7.42901C17.1371 7.35376 17.0929 7.28072 17.042 7.21211C17.0407 7.21211 17.0241 7.19248 17.0081 7.17374L17.0081 7.17374L17.0081 7.17374C16.9958 7.15918 16.9839 7.14516 16.98 7.14129C16.9512 7.10809 16.9202 7.0771 16.8893 7.04833C16.8671 7.0262 16.8428 7.00628 16.8184 6.98636L16.8184 6.98636C16.8229 6.98857 16.7653 6.9443 16.7542 6.93766C16.6856 6.8934 16.6126 6.85356 16.5396 6.81593C16.5351 6.81372 16.5241 6.8093 16.513 6.80487L16.513 6.80487C16.5108 6.80265 16.5108 6.80265 16.5086 6.80265C16.4975 6.79823 16.4864 6.7938 16.482 6.79159C16.4444 6.77831 16.4068 6.76503 16.3691 6.75396C16.3249 6.74068 16.2828 6.72961 16.2385 6.72076L16.2146 6.71716C16.1871 6.71313 16.1487 6.70748 16.1567 6.70748C16.0814 6.70084 16.0061 6.69863 15.9309 6.70084L15.8379 6.70748C15.8349 6.70748 15.8308 6.70796 15.8265 6.70847C15.8215 6.70906 15.8161 6.7097 15.8114 6.7097H15.8092C15.7829 6.71345 15.7582 6.7188 15.7323 6.7244L15.7184 6.7274C15.641 6.74511 15.5657 6.76945 15.4905 6.79601C15.4882 6.79823 15.4838 6.80044 15.4816 6.80044C15.4805 6.80044 15.4794 6.80099 15.4783 6.80155C15.4772 6.8021 15.4761 6.80265 15.475 6.80265C15.4573 6.80929 15.4395 6.81815 15.4218 6.827C15.3864 6.84471 15.3532 6.86241 15.32 6.88233L15.32 6.88234L15.32 6.88234C15.2868 6.90226 15.2536 6.92217 15.2226 6.9443C15.2094 6.95537 15.1939 6.96644 15.1784 6.9775L15.1762 6.97972C15.112 7.03726 15.0478 7.09481 14.9902 7.16121L14.9526 7.20547C14.9518 7.20632 14.9509 7.20684 14.9502 7.20729C14.949 7.20801 14.9482 7.20853 14.9482 7.2099L14.934 7.23027C14.9181 7.25306 14.9015 7.27685 14.8862 7.30064C14.8464 7.36483 14.8088 7.43123 14.7778 7.49984C14.7778 7.50076 14.7736 7.51112 14.7684 7.52407C14.761 7.54244 14.7516 7.566 14.749 7.57509L14.7158 7.68797C14.7047 7.73666 14.6937 7.78535 14.6848 7.83405V7.83626V7.84069V7.84511V7.84733C14.6826 7.84954 14.6826 7.85397 14.6826 7.85618C14.6826 7.86146 14.6821 7.86674 14.6816 7.87226C14.681 7.87831 14.6804 7.88465 14.6804 7.89159C14.6737 7.98234 14.676 8.07308 14.6826 8.16383C14.6981 8.3431 14.5188 8.49582 14.3506 8.49582H13.0647H12.9363H12.9098H12.8766H12.8588C12.8566 8.49693 12.8544 8.49748 12.8522 8.49803C12.85 8.49859 12.8478 8.49914 12.8456 8.50025L12.8456 8.50025L12.8456 8.50025C12.8256 8.50468 12.8057 8.5091 12.7858 8.51574C12.7858 8.51706 12.7701 8.52307 12.7556 8.52866C12.7457 8.53247 12.7363 8.53608 12.7327 8.53787C12.72 8.54423 12.7084 8.55172 12.6963 8.55954L12.6818 8.56886C12.6818 8.5703 12.6659 8.5839 12.6535 8.59446C12.6469 8.60014 12.6413 8.60494 12.6397 8.60649C12.5955 8.65296 12.5556 8.72158 12.5401 8.78355C12.5357 8.79683 12.5335 8.8079 12.5313 8.82117C12.5313 8.82289 12.5309 8.82494 12.5305 8.82745C12.5299 8.83141 12.5291 8.83653 12.5291 8.84331V8.87651V8.89864V8.99824V10.22C12.6312 10.22 12.7332 10.2222 12.8351 10.2244H12.8351H12.8351C12.9363 10.2266 13.0373 10.2288 13.1377 10.2288H19.4655ZM22.8644 24.0618V9.80822C22.8644 9.79052 22.8622 9.7706 22.86 9.75289C22.8179 9.44082 22.5789 9.20842 22.2535 9.19735H20.1294V10.5607C20.1294 10.6891 20.0541 10.802 19.9457 10.8573C19.9014 10.8795 19.8505 10.8927 19.7974 10.8927H19.7841C19.7697 10.8927 19.7559 10.8933 19.7421 10.8938L19.742 10.8938C19.7282 10.8944 19.7143 10.8949 19.7 10.8949C19.6712 10.8949 19.6424 10.8949 19.6137 10.8972C19.4695 10.8984 19.3253 10.8968 19.1811 10.8952L19.181 10.8952C19.0729 10.894 18.9648 10.8927 18.8567 10.8927H12.1969C12.1438 10.8927 12.0951 10.8795 12.0486 10.8573C11.9402 10.802 11.8649 10.6891 11.8649 10.5607V9.19735H10.0241C9.99257 9.19735 9.96083 9.19673 9.92898 9.19611H9.92897H9.92896L9.92891 9.1961C9.8265 9.1941 9.72305 9.19207 9.62345 9.21063C9.32466 9.26597 9.13432 9.53377 9.12989 9.82814C9.12841 9.91372 9.12891 9.9993 9.1294 10.0849C9.12964 10.1277 9.12989 10.1705 9.12989 10.2133V25.0622C9.13653 25.3942 9.37335 25.6665 9.71199 25.6886C9.9552 25.7051 10.2025 25.7002 10.4483 25.6954H10.4484H10.4486H10.4487C10.5651 25.6931 10.6813 25.6908 10.7965 25.6908H22.1163C22.1302 25.6908 22.1442 25.691 22.1582 25.6913C22.1865 25.6918 22.2151 25.6923 22.2447 25.6908C22.5899 25.6797 22.8555 25.4252 22.8666 25.0777C22.8738 24.8586 22.8707 24.6395 22.8677 24.4204L22.8677 24.4202C22.866 24.3007 22.8644 24.1813 22.8644 24.0618ZM18.7298 14.8439H19.7932C19.9162 14.8439 20.0165 14.9436 20.0165 15.0671C20.0165 15.1906 19.9156 15.2915 19.7927 15.2915H18.047L17.0056 13.7609C16.9444 13.6688 16.8471 13.6172 16.7437 13.6279C16.6422 13.6368 16.5537 13.7027 16.5086 13.8036L15.6762 15.6448L15.0789 14.3433C15.0302 14.2376 14.9387 14.1729 14.833 14.1694C14.7274 14.1658 14.6324 14.2252 14.5777 14.3267L14.0594 15.2862H13.4318C12.939 14.0369 13.4668 12.7628 14.2262 12.4914C15.428 12.0621 16.0146 13.1481 16.0146 13.1481C16.0146 13.1481 16.6018 12.0621 17.803 12.4914C18.4722 12.7307 18.962 13.7496 18.7298 14.8439ZM16.7977 14.2501L17.6777 15.5433C17.7531 15.6561 17.9015 15.7345 18.0369 15.7333H18.3712C17.9615 16.4042 17.2205 17.0318 16.0146 17.4474C15.0836 17.1262 14.4316 16.6774 13.9923 16.1816H12.5126C12.3885 16.1816 12.2888 16.0806 12.2888 15.9571C12.2888 15.8336 12.3885 15.7333 12.5126 15.7333H14.0819C14.2268 15.7333 14.3752 15.6448 14.4435 15.5172L14.8122 14.8355L15.428 16.1762C15.4766 16.2849 15.5705 16.349 15.6773 16.349H15.6785C15.7854 16.349 15.8792 16.2843 15.9279 16.175L16.7977 14.2501ZM19.1111 20.1916C18.9674 20.1916 18.8338 20.1234 18.7424 20.0028L17.7128 18.6532L18.2798 18.2204L19.0867 19.2785L20.4055 17.1136L21.0141 17.4847L19.5053 19.9636C19.4216 20.1002 19.2874 20.1833 19.1342 20.1916C19.1288 20.1913 19.1241 20.1914 19.1191 20.1915L19.1111 20.1916ZM16.9954 19.6314C16.9954 19.7044 16.936 19.7638 16.863 19.7638H11.9146C11.8416 19.7638 11.7822 19.7044 11.7822 19.6314V19.1023C11.7822 19.0293 11.8416 18.9699 11.9146 18.9699H16.863C16.936 18.9699 16.9954 19.0293 16.9954 19.1023V19.6314ZM16.9954 23.1991C16.9954 23.2721 16.936 23.3309 16.863 23.3309H11.9146C11.8416 23.3309 11.7822 23.2721 11.7822 23.1991V22.6695C11.7822 22.5965 11.8416 22.5371 11.9146 22.5371H16.863C16.936 22.5371 16.9954 22.5965 16.9954 22.6695V23.1991ZM19.1111 23.759C18.9674 23.759 18.8338 23.6908 18.7424 23.5702L17.7128 22.2206L18.2798 21.7878L19.0867 22.8453L20.4055 20.6804L21.0141 21.0515L19.5053 23.531C19.4216 23.667 19.2874 23.7507 19.1342 23.759H19.1111Z"
+                                    fill="#368796" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_9203_4814">
+                                    <rect width="32" height="32" fill="white"
+                                        transform="translate(0 0.200012)" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        <div class="tooltip">
+                            <p>Result Entry
+                            </p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                    <div class="p-2 bg-grey-50 d-flex align-items-centeri gap-3">
+                        <div class="d-flex align-items-centeri gap-2">
+                            <p class="label m-0 fw-bold clr-primary-600">Doctor Name:</p>
+                            <p class="m-0">{{item.DoctorName}}</p>
+                        </div>
+                        <div class="d-flex align-items-centeri gap-2">
+                            <p class="label m-0 fw-bold clr-primary-600">Ack.Date:</p>
+                            <p class="m-0">{{item.SampleAcknowledgeDate}}</p>
+                        </div>
+                        <div class="ms-auto d-flex gap-2 align-items-center inline_legend pe-2" [class]="item.AClass">
+                            <label for="" class="form-label m-0 clr-grey fw-bold">Order Status</label>                           
+                            <span class="legend fs-8 w-max-content">{{item.StatusName}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="employeeWorklist_legends p-2 rounded-bottom bg-primary-100 d-none">
+            <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-1">
+                    <span class="legend testRejected"></span>
+                    <p class="fs-9">Test Rejected</p>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="legend reCollect"></span>
+                    <p class="fs-9">Re-collect</p>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="legend approvalRequired"></span>
+                    <p class="fs-9">Approval Required</p>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="legend newRequist"></span>
+                    <p class="fs-9">New Requisition</p>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="legend sampleCollect"></span>
+                    <p class="fs-9">Sample Collected</p>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="legend sampleacknowledged"></span>
+                    <p class="fs-9">Sample Acknowledged</p>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="legend resultsEntered"></span>
+                    <p class="fs-9">Results Entered</p>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="legend resultsverified"></span>
+                    <p class="fs-9">Results Verified</p>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="legend reportDispatched"></span>
+                    <p class="fs-9">Report Dispatched</p>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="legend sampleSent"></span>
+                    <p class="fs-9">Sample Sent For Outsourcing</p>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="legend resultsReceived"></span>
+                    <p class="fs-9">Result Received</p>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="legend partialSample"></span>
+                    <p class="fs-9">Partial Sample Collected</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal viewhistoryModal" data-bs-backdrop="static" id="viewhistoryModal" tab-index="-1">
+    <div class="modal-dialog modal-dialog-scrollabel">
+        <div class="modal-content h-100 overflow-auto">
+            <div class="modal-body p-0">
+                <div class="modal-header ps-0">
+                    <div class="actions ms-auto d-flex align-items-center gap-2">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="p-3 content">
+                    <div class="sample_details">
+                        <div
+                            class="sample_details_header rounded-top bg-primary-50 p-2 d-flex align-items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="15" viewBox="0 0 14 15"
+                                fill="none">
+                                <circle cx="7" cy="7.401" r="7" fill="#368796" />
+                            </svg>
+                            <h6 class="clr-primary-600 m-0">{{testandSpecialisation}}</h6>
+                        </div>
+                        <div class="p-3 sample_details_body">
+                            <div class="pb-2 border-bottom-primary-200">
+                                <div class="rounded-top bg-primary-50 p-2">
+                                    <h6 class="clr-primary-600 m-0 fs-7">Sample Collection</h6>
+                                </div>
+                                <div class="p-2 row g-2">
+                                    <div class="col-6">
+                                        <label for="" class="m-0 form-label">Sample Collected Date</label>
+                                        <p class="fs-7 clr-primary-600 m-0">{{testHistory?.SampleCollectedAt}}
+                                        </p>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="" class="m-0 form-label">Sample Collected By</label>
+                                        <p class="fs-7 clr-primary-600 m-0">{{testHistory?.SampleCollectedBy}}
+                                        </p>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="" class="m-0 form-label">SampleCollected Employee</label>
+                                        <p class="fs-7 clr-primary-600 m-0">
+                                            {{testHistory?.SampleCollectedbyEmpName}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pb-2 border-bottom-primary-200 mt-3">
+                                <div class="rounded-top bg-primary-50 p-2">
+                                    <h6 class="clr-primary-600 m-0 fs-7">Sample Acknowledge</h6>
+                                </div>
+                                <div class="p-2 row g-2">
+                                    <div class="col-6">
+                                        <label for="" class="m-0 form-label">Sample Acknowledge Date</label>
+                                        <p class="fs-7 clr-primary-600 m-0">{{testHistory?.SampleAckAt}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="" class="m-0 form-label">Sample Acknowledge By</label>
+                                        <p class="fs-7 clr-primary-600 m-0">{{testHistory?.SampleAckBy}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="" class="m-0 form-label">Sample Acknowledge Employee</label>
+                                        <p class="fs-7 clr-primary-600 m-0">{{testHistory?.SampleAckbyEmpName}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pb-2 border-bottom-primary-200 mt-3">
+                                <div class="rounded-top bg-primary-50 p-2">
+                                    <h6 class="clr-primary-600 m-0 fs-7">Result Enter</h6>
+                                </div>
+                                <div class="p-2 row g-2">
+                                    <div class="col-6">
+                                        <label for="" class="m-0 form-label">Result Entered Date</label>
+                                        <p class="fs-7 clr-primary-600 m-0">{{testHistory?.ResultEnteredAt}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="" class="m-0 form-label">Result Entered By</label>
+                                        <p class="fs-7 clr-primary-600 m-0">{{testHistory?.ResultEnteredBy}}</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="" class="m-0 form-label">Result Entered Employee</label>
+                                        <p class="fs-7 clr-primary-600 m-0">
+                                            {{testHistory?.ResultEnteredbyEmpName}}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-2">
+                                <div class="mb-2">
+                                    <label for="" class="m-0 form-label">Result Verified Date</label>
+                                    <p class="fs-7 clr-primary-600 m-0">{{testHistory?.ResultVerifyedAt}}</p>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="" class="m-0 form-label">Result Verified By</label>
+                                    <p class="fs-7 clr-primary-600 m-0">{{testHistory?.ResultVerifyedBy}}</p>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="" class="m-0 form-label">Result Verified Employee</label>
+                                    <p class="fs-7 clr-primary-600 m-0">{{testHistory?.ResultverifiedbyEmpName}}
+                                    </p>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="" class="m-0 form-label">Sample Recollected Date</label>
+                                    <p class="fs-7 clr-primary-600 m-0">{{testHistory?.SampleReCollectedAt}}</p>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="" class="m-0 form-label">Result Recollected Reasons</label>
+                                    <p class="fs-7 clr-primary-600 m-0">
+                                        {{testHistory?.SampleRecollectReasonName}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addOnTestModal" tabindex="-1" aria-labelledby="requestLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60rem">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" translate>Add On Tests</h5>
+                <div class="ms-auto d-flex align-items-center">
+                    <button type="button" class="btn-close ms-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body px-0">
+                <div class="tableVitals px-3">
+                    <table class="table m-0">
+                        <tbody>
+                            <tr *ngFor="let item of addOnTests; let i = index">
+                                <td>
+                                    <div class="custom_check d-flex align-items-center gap-2"
+                                        [class.active]="item.selected" (click)="item.selected = !item.selected;">
+                                        <svg style="min-width: 1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0">{{item.Name}}</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-3">
+                    <label for="" class="form-label m-0">Remarks:</label>
+                    <textarea name="" id="remarks" cols="" rows="3" class="form-control"
+                        [(ngModel)]="remarks"></textarea>
+                </div>
+                <div class="d-flex justify-content-end align-items-end p-3">
+                    <button class="btn btn-main-outline" (click)="saveAddOnTests()">save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p *ngIf="errorMessages.length === 1">{{errorMessages[0]}}</p>
+                <ul *ngIf="errorMessages.length > 1">
+                    <li *ngFor="let error of errorMessages; let i = index"> {{error}}</li>
+                </ul>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="savemsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,373 @@
+<div class="card card-style-1 rounded main-container" #divicbf >
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading">Infection Prevention & Control Program Surgical Site Infection Bundle Infection Control Surveillance Form</h2>
+        <div class="actions generalConsent_popup position-relative ms-auto d-flex align-items-center gap-2"
+            *ngIf="IsView">
+             <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+            <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+        </div>
+    </div>
+
+
+
+    <div class="p-2 template_scroll" *ngIf="showContent" id="divscroll">
+        <!-- <app-wardheader-summary></app-wardheader-summary> -->
+
+        <div class="">    
+            <div class="card card-style-1 rounded">
+                <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                    <h5 class="card-heading">Section I: Patient and Hospital Information</h5>
+                </div>
+                <div class="p-2">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-2">
+                            <label for="" class="form-label">Patient ID:</label>
+                            <input type="text" id="textbox_PatientID" class="form-control">
+                        </div>
+                        <div class="col-2">
+                            <label for="" class="form-label">Date of Birth:</label>
+                            <input type="text" id="textbox_DOB" class="form-control">
+                        </div>
+                        <div class="col-2">
+                            <label for="" class="form-label">Gender/Age:</label>
+                            <input type="text" id="textbox_Gender" class="form-control">
+                        </div>
+                        <div class="col-2">
+                            <label for="" class="form-label">Surveillance Plan Date:</label>
+                            <input type="text" id="textbox_SurveillancePlanDate" class="form-control">
+                        </div>
+                        <div class="col-2">
+                            <label for="" class="form-label">Facility ID:</label>
+                            <input type="text" id="textbox_FacilityID" class="form-control">
+                        </div>
+                        <div class="col-2">
+                            <label for="" class="form-label">Ward/Unit:</label>
+                            <input type="text" id="textbox_Ward" class="form-control">
+                        </div>
+                        <div class="col-2">
+                            <label for="" class="form-label">Name of Procedure:</label>
+                            <input type="text" id="textbox_NameofProcedure" class="form-control">
+                        </div>
+                        <div class="col">
+                            <div id="toggle_patienttype" class="clinical_toggle toggle__switch switch-sm custom-inline-flex mt-3">
+                                <button class="btn selected" (click)="toggleSelection($event)">Outpatient</button>
+                                <button class="btn" (click)="toggleSelection($event)">Inpatient</button>
+                                <button class="btn" (click)="toggleSelection($event)">Both</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="card card-style-1 rounded mt-3">
+                <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                    <h5 class="card-heading">Section II: Bundle Variables</h5>
+                </div>
+                <div class="p-2">
+                    <h6 class="clr-primary-600">Appropriate use of antibiotics:</h6>
+                    <div class="row mt-2 align-items-center">
+                        <div class="col-5">
+                            <p class="m-0">1. Antibiotic(s) was (were) given within one (1) hour before surgical incesion*</p>
+                        </div>
+                        <div class="col-5">
+                            <div id="toggle_Antibioticwasgivenwithinonehourbeforesurgicalincesion" class="clinical_toggle toggle__switch switch-sm custom-inline-flex mt-3">
+                                <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                <button class="btn" (click)="toggleSelection($event)">No</button>
+                                <button class="btn" (click)="toggleSelection($event)">N/D</button>
+                                <button class="btn" (click)="toggleSelection($event)">N/A</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2 align-items-center">
+                        <div class="col-5">
+                            <p class="m-0">2. Discontinuation of prophylactic antibiotic(s) within 24 hours after surgery**</p>
+                        </div>
+                        <div class="col-5">
+                            <div id="toggle_Discontinuationofprophylacticantibioticwithin24hoursaftersurgery" class="clinical_toggle toggle__switch switch-sm custom-inline-flex mt-3">
+                                <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                <button class="btn" (click)="toggleSelection($event)">No</button>
+                                <button class="btn" (click)="toggleSelection($event)">N/D</button>
+                                <button class="btn" (click)="toggleSelection($event)">N/A</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <p class="fs-7 mb-2"><b>Antibiotic (1) </b></p>
+                        <div class="row g-2">
+                            <div class="col-2">
+                                <label for="" class="form-label">Name</label>
+                                <input type="text" id="textbox_Antibiotic1Name" class="form-control">
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="form-label">Dose</label>
+                                <div class="d-flex align-items-center afterlabel">
+                                    <input type="text" name="" class="form-control pe-6" id="textbox_Antibiotic1Dose">
+                                    <label for="" class="form-label label_sm">mg/day</label>
+                                 </div>
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="form-label">Route</label>
+                                <div id="toggle_Antibiotic1Route" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                    <button class="btn selected" (click)="toggleSelection($event)">Parenteral (IV/IM)</button>
+                                    <button class="btn" (click)="toggleSelection($event)">Oral</button>
+                                    <button class="btn" (click)="toggleSelection($event)">Others</button>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <label for="" class="form-label">specify</label>
+                                <!-- <textarea name="" class="form-control" id="textarea_specify1" cols="30" rows="3"></textarea> -->
+                                <span name="" class="form-control " id="textarea_specify1" cols="30" rows="3" resize-none contenteditable="true">
+                                </span>                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <p class="fs-7 mb-2"><b>Antibiotic (2) </b></p>
+                        <div class="row g-2">
+                            <div class="col-2">
+                                <label for="" class="form-label">Name</label>
+                                <input type="text" id="textbox_Antibiotic2Name" class="form-control">
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="form-label">Dose</label>
+                                <div class="d-flex align-items-center afterlabel">
+                                    <input type="text" name="" class="form-control pe-6" id="textbox_Antibiotic2Dose">
+                                    <label for="" class="form-label label_sm">mg/day</label>
+                                 </div>
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="form-label">Route</label>
+                                <div id="toggle_Antibiotic2Route" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                    <button class="btn selected" (click)="toggleSelection($event)">Parenteral (IV/IM)</button>
+                                    <button class="btn" (click)="toggleSelection($event)">Oral</button>
+                                    <button class="btn" (click)="toggleSelection($event)">Others</button>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <label for="" class="form-label">specify</label>
+                                <!-- <textarea name="" class="form-control" id="textarea_specify2" cols="30" rows="3"></textarea> -->
+                                <span name="" class="form-control " id="textarea_specify2" cols="30" rows="3" resize-none contenteditable="true">
+                                </span>                                
+                            </div>
+                        </div>
+                    </div>
+    
+                    <h6 class="clr-primary-600 mt-3">Appropriate hair removal:</h6>
+                    <div class="row mt-2 align-items-center">
+                        <div class="col-5">
+                            <p class="m-0">3. Was the hair at the incisional site clipped?</p>
+                        </div>
+                        <div class="col-5">
+                            <div id="toggle_Wasthehairattheincisionalsiteclipped" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                <button class="btn" (click)="toggleSelection($event)">No</button>
+                                <button class="btn" (click)="toggleSelection($event)">N/D</button>
+                                <button class="btn" (click)="toggleSelection($event)">N/A</button>
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class="clr-primary-600 mt-3">Maintenance of postoperative glucose control: (For diabetic and cardiac patient only)</h6>
+                    <p class="m-0">4. Serum glucose levels below 11.11 mmol/L (200mg/dL), collected at least once each of the first two (2) post-operative days</p>
+                    <div class="row g-2 mt-2 align-items-center">
+                        <div class="col-3">
+                            <label for="" class="form-label">(1) Serum glucose day</label>
+                            <div class="d-flex align-items-center afterlabel">
+                                <input type="text" name="" class="form-control pe-6" id="textbox_Serumglucoseday1">
+                                <label for="" class="form-label label_sm">mmol/L</label>
+                             </div>
+                        </div>
+                        <div class="col-5">
+                            <div id="toggle_Serumglucoseday1" class="clinical_toggle toggle__switch switch-sm custom-inline-flex mt-3">
+                                <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                <button class="btn" (click)="toggleSelection($event)">No</button>
+                                <button class="btn" (click)="toggleSelection($event)">N/D</button>
+                                <button class="btn" (click)="toggleSelection($event)">N/A</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-2 mt-2 align-items-center">
+                        <div class="col-3">
+                            <label for="" class="form-label">(2) Serum glucose day</label>
+                            <div class="d-flex align-items-center afterlabel">
+                                <input type="text" name="" class="form-control pe-6" id="textbox_Serumglucoseday2">
+                                <label for="" class="form-label label_sm">mmol/L</label>
+                             </div>
+                        </div>
+                        <div class="col-5">
+                            <div id="toggle_Serumglucoseday2" class="clinical_toggle toggle__switch switch-sm custom-inline-flex mt-3">
+                                <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                <button class="btn" (click)="toggleSelection($event)">No</button>
+                                <button class="btn" (click)="toggleSelection($event)">N/D</button>
+                                <button class="btn" (click)="toggleSelection($event)">N/A</button>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <h6 class="clr-primary-600 mt-3">Maintenance of postoperative normothermia: (for all patients)</h6>
+                    <p class="m-0">5. Postoperative core temperature is normal (36.1 - 37.1 C)</p>
+                    <div class="row g-2 mt-2 align-items-center">
+                        <div class="col-3">
+                            <label for="" class="form-label">Core temperature</label>
+                            <div class="d-flex align-items-center afterlabel">
+                                <input type="text" name="" class="form-control pe-6" id="textbox_Coretemperature">
+                                <label for="" class="form-label label_sm">C</label>
+                             </div>
+                        </div>
+                        <div class="col-5">
+                            <div id="toggle_Coretemperature" class="clinical_toggle toggle__switch switch-sm custom-inline-flex mt-3">
+                                <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                <button class="btn" (click)="toggleSelection($event)">No</button>
+                                <button class="btn" (click)="toggleSelection($event)">N/D</button>
+                                <button class="btn" (click)="toggleSelection($event)">N/A</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-2 mt-2 align-items-center">
+                        <div class="col-5">
+                            <h6 class="clr-primary-600 m-0">Maintenance of postoperative normothermia: (for all patients)</h6>
+                        </div>
+                        <div class="col-5">
+                            <div id="toggle_Maintenanceofpostoperativenormothermia" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                <button class="btn" (click)="toggleSelection($event)">No</button>
+                                <button class="btn" (click)="toggleSelection($event)">N/D</button>
+                                <button class="btn" (click)="toggleSelection($event)">N/A</button>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-3 fs-7">*Due to the longer infusion time required for vancomycin, it is acceptable to start this antibiotic within 2 hours prior to incision.</p>
+                    <p class="mt-3 fs-7">**During cadriovascular surgery, prophylactic antibiotics(s) should be discontinued within 48 hours after surgery.</p>
+                </div>
+            </div>
+            <div class="mt-3">
+                <label for="" class="form-label">Comments</label>
+                <!-- <textarea name="" class="form-control" id="textarea_Comments" cols="30" rows="3"></textarea> -->
+                <span name="" class="form-control  textarea_box_double" id="textarea_Comments" cols="30" rows="3" resize-none contenteditable="true">
+                </span>       
+            </div>
+            <div class="mt-3 border rounded-2 p-2">
+                <div class="row g-2">
+                    <div class="col-3">
+                      <div class="border p-2 rounded-2 h-100">
+                        <div class="row g-2">
+                            <div class="col-6 offset-6 text-center">
+                                <label for="" class="form-label">DDMMYY</label>
+                            </div>
+                            <div class="col-6">
+                                <label for="" class="form-label">Date data collected</label>
+                            </div>
+                            <div class="col-6">
+                                <mat-form-field appearance="fill">
+                                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                                    <input matInput class="" #collectedDate id="textbox_collectedDate" [matDatepicker]="cdate"
+                                        (click)="cdate.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="cdate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #cdate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-6">
+                                <label for="" class="form-label">Collector ID</label>
+                            </div>
+                            <div class="col-6">
+                                <input type="text" class="form-control" name="" id="textbox_CollectorID1">
+                            </div>
+                       </div>
+                      </div>
+                    </div>
+                    <div class="col-3 text-center">
+                        <div class="border p-2 rounded-2 h-100">
+                            <label for="" class="form-label">Date Entry Stamp</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="border p-2 rounded-2 h-100">
+                            <div class="row g-2">
+                                <div class="col-6 offset-6 text-center">
+                                    <label for="" class="form-label">DDMMYY</label>
+                                </div>
+                                <div class="col-6">
+                                    <label for="" class="form-label">Date data collected</label>
+                                </div>
+                                <div class="col-6">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" #collected1Date id="textbox_collected1Date" [matDatepicker]="c1date"
+                                            (click)="c1date.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="c1date">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #c1date></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-6">
+                                    <label for="" class="form-label">Collector ID</label>
+                                </div>
+                                <div class="col-6">
+                                    <input type="text" class="form-control" name="" id="textbox_CollectorID2">
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+        <div class="modal-content">
+            <div class="modal-header p-2">
+                <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-2">
+                <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                    *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                    <div class="row mx-0 g-2 w-100">
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Template ID</p>
+                            <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                                    tem.PatientTemplatedetailID }}</a></p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Name</p>
+                            <p>{{ tem.PatientName }}</p>
+                        </div>
+
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">DoctorName</p>
+                            <p>{{ tem.Consultant }}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Created By</p>
+                            <p>{{ tem.CreatedBy }}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Date</p>
+                            <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

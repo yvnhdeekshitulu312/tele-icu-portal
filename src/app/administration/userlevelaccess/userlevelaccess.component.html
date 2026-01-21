@@ -1,0 +1,193 @@
+<app-header [InputHome]="true" [IsSwitchWard]="false"></app-header>
+<div class="container__wrapper p-0" style="background-color: #fff;">
+    <div class="page-header sticky-top bg-primary-50 shadow-sm justify-content-between">
+        <h2 class="page-heading d-flex align-items-center m-0">
+            User Level Access
+        </h2>
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-danger-outline" (click)="onClearClick()">Clear</button>
+            <button class="btn btn-main-outline" (click)="onSaveClick()" *ngIf="selectedUser">Save</button>
+        </div>
+    </div>
+    <div class="p-2 pb-0">
+        <div class="row g-2">
+            <div class="col-3">
+                <label for="" class="form-label">User</label>
+                <div class="CommanSearch__form bg-white ps-2 w-100 grey height-unset">
+                    <svg id="button-addon2" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M10.8609 2.49805C15.7521 2.49805 19.7218 6.46772 19.7218 11.3589C19.7218 16.2501 15.7521 20.2198 10.8609 20.2198C5.96968 20.2198 2 16.2501 2 11.3589C2 6.46772 5.96968 2.49805 10.8609 2.49805ZM10.8609 18.2507C14.6681 18.2507 17.7527 15.1662 17.7527 11.3589C17.7527 7.55072 14.6681 4.46713 10.8609 4.46713C7.05267 4.46713 3.96909 7.55072 3.96909 11.3589C3.96909 15.1662 7.05267 18.2507 10.8609 18.2507ZM19.2147 18.3206L22 21.1049L20.6069 22.498L17.8226 19.7128L19.2147 18.3206Z"
+                            fill="#368796"></path>
+                    </svg>
+                    <input type="text" id="userName" class="form-control" [matAutocomplete]="userAuto"
+                        placeholder="Search User" [(ngModel)]="userSearchText"
+                        (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchUsers($event)">
+                    <mat-autocomplete #userAuto="matAutocomplete">
+                        <mat-option *ngFor="let item of usersList" (onSelectionChange)="onUserSelected(item)"
+                            [value]="item.EmpNoFullName">
+                            {{item.EmpNoFullName}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+            </div>
+            <div class="col-3" *ngIf="selectedUser">
+                <label for="" class="form-label">Module</label>
+                <div class="dropdown custom_dropdown">
+                    <select name="" class="form-select pe-5" [(ngModel)]="moduleId" (change)="moduleChange($event)">
+                        <option value="">{{langData?.common?.Select}}</option>
+                        <option *ngFor="let e of modulesList" [value]="e.ID">
+                            {{e.Name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-3" *ngIf="selectedUser">
+                <label for="" class="form-label">Feature</label>
+                <div class="CommanSearch__form bg-white ps-2 w-100 grey height-unset">
+                    <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_9239_2779)">
+                            <path
+                                d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                fill="#368796" />
+                        </g>
+                    </svg>
+                    <input type="text" class="form-control" [matAutocomplete]="featureAuto"
+                        [(ngModel)]="featureSearchText" placeholder="Search Feature">
+                    <mat-autocomplete #featureAuto="matAutocomplete">
+                        <mat-option *ngFor="let item of featuresList">
+                            <div (click)="featureOptionClicked($event, item);">
+                                <mat-checkbox [checked]="item.selected" (change)="toggleFeatureSelection(item)"
+                                    (click)="$event.stopPropagation()">
+                                    {{ item.FeatureName }}
+                                </mat-checkbox>
+                            </div>
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-style-1 rounded mt-2">
+            <div class="card-header rounded-top justify-content-between py-1 min-height-unset">
+                <h5 class="card-heading">Features</h5>
+            </div>
+            <div class="p-2 mapuser_list d-flex flex-column gap-2">
+                <div class="border p-2 rounded" *ngFor="let item of userLevelAccessList; let i = index;">
+                    <div class="row justify-content-between align-items-center">
+                         <div class="col-5">
+                            <h6 class="clr-primary-600 m-0">{{item.ModuleName}}</h6>
+                        </div>
+                        <div class="col-5">
+                            <h6 class="clr-primary-600 m-0">{{item.FeatureName}}</h6>
+                        </div>
+                        <div class="col-2">
+                            <div class="d-flex align-items-center justify-content-end gap-3">
+                                <!-- <div class="custom_check d-flex align-items-center gap-2">
+                                    <svg width="20" height="20" viewBox="0 0 20 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                        <path
+                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                </div> -->
+                                <div class="del_svg cursor-pointer custom_tooltip custom_tooltip_left"
+                                    (click)="deleteItem(i, 'old')">
+                                    <svg width="23" height="22" viewBox="0 0 23 22" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M20.0995 6.16917H20.0261C15.177 5.68334 10.337 5.5 5.5428 5.98584L3.6728 6.16917C3.58184 6.17866 3.48989 6.17003 3.40228 6.14377C3.31467 6.11751 3.23314 6.07414 3.16239 6.01618C3.09164 5.95822 3.03308 5.8868 2.9901 5.80607C2.94712 5.72534 2.92056 5.63689 2.91197 5.54584C2.8753 5.16084 3.1503 4.83084 3.52614 4.79417L5.39614 4.61084C10.2728 4.11584 15.2136 4.30834 20.1636 4.79417C20.5395 4.83084 20.8145 5.17 20.7778 5.54584C20.764 5.71605 20.6864 5.87477 20.5607 5.99032C20.4349 6.10586 20.2702 6.16973 20.0995 6.16917Z"
+                                            fill="#EB6247"></path>
+                                        <path
+                                            d="M8.64147 5.24333C8.6048 5.24333 8.56813 5.24333 8.5223 5.23416C8.34445 5.20211 8.18627 5.10159 8.08172 4.95419C7.97717 4.80679 7.93459 4.62427 7.96313 4.44583L8.1648 3.24499C8.31147 2.36499 8.51313 1.14583 10.649 1.14583H13.0506C15.1956 1.14583 15.3973 2.41083 15.5348 3.25416L15.7365 4.44583C15.8006 4.82166 15.544 5.17916 15.1773 5.23416C14.8015 5.29833 14.444 5.04166 14.389 4.67499L14.1873 3.48333C14.059 2.68583 14.0315 2.52999 13.0598 2.52999H10.6581C9.68647 2.52999 9.66813 2.65833 9.53063 3.47416L9.3198 4.66583C9.29369 4.82694 9.2111 4.97351 9.08683 5.07931C8.96255 5.18512 8.80468 5.24325 8.64147 5.24333ZM14.7923 20.856H8.9073C5.70813 20.856 5.5798 19.0868 5.47897 17.6568L4.88313 8.42599C4.85563 8.05016 5.14897 7.72016 5.5248 7.69266C5.9098 7.67433 6.23063 7.95849 6.25813 8.33433L6.85397 17.5652C6.9548 18.9585 6.99147 19.481 8.9073 19.481H14.7923C16.7173 19.481 16.754 18.9585 16.8456 17.5652L17.4415 8.33433C17.469 7.95849 17.799 7.67433 18.1748 7.69266C18.5506 7.72016 18.844 8.041 18.8165 8.42599L18.2206 17.6568C18.1198 19.0868 17.9915 20.856 14.7923 20.856Z"
+                                            fill="#EB6247"></path>
+                                        <path
+                                            d="M13.3714 15.8125H10.3189C9.94311 15.8125 9.63144 15.5008 9.63144 15.125C9.63144 14.7492 9.94311 14.4375 10.3189 14.4375H13.3714C13.7473 14.4375 14.0589 14.7492 14.0589 15.125C14.0589 15.5008 13.7473 15.8125 13.3714 15.8125ZM14.1414 12.1458H9.55811C9.18227 12.1458 8.87061 11.8342 8.87061 11.4583C8.87061 11.0825 9.18227 10.7708 9.55811 10.7708H14.1414C14.5173 10.7708 14.8289 11.0825 14.8289 11.4583C14.8289 11.8342 14.5173 12.1458 14.1414 12.1458Z"
+                                            fill="#EB6247"></path>
+                                    </svg>
+                                    <div class="tooltip">
+                                        <p>Delete</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="border p-2 rounded" *ngFor="let item of newUserLevelAccessList; let i = index;">
+                    <div class="row justify-content-between align-items-center">
+                         <div class="col-5">
+                            <h6 class="clr-primary-600 m-0">{{item.ModuleName}}</h6>
+                        </div>
+                        <div class="col-5">
+                            <h6 class="clr-primary-600 m-0">{{item.FeatureName}}</h6>
+                        </div>
+                        <div class="col-2">
+                            <div class="d-flex align-items-center justify-content-end gap-3">
+                                <!-- <div class="custom_check d-flex align-items-center gap-2">
+                                    <svg width="20" height="20" viewBox="0 0 20 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                        <path
+                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                </div> -->
+                                <div class="del_svg cursor-pointer custom_tooltip custom_tooltip_left"
+                                    (click)="deleteItem(i, 'new')">
+                                    <svg width="23" height="22" viewBox="0 0 23 22" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M20.0995 6.16917H20.0261C15.177 5.68334 10.337 5.5 5.5428 5.98584L3.6728 6.16917C3.58184 6.17866 3.48989 6.17003 3.40228 6.14377C3.31467 6.11751 3.23314 6.07414 3.16239 6.01618C3.09164 5.95822 3.03308 5.8868 2.9901 5.80607C2.94712 5.72534 2.92056 5.63689 2.91197 5.54584C2.8753 5.16084 3.1503 4.83084 3.52614 4.79417L5.39614 4.61084C10.2728 4.11584 15.2136 4.30834 20.1636 4.79417C20.5395 4.83084 20.8145 5.17 20.7778 5.54584C20.764 5.71605 20.6864 5.87477 20.5607 5.99032C20.4349 6.10586 20.2702 6.16973 20.0995 6.16917Z"
+                                            fill="#EB6247"></path>
+                                        <path
+                                            d="M8.64147 5.24333C8.6048 5.24333 8.56813 5.24333 8.5223 5.23416C8.34445 5.20211 8.18627 5.10159 8.08172 4.95419C7.97717 4.80679 7.93459 4.62427 7.96313 4.44583L8.1648 3.24499C8.31147 2.36499 8.51313 1.14583 10.649 1.14583H13.0506C15.1956 1.14583 15.3973 2.41083 15.5348 3.25416L15.7365 4.44583C15.8006 4.82166 15.544 5.17916 15.1773 5.23416C14.8015 5.29833 14.444 5.04166 14.389 4.67499L14.1873 3.48333C14.059 2.68583 14.0315 2.52999 13.0598 2.52999H10.6581C9.68647 2.52999 9.66813 2.65833 9.53063 3.47416L9.3198 4.66583C9.29369 4.82694 9.2111 4.97351 9.08683 5.07931C8.96255 5.18512 8.80468 5.24325 8.64147 5.24333ZM14.7923 20.856H8.9073C5.70813 20.856 5.5798 19.0868 5.47897 17.6568L4.88313 8.42599C4.85563 8.05016 5.14897 7.72016 5.5248 7.69266C5.9098 7.67433 6.23063 7.95849 6.25813 8.33433L6.85397 17.5652C6.9548 18.9585 6.99147 19.481 8.9073 19.481H14.7923C16.7173 19.481 16.754 18.9585 16.8456 17.5652L17.4415 8.33433C17.469 7.95849 17.799 7.67433 18.1748 7.69266C18.5506 7.72016 18.844 8.041 18.8165 8.42599L18.2206 17.6568C18.1198 19.0868 17.9915 20.856 14.7923 20.856Z"
+                                            fill="#EB6247"></path>
+                                        <path
+                                            d="M13.3714 15.8125H10.3189C9.94311 15.8125 9.63144 15.5008 9.63144 15.125C9.63144 14.7492 9.94311 14.4375 10.3189 14.4375H13.3714C13.7473 14.4375 14.0589 14.7492 14.0589 15.125C14.0589 15.5008 13.7473 15.8125 13.3714 15.8125ZM14.1414 12.1458H9.55811C9.18227 12.1458 8.87061 11.8342 8.87061 11.4583C8.87061 11.0825 9.18227 10.7708 9.55811 10.7708H14.1414C14.5173 10.7708 14.8289 11.0825 14.8289 11.4583C14.8289 11.8342 14.5173 12.1458 14.1414 12.1458Z"
+                                            fill="#EB6247"></path>
+                                    </svg>
+                                    <div class="tooltip">
+                                        <p>Delete</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="savemsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{errorMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

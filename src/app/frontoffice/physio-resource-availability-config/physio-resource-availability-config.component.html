@@ -1,0 +1,590 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+<form [formGroup]="form">
+   <div class="" style="background-color: #fff;">
+      <div class="page-header sticky-top bg-primary-50 shadow-sm justify-content-start">
+         <h2 class="page-heading"> Multi Resource Availability Configuration </h2>
+      </div>
+      <div class="bg-white p-2">
+         <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-2">
+               <div class="dropdown primary-dropdown hoverServices">
+                  <button
+                     class="btn btn-main-outline d-flex align-items-center justify-content-between dropdown-toggle w-100">
+                     <span>
+                        <svg class="me-2" width="12" height="17" viewBox="0 0 12 17" fill="none"
+                           xmlns="http://www.w3.org/2000/svg">
+                           <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M6.00015 0.500766C8.77762 0.45442 10.7001 2.51758 10.7504 5.2977C10.804 8.23808 8.13741 10.82 6.46617 12.9966C6.22341 13.3114 5.73815 13.3011 5.51208 12.9659C5.11911 12.3836 4.64064 11.7882 4.14395 11.1702C2.72755 9.40752 1.20654 7.69043 1.25005 5.29788C1.30024 2.51913 3.2218 0.454933 6.00032 0.500943L6.00015 0.500766ZM6.00015 3.14664C7.41899 3.14664 8.56912 4.29677 8.56912 5.71561C8.56912 7.13445 7.41899 8.28471 6.00015 8.28471C4.58118 8.28471 3.43105 7.13432 3.43105 5.71561C3.43105 4.29677 4.58118 3.14664 6.00015 3.14664ZM9.45818 11.9057C11.6858 12.9 11.6858 14.8575 9.45818 15.8518C7.52185 16.7161 4.47851 16.7161 2.5418 15.8518C0.314193 14.8575 0.314193 12.9 2.5418 11.9057C2.86634 11.7608 3.22193 11.6404 3.59846 11.544C3.87409 11.8876 4.15513 12.2275 4.42971 12.5674C3.9135 12.6578 3.43171 12.7948 3.0205 12.9782C1.71696 13.5602 1.71696 14.1973 3.0205 14.7792C4.64231 15.503 7.35766 15.503 8.97954 14.7792C10.2831 14.1973 10.2831 13.5602 8.97954 12.9782C8.5872 12.8032 8.13071 12.6706 7.64132 12.5803C7.91374 12.2485 8.19013 11.9081 8.46064 11.5593C8.81521 11.653 9.15079 11.7684 9.45815 11.9058L9.45818 11.9057Z"
+                              fill="#8ECBD7" />
+                        </svg>
+                        {{form.get("HospitalName").value}}
+                     </span>
+                  </button>
+                  <div class="dropdown-menu">
+                     <p *ngFor="let hl of locationList;let i=index" (click)="selectedHospital(hl)"
+                        class="dropdown-item border-0 py-2 cursor-pointer"> {{hl.Name}}</p>
+                  </div>
+               </div>
+            </div>
+            <div class="row g-2 justify-content-end w-100 align-items-end">
+               <div class="ps-0 col-2 position-relative">
+                  <label for="" class="form-label" required>Service :</label>
+                  <select class="form-select pe-5" id="Service" (change)="onServiceChanged($event)"
+                      formControlName="Service">
+                      <option dir="ltr" value="0" translate>{{langData?.common?.Select}}</option>
+                      <option dir="ltr" *ngFor="let svc of services"
+                          [value]="svc.ServiceID">
+                          {{svc.ServiceName}}
+                      </option>
+                  </select>
+               </div>              
+               <div class="ps-0 col-2 position-relative">
+               <label for="" class="form-label" required>Resource Type :</label>
+               <select class="form-select pe-5" id="ResourceType" (change)="onResourceTypeChanged($event)"
+                   formControlName="ResourceType">
+                   <option dir="ltr" value="0" translate>{{langData?.common?.Select}}</option>
+                   <option dir="ltr" *ngFor="let rtyp of resourceTypes"
+                       [value]="rtyp.DomainID">
+                       {{rtyp.DomainName}}
+                   </option>
+               </select>
+               </div>
+               <div class="ps-0 col-2 position-relative">
+               <label for="" class="form-label" required>Resource Name :</label>
+               <select class="form-select pe-5" id="ResourceName"
+                  formControlName="ResourceName">
+                  <option dir="ltr" value="0" translate>{{langData?.common?.Select}}</option>
+                  <option dir="ltr" *ngFor="let svc of resourceNames"
+                     [value]="svc.ServiceItemID">
+                     {{svc.ServiceItemName}}
+                  </option>
+               </select>
+               </div>
+               <div class="CommanSearch__form ps-0 w-25 position-relative d-none">
+                  <input type="text" class="form-control pe-5" placeholder="Specialisation" autocomplete="off"
+                     formControlName="Specialisation" aria-label="Specialisation" [matAutocomplete]="autoSpecialisation"
+                     (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchSpecialisationSearch($event)">
+                  <mat-autocomplete #autoSpecialisation="matAutocomplete">
+                     <mat-option *ngFor="let item of listOfSpecialisation"
+                        (onSelectionChange)="selectSpecialisationItem(item)">
+                        {{item.Specialisation}}
+                     </mat-option>
+                  </mat-autocomplete>
+                  <label for="" class="CommonSearch__label me-2 position-absolute end-0">
+                     <img src="assets/images/icons/icon-search.svg" alt="">
+                  </label>
+               </div>
+               <div class="CommanSearch__form ps-0 w-25 position-relative d-none">
+                  <input type="text" class="form-control pe-5" placeholder="Doctor" autocomplete="off" id="txtDoctor"
+                      formControlName="DoctorName" aria-label="Doctor"
+                      [matAutocomplete]="autoDoctor" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchDoctorSearch($event)">
+                  <mat-autocomplete #autoDoctor="matAutocomplete">
+                      <mat-option *ngFor="let item of listOfItems"
+                          (onSelectionChange)="selectDocor(item)">
+                          {{item.DoctorName}}
+                      </mat-option>
+                  </mat-autocomplete>
+                  <label for="" class="CommonSearch__label me-2 position-absolute end-0">
+                      <img src="assets/images/icons/icon-search.svg" alt="">
+                  </label>
+              </div>
+              <div class="w-max-content">
+               <button class="btn btn-danger-outline" (click)="clearresource()">Clear</button>
+              </div>
+            </div>
+         </div>
+
+         <div class="mt-2 border-primary-200 rounded-3 position-relative">
+            <div class="row mx-0 gx-0 resource_avail_config" >
+               <div class="col-3 resource-doctor-list border-end">
+                  <div class="d-flex align-items-center justify-content-between stickhead sticky-top top-0 p-2"
+                     style="height: 3rem;">
+                     <h5 class="m-0 clr-primary-600 fs-6">Doctors</h5>
+                     <div class="d-flex align-items-center gap-2" *ngIf="filterDoctor.length > 0">
+                        <div class="custom_check d-flex align-items-center gap-2" [class.active]="selectAll"
+                           (click)="selectAllDoctor()">
+                           <p class="m-0 fs-7">Select all</p>
+                           <svg width="18" height="18" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                        </div>
+                        <div
+                           class="d-none search_icon p-1 border-primary-300 rounded-2 ms-3 cursor-pointer bg-primary-20">
+                           <img src="assets/images/icons/icon-search.svg" alt="">
+                        </div>
+                     </div>
+                  </div>
+                  <div *ngIf="filterDoctor.length > 0"
+                     class="bg-primary-50 position-relative d-flex align-items-center">
+                     <input type="text" placeholder="Search doctor" (keydown.enter)="onDoctorEnterPress($event)"
+                        (change)="fetchDoctors($event)" formControlName="SearchQuery"
+                        class="form-control bg-transparent border-0 py-2 clr-primary-600 pe-5">
+                     <div class="position-absolute end-0 me-2"
+                        (click)="form.get('SearchQuery').setValue('');fetchDoctors($event)">
+                        <svg width="20" height="20" viewBox="0 0 20 20">
+                           <path d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z"
+                              stroke="#368796" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                              stroke-linejoin="round"></path>
+                        </svg>
+                     </div>
+                  </div>
+                  
+                  <div class="doctors-list-cards p-2 d-flex flex-column gap-2">
+                     <div (click)="selectDoctor(item)" *ngFor="let item of doctorList" [class.active]="item.selected"
+                        class="doctor-card cursor-pointer rounded-2 border p-2 d-flex justify-content-between">
+                        <div class="d-flex align-items-center gap-2">
+                           <!-- <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <rect width="32" height="32" rx="16" fill="#ECF6F8" />
+                              <path fill-rule="evenodd" clip-rule="evenodd"
+                                 d="M15.9999 17.7756C19.04 17.7756 21.5038 13.6709 21.5038 10.9422C21.5038 8.21267 19.04 6 15.9999 6C12.9602 6 10.4962 8.21267 10.4962 10.9422C10.4962 13.6713 12.9607 17.7756 15.9999 17.7756ZM11.3222 11.1092C11.6532 9.67606 13.6258 9.91675 15.1147 10.0984L15.2386 10.1135C16.6876 10.2892 18.318 10.0911 18.9463 9.99883L18.9864 9.99289C19.1521 9.96831 19.3179 9.94371 19.4846 9.95827C20.8349 10.0762 20.73 11.8651 20.7282 11.886C20.2961 14.1893 18.3436 17.0016 16.0001 17.0016C13.6703 17.0016 11.7265 14.2201 11.2797 11.9244C11.2413 11.7268 11.2769 11.3053 11.3222 11.1092Z"
+                                 fill="#43A9BC" />
+                              <path
+                                 d="M23.3883 18.1829C22.9689 17.8969 22.449 18.439 22.5324 18.9398C22.5711 19.1718 22.7429 19.3632 22.9565 19.4618C23.4756 19.7015 23.8315 20.1868 23.8315 20.7458C23.8315 21.5423 23.1098 22.1903 22.2228 22.1903C21.3358 22.1903 20.6141 21.5423 20.6141 20.7458C20.6141 20.2896 20.8095 19.8234 20.9982 19.373C21.2863 18.6852 21.5589 18.0345 21.0966 17.5134C20.9576 17.3567 20.8008 17.2204 20.6278 17.1113C20.5819 17.0823 20.5306 17.0645 20.4768 17.0566C20.2228 17.0188 20.0039 17.2264 19.8882 17.4557C19.4544 18.3163 17.8783 18.9538 15.9994 18.9538C14.1987 18.9538 12.6759 18.3683 12.1708 17.562C11.9993 17.2883 11.7202 17.0225 11.4016 17.0756C11.3291 17.0876 11.2605 17.1141 11.2009 17.1571C10.7299 17.4973 10.3478 18.0745 10.2451 18.7751C10.2185 18.9567 10.3349 19.1206 10.4537 19.2605C10.5268 19.3467 10.6077 19.427 10.7076 19.4799C11.1713 19.7258 11.5813 20.1679 11.9029 20.7716C11.9663 20.8913 11.9835 21.0302 12.0007 21.1692C12.0136 21.2732 12.0264 21.3772 12.0586 21.4733C12.1905 21.8665 12.2635 22.2691 12.2635 22.62C12.2635 23.16 12.2635 23.6752 11.7925 23.9138C11.6049 24.0089 11.4017 24.1111 11.1914 24.1111H10.6746C10.4155 24.1111 10.2046 23.9216 10.2046 23.6891L10.2051 23.6727C10.215 23.4485 10.4242 23.2671 10.6746 23.2671H11.1914C11.2359 23.2671 11.2796 23.2728 11.3221 23.284C11.3379 23.2881 11.3659 23.2861 11.3808 23.2796C11.3899 23.2756 11.391 23.2725 11.3935 23.2657C11.3942 23.2639 11.395 23.2618 11.396 23.2595C11.4448 23.1451 11.4448 22.7937 11.4448 22.6203C11.4448 22.334 11.383 22.0018 11.2712 21.6738C11.2347 21.5669 11.1632 21.4781 11.0913 21.389C11.0382 21.323 10.9849 21.2569 10.9456 21.1831C10.6323 20.594 10.2061 20.2136 9.86012 20.2136C9.50621 20.2136 9.05874 20.6249 8.74666 21.2367C8.70337 21.3212 8.64189 21.3961 8.58061 21.4708C8.4986 21.5707 8.41696 21.6702 8.37975 21.7917C8.29115 22.0809 8.24375 22.3661 8.24375 22.62C8.24375 22.7594 8.24375 23.1079 8.29243 23.2432C8.30058 23.2659 8.3087 23.279 8.33169 23.2861C8.34454 23.2901 8.37221 23.2925 8.3851 23.2886C8.43288 23.2743 8.48335 23.2669 8.53381 23.2669H9.05156C9.29287 23.2669 9.49457 23.432 9.51883 23.6463L9.5213 23.6725C9.5213 23.9216 9.31044 24.1111 9.05156 24.1111H8.53381C8.35216 24.1111 8.17585 24.0351 8.00735 23.9624L7.96103 23.9425C7.81266 23.8791 7.69796 23.7876 7.61414 23.6665C7.45426 23.436 7.42505 23.1334 7.42505 22.62C7.42505 22.2612 7.49856 21.8592 7.6348 21.4601C7.66396 21.3747 7.67746 21.283 7.69094 21.1912C7.70894 21.0688 7.72694 20.9464 7.78218 20.8394C8.00121 20.4091 8.27989 20.0407 8.58777 19.7743C8.70566 19.6723 8.82969 19.5842 8.95841 19.511C9.06609 19.4499 9.15319 19.3579 9.23375 19.2638C9.24109 19.2553 9.24862 19.2469 9.25634 19.2386C9.37302 19.114 9.47701 18.9594 9.49684 18.7898C9.54915 18.3427 9.0812 17.872 8.70501 18.1193C7.06506 19.1972 6 20.9382 6 22.9031C6.00025 25.8547 8.40215 26 11.547 26C11.7164 26 11.888 25.9996 12.0617 25.9992L12.0624 25.9992C12.2399 25.9987 12.4195 25.9983 12.6008 25.9983H19.3994C19.58 25.9983 19.7593 25.9987 19.9367 25.9992C20.1106 25.9996 20.2829 26 20.4527 26C23.5976 26 26 25.8551 26 22.9036C25.9998 20.9761 24.9749 19.2648 23.3883 18.1829Z"
+                                 fill="#43A9BC" />
+                              <path
+                                 d="M22.9653 20.7458C22.9653 21.114 22.6329 21.4124 22.2228 21.4124C21.8128 21.4124 21.4803 21.114 21.4803 20.7458C21.4803 20.3776 21.8128 20.0791 22.2228 20.0791C22.6329 20.0791 22.9653 20.3776 22.9653 20.7458Z"
+                                 fill="#43A9BC" />
+                           </svg> -->
+                           <div class="profile_img position-relative">
+                              <!-- <img class="doc_img" src="assets/images/maleD.svg" alt="" *ngIf="item.GenderID=='1'">
+                              <img class="doc_img" src="assets/images/femaleD.svg" alt="" *ngIf="item.GenderID=='2'"> -->
+                              <!-- <img class="flag_img" src="assets/images/flag1.png" alt=""> -->
+                           </div>
+                           <!-- <div class="">
+                              <p class="fw-bold fs-8">{{item.EmpCodeName}}</p>
+                              <p class="clr-primary-600 fw-bold fs-8">{{item.Specialization}}</p>
+                              <p class="clr-dark-600">{{item.Nationality}}</p>
+                           </div> -->
+                           <div class="">
+                              <p class="fw-bold fs-8">{{item.ServiceItemName}}</p>
+                              <!-- <p class="clr-primary-600 fw-bold fs-8">{{item.Specialization}}</p>
+                              <p class="clr-dark-600">{{item.Nationality}}</p> -->
+                           </div>
+                        </div>
+                        <div class="custom_check" [class.active]="item.selected">
+                           <svg width="18" height="18" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                        </div>
+                     </div>
+
+                     <div class="no_doctors flex-column justify-content-center align-items-center gap-2" *ngIf="filterDoctor.length == 0">
+                        <img class="mb-2" src="assets/images/Doctor.svg" alt="" style="height: 7rem;">
+                        <p class="fs-7">Select Doctor</p>
+                    </div>
+
+                  </div>
+               </div>
+               <div class="col-9">
+                  <div class="medicine_card">                     
+                     <div class="d-flex align-items-center gap-2 justify-content-between stickhead sticky-top top-0 p-2"
+                        style="height: 3rem;">
+                        <div class="p-2 avail_legends">
+                           <div class="d-flex align-items-center gap-3">
+                              <div class="d-flex align-items-center gap-1">
+                                 <span class="legend inavailable"></span>
+                                 <label for="" class="form-label m-0">Avaialble</label>
+                              </div>
+                              <div class="d-flex align-items-center gap-1">
+                                 <span class="legend change_duty"></span>
+                                 <label for="" class="form-label m-0">Change Duty</label>
+                              </div>
+                              <div class="d-flex align-items-center gap-1">
+                                 <span class="legend iprounds"></span>
+                                 <label for="" class="form-label m-0">Meeting</label>
+                              </div>
+                              <div class="d-flex align-items-center gap-1">
+                                 <span class="legend inor"></span>
+                                 <!-- <label for="" class="form-label m-0">In OR</label> -->
+                                 <label for="" class="form-label m-0">InPatient Sessions</label> 
+                              </div>
+                              <div class="d-flex align-items-center gap-1">
+                                 <span class="legend onvacation"></span>
+                                 <label for="" class="form-label m-0">On Vacation</label>
+                              </div>                            
+                           </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                           <h5 class="m-0 clr-primary-600 fs-6">Status</h5>
+                           <div class="dropdown primary-dropdown hoverServices" style="width: 9rem;">
+                              <button
+                                 class="w-100 btn btn-main-outline rounded-5 bg-primary-100 d-flex align-items-center justify-content-between dropdown-toggle"
+                                 style="height: 2rem;">
+                                 {{form.get("StatusName").value}}
+                              </button>
+                              <div class="dropdown-menu end-0">
+                                 <!-- <p class="dropdown-item border-0 py-2 cursor-pointer"> Available</p>
+                                 <p class="dropdown-item border-0 py-2 cursor-pointer"> Resource Blocking</p> -->
+                                 <p *ngFor="let hl of StatusList;let i=index" (click)="selectedStatus(hl)"
+                                    class="dropdown-item border-0 py-2 cursor-pointer"> {{hl.ID === '15' ? 'InPatient Sessions' : hl.Name}}</p>
+                              </div>
+                           </div>
+                           <div class="" *ngIf="!IsConsultation && doctorSelected()">
+                              <button (click)="newConsultaion()"
+                                 class="btn border-primary-200 rounded-5 bg-primary-100 p-2 px-3 cursor-pointer d-flex align-items-center gap-2 clr-primary-600"
+                                 style="height: 2rem;">
+                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                       d="M-4.67448e-08 5.25L1.21843e-07 6.75L5.25 6.75L5.25 12L6.75 12L6.75 6.75H12V5.25H6.75L6.75 -4.68978e-07L5.25 -3.00391e-07L5.25 5.25H-4.67448e-08Z"
+                                       fill="#368796" />
+                                 </svg>
+                                 New
+                              </button>
+                           </div>
+                           <div *ngIf="IsConsultation">
+                              <button class="btn btn-danger-outline" (click)="cancelConsultation()">Cancel</button>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="prescribeditems_body">
+
+                        <div class="no-visit d-flex align-items-center justify-content-center flex-column gap-2"
+                               *ngIf="filterDoctor.length == 0">
+                              <img style="height: 7rem;" src="assets/images/no-visits.svg" alt="">
+                              <p class="m-0 fs-6 text-center">No Slots</p>
+                           </div>
+
+                        <div *ngIf="IsConsultation" class="allday_selectionrow">
+                           <div class="px-1 d-flex align-items-center gap-2">
+                              <div class="fromtodate" [formGroup]="datesForm">
+                                 <button class="date_range_calendar position-relative pd p-0" style="width: 236px;"
+                                    dir="ltr">
+                                    <mat-date-range-input class="btn btn-main-outline" [rangePicker]="picker" [min]="minDate">
+                                       <input matStartDate formControlName="FromDate">
+                                       <input matEndDate formControlName="ToDate">
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker></mat-date-range-picker>
+                                 </button>
+                              </div>
+                              <div [formGroup]="timesForm" class="d-flex gap-3">
+                                 <div *ngFor="let dateTimeGroup of dateTimes.controls; let i = index; let last = last"
+                                    formArrayName="dateTimes">
+                                    <div [formGroupName]="i" class="d-flex gap-2">
+                                       <div class="fromtotime">
+                                          <input type="time" class="form-control" formControlName="FromTime" (change)="validateTime(i)">
+                                       </div>
+                                       -
+                                       <div class="fromtotime">
+                                          <input type="time" class="form-control" formControlName="ToTime" (change)="validateTime(i)">
+                                       </div>
+                                       <button class="p-0" (click)="DeleteRow(i)">
+                                          <svg class="cursor-pointer" width="20" height="20" viewBox="0 0 24 24"
+                                          fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <path
+                                             d="M21 5.98C17.67 5.65 14.32 5.48 10.98 5.48C9 5.48 7.02 5.58 5.04 5.78L3 5.98M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97M18.85 9.14L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5H13.66M9.5 12.5H14.5"
+                                             stroke="#EB6247" stroke-width="1.5" stroke-linecap="round"
+                                             stroke-linejoin="round" />
+                                       </svg>
+                                       </button>
+                                      
+                                    </div>
+
+                                 </div>
+                              </div>
+                              <div>
+                                 <button (click)="addRow()">
+                                    <svg class="cursor-pointer add" width="20" height="20" viewBox="0 0 16 16"
+                                       fill="none" xmlns="http://www.w3.org/2000/svg">
+                                       <rect x="0.5" y="0.5" width="15" height="15" rx="7.5"
+                                          fill="url(#paint0_radial_1479_2142)"></rect>
+                                       <rect x="0.5" y="0.5" width="15" height="15" rx="7.5" stroke="#0AC285"></rect>
+                                       <path
+                                          d="M7.45935 5.36108C7.41333 5.36108 7.37602 5.39839 7.37602 5.44442V7.37598H5.44417C5.39815 7.37598 5.36084 7.41329 5.36084 7.45931V8.54102C5.36084 8.58704 5.39815 8.62435 5.44417 8.62435H7.37602V10.5559C7.37602 10.602 7.41333 10.6393 7.45935 10.6393H8.54106C8.58708 10.6393 8.62439 10.602 8.62439 10.5559V8.62435H10.5557C10.6017 8.62435 10.639 8.58704 10.639 8.54102V7.45931C10.639 7.41329 10.6017 7.37598 10.5557 7.37598H8.62439V5.44442C8.62439 5.39839 8.58708 5.36108 8.54106 5.36108H7.45935Z"
+                                          fill="#43BC94"></path>
+                                       <defs>
+                                          <radialGradient id="paint0_radial_1479_2142" cx="0" cy="0" r="1"
+                                             gradientUnits="userSpaceOnUse"
+                                             gradientTransform="translate(8 8) rotate(90) scale(8)">
+                                             <stop stop-color="white"></stop>
+                                             <stop offset="1" stop-color="#E3F4F5"></stop>
+                                          </radialGradient>
+                                       </defs>
+                                    </svg>
+                                 </button>
+                              </div>
+                           </div>
+                           <div class="mt-2 bg-primary-20 p-2">
+                              <div class="d-flex align-items-center justify-content-between">
+                                 <div class="d-flex gap-2 alldays">
+                                    <div class="alldays_btn cursor-pointer" (click)="toggleAllDays()" [class.active]="allDaysSelected">
+                                       All Days
+                                    </div>
+                                    <div class="week_circles d-flex align-items-center gap-2 me-4">
+                                       <div *ngFor="let day of activeDays; let i = index" class="week_letter custom_tooltip custom_tooltip_left"
+                                          [class.active]="day" (click)="toggleDay(i)">
+                                          {{ dayNames[i] }}
+                                          <div class="tooltip">
+                                             <p>{{ dayNames[i] }}</p>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div
+                                       class="inline-dropdown bg-primary-100 p-2 d-flex flex-column gap-1 rounded-1">
+                                       <p class="fs-8 clr-primary-600 m-0">Consultation:</p>
+                                       <div class="dropdown primary-dropdown hoverServices">
+                                          <button
+                                             class="btn btn-main-outline rounded-5 fs-7 bg-transparent border-0 d-flex align-items-center dropdown-toggle ps-0"
+                                             style="height: 1.7rem;">
+                                             {{ selectedTime }} min
+                                          </button>
+                                          <div class="dropdown-menu">
+                                             <p *ngFor="let time of timeOptions"
+                                                class="dropdown-item border-0 py-2 cursor-pointer"
+                                                (click)="selectTime(time)">
+                                                {{ time }} min
+                                             </p>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div
+                                       class="inline-dropdown bg-primary-100 p-2 d-flex flex-column gap-1 rounded-1">
+                                       <p class="fs-8 clr-primary-600 m-0">Follow-up:</p>
+                                       <div class="dropdown primary-dropdown hoverServices">
+                                          <button
+                                             class="btn btn-main-outline rounded-5 fs-7 bg-transparent border-0 d-flex align-items-center dropdown-toggle ps-0"
+                                             style="height: 1.7rem;">
+                                             {{ selectedFollowupTime }} min
+                                          </button>
+                                          <div class="dropdown-menu">
+                                             <p *ngFor="let time of timeOptions"
+                                                class="dropdown-item border-0 py-2 cursor-pointer"
+                                                (click)="selectFollowupTime(time)">
+                                                {{ time }} min
+                                             </p>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div
+                                       class="inline-dropdown bg-primary-100 p-2 d-flex flex-column gap-1 rounded-1">
+                                       <p class="fs-8 clr-primary-600 m-0">Total Waiting List Count:</p>
+                                       <input type="text" id="waitingListCount" class="form-control fs-8"  placeholder="Count" autocomplete="off" aria-label="Count"
+                                          (keypress)="($event.charCode >= 48 && $event.charCode < 58)"  maxlength="2" (change)="onWaitingListCountChange()">
+                                    </div>
+                                 </div>
+                                 <div class="d-flex align-items-center gap-2">
+                                    <button class="btn btn-danger-outline" (click)="clear()">Clear</button>
+                                    <button *ngIf="!modify" class="btn btn-main-outline" (click)="save()">Save</button>
+                                    <button *ngIf="modify" class="btn btn-main-outline"
+                                       (click)="modifyresource()">Modify</button>
+                                       <button *ngIf="modify" class="btn btn-main-outline"
+                                       (click)="delete(SelectedConfigForEdit)">Delete</button>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div *ngIf="FetchResourceAvailableConfigurationDataList.length > 0"
+                           class="medical-item-card-list p-3 d-flex flex-column gap-2">
+                           <div *ngFor="let config of FetchResourceAvailableConfigurationDataList;let i=index"
+                              class="medical-item-card border-primary-200 shadow-sm rounded-2">
+                              <div class="d-flex align-items-center justify-content-between gap-2 p-1 border-bottom bg-primary-50">
+                                 <div class="d-flex align-items-center gap-2">
+                                    <!-- <svg width="36" height="36" viewBox="0 0 36 36" fill="none"
+                                       xmlns="http://www.w3.org/2000/svg">
+                                       <rect width="36" height="36" rx="18" fill="#ECF6F8" />
+                                       <path fill-rule="evenodd" clip-rule="evenodd"
+                                          d="M17.9998 19.9975C21.42 19.9975 24.1918 15.3797 24.1918 12.31C24.1918 9.23925 21.42 6.75 17.9998 6.75C14.5802 6.75 11.8082 9.23925 11.8082 12.31C11.8082 15.3802 14.5808 19.9975 17.9998 19.9975ZM12.7375 12.4978C13.1099 10.8856 15.329 11.1563 17.004 11.3607L17.1434 11.3777C18.7736 11.5753 20.6077 11.3525 21.3146 11.2487L21.3597 11.242C21.5461 11.2143 21.7326 11.1867 21.9202 11.2031C23.4393 11.3357 23.3213 13.3482 23.3192 13.3717C22.8331 15.963 20.6366 19.1267 18.0001 19.1267C15.3791 19.1267 13.1923 15.9977 12.6897 13.415C12.6464 13.1926 12.6865 12.7185 12.7375 12.4978Z"
+                                          fill="#43A9BC" />
+                                       <path
+                                          d="M26.3118 20.4558C25.84 20.134 25.2551 20.7439 25.349 21.3072C25.3925 21.5683 25.5857 21.7836 25.826 21.8946C26.41 22.1642 26.8104 22.7101 26.8104 23.339C26.8104 24.235 25.9985 24.964 25.0006 24.964C24.0028 24.964 23.1909 24.235 23.1909 23.339C23.1909 22.8258 23.4106 22.3013 23.6229 21.7946C23.9471 21.0209 24.2538 20.2888 23.7337 19.7026C23.5773 19.5262 23.4009 19.3729 23.2063 19.2502C23.1546 19.2176 23.0969 19.1976 23.0364 19.1886C22.7506 19.1462 22.5043 19.3796 22.3743 19.6377C21.8862 20.6058 20.1131 21.323 17.9993 21.323C15.9735 21.323 14.2604 20.6643 13.6921 19.7573C13.4992 19.4493 13.1852 19.1503 12.8268 19.21C12.7452 19.2236 12.668 19.2534 12.601 19.3018C12.0711 19.6844 11.6413 20.3338 11.5258 21.1219C11.4958 21.3263 11.6268 21.5107 11.7604 21.6681C11.8427 21.765 11.9337 21.8554 12.046 21.9149C12.5677 22.1915 13.029 22.6889 13.3908 23.368C13.4621 23.5027 13.4814 23.659 13.5008 23.8154C13.5152 23.9323 13.5297 24.0494 13.566 24.1574C13.7143 24.5998 13.7964 25.0527 13.7964 25.4475C13.7964 26.055 13.7964 26.6345 13.2666 26.903C13.0555 27.01 12.8269 27.125 12.5903 27.125H12.0089C11.7174 27.125 11.4802 26.9118 11.4802 26.6503L11.4808 26.6318C11.4919 26.3795 11.7272 26.1755 12.0089 26.1755H12.5903C12.6404 26.1755 12.6895 26.1819 12.7374 26.1945C12.7551 26.1992 12.7866 26.1969 12.8034 26.1895C12.8136 26.185 12.8149 26.1816 12.8177 26.1739C12.8185 26.1719 12.8193 26.1696 12.8205 26.1669C12.8754 26.0382 12.8754 25.6429 12.8754 25.4478C12.8754 25.1258 12.8058 24.752 12.6801 24.383C12.6391 24.2628 12.5586 24.1629 12.4778 24.0626C12.418 23.9884 12.358 23.914 12.3138 23.831C11.9613 23.1683 11.4819 22.7403 11.0926 22.7403C10.6945 22.7403 10.1911 23.203 9.83999 23.8913C9.79129 23.9864 9.72213 24.0706 9.65318 24.1546C9.56093 24.267 9.46908 24.3789 9.42721 24.5156C9.32754 24.841 9.27422 25.1619 9.27422 25.4475C9.27422 25.6044 9.27422 25.9964 9.32898 26.1486C9.33815 26.1741 9.34728 26.1888 9.37316 26.1969C9.38761 26.2013 9.41874 26.204 9.43324 26.1997C9.48699 26.1836 9.54376 26.1753 9.60054 26.1753H10.183C10.4545 26.1753 10.6814 26.361 10.7087 26.602L10.7115 26.6315C10.7115 26.9118 10.4742 27.125 10.183 27.125H9.60054C9.39618 27.125 9.19783 27.0395 9.00826 26.9577L8.95616 26.9353C8.78924 26.864 8.6602 26.7611 8.5659 26.6248C8.38604 26.3655 8.35319 26.025 8.35319 25.4475C8.35319 25.0438 8.43588 24.5916 8.58915 24.1427C8.62196 24.0466 8.63714 23.9433 8.65231 23.8402C8.67256 23.7024 8.6928 23.5648 8.75496 23.4443C9.00136 22.9603 9.31487 22.5458 9.66124 22.246C9.79387 22.1313 9.9334 22.0322 10.0782 21.9499C10.1994 21.8811 10.2973 21.7776 10.388 21.6718C10.3962 21.6622 10.4047 21.6527 10.4134 21.6434C10.5446 21.5032 10.6616 21.3293 10.6839 21.1385C10.7428 20.6355 10.2163 20.106 9.79314 20.3842C7.94819 21.5969 6.75 23.5554 6.75 25.766C6.75028 29.0865 9.45242 29.25 12.9904 29.25C13.181 29.25 13.374 29.2495 13.5694 29.249L13.5702 29.249C13.7699 29.2485 13.9719 29.248 14.1759 29.248H21.8243C22.0275 29.248 22.2292 29.2485 22.4288 29.249C22.6244 29.2495 22.8182 29.25 23.0093 29.25C26.5473 29.25 29.25 29.087 29.25 25.7665C29.2498 23.5981 28.0968 21.6729 26.3118 20.4558Z"
+                                          fill="#43A9BC" />
+                                       <path
+                                          d="M25.836 23.339C25.836 23.7532 25.462 24.089 25.0007 24.089C24.5394 24.089 24.1654 23.7532 24.1654 23.339C24.1654 22.9248 24.5394 22.589 25.0007 22.589C25.462 22.589 25.836 22.9248 25.836 23.339Z"
+                                          fill="#43A9BC" />
+                                    </svg> -->
+                                    <div class="profile_img position-relative">
+                                       <img class="doc_img" src="assets/images/maleD.svg" alt=""
+                                          *ngIf="config.GenderID=='1'"
+                                          style="width: 2rem;height: 2rem;min-width: 2rem;border-radius: 50%;background: #daeef1;">
+                                       <img class="doc_img" src="assets/images/femaleD.svg" alt=""
+                                          *ngIf="config.GenderID=='2'"
+                                          style="width: 2rem;height: 2rem;min-width: 2rem;border-radius: 50%;background: #daeef1;">
+                                    </div>
+                                    <!-- <div class="">
+                                       <h5 class="clr-primary-600 m-0 fs-6 fw-bold">{{ config.DoctorCode }} - {{ config.DoctorName }}</h5>
+                                       <p class="fw-bold fs-7 clr-dark-600">{{ config.Specialisation }}</p>
+                                    </div> -->
+                                    <div class="d-flex align-items-center gap-1 ms-auto">
+                                       <p class="clr-dark-600 fw-bold fs-7">{{ config.DoctorCode }} - {{
+                                          config.DoctorName }}</p> |
+                                       <p class="clr-dark-600 fw-bold fs-7">{{ config.Specialisation }}</p> 
+                                       
+                                    </div>
+                                 </div>
+                                 <p class="clr-dark-600 fw-bold fs-7 clr-primary-600">Waiting List Count : {{ this.FetchResourceAvailableConfigurationDataList[0]?.TotalWaitingSlots }}</p>
+                                 <div class="custom_check d-none">
+                                    <svg width="21" height="21" viewBox="0 0 20 21" fill="none"
+                                       xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                       <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                       <path
+                                          d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                          fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                 </div>
+                              </div>
+                              <div class="activity_list p-2 d-flex flex-column gap-2">
+                                 <div [class]="config1.Class" [class.d-none]="config1?.ConfigId == fetchSavedConfig(config)[i-1]?.ConfigId"
+                                    *ngFor="let config1 of fetchSavedConfig(config);let i=index">
+
+
+                                    <div class="" style="min-width: 14rem;">
+                                       <div class="d-flex align-items-center gap-2 bg-primary-100 rounded-4 px-2 py-1">
+                                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                             <g clip-path="url(#clip0_2761_13929)">
+                                                <path
+                                                   d="M7.17965 8.82065C7.17965 9.27382 6.81221 9.64125 6.35904 9.64125C5.90587 9.64125 5.53857 9.27382 5.53857 8.82065C5.53857 8.36748 5.90587 8.00018 6.35904 8.00018C6.81221 8.00018 7.17965 8.36748 7.17965 8.82065Z"
+                                                   fill="#8ECBD7" />
+                                                <path
+                                                   d="M3.07681 9.64125C3.52998 9.64125 3.89728 9.27382 3.89728 8.82065C3.89728 8.36748 3.52998 8.00018 3.07681 8.00018C2.62364 8.00018 2.25635 8.36748 2.25635 8.82065C2.25635 9.27382 2.62364 9.64125 3.07681 9.64125Z"
+                                                   fill="#8ECBD7" />
+                                                <path
+                                                   d="M13.7435 8.82065C13.7435 9.27382 13.3762 9.64126 12.923 9.64126C12.4698 9.64126 12.1025 9.27382 12.1025 8.82065C12.1025 8.36748 12.4698 8.00018 12.923 8.00018C13.3762 8.00018 13.7435 8.36748 13.7435 8.82065Z"
+                                                   fill="#8ECBD7" />
+                                                <path
+                                                   d="M9.64092 9.64125C10.0941 9.64125 10.4614 9.27382 10.4614 8.82065C10.4614 8.36748 10.0941 8.00018 9.64092 8.00018C9.18775 8.00018 8.82031 8.36748 8.82031 8.82065C8.82031 9.27382 9.18775 9.64125 9.64092 9.64125Z"
+                                                   fill="#8ECBD7" />
+                                                <path
+                                                   d="M7.17965 12.1029C7.17965 12.5561 6.81221 12.9234 6.35904 12.9234C5.90587 12.9234 5.53857 12.5561 5.53857 12.1029C5.53857 11.6497 5.90587 11.2823 6.35904 11.2823C6.81221 11.2823 7.17965 11.6497 7.17965 12.1029Z"
+                                                   fill="#8ECBD7" />
+                                                <path
+                                                   d="M3.07681 12.9234C3.52998 12.9234 3.89728 12.5561 3.89728 12.1029C3.89728 11.6497 3.52998 11.2823 3.07681 11.2823C2.62364 11.2823 2.25635 11.6497 2.25635 12.1029C2.25635 12.5561 2.62364 12.9234 3.07681 12.9234Z"
+                                                   fill="#8ECBD7" />
+                                                <path
+                                                   d="M13.7435 12.1029C13.7435 12.5561 13.3762 12.9234 12.923 12.9234C12.4698 12.9234 12.1025 12.5561 12.1025 12.1029C12.1025 11.6497 12.4698 11.2823 12.923 11.2823C13.3762 11.2823 13.7435 11.6497 13.7435 12.1029Z"
+                                                   fill="#8ECBD7" />
+                                                <path
+                                                   d="M9.64092 12.9234C10.0941 12.9234 10.4614 12.5561 10.4614 12.1029C10.4614 11.6497 10.0941 11.2823 9.64092 11.2823C9.18775 11.2823 8.82031 11.6497 8.82031 12.1029C8.82031 12.5561 9.18775 12.9234 9.64092 12.9234Z"
+                                                   fill="#8ECBD7" />
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                   d="M12.9231 1.64131L12.718 1.64131L12.718 0.61562C12.718 0.395703 12.6007 0.192552 12.4103 0.0826622C12.2199 -0.0272278 11.9853 -0.0272278 11.7949 0.0826622C11.6045 0.192552 11.4872 0.39571 11.4872 0.61562L11.4872 1.64131L8.61538 1.64131L8.61539 0.61562C8.61539 0.395703 8.49808 0.192552 8.30769 0.0826613C8.11731 -0.0272278 7.88269 -0.0272278 7.69231 0.0826613C7.50193 0.192552 7.38462 0.39571 7.38462 0.61562L7.38462 1.64131L4.51277 1.64131L4.51277 0.615619C4.51277 0.395702 4.39547 0.192551 4.20508 0.0826613C4.0147 -0.0272278 3.78008 -0.0272278 3.5897 0.0826613C3.39931 0.192551 3.282 0.39571 3.282 0.615619L3.282 1.64131L3.07692 1.64131C2.26127 1.64241 1.47924 1.96686 0.902471 2.54364C0.325556 3.12041 0.0010903 3.90244 -2.0623e-07 4.71823L-2.06228e-07 13.1965C0.00453285 13.9433 0.305083 14.658 0.835868 15.1836C1.36651 15.7091 2.08394 16.0028 2.83077 16.0002L13.1692 16.0002C13.9161 16.0028 14.6335 15.7091 15.1641 15.1836C15.6949 14.658 15.9955 13.9433 16 13.1965L16 4.71823C15.9989 3.90244 15.6745 3.12041 15.0975 2.54364C14.5208 1.96686 13.7387 1.6424 12.9231 1.64131ZM3.07692 14.7694C2.5875 14.7687 2.11826 14.5741 1.77224 14.2279C1.42608 13.8819 1.23144 13.4127 1.23077 12.9232L1.23077 6.97441L13.7435 6.97441C13.9634 6.97441 14.1665 6.8571 14.2764 6.66671C14.3863 6.47633 14.3863 6.24171 14.2764 6.05133C14.1665 5.86094 13.9634 5.74364 13.7435 5.74364L1.23077 5.74364L1.23077 4.71809C1.23146 4.22867 1.4261 3.75943 1.77224 3.4133C2.11825 3.06728 2.5875 2.8725 3.07692 2.87194L3.282 2.87194L3.282 3.89748C3.282 4.1174 3.39931 4.32055 3.5897 4.43044C3.78008 4.54033 4.0147 4.54033 4.20508 4.43044C4.39547 4.32055 4.51277 4.11739 4.51277 3.89748L4.51277 2.87194L7.38462 2.87194L7.38462 3.89748C7.38462 4.1174 7.50192 4.32055 7.69231 4.43044C7.88269 4.54033 8.11731 4.54033 8.30769 4.43044C8.49808 4.32055 8.61538 4.11739 8.61538 3.89748L8.61538 2.87194L11.4872 2.87194L11.4872 3.89748C11.4872 4.1174 11.6045 4.32055 11.7949 4.43044C11.9853 4.54033 12.2199 4.54033 12.4103 4.43044C12.6007 4.32055 12.718 4.11739 12.718 3.89748L12.718 2.87194L12.9231 2.87194C13.4125 2.87249 13.8817 3.06727 14.2278 3.4133C14.5739 3.75946 14.7686 4.2287 14.7692 4.71809L14.7692 12.9231C14.7685 13.4125 14.5739 13.8818 14.2278 14.2278C13.8817 14.5739 13.4125 14.7686 12.9231 14.7693L3.07692 14.7694Z"
+                                                   fill="#8ECBD7" />
+                                             </g>
+                                             <defs>
+                                                <clipPath id="clip0_2761_13929">
+                                                   <rect width="16" height="16" fill="white" />
+                                                </clipPath>
+                                             </defs>
+                                          </svg>
+                                          <span class="clr-primary-600 fs-8">{{ config1.FromDate }}</span>
+                                          <svg width="10" height="4" viewBox="0 0 10 4" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                             <path d="M0 3.2904H8L5.93534 0.709717" stroke="#368796"
+                                                stroke-width="1.28345" />
+                                          </svg>
+                                          <span class="clr-primary-600 fs-8">{{ config1.ToDate }}</span>
+                                       </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2 alldays" style="min-width: 14rem;">
+                                       <div class="week_circles d-flex align-items-center gap-2">
+                                          <div *ngFor="let day of config1.activeDays; let i = index" class="week_letter custom_tooltip custom_tooltip_left"
+                                             [class.active]="day">
+                                             {{ dayNames[i] }}
+                                             <div class="tooltip">
+                                                <p>{{ dayNames[i] }}</p>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2 col-5">
+                                       <div  class="d-flex">
+                                       <div class="d-flex align-items-center gap-2 bg-primary-100 rounded-4 px-2 py-1 mx-2"
+                                          *ngFor="let conf of filterConfigs(config1); let i = index">                                          
+                                          <span class="clr-primary-600 fs-8">{{ conf.FromTime }}</span>
+                                          <svg width="10" height="4" viewBox="0 0 10 4" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                             <path d="M0 3.2904H8L5.93534 0.709717" stroke="#368796"
+                                                stroke-width="1.28345" />
+                                          </svg>
+                                          <span class="clr-primary-600 fs-8">{{ conf.ToTime }}</span>
+                                       </div>
+                                       </div>
+
+                                       <div class="d-flex justify-content-center gap-2"
+                                          (click)="$event.stopPropagation();">
+                                          <!-- <svg (click)="delete(config1)" class="cursor-pointer" width="20" height="20"
+                                             viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                             <path
+                                                d="M21 5.98C17.67 5.65 14.32 5.48 10.98 5.48C9 5.48 7.02 5.58 5.04 5.78L3 5.98M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97M18.85 9.14L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5H13.66M9.5 12.5H14.5"
+                                                stroke="#EB6247" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                          </svg> -->                                        
+                                          <svg class="cursor-pointer" (click)="configSelect(config1)" width="20" 
+
+                                             height="22" viewBox="0 0 20 22" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                             <path
+                                                d="M3 17.0029H7.24C7.37161 17.0036 7.50207 16.9784 7.62391 16.9286C7.74574 16.8789 7.85656 16.8055 7.95 16.7129L14.87 9.78287L17.71 7.00287C17.8037 6.90991 17.8781 6.7993 17.9289 6.67745C17.9797 6.55559 18.0058 6.42488 18.0058 6.29287C18.0058 6.16086 17.9797 6.03015 17.9289 5.90829C17.8781 5.78643 17.8037 5.67583 17.71 5.58287L13.47 1.29287C13.377 1.19914 13.2664 1.12475 13.1446 1.07398C13.0227 1.02321 12.892 0.99707 12.76 0.99707C12.628 0.99707 12.4973 1.02321 12.3754 1.07398C12.2536 1.12475 12.143 1.19914 12.05 1.29287L9.23 4.12287L2.29 11.0529C2.19732 11.1463 2.12399 11.2571 2.07423 11.379C2.02446 11.5008 1.99924 11.6313 2 11.7629V16.0029C2 16.2681 2.10536 16.5224 2.29289 16.71C2.48043 16.8975 2.73478 17.0029 3 17.0029ZM12.76 3.41287L15.59 6.24287L14.17 7.66287L11.34 4.83287L12.76 3.41287ZM4 12.1729L9.93 6.24287L12.76 9.07287L6.83 15.0029H4V12.1729ZM19 19.0029H1C0.734784 19.0029 0.48043 19.1082 0.292893 19.2958C0.105357 19.4833 0 19.7377 0 20.0029C0 20.2681 0.105357 20.5224 0.292893 20.71C0.48043 20.8975 0.734784 21.0029 1 21.0029H19C19.2652 21.0029 19.5196 20.8975 19.7071 20.71C19.8946 20.5224 20 20.2681 20 20.0029C20 19.7377 19.8946 19.4833 19.7071 19.2958C19.5196 19.1082 19.2652 19.0029 19 19.0029Z"
+                                                fill="#FFAD0E" />
+                                          </svg>
+                                       </div>
+                                    </div>
+
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</form>
+
+<div class="modal" id="saveMsg" tabindex="-1">
+   <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+      <div class="modal-content">
+         <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+         <div class="modal-body">
+            <p>Saved successfully</p>
+            <div class="modal-footer">
+               <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal">Ok</a>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="modal" id="ValidationMsg" tabindex="-1">
+   <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+      <div class="modal-content">
+         <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+         <div class="modal-body">
+            <p>{{ValidationMsg}}</p>
+            <div class="modal-footer">
+               <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal">Ok</a>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal" id="errorMsg" tabindex="-1" style="z-index: 999999;">
+   <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+      <div class="modal-content">
+         <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+         <div class="modal-body">
+            <p class="fw-bold">Below fields are mandatory</p>
+            <p *ngIf="errorMessages.length === 1">{{errorMessages[0]}}</p>
+            <ul class="p-0 m-0" *ngIf="errorMessages.length > 1">
+               <li *ngFor="let error of errorMessages; let i = index" class="pb-1"> {{error}}</li>
+            </ul>
+            <div class="modal-footer">
+               <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                  data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

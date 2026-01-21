@@ -1,0 +1,578 @@
+<div class="card card-style-1 rounded main-container"  #divclb>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading">Infection Prevention & Control Program Central Line Bundle (CVC) Infection Control Surveillance Form </h2>
+        <div class="actions generalConsent_popup position-relative ms-auto d-flex align-items-center gap-2" *ngIf="IsView">
+             <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+            <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+        </div>
+    </div>
+  
+
+
+<div class="p-2 template_scroll"  *ngIf="showContent" id="divscroll">
+    <!-- <app-wardheader-summary></app-wardheader-summary> -->
+
+    <div class="">
+
+        <div class="">
+            <div class="card card-style-1 rounded">
+                <div class="card-header justify-content-start py-2 rounded-top min-height-unset">
+                    <h5 class="card-heading">Section I: Patient and Hospital Information</h5>
+                </div>
+                <div class="p-2">
+                    <div class="row g-2">
+                        <div class="col">
+                            <label for="" class="form-label">UHID   :</label>
+                            <input type="text" class="form-control" id="text_UHID">
+                        </div>
+                        <div class="col">
+                            <label for="" class="form-label">Date of Birth:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                <input matInput class="" #dobdate id="textbox_DOB"
+                                    [matDatepicker]="ddate"
+                                    (click)="ddate.open()">
+                                <mat-datepicker-toggle matSuffix [for]="ddate">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #ddate></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <label for="" class="form-label">Gender/Age:</label>
+                            <input type="text" class="form-control"  id="text_GenderAndAge">
+                        </div>
+                        <div class="col">
+                            <label for="" class="form-label">Surveillance Plan date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                <input matInput class="" #survdate id="textbox_survdate"
+                                    [matDatepicker]="sdate"
+                                    (click)="sdate.open()">
+                                <mat-datepicker-toggle matSuffix [for]="sdate">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #sdate></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <label for="" class="form-label">Facility ID:</label>
+                            <input type="text" class="form-control"  id="text_FacilityID">
+                        </div>
+                        <div class="col">
+                            <label for="" class="form-label">Central Line Type</label>
+                            <input type="text" class="form-control"  id="text_CentralLineType">
+                        </div>
+                        <div class="col">
+                            <label for="" class="form-label">Operation ID</label>
+                            <input type="text" class="form-control"  id="text_OperationID">
+                        </div>
+                    </div>
+                    <div class="mt-3 border rounded-2 p-0 row g-2">
+                        <div class="col-4 p-2 border-end">
+                            <h6 class="clr-primary-600">Insertion Location:</h6>
+                            <div class="mt-2">
+                                <div class="row g-2">
+                                    <div class="col">
+                                        <label for="" class="form-label">ICU :</label>
+                                        <input type="text" class="form-control"  id="text_ICU">
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="form-label">NICU :</label>
+                                        <input type="text" class="form-control"  id="text_NICU">
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="form-label">SCA :</label>
+                                        <input type="text" class="form-control"  id="text_SCA">
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="form-label">Other :</label>
+                                        <input type="text" class="form-control"  id="text_Others1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 p-2 border-end">
+                            <h6 class="clr-primary-600">Follow-up location:</h6>
+                            <div class="mt-2">
+                                <div class="row g-2">
+                                    <div class="col">
+                                        <label for="" class="form-label">ICU :</label>
+                                        <input type="text" class="form-control"  id="text_FollowUp_ICU">
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="form-label">NICU :</label>
+                                        <input type="text" class="form-control"   id="text_FollowUp_NICU">
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="form-label">SCA :</label>
+                                        <input type="text" class="form-control"   id="text_FollowUp_SCA">
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="form-label">Other :</label>
+                                        <input type="text" class="form-control"   id="text_FollowUp_Others">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 p-2">
+                            <h6 class="clr-primary-600">Insertion Site::</h6>
+                            <div class="mt-2">
+                                <div class="row g-2">
+                                    <div class="col-3">
+                                        <div class="custom_check d-flex align-items-center gap-2" (click)="toggleCheckboxSelection($event)" id="checkbox_InsertionSite_Rjugular">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">R Jugular</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="custom_check d-flex align-items-center gap-2" (click)="toggleCheckboxSelection($event)" id="checkbox_InsertionSite_RSubclavian">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">R Subclavian</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="custom_check d-flex align-items-center gap-2"  (click)="toggleCheckboxSelection($event)" id="checkbox_InsertionSite_RFemoral">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">R Femoral</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="custom_check d-flex align-items-center gap-2" (click)="toggleCheckboxSelection($event)" id="checkbox_InsertionSite_Umbilical">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">Umbilical</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="custom_check d-flex align-items-center gap-2"  (click)="toggleCheckboxSelection($event)" id="checkbox_InsertionSite_Ljugular">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">L Jugular</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="custom_check d-flex align-items-center gap-2"  (click)="toggleCheckboxSelection($event)" id="checkbox_InsertionSite_Lsubclavian">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">L  Subclavian</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="custom_check d-flex align-items-center gap-2"  (click)="toggleCheckboxSelection($event)" id="checkbox_InsertionSite_LFemoral">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">L Femoral</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="custom_check d-flex align-items-center gap-2"   (click)="toggleCheckboxSelection($event)" id="checkbox_InsertionSite_Others2">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">Other(s)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-style-1 rounded mt-3">
+                <div class="card-header justify-content-start py-2 rounded-top min-height-unset">
+                    <h5 class="card-heading">Section II: Bundle Variables</h5>
+                </div>
+                <div class="">
+                    <div class="row g-2 p-2 border-bottom mx-0 align-items-center">
+                        <div class="col-9">
+                            <label for="" class="form-label fs-7 m-0">1. Hand Hygiene</label>
+                        </div>
+                        <div class="col-3 text-end">
+                            <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex" id="btnToggle_HandHygiene">
+                                <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                <button class="btn" (click)="toggleSelection($event)">No</button>
+                                <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="row g-2 p-2 border-bottom mx-0 align-items-center">
+                        <div class="col-9">
+                            <label for="" class="form-label fs-7 m-0">2. Maximal Barrier Precautions</label>
+                        </div>
+                        <div class="col-3 text-end">
+                            <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex"  id="btnToggle_MaximalBarrier">
+                                <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                <button class="btn" (click)="toggleSelection($event)">No</button>
+                                <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                             </div>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="clr-primary-600">For provider:</h6>
+                            <div class="mt-2 row">
+                                <div class="col-3">
+                                    <label for="" class="form-label w-100">Cap</label>
+                                    <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex"  id="btnToggle_Cap">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                                     </div>
+                                </div>
+                                <div class="col-3">
+                                    <label for="" class="form-label w-100">Mask</label>
+                                    <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex" id="btnToggle_Mask">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                                     </div>
+                                </div>
+                                <div class="col-3">
+                                    <label for="" class="form-label w-100">Sterile gloves</label>
+                                    <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex"  id="btnToggle_SterileGloves">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                                     </div>
+                                </div>
+                                <div class="col-3">
+                                    <label for="" class="form-label w-100">Sterile gowns</label>
+                                    <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex"  id="btnToggle_SterileGowns">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                                     </div>
+                                </div>
+                            </div>
+                            <h6 class="clr-primary-600 mt-3">For patient:</h6>
+                            <div class="mt-2 row">
+                                <div class="col-2">
+                                    <label for="" class="form-label">Large sterile drape</label>
+                                    <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex"  id="btnToggle_LargeSterileDrape">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-2 p-2 border-bottom mx-0 align-items-center">
+                        <div class="col-9">
+                            <label for="" class="form-label fs-7 m-0"> 3. Chlorhexidine skin antisepsis:</label>
+                        </div>
+                        <div class="col-9">
+                            <label for="" class="form-label fs-7 m-0"> 2% chlorhexidine in alchol for adults, pediatrics & neonates >;2 wk or >;1.500g</label>
+                        </div>
+                        <div class="col-3 text-end">
+                            <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex"  id="btnToggle_Chlorohexidine">
+                                <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                <button class="btn" (click)="toggleSelection($event)">No</button>
+                                <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="row g-2 p-2 border-bottom mx-0 align-items-center" >
+                        <div class="col-9">
+                            <label for="" class="form-label fs-7 m-0"> 4. Optimal catheter site selection:</label>
+                        </div>
+                        <div class="col-9">
+                            <label for="" class="form-label fs-7 m-0">Subclavian vein for adults, femoral vein for pediatrics, and umbilical vein or PICC site for neonates</label>
+                        </div>
+                        <div class="col-3 text-end">
+                            <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex" id="btnToggle_SubClavianVein">
+                                <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                <button class="btn" (click)="toggleSelection($event)">No</button>
+                                <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="row g-2 p-2 border-bottom mx-0 align-items-center">
+                        <div class="col-9">
+                            <label for="" class="form-label fs-7 m-0">Insertion Compliance: Compliant for the above 4 (insertion) components</label>
+                        </div>
+                        <div class="col-9">
+                            <label for="" class="form-label fs-7 m-0">5. Daily review of central line necessityL With prompt removal of unnecessary lines (record data below by date)</label>
+                        </div>
+                        <div class="col-3 text-end">
+                            <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex"  id="btnToggle_DailyReview">
+                                <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                <button class="btn" (click)="toggleSelection($event)">No</button>
+                                <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="p-2 border-bottom mx-0 align-items-center">
+                       <table class="table table-bordered m-0">
+                            <thead>
+                                <tr class="text-center">
+                                    <th></th>
+                                    <th>DD MM YY</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center">
+                                    <td>
+                                        <input type="text" class="form-control"  id="text_No1">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control"   id="text_Date1">
+                                    </td>
+                                    <td>
+                                        <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex" id="btnToggle_YesOrNo1">
+                                            <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                            <button class="btn" (click)="toggleSelection($event)">No</button>
+                                            <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                                         </div>
+                                    </td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td>
+                                        <input type="text" class="form-control"  id="text_No2">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="text_Date2">
+                                    </td>
+                                    <td>
+                                        <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex" id="btnToggle_YesOrNo2">
+                                            <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                            <button class="btn" (click)="toggleSelection($event)">No</button>
+                                            <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                                         </div>
+                                    </td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td>
+                                        <input type="text" class="form-control"  id="text_No3">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="text_Date3">
+                                    </td>
+                                    <td>
+                                        <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex" id="btnToggle_YesOrNo3">
+                                            <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                            <button class="btn" (click)="toggleSelection($event)">No</button>
+                                            <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                                         </div>
+                                    </td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td>
+                                        <input type="text" class="form-control"   id="text_No4">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="text_Date4">
+                                    </td>
+                                    <td>
+                                        <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex"  id="btnToggle_YesOrNo4">
+                                            <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                            <button class="btn" (click)="toggleSelection($event)">No</button>
+                                            <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                                         </div>
+                                    </td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td>
+                                        <input type="text" class="form-control"  id="text_No5">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="text_Date5">
+                                    </td>
+                                    <td>
+                                        <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex"  id="btnToggle_YesOrNo5">
+                                            <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                            <button class="btn" (click)="toggleSelection($event)">No</button>
+                                            <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                                         </div>
+                                    </td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td>
+                                        <input type="text" class="form-control"  id="text_No6">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="text_Date6">
+                                    </td>
+                                    <td>
+                                        <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex"  id="btnToggle_YesOrNo6">
+                                            <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                            <button class="btn" (click)="toggleSelection($event)">No</button>
+                                            <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                                         </div>
+                                    </td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td>
+                                        <input type="text" class="form-control"  id="text_No7">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control"  id="text_Date7">
+                                    </td>
+                                    <td>
+                                        <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex"  id="btnToggle_YesOrNo7">
+                                            <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                            <button class="btn" (click)="toggleSelection($event)">No</button>
+                                            <button class="btn" (click)="toggleSelection($event)">Not Documented</button>
+                                         </div>
+                                    </td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td>
+                                        Number of compliant days out of the days examined for "daily review"
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control"  id="text_Complaints">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td>
+                                        Number of total days examined for "daily review"
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control"  id="text_ExaminedDays">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                       </table>
+                       <div class="mt-3">
+                            <div class="row g-2">
+                                <div class="col-2">
+                                    <label for="" class="form-label">Name & Signature of Head Nurse:</label>
+                                    <input type="text" class="form-control"  id="text_HeadNurseNameAndSign">
+                                </div>
+                                <div class="col-12">
+                                    <label for="" class="form-label">Comments</label>
+                                    <!-- <textarea name="" class="form-control" id="ta_Comments1" cols="30" rows="3"></textarea> -->
+                                    <span name="" class="form-control " id="ta_Comments1" cols="30" rows="3" resize-none contenteditable="true">
+                                    </span>
+                                </div>
+                            </div>
+                       </div>
+                       <div class="mt-3 border rounded-2 p-2">
+                        <div class="row g-2">
+                            <div class="col-4">
+                              <div class="border p-2 rounded-2 h-100">
+                                <div class="row g-2">
+                                    <div class="col-6 offset-6 text-center">
+                                        <label for="" class="form-label">DDMMYY</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="" class="form-label">Date data collected</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                                            <input matInput class="" #collecteddate id="textbox_collecteddate"
+                                                [matDatepicker]="cdate"
+                                                (click)="cdate.open()">
+                                            <mat-datepicker-toggle matSuffix [for]="cdate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #cdate></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="" class="form-label">Collector ID</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" class="form-control" name="" id="text_CollectorID1">
+                                    </div>
+                               </div>
+                              </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="border p-2 rounded-2 h-100">
+                                    <div class="row g-2">
+                                        <div class="col-6 offset-6 text-center">
+                                            <label for="" class="form-label">DDMMYY</label>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="" class="form-label">Date data collected</label>
+                                        </div>
+                                        <div class="col-6">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                <input matInput class="" #collected1date id="textbox_collected1date"
+                                                    [matDatepicker]="c1date"
+                                                    (click)="c1date.open()">
+                                                <mat-datepicker-toggle matSuffix [for]="c1date">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #c1date></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="" class="form-label">Collector ID</label>
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="text" class="form-control" name="" id="text_CollectorID2">
+                                        </div>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
+    </div>
+
+</div>
+</div>
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+      [selectedTemplateFn]="selectedTemplate.bind(this)">
+   </app-sharedtemplateview>
+   
+<!-- <div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+       <div class="modal-content">
+          <div class="modal-header p-2">
+             <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+             <div class="d-flex align-items-center gap-2">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+          </div>
+          <div class="modal-body p-2">
+             <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                <div class="row mx-0 g-2 w-100">
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Template ID</p>
+                      <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                            tem.PatientTemplatedetailID }}</a></p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Name</p>
+                      <p>{{ tem.PatientName }}</p>
+                   </div>
+ 
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">DoctorName</p>
+                      <p>{{ tem.Consultant }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Created By</p>
+                      <p>{{ tem.CreatedBy }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Date</p>
+                      <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+
+ <div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div> -->
+ 

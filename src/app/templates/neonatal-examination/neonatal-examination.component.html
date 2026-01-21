@@ -1,0 +1,453 @@
+<div class="card card-style-1 rounded main-container" #divnne>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading">Neonatal Examination </h2>
+    <div class="actions generalConsent_popup position-relative ms-auto d-flex align-items-center gap-2" *ngIf="IsView">
+          <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+        <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+    </div>
+    </div>
+    
+
+
+<div class="p-2 template_scroll" *ngIf="showContent" id="divscroll">
+    <!-- <app-wardheader-summary></app-wardheader-summary> -->
+
+    <div class="">
+        <div class="border p-2 rounded-2">
+            <div class="row gx-2">
+                <div class="col">
+                    <label for="" class="form-label">Consultant/Pediatrician</label>
+                    <input id="textbox_Consultant/Pediatricia1n" type="text" class="form-control">
+                </div>
+                <div class="col">
+                    <label for="" class="form-label">Mother's Name</label>
+                    <input id="textbox_MothersName" type="text" class="form-control">
+                </div>
+                <div class="col">
+                    <label for="" class="form-label">Mother's File Number</label>
+                    <input id="textbox_MothersFileNumber" type="text" class="form-control">
+                </div>
+                <div class="col">
+                    <label for="" class="form-label">Baby's File No</label>
+                    <input id="textbox_BabysFileNo" type="text" class="form-control">
+                </div>
+                <div class="col">
+                    <label for="" class="form-label">Nationality</label>
+                    <input id="textbox_Nationality" type="text" class="form-control">
+                </div>
+                <div class="col">
+                    <label for="" class="form-label">Gender</label>
+                    <select name="" class="form-select" id="ddl_1">
+                        <option value="0">Male</option>
+                        <option value="1">Female</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 border rounded-2 p-2">
+            <div>
+                <h6 class="clr-primary-600">Resuscitation</h6>
+                <!-- <textarea name="" class="form-control resize-none" id="textarea_Resuscitation" cols="30"
+                    rows="3"></textarea> -->
+                    <span name="" class="form-control  textarea_box_double" id="textarea_Resuscitation" cols="30" rows="3" resize-none contenteditable="true">
+                    </span>
+            </div>
+            <div class="mt-3 card card-style-1 rounded">
+                <div class="card-header justify-content-start py-2 rounded-top min-height-unset">
+                    <h5 class="card-heading">Examination</h5>
+                </div>
+                <div class="">
+                    <div class="row gx-0">
+                        <div class="col-lg-6 col-12 p-3 border-end">
+                            <table class="table m-0">
+                                <thead>
+                                  <tr>
+                                    <th>Apgar Score</th>
+                                    <th>1M</th>
+                                    <th>5M</th>
+                                    <th>10M</th>
+                                    <th>15M</th>
+                                    <th>20M</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let category of categories; let i = index">
+                                    <td>{{ category }}</td>
+                                    <td>
+                                      <select [(ngModel)]="scores[i][0]" id="ddl_cat_{{i}}_0" class="form-select" (change)="calculateTotals()">
+                                        <option *ngFor="let score of [0, 1, 2]" [value]="score">{{ score }}</option>
+                                      </select>
+                                    </td>
+                                    <td>
+                                      <select [(ngModel)]="scores[i][1]" id="ddl_cat_{{i}}_1" class="form-select" (change)="calculateTotals()">
+                                        <option *ngFor="let score of [0, 1, 2]" [value]="score">{{ score }}</option>
+                                      </select>
+                                    </td>
+                                    <td>
+                                      <select [(ngModel)]="scores[i][2]" id="ddl_cat_{{i}}_2" class="form-select" (change)="calculateTotals()">
+                                        <option *ngFor="let score of [0, 1, 2]" [value]="score">{{ score }}</option>
+                                      </select>
+                                    </td>
+                                    <td>
+                                      <select [(ngModel)]="scores[i][3]" id="ddl_cat_{{i}}_3" class="form-select" (change)="calculateTotals()">
+                                        <option *ngFor="let score of [0, 1, 2]" [value]="score">{{ score }}</option>
+                                      </select>
+                                    </td>
+                                    <td>
+                                      <select [(ngModel)]="scores[i][4]" id="ddl_cat_{{i}}_4" class="form-select" (change)="calculateTotals()">
+                                        <option *ngFor="let score of [0, 1, 2]" [value]="score">{{ score }}</option>
+                                      </select>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td><b>Total</b></td>
+                                    <td>
+                                      <input type="text" class="form-control" id="txt_total_0" [value]="totals[0]" readonly>
+                                    </td>
+                                    <td>
+                                      <input type="text" class="form-control" id="txt_total_1" [value]="totals[1]" readonly>
+                                    </td>
+                                    <td>
+                                      <input type="text" class="form-control" id="txt_total_2" [value]="totals[2]" readonly>
+                                    </td>
+                                    <td>
+                                      <input type="text" class="form-control" id="txt_total_3" [value]="totals[3]" readonly>
+                                    </td>
+                                    <td>
+                                      <input type="text" class="form-control" id="txt_total_4" [value]="totals[4]" readonly>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              
+                        </div>
+                        <div class="col-lg-3 p-3 col-6 border-end">
+                            <div class="mt-2">
+                                <div class="row g-2">
+                                    <div class="col-4">
+                                        <label for="" class="form-label">Vit. K1</label>
+                                        <input type="text" id="textbox_VitK1" class="form-control">
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="" class="form-label">Length</label>
+                                        <div class="d-flex align-items-center afterlabel">
+                                            <input type="text" name="" class="form-control pe-6" id="textbox_Height">
+                                            <label for="" class="form-label label_sm">cm</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="" class="form-label">B.Weight</label>
+                                        <div class="d-flex align-items-center afterlabel">
+                                            <input type="text" name="" class="form-control pe-6" id="textbox_Weight">
+                                            <label for="" class="form-label label_sm">Kgs</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="" class="form-label">Head Cir</label>
+                                        <div class="d-flex align-items-center afterlabel">
+                                            <input type="text" name="" class="form-control pe-6" id="textbox_HeadCir">
+                                            <label for="" class="form-label label_sm">cm</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="" class="form-label">Chest.Cir</label>
+                                        <div class="d-flex align-items-center afterlabel">
+                                            <input type="text" name="" class="form-control pe-6" id="textbox_ChestCir">
+                                            <label for="" class="form-label label_sm">cm</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <label for="" class="form-label fw-bold m-0 text-nowrap">Gestational Age</label>
+                                    <div class="row g-2">
+                                        <div class="col-12">
+                                            <label for="" class="form-label">By Date</label>
+                                            <div class="row gx-2">
+                                                <div class="col-6 d-flex align-items-center afterlabel">
+                                                    <input type="text" id="textbox_ByDate1" class="form-control">
+                                                    <label for="" class="form-label label_sm">W</label>
+                                                 </div>
+                                                 <div class="col-6 d-flex align-items-center afterlabel">
+                                                    <input type="text" name="" class="form-control pe-6" id="textbox_Wplus1">
+                                                    <label for="" class="form-label label_sm">d</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="col-6">
+                                            <label for="" class="form-label">W+</label>
+                                        </div> -->
+                                        <div class="col-12">
+                                            <label for="" class="form-label">By Date</label>
+                                            <div class="row gx-2">
+                                                <div class="col-6 d-flex align-items-center afterlabel">
+                                                    <input type="text" id="textbox_ByDate2" class="form-control">
+                                                    <label for="" class="form-label label_sm">W</label>
+                                                </div>
+                                                <div class="col-6 d-flex align-items-center afterlabel">
+                                                    <input type="text" name="" class="form-control pe-6" id="textbox_Wplus2">
+                                                    <label for="" class="form-label label_sm">d</label>
+                                                </div>
+                                           </div>
+                                        </div>
+                                        <!-- <div class="col-6">
+                                            <label for="" class="form-label">W+</label>
+                                        </div> -->
+                                    </div>
+                                    <div class="mt-3">
+                                        <label for="" class="form-label">Remarks</label>
+                                        <!-- <textarea name="" class="form-control resize-none" id="textarea_Remarks" cols="30"
+                                            rows="3"></textarea> -->
+                                            <span name="" class="form-control " id="textarea_Remarks" cols="30" rows="3" resize-none contenteditable="true">
+                                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6 p-3">
+                            <p class="clr-primary-600 m-0 fs-7 fw-bold">Cord B - gases</p>
+                            <div class="row g-2">
+                                <div class="col-4">
+                                    <label for="" class="form-label">pH</label>
+                                    <input type="text" id="textbox_ph" class="form-control">
+                                </div>
+                                <div class="col-4">
+                                    <label for="" class="form-label" required>pCO2</label>
+                                    <input type="text" id="textbox_pco2" class="form-control">
+                                </div>
+                                <div class="col-4">
+                                    <label for="" class="form-label" required>pO2</label>
+                                    <input type="text" id="textbox_po2" class="form-control">
+                                </div>
+                                <div class="col-4">
+                                    <label for="" class="form-label" required>ABE</label>
+                                    <input type="text" id="textbox_abe" class="form-control">
+                                </div>
+                                <div class="col-4">
+                                    <label for="" class="form-label">HCO3</label>
+                                    <input type="text" id="textbox_hco3" class="form-control">
+                                </div>
+                                <div class="col-4">
+                                    <label for="" class="form-label" required>SBE</label>
+                                    <input type="text" id="textbox_sbe" class="form-control">
+                                </div>
+                                <div class="col-4">
+                                    <label for="" class="form-label">SPO2</label>
+                                    <input type="text" id="textbox_spo2" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-top p-3">
+                        <div class="border rounded-2">
+                            <div class="d-flex align-items-center border-bottom-primary-200 p-2 justify-content-start gap-4">
+                                <label for="" class="form-label m-0 text-nowrap fs-7">Vital Sign</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0 text-nowrap">HR</label>
+                                    <input type="text" id="textbox_hr" class="form-control">
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0 text-nowrap">RR</label>
+                                    <input type="text" id="textbox_rr" class="form-control">
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0 text-nowrap">Temp</label>
+                                    <input type="text" id="textbox_temp" class="form-control">
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0 text-nowrap">Sat</label>
+                                    <input type="text" id="textbox_o2sat" class="form-control">
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="row g-2 p-2">
+                                    <div class="col">
+                                        <label for="" class="form-label">Hips</label>
+                                        <input type="text" id="textbox_Hips" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="form-label">Genitalia</label>
+                                        <select name=""  style="width:150px;" class="form-select" id="ddl_Genitalia">
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Ambiguous">Ambiguous</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="form-label">Femoral Pulse</label>
+                                        <input type="text" id="textbox_FemoralPulse" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="form-label">AF</label>
+                                        <input type="text" id="textbox_AF" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="form-label">Cord</label>
+                                        <input type="text" id="textbox_Cord" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="form-label">Anus</label>
+                                        <input type="text" id="textbox_Anus" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="form-label">Moro Reflex</label>
+                                        <input type="text" id="textbox_MoroReflex" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="form-label">Red Eye Reflex</label>
+                                        <input type="text" id="textbox_RedEyeReflex" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+           
+
+            <div class="mt-3">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <div class="card card-style-1 rounded">
+                            <div class="card-header justify-content-start py-2 rounded-top min-height-unset">
+                                <h5 class="card-heading">Impression</h5>
+                            </div>
+                            <div class="p-3">
+                                <!-- <div class="d-flex gap-2">
+                                    <label for="" class="form-label">1.</label>
+                                    <textarea name="" class="form-control resize-none" id="textarea_Impression1"
+                                        cols="30" rows="3"></textarea>
+                                </div>
+                                <div class="d-flex gap-2 mt-2">
+                                    <label for="" class="form-label">2.</label>
+                                    <textarea name="" class="form-control resize-none" id="textarea_Impression2"
+                                        cols="30" rows="3"></textarea>
+                                </div>
+                                <div class="d-flex gap-2 mt-2">
+                                    <label for="" class="form-label">3.</label>
+                                    <textarea name="" class="form-control resize-none" id="textarea_Impression3"
+                                        cols="30" rows="3"></textarea>
+                                </div> -->
+                                <span class="textarea_box p-2 rounded-2 border bg-transparent d-block w-100" id="textarea_Impression" contenteditable="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card card-style-1 rounded">
+                            <div class="card-header justify-content-start py-2 rounded-top min-height-unset">
+                                <h5 class="card-heading">Plan</h5>
+                            </div>
+                            <div class="p-3">
+                                <!-- <div class="d-flex gap-2">
+                                    <label for="" class="form-label">1.</label>
+                                    <textarea name="" class="form-control resize-none" id="textarea_Plan1" cols="30"
+                                        rows="3"></textarea>
+                                </div>
+                                <div class="d-flex gap-2 mt-2">
+                                    <label for="" class="form-label">2.</label>
+                                    <textarea name="" class="form-control resize-none" id="textarea_Plan2" cols="30"
+                                        rows="3"></textarea>
+                                </div>
+                                <div class="d-flex gap-2 mt-2">
+                                    <label for="" class="form-label">3.</label>
+                                    <textarea name="" class="form-control resize-none" id="textarea_Plan3" cols="30"
+                                        rows="3"></textarea>
+                                </div> -->
+                                <span class="textarea_box p-2 rounded-2 border bg-transparent d-block w-100" id="textarea_Plan" contenteditable="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="">
+                                <label for="" class="form-label">ID Number</label>
+                                <input type="text" id="textbox_ID" class="form-control">
+                            </div>
+                            <div class="col-4">
+                                <label for="" class="form-label">Attending Physician Name</label>
+                                <input type="text" id="textbox_Name" class="form-control">
+                            </div>
+                            <div class="">
+                                <label for="" class="form-label">Date</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                                    <input matInput class="" #Date1 id="textbox_Date1"
+                                        [matDatepicker]="date1" 
+                                        (click)="date1.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="date1">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #date1></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+      [selectedTemplateFn]="selectedTemplate.bind(this)">
+</app-sharedtemplateview>
+
+<!-- <div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+       <div class="modal-content">
+          <div class="modal-header p-2">
+             <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+             <div class="d-flex align-items-center gap-2">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+          </div>
+          <div class="modal-body p-3">
+             <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                <div class="row mx-0 g-2 w-100">
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Template ID</p>
+                      <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                            tem.PatientTemplatedetailID }}</a></p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Name</p>
+                      <p>{{ tem.PatientName }}</p>
+                   </div>
+ 
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">DoctorName</p>
+                      <p>{{ tem.Consultant }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Created By</p>
+                      <p>{{ tem.CreatedBy }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Date</p>
+                      <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+
+ <div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div> -->
+ 

@@ -1,0 +1,937 @@
+<div class="card card-style-1 rounded main-container" #divossc>
+   <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+      <h2 class="card-heading">OR Surgical Safety Checklist</h2>
+      <div class="actions generalConsent_popup position-relative d-flex align-items-center gap-2">
+          <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+         <button class="btn btn-main-outline" (click)="viewWorklist()" *ngIf="IsView">View</button>
+      </div>
+   </div>
+
+   <div class="p-2 template_scroll" id="divscroll">
+      <div *ngIf="showContent">
+         <h5 class="clr-primary-600">Phase-I pre-induction assessment & before induction</h5>
+         <div class="d-flex flex-column gap-3">
+            <div class="border rounded bg-primary-10">
+               <div class="row gx-2">
+                  <div class="col-7 border-end">
+                     <label for="" class="form-label clr-primary-600 m-0 fs-6 p-2 pb-0">Vital Signs</label>
+                     <div class="d-flex align-items-center gap-4 p-2">
+                        <div class="">
+                           <label for="" class="form-label">Blood Pressure</label>
+                           <input type="text" class="form-control" id="textbox_bp">
+                        </div>
+                        <div class="">
+                           <label for="" class="form-label">Pulse Rate</label>
+                           <input type="text" class="form-control" id="textbox_hr">
+                        </div>
+                        <div class="">
+                           <label for="" class="form-label">Respiratory</label>
+                           <input type="text" class="form-control" id="textbox_rr">
+                        </div>
+                        <div class="">
+                           <label for="" class="form-label">Spo<sub>2</sub></label>
+                           <input type="text" class="form-control" id="textbox_o2sat">
+                        </div>
+                        <div class="">
+                           <label for="" class="form-label">Temperature</label>
+                           <input type="text" class="form-control" id="textbox_temp">
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-5">
+                     <label for="" class="form-label clr-primary-600 m-0 fs-6 p-2 pb-0">Level of consciousness</label>
+                     <div class="d-flex align-items-center gap-2 p-2">
+                        <div id="checkbox_surgery_conscious" (click)="toggleCheckboxSelection($event)"
+                           class="custom_check d-flex align-items-center gap-2">
+                           <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                           <p class="m-0 fs-7">Conscious</p>
+                        </div>
+                        <div id="checkbox_surgery_drowsy" (click)="toggleCheckboxSelection($event)"
+                           class="custom_check d-flex align-items-center gap-2">
+                           <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                           <p class="m-0 fs-7">Drowsy</p>
+                        </div>
+                        <div id="checkbox_surgery_comatose" (click)="toggleCheckboxSelection($event)"
+                           class="custom_check d-flex align-items-center gap-2">
+                           <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                           <p class="m-0 fs-7">Comatose</p>
+                        </div>
+                        <div id="checkbox_surgery_anesthesiaequipment" (click)="toggleCheckboxSelection($event)"
+                           class="custom_check d-flex align-items-center gap-2">
+                           <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                           <p class="m-0 fs-7">Anesthesia Equipment and Medication</p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="border rounded bg-primary-10">
+               <div class="row gx-2">
+                  <div class="col-7 border-end">
+                     <label for="" class="form-label clr-primary-600 m-0 fs-6 p-2 pb-0">Patient Confirmation</label>
+                     <div class="border rounded-2 m-2">
+                        <div class="row">
+                           <div class="col-3 border-end">
+                              <div id="checkbox_surgery_identity" (click)="toggleCheckboxSelection($event)"
+                                 class="custom_check d-flex align-items-center gap-2 p-2">
+                                 <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                    <path
+                                       d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                       fill="white" stroke="white" stroke-width="0.25"></path>
+                                 </svg>
+                                 <p class="m-0 fs-7">Identity</p>
+                              </div>
+                           </div>
+                           <div class="col-9">
+                              <div class="d-flex align-items-center gap-4 p-2">
+                                 <div id="checkbox_surgery_sight" (click)="toggleCheckboxSelection($event)"
+                                    class="custom_check d-flex align-items-center gap-2">
+                                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                       xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                       <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                       <path
+                                          d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                          fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <p class="m-0 fs-7">Sight</p>
+                                 </div>
+                                 <div id="checkbox_surgery_right" (click)="toggleCheckboxSelection($event)"
+                                    class="custom_check d-flex align-items-center gap-2">
+                                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                       xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                       <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                       <path
+                                          d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                          fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <p class="m-0 fs-7">Right</p>
+                                 </div>
+                                 <div id="checkbox_surgery_left" (click)="toggleCheckboxSelection($event)"
+                                    class="custom_check d-flex align-items-center gap-2">
+                                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                       xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                       <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                       <path
+                                          d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                          fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <p class="m-0 fs-7">Left</p>
+                                 </div>
+                                 <div id="checkbox_surgery_na" (click)="toggleCheckboxSelection($event)"
+                                    class="custom_check d-flex align-items-center gap-2">
+                                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                       xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                       <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                       <path
+                                          d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                          fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <p class="m-0 fs-7">N/A</p>
+                                 </div>
+                                 <div id="checkbox_surgery_consent" (click)="toggleCheckboxSelection($event)"
+                                    class="custom_check d-flex align-items-center gap-2">
+                                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                       xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                       <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                       <path
+                                          d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                          fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <p class="m-0 fs-7">Consent</p>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="border rounded-2 m-2">
+                        <div class="row">
+                           <div class="col-3 border-end">
+                              <div id="checkbox_surgery_procedure1" (click)="toggleCheckboxSelection($event)"
+                                 class="custom_check d-flex align-items-center gap-2 p-2">
+                                 <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                    <path
+                                       d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                       fill="white" stroke="white" stroke-width="0.25"></path>
+                                 </svg>
+                                 <p class="m-0 fs-7">Procedure</p>
+                              </div>
+                           </div>
+                           <div class="col-9">
+                              <div class="d-flex align-items-center gap-4 p-2">
+                                 <div id="checkbox_surgery_pconsent" (click)="toggleCheckboxSelection($event)"
+                                    class="custom_check d-flex align-items-center gap-2">
+                                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                       xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                       <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                       <path
+                                          d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                          fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <p class="m-0 fs-7">Consent</p>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-5">
+                     <div id="checkbox_surgery_pulseoximeter" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2 p-2">
+                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                           class="check_svg">
+                           <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                           <path
+                              d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                              fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Pulse Oximeter Functioning</p>
+                     </div>
+                     <div id="checkbox_surgery_ivaccess" (click)="toggleCheckboxSelection($event)"
+                        class="d-flex align-items-center gap-4 p-2">
+                        <div class="custom_check active d-flex align-items-center gap-2">
+                           <p class="m-0 fs-7">IV Access:</p>
+                        </div>
+                        <div id="checkbox_surgery_available" (click)="toggleCheckboxSelection($event)"
+                           class="custom_check d-flex align-items-center gap-2">
+                           <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                           <p class="m-0 fs-7">Available</p>
+                        </div>
+                        <div id="checkbox_surgery_notavailable" (click)="toggleCheckboxSelection($event)"
+                           class="custom_check d-flex align-items-center gap-2">
+                           <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                           <p class="m-0 fs-7">Not Available</p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="border rounded bg-primary-10">
+               <div class="row gx-2">
+                  <div class="col-7 border-end">
+                     <label for="" class="form-label clr-primary-600 m-0 fs-6 p-2 pb-0 w-100">Difficult airway /
+                        aspiration risk</label>
+                     <div id="toggle_surgery_difficult_airway"
+                        class="clinical_toggle toggle__switch switch-sm d-inline-flex m-2">
+                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                        <button class="btn" (click)="toggleSelection($event)">Equipment / assistance available</button>
+                     </div>
+                  </div>
+                  <div class="col-5">
+                     <label for="" class="form-label clr-primary-600 m-0 fs-6 p-2 pb-0 w-100">Equipment sterility and
+                        indicator resue</label>
+                     <div id="toggle_surgery_equiment_sterility"
+                        class="clinical_toggle toggle__switch switch-sm d-inline-flex m-2 p-2">
+                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="border rounded bg-primary-10">
+               <div class="row gx-2">
+                  <div class="col border-end">
+                     <label for="" class="form-label clr-primary-600 m-0 fs-6 p-2 pb-0 w-100">Patient is fit for
+                        anesthesia</label>
+                     <div id="toggle_surgery_patientisfit"
+                        class="clinical_toggle toggle__switch switch-sm d-inline-flex m-2">
+                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                     </div>
+                  </div>
+                  <div class="col border-end">
+                     <label for="" class="form-label clr-primary-600 m-0 fs-6 p-2 pb-0 w-100">Known allergy</label>
+                     <div id="toggle_surgery_knownallergy"
+                        class="clinical_toggle toggle__switch switch-sm d-inline-flex m-2 p-2">
+                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                     </div>
+                  </div>
+                  <div class="col border-end">
+                     <label for="" class="form-label clr-primary-600 m-0 fs-6 p-2 pb-0 w-100">Risk of >; 500 ml blood
+                        loss(7 ml/kg in children)</label>
+                     <div id="toggle_surgery_riskof"
+                        class="clinical_toggle toggle__switch switch-sm d-inline-flex m-2 p-2">
+                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                     </div>
+                  </div>
+                  <div class="col border-end">
+                     <label for="" class="form-label clr-primary-600 m-0 fs-6 p-2 pb-0 w-100">Site Marked</label>
+                     <div id="toggle_surgery_sitemarked"
+                        class="clinical_toggle toggle__switch switch-sm d-inline-flex m-2 p-2">
+                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                        <button class="btn" (click)="toggleSelection($event)">Not Applicable</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="border rounded bg-primary-10">
+               <div class="row gx-2">
+                  <div class="col border-end">
+                     <label for="" class="form-label clr-primary-600 m-0 fs-6 p-2 pb-0 w-100">Laboratory results
+                        available</label>
+                     <div id="toggle_surgery_laboratory_results"
+                        class="clinical_toggle toggle__switch switch-sm d-inline-flex m-2">
+                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                     </div>
+                  </div>
+                  <div class="col border-end">
+                     <label for="" class="form-label clr-primary-600 m-0 fs-6 p-2 pb-0 w-100">Radiology imaging
+                        available</label>
+                     <div id="toggle_surgery_radiologyimaging"
+                        class="clinical_toggle toggle__switch switch-sm d-inline-flex m-2 p-2">
+                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                     </div>
+                  </div>
+                  <div class="col border-end">
+                     <label for="" class="form-label clr-primary-600 m-0 fs-6 p-2 pb-0 w-100">Essential imaging
+                        available</label>
+                     <div id="toggle_surgery_essentialimaging"
+                        class="clinical_toggle toggle__switch switch-sm d-inline-flex m-2 p-2">
+                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                        <button class="btn" (click)="toggleSelection($event)">Not Applicable</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="border rounded bg-primary-10">
+               <div class="row mx-0">
+                  <div class="col-6 border-end">
+                     <div class="row align-items-center justify-content-between p-2">
+                        <div class="col-6 offset-6">
+                           <label for="" class="form-label text-nowrap">Anesthetist / Surgeon</label>
+                           <div class="d-flex align-items-center input-group w-100">
+                              <input type="text" class="form-control" [matAutocomplete]="employeesearch1" placeholder=""
+                                 id="textbox_surgery_anesthetist" (keyup)="searchEmployee($event)">
+                              <mat-autocomplete #employeesearch1="matAutocomplete">
+                                 <mat-option *ngFor="let item of employeeList"
+                                    (onSelectionChange)="onEmployeeSelected(item)" [value]="item.Name">
+                                    {{item.Name}}
+                                 </mat-option>
+                              </mat-autocomplete>
+                              <button type="button" id="button-addon6" class="btn btn-secondary-fill btn-icon">
+                                 <img src="assets/images/icons/icon-search.svg" alt="">
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="signature_box active text-end ms-auto mt-2 p-2 pe-3">
+                        <div class="position-relative">
+                           <app-signature #Signature1 class="" (base64Signature)="base64Signature('Signature1', $event)"
+                              [imageToDisplay]="getSignature('Signature1')">
+                              <canvas style="border: 1px solid #000;"></canvas>
+                           </app-signature>
+                           <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                              (click)="clearSignature('Signature1'); clearbase64Signature(Signature1)"
+                              xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                              <path
+                                 d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                 fill="#EB6247"></path>
+                           </svg>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-6">
+                     <div class="row align-items-center justify-content-between p-2">
+                        <div class="col-6 offset-6">
+                           <label for="" class="form-label text-nowrap">Nurse</label>
+                           <div class="d-flex align-items-center input-group w-100">
+                              <input type="text" class="form-control" [matAutocomplete]="employeesearch2" placeholder=""
+                                 id="textbox_surgery_nurse" (keyup)="searchEmployee($event)">
+                              <mat-autocomplete #employeesearch2="matAutocomplete">
+                                 <mat-option *ngFor="let item of employeeList"
+                                    (onSelectionChange)="onEmployeeSelected(item)" [value]="item.Name">
+                                    {{item.Name}}
+                                 </mat-option>
+                              </mat-autocomplete>
+                              <button type="button" id="button-addon3" class="btn btn-secondary-fill btn-icon">
+                                 <img src="assets/images/icons/icon-search.svg" alt="">
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                     <img id="imgFinal" style="display:none" src="" alt="" />
+                     <div class="signature_box active text-end ms-auto mt-2 p-2 pe-3">
+                        <div class="position-relative">
+                           <app-signature #Signature2 class="" (base64Signature)="base64Signature('Signature2', $event)"
+                              [imageToDisplay]="getSignature('Signature2')">
+                              <canvas style="border: 1px solid #000;"></canvas>
+                           </app-signature>
+                           <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                              (click)="clearSignature('Signature2'); clearbase64Signature(Signature2)"
+                              xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                              <path
+                                 d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                 fill="#EB6247"></path>
+                           </svg>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <h5 class="clr-primary-600 my-3">Phase ii:before skin incision (time out)</h5>
+
+         <div class="d-flex flex-column gap-3">
+            <div class="border rounded bg-primary-10">
+               <div class="row gx-2">
+                  <div class="col-6 border-end">
+                     <div id="checkbox_surgery_teammembershaveintroduced" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2 p-2 py-3 h-100">
+                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                           class="check_svg">
+                           <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                           <path
+                              d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                              fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Team members have introduced themselves by name/role if necessary</p>
+                     </div>
+                  </div>
+                  <div class="col-6">
+                     <div class="d-flex align-items-center gap-2 p-2 py-3">
+                        <label for="" class="form-label m-0 fs-7">Team members verbally confirm</label>
+                        <div id="checkbox_surgery_teammembersverballyconfirm" (click)="toggleCheckboxSelection($event)"
+                           class="custom_check d-flex align-items-center gap-2">
+                           <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                           <p class="m-0 fs-7">Patient</p>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                           <div id="checkbox_surgery_procedure" (click)="toggleCheckboxSelection($event)"
+                              class="custom_check d-flex align-items-center gap-2">
+                              <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                 <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                 <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                              </svg>
+                              <p class="m-0 fs-7">Procedure</p>
+                           </div>
+                           <input type="text" class="form-control" id="textbox_surgery_procedure">
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <div class="border rounded bg-primary-10">
+               <div class="row gx-2">
+                  <div class="col-6 border-end">
+                     <div class="d-flex align-items-center gap-3">
+                        <div id="checkbox_surgery_equipments" (click)="toggleCheckboxSelection($event)"
+                           class="custom_check d-flex align-items-center gap-2 p-2 py-3">
+                           <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                           <p class="m-0 fs-7">Implaints/equipments</p>
+                        </div>
+                        <div id="toggle_surgery_equipments"
+                           class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                           <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                           <button class="btn" (click)="toggleSelection($event)">No</button>
+                           <button class="btn" (click)="toggleSelection($event)">Not Applicable</button>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-6">
+                     <div class="d-flex align-items-center gap-3">
+                        <div id="checkbox_surgery_prophylaxis" (click)="toggleCheckboxSelection($event)"
+                           class="custom_check d-flex align-items-center gap-2 p-2 py-3">
+                           <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                           <p class="m-0 fs-7">Antibiotics prophylaxis</p>
+                        </div>
+                        <div id="toggle_surgery_prophylaxis"
+                           class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                           <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                           <button class="btn" (click)="toggleSelection($event)">No</button>
+                           <button class="btn" (click)="toggleSelection($event)">On Treatment</button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <div class="border rounded bg-primary-10">
+               <div class="row gx-2">
+                  <div class="col-6 border-end">
+                     <div class="d-flex align-items-center gap-3 p-2 h-100">
+                        <label for="" class="form-label m-0">Anticipated critical events:</label>
+                        <input type="text" class="form-control w-auto" id="textbox_surgery_anticipated">
+                     </div>
+                  </div>
+                  <div class="col-6">
+                     <div class="d-flex align-items-center gap-2 p-2">
+                        <label for="" class="form-label m-0">Hemodynamic instability:</label>
+                        <input type="text" class="form-control w-auto" id="textbox_surgery_hemodynamic">
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <div class="border rounded bg-primary-10">
+               <div class="row gx-2">
+                  <div class="col-6 border-end">
+                     <div class="d-flex align-items-center gap-2 p-2">
+                        <label for="" class="form-label m-0">Major blood loss</label>
+                        <input type="text" class="form-control w-auto" id="textbox_surgery_majorblood">
+                     </div>
+                  </div>
+                  <div class="col-6">
+                     <div class="d-flex align-items-center gap-2 p-2">
+                        <label for="" class="form-label m-0">Other morbidity</label>
+                        <input type="text" class="form-control w-auto" id="textbox_surgery_othermorbidity">
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <div class="border rounded bg-primary-10">
+               <div class="row mx-0">
+                  <div class="col-4 border-end">
+                     <div class="row align-items-center justify-content-between p-2">
+                        <div class="col-6 offset-6">
+                           <label for="" class="form-label text-nowrap">Circulating Nurse</label>
+                           <div class="d-flex align-items-center input-group w-100">
+                              <input type="text" class="form-control" [matAutocomplete]="employeesearch3" placeholder=""
+                                 id="textbox_surgery_circulatingnurse" (keyup)="searchEmployee($event)">
+                              <mat-autocomplete #employeesearch3="matAutocomplete">
+                                 <mat-option *ngFor="let item of employeeList"
+                                    (onSelectionChange)="onEmployeeSelected(item)" [value]="item.Name">
+                                    {{item.Name}}
+                                 </mat-option>
+                              </mat-autocomplete>
+                              <button type="button" id="button-addon7" class="btn btn-secondary-fill btn-icon">
+                                 <img src="assets/images/icons/icon-search.svg" alt="">
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="signature_box active text-end ms-auto mt-2 p-2 pe-3">
+                        <div class="position-relative">
+                           <app-signature #Signature3 class="" (base64Signature)="base64Signature('Signature3', $event)"
+                              [imageToDisplay]="getSignature('Signature3')">
+                              <canvas style="border: 1px solid #000;"></canvas>
+                           </app-signature>
+                           <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                              (click)="clearSignature('Signature3'); clearbase64Signature(Signature3)"
+                              xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                              <path
+                                 d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                 fill="#EB6247"></path>
+                           </svg>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-4 border-end">
+                     <div class="row align-items-center justify-content-between p-2">
+                        <div class="col-6 offset-6">
+                           <label for="" class="form-label text-nowrap">Scrub Nurse</label>
+                           <div class="d-flex align-items-center input-group w-100">
+                              <input type="text" class="form-control" [matAutocomplete]="employeesearch4" placeholder=""
+                                 id="textbox_surgery_scrubnurse" (keyup)="searchEmployee($event)">
+                              <mat-autocomplete #employeesearch4="matAutocomplete">
+                                 <mat-option *ngFor="let item of employeeList"
+                                    (onSelectionChange)="onEmployeeSelected(item)" [value]="item.Name">
+                                    {{item.Name}}
+                                 </mat-option>
+                              </mat-autocomplete>
+                              <button type="button" id="button-addon8" class="btn btn-secondary-fill btn-icon">
+                                 <img src="assets/images/icons/icon-search.svg" alt="">
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="signature_box active text-end ms-auto mt-2 p-2 pe-3">
+                        <div class="position-relative">
+                           <app-signature #Signature4 class="" (base64Signature)="base64Signature('Signature4', $event)"
+                              [imageToDisplay]="getSignature('Signature4')">
+                              <canvas style="border: 1px solid #000;"></canvas>
+                           </app-signature>
+                           <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                              (click)="clearSignature('Signature4'); clearbase64Signature(Signature4)"
+                              xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                              <path
+                                 d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                 fill="#EB6247"></path>
+                           </svg>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-4">
+                     <div class="row align-items-center justify-content-between p-2">
+                        <div class="col-6 offset-6">
+                           <label for="" class="form-label text-nowrap">Surgeon</label>
+                           <div class="d-flex align-items-center input-group w-100">
+                              <input type="text" class="form-control" [matAutocomplete]="employeesearch5" placeholder=""
+                                 id="textbox_surgery_surgeon" (keyup)="searchEmployee($event)">
+                              <mat-autocomplete #employeesearch5="matAutocomplete">
+                                 <mat-option *ngFor="let item of employeeList"
+                                    (onSelectionChange)="onEmployeeSelected(item)" [value]="item.Name">
+                                    {{item.Name}}
+                                 </mat-option>
+                              </mat-autocomplete>
+                              <button type="button" id="button-addon9" class="btn btn-secondary-fill btn-icon">
+                                 <img src="assets/images/icons/icon-search.svg" alt="">
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="signature_box active text-end ms-auto mt-2 p-2 pe-3">
+                        <div class="position-relative">
+                           <app-signature #Signature5 class="" (base64Signature)="base64Signature('Signature5', $event)"
+                              [imageToDisplay]="getSignature('Signature5')">
+                              <canvas style="border: 1px solid #000;"></canvas>
+                           </app-signature>
+                           <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                              (click)="clearSignature('Signature5'); clearbase64Signature(Signature5)"
+                              xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                              <path
+                                 d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                 fill="#EB6247"></path>
+                           </svg>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <h5 class="clr-primary-600 my-3">Phase iii:before patient leaves operating room(sign out)</h5>
+
+         <div class="d-flex flex-column gap-3">
+            <div class="border rounded bg-primary-10">
+               <div class="row gx-2">
+                  <div class="col-6 border-end">
+                     <div class="d-flex align-items-center gap-2 p-2">
+                        <div id="checkbox_surgery_siteofprocedure" (click)="toggleCheckboxSelection($event)"
+                           class="custom_check d-flex align-items-center gap-2">
+                           <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                           <p class="m-0 fs-7 text-nowrap">Confirm the recorded name and site of procedure</p>
+                        </div>
+                        <input type="text" class="form-control w-auto" id="textbox_surgery_siteofprocedure">
+                     </div>
+                  </div>
+                  <div class="col-6">
+                     <div class="d-flex align-items-center gap-2 p-2">
+                        <div id="checkbox_surgery_needlecounts" (click)="toggleCheckboxSelection($event)"
+                           class="custom_check d-flex align-items-center gap-2">
+                           <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                           <p class="m-0 fs-7 text-nowrap">Complete /correct instrument,sponge,needle counts</p>
+                        </div>
+                        <input type="text" class="form-control w-auto" id="textbox_surgery_needlecounts">
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="border rounded bg-primary-10">
+               <div class="row gx-2">
+                  <div class="col-6 border-end">
+                     <div id="checkbox_surgery_pathologicalspecimen" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2 h-100 p-2">
+                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                           class="check_svg">
+                           <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                           <path
+                              d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                              fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7 text-nowrap">Correct labelling of pathological specimen :</p>
+                     </div>
+                  </div>
+                  <div class="col-6">
+                     <div class="d-flex align-items-center gap-2 p-2">
+                        <div id="checkbox_surgery_specimen" (click)="toggleCheckboxSelection($event)"
+                           class="custom_check d-flex align-items-center gap-2">
+                           <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                           <p class="m-0 fs-7 text-nowrap">Name of Specimen</p>
+                        </div>
+                        <input type="text" class="form-control w-auto" id="textbox_surgery_specimen">
+                        <p class="m-0 fs-7 text-nowrap">Name of lab test</p>
+                        <input type="text" class="form-control w-auto" id="textbox_surgery_labtest">
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="border rounded bg-primary-10">
+               <div class="row gx-2">
+                  <div class="col-6 border-end">
+                     <div class="d-flex align-items-center gap-2 p-2">
+                        <div id="checkbox_surgery_equipmentproblems" (click)="toggleCheckboxSelection($event)"
+                           class="custom_check d-flex align-items-center gap-2">
+                           <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                           <p class="m-0 fs-7 text-nowrap">Equipment Problems</p>
+                        </div>
+                        <input type="text" class="form-control w-auto" id="textbox_surgery_equipmentproblems">
+                     </div>
+                  </div>
+                  <div class="col-6">
+                     <div class="d-flex align-items-center gap-2 p-2">
+                        <div id="checkbox_surgery_managementofpatient" (click)="toggleCheckboxSelection($event)"
+                           class="custom_check d-flex align-items-center gap-2">
+                           <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                              xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                 d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                 fill="white" stroke="white" stroke-width="0.25"></path>
+                           </svg>
+                           <p class="m-0 fs-7 text-nowrap">Concerns for recovery and management of patient</p>
+                        </div>
+                        <input type="text" class="form-control w-auto" id="textbox_surgery_managementofpatient">
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="border rounded bg-primary-10">
+               <div class="row mx-0">
+                  <div class="col-4 border-end">
+                     <div class="row align-items-center justify-content-between p-2">
+                        <div class="col-6 offset-6">
+                           <label for="" class="form-label text-nowrap">Circulating Nurse</label>
+                           <div class="d-flex align-items-center input-group w-100">
+                              <input type="text" class="form-control" [matAutocomplete]="employeesearch6" placeholder=""
+                                 id="textbox_surgery_circulatingnurse1" (keyup)="searchEmployee($event)">
+                              <mat-autocomplete #employeesearch6="matAutocomplete">
+                                 <mat-option *ngFor="let item of employeeList"
+                                    (onSelectionChange)="onEmployeeSelected(item)" [value]="item.Name">
+                                    {{item.Name}}
+                                 </mat-option>
+                              </mat-autocomplete>
+                              <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                 <img src="assets/images/icons/icon-search.svg" alt="">
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="signature_box active text-end ms-auto mt-2 p-2 pe-3">
+                        <div class="position-relative">
+                           <app-signature #Signature6 class="" (base64Signature)="base64Signature('Signature6', $event)"
+                              [imageToDisplay]="getSignature('Signature6')">
+                              <canvas style="border: 1px solid #000;"></canvas>
+                           </app-signature>
+                           <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                              (click)="clearSignature('Signature6'); clearbase64Signature(Signature6)"
+                              xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                              <path
+                                 d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                 fill="#EB6247"></path>
+                           </svg>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-4 border-end">
+                     <div class="row align-items-center justify-content-between p-2">
+                        <div class="col-6 offset-6">
+                           <label for="" class="form-label text-nowrap">Scrub Nurse</label>
+                           <div class="d-flex align-items-center input-group w-100">
+                              <input type="text" class="form-control" [matAutocomplete]="employeesearch7" placeholder=""
+                                 id="textbox_surgery_scrubnurse1" (keyup)="searchEmployee($event)">
+                              <mat-autocomplete #employeesearch7="matAutocomplete">
+                                 <mat-option *ngFor="let item of employeeList"
+                                    (onSelectionChange)="onEmployeeSelected(item)" [value]="item.Name">
+                                    {{item.Name}}
+                                 </mat-option>
+                              </mat-autocomplete>
+                              <button type="button" id="button-addon4" class="btn btn-secondary-fill btn-icon">
+                                 <img src="assets/images/icons/icon-search.svg" alt="">
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="signature_box active text-end ms-auto mt-2 p-2 pe-3">
+                        <div class="position-relative">
+                           <app-signature #Signature7 class="" (base64Signature)="base64Signature('Signature7', $event)"
+                              [imageToDisplay]="getSignature('Signature7')">
+                              <canvas style="border: 1px solid #000;"></canvas>
+                           </app-signature>
+                           <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                              (click)="clearSignature('Signature7'); clearbase64Signature(Signature7)"
+                              xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                              <path
+                                 d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                 fill="#EB6247"></path>
+                           </svg>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-4">
+                     <div class="row align-items-center justify-content-between p-2">
+                        <div class="col-6 offset-6">
+                           <label for="" class="form-label text-nowrap">Surgeon</label>
+                           <div class="d-flex align-items-center input-group w-100">
+                              <input type="text" class="form-control" [matAutocomplete]="employeesearch8" placeholder=""
+                                 id="textbox_surgery_surgeon1" (keyup)="searchEmployee($event)">
+                              <mat-autocomplete #employeesearch8="matAutocomplete">
+                                 <mat-option *ngFor="let item of employeeList"
+                                    (onSelectionChange)="onEmployeeSelected(item)" [value]="item.Name">
+                                    {{item.Name}}
+                                 </mat-option>
+                              </mat-autocomplete>
+                              <button type="button" id="button-addon5" class="btn btn-secondary-fill btn-icon">
+                                 <img src="assets/images/icons/icon-search.svg" alt="">
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="signature_box active text-end ms-auto mt-2 p-2 pe-3">
+                        <div class="position-relative">
+                           <app-signature #Signature8 class="" (base64Signature)="base64Signature('Signature8', $event)"
+                              [imageToDisplay]="getSignature('Signature8')">
+                              <canvas style="border: 1px solid #000;"></canvas>
+                           </app-signature>
+                           <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                              (click)="clearSignature('Signature8'); clearbase64Signature(Signature8)"
+                              xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                              <path
+                                 d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                 fill="#EB6247"></path>
+                              <path
+                                 d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                 fill="#EB6247"></path>
+                           </svg>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+   [selectedTemplateFn]="selectedTemplate.bind(this)">
+</app-sharedtemplateview>

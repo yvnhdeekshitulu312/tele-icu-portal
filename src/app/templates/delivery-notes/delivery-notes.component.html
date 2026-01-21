@@ -1,0 +1,282 @@
+<div class="card card-style-1 rounded main-container" #divdns>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading">Delivery Notes</h2>
+        <div class="actions generalConsent_popup position-relative d-flex align-items-center gap-2">
+             <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+            <button class="btn btn-main-outline" (click)="viewWorklist()" *ngIf="IsView">View</button>
+        </div>
+    </div>
+    <div class="p-2 template_scroll" id="divscroll">
+        <div *ngIf="showContent">
+            <div class="p-2">
+                <label for="" class="form-label fs-6 fw-semibold clr-primary-600">Delivey Notes</label>
+                <span class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                    id="deliveryNotestextarea" contenteditable="true"></span>
+
+                <div class="row g-2 align-items-end mt-2">
+                    <div class="col-3">
+                        <label for="" class="form-label">Mode of Delivery</label>
+                        <select name="" class="form-select pe-4" id="modeofDelivery">
+                            <option value="0">Select</option>
+                            <option value="1">Spontaneous Vaginal Delivery</option>
+                            <option value="2">Ventous Delivery</option>
+                            <option value="3">STAT Cesearean section</option>
+                            <option value="4">Emergency Cesearean section</option>
+                            <option value="5">Urgent Cesearean section</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Delivery Conducted By</label>
+                        <div class="d-flex align-items-center input-group w-100">
+                            <input type="text" class="form-control" [matAutocomplete]="employeesearch1"
+                                placeholder="" id="deliveryConducted" (keyup)="searchEmployee($event)">
+                            <mat-autocomplete #employeesearch1="matAutocomplete">
+                                <mat-option *ngFor="let item of employeeList"
+                                    (onSelectionChange)="onEmployeeSelected(item)" [value]="item.Name">
+                                    {{item.Name}}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <button type="button" id="button-addon2"
+                                class="btn btn-secondary-fill btn-icon">
+                                <img src="assets/images/icons/icon-search.svg" alt="">
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Delivery Assisted By</label>
+                        <div class="d-flex align-items-center input-group w-100">
+                            <input type="text" class="form-control" [matAutocomplete]="employeesearch2"
+                                placeholder="" id="deliveryAssisted" (keyup)="searchEmployee($event)">
+                            <mat-autocomplete #employeesearch2="matAutocomplete">
+                                <mat-option *ngFor="let item of employeeList"
+                                    (onSelectionChange)="onEmployeeSelected(item)" [value]="item.Name">
+                                    {{item.Name}}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <button type="button" id="button-addon2"
+                                class="btn btn-secondary-fill btn-icon">
+                                <img src="assets/images/icons/icon-search.svg" alt="">
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Nurse</label>
+                        <div class="d-flex align-items-center input-group w-100">
+                            <input type="text" class="form-control" [matAutocomplete]="employeesearch3"
+                                placeholder="" id="nurseGroup" (keyup)="searchEmployee($event)">
+                            <mat-autocomplete #employeesearch3="matAutocomplete">
+                                <mat-option *ngFor="let item of employeeList"
+                                    (onSelectionChange)="onEmployeeSelected(item)" [value]="item.Name">
+                                    {{item.Name}}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <button type="button" id="button-addon2"
+                                class="btn btn-secondary-fill btn-icon">
+                                <img src="assets/images/icons/icon-search.svg" alt="">
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Current Date/Time </label>
+                        <div class="d-flex align-items-center gap-2">
+                            <mat-form-field appearance="fill">
+                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                <input matInput class="" id="textbox_date1" [matDatepicker]="date1"
+                                    (click)="date1.open()">
+                                <mat-datepicker-toggle matSuffix [for]="date1">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #date1></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Membrane</label>
+                        <select name="" class="form-select pe-4" id="Membranetext">
+                            <option value="0">Select</option>
+                            <option value="1">ARM</option>
+                            <option value="2">SROM</option>
+                            <option value="3">Leaking</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <div class="d-flex gap-2">
+                            <div style="width: 60%;">
+                                <label for="" class="form-label">Color</label>
+                                <select name="" class="form-select pe-4" id="ColorText">
+                                    <option value="0">Select</option>
+                                    <option value="1">Clear</option>
+                                    <option value="2">Scanty Liquor</option>
+                                    <option value="3">Meconium G- 1</option>
+                                    <option value="4">Meconium G- 2</option>
+                                    <option value="5">Meconium G- 3</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="" class="form-label">Fully Dilated </label>
+                                <app-time-selector [hours]="getHours('textbox_generic_time1')"
+                                    [minutes]="getMinutes('textbox_generic_time1')"
+                                    (timeSelected)="onTimeChange($event, 'textbox_generic_time1')"
+                                    [disabled]="isTimeSelectorDisable('textbox_generic_time1')"></app-time-selector>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Placenta </label>
+                        <select name="" class="form-select pe-4" id="Placentaselect">
+                            <option value="0">Select</option>
+                            <option value="1">Complete</option>
+                            <option value="2">Incomplete</option>
+                            <option value="3">Manual</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    <div class="col-3" *ngIf="isOthersOptionSelected('Placentaselect')">
+                        <label for="" class="form-label"></label>
+                        <input type="text" class="form-control" id="PlacentaselectOtherstext">
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Weight (Placenta)</label>
+                        <input type="text" class="form-control" id="weightPlacentatext">
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Doctor</label>
+                        <div class="d-flex align-items-center input-group w-100">
+                            <input type="text" class="form-control" [matAutocomplete]="employeesearch4"
+                                placeholder="" id="doctorGroup" (keyup)="searchEmployee($event)">
+                            <mat-autocomplete #employeesearch4="matAutocomplete">
+                                <mat-option *ngFor="let item of employeeList"
+                                    (onSelectionChange)="onEmployeeSelected(item)" [value]="item.Name">
+                                    {{item.Name}}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <button type="button" id="button-addon2"
+                                class="btn btn-secondary-fill btn-icon">
+                                <img src="assets/images/icons/icon-search.svg" alt="">
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">APGAR Score</label>
+                        <input type="text" class="form-control" id="apgarscoretext">
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Gender</label>
+                        <select name="" class="form-select" id="genderselect">
+                            <option value="0">Select</option>
+                            <option value="1">Male / <span class="arb"> ذكر</span></option>
+                            <option value="2">Female / <span class="arb"> أنثى</span></option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Weight</label>
+                        <input type="text" class="form-control" id="weighttext" >
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Baby Disposition</label>
+                        <select name="" class="form-select pe-4" id="BabyDispositionselect">
+                            <option value="0">Select</option>
+                            <option value="1">NICU</option>
+                            <option value="2">Nursery</option>
+                            <option value="3">Mortuary</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <div class="d-flex gap-2">
+                            <div>
+                                <label for="" class="form-label">Current Date/Time</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" id="textbox_date2" [matDatepicker]="date2"
+                                            (click)="date2.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="date2">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #date2></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="" class="form-label">Delivery Time</label>
+                                <app-time-selector [hours]="getHours('textbox_generic_time2')"
+                                    [minutes]="getMinutes('textbox_generic_time2')"
+                                    (timeSelected)="onTimeChange($event, 'textbox_generic_time2')"
+                                    [disabled]="isTimeSelectorDisable('textbox_generic_time2')"></app-time-selector>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Blood Loss </label>
+                        <input type="text" class="form-control" id="BloodLosstext">
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Sutured With </label>
+                        <input type="text" class="form-control" id="SuturedWithtext">
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-end gap-2">
+                            <div class="d-flex align-items-center gap-1">
+                                <label for="" class="form-label d-block m-0">Perineal Tear</label>
+                                <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center"
+                                    id="PerinealTeartoggle">
+                                    <button (click)="toggleSelection($event)" class="btn">Yes</button>
+                                    <button (click)="toggleSelection($event)" class="btn selected">No</button>
+                                </div>
+                            </div>
+                            <div class="" *ngIf="getClassButtonSelectionExistence('PerinealTeartoggle') === 'Yes'">
+                                <div class="d-flex align-items-center gap-3 ">
+                                    <div class="custom_check d-flex align-items-center gap-1" id="degreecheck1" (click)="toggleCheckboxSelection($event)">
+                                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0">1st Degree</p>
+                                    </div>
+                                    <div class="custom_check d-flex align-items-center gap-1" id="degreecheck2" (click)="toggleCheckboxSelection($event)">
+                                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0">2nd Degree</p>
+                                    </div>
+                                    <div class="custom_check d-flex align-items-center gap-1" id="degreecheck3" (click)="toggleCheckboxSelection($event)">
+                                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0">3rd Degree</p>
+                                    </div>
+                                    <div class="custom_check d-flex align-items-center gap-1" id="rmlecheck1" (click)="toggleCheckboxSelection($event)">
+                                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0">RMLE</p>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control mt-2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+    [selectedTemplateFn]="selectedTemplate.bind(this)">
+</app-sharedtemplateview>

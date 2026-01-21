@@ -1,0 +1,474 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+
+<div class="" style="background-color: #fff;">
+    <div class="page-header sticky-top bg-primary-50 shadow-sm justify-content-between">
+        <div class="d-flex align-items-center gap-2">
+            <h2 class="page-heading d-flex align-items-center m-0 text-nowrap">
+                Food Order Inpatient
+            </h2>
+            <div class="" style="min-width: 18rem">
+                <div class="CommanSearch__form ps-2" style="height: 2rem;">
+                    <label for="" class="CommonSearch__label">
+                        <img src="assets/images/icons/icon-search.svg" alt="">
+                    </label>
+                    <input class="CommonSearch__input form-control" type="text" id="txtSsn" placeholder="ID No."
+                        (keypress)="($event.charCode >= 48 && $event.charCode < 58)"
+                        (keydown.enter)="onEnterPress($event)">
+                    <button type="reset" class="reset-btn">
+                        <svg width="20" height="20" viewBox="0 0 20 20">
+                            <path d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z"
+                                stroke="currentColor" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                                stroke-linejoin="round"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="CommanSearch__form">
+                <label for="" class="CommonSearch__label">
+                    <img src="assets/images/icons/icon-search.svg" alt="">
+                </label>
+                <input class="CommonSearch__input form-control" type="text" id="txtRoomNo" placeholder="Room No"
+                    (keypress)="($event.charCode >= 48 && $event.charCode < 58)" (keydown.enter)="findPatient()">
+                <button type="reset" class="reset-btn">
+                    <svg width="20" height="20" viewBox="0 0 20 20">
+                        <path d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z"
+                            stroke="currentColor" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <label *ngIf="IsEdit" class="toggle-label">
+                <input type="checkbox" name="isPaid" (click)="togglePaid()" class="toggle" id="toggle5"
+                    [checked]="IsPaid ? true : false" />
+                Paid
+            </label>
+            <!-- <button class="btn btn-main-outline">3 Sticker</button>
+            <button class="btn btn-main-outline">Print Bill</button>
+            <button class="btn btn-main-outline">Print Receipt</button>
+            <button class="btn btn-main-outline">Dispatch</button> -->
+            <button class="btn btn-main-outline" *ngIf="enablePrint" (click)="printFoodIssued()">Print</button>
+            <button class="btn btn-main-outline" (click)="openCollectionReport()">Collection Report</button>
+            <button class="btn btn-main-outline" *ngIf="FoodOrders.length > 0 " (click)="view()">View</button>
+            <button class="btn btn-danger-outline" *ngIf="IsEdit" (click)="delete()">Delete</button>
+            <button class="btn btn-danger-outline" (click)="clear()">Clear</button>
+            <button class="btn btn-main-outline" (click)="save()">Save</button>
+        </div>
+    </div>
+    <div class="bg-white pb-0 patient_summary_page rounded-2" [class.d-none]="!noPatientSelected">
+        <div class="doctor_worklist overflow-hidden worklist_patientcard rounded-0 border-0">
+            <div class="row mx-0">
+                <div class="col-md-12 p-0">
+                    <div class="d-flex mx-0 gap-2 border-bottom p-1">
+                        <div style="width: 20rem;">
+                            <div class="d-flex align-items-center h-100">
+                                <div class="patient-photo me-3">
+                                    <img *ngIf="patientData.genderId === 1" src="assets/images/icons/male.svg" alt=""
+                                        class="position-relative">
+                                    <img *ngIf="patientData.genderId === 2" src="assets/images/icons/female.svg" alt=""
+                                        class="position-relative">
+                                </div>
+                                <div>
+                                    <p class="value clr-primary m-0 fs-7 fw-bold w-100"> {{patientData?.patientName}}
+                                    </p>
+                                    <div class="d-flex align-items-center gap-2 mt-1">
+                                        <p class="m-0"> {{patientData?.gender}} | {{patientData?.fullAge}} </p>
+                                        <p class="m-0"> ID No: <span class="fw-bold">{{patientData?.ssn}}</span></p>
+                                    </div>
+                                    <p translate="" class="m-0 mt-1" ng-reflect-translate="">
+                                        <span>{{patientData?.nationality}}</span> | Mobile No: <span
+                                            class="fw-bold">{{patientData?.mobileNo}}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col pe-0">
+                            <div class="bg-white h-100 p-1 rounded-2">
+                                <div class="row mx-0">
+                                    <div class="col-2">
+                                        <label for="" class="form-label m-0 fw-bold">Ward</label>
+                                        <p class="text-wrap fs-8 m-0"> {{patientData?.ward}} </p>
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="" class="form-label m-0 fw-bold">Bed</label>
+                                        <p class="text-wrap fs-8 m-0">{{patientData?.bedName}} </p>
+                                    </div>
+                                    <div class="col-3">
+                                        <label for="" class="form-label m-0 fw-bold">Doctor</label>
+                                        <p class="text-wrap fs-8 m-0"> {{patientData?.consultant}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="m-2 mb-0 border rounded" [class.d-none]="!noPatientSelected">
+        <div class="fixed_alter_list food_order_list rounded border-primary-200 rounded-bottom-0">
+            <div class="fixed_alter_header rounded-top">
+                <div class="row gx-2 mx-0 p-2 py-1 align-items-center">
+                    <div class="col-1">
+                        <label for="" class="form-label fs-8 m-0 clr-primary-600">Sl No</label>
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label fs-8 m-0 clr-primary-600">Food Items</label>
+                    </div>
+                    <div class="col-1">
+                        <label for="" class="form-label fs-8 m-0 clr-primary-600">Unit</label>
+                    </div>
+                    <div class="col-2">
+                        <label for="" class="form-label fs-8 m-0 clr-primary-600">Quantity</label>
+                    </div>
+                    <div class="col-2">
+                        <label for="" class="form-label fs-8 m-0 clr-primary-600">Price</label>
+                    </div>
+                    <div class="col-2">
+                        <label for="" class="form-label fs-8 m-0 clr-primary-600">Amount</label>
+                    </div>
+                    <div class="col-1">
+                        <label for="" class="form-label fs-8 m-0 clr-primary-600"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="fixed_alter_body">
+                <div class="row gx-2 mx-0 p-2 align-items-center alter_div"
+                    *ngFor="let row of foodOrderList; let i = index">
+                    <div class="col-1">
+                        <label for="" class="form-label fs-8 m-0">{{ row.slNo }}</label>
+                    </div>
+                    <div class="col-3">
+                        <div class="d-flex input-group w-100">
+                            <input type="text" class="form-control" [disabled]="row.foodIssueID > 0"
+                                [(ngModel)]="row.foodname" placeholder="Food Items" aria-label="Fooditems"
+                                [matAutocomplete]="autoMed"
+                                (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchFoodItems($event)" />
+                            <mat-autocomplete #autoMed="matAutocomplete">
+                                <mat-option *ngFor="let item of FoodList"
+                                    (onSelectionChange)="onItemSelected(row, item)" [value]="item.foodname">
+                                    {{ item.foodname }}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                <img src="assets/images/icons/icon-search.svg" alt="" />
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <label for="" class="form-label fs-8 m-0">{{ row.units }}</label>
+                    </div>
+                    <div class="col-2">
+                        <input type="text" [disabled]="row.foodIssueID > 0" class="form-control" numbersOnly
+                            [(ngModel)]="row.quantity" (input)="validateQuantity(row)" />
+                    </div>
+                    <div class="col-2">
+                        <label for="" class="form-label fs-8 m-0">{{ row.itemPrice.toFixed(2) }}</label>
+                    </div>
+                    <div class="col-2">
+                        <label for="" class="form-label fs-8 m-0">{{ row.amount.toFixed(2) }}</label>
+                    </div>
+                    <div class="col-1">
+                        <div class="px-1 d-flex align-items-center gap-2" *ngIf="row.foodIssueID === 0">
+                            <div class="del_svg cursor-pointer custom_tooltip" (click)="deleteRow(i)">
+                                <svg width="23" height="22" viewBox="0 0 23 22" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M20.0995 6.16917H20.0261C15.177 5.68334 10.337 5.5 5.5428 5.98584L3.6728 6.16917C3.58184 6.17866 3.48989 6.17003 3.40228 6.14377C3.31467 6.11751 3.23314 6.07414 3.16239 6.01618C3.09164 5.95822 3.03308 5.8868 2.9901 5.80607C2.94712 5.72534 2.92056 5.63689 2.91197 5.54584C2.8753 5.16084 3.1503 4.83084 3.52614 4.79417L5.39614 4.61084C10.2728 4.11584 15.2136 4.30834 20.1636 4.79417C20.5395 4.83084 20.8145 5.17 20.7778 5.54584C20.764 5.71605 20.6864 5.87477 20.5607 5.99032C20.4349 6.10586 20.2702 6.16973 20.0995 6.16917Z"
+                                        fill="#EB6247"></path>
+                                    <path
+                                        d="M8.64147 5.24333C8.6048 5.24333 8.56813 5.24333 8.5223 5.23416C8.34445 5.20211 8.18627 5.10159 8.08172 4.95419C7.97717 4.80679 7.93459 4.62427 7.96313 4.44583L8.1648 3.24499C8.31147 2.36499 8.51313 1.14583 10.649 1.14583H13.0506C15.1956 1.14583 15.3973 2.41083 15.5348 3.25416L15.7365 4.44583C15.8006 4.82166 15.544 5.17916 15.1773 5.23416C14.8015 5.29833 14.444 5.04166 14.389 4.67499L14.1873 3.48333C14.059 2.68583 14.0315 2.52999 13.0598 2.52999H10.6581C9.68647 2.52999 9.66813 2.65833 9.53063 3.47416L9.3198 4.66583C9.29369 4.82694 9.2111 4.97351 9.08683 5.07931C8.96255 5.18512 8.80468 5.24325 8.64147 5.24333ZM14.7923 20.856H8.9073C5.70813 20.856 5.5798 19.0868 5.47897 17.6568L4.88313 8.42599C4.85563 8.05016 5.14897 7.72016 5.5248 7.69266C5.9098 7.67433 6.23063 7.95849 6.25813 8.33433L6.85397 17.5652C6.9548 18.9585 6.99147 19.481 8.9073 19.481H14.7923C16.7173 19.481 16.754 18.9585 16.8456 17.5652L17.4415 8.33433C17.469 7.95849 17.799 7.67433 18.1748 7.69266C18.5506 7.72016 18.844 8.041 18.8165 8.42599L18.2206 17.6568C18.1198 19.0868 17.9915 20.856 14.7923 20.856Z"
+                                        fill="#EB6247"></path>
+                                    <path
+                                        d="M13.3714 15.8125H10.3189C9.94311 15.8125 9.63144 15.5008 9.63144 15.125C9.63144 14.7492 9.94311 14.4375 10.3189 14.4375H13.3714C13.7473 14.4375 14.0589 14.7492 14.0589 15.125C14.0589 15.5008 13.7473 15.8125 13.3714 15.8125ZM14.1414 12.1458H9.55811C9.18227 12.1458 8.87061 11.8342 8.87061 11.4583C8.87061 11.0825 9.18227 10.7708 9.55811 10.7708H14.1414C14.5173 10.7708 14.8289 11.0825 14.8289 11.4583C14.8289 11.8342 14.5173 12.1458 14.1414 12.1458Z"
+                                        fill="#EB6247"></path>
+                                </svg>
+                                <div class="tooltip">
+                                    <p>Delete</p>
+                                </div>
+                            </div>
+                            <div *ngIf="i + 1 === foodOrderList.length">
+                                <button (click)="addRow()">
+                                    <svg class="cursor-pointer add" width="20" height="20" viewBox="0 0 16 16"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="0.5" y="0.5" width="15" height="15" rx="7.5"
+                                            fill="url(#paint0_radial_1479_2142)"></rect>
+                                        <rect x="0.5" y="0.5" width="15" height="15" rx="7.5" stroke="#0AC285"></rect>
+                                        <path
+                                            d="M7.45935 5.36108C7.41333 5.36108 7.37602 5.39839 7.37602 5.44442V7.37598H5.44417C5.39815 7.37598 5.36084 7.41329 5.36084 7.45931V8.54102C5.36084 8.58704 5.39815 8.62435 5.44417 8.62435H7.37602V10.5559C7.37602 10.602 7.41333 10.6393 7.45935 10.6393H8.54106C8.58708 10.6393 8.62439 10.602 8.62439 10.5559V8.62435H10.5557C10.6017 8.62435 10.639 8.58704 10.639 8.54102V7.45931C10.639 7.41329 10.6017 7.37598 10.5557 7.37598H8.62439V5.44442C8.62439 5.39839 8.58708 5.36108 8.54106 5.36108H7.45935Z"
+                                            fill="#43BC94"></path>
+                                        <defs>
+                                            <radialGradient id="paint0_radial_1479_2142" cx="0" cy="0" r="1"
+                                                gradientUnits="userSpaceOnUse"
+                                                gradientTransform="translate(8 8) rotate(90) scale(8)">
+                                                <stop stop-color="white"></stop>
+                                                <stop offset="1" stop-color="#E3F4F5"></stop>
+                                            </radialGradient>
+                                        </defs>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-2 row gx-2 mx-0 p-2 align-items-center">
+                <div class="col-9 text-end">
+                    <label for="" class="form-label m-0 fs-6 clr-primary-600">Total</label>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control w-auto" [value]="getTotalAmount().toFixed(2)" readonly />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="saveMessage" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Food ordered successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="cancelMessage" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Food ordered Cancelled successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+        <div class="modal-content">
+            <div class="modal-header p-2">
+                <h5 class="modal-title clr-primary-600 fs-6" translate>Food Orders</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-3">
+                <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                    *ngFor="let item of FoodOrders;let i=index">
+                    <div class="row mx-0 g-2 w-100">
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Order ID</p>
+                            <p><a href="#" *ngIf="item.status != '3'" (click)="$event.preventDefault();selectedOrder(item)">{{
+                                item.foodIssueID }}</a></p>
+                            <p *ngIf="item.status == '3'">{{ item.foodIssueID }} - Cancelled</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Order Slno</p>
+                            <p>{{ item.orderslno }}</p>
+                        </div>
+
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Patient Name</p>
+                            <p>{{ item.patientName }}</p>
+                        </div>
+
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Date</p>
+                            <p>{{ item.moddate | date: 'dd-MMM-yyyy' }}</p>
+                        </div>
+                        <div class="col text-end" (click)="foodBillPrint(item)" *ngIf="item.status != '3'">
+                            <p class="label">Print Bill</p>
+                            <svg class="cursor-pointer" width="28" height="28" viewBox="0 0 28 28" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M14.1348 27.389C21.6325 27.389 27.7106 21.3109 27.7106 13.8132C27.7106 6.31556 21.6325 0.237488 14.1348 0.237488C6.63716 0.237488 0.559082 6.31556 0.559082 13.8132C0.559082 21.3109 6.63716 27.389 14.1348 27.389Z"
+                                    fill="#DAEEF1" />
+                                <path
+                                    d="M18.479 11.4964H18.1894V7.7313C18.1894 7.6545 18.1589 7.5808 18.1046 7.5265C18.0502 7.4722 17.9766 7.44165 17.8998 7.44165H10.3697C10.2098 7.44165 10.0802 7.5714 10.0802 7.7313V11.4964H9.79051C9.25282 11.4964 8.73723 11.7099 8.35702 12.0901C7.97682 12.4703 7.76318 12.986 7.76318 13.5236V17.2886C7.76318 17.3654 7.79373 17.4391 7.84803 17.4934C7.90233 17.5477 7.97603 17.5783 8.05283 17.5783H10.0802V19.8952C10.0802 19.972 10.1106 20.0457 10.1649 20.1C10.2193 20.1543 10.2929 20.1848 10.3697 20.1848H17.8998C17.9766 20.1848 18.0502 20.1543 18.1046 20.1C18.1589 20.0457 18.1894 19.972 18.1894 19.8952V17.5783H20.2167C20.2935 17.5783 20.3672 17.5477 20.4215 17.4934C20.4758 17.4391 20.5063 17.3654 20.5063 17.2886V13.5236C20.5063 12.986 20.2927 12.4703 19.9125 12.0901C19.5323 11.7099 19.0167 11.4964 18.479 11.4964ZM10.6595 8.02099H17.6102V11.4964H10.6595V8.02099ZM17.6102 19.6054H10.6595V15.2612H17.6102V19.6054ZM18.479 13.5235C18.3619 13.5235 18.2563 13.453 18.2115 13.3448C18.1666 13.2366 18.1914 13.112 18.2742 13.0291C18.357 12.9463 18.4816 12.9215 18.5899 12.9663C18.6981 13.0112 18.7687 13.1168 18.7687 13.2339C18.7687 13.3107 18.7381 13.3843 18.6838 13.4387C18.6295 13.493 18.5558 13.5235 18.479 13.5235Z"
+                                    fill="#368796" stroke="#368796" stroke-width="0.15929" />
+                            </svg>
+                        </div>
+                        <div class="col text-end" (click)="foodReceiptPrint(item)" *ngIf="item.status != '3'">
+                            <p class="label">Print Receipt</p>
+                            <svg class="cursor-pointer" width="28" height="28" viewBox="0 0 28 28" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M14.1348 27.389C21.6325 27.389 27.7106 21.3109 27.7106 13.8132C27.7106 6.31556 21.6325 0.237488 14.1348 0.237488C6.63716 0.237488 0.559082 6.31556 0.559082 13.8132C0.559082 21.3109 6.63716 27.389 14.1348 27.389Z"
+                                    fill="#DAEEF1" />
+                                <path
+                                    d="M18.479 11.4964H18.1894V7.7313C18.1894 7.6545 18.1589 7.5808 18.1046 7.5265C18.0502 7.4722 17.9766 7.44165 17.8998 7.44165H10.3697C10.2098 7.44165 10.0802 7.5714 10.0802 7.7313V11.4964H9.79051C9.25282 11.4964 8.73723 11.7099 8.35702 12.0901C7.97682 12.4703 7.76318 12.986 7.76318 13.5236V17.2886C7.76318 17.3654 7.79373 17.4391 7.84803 17.4934C7.90233 17.5477 7.97603 17.5783 8.05283 17.5783H10.0802V19.8952C10.0802 19.972 10.1106 20.0457 10.1649 20.1C10.2193 20.1543 10.2929 20.1848 10.3697 20.1848H17.8998C17.9766 20.1848 18.0502 20.1543 18.1046 20.1C18.1589 20.0457 18.1894 19.972 18.1894 19.8952V17.5783H20.2167C20.2935 17.5783 20.3672 17.5477 20.4215 17.4934C20.4758 17.4391 20.5063 17.3654 20.5063 17.2886V13.5236C20.5063 12.986 20.2927 12.4703 19.9125 12.0901C19.5323 11.7099 19.0167 11.4964 18.479 11.4964ZM10.6595 8.02099H17.6102V11.4964H10.6595V8.02099ZM17.6102 19.6054H10.6595V15.2612H17.6102V19.6054ZM18.479 13.5235C18.3619 13.5235 18.2563 13.453 18.2115 13.3448C18.1666 13.2366 18.1914 13.112 18.2742 13.0291C18.357 12.9463 18.4816 12.9215 18.5899 12.9663C18.6981 13.0112 18.7687 13.1168 18.7687 13.2339C18.7687 13.3107 18.7381 13.3843 18.6838 13.4387C18.6295 13.493 18.5558 13.5235 18.479 13.5235Z"
+                                    fill="#368796" stroke="#368796" stroke-width="0.15929" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{errorMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="foodIssueConfirmation" tabindex="-1" aria-labelledby="discontinueRemarksLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="width: 35%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="discontinueRemarksLabel"> Cancel Food Issue Remarks</h5>
+                <div class="d-flex gap-2 align-items-center justify-content-end">
+                    <button class="btn btn-main-outline" data-bs-dismiss="modal"
+                        (click)="deleteFoodIssue()">Cancel</button>
+                    <button type="button" class="btn-close ms-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <textarea name="" placeholder="" #cancelRemarks class="form-control resize-none mb-2" id="cancelRemarks"
+                    cols="30" rows="3"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="ipbillPrintModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Print</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <iframe height="600" width="100%" [src]="(trustedUrl ? trustedUrl : '') | safeUrl"
+                    frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal displayCollectionReport" data-bs-backdrop="static" tabindex="-1" id="displayCollectionReport"
+   tabindex="-1">
+   <div class="modal-dialog modal-dialog-centered" style="max-width: 99%;">
+      <div class="modal-content">
+         <div class="modal-header py-2 gap-2">
+            <h5 class="modal-title m-0" translate>Collection Report</h5>
+            <div class="d-flex align-items-center gap-2">
+               <p class="m-0 fs-6 clr-primary-600 fw-bold text-nowrap">Collected Amount : {{ totalCollected }}</p>
+               <button class="date_range_calendar p-0 position-relative" style="width: 227px;">
+                  <mat-date-range-input class="btn btn-main-outline" [formGroup]="collectionReportForm"
+                     [rangePicker]="picker2">
+                     <input matStartDate formControlName="FromDate">
+                     <input matEndDate formControlName="ToDate" (dateChange)="openCollectionReport()">
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-date-range-picker #picker2></mat-date-range-picker>
+               </button>
+               <button class="btn btn-main-outline" (click)="printDailyCollectionReport()">Print</button>
+               <button type="button" #closebutton class="btn-close" (click)="closedailyCollReportModal()"
+                  aria-label="Close"></button>
+            </div>
+         </div>
+         <div class="modal-body p-2">
+            <div class="fixed_alter_list border-primary-200 rounded ConveringLetterData_list">
+               <div class="fixed_alter_header bg-primary-50 rounded-top">
+                  <div class="row gx-2 p-2 mx-0">
+                     <div class="" style="width:4%;">
+                        <p class="clr-primary-600 m-0">Sl.No</p>
+                     </div>
+                     <div class="" style="width:10%;">
+                        <p class="clr-primary-600 m-0">Bill No</p>
+                     </div>
+                     <div class="" style="width:28%;">
+                        <p class="clr-primary-600 m-0">Patient</p>
+                     </div>
+                     <div class="" style="width:13%;">
+                        <p class="clr-primary-600 m-0">Cashier</p>
+                     </div>
+                     <div class="" style="width:10%;">
+                        <p class="clr-primary-600 m-0">Bill Date</p>
+                     </div>
+                     <div class="" style="width:8%;">
+                        <p class="clr-primary-600 m-0">Payment Type</p>
+                     </div>
+                     <div class="" style="width:9%;">
+                        <p class="clr-primary-600 m-0">Receipt Amount</p>
+                     </div>
+                     <div class="" style="width:9%;">
+                        <p class="clr-primary-600 m-0">Deposit Amount</p>
+                     </div>
+                     <div class="" style="width:9%;">
+                        <p class="clr-primary-600 m-0">Refund Amount</p>
+                     </div>
+                  </div>
+               </div>
+               <div class="fixed_alter_body">
+                  <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let al of cashierResponse;let i=index">
+                     <div class="" style="width:4%;">
+                        <p class="m-0">{{ i + 1 }}</p>
+                     </div>
+                     <div class="" style="width:10%;">
+                        <p class="m-0">{{ al?.BillNO }}</p>
+                     </div>
+                     <div class="" style="width:28%;">
+                        <p class="m-0">{{ al?.SSN }} | {{ al?.PatientName }} <br> {{al?.FullAge}} | {{al?.Gender}}</p>
+                     </div>
+                     <div class="" style="width:13%;">
+                        <p class="m-0">{{ al?.CashierName }}</p>
+                     </div>
+                     <div class="" style="width:10%;">
+                        <p class="m-0">{{ al?.BillDate | date : 'dd-MMM-yyyy HH:mm' }}</p>
+                     </div>
+                     <div class="" style="width:8%;">
+                        <p class="m-0">{{ al?.PaymentName }}</p>
+                     </div>
+                     <div class="" style="width:9%;">
+                        <p class="m-0">{{ al?.ReceiptAmount }}</p>
+                     </div>
+                     <div class="" style="width:9%;">
+                        <p class="m-0">{{ al?.AvailedDeposits }}</p>
+                     </div>
+                     <div class="" style="width:9%;">
+                        <p class="m-0">{{ al?.TotalRefund }}</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+         </div>
+      </div>
+   </div>
+</div>
+<div class="modal" id="dailyCollectionReportPrint">
+   <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title">Print</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="trustedUrl = ''"></button>
+         </div>
+         <div class="modal-body">
+            <iframe *ngIf="trustedUrl" height="600" width="100%" [src]="(trustedUrl ? trustedUrl : '') | safeUrl" frameborder="0"></iframe>
+         </div>
+      </div>
+   </div>
+</div>

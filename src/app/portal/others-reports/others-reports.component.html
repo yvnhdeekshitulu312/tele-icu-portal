@@ -1,0 +1,329 @@
+    <div class="card card-style-1 h-100">
+        <div class="row mx-0 gap-3 align-items-center justify-content-between rounded">
+            <ul class="nav nav-pills">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="medicalCertificate-tab" data-bs-toggle="pill" data-bs-target="#medicalCertificate"
+                        type="button" role="tab" aria-controls="medicalCertificate" aria-selected="true" (click)="showTab('MedicalCertificate')">{{langData?.common?.MedicalCertificate}} </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="sickLeave-tab" data-bs-toggle="pill" data-bs-target="#sickLeave" type="button"
+                        role="tab" aria-controls="sickLeave" aria-selected="false" (click)="showTab('SickLeave')">{{langData?.common?.SickLeave}} </button>
+                </li> 
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="dischargeSummary-tab" data-bs-toggle="pill" data-bs-target="#dischargeSummary" type="button"
+                        role="tab" aria-controls="dischargeSummary" aria-selected="false" (click)="showTab('DischargeSummary')">{{langData?.common?.DischargeSummary}} </button>
+                </li>          
+            </ul>
+        </div>
+        
+        <!-- Medical Certificate -->
+
+        <div class="tab-content mt-0" *ngIf="showMedCertificateTab">
+            <div class="tab-pane fade show active" id="medicalCertificate" role="tabpanel" aria-labelledby="medicalCertificate-tab">
+                <!-- <div class="table-cards_div d-flex mx-0 g-2 p-2 position-relative" *ngFor="let medcert of medicalCertificateData;let i = index">
+                    <div class="row mx-0 g-2 w-100">
+                        <div class="col-lg col-md-3 col-12">
+                            <p class="label">Template Name</p>
+                            <p class="value">{{medcert.TemplateName}}</p>
+                        </div>
+                        <div class="col-lg col-md-3 col-12">
+                            <p class="label">{{langData?.labreports?.doctor}}</p>
+                            <p class="value">{{medcert.PrimaryPhysician}}</p>
+                        </div>
+                        <div class="col-lg col-md-3 col-12">
+                            <p class="label">{{langData?.labreports?.date}}</p>
+                            <p class="value text-start" dir="ltr">{{medcert.CertificateDate | date:'dd-MMM-YYYY'}}</p>
+                        </div>
+                        <div class="col-lg col-md-3 col-12">
+                            <p class="label">{{langData?.insurancestatus?.status}}</p>
+                            <p class="value text-capitalize">{{medcert.StatusName}}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">{{langData?.common?.Remarks}}</p>
+                            <p class="value text-capitalize">{{medcert.Remarks}}</p>
+                        </div>
+                    </div>
+                    <div class="position-unset text-center view-toggle_double w-unset h-unset justify-content-start align-items-center flex-lg-row flex-column">
+                        <button class="btn btn-sm" (click)="viewMedicalCertificateReport(medcert)">
+                            <div>
+                                <img src="assets/images/icons/icon-eye.svg" alt="">
+                            </div>
+                            <span>{{langData?.common?.view}}</span>
+                        </button>
+                    </div>
+                </div> -->
+
+                <div class="fixed_alter_list medicalCertificate_list">
+                    <div class="fixed_alter_header bg-primary-50">
+                        <div class="row gx-2 p-2 mx-0">
+                            <div class="col-2">
+                                <p class="label m-0">Medical Report ID</p>
+                            </div>
+                            <div class="col-3">
+                                <p class="label m-0">{{langData?.labreports?.doctor}}</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="label m-0">{{langData?.labreports?.date}}</p>
+                            </div>
+                                                      
+                            <div class="col-1">
+                                <p class="label m-0">Action</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fixed_alter_body">
+                        <div class="row gx-2 mx-0 p-2 py-1 alter_div align-items-center" *ngFor="let medcert of medicalCertificateData;let i = index">
+                            <div class="col-2">
+                                <p class="label m-0">{{medcert.MedicalReportID}}</p>
+                            </div>
+                            <div class="col-3">
+                                <p class="label m-0">{{medcert.DoctorName}}</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="label m-0">{{medcert.CreateDate | date:'dd-MMM-YYYY'}}</p>
+                            </div>
+                          
+                           
+                            <div class="col-1">
+                                <div class="d-inline-flex flex-column cursor-pointer"  (click)="FetchPatientCaseRecordMR(medcert)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="15" viewBox="0 0 33 17" fill="none">
+                                        <path d="M29.8223 5.08352C22.587 -1.67628 11.332 -1.67628 4.09666 5.08352L0.96167 8.01367L4.10173 10.9438C11.3371 17.7036 22.592 17.7036 29.8274 10.9438L32.9624 8.01367L29.8223 5.08352ZM16.9621 14.0137C13.6471 14.0137 10.9619 11.3287 10.9619 8.01349C10.9619 4.69824 13.6469 2.0133 16.9621 2.0133C20.2774 2.0133 22.9623 4.69824 22.9623 8.01349C22.9623 11.3287 20.2774 14.0137 16.9621 14.0137Z" fill="#43A9BC"/>
+                                        <path d="M16.9621 4.01336C16.4021 4.01336 15.8671 4.12846 15.3821 4.33839C15.7323 4.61348 15.9622 5.03335 15.9622 5.51333C15.9622 6.33834 15.2873 7.01326 14.4623 7.01326C13.9823 7.01326 13.5623 6.7833 13.2874 6.43317C13.0772 6.91842 12.9621 7.45336 12.9621 8.01343C12.9621 10.2184 14.7571 12.0135 16.9622 12.0135C18.2522 12.0135 19.3923 11.3984 20.1273 10.4535C19.7422 10.3135 19.4623 9.94842 19.4623 9.51336C19.4623 8.96343 19.9123 8.51338 20.4623 8.51338C20.6223 8.51338 20.7772 8.55344 20.9123 8.62342C20.9422 8.42338 20.9623 8.2185 20.9623 8.01338C20.9623 5.80835 19.1672 4.01336 16.9621 4.01336Z" fill="#43A9BC"/>
+                                    </svg>
+                                    <span class="fs-8 lh-1">{{langData?.common?.view}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div  class="h-75 d-flex align-items-center justify-content-center" *ngIf="medicalCertificateData?.length == 0">
+                    No Records Found
+                </div>
+            </div>
+        </div>
+
+        <!-- Sick Leave -->
+        <div class="tab-content mt-0" *ngIf="showSickLeaveTab">
+            <div class="tab-pane fade show active" id="sickLeave" role="tabpanel" aria-labelledby="sickLeave-tab">
+                <!-- <div class="table-cards_div d-flex mx-0 mt-0 g-2 p-2 position-relative" *ngFor="let sickleave of sickLeaveData;let i = index">
+                    <div class="row mx-0 g-2 w-100">
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Create Date</p>
+                            <p class="value">{{sickleave.CREATEDATE | date:'dd-MMM-YYYY'}}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">{{langData?.common?.DoctorName}} </p>
+                            <p class="value">{{sickleave.DoctorName}}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Doctor EmpNo</p>
+                            <p class="value">{{sickleave.DoctorEmpNo}}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Patient Type</p>
+                            <p class="value text-capitalize">{{sickleave.PatientType}}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">{{langData?.common?.FromDate}} </p>
+                            <p class="value text-capitalize">{{sickleave.FromDate}}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">{{langData?.common?.ToDate}} </p>
+                            <p class="value text-capitalize">{{sickleave.ToDate}}</p>
+                        </div>
+                    </div>
+                    <div class="position-unset text-center view-toggle_double w-unset h-unset justify-content-start align-items-center flex-lg-row flex-column">
+                        <button class="btn btn-sm" (click)="viewSickLeaveReport(sickleave)">
+                            <div>
+                                <img src="assets/images/icons/icon-eye.svg" alt="">
+                            </div>
+                            <span>{{langData?.common?.view}}</span>
+                        </button>
+                    </div>
+                </div> -->
+
+                <div class="fixed_alter_list medicalCertificate_list">
+                    <div class="fixed_alter_header bg-primary-50">
+                        <div class="row gx-2 p-2 mx-0">
+                            <div class="col-2">
+                                <p class="label m-0">Create Date</p>
+                            </div>
+                            <div class="col-3">
+                                <p class="label m-0">{{langData?.common?.DoctorName}}</p>
+                            </div>
+                            <div class="col-1">
+                                <p class="label m-0">Doctor EmpNo</p>
+                            </div>
+                            <div class="col-1">
+                                <p class="label m-0">Patient Type</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="label m-0">{{langData?.common?.FromDate}}</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="label m-0">{{langData?.common?.ToDate}}</p>
+                            </div>
+                            <div class="col-1">
+                                <p class="label m-0">Action</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fixed_alter_body">
+                        <div class="row gx-2 mx-0 p-2 py-1 alter_div align-items-center" *ngFor="let sickleave of sickLeaveData;let i = index">
+                            <div class="col-2">
+                                <p class="label m-0">{{sickleave.CREATEDATE | date:'dd-MMM-YYYY'}}</p>
+                            </div>
+                            <div class="col-3">
+                                <p class="label m-0">{{sickleave.DoctorName}}</p>
+                            </div>
+                            <div class="col-1">
+                                <p class="label m-0">{{sickleave.DoctorEmpNo}}</p>
+                            </div>
+                            <div class="col-1">
+                                <p class="label m-0 text-capitalize">{{sickleave.PatientType}}</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="label m-0 text-capitalize">{{sickleave.FromDate}}</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="label m-0 text-capitalize">{{sickleave.ToDate}}</p>
+                            </div>
+                            <div class="col-1">
+                                <div class="d-inline-flex flex-column cursor-pointer"  (click)="viewSickLeaveReport(sickleave)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="15" viewBox="0 0 33 17" fill="none">
+                                        <path d="M29.8223 5.08352C22.587 -1.67628 11.332 -1.67628 4.09666 5.08352L0.96167 8.01367L4.10173 10.9438C11.3371 17.7036 22.592 17.7036 29.8274 10.9438L32.9624 8.01367L29.8223 5.08352ZM16.9621 14.0137C13.6471 14.0137 10.9619 11.3287 10.9619 8.01349C10.9619 4.69824 13.6469 2.0133 16.9621 2.0133C20.2774 2.0133 22.9623 4.69824 22.9623 8.01349C22.9623 11.3287 20.2774 14.0137 16.9621 14.0137Z" fill="#43A9BC"/>
+                                        <path d="M16.9621 4.01336C16.4021 4.01336 15.8671 4.12846 15.3821 4.33839C15.7323 4.61348 15.9622 5.03335 15.9622 5.51333C15.9622 6.33834 15.2873 7.01326 14.4623 7.01326C13.9823 7.01326 13.5623 6.7833 13.2874 6.43317C13.0772 6.91842 12.9621 7.45336 12.9621 8.01343C12.9621 10.2184 14.7571 12.0135 16.9622 12.0135C18.2522 12.0135 19.3923 11.3984 20.1273 10.4535C19.7422 10.3135 19.4623 9.94842 19.4623 9.51336C19.4623 8.96343 19.9123 8.51338 20.4623 8.51338C20.6223 8.51338 20.7772 8.55344 20.9123 8.62342C20.9422 8.42338 20.9623 8.2185 20.9623 8.01338C20.9623 5.80835 19.1672 4.01336 16.9621 4.01336Z" fill="#43A9BC"/>
+                                    </svg>
+                                    <span class="fs-8 lh-1">{{langData?.common?.view}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div  class="h-75 d-flex align-items-center justify-content-center" *ngIf="sickLeaveData?.length == 0">
+                    No Records Found
+                </div>
+            </div>
+        </div>
+
+        <!-- Discharge Summary -->
+        <div class="tab-content mt-0" *ngIf="showDischargeSummary">
+            <div class="tab-pane fade show active" id="dischargeSummary" role="tabpanel" aria-labelledby="dischargeSummary-tab">
+                <!-- <div class="table-cards_div d-flex mx-0 mt-0 g-2 p-2 position-relative" *ngFor="let test of dischargeSummaryData;let i = index">
+                    <div class="row mx-0 g-2 w-100">
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Admit Date</p>
+                            <p class="value">{{test.AdmiTDate | date:'dd-MMM-YYYY'}}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Discharge Date</p>
+                            <p class="value">{{test.DischargeDate | date:'dd-MMM-YYYY'}}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Prepared By</p>
+                            <p class="value">{{test.PreparedBy}}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">VerifiedDate</p>
+                            <p class="value text-capitalize">{{test.VerifiedDate | date:'dd-MMM-YYYY'}}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">VerifiedBy</p>
+                            <p class="value text-capitalize">{{test.VerifiedBy}}</p>
+                        </div>
+                    </div>
+                    <div class="position-unset text-center view-toggle_double w-unset h-unset justify-content-start align-items-center flex-lg-row flex-column">
+                        <button class="btn btn-sm" >
+                            <div>
+                                <img src="assets/images/icons/icon-eye.svg" alt="">
+                            </div>
+                            <span>{{langData?.common?.view}}</span>
+                        </button>
+                    </div>
+                </div> -->
+
+                <div class="fixed_alter_list medicalCertificate_list">
+                    <div class="fixed_alter_header bg-primary-50">
+                        <div class="row gx-2 p-2 mx-0">
+                            <div class="col-2">
+                                <p class="label m-0">Admit Date</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="label m-0">Discharge Date</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="label m-0">Prepared By</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="label m-0">Create Date</p>
+                            </div>
+                            
+                            <div class="col-1">
+                                <p class="label m-0">Action</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fixed_alter_body">
+                        <div class="row gx-2 mx-0 p-2 py-1 alter_div align-items-center" *ngFor="let test of dischargeSummaryData;let i = index">
+                            <div class="col-2">
+                                <p class="label m-0">{{test.AdmitDate | date:'dd-MMM-YYYY'}}</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="label m-0">{{test.DischargeDate | date:'dd-MMM-YYYY'}}</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="label m-0">{{test.PreparedByName}}</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="label m-0">{{test.CreateDate | date:'dd-MMM-YYYY'}}</p>
+                            </div>
+                           
+                            <div class="col-1">
+                                <div class="d-inline-flex flex-column cursor-pointer" (click)="FetchPatientDischargeSummaryPrint(test)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="15" viewBox="0 0 33 17" fill="none">
+                                        <path d="M29.8223 5.08352C22.587 -1.67628 11.332 -1.67628 4.09666 5.08352L0.96167 8.01367L4.10173 10.9438C11.3371 17.7036 22.592 17.7036 29.8274 10.9438L32.9624 8.01367L29.8223 5.08352ZM16.9621 14.0137C13.6471 14.0137 10.9619 11.3287 10.9619 8.01349C10.9619 4.69824 13.6469 2.0133 16.9621 2.0133C20.2774 2.0133 22.9623 4.69824 22.9623 8.01349C22.9623 11.3287 20.2774 14.0137 16.9621 14.0137Z" fill="#43A9BC"/>
+                                        <path d="M16.9621 4.01336C16.4021 4.01336 15.8671 4.12846 15.3821 4.33839C15.7323 4.61348 15.9622 5.03335 15.9622 5.51333C15.9622 6.33834 15.2873 7.01326 14.4623 7.01326C13.9823 7.01326 13.5623 6.7833 13.2874 6.43317C13.0772 6.91842 12.9621 7.45336 12.9621 8.01343C12.9621 10.2184 14.7571 12.0135 16.9622 12.0135C18.2522 12.0135 19.3923 11.3984 20.1273 10.4535C19.7422 10.3135 19.4623 9.94842 19.4623 9.51336C19.4623 8.96343 19.9123 8.51338 20.4623 8.51338C20.6223 8.51338 20.7772 8.55344 20.9123 8.62342C20.9422 8.42338 20.9623 8.2185 20.9623 8.01338C20.9623 5.80835 19.1672 4.01336 16.9621 4.01336Z" fill="#43A9BC"/>
+                                    </svg>
+                                    <span class="fs-8 lh-1">{{langData?.common?.view}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div  class="h-75 d-flex align-items-center justify-content-center" *ngIf="dischargeSummaryData?.length == 0">
+                    No Records Found
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="modal" id="MedCertViewModal">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Report</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="trustedUrl = ''"></button>
+            </div>
+            <div class="modal-body">
+                <iframe *ngIf="trustedUrl" height="600" width="100%" [src]="(trustedUrl ? trustedUrl :'')| safeUrl"
+                    frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="SickLeaveViewModal">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sick Leave Report</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="trustedUrl = ''"></button>
+            </div>
+            <div class="modal-body">
+                <iframe *ngIf="trustedUrl" height="600" width="100%" [src]="(trustedUrl ? trustedUrl :'')| safeUrl"
+                    frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>

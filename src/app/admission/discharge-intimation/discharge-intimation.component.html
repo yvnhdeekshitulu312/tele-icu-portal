@@ -1,0 +1,300 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+
+<div class="">
+    <div class="page-header sticky-top justify-content-between shadow-sm">
+        <div class="d-flex align-items-center gap-3">
+            <h2 class="page-heading">Discharge Intimations</h2>
+            <form [formGroup]="dischargeForm" (keydown.enter)="$event.preventDefault()">
+                <div class="d-flex align-items-center gap-4">
+                    <button class="date_range_calendar position-relative pd p-0" dir="ltr" style="height: 32px">
+                        <mat-date-range-input class="btn btn-main-outline" [rangePicker]="picker">
+                            <input matStartDate formControlName="fromDate" />
+                            <input matEndDate formControlName="toDate" (dateChange)="searchDischargeIntimationList()" />
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </button>
+                    <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                        <button class="btn" [ngClass]="!virtualDischarge ? 'selected' : ''"
+                            (click)="virtualDischarge = false;searchDischargeIntimationList();" translate>
+                            Discharge
+                        </button>
+                        <button class="btn" [ngClass]="virtualDischarge ? 'selected' : ''"
+                            (click)="virtualDischarge = true;searchDischargeIntimationList();" translate>
+                            Virtual Discharge
+                        </button>
+                    </div>
+                    <!-- <div class="w-max-content">
+            <mat-form-field appearance="fill">
+              <mat-label translate class="pt-dob-testtttt"
+                >dd-MMM-yyyy</mat-label
+              >
+              <input
+                matInput
+                formControlName="fromDate"
+                class=""
+                [matDatepicker]="fromDate"
+                (click)="fromDate.open()"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="fromDate"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #fromDate></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="w-max-content">
+            <mat-form-field appearance="fill">
+              <mat-label translate class="pt-dob-testtttt"
+                >dd-MMM-yyyy</mat-label
+              >
+              <input
+                matInput
+                formControlName="toDate"
+                class=""
+                [matDatepicker]="toDate"
+                (click)="toDate.open()"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="toDate"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #toDate></mat-datepicker>
+            </mat-form-field>
+          </div> -->
+                </div>
+            </form>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-main-outline" (click)="searchDischargeIntimationList()">
+                Show
+            </button>
+            <button class="btn btn-danger-outline" (click)="clearList()">
+                Clear
+            </button>
+            <button class="btn btn-main-outline">Print</button>
+        </div>
+    </div>
+    <div class="">
+        <div class="fixed_alter_list dischargeIntimationList d-none">
+            <div class="fixed_alter_header">
+                <div class="row gx-3 mx-0 p-2 align-items-center">
+                    <div class="col-1" style="width: 4rem">
+                        <label for="" translate class="form-label fw-bold text-nowrap m-0 clr-primary-600">Sl.No</label>
+                    </div>
+                    <div class="col-1">
+                        <label for="" translate class="form-label fw-bold text-nowrap m-0 clr-primary-600">IP.No</label>
+                    </div>
+                    <div class="col-3" style="width: 25%">
+                        <label for="" translate class="form-label fw-bold text-nowrap m-0 clr-primary-600">Patient
+                            Name</label>
+                    </div>
+                    <div class="col-1" style="width: 10%">
+                        <label for="" translate class="form-label fw-bold text-nowrap m-0 clr-primary-600">UHID</label>
+                    </div>
+                    <div class="col-1" style="width: 12%">
+                        <label for="" translate class="form-label fw-bold text-nowrap m-0 clr-primary-600">Req.
+                            Ward</label>
+                    </div>
+                    <div class="col-1">
+                        <label for="" translate class="form-label fw-bold text-nowrap m-0 clr-primary-600">Bed
+                        </label>
+                    </div>
+                    <div class="col-1" style="width: 12%">
+                        <label for="" translate class="form-label fw-bold text-nowrap m-0 clr-primary-600">Req.
+                            Discharge
+                            Date</label>
+                    </div>
+                    <div class="col-1 text-center" style="width: 11%">
+                        <label for="" translate class="form-label fw-bold text-nowrap m-0 clr-primary-600">Not Done
+                            Procedures</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Preload Animation -->
+            <!-- <div class="item mt-3" *ngIf="skelLoader">
+        <div class="row g-3 mx-0">
+          <div class="col-md-12">
+            <ngx-skeleton-loader animation="progress" count="5" [theme]="{
+                'border-radius': '10px',
+                height: '50px',
+                'background-color': '#ecf6f8',
+                border: '1px solid white'
+              }" />
+          </div>
+        </div>
+      </div> -->
+
+            <div class="fixed_alter_body" *ngIf="!skelLoader && dischargeIntimationList.length">
+                <div class="row gx-3 mx-0 p-2 align-items-center alter_div"
+                    *ngFor="let data of dischargeIntimationList; index as i">
+                    <div class="col-1" style="width: 4rem">
+                        <p class="m-0">{{ i + 1 }}</p>
+                    </div>
+                    <div class="col-1">
+                        <a href="javascript:void(0)" class="text-decoration-none" (click)="pendingOrderView(data.ipid)">
+                            <p class="m-0">{{ data.admissionNumber }}</p>
+                        </a>
+                    </div>
+                    <div class="col-3" style="width: 25%">
+                        <p class="m-0">
+                            <a href="javascript:void(0)" class="text-decoration-none">
+                                {{ lang === "ar" ? data.patientName2l : data.patientName }}
+                            </a>
+                        </p>
+                    </div>
+                    <div class="col-1" style="width: 10%">
+                        <p class="m-0" translate>{{ data.ssn }}</p>
+                    </div>
+                    <div class="col-1" style="width: 12%">
+                        <p class="m-0">{{ data.wardName }}</p>
+                    </div>
+                    <div class="col-1">
+                        <p class="m-0">
+                            {{ lang === "ar" ? data.bedName2l : data.bedName }}
+                        </p>
+                    </div>
+                    <div class="col-1" style="width: 12%">
+                        <p class="m-0">{{ data.requestedDate | date : "dd-MMM-yyyy HH:mm" }}</p>
+                    </div>
+                    <div class="col-1 text-center" style="width: 11%">
+                        <a href="" data-bs-toggle="modal" data-bs-target="#notDoneProcedureModal">
+                            <!-- <p class="m-0">Not Done Procedures</p> -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="17" viewBox="0 0 33 17"
+                                fill="none">
+                                <path
+                                    d="M29.8223 5.08352C22.587 -1.67628 11.332 -1.67628 4.09666 5.08352L0.96167 8.01367L4.10173 10.9438C11.3371 17.7036 22.592 17.7036 29.8274 10.9438L32.9624 8.01367L29.8223 5.08352ZM16.9621 14.0137C13.6471 14.0137 10.9619 11.3287 10.9619 8.01349C10.9619 4.69824 13.6469 2.0133 16.9621 2.0133C20.2774 2.0133 22.9623 4.69824 22.9623 8.01349C22.9623 11.3287 20.2774 14.0137 16.9621 14.0137Z"
+                                    fill="#43A9BC"></path>
+                                <path
+                                    d="M16.9621 4.01336C16.4021 4.01336 15.8671 4.12846 15.3821 4.33839C15.7323 4.61348 15.9622 5.03335 15.9622 5.51333C15.9622 6.33834 15.2873 7.01326 14.4623 7.01326C13.9823 7.01326 13.5623 6.7833 13.2874 6.43317C13.0772 6.91842 12.9621 7.45336 12.9621 8.01343C12.9621 10.2184 14.7571 12.0135 16.9622 12.0135C18.2522 12.0135 19.3923 11.3984 20.1273 10.4535C19.7422 10.3135 19.4623 9.94842 19.4623 9.51336C19.4623 8.96343 19.9123 8.51338 20.4623 8.51338C20.6223 8.51338 20.7772 8.55344 20.9123 8.62342C20.9422 8.42338 20.9623 8.2185 20.9623 8.01338C20.9623 5.80835 19.1672 4.01336 16.9621 4.01336Z"
+                                    fill="#43A9BC"></path>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <div class="col-12 p-2 pb-0 d-flex align-items-center gap-2">
+                        <label for="" translate
+                            class="form-label fw-bold text-nowrap m-0 clr-primary-600">Remarks:</label>
+                        <p class="m-0">{{ data.remarks }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-column gap-2 dischargeIntimationList p-2">
+            <div class="doc_card rounded cursor-pointer" *ngFor="let data of dischargeIntimationList; index as i">
+                <div class="rounded NewRequest">
+                    <div class="row gx-1 mx-0">
+                        <div class="bg-primary-50 rounded-start cursor-pointer position-relative d-flex align-items-center"
+                            style="width: 22rem;">
+                            <div class="p-2 doctor_profile d-flex">
+                                <div class="text-center me-2">
+                                    <div class="profile_img position-relative">
+                                        <!-- <img src="assets/images/icons/female.svg" alt="" class="position-relative"> -->
+                                        <img *ngIf="data.genderID == 1" src="assets/images/icons/male.svg" alt=""
+                                            class="position-relative">
+                                        <img *ngIf="data.genderID == 2" src="assets/images/icons/female.svg" alt=""
+                                            class="position-relative">
+                                    </div>
+                                </div>
+                                <div class="d-flex w-100 align-items-center justify-content-between">
+                                    <div class="w-100 position-relative" (click)="ipRedirection(data)">
+                                        <div class="custom_tooltip custom_tooltip_right">
+                                            <p class="m-0 value fs-7 fw-bold w-75 text-truncate clr-primary-600 mb-1">
+                                                <a href="javascript:void(0)"
+                                                    class="text-decoration-none  clr-primary-600">
+                                                    {{ lang === "ar" ? data.patientName2l : data.patientName }}
+                                                </a>
+                                            </p>
+                                            <div class="tooltip">
+                                                <p class="m-0 value fs-7 fw-bold">{{ lang === "ar" ? data.patientName2l
+                                                    : data.patientName }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-3 mb-1">
+                                            <div
+                                                class="full_age_hover custom_tooltip custom_tooltip_right d-flex align-items-center gap-1">
+                                                <p class="m-0">{{data.gender}} | {{data.fullAge}} </p>
+                                            </div>
+                                            <p class="m-0"><b>SSN</b> : <span>{{data.ssn}}</span></p>
+                                        </div>
+                                        <!-- <div>
+                                <p class="m-0">{{data.nationality}} | Mobile : {{data.mobileNo}}</p>
+                            </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col doc_details p-0">
+                            <div class="bg-white rounded">
+                                <div class="row gx-2 p-1">
+                                    <div class="col-2 d-flex flex-column" style="width: 15%;">
+                                        <label for="" class="form-label m-0 clr-grey fw-bold">IP.No</label>
+                                        <p class="m-0">
+                                            <a href="javascript:void(0)" class="text-decoration-none"
+                                                (click)="pendingOrderView(data.ipid)">
+                                                <p class="m-0">{{ data.admissionNumber }}</p>
+                                            </a>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-2 d-flex flex-column" style="width: 10%;">
+                                        <label for="" class="form-label m-0 clr-grey fw-bold">Req. Ward</label>
+                                        <p class="m-0">{{ data.wardName }} </p>
+                                    </div>
+
+
+                                    <div class="col-2 d-flex flex-column" style="width: 5%;">
+                                        <label for="" class="form-label m-0 clr-grey fw-bold">Bed</label>
+                                        <p class="m-0">{{ lang === "ar" ? data.bedName2l : data.bedName }}</p>
+                                    </div>
+
+                                    <div class="col-2 d-flex flex-column" style="width: 15%;">
+                                        <label for="" class="form-label m-0 clr-grey fw-bold">Req. Discharge
+                                            Date</label>
+                                        <div class="d-flex align-items-center flex-nowrap gap-1 text-nowrap">
+                                            <svg width="14" height="14" viewBox="0 0 10 11" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="m-0">{{ data.requestedDate | date : "dd-MMM-yyyy HH:mm" }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 d-flex flex-column" style="width: 15%;">
+                                        <label for="" class="form-label m-0 clr-grey fw-bold">Not Done
+                                            Procedures</label>
+                                        <a href="" data-bs-toggle="modal" data-bs-target="#notDoneProcedureModal">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="17"
+                                                viewBox="0 0 33 17" fill="none">
+                                                <path
+                                                    d="M29.8223 5.08352C22.587 -1.67628 11.332 -1.67628 4.09666 5.08352L0.96167 8.01367L4.10173 10.9438C11.3371 17.7036 22.592 17.7036 29.8274 10.9438L32.9624 8.01367L29.8223 5.08352ZM16.9621 14.0137C13.6471 14.0137 10.9619 11.3287 10.9619 8.01349C10.9619 4.69824 13.6469 2.0133 16.9621 2.0133C20.2774 2.0133 22.9623 4.69824 22.9623 8.01349C22.9623 11.3287 20.2774 14.0137 16.9621 14.0137Z"
+                                                    fill="#43A9BC"></path>
+                                                <path
+                                                    d="M16.9621 4.01336C16.4021 4.01336 15.8671 4.12846 15.3821 4.33839C15.7323 4.61348 15.9622 5.03335 15.9622 5.51333C15.9622 6.33834 15.2873 7.01326 14.4623 7.01326C13.9823 7.01326 13.5623 6.7833 13.2874 6.43317C13.0772 6.91842 12.9621 7.45336 12.9621 8.01343C12.9621 10.2184 14.7571 12.0135 16.9622 12.0135C18.2522 12.0135 19.3923 11.3984 20.1273 10.4535C19.7422 10.3135 19.4623 9.94842 19.4623 9.51336C19.4623 8.96343 19.9123 8.51338 20.4623 8.51338C20.6223 8.51338 20.7772 8.55344 20.9123 8.62342C20.9422 8.42338 20.9623 8.2185 20.9623 8.01338C20.9623 5.80835 19.1672 4.01336 16.9621 4.01336Z"
+                                                    fill="#43A9BC"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="col-2 d-flex flex-column" style="width: 15%;">
+                                        <button class="btn btn-main-outline" (click)="openDischargeSummary(data)">Discharge Summary</button>
+                                    </div>
+                                    <div class="col-2 d-flex flex-column" style="width: 10%;">
+                                        <button class="btn btn-main-outline" (click)="openMedicalReport(data)">Medical Report</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 p-1" style="background: #ededed;">
+                                    <label for="" translate
+                                        class="form-label fw-bold text-nowrap m-0 clr-primary-600">Remarks:</label>
+                                    <p class="m-0">{{ data.remarks }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

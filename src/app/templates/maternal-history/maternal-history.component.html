@@ -1,0 +1,364 @@
+<div class="card card-style-1 rounded main-container" #divmths>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading"> Maternal History Form </h2>
+        <div class="actions generalConsent_popup position-relative d-flex align-items-center gap-2" *ngIf="IsView">
+              <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+            <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+        </div>
+    </div>
+
+    <div class="p-2 template_scroll" *ngIf="showContent" id="divscroll">
+        <!-- <app-wardheader-summary></app-wardheader-summary> -->
+        <div class="row g-2">
+            <div class="col-3">
+                <label for="" class="form-label">Consultant Obstetrician</label>
+                <!-- <textarea name="" class="form-control" id="ta_ConsultantObstetrician" cols="30" rows="2"></textarea> -->
+                <span name="" class="form-control " id="ta_ConsultantObstetrician" cols="30" rows="3" resize-none contenteditable="true">
+                </span>
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Family History And Consanguinity</label>
+                <!-- <textarea name="" class="form-control" id="ta_FamilyHistory" cols="30" rows="2"></textarea> -->
+                <span name="" class="form-control " id="ta_FamilyHistory" cols="30" rows="3" resize-none contenteditable="true">
+                </span>
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Maternal / Medical / and Drugs uses History </label>
+                <!-- <textarea name="" class="form-control" id="ta_MaternalHistory" cols="30" rows="2"></textarea> -->
+                <span name="" class="form-control " id="ta_MaternalHistory" cols="30" rows="3" resize-none contenteditable="true">
+                </span>
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">History of Blood Transfusion </label>
+                <!-- <textarea name="" class="form-control" id="ta_BloodTransfusion" cols="30" rows="2"></textarea> -->
+                <span name="" class="form-control " id="ta_BloodTransfusion" cols="30" rows="3" resize-none contenteditable="true">
+                </span>
+            </div>
+        </div>
+        <div class="row g-2 mt-2">
+            <div class="col-2">
+                <label for="" class="form-label">LMP</label>
+                <mat-form-field appearance="fill">
+                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                    <input id="text_LMP" matInput class="" #lmpdate id="textbox_lmpdate" [matDatepicker]="ldate"
+                        (click)="ldate.open()">
+                    <mat-datepicker-toggle matSuffix [for]="ldate">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #ldate></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col-2">
+                <label for="" class="form-label">EDD</label>
+                <mat-form-field appearance="fill">
+                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                    <input id="text_EDD" matInput class="" #edddate id="textbox_edddate" [matDatepicker]="edate"
+                        (click)="edate.open()">
+                    <mat-datepicker-toggle matSuffix [for]="edate">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #edate></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col-2">
+                <label for="" class="form-label">EDD by Scan </label>
+                <!-- <input type="date" class="form-control" id="text_EDDScan"> -->
+                <mat-form-field appearance="fill">
+                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                    <input id="text_EDDScan" matInput class="" #edddateScan id="textbox_edddateScan" [matDatepicker]="edatesc"
+                        (click)="edatesc.open()">
+                    <mat-datepicker-toggle matSuffix [for]="edatesc">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #edatesc></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col-2">
+                <label for="" class="form-label">Gravida </label>
+                <input type="text" class="form-control"  id="textbox_Gravidity">
+            </div>
+            <div class="col-2">
+                <label for="" class="form-label">Parity</label>
+                <input type="text" class="form-control" id="textbox_Parity">
+            </div>
+            <div class="col-2">
+                <label for="" class="form-label">Abortion </label>
+                <input type="text" class="form-control" id="textbox_Abortions">
+            </div>
+        </div>
+        <div class="mt-3">
+            <table class="m-0 table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Gestation</th>
+                        <th>Type of Delivery</th>
+                        <th>Sex</th>
+                        <th>Baby Weight</th>
+                        <th style="width: 15rem;">Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let delivery of deliveries; let i = index">
+                        <td>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [(ngModel)]="delivery.date" id="textbox_date" [matDatepicker]="pickerArray[i]"
+                                    (click)="pickerArray[i].open()">
+                                <mat-datepicker-toggle matSuffix [for]="pickerArray[i]"></mat-datepicker-toggle>
+                                <mat-datepicker #picker="matDatepicker"></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td><input type="text" class="form-control" id="textbox_gestation" [(ngModel)]="delivery.gestation"></td>
+                        <td><input type="text" class="form-control" id="textbox_typeofdelivery1" [(ngModel)]="delivery.deliveryType"></td>
+                        <td>
+                            <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex" id="toggle_Gender" >
+                                <button class="btn" [class.selected]="delivery.gender === 'Male'"
+                                    (click)="toggleLocalSelection($event, delivery)">Male</button>
+                                <button class="btn" [class.selected]="delivery.gender === 'Female'"
+                                    (click)="toggleLocalSelection($event, delivery)">Female</button>
+                            </div>
+                        </td>
+                        <td><input type="text" class="form-control" id="textbox_weight" [(ngModel)]="delivery.weight"></td>
+                        <td>
+                            <input type="text"  class="form-control" id="textbox_delivaryRemarks" [(ngModel)]="delivery.remarks">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <button class="btn btn-main-outline" (click)="addRow()">Add</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="border rounded-2 mt-3">
+            <div class="row g-2 mx-0 p-2 border-bottom">
+                <div class="col-6">
+                    <label for="" class="form-label">Complication of Pregnancy: </label>
+                    <input type="text" class="form-control"   id="text_ComplicationOfPegnancy">
+                </div>
+                <div class="col-6">
+                    <label for="" class="form-label">Antenatal USS: </label>
+                    <input type="text" class="form-control" id="text_AntenatalUSS">
+                </div>
+            </div>
+            <div class="row g-2 mx-0 p-2 border-bottom">
+                <div class="col-3 d-flex align-items-center gap-2">
+                    <label for="" class="form-label text-nowrap m-0">Vaginal Discharge: </label>
+                    <input type="text" class="form-control" id="text_ViginalDischarge">
+                </div>
+                <div class="col-3 d-flex align-items-center gap-2">
+                    <label for="" class="form-label text-nowrap m-0">Amount: </label>
+                    <input type="text" class="form-control" id="text_Amount">
+                </div>
+                <div class="col-3 d-flex align-items-center gap-2">
+                    <label for="" class="form-label text-nowrap m-0">Character: Bloody</label>
+                    <input type="text" class="form-control" id="text_Bloody">
+                </div>
+                <div class="col-3 d-flex align-items-center gap-2">
+                    <label for="" class="form-label text-nowrap m-0">Meconium: </label>
+                    <input type="text" class="form-control" id="text_Meconium">
+                </div>
+            </div>
+            <div class="row g-2 mx-0 p-2 border-bottom">
+                <div class="col-3 d-flex align-items-center gap-2">
+                    <label for="" class="form-label text-nowrap m-0">Polyhydramnious: </label>
+                    <input type="text" class="form-control" id="text_Polyhydramnious">
+                </div>
+                <div class="col-3 d-flex align-items-center gap-2">
+                    <label for="" class="form-label text-nowrap m-0">Oligohydramnious: </label>
+                    <input type="text" class="form-control" id="text_Oligohydramnius">
+                </div>
+                <div class="col-3 d-flex align-items-center gap-2">
+                    <label for="" class="form-label text-nowrap m-0">Average: </label>
+                    <input type="text" class="form-control" id="text_Average">
+                </div>
+            </div>
+            <div class="row g-2 mx-0 p-2 border-bottom">
+                <div class="col-12">
+                    <h6 class="clr-primary-600">Investigation</h6>
+                </div>
+                <div class="col d-flex align-items-center felx-column gap-1">
+                    <label for="" class="form-label text-nowrap m-0">RH: </label>
+                    <input type="text" class="form-control" id="text_RH">
+                </div>
+                <div class="col d-flex align-items-center felx-column gap-1">
+                    <label for="" class="form-label text-nowrap m-0">Hgb: </label>
+                    <input type="text" class="form-control" id="text_HgB">
+                </div>
+                <div class="col d-flex align-items-center felx-column gap-1">
+                    <label for="" class="form-label text-nowrap m-0">Platelet Count:</label>
+                    <input type="text" class="form-control" id="text_PlateletCount">
+                </div>
+                <div class="col d-flex align-items-center felx-column gap-1">
+                    <label for="" class="form-label text-nowrap m-0">Blood Sugar Profile: </label>
+                    <input type="text" class="form-control" id="text_BloodSugar">
+                </div>
+                <div class="col d-flex align-items-center felx-column gap-1">
+                    <label for="" class="form-label text-nowrap m-0">Hepatitis: </label>
+                    <input type="text" class="form-control" id="text_Hepatitis">
+                </div>
+                <div class="col d-flex align-items-center felx-column gap-1">
+                    <label for="" class="form-label text-nowrap m-0">Sickle Cell: </label>
+                    <input type="text" class="form-control" id="text_SickleCell">
+                </div>
+                <div class="col d-flex align-items-center felx-column gap-1">
+                    <label for="" class="form-label text-nowrap m-0">HVS: </label>
+                    <input type="text" class="form-control" id="text_HVS">
+                </div>
+            </div>
+            <div class="row g-2 mx-0 p-2 border-bottom">
+                <div class="col d-flex align-items-center gap-2">
+                    <label for="" class="form-label text-nowrap m-0">Drug used in Labour:  </label>
+                    <input type="text" class="form-control" id="text_DrugUseInLabour">
+                </div>
+            </div>
+            <div class="row g-2 mx-0 p-2 border-bottom">
+                <div class="col-12">
+                    <h6 class="clr-primary-600">Labour Onset:</h6>
+                </div>
+                <div class="col">
+                    <label for="" class="form-label text-nowrap m-0">Date:  </label>
+                    <mat-form-field appearance="fill">
+                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                        <input matInput class="" #labourdate id="textbox_labourdate" [matDatepicker]="ldate1"
+                            (click)="ldate1.open()">
+                        <mat-datepicker-toggle matSuffix [for]="ldate1">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #ldate1></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <label for="" class="form-label text-nowrap m-0">Time:</label>
+                    <!-- <input type="time" class="form-control" id="text_Time1"> -->
+                    <app-time-selector [hours]="getHours('textbox_generic_time1')" [minutes]="getMinutes('textbox_generic_time1')" (timeSelected)="onTimeChange($event, 'textbox_generic_time1')" [disabled]="isTimeSelectorDisable('textbox_generic_time1')"></app-time-selector>
+                </div>
+                <div class="col">
+                    <label for="" class="form-label text-nowrap m-0">Length of labour:</label>
+                    <input type="text" class="form-control" id="text_LengthOfLabour">
+                </div>
+                <div class="col">
+                    <label for="" class="form-label text-nowrap m-0">Type of Delivery:  </label>
+                    <input type="text" class="form-control" id="textbox_TypeOfDelivery">
+                </div>
+                <div class="col">
+                    <label for="" class="form-label text-nowrap m-0">Date of Birth: :</label>
+                    <!-- <input type="date" class="form-control" id="text_DOB"> -->
+                    <mat-form-field appearance="fill">
+                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                        <input id="text_EDDScan" matInput class="" #edddateDOB id="textbox_edddateDOB" [matDatepicker]="edateDOB"
+                            (click)="edateDOB.open()">
+                        <mat-datepicker-toggle matSuffix [for]="edateDOB">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #edateDOB></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <label for="" class="form-label text-nowrap m-0">Time:</label>
+                    <!-- <input type="time" class="form-control" id="text_Time2"> -->
+                    <app-time-selector [hours]="getHours('textbox_generic_time2')" [minutes]="getMinutes('textbox_generic_time2')" (timeSelected)="onTimeChange($event, 'textbox_generic_time2')" [disabled]="isTimeSelectorDisable('textbox_generic_time2')"></app-time-selector>
+                </div>
+            </div>
+            <div class="p-2 border-bottom">
+               
+                <label for="" class="form-label text-nowrap m-0">Remarks:</label>
+                <span class="textarea_box textarea_box_double p-2 rounded-2 bg-transparent border d-block w-100" id="textarea_RemarksRemarks" contenteditable="true"></span>
+            </div>
+            <div class="row g-2 mx-0 p-2">
+                <div class="col-3 d-flex align-items-center gap-2">
+                    <label for="" class="form-label text-nowrap m-0">Doctor Name: </label>
+                    <div class="d-flex align-items-center input-group w-100">
+                        <input id="textbox_name1" type="text" placeholder="search" class="form-control pe-2" aria-label="Search"
+                            [matAutocomplete]="doctor1"
+                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : onSearchDoctors($event)">
+                        <mat-autocomplete #doctor1="matAutocomplete">
+                            <mat-option *ngFor="let item of doctorsList"
+                                (onSelectionChange)="onDoctorSelect(item, 'text_IDNumber')"
+                                value="{{item.EmpNo}}-{{item.Fullname}}">
+                                {{item.EmpNo}}-{{item.Fullname}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                            <img src="assets/images/icons/icon-search.svg" alt="">
+                        </button>
+                    </div>
+                </div>
+                <div class="col-3 d-flex align-items-center gap-2">
+                    <label for="" class="form-label text-nowrap m-0">ID Number</label>
+                    <input type="text" class="form-control" id="text_IDNumber">
+                </div>
+                <div class="col-3 d-flex align-items-center gap-2">
+                    <label for="" class="form-label text-nowrap m-0">Date:</label>
+                    <mat-form-field appearance="fill">
+                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                        <input matInput class="" #doctordate id="textbox_doctordate" [matDatepicker]="dcdate"
+                            (click)="dcdate.open()">
+                        <mat-datepicker-toggle matSuffix [for]="dcdate">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #dcdate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+      [selectedTemplateFn]="selectedTemplate.bind(this)">
+</app-sharedtemplateview>
+
+<!-- <div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+       <div class="modal-content">
+          <div class="modal-header p-2">
+             <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+             <div class="d-flex align-items-center gap-2">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+          </div>
+          <div class="modal-body p-3">
+             <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                <div class="row mx-0 g-2 w-100">
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Template ID</p>
+                      <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                            tem.PatientTemplatedetailID }}</a></p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Name</p>
+                      <p>{{ tem.PatientName }}</p>
+                   </div>
+ 
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">DoctorName</p>
+                      <p>{{ tem.Consultant }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Created By</p>
+                      <p>{{ tem.CreatedBy }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Date</p>
+                      <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+
+ <div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div> -->
+ 

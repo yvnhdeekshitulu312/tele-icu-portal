@@ -1,0 +1,851 @@
+<div class="card card-style-1 rounded main-container" #divotmjs>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading">Operation Theatre Major Surgery Form #1: Instrument And Sponge Count</h2>
+        <div class="actions generalConsent_popup position-relative d-flex align-items-center gap-2" *ngIf="IsView">
+             <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+            <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+        </div>
+    </div>
+
+    <div class="template_scroll p-2 rounded-2" *ngIf="showContent" id="divscroll">
+            <div class="">
+                <div class="row mx-0 g-2">
+                    <div class="col-2">
+                        <label for="" class="form-label">Instrument Set:  </label>
+                        <input type="text" class="form-control" id="text_InstrumentSet">
+                    </div>
+                    <div class="col-2">
+                        <label for="" class="form-label">Name of Operation: </label>
+                        <input type="text" class="form-control" id="text_OperationName">
+                    </div>
+                    <div class="col-2">
+                        <label for="" class="form-label">Date: </label>
+                        <mat-form-field appearance="fill">
+                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                            <input matInput class="" #date1 id="textbox_date1" [matDatepicker]="Date1" (click)="Date1.open()">
+                            <mat-datepicker-toggle matSuffix [for]="Date1">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #Date1></mat-datepicker>
+                         </mat-form-field>
+                    </div>
+                    <div class="col-2">
+                        <label for="" class="form-label">Type of Procedure: </label>
+                        <input type="text" class="form-control" id="text_ProcedureType">
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="">
+                        <table class="table m-0">
+                            <thead>
+                                <tr style="text-align: center;">
+                                    <th>Sponges</th>
+                                    <th>Initial Count (Before Skin Incision)</th>
+                                    <th colspan="3">First Counting(Before closing the Peritoneum/Cavity)</th>
+                                    <th colspan="3">Second Counting(Before closing the Muscle / Fascia)</th>
+                                    <th colspan="3">Final Counting(Before skin closure)</th>
+                                    <th>Total</th>
+                                </tr>
+                                <tr style="text-align: center;">
+                                    <th></th>
+                                    <th></th>
+                                    <th>Field</th>
+                                    <th>Floor</th>
+                                    <th>Add</th>
+                                    <th>Field</th>
+                                    <th>Floor</th>
+                                    <th>Add</th>
+                                    <th>Field</th>
+                                    <th>Floor</th>
+                                    <th>Add</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Visceral Pack / 10x10</td>
+                                    <td><input type="text" value="" class="form-control"  id="text_VisceralPack1"/></td>
+                                    <td><input type="text" value="" class="form-control"  id="text_VisceralPack2"/></td>
+                                    <td><input type="text" value="" class="form-control"  id="text_VisceralPack3"/></td>
+                                    <td><input type="text" value="" class="form-control"  id="text_VisceralPack4"/></td>
+                                    <td><input type="text" value="" class="form-control"  id="text_VisceralPack5"/></td>
+                                    <td><input type="text" value="" class="form-control"  id="text_VisceralPack6"/></td>
+                                    <td><input type="text" value="" class="form-control"  id="text_VisceralPack7"/></td>
+                                    <td><input type="text" value="" class="form-control"  id="text_VisceralPack8"/></td>
+                                    <td><input type="text" value="" class="form-control"  id="text_VisceralPack9"/></td>
+                                    <td><input type="text" value="" class="form-control"  id="text_VisceralPack10"/></td>
+                                    <td><input type="text" value="" class="form-control"  id="text_VisceralPackTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>4x4</td>
+                                    <td><input type="text" value="" class="form-control" id="text_VisceralPack4BY4A"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_VisceralPack4BY4B"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_VisceralPack4BY4C"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_VisceralPack4BY4D"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_VisceralPack4BY4E"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_VisceralPack4BY4F"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_VisceralPack4BY4G"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_VisceralPack4BY4H"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_VisceralPack4BY4I"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_VisceralPack4BY4J"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_VisceralPack4BY4Total"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Cherries</td>
+                                    <td><input type="text" value="" class="form-control" id="text_Cherries1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Cherries2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Cherries3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Cherries4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Cherries5"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Cherries6"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Cherries7"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Cherries8"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Cherries9"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Cherries10"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_CherriesTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Peanuts</td>
+                                    <td><input type="text" value="" class="form-control" id="text_Peanuts1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Peanuts2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Peanuts3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Peanuts4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Peanuts5"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Peanuts6"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Peanuts7"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Peanuts8"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Peanuts9"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Peanuts10"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_PeanutsTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Patties</td>
+                                    <td><input type="text" value="" class="form-control" id="text_Patties1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Patties2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Patties3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Patties4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Patties5"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Patties6"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Patties7"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Patties8"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Patties9"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Patties10"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_PattiesTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Needles</td>
+                                    <td><input type="text" value="" class="form-control" id="text_Needles1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Needles2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Needles3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Needles4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Needles5"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Needles6"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Needles7"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Needles8"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Needles9"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Needles10"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_NeedlesTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Scalpel and Blade</td>
+                                    <td><input type="text" value="" class="form-control" id="text_Scalpel1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Scalpel2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Scalpel3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Scalpel4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Scalpel5"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Scalpel6"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Scalpel7"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Scalpel8"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Scalpel9"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Scalpel10"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_ScalpelTotal"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-2 d-grid">
+                        <table class="table m-0  d-block horizontalScroll">
+                            <thead>
+                                <tr style="text-align: center;">
+                                    <th>Instruments</th>
+                                    <th>Initial Count Prior to Surgery</th>
+                                    <th>First Count (Before Closure of Peritoneum/ Cavity)</th>
+                                    <th>Second Count (Before Closure of Fascia)</th>
+                                    <th>Final Counting (Before Closure of Skin)</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Artery</td>
+                                    <td><input type="text" value="" class="form-control" id="text_Artery1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Artery2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Artery3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Artery4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_ArteryTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Kocker</td>
+                                    <td><input type="text" value="" class="form-control" id="text_Kocker1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Kocker2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Kocker3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Kocker4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_KockerTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Mosquito</td>
+                                    <td><input type="text" value="" class="form-control" id="text_Mosquito1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Mosquito2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Mosquito3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Mosquito4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_MosquitoTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Kelly Clamps (Curve)</td>
+                                    <td><input type="text" value="" class="form-control" id="text_KellyClamps_Curve1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_KellyClamps_Curve2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_KellyClamps_Curve3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_KellyClamps_Curve4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_KellyClamps_CurveTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Kelly Clamps (Straight)</td>
+                                    <td><input type="text" value="" class="form-control" id="text_KellyClamps_Straight1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_KellyClamps_Straight2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_KellyClamps_Straight3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_KellyClamps_Straight4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_KellyClamps_StraightTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Babcock</td>
+                                    <td><input type="text" value="" class="form-control" id="text_Babcock1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Babcock2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Babcock3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Babcock4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_BabcockTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Right Angle</td>
+                                    <td><input type="text" value="" class="form-control" id="text_rightAngle1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_rightAngle2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_rightAngle3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_rightAngle4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_rightAngleTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Allis</td>
+                                    <td><input type="text" value="" class="form-control" id="text_Allis1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Allis2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Allis3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Allis4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_AllisTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Tissue Forceps</td>
+                                    <td><input type="text" value="" class="form-control" id="text_TissueForceps1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_TissueForceps2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_TissueForceps3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_TissueForceps4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_TissueForcepsTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Scissors</td>
+                                    <td><input type="text" value="" class="form-control" id="text_Scissors1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Scissors2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Scissors3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Scissors4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_ScissorsTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Needle Holders</td>
+                                    <td><input type="text" value="" class="form-control" id="text_NeedleHolders1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_NeedleHolders2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_NeedleHolders3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_NeedleHolders4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_NeedleHoldersTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Green Armitage</td>
+                                    <td><input type="text" value="" class="form-control"  id="text_GreenArmitage1"/></td>
+                                    <td><input type="text" value="" class="form-control"  id="text_GreenArmitage2"/></td>
+                                    <td><input type="text" value="" class="form-control"  id="text_GreenArmitage3"/></td>
+                                    <td><input type="text" value="" class="form-control"  id="text_GreenArmitage4"/></td>
+                                    <td><input type="text" value="" class="form-control"  id="text_GreenArmitageTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Retractors</td>
+                                    <td><input type="text" value="" class="form-control" id="text_Retractors1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Retractors2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Retractors3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Retractors4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_RetractorsTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Blade Holders</td>
+                                    <td><input type="text" value="" class="form-control" id="text_BladeHolders1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_BladeHolders2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_BladeHolders3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_BladeHolders4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_BladeHoldersTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Tampoon / Sponge Forceps</td>
+                                    <td><input type="text" value="" class="form-control" id="text_Tampoon1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Tampoon2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Tampoon3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Tampoon4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_TampoonTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Heany (Curve)</td>
+                                    <td><input type="text" value="" class="form-control" id="text_HeanyCurve1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_HeanyCurve2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_HeanyCurve3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_HeanyCurve4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_HeanyCurveTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Heany (Straight)</td>
+                                    <td><input type="text" value="" class="form-control" id="text_HeanyStraight1"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_HeanyStraight2"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_HeanyStraight3"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_HeanyStraight4"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_HeanyStraightTotal"/></td>
+                                </tr>
+                                <tr>
+                                    <td>OTHERS</td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others1A"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others1B"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others1C"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others1D"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others1E"/></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others2A"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others2B"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others2C"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others2D"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others2E"/></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others3A"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others3B"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others3C"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others3D"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others3E"/></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others4A"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others4B"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others4C"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others4D"/></td>
+                                    <td><input type="text" value="" class="form-control" id="text_Others4E"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Date, Time and Signature of Scrub Nurse</td>
+                                    <td>
+                                        <div class="col-12" style="width: 19rem;">
+                                            <img id="imgFinal" style="display:none" src="" alt="" />
+                                            <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                                              
+                                                <div class="position-relative">
+                                                    <app-signature #Signature1 class="" (base64Signature)="base64Signature('Signature1', $event)" [imageToDisplay]="getSignature('Signature1')">
+                                                        <canvas style="border: 1px solid #000;"></canvas>
+                                                    </app-signature>
+                                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                                    (click)="clearSignature('Signature1'); clearbase64Signature(Signature1)"
+                                                        xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                                        <path
+                                                            d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                            fill="#EB6247"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-12" style="width: 19rem;">
+                                            <img id="imgFinal" style="display:none" src="" alt="" />
+                                            <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                                               
+                                                <div class="position-relative">
+                                                    <app-signature #Signature2 class="" (base64Signature)="base64Signature('Signature2', $event)" [imageToDisplay]="getSignature('Signature2')">
+                                                        <canvas style="border: 1px solid #000;"></canvas>
+                                                    </app-signature>
+                                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                                    (click)="clearSignature('Signature2'); clearbase64Signature(Signature2)"
+                                                        xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                                        <path
+                                                            d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                            fill="#EB6247"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-12" style="width: 19rem;">
+                                            <img id="imgFinal" style="display:none" src="" alt="" />
+                                            <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                                                
+                                                <div class="position-relative">
+                                                    <app-signature #Signature3 class="" (base64Signature)="base64Signature('Signature3', $event)" [imageToDisplay]="getSignature('Signature3')">
+                                                        <canvas style="border: 1px solid #000;"></canvas>
+                                                    </app-signature>
+                                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                                    (click)="clearSignature('Signature3'); clearbase64Signature(Signature3)"
+                                                        xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                                        <path
+                                                            d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                            fill="#EB6247"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-12" style="width: 19rem;">
+                                            <img id="imgFinal" style="display:none" src="" alt="" />
+                                            <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                                               
+                                                <div class="position-relative">
+                                                    <app-signature #Signature4 class="" (base64Signature)="base64Signature('Signature4', $event)" [imageToDisplay]="getSignature('Signature4')">
+                                                        <canvas style="border: 1px solid #000;"></canvas>
+                                                    </app-signature>
+                                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                                    (click)="clearSignature('Signature4'); clearbase64Signature(Signature4)"
+                                                        xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                                        <path
+                                                            d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                            fill="#EB6247"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-12" style="width: 19rem;">
+                                            <img id="imgFinal" style="display:none" src="" alt="" />
+                                            <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                                                
+                                                <div class="position-relative">
+                                                    <app-signature #Signature5 class="" (base64Signature)="base64Signature('Signature5', $event)" [imageToDisplay]="getSignature('Signature5')">
+                                                        <canvas style="border: 1px solid #000;"></canvas>
+                                                    </app-signature>
+                                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                                    (click)="clearSignature('Signature5'); clearbase64Signature(Signature5)"
+                                                        xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                                        <path
+                                                            d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                            fill="#EB6247"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Date, Time and Signature Circulating nurse</td>
+                                    <td>
+                                        <div class="col-12" style="width: 19rem;">
+                                            <img id="imgFinal" style="display:none" src="" alt="" />
+                                            <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                                               
+                                                <div class="position-relative">
+                                                    <app-signature #Signature6 class="" (base64Signature)="base64Signature('Signature6', $event)" [imageToDisplay]="getSignature('Signature6')">
+                                                        <canvas style="border: 1px solid #000;"></canvas>
+                                                    </app-signature>
+                                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                                    (click)="clearSignature('Signature6'); clearbase64Signature(Signature6)"
+                                                        xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                                        <path
+                                                            d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                            fill="#EB6247"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-12" style="width: 19rem;">
+                                            <img id="imgFinal" style="display:none" src="" alt="" />
+                                            <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                                                
+                                                <div class="position-relative">
+                                                    <app-signature #Signature7 class="" (base64Signature)="base64Signature('Signature7', $event)" [imageToDisplay]="getSignature('Signature7')">
+                                                        <canvas style="border: 1px solid #000;"></canvas>
+                                                    </app-signature>
+                                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                                    (click)="clearSignature('Signature7'); clearbase64Signature(Signature7)"
+                                                        xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                                        <path
+                                                            d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                            fill="#EB6247"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-12" style="width: 19rem;">
+                                            <img id="imgFinal" style="display:none" src="" alt="" />
+                                            <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                                                
+                                                <div class="position-relative">
+                                                    <app-signature #Signature8 class="" (base64Signature)="base64Signature('Signature8', $event)" [imageToDisplay]="getSignature('Signature8')">
+                                                        <canvas style="border: 1px solid #000;"></canvas>
+                                                    </app-signature>
+                                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                                    (click)="clearSignature('Signature8'); clearbase64Signature(Signature8)"
+                                                        xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                                        <path
+                                                            d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                            fill="#EB6247"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-12" style="width: 19rem;">
+                                            <img id="imgFinal" style="display:none" src="" alt="" />
+                                            <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                                                
+                                                <div class="position-relative">
+                                                    <app-signature #Signature9 class="" (base64Signature)="base64Signature('Signature9', $event)" [imageToDisplay]="getSignature('Signature9')">
+                                                        <canvas style="border: 1px solid #000;"></canvas>
+                                                    </app-signature>
+                                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                                    (click)="clearSignature('Signature9'); clearbase64Signature(Signature9)"
+                                                        xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                                        <path
+                                                            d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                            fill="#EB6247"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-12" style="width: 19rem;">
+                                            <img id="imgFinal" style="display:none" src="" alt="" />
+                                            <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                                                
+                                                <div class="position-relative">
+                                                    <app-signature #Signature10 class="" (base64Signature)="base64Signature('Signature10', $event)" [imageToDisplay]="getSignature('Signature10')">
+                                                        <canvas style="border: 1px solid #000;"></canvas>
+                                                    </app-signature>
+                                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                                    (click)="clearSignature('Signature10'); clearbase64Signature(Signature10)"
+                                                        xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                                        <path
+                                                            d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                            fill="#EB6247"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="border p-2 rounded-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <label for="" class="form-label m-0">If Counts are unresolved, X-ray taken:</label>
+                            <div class="clinical_toggle toggle__switch switch-sm d-inline-flex" id="btnToggle_Xray">
+                                <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                <button class="btn" (click)="toggleSelection($event)">No</button>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <label for="" class="form-label">If no, explain: </label>
+                            <!-- <textarea name="" class="form-control" id="ta_Explain" cols="30" rows="3"></textarea> -->
+                            <span name="" class="form-control  textarea_box_double" id="ta_Explain" cols="30" rows="3" resize-none contenteditable="true">
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 mt-2">
+                            <label for="" class="form-label m-0">Surgeon Notified of Counts? </label>
+                            <div class="clinical_toggle toggle__switch switch-sm d-inline-flex" id="btnToggle_Counts">
+                                <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                <button class="btn" (click)="toggleSelection($event)">No</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row gx-2 mt-2">
+                    <div class="col-6">    
+                        <div class="p-2 border rounded-start rounded-0 h-100">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="form-label text-nowrap">Surgeon</label>
+                                    <input type="text" class="form-control" id="text_Surgeon">
+                                </div>
+                                <div class="col-12">
+                                    <img id="imgFinal" style="display:none" src="" alt="" />
+                                    <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                                        
+                                        <div class="position-relative">
+                                            <app-signature #Signature11 class="" (base64Signature)="base64Signature('Signature11', $event)" [imageToDisplay]="getSignature('Signature11')">
+                                                <canvas style="border: 1px solid #000;"></canvas>
+                                            </app-signature>
+                                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                            (click)="clearSignature('Signature11'); clearbase64Signature(Signature11)"
+                                                xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                                <path
+                                                    d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                    fill="#EB6247"></path>
+                                                <path
+                                                    d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                    fill="#EB6247"></path>
+                                                <path
+                                                    d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                    fill="#EB6247"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 border rounded-start rounded-0 h-100">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="form-label text-nowrap">Senior Nurse</label>
+                                    <input type="text" class="form-control" id="text_SeniorNurse">
+                                </div>
+                                <div class="col-12">
+                                    <img id="imgFinal" style="display:none" src="" alt="" />
+                                    <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                                        
+                                        <div class="position-relative">
+                                            <app-signature #Signature12 class="" (base64Signature)="base64Signature('Signature12', $event)" [imageToDisplay]="getSignature('Signature12')">
+                                                <canvas style="border: 1px solid #000;"></canvas>
+                                            </app-signature>
+                                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                            (click)="clearSignature('Signature12'); clearbase64Signature(Signature12)"
+                                                xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                                <path
+                                                    d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                    fill="#EB6247"></path>
+                                                <path
+                                                    d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                    fill="#EB6247"></path>
+                                                <path
+                                                    d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                    fill="#EB6247"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row gx-2 mt-2">
+                    <div class="col-6">    
+                        <div class="p-2 border rounded-start rounded-0 h-100">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="form-label text-nowrap">Scrub Nurse</label>
+                                    <input type="text" class="form-control" id="text_ScrubNurse">
+                                </div>
+                                <div class="col-12">
+                                    <img id="imgFinal" style="display:none" src="" alt="" />
+                                    <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                                        
+                                        <div class="position-relative">
+                                            <app-signature #Signature13 class="" (base64Signature)="base64Signature('Signature13', $event)" [imageToDisplay]="getSignature('Signature13')">
+                                                <canvas style="border: 1px solid #000;"></canvas>
+                                            </app-signature>
+                                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                            (click)="clearSignature('Signature13'); clearbase64Signature(Signature13)"
+                                                xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                                <path
+                                                    d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                    fill="#EB6247"></path>
+                                                <path
+                                                    d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                    fill="#EB6247"></path>
+                                                <path
+                                                    d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                    fill="#EB6247"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 border rounded-start rounded-0 h-100">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="form-label text-nowrap">Circulating Nurse</label>
+                                    <input type="text" class="form-control" id="text_CirculatingNurse">
+                                </div>
+                                <div class="col-12">
+                                    <img id="imgFinal" style="display:none" src="" alt="" />
+                                    <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                                        
+                                        <div class="position-relative">
+                                            <app-signature #Signature14 class="" (base64Signature)="base64Signature('Signature14', $event)" [imageToDisplay]="getSignature('Signature14')">
+                                                <canvas style="border: 1px solid #000;"></canvas>
+                                            </app-signature>
+                                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                            (click)="clearSignature('Signature14'); clearbase64Signature(Signature14)"
+                                                xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                                <path
+                                                    d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                    fill="#EB6247"></path>
+                                                <path
+                                                    d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                    fill="#EB6247"></path>
+                                                <path
+                                                    d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                    fill="#EB6247"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <label for="" class="form-label">Remarks</label>
+                    <!-- <textarea name="" class="form-control" id="ta_Remarks" cols="30" rows="3"></textarea> -->
+                    <span name="" class="form-control  textarea_box_double" id="ta_Remarks" cols="30" rows="3" resize-none contenteditable="true">
+                    </span>
+                </div>
+            </div>
+    </div>
+
+</div>
+
+
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+      [selectedTemplateFn]="selectedTemplate.bind(this)">
+</app-sharedtemplateview>
+
+<!-- <div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+        <div class="modal-content">
+            <div class="modal-header p-2">
+                <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-3">
+                <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                    *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                    <div class="row mx-0 g-2 w-100">
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Template ID</p>
+                            <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                                    tem.PatientTemplatedetailID }}</a></p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Name</p>
+                            <p>{{ tem.PatientName }}</p>
+                        </div>
+
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">DoctorName</p>
+                            <p>{{ tem.Consultant }}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Created By</p>
+                            <p>{{ tem.CreatedBy }}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Date</p>
+                            <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

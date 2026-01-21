@@ -1,0 +1,496 @@
+<div class="card card-style-1 rounded main-container" #divrms>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading"> Restraints Monitoring Sheet </h2>
+        <div class="actions generalConsent_popup position-relative d-flex align-items-center gap-2" *ngIf="IsView">
+            <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+            <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+        </div>
+    </div>
+
+    <div class="p-2 template_scroll" id="divscroll">
+        <!-- <app-wardheader-summary></app-wardheader-summary> -->
+
+        <div class="bodyScroll" *ngIf="showContent">
+            <div class="">
+        
+                <div class="">
+                    <div class="card card-style-1 p-2 rounded-2">
+                        <div class="d-flex flex-wrap gap-2">
+                            <div class="col-1">
+                                <label for="" class="form-label">Unit Room</label>
+                                <input type="text" id="textbox_areaunit" class="form-control">
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="form-label">Date of Order</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                                    <input matInput class="" #orderdate id="textbox_orderdate" [matDatepicker]="odate"
+                                        (click)="odate.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="odate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #odate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col">
+                                <label for="" class="form-label">Time of Order</label>
+                                <app-time-selector class="select_time_fullWidth" [hours]="getHours('textbox_generic_time1')" [minutes]="getMinutes('textbox_generic_time1')" (timeSelected)="onTimeChange($event, 'textbox_generic_time1')" [disabled]="isTimeSelectorDisable('textbox_generic_time1')"></app-time-selector>
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="form-label">Date due for Renewal of Order</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                                    <input matInput class="" #renewaltime id="textbox_renewaltime" [matDatepicker]="rdate"
+                                        (click)="rdate.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="rdate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #rdate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="form-label">Time due for Renewal of Order</label>
+                                <app-time-selector class="select_time_fullWidth" [hours]="getHours('textbox_generic_time2')" [minutes]="getMinutes('textbox_generic_time2')" (timeSelected)="onTimeChange($event, 'textbox_generic_time2')" [disabled]="isTimeSelectorDisable('textbox_generic_time2')"></app-time-selector>
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="form-label">Date of Consent</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                                    <input matInput class="" #consenttime id="textbox_consenttime" [matDatepicker]="cdate"
+                                        (click)="cdate.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="cdate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #cdate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col">
+                                <label for="" class="form-label">Time of Consent</label>
+                                <app-time-selector class="select_time_fullWidth" [hours]="getHours('textbox_generic_time3')" [minutes]="getMinutes('textbox_generic_time3')" (timeSelected)="onTimeChange($event, 'textbox_generic_time3')" [disabled]="isTimeSelectorDisable('textbox_generic_time3')"></app-time-selector>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2 d-grid">
+                        <table class="table table-bordered m-0 d-block horizontalScroll">
+                            <thead>
+                                <tr style="text-align: center;">
+                                    <th rowspan="3">Date</th>
+                                    <th rowspan="3">Time</th>
+                                    <th rowspan="3">Type Of Restraint</th>
+                                    <th rowspan="3">Location</th>
+                                    <th style="text-align: center;" colspan="6">Physical Status</th>
+                                    <th style="text-align: center;" colspan="3">Mental Status</th>
+                                    <th rowspan="3">Nurse Name, ID Number</th>
+                                </tr>
+                                <tr>
+                                    <th style="text-align: center;" colspan="3"> Circulation Distal to Restraint</th>
+                                    <th rowspan="2">Motor Activity</th>
+                                    <th rowspan="2">Breathing</th>
+                                    <th rowspan="2">General Appearance</th>
+                                    <th rowspan="2">Orientation</th>
+                                    <th rowspan="2">Speech</th>
+                                    <th rowspan="2">Behaviour</th>
+                                </tr>
+                                <tr>
+                                    <th>Skin-Temp</th>
+                                    <th>Pulse</th>
+                                    <th>Cap.refill</th>
+                                </tr>
+                            </thead>
+                           <tbody>
+                            <tr *ngFor="let row of rows;let i=index">
+                                <td>
+                                    <mat-form-field appearance="fill"  style="width: 10rem;">
+                                        <mat-label>dd-MMM-yyyy</mat-label>
+                                        <input matInput id="textbox_date_{{i}}" [matDatepicker]="pickerArray[i]"
+                                            (click)="pickerArray[i].open()">
+                                        <mat-datepicker-toggle matSuffix [for]="pickerArray[i]"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker="matDatepicker"></mat-datepicker>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <app-time-selector 
+                                      [id]="'textbox_generic_time_' + (i + 4)" 
+                                      [hours]="getHours('textbox_generic_time_' + (i + 4))" 
+                                      [minutes]="getMinutes('textbox_generic_time_' + (i + 4))" 
+                                      (timeSelected)="onTimeChange($event, 'textbox_generic_time_' + (i + 4))">
+                                      [disabled]="isTimeSelectorDisable('textbox_generic_time_')"
+                                    </app-time-selector>
+                                  </td>
+                                <td>
+                                    <select style="width: 15rem;" name="" class="form-select pe-4" id="select_restraint_{{ i }}">
+                                        <option value="1">Commercial soft padded</option>
+                                        <option value="2">Non Commercial</option>
+                                        <option value="3">MummyDevice</option>
+                                        <option value="4">Chemical</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select style="width: 16rem;" name="" class="form-select pe-4" id="select_location__{{ i }}">
+                                        <option value="1">Right Upper Limb</option>
+                                        <option value="2">Right Lower Limb</option>
+                                        <option value="3">Left Upper Limb</option>
+                                        <option value="4">Left Lower Limb</option>
+                                        <option value="5">Generalized or Whole Body</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select style="width: 9rem;" name="" class="form-select pe-4" id="select_skin_temp__{{ i }}">
+                                        <option value="1">Warm</option>
+                                        <option value="2">Cold</option>
+                                        <option value="3">With Lesion</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select style="width: 11rem;" name="" class="form-select pe-4" id="select_pulse__{{ i }}">
+                                        <option value="1">Equal and Strong</option>
+                                        <option value="2">Weak</option>
+                                        <option value="3">Absent</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select style="width: 5rem;" name="" class="form-select pe-4" id="select_refill__{{ i }}">
+                                        <option value="1">> 4s</option>
+                                        <option value="2">< 4s</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select style="width: 8rem;" name="" class="form-select pe-4" id="select_motor_activity__{{ i }}">
+                                        <option value="1">Normal</option>
+                                        <option value="2">Abnormal </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select style="width: 13rem;" name="" class="form-select pe-4" id="select_breathing__{{ i }}">
+                                        <option value="1">Not Obstructed</option>
+                                        <option value="2">Obstructed</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select style="width: 8rem;" name="" class="form-select pe-4" id="select_appearence__{{ i }}">
+                                        <option value="1">Pink</option>
+                                        <option value="2">Pale</option>
+                                        <option value="3">Cyanotic</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select style="width: 10rem;" name="" class="form-select pe-4" id="select_orientation__{{ i }}">
+                                        <option value="1">Oriented</option>
+                                        <option value="2">Not Oriented</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select style="width: 20rem;" name="" class="form-select pe-4" id="select_speech__{{ i }}">
+                                        <option value="1">Clear and appropriate</option>
+                                        <option value="2">Not appropriate and Incomprehensible</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select style="width: 15rem;" name="" class="form-select pe-4" id="select_behavior__{{ i }}">
+                                        <option value="1">Appropraite and Calm</option>
+                                        <option value="2">Agitated</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" style="width: 15rem;" class="form-control" id="txt_NurseNameID__{{ i }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="14">
+                                    <button class="btn btn-main-outline" (click)="addRow()">Add row</button>
+                                </td>
+                            </tr>
+                           </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-2 card card-style-1 rounded">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">Legend</h5>
+                        </div>
+                        <div class="p-2">
+                            <!-- <div class="row g-2">
+                                <div class="col-2">
+                                    <h6 class="clr-primary-600 m-0">Type of Restraints:</h6>
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>CS</b></p> - 
+                                            <p>Commercial soft padded</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>NC</b></p> - 
+                                            <p>Non Commercial</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>MC</b></p> - 
+                                            <p>MummyDevice</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>CH</b></p> - 
+                                            <p>Chemical</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-2 mt-1">
+                                <div class="col-2">
+                                    <h6 class="clr-primary-600 m-0">Location:</h6>
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>RU</b></p> - 
+                                            <p>Right Upper Limb</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>RL</b></p> - 
+                                            <p>Right Lower Limb</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>UL</b></p> - 
+                                            <p>Left Upper Limb</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>LL</b></p> - 
+                                            <p>Left Lower Limb</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>GEN</b></p> - 
+                                            <p>Generalized or whole body</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-2 mt-1">
+                                <div class="col-2">
+                                    <h6 class="clr-primary-600 m-0">Skin-Temp:</h6>
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>W</b></p> - 
+                                            <p>Warm</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>C</b></p> - 
+                                            <p>Cold</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>L</b></p> - 
+                                            <p>With Lesion</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-2 mt-1">
+                                <div class="col-2">
+                                    <h6 class="clr-primary-600 m-0">Pulse:</h6>
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>ES</b></p> - 
+                                            <p>Equal and Strong</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>W</b></p> - 
+                                            <p>Weak</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>A</b></p> - 
+                                            <p>Absent</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="row g-2 mt-1">
+                                <div class="col-2">
+                                    <h6 class="clr-primary-600 m-0">Motor Activity :</h6>
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <!-- <p><b>N</b></p> -  -->
+                                            <p><b>Normal</b>-Able to make a fist, spread fingers, extend and dorsiflex</p>
+                                        </div>, 
+                                        <div class="d-flex align-items-center gap-2">
+                                            <!-- <p><b>AB</b></p> -  -->
+                                            <p><b>Abnormal</b>-Not able to make a fist, spread fingers, extend and dorsiflex</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-2 mt-1">
+                                <div class="col-2">
+                                    <h6 class="clr-primary-600 m-0">Capillary Refill :</h6>
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>> 4s</b> - 4 Secs and above</p>
+                                        </div>,
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>< 4s</b> - Less than 4 secs</p> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="row g-2 mt-1">
+                                <div class="col-2">
+                                    <h6 class="clr-primary-600 m-0">Breathing :</h6>
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>N</b></p> - 
+                                            <p>Not Obstructed</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>OB</b></p> - 
+                                            <p>Obstructed</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="row g-2 mt-1">
+                                <div class="col-2">
+                                    <h6 class="clr-primary-600 m-0">Orientation :</h6>
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <!-- <p><b>OB</b></p> -  -->
+                                            <p><b>Oriented</b> - Oriented to person, place and time</p>
+                                        </div>, 
+                                        <div class="d-flex align-items-center gap-2">
+                                            <!-- <p><b>NOR</b></p> -  -->
+                                            <p><b>Not Oriented</b></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="row g-2 mt-1">
+                                <div class="col-2">
+                                    <h6 class="clr-primary-600 m-0">General appearance :</h6>
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>P</b></p> - 
+                                            <p>Pink</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>PP</b></p> - 
+                                            <p>Pale</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>C</b></p> - 
+                                            <p>Cyanotic</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-2 mt-1">
+                                <div class="col-2">
+                                    <h6 class="clr-primary-600 m-0">Speech :</h6>
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>CA</b></p> - 
+                                            <p>Clear and appropriate</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>NA</b></p> - 
+                                            <p>Not appropriate and Incomprehensible</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-2 mt-1">
+                                <div class="col-2">
+                                    <h6 class="clr-primary-600 m-0">Behaviour :</h6>
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>AP</b></p> - 
+                                            <p>Appropraite and Calm</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p><b>AG</b></p> - 
+                                            <p>Agitated</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+      [selectedTemplateFn]="selectedTemplate.bind(this)">
+</app-sharedtemplateview>
+
+
+<!-- <div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+       <div class="modal-content">
+          <div class="modal-header p-2">
+             <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+             <div class="d-flex align-items-center gap-2">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+          </div>
+          <div class="modal-body p-2">
+             <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                <div class="row mx-0 g-2 w-100">
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Template ID</p>
+                      <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                            tem.PatientTemplatedetailID }}</a></p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Name</p>
+                      <p>{{ tem.PatientName }}</p>
+                   </div>
+ 
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">DoctorName</p>
+                      <p>{{ tem.Consultant }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Created By</p>
+                      <p>{{ tem.CreatedBy }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Date</p>
+                      <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+
+ <div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div> -->
+ 

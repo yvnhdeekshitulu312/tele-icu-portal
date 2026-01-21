@@ -1,0 +1,1536 @@
+<div class="card card-style-1 rounded " #divnicu>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading"> Baby Received  (NICU)</h2>
+        <div class="actions generalConsent_popup position-relative d-flex align-items-center gap-2" *ngIf="IsView">
+            <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+        </div>
+    </div>
+
+    <div class="p-3 template_scroll" *ngIf="showContent" id="divscroll">
+        <!-- <app-wardheader-summary></app-wardheader-summary> -->
+        <div class="">
+            <div class="border rounded-2">
+                <div class="row gx-0">
+                    <div class="col-lg-8 col-12 p-3 border-end">
+                        <div class="row g-2">
+                            <div class="col-3">
+                                <label for="" class="form-label">Name</label>
+                                <input id="textbox_Name" type="text" class="form-control">
+                            </div>
+                            <div class="col-3">
+                                <label for="" class="form-label">Date</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                                    <input matInput class="" #recdate id="textbox_recdate"
+                                        [matDatepicker]="rcdate"
+                                        (click)="rcdate.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="rcdate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #rcdate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-3">
+                                <label for="" class="form-label">Admission date NICU</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                                    <input matInput class="" #admdate id="textbox_admdate"
+                                        [matDatepicker]="amdate"
+                                        (click)="amdate.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="amdate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #amdate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-3">
+                                <label for="" class="form-label"># of day in NICU</label>
+                                <input id="textbox_ofdayinNICU" type="text" class="form-control">
+                            </div>
+                            <div class="col-3">
+                                <label for="" class="form-label">DOB</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                                    <input matInput class="" #dobdate id="textbox_dobdate"
+                                        [matDatepicker]="dbdate"
+                                        (click)="dbdate.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="dbdate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #dbdate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-3">
+                                <label for="" class="form-label">Birth Weight</label>
+                                <input id="textbox_BirthWeight" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="mt-3 rounded-2">
+                            <h6 class="clr-primary-600">Today</h6>
+                            <div class="row g-2">
+                                <div class="col-3">
+                                    <label for="" class="form-label">Weight</label>
+                                    <input id="textbox_Weight" type="text" class="form-control">
+                                </div>
+                                <div class="col-3">
+                                    <label for="" class="form-label">Chest Circumference</label>
+                                    <input id="textbox_ChestCircumference" type="text" class="form-control">
+                                </div>
+                                <div class="col-3">
+                                    <label for="" class="form-label">Head Circumference</label>
+                                    <input id="textbox_HeadCircumference" type="text" class="form-control">
+                                </div>
+                                <div class="col-3">
+                                    <label for="" class="form-label">ABDLGIRTH</label>
+                                    <input id="textbox_ABDLGIRTH" type="text" class="form-control">
+                                </div>
+                                <div class="col-3">
+                                    <label for="" class="form-label">Length</label>
+                                    <input id="textbox_Length" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <label for="" class="form-label">Remarks</label>
+                            <!-- <textarea name="" class="form-control resize-none" id="textarea_Remarks" cols="30" rows="3"></textarea> -->
+                            <span name="" class="form-control " id="textarea_Remarks" cols="30" rows="3" resize-none contenteditable="true">
+                            </span>
+                        </div>
+                        <div class="mt-3 rounded-2">
+                            <div class="row g-2">
+                                <div class="col-3">
+                                    <label for="" class="form-label">Total Fluid Requirement</label>
+                                    <input id="textbox_TotalFluidRequirement" type="text" class="form-control">
+                                </div>
+                                <div class="col-3">
+                                    <label for="" class="form-label">Prev. TFR</label>
+                                    <input id="textbox_PrevTFR" type="text" class="form-control">
+                                </div>
+                                <div class="col-3">
+                                    <label for="" class="form-label">Weight Loss / Gain</label>
+                                    <input id="textbox_WeightLossGain" type="text" class="form-control">
+                                </div>
+                                <div class="col-3">
+                                    <label for="" class="form-label">Prev. Weight</label>
+                                    <input id="textbox_PrevWeight" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-12 p-3">
+                        <div class="card card-style-1 h-100">
+                            <div class="card-header justify-content-start">
+                                <h5 class="card-heading">Parent Vistation</h5>
+                            </div>
+                            <div class="p-3">
+                                <div class="row g-2">
+                                    <div class="col-3">
+                                        <div (click)="toggleCheckboxSelection($event)" id="checkbox_Mother" class="custom_check d-flex align-items-center gap-2 mt-2">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">Mother</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div (click)="toggleCheckboxSelection($event)" id="checkbox_Father" class="custom_check d-flex align-items-center gap-2 mt-2">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">Father</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div (click)="toggleCheckboxSelection($event)" id="checkbox_EBM" class="custom_check d-flex align-items-center gap-2 mt-2">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">EBM</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div (click)="toggleCheckboxSelection($event)" id="checkbox_MomFed" class="custom_check d-flex align-items-center gap-2 mt-2">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">Mom Fed</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex align-items-center gap-2">
+                                        <label for="" class="form-label m-0 text-nowrap">Date Last Visit Mom</label>
+                                        <input id="textbox_DateLastVisitMom" type="date" class="form-control">
+                                    </div>
+                                    <div class="col-12">
+                                        <div (click)="toggleCheckboxSelection($event)" id="checkbox_DischargeDiscussed" class="custom_check d-flex align-items-center gap-2 mt-2">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">Discharge Discussed</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="row gx-2">
+                    <div class="col-4">
+                        <div class="card card-style-1 h-100">
+                            <div class="card-header justify-content-start">
+                                <h5 class="card-heading">Resp. Code Mode</h5>
+                            </div>
+                            <div class="p-3">
+                                <div class="row g-2">
+                                    <div class="col-4">
+                                        <div (click)="toggleCheckboxSelection($event)" id="checkbox_SIPPVIMVCPAP" class="custom_check d-flex align-items-center gap-2 mt-2">
+                                            <svg style="min-width:1rem" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">SIPPV/IMV/CPAP</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div (click)="toggleCheckboxSelection($event)" id="checkbox_NCPAP" class="custom_check d-flex align-items-center gap-2 mt-2">
+                                            <svg style="min-width:1rem" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">NCPAP</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div (click)="toggleCheckboxSelection($event)" id="checkbox_HFOV" class="custom_check d-flex align-items-center gap-2 mt-2">
+                                            <svg style="min-width:1rem" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">HFOV</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div (click)="toggleCheckboxSelection($event)" id="checkbox_Oxygen" class="custom_check d-flex align-items-center gap-2 mt-2">
+                                            <svg style="min-width:1rem" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">Oxygen</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div (click)="toggleCheckboxSelection($event)" id="checkbox_OxygenNasalCannula" class="custom_check d-flex align-items-center gap-2 mt-2">
+                                            <svg style="min-width:1rem" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                            <p class="m-0 fs-7">Oxygen / Nasal Cannula</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="card card-style-1 h-100">
+                            <div class="card-header justify-content-start">
+                                <h5 class="card-heading">Explination Codes</h5>
+                            </div>
+                            <div class="p-3">
+                                <p class="fs-7 mb-2"><b>COLOR CODE</b> M=Ashen C=Cyanotic CC=Circumoral Cyanotic Ac=Acrocyanosis D=Dusky J=Jaundice
+                                    M=Mottled P=Pink PL=Plethoric PP=Pale</p>
+                                <p class="fs-7 mb-2"><b>ACTIVITY CODE</b> A+++ = Active AS=Active c Stimulation I=Irritable J=Jittery H=Hyperactive Q=Quiet
+                                        L=Lethargic</p>
+                                <p class="fs-7 mb-2">N=Non Reactive S=Seizure</p>
+                                <p class="fs-7 mb-2"><b>EDEMA</b> M=Mild MM=Moderate S=Severe</p>
+                                <p class="fs-7 mb-2"><b>SUCTION CODE</b> S=Scant M=Moderate L=Large T=Thin TH=Thick V=Viscous Y=Yellow G=Green B=Bloddy</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="row g-2">
+                    <div class="col-12 d-grid">
+                        <table class="table table-bordered m-0 d-block horizontalScroll">
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>Time</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="9" style="transform: rotate(90deg);">Temperature</td>
+                                    <td>40</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>35.5</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>39.0</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>38.5</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>38</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>37.5</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>37.0</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>36.5</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>36.0</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="12" style="transform: rotate(90deg);">Pulse Rate Beats per minute</td>
+                                    <td>190</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>180</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>170</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>160</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>155</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>150</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>150</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>145</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>140</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>135</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>130</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>120</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="15" style="transform: rotate(90deg);">Respiration Breaths per minute</td>
+                                    <td>110</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>100</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>95</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>90</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>85</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>80</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>75</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>70</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>65</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>60</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>55</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>50</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>45</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>40</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                                <tr>
+                                    <td>30</td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                    <td><input type="text" class="form-control p-1" style="min-width:4rem;" ></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-12 d-grid">
+                        <table class="table table-bordered m-0 d-block horizontalScroll">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" rowspan="7">Pain Scale</th>
+                                </tr>
+                                <tr>
+                                    <th>Shift</th>
+                                    <th>Crying</th>
+                                    <th>Requires O2</th>
+                                    <th>Increase V/S</th>
+                                    <th>Expression</th>
+                                    <th>Sleepless</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>08</td>
+                                    <td><input id="textbox_painscale08Shift" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale08Crying" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale08RequiresO2" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale08IncreaseVS" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale08Expression" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale08Sleepless" type="text" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td>10</td>
+                                    <td><input id="textbox_painscale10Shift" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale10Crying" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale10RequiresO2" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale10IncreaseVS" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale10Expression" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale10Sleepless" type="text" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td>12</td>
+                                    <td><input id="textbox_painscale12Shift" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale12Crying" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale12RequiresO2" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale12IncreaseVS" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale12Expression" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale12Sleepless" type="text" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td>14</td>
+                                    <td><input id="textbox_painscale14Shift" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale14Crying" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale14RequiresO2" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale14IncreaseVS" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale14Expression" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale14Sleepless" type="text" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td>16</td>
+                                    <td><input id="textbox_painscale16Shift" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale16Crying" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale16RequiresO2" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale16IncreaseVS" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale16Expression" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale16Sleepless" type="text" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td>18</td>
+                                    <td><input id="textbox_painscale18Shift" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale18Crying" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale18RequiresO2" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale18IncreaseVS" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale18Expression" type="text" class="form-control"></td>
+                                    <td><input id="textbox_painscale18Sleepless" type="text" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td>Day</td>
+                                    <td><input id="textbox_day1" type="text" class="form-control"></td>
+                                    <td><input id="textbox_day2" type="text" class="form-control"></td>
+                                    <td><input id="textbox_day3" type="text" class="form-control"></td>
+                                    <td><input id="textbox_day4" type="text" class="form-control"></td>
+                                    <td><input id="textbox_day5" type="text" class="form-control"></td>
+                                    <td><input id="textbox_day6" type="text" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td>Nurse</td>
+                                    <td><input id="textbox_Nurse1" type="text" class="form-control"></td>
+                                    <td><input id="textbox_Nurse2" type="text" class="form-control"></td>
+                                    <td><input id="textbox_Nurse3" type="text" class="form-control"></td>
+                                    <td><input id="textbox_Nurse4" type="text" class="form-control"></td>
+                                    <td><input id="textbox_Nurse5" type="text" class="form-control"></td>
+                                    <td><input id="textbox_Nurse6" type="text" class="form-control"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-12">
+                        <h6 class="clr-primary-600">Legend</h6>
+                        <p class="fs-7 fw-bold">Scoring</p>
+                        <div class="row g-2 mt-2">
+                            <div class="col-lg-3 col-4">
+                                <div class="border p-2 rounded-2 h-100">
+                                    <h6 class="clr-primary-600">Crying</h6>
+                                    <div class="mt-2">
+                                        <p>0 -	No cry or cry that is not high pitched</p>
+                                        <p>1 -	Cry high pitched but baby is easily consolable</p>
+                                        <p>2 -	Cry high pitched but baby is inconsolable</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-4">
+                                <div class="border p-2 rounded-2 h-100">
+                                    <h6 class="clr-primary-600">Requires O2</h6>
+                                    <div class="mt-2">
+                                        <p>0 -	No oxygen required</p>
+                                        <p>1 -	30% oxygen required</p>
+                                        <p>2 -	Cry high pitched but baby is inconsolable</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-4">
+                                <div class="border p-2 rounded-2 h-100">
+                                    <h6 class="clr-primary-600">Increased Vital signs(BP and HR)</h6>
+                                    <div class="mt-2">
+                                        <p>0 -	Both HR and BP unchanged or less than baseline</p>
+                                        <p>1 -	HR or BP increased in >20% of baseline</p>
+                                        <p>2 -	HR or BP increased in >20% over baseline</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-4">
+                                <div class="border p-2 rounded-2 h-100">
+                                    <h6 class="clr-primary-600">Expression</h6>
+                                    <div class="mt-2">
+                                        <p>0 -	No grimace present</p>
+                                        <p>1 -	Grimace alone is present</p>
+                                        <p>2 -	Grimace and non-cry vocalization is present</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-4">
+                                <div class="border p-2 rounded-2 h-100">
+                                    <h6 class="clr-primary-600">Sleepless</h6>
+                                    <div class="mt-2">
+                                        <p>0 -	Child has been continously asleep</p>
+                                        <p>1 -	Child has awakened at frequent intervals</p>
+                                        <p>2 -	Child has been awake constantly</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-4">
+                                <div class="border p-2 rounded-2 h-100">
+                                    <h6 class="clr-primary-600">Total</h6>
+                                    <div class="mt-2">
+                                        <p>0 -	No evidence of pain</p>
+                                        <p>1-3-	Mild pain</p>
+                                        <p>4-6-	Moderrate pain</p>
+                                        <p>>6-	Severe uncontrolled pain</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-style-1 mt-3">
+                <div class="card-header justify-content-start">
+                    <h5 class="card-heading">Respiratory</h5>
+                </div>
+                <div class="p-3  d-grid">
+                    <table class="table m-0 d-block horizontalScroll">
+                        <thead>
+                            <tr>
+                                <th class="text-wrap" colspan="15">
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                        TRACHI/E.T. size
+                                        <input type="text" id="textbox_TRACHIETsize" class="form-control w-auto">
+                                        Level:
+                                        <input type="text" id="textbox_Level" class="form-control w-auto">
+                                    </div>
+                                </th>
+                                <th class="text-wrap" colspan="2">Breath Sounds</th>
+                                <th class="text-wrap">Incubator Temp</th>
+                                <th class="text-wrap">O2% status</th>
+                                <th class="text-wrap">Dressings</th>
+                            </tr>
+                            <tr>
+                                <th>Time</th>
+                                <th>Blood Sugar Monitoring</th>
+                                <th>Abdominal Girth</th>
+                                <th>Color</th>
+                                <th>Suctioning</th>
+                                <th>Position</th>
+                                <th>Physiotheraphy</th>
+                                <th>Mode</th>
+                                <th>FiO2</th>
+                                <th>Flow Rate</th>
+                                <th>TI Ratio</th>
+                                <th>Vent Rate</th>
+                                <th>Peep CPAP</th>
+                                <th>T.V. / Amp.</th>
+                                <th>PIP / PMAX</th>
+                                <th>RT</th>
+                                <th>LT</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input id="textbox_Time1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_BloodSugarMonitoring1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_AbdominalGirth1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Color1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Suctioning1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Position1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Physiotheraphy1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Mode1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_FiO21" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_FlowRate1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_TIRatio1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_VentRate1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_PeepCPAP1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_TVAmp1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_PIPPMAX1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_BreathSoundsRT1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_BreathSoundsLT1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_IncubatorTemp1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_O2status1" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Dressings1" type="text" class="form-control" style="min-width:4rem;"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" id="textbox_Time2" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_BloodSugarMonitoring2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_AbdominalGirth2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Color2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Suctioning2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Position2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Physiotheraphy2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Mode2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_FiO22" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_FlowRate2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_TIRatio2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_VentRate2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_PeepCPAP2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_TVAmp2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_PIPPMAX2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_BreathSoundsRT2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_BreathSoundsLT2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_IncubatorTemp2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_O2status2" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Dressings2" type="text" class="form-control" style="min-width:4rem;"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" id="textbox_Time3" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_BloodSugarMonitoring3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_AbdominalGirth3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Color3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Suctioning3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Position3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Physiotheraphy3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Mode3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_FiO23" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_FlowRate3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_TIRatio3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_VentRate3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_PeepCPAP3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_TVAmp3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_PIPPMAX3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_BreathSoundsRT3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_BreathSoundsLT3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_IncubatorTemp3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_O2status3" type="text" class="form-control" style="min-width:4rem;"></td>
+                                <td><input id="textbox_Dressings3" type="text" class="form-control" style="min-width:4rem;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+       <div class="modal-content">
+          <div class="modal-header p-2">
+             <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+             <div class="d-flex align-items-center gap-2">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+          </div>
+          <div class="modal-body p-3">
+             <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                <div class="row mx-0 g-2 w-100">
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Template ID</p>
+                      <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                            tem.PatientTemplatedetailID }}</a></p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Name</p>
+                      <p>{{ tem.PatientName }}</p>
+                   </div>
+ 
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">DoctorName</p>
+                      <p>{{ tem.Consultant }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Created By</p>
+                      <p>{{ tem.CreatedBy }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Date</p>
+                      <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+
+ <div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+ 

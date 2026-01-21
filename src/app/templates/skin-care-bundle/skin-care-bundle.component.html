@@ -1,0 +1,256 @@
+<div class="card card-style-1 rounded main-container" #divscb>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading"> SSKIN Care Bundle</h2>
+        <div class="actions generalConsent_popup position-relative d-flex align-items-center gap-2" *ngIf="IsView">
+            <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+            <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+        </div>
+    </div>
+
+    <div class="p-2 template_scroll" *ngIf="showContent" id="divscroll">
+        <!-- <app-wardheader-summary></app-wardheader-summary> -->
+        <div class="">
+            <p class="mb-2">When to use this bundle:</p>
+            <p class="mb-2 ps-3">Accomplish if the patient is admitted in the critical care area.</p>
+            <p class="mb-2 ps-3">Accomplish if the patient in the General Wards has a risk level of <b>HIGH</b> or <b>VERY HIGH</b>.</p>
+
+            <div class="examination_table border">
+                <div class="row mx-0 border-bottom">
+                    <div class="col-lg-2 p-0">
+                        <div class="th align-items-baseline"><span class="fs-5">S</span>urface</div>
+                    </div>
+                    <div class="col-lg-10 p-0">
+                        <div class="td">
+                            <div class="d-flex align-items-center flex-wrap gap-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0">Mattress appropriate</label>
+                                    <div id="toggle_Mattressappropriate" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn "  (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0">Cushion appropriate</label>
+                                    <div id="toggle_Cushionappropriate" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0">Functionality/integrity check of equipment performed</label>
+                                    <div id="toggle_Functionalityintegritycheckofequipmentperformed" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mx-0 border-bottom">
+                    <div class="col-lg-2 p-0">
+                        <div class="th align-items-baseline"><span class="fs-5">S</span>kin Inspection</div>
+                    </div>
+                    <div class="col-lg-10 p-0">
+                        <div class="td">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0">All pressure areas checked</label>
+                                    <div id="toggle_Allpressureareaschecked" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0">Redness present</label>
+                                    <div id="toggle_Rednesspresent" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mx-0 border-bottom">
+                    <div class="col-lg-2 p-0">
+                        <div class="th align-items-baseline"><span class="fs-5">K</span>eep Moving</div>
+                    </div>
+                    <div class="col-lg-10 p-0">
+                        <div class="td">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0">Log rolling q2 hours or more frequently</label>
+                                    <div id="toggle_Logrollingq2hoursormorefrequently" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0">Transfer to chair</label>
+                                    <div id="toggle_Transfertochair" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0">Ambulate</label>
+                                    <div id="toggle_Ambulate" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mx-0 border-bottom">
+                    <div class="col-lg-2 p-0">
+                        <div class="th align-items-baseline"><span class="fs-5">I</span>ncontinence</div>
+                    </div>
+                    <div class="col-lg-10 p-0">
+                        <div class="td">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0">Urine</label>
+                                    <div id="toggle_Urine" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0">Bowels</label>
+                                    <div id="toggle_Bowels" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mx-0">
+                    <div class="col-lg-2 p-0">
+                        <div class="th align-items-baseline"><span class="fs-5">N</span>utrition</div>
+                    </div>
+                    <div class="col-lg-10 p-0">
+                        <div class="td">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0">Good dietary intake</label>
+                                    <div id="toggle_Gooddietaryintake" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0">Adequate fluid</label>
+                                    <div id="toggle_Adequatefluid" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0">Taking additional supplements?</label>
+                                    <div id="toggle_Takingadditionalsupplements" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                        <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-style-1 mt-2 rounded">
+                <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                    <h5 class="card-heading">Accomplished By</h5>
+                </div>
+                <div class="p-2">
+                    <div class="row g-2">
+                        <div class="col-4">
+                            <label for="" class="form-label">Name and ID</label>
+                            <input type="text" class="form-control" name="" id="textbox_PrimaryDocFullNameEmpNo">
+                        </div>
+                        <div class="col-2">
+                            <label for="" class="form-label">Date</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                <input matInput class="" #dischargedate id="textbox_dischargedate"
+                                    [matDatepicker]="dischargeDate"
+                                    (click)="dischargeDate.open()">
+                                <mat-datepicker-toggle matSuffix [for]="dischargeDate">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #dischargeDate></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+      [selectedTemplateFn]="selectedTemplate.bind(this)">
+</app-sharedtemplateview>
+
+
+<!-- <div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+       <div class="modal-content">
+          <div class="modal-header p-2">
+             <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+             <div class="d-flex align-items-center gap-2">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+          </div>
+          <div class="modal-body p-3">
+             <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                <div class="row mx-0 g-2 w-100">
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Template ID</p>
+                      <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                            tem.PatientTemplatedetailID }}</a></p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Name</p>
+                      <p>{{ tem.PatientName }}</p>
+                   </div>
+ 
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">DoctorName</p>
+                      <p>{{ tem.Consultant }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Created By</p>
+                      <p>{{ tem.CreatedBy }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Date</p>
+                      <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+
+ <div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div> -->
+ 

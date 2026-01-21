@@ -1,0 +1,1050 @@
+<!--Container-->
+<div class="container__wrapper p-0">
+    <div class="page-header sticky-top shadow-sm">
+        <h2 class="page-heading">Individual Processing</h2>
+        <div class="actions ms-auto gap-2 d-flex align-items-center">
+            <button class="btn btn-main-fill" (click)="openPatientSummary()">EHR</button>
+            <button class="btn btn-main-outline" (click)="showViewBulkProcessingPrint()">Sticker Print</button>
+            <button class="btn btn-danger-outline" (click)="clearViewScreen()">Clear</button>
+            <button class="btn btn-main-outline" (click)="FetchIndividualProcessing()">Search</button>
+        </div>
+    </div>
+
+    <div class="bg-white mb-0 rounded-2">
+        <div class="row g-0">
+            <div class="col-12">
+                <form [formGroup]="datesForm">
+                    <div class="d-flex align-items-center bg-primary-20 p-2 justify-content-between">
+                        <div class="row align-items-center gx-3 mx-0 rounded-2 w-100">
+                            <div class="col d-flex align-items-center gap-2">
+                                <label for="" class="form-label text-nowrap">Date :</label>
+                                <div class="d-flex align-items-center gap-2 justify-content-end">
+                                    <button class="date_range_calendar p-0 position-relative" style="width: 227px;">
+                                        <mat-date-range-input class="btn btn-main-outline" [formGroup]="datesForm"
+                                            [rangePicker]="picker">
+                                            <input matStartDate formControlName="fromdate">
+                                            <input matEndDate formControlName="todate"
+                                                (dateChange)="FetchIndividualProcessing()">
+                                        </mat-date-range-input>
+                                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-date-range-picker #picker></mat-date-range-picker>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col d-flex align-items-center gap-2">
+                                <label for="" class="form-label text-nowrap">SSN :</label>
+                                <input type="text" formControlName="SSN" id="ssn" placeholder="SSN" class="form-control"
+                                    (keydown.enter)="onEnterPress($event)" (change)="onEnterChange()"
+                                    class="form-control" (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
+                            </div>
+                            <div class="col d-flex align-items-center gap-2">
+                                <label for="" class="form-label text-nowrap">Ward :</label>
+                                <div class="d-flex align-items-center gap-2 w-100">
+                                    <input type="text" class="form-control" placeholder="Ward" aria-label="Ward"
+                                        id="wardSearch" [matAutocomplete]="autoMed"
+                                        (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchWard($event)">
+                                    <mat-autocomplete #autoMed="matAutocomplete">
+                                        <mat-option *ngFor="let item of listOfWards"
+                                            (onSelectionChange)="onItemSelected(item)" [value]="item.Name.trim()">
+                                            {{item.Name}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                            </div>
+
+                            <div class="col d-flex align-items-center gap-2">
+                                <label for="" class="form-label text-nowrap">Bed :</label>
+                                <div class="d-flex align-items-center gap-2 w-100">
+                                    <input type="text" class="form-control" placeholder="Bed" aria-label="Bed"
+                                        id="BedSearch" [matAutocomplete]="autoMed1"
+                                        (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchBed($event)">
+                                    <mat-autocomplete #autoMed1="matAutocomplete">
+                                        <mat-option *ngFor="let item of listOfBeds"
+                                            (onSelectionChange)="onItemBedSelected(item)" [value]="item.BedName.trim()">
+                                            {{item.BedName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </div>
+                            </div>
+
+                            <div class="col d-flex align-items-center gap-2">
+
+                                <div class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                    <button class="btn" [ngClass]="{'selected': selectedStatus === 'New Request'}"
+                                        (click)="filterStatus('New Request')">New Request</button>
+                                    <button class="btn" [ngClass]="{'selected': selectedStatus === 'Partially Issued'}"
+                                        (click)="filterStatus('Partially Issued')">Partially Issued</button>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-2 ms-auto mx-2">
+                                    <div class="form-check d-flex align-items-center form-switch gap-2">
+                                        <input class="form-check-input" type="checkbox" (click)="toggleFilter()"
+                                            role="switch" id="flexSwitchCheckChecked"
+                                            [checked]="datesForm.get('StatFilter').value">
+                                        <label class="form-check-label text-nowrap" for="flexSwitchCheckChecked">STAT</label>
+                                    </div>
+                                    <div class="form-check d-flex align-items-center form-switch gap-2">
+                                        <input class="form-check-input" type="checkbox" (click)="filterDischargeMed()"
+                                            role="switch" id="flexSwitchCheckChecked1"
+                                            [checked]="showDischargeMedication">
+                                        <label class="form-check-label text-nowrap" for="flexSwitchCheckChecked">Discharge
+                                            Medication</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <div class="p-2">
+
+            <!-- No Bulk Process -->
+            <div class="nobulkprocess d-flex flex-column align-items-center justify-content-center"
+                *ngIf="showNoRecFound">
+                <img src="assets/images/nomedicine.png" alt="" class="mb-2">
+                <p class="m-0 fs-6">No Orders to View</p>
+            </div>
+
+            <div class="orderTable lab_panic_design d-none"
+                *ngIf="FetchIndividualProcessingDataList != undefined && FetchIndividualProcessingDataList?.length > 0">
+                <table class="table m-0">
+                    <thead>
+                        <tr>
+                            <th>Order No.</th>
+                            <!-- <th>UHID</th> -->
+                            <th>SSN</th>
+                            <th>Patient Name</th>
+                            <th>Bed</th>
+                            <th>Ward</th>
+                            <th>Doctor Name</th>
+                            <th>Start Date</th>
+                            <th>Insurance Name</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr [class]="item.Class" *ngFor="let item of FetchIndividualProcessingDataList">
+                            <td [class]="item.OrderType === 'Normal' ? '' : 'circle_legend'">
+                                <span class="stat"></span>
+                                <a href="#"
+                                    (click)="$event.preventDefault();navigateToDetails(item)">{{item.ORDERSLNO}}</a>
+                            </td>
+                            <!-- <td>{{item.UHID}}</td> -->
+                            <td>{{item.SSN}}</td>
+                            <td>{{item.PatientName}}</td>
+                            <td>{{item.BedName}}</td>
+                            <td>{{item.Ward}}</td>
+                            <td>{{item.Doctorname}}</td>
+                            <td>{{item.OrderDate}}</td>
+                            <td>{{item.CompanyName}}</td>
+                            <td>
+                                <div class="col-1" style="width: 5rem;">
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                        <svg *ngIf="item?.IsPregnancy==1" width="17" height="25" viewBox="0 0 17 25"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M16.9116 14.5282C16.6976 14.0886 16.4757 13.6374 16.1738 13.2589C15.5849 12.5287 14.9466 11.8443 14.3195 11.1484C14.178 10.9878 14.0404 10.8235 13.9066 10.6552C13.7766 10.506 13.6544 10.3493 13.532 10.1887C13.1229 9.65723 12.7329 9.10285 12.2284 8.67858C11.4255 8.00186 11.4523 7.13018 11.2954 6.26623C11.2954 6.25855 11.2917 6.25087 11.2917 6.24336C11.2075 5.78082 11.135 5.31435 11.0546 4.85164C10.8749 3.84617 10.8597 2.74889 10.4429 1.78935C9.87317 0.474088 8.57723 0.229537 7.26197 0.546794C6.75351 0.66917 6.30242 0.902314 5.93924 1.28089C5.92013 1.3 5.90101 1.31912 5.88189 1.34199C5.82079 1.41077 5.75952 1.48348 5.69074 1.56762C5.69074 1.56387 5.68698 1.55994 5.68306 1.55994C5.66018 1.59442 5.64107 1.62873 5.62195 1.66696C5.6182 1.69375 5.60659 1.7243 5.58372 1.76254C5.55693 1.80845 5.53013 1.85436 5.50726 1.9001C5.50726 1.90386 5.5035 1.90386 5.5035 1.90386C5.3161 2.26706 5.22052 2.64564 5.24356 3.05081C5.24732 3.13495 5.255 3.22285 5.27036 3.31075C5.29323 3.45224 5.22837 3.64715 5.13655 3.76953C5.11368 3.79632 5.09456 3.82312 5.07152 3.84974C4.98362 3.953 4.87661 4.04858 4.77335 4.14023C4.71975 4.18615 4.66634 4.23206 4.61274 4.2778C4.39871 4.46896 4.40622 4.59901 4.65865 4.7212C4.66241 4.72495 4.67009 4.72888 4.67777 4.73263C4.71225 4.74799 4.74655 4.76711 4.78478 4.77855C4.95307 4.83214 4.94539 4.94684 4.86893 5.06153C4.78478 5.18766 4.78103 5.29092 4.78871 5.45153C4.80407 5.64269 4.89573 5.75738 4.94932 5.91031C4.9838 5.99821 4.97219 6.1129 4.94932 6.20848C4.8691 6.55257 4.97219 6.72087 5.3202 6.7782C5.4349 6.79731 5.54959 6.80107 5.66804 6.80499H5.82097H5.82865C5.89743 6.79356 6.27974 6.7514 6.44804 7.00384C6.53219 7.08405 6.60472 7.18356 6.63545 7.28289C6.70423 7.49692 6.73103 7.71487 6.74246 7.94428C6.77694 8.09345 6.78069 8.24245 6.74246 8.38392C6.7271 8.44895 6.70048 8.51005 6.666 8.57132C6.58578 8.70138 6.50539 8.83127 6.42125 8.96132C6.38677 8.97668 6.36015 8.99187 6.3371 8.99956C5.81331 9.82151 5.19391 10.5556 4.42928 11.2055C3.58442 11.9205 3.13709 12.5781 3.64551 13.7021C3.73733 13.9046 3.74484 14.1112 3.69142 14.31C3.64175 14.4935 3.53849 14.6732 3.40468 14.8452C2.99181 15.3651 2.49481 15.74 2.04748 16.2139C1.22552 17.0778 0.862296 18.2248 0.927312 19.4025V19.4063C0.904441 20.2588 1.15295 21.0885 1.63462 21.7652C1.9176 22.2622 2.2808 22.7324 2.72424 23.153H2.728C2.91148 23.3288 3.06065 23.5353 3.15998 23.7684C3.25181 23.9825 3.33971 24.2004 3.43904 24.4184H8.28681C9.44914 24.4184 10.6113 24.4184 11.7773 24.4221C11.7965 24.4221 11.8156 24.4221 11.8309 24.4184C11.8883 24.4069 11.9265 24.3801 11.9647 24.319C11.9839 24.2846 11.9992 24.254 12.0183 24.2197C12.3013 23.7112 12.5116 23.1721 12.5881 22.5872C12.6799 21.8762 12.5843 21.1803 12.3358 20.5112C12.1178 19.911 11.8616 19.326 11.6248 18.7297C11.4872 18.378 11.3648 18.0187 11.3534 17.6401C11.3725 17.6324 11.3916 17.6247 11.4108 17.6172C13.1044 16.9023 14.798 16.1873 16.4918 15.4686C16.9158 15.289 17.1337 14.9792 16.9117 14.5281L16.9116 14.5282ZM13.6431 14.6429C12.9894 15.1054 12.3395 15.5796 11.6628 16.0039C11.8845 15.3234 12.1215 14.6504 12.3356 13.9699C12.4311 13.6755 12.5114 13.381 12.5764 13.0791C12.9664 13.427 13.341 13.7635 13.7156 14.1037C13.9336 14.3025 13.83 14.509 13.6431 14.6429L13.6431 14.6429Z"
+                                                fill="#368796" />
+                                        </svg>
+                                    </div>
+                                    <p *ngIf="item?.IsPregnancy==1">{{item?.PregnancyContent}}</p>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                <div data-bs-toggle="modal" data-bs-target="#quick_info" (click)="showPatientInfo(item)"
+                                    class="info_img cursor-pointer custom_tooltip custom_tooltip_left">
+                                    <svg width="20" height="29" viewBox="0 0 28 29" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <rect y="0.422119" width="28" height="28" rx="14" fill="#69BAC9"></rect>
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M14.9692 9.57595C16.1161 9.57595 17.0461 8.64597 17.0461 7.49904C17.0461 6.3521 16.1161 5.42212 14.9692 5.42212C13.8223 5.42212 12.8923 6.3521 12.8923 7.49904C12.8923 8.64597 13.8223 9.57595 14.9692 9.57595ZM10.5385 11.6529C10.5385 11.2706 10.8484 10.9606 11.2308 10.9606H15.6615C16.0862 10.9606 16.4107 11.3392 16.3458 11.7589L14.6923 21.2067C14.5616 22.2031 15.0205 22.4566 15.6615 22.4566C16.242 22.4566 16.6942 22.0035 16.9856 21.5535C17.0767 21.4249 17.2109 21.36 17.3716 21.4249C17.4683 21.4898 17.5001 21.6505 17.4012 21.7791C16.6644 23.0042 15.193 23.4221 14 23.4221C12.0705 23.4221 11.1152 22.4245 11.3692 20.6529L12.5922 12.3452H11.2308C10.8485 12.3452 10.5385 12.0352 10.5385 11.6529Z"
+                                            fill="#ECF6F8"></path>
+                                    </svg>
+                                    <div class="tooltip">
+                                        <p>Patient Info</p>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div [class]="item.itemSelectClass" (click)="viewselectItemForPatient(item)">
+                                    <svg class="check_svg" width="20" height="21" viewBox="0 0 20 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94" />
+                                        <path
+                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                            fill="white" stroke="white" stroke-width="0.25" />
+                                    </svg>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="individual_processing_height" *ngIf="groupedData != undefined && groupedData?.length > 0">
+                <div *ngFor="let data of groupedData">
+                    <!-- <div class="card-wrapper-heading group-date my-4">
+                        <h6 class="heading d-flex align-items-center text-nowrap mb-0 clr-primary-600 fs-7 rounded-2">
+                           <span class="border_grp"></span>
+                           <span class="d-block mx-3">{{data.date | date: 'dd-MMM-yyyy'}}</span>
+                           <span class="border_grp"></span>
+                        </h6>
+                     </div> -->
+                    <div class="card card-style-1 rounded group-date p-0 border-0 mt-1">
+                        <div class="card-header rounded-top justify-content-start p-0 min-height-unset p-0">
+                            <span class="d-block grp_date">{{data.date | date: 'dd-MMM-yyyy'}}</span>
+                        </div>
+
+                        <div class="p-1 d-flex flex-column gap-1 px-0">
+                            <div [class]="item.Class" *ngFor="let item of data.items">
+                                <div class="row mx-0">
+                                    <div class="position-relative" style="width: 22rem;">
+
+                                        <div class="d-flex align-items-center h-100"
+                                            (click)="$event.preventDefault();navigateToDetails(item)">
+                                            <div class="patient-photo me-3">
+                                                <img src="assets/images/icons/male.svg" alt="" class="position-relative"
+                                                    *ngIf="item.GenderId=='1'">
+                                                <img src="assets/images/icons/female.svg" alt=""
+                                                    class="position-relative" *ngIf="item.GenderId=='2'">
+                                            </div>
+                                            <div class="py-1">
+                                                <p class="value fs-7 fw-bold w-100">{{item.PatientName}}</p>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <p>{{item.Gender}} | {{item.Age}} {{item.AgeUOM}}</p>
+                                                    <p>SSN : <span class="fw-bold">{{item.SSN}}</span></p>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p><b>DOB</b> :</p>
+                                                    <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                            fill="#368796" />
+                                                    </svg>
+                                                    <p class="m-0 fw-bold text-nowrap">
+                                                        {{item.DOB?.split('
+                                                        ')[0]}}</p>
+                                                </div>
+                                                <p>{{item.Nationality}} | Mobile : {{item.MobileNo}}</p>
+
+                                            </div>
+                                            <div *ngIf="item.IsAdminReconciliation=='True'"
+                                                class="custom_tooltip custom_tooltip_left">
+                                                <svg width="15" height="15" viewBox="0 0 7 7" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M3.21688 1.25366C3.41345 0.827485 4.01916 0.827485 4.21574 1.25366L4.68739 2.2762C4.76751 2.44989 4.93211 2.56949 5.12206 2.59201L6.2403 2.7246C6.70637 2.77985 6.89354 3.35592 6.54897 3.67457L5.72223 4.43912C5.58179 4.56899 5.51892 4.7625 5.5562 4.95011L5.77565 6.05459C5.86712 6.51492 5.37709 6.87094 4.96756 6.6417L3.98495 6.09168C3.81804 5.99825 3.61458 5.99825 3.44767 6.09168L2.46506 6.6417C2.05552 6.87094 1.5655 6.51492 1.65696 6.05459L1.87642 4.95011C1.9137 4.7625 1.85083 4.56899 1.71039 4.43912L0.883649 3.67457C0.539074 3.35592 0.726247 2.77985 1.19231 2.7246L2.31055 2.59201C2.5005 2.56949 2.66511 2.44989 2.74523 2.2762L3.21688 1.25366Z"
+                                                        fill="#EF5056" />
+                                                </svg>
+
+                                                <div class="tooltip">
+                                                    <p>Admission Reconciliation</p>
+                                                </div>
+
+                                            </div>
+                                            <div *ngIf="item.isDisPrescription==true"
+                                                class="custom_tooltip custom_tooltip_left legend_row">
+                                                <span class="legend discharge"></span>
+                                                <div class="tooltip">
+                                                    <p>Discharge Medication
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="item.OrdertypeId==47"
+                                                class="custom_tooltip custom_tooltip_left legend_row">
+                                                <span class="legend stat"></span>
+                                                <div class="tooltip">
+                                                    <p>STAT</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col pe-0 doc_details">
+                                        <div class="bg-white h-100 rounded">
+                                            <div class="row mx-0 gx-2 p-2 pt-1 indivialprocessing_tabgrid">
+                                                <div class="col-1" style="width: 11%;">
+                                                    <label for="" class="form-label m-0 clr-grey fw-bold">Order No</label>
+                                                    <p class="fw-bold"
+                                                        (click)="$event.preventDefault();navigateToDetails(item)">
+                                                        <span>{{item.ORDERSLNO}}</span>
+                                                    </p>
+                                                </div>
+                                                <div class="" style="width: 8rem;">
+                                                    <label for="" class="form-label m-0 clr-grey fw-bold">Ward</label>
+                                                    <div class="custom_tooltip custom_tooltip_left">
+                                                        <p class="fw-bold fs-8">{{item.Ward}}</p>
+                                                        <div class="tooltip">
+                                                            <p class=" fs-8">{{item.Ward}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-1" style="width: 8%;">
+                                                    <label for="" class="form-label m-0 clr-grey fw-bold">Bed</label>
+                                                    <div class="custom_tooltip custom_tooltip_right">
+                                                        <p class="fw-bold fs-8">{{item.BedName}}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="" style="width: 17rem;">
+                                                    <label for="" class="form-label m-0 clr-grey fw-bold">Doctor Name</label>
+                                                    <p class="fw-bold fs-8">{{item.Doctorname}}</p>
+                                                </div>
+                                                <div class="col-1" style="width: 12%;">
+                                                    <label for="" class="form-label m-0 clr-grey fw-bold">Start Date</label>
+                                                    <p class="fw-bold fs-8">{{item.OrderDate}}</p>
+                                                </div>
+                                                <div class="col-1" style="width: 12%;">
+                                                    <label for="" class="form-label m-0 clr-grey fw-bold">Prescription
+                                                        Date</label>
+                                                    <!-- <p class="fw-bold fs-8">{{item.MonitorDate}}</p> -->
+                                                    <p class="fw-bold fs-8">{{item.OrderDate}}</p>
+                                                </div>
+                                                <div class="col" style="width: 2rem;">
+                                                    <div class="d-flex align-items-start justify-content-end gap-2">
+                                                        <div>
+                                                            <div
+                                                                class="d-flex align-items-center justify-content-center gap-2">
+                                                                <svg *ngIf="item?.IsPregnancy==1" width="28" height="28"
+                                                                    viewBox="0 0 32 32" fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                    <circle cx="16" cy="15.998" r="16" fill="#DADFF1"
+                                                                        fill-opacity="0.5" />
+                                                                    <path
+                                                                        d="M8.97438 17.2531C9.15273 16.8868 9.33764 16.5108 9.58925 16.1953C10.08 15.5869 10.6119 15.0165 11.1345 14.4366C11.2524 14.3028 11.367 14.1658 11.4785 14.0256C11.5869 13.9013 11.6887 13.7707 11.7907 13.6369C12.1316 13.194 12.4566 12.732 12.8771 12.3784C13.5461 11.8145 13.5238 11.0881 13.6545 10.3681C13.6545 10.3617 13.6577 10.3553 13.6577 10.3491C13.7278 9.96363 13.7882 9.57491 13.8552 9.18931C14.005 8.35142 14.0176 7.43703 14.365 6.6374C14.8397 5.54135 15.9197 5.33756 17.0157 5.60194C17.4395 5.70392 17.8154 5.89821 18.118 6.21369C18.1339 6.22962 18.1499 6.24555 18.1658 6.2646C18.2167 6.32192 18.2678 6.38251 18.3251 6.45263C18.3251 6.4495 18.3282 6.44623 18.3315 6.44623C18.3506 6.47496 18.3665 6.50355 18.3824 6.53541C18.3856 6.55774 18.3952 6.5832 18.4143 6.61506C18.4366 6.65332 18.4589 6.69158 18.478 6.7297C18.478 6.73283 18.4811 6.73283 18.4811 6.73283C18.6373 7.03549 18.7169 7.35098 18.6977 7.68862C18.6946 7.75874 18.6882 7.83199 18.6754 7.90524C18.6564 8.02315 18.7104 8.18557 18.7869 8.28755C18.806 8.30988 18.8219 8.33221 18.8411 8.3544C18.9144 8.44045 19.0035 8.5201 19.0896 8.59648C19.1343 8.63474 19.1788 8.673 19.2234 8.71111C19.4018 8.87041 19.3955 8.97879 19.1852 9.08061C19.182 9.08374 19.1756 9.08701 19.1692 9.09014C19.1405 9.10294 19.1119 9.11887 19.0801 9.1284C18.9398 9.17306 18.9462 9.26864 19.0099 9.36422C19.0801 9.46933 19.0832 9.55538 19.0768 9.68922C19.064 9.84852 18.9876 9.9441 18.9429 10.0715C18.9142 10.1448 18.9239 10.2404 18.9429 10.32C19.0098 10.6068 18.9239 10.747 18.6339 10.7948C18.5383 10.8107 18.4427 10.8138 18.344 10.8171H18.2166H18.2102C18.1529 10.8076 17.8343 10.7724 17.694 10.9828C17.6239 11.0497 17.5634 11.1326 17.5378 11.2154C17.4805 11.3937 17.4582 11.5753 17.4487 11.7665C17.4199 11.8908 17.4168 12.015 17.4487 12.1329C17.4615 12.1871 17.4837 12.238 17.5124 12.2891C17.5792 12.3974 17.6462 12.5057 17.7163 12.614C17.7451 12.6269 17.7673 12.6395 17.7865 12.6459C18.223 13.3309 18.7391 13.9426 19.3763 14.4842C20.0804 15.08 20.4531 15.6281 20.0295 16.5647C19.9529 16.7335 19.9467 16.9056 19.9912 17.0713C20.0326 17.2242 20.1186 17.3739 20.2301 17.5173C20.5742 17.9505 20.9884 18.2629 21.3612 18.6579C22.0461 19.3778 22.3488 20.3336 22.2946 21.315V21.3182C22.3137 22.0286 22.1066 22.72 21.7052 23.2839C21.4694 23.6981 21.1667 24.09 20.7972 24.4404H20.7941C20.6412 24.5869 20.5168 24.759 20.4341 24.9533C20.3575 25.1317 20.2843 25.3133 20.2015 25.4949H16.1617C15.1931 25.4949 14.2247 25.4949 13.2529 25.498C13.237 25.498 13.2211 25.498 13.2083 25.4949C13.1605 25.4854 13.1286 25.4631 13.0968 25.4121C13.0808 25.3834 13.068 25.358 13.0521 25.3294C12.8163 24.9056 12.6411 24.4563 12.5773 23.9689C12.5008 23.3764 12.5805 22.7965 12.7875 22.239C12.9692 21.7388 13.1827 21.2513 13.3801 20.7544C13.4947 20.4612 13.5967 20.1619 13.6062 19.8464C13.5903 19.84 13.5744 19.8336 13.5584 19.8273C12.1471 19.2315 10.7357 18.6357 9.32417 18.0367C8.97087 17.8871 8.78926 17.629 8.97429 17.2531L8.97438 17.2531ZM11.6981 17.3487C12.2429 17.7341 12.7845 18.1293 13.3484 18.4828C13.1637 17.9158 12.9661 17.3549 12.7878 16.7879C12.7081 16.5425 12.6413 16.2971 12.5871 16.0455C12.2621 16.3354 11.9499 16.6159 11.6377 16.8993C11.4561 17.065 11.5424 17.2371 11.6981 17.3487L11.6981 17.3487Z"
+                                                                        fill="#368796" />
+                                                                </svg>
+                                                            </div>
+                                                            <p *ngIf="item?.IsPregnancy==1" style="width: 3rem;text-align: center;">{{item?.PregnancyContent}}
+                                                            </p>
+                                                        </div>
+
+                                                        <div class="px-2 position-relative border-start-primary-200 d-flex align-items-center" [class.alleregyblink]="item?.IsAllergy == 1">
+                                                            <div id="divAllergyTooltip"
+                                                                class="pb-0 clr-main-2 hoverAllergy">
+                                                                <div class="PatientsList  w-100 " id="divAllergy">
+                                                                    <div class="pb-0 clr-main-2 hoverAllergyLab d-inline-block "
+                                                                        id="divAllergyTooltip">
+                                                                        <div class="d-flex align-items-center gap-2">
+                                                                            <svg 
+                                                                                width="28" height="28"
+                                                                                viewBox="0 0 39 39" fill="none"
+                                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                                <circle cx="19.2642" cy="19.9221" r="19"
+                                                                                    fill="#DAEEF1" />
+                                                                                <path fill-rule="evenodd"
+                                                                                    clip-rule="evenodd"
+                                                                                    d="M28.2642 19.9221C28.2642 24.8927 24.2347 28.9221 19.2642 28.9221C14.2936 28.9221 10.2642 24.8927 10.2642 19.9221C10.2642 14.9516 14.2936 10.9221 19.2642 10.9221C24.2347 10.9221 28.2642 14.9516 28.2642 19.9221ZM24.8999 25.8535C23.4326 27.2481 21.4483 28.1039 19.2642 28.1039C14.7455 28.1039 11.0823 24.4408 11.0823 19.9221C11.0823 17.7903 11.8976 15.8489 13.2335 14.3928C13.252 14.457 13.2866 14.5176 13.3372 14.5682L16.963 18.194L15.4228 19.7455C15.3171 19.8521 15.2575 19.996 15.2568 20.1461V23.1164L13.7059 24.6674C13.6523 24.7206 13.6097 24.7839 13.5806 24.8536C13.5516 24.9233 13.5366 24.9981 13.5366 25.0737C13.5366 25.1492 13.5516 25.2241 13.5806 25.2938C13.6097 25.3635 13.6523 25.4268 13.7059 25.48C13.7591 25.5337 13.8224 25.5763 13.8921 25.6053C13.9619 25.6344 14.0367 25.6493 14.1122 25.6493C14.1878 25.6493 14.2626 25.6344 14.3323 25.6053C14.4021 25.5763 14.4654 25.5337 14.5186 25.48L16.0695 23.9291H19.0398C19.1899 23.9285 19.3338 23.8688 19.4404 23.7631L20.9919 22.2229L24.5141 25.7452C24.6187 25.8498 24.7659 25.8859 24.8999 25.8535ZM25.2011 25.552C25.2333 25.4181 25.1972 25.2711 25.0927 25.1666L21.5725 21.6465L24.1505 19.0874C24.417 18.8216 24.6284 18.5058 24.7726 18.1581C24.9169 17.8105 24.9912 17.4378 24.9912 17.0614C24.9912 16.685 24.9169 16.3123 24.7726 15.9647C24.6284 15.617 24.417 15.3013 24.1505 15.0355C23.8847 14.769 23.5689 14.5575 23.2212 14.4133C22.8736 14.269 22.5009 14.1948 22.1245 14.1948C21.7481 14.1948 21.3754 14.269 21.0278 14.4133C20.6801 14.5575 20.3644 14.769 20.0985 15.0355L17.5394 17.6134L13.9157 13.9897C13.8652 13.9392 13.8048 13.9046 13.7407 13.8861C15.1962 12.5534 17.1352 11.7403 19.2642 11.7403C23.7829 11.7403 27.446 15.4034 27.446 19.9221C27.446 22.1034 26.5924 24.0852 25.2011 25.552ZM16.4015 20.3808L17.7721 19.0032L18.5711 19.8021L17.712 20.6612C17.6584 20.7144 17.6158 20.7777 17.5868 20.8475C17.5577 20.9172 17.5427 20.992 17.5427 21.0676C17.5427 21.1431 17.5577 21.2179 17.5868 21.2877C17.6158 21.3574 17.6584 21.4207 17.712 21.4739C17.7652 21.5275 17.8285 21.5701 17.8983 21.5992C17.968 21.6282 18.0428 21.6432 18.1184 21.6432C18.1939 21.6432 18.2687 21.6282 18.3385 21.5992C18.4082 21.5701 18.4715 21.5275 18.5247 21.4739L19.3838 20.6148L20.1828 21.4138L18.8051 22.7845H16.4015V20.3808ZM18.3492 18.4232L19.1496 19.2236L21.7182 16.6551C21.8259 16.5473 21.9721 16.4868 22.1245 16.4868C22.2769 16.4868 22.4231 16.5473 22.5308 16.6551C22.6386 16.7628 22.6992 16.909 22.6992 17.0614C22.6992 17.2138 22.6386 17.36 22.5308 17.4678L19.9623 20.0363L20.7628 20.8367L23.3378 18.2747C23.6411 17.9492 23.8062 17.5188 23.7983 17.074C23.7905 16.6292 23.6103 16.2048 23.2957 15.8902C22.9812 15.5756 22.5568 15.3954 22.112 15.3876C21.6672 15.3797 21.2367 15.5449 20.9112 15.8481L18.3492 18.4232Z"
+                                                                                    fill="#368796" />
+                                                                            </svg>
+                                                                            <div class="">
+                                                                                <p class="fs-8">Allergy</p>
+                                                                                <p class="m-0 fs-8 text-nowrap">{{item.IsAllergy
+                                                                                    === 1 ? 'Yes' :
+                                                                                    'NKA'}}</p>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="viewPatientsAllergiesModal end-0" *ngIf="item?.IsAllergy == 1"
+                                                                            data-bs-backdrop="static" tabindex="-1"
+                                                                            id="viewAllergies" tabindex="-1">
+                                                                            <div
+                                                                                class="modal-dialog modal-dialog-scrollable modal-l ">
+                                                                                <div class="modal-content p-3">
+                                                                                    <div class="modal-header">
+                                                                                        <h6 class="modal-title"
+                                                                                            translate>
+                                                                                            Allergies
+                                                                                        </h6>
+                                                                                    </div>
+                                                                                    <div class="modal-body">
+                                                                                        <div
+                                                                                            class="d-flex w-100 align-items-center justify-content-between">
+                                                                                            <div
+                                                                                                class="d-flex w-100 mt-2">
+                                                                                                 <div
+                                                                                                    [innerHtml]="item?.AllergyData">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div data-bs-toggle="modal" data-bs-target="#quick_info"
+                                                            (click)="showPatientInfo(item)"
+                                                            class="info_img cursor-pointer custom_tooltip custom_tooltip_left">
+                                                            <svg width="20" height="29" viewBox="0 0 28 29" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <rect y="0.422119" width="28" height="28" rx="14"
+                                                                    fill="#69BAC9"></rect>
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M14.9692 9.57595C16.1161 9.57595 17.0461 8.64597 17.0461 7.49904C17.0461 6.3521 16.1161 5.42212 14.9692 5.42212C13.8223 5.42212 12.8923 6.3521 12.8923 7.49904C12.8923 8.64597 13.8223 9.57595 14.9692 9.57595ZM10.5385 11.6529C10.5385 11.2706 10.8484 10.9606 11.2308 10.9606H15.6615C16.0862 10.9606 16.4107 11.3392 16.3458 11.7589L14.6923 21.2067C14.5616 22.2031 15.0205 22.4566 15.6615 22.4566C16.242 22.4566 16.6942 22.0035 16.9856 21.5535C17.0767 21.4249 17.2109 21.36 17.3716 21.4249C17.4683 21.4898 17.5001 21.6505 17.4012 21.7791C16.6644 23.0042 15.193 23.4221 14 23.4221C12.0705 23.4221 11.1152 22.4245 11.3692 20.6529L12.5922 12.3452H11.2308C10.8485 12.3452 10.5385 12.0352 10.5385 11.6529Z"
+                                                                    fill="#ECF6F8"></path>
+                                                            </svg>
+                                                            <div class="tooltip">
+                                                                <p>Patient Info</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="doctor_worklist_ChiefComplaints p-1 d-flex align-items-center gap-2 justify-content-between rounded-bottom">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <label for="" class="form-label m-0 fw-bold text-nowrap">Insurance Name</label>
+                                            <div class="custom_tooltip custom_tooltip_left">
+                                                <p class=" fs-8">{{item.Insurancename}}</p>
+                                                <div class="tooltip">
+                                                    <p class=" fs-8">{{item.Insurancename}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <div class="custom_tooltip custom_tooltip_left d-flex align-items-center gap-1"
+                                                *ngIf="item?.IsVerified">
+                                                <svg width="15" height="15" viewBox="0 0 20 21" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p for="" class="form-label fs-8 m-0" *ngIf="item?.IsVerified"><b>Verified By: </b>
+                                                    :{{item?.VerifiedBy}}-{{item?.VerifiedByName}} on
+                                                    ({{item?.VerifiedDate}})</p>  
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-4">
+                                        <div class="w-max-content border-end px-4 cursor-pointer" (click)="PatientPrintCard(item)">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <svg width="30" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M20.4312 14.8708C20.4312 14.4658 20.7596 14.1373 21.1647 14.1373C21.5696 14.1373 21.8982 14.4655 21.8982 14.8708V17.7986C21.8982 18.2857 21.6998 18.7274 21.3801 19.0472C21.0603 19.3671 20.6186 19.5653 20.1315 19.5653H17.2033C16.7984 19.5653 16.4698 19.2369 16.4698 18.8318C16.4698 18.4269 16.7982 18.0984 17.2033 18.0984L20.1312 18.0985C20.2132 18.0985 20.2883 18.0645 20.3427 18.0102C20.3973 17.9556 20.431 17.8809 20.431 17.7987L20.4309 14.8708L20.4312 14.8708ZM5.45691 16.5831H5.87794L5.8781 12.9512H7.34472V16.5834H9.41429V12.9512H10.8809V16.5834H12.9505V12.9512H14.4171V16.5834H16.4866V12.9512H17.9533V16.5834H18.3928C18.6453 16.5834 18.8512 16.3775 18.8512 16.125V12.9513H22.2665C22.6715 12.9513 23 12.623 23 12.2178C23 11.8129 22.6716 11.4843 22.2665 11.4843H1.73345C1.32853 11.4843 1 11.8127 1 12.2178C1 12.6227 1.32838 12.9513 1.73345 12.9513H4.99797V16.125C4.99845 16.3773 5.20421 16.5831 5.45687 16.5831H5.45691ZM5.87811 10.0178V7.85243H5.45708C5.20459 7.85243 4.99867 8.05835 4.99867 8.31083V10.018L5.87811 10.0182V10.0178ZM9.41429 10.0178V7.85243H7.34473V10.0178H9.41429ZM12.9506 10.0178V7.85243H10.881V10.0178H12.9506ZM16.4868 10.0178V7.85243H14.4172V10.0178H16.4868ZM18.8514 10.0178V8.31066C18.8514 8.05817 18.6454 7.85226 18.3929 7.85226H17.9534V10.0177H18.8514L18.8514 10.0178ZM6.79789 18.099C7.20281 18.099 7.53134 18.4274 7.53134 18.8325C7.53134 19.2374 7.20296 19.5659 6.79789 19.5659L3.87001 19.5658C3.3829 19.5658 2.94124 19.3674 2.62139 19.0477C2.30155 18.7279 2.10334 18.2862 2.10334 17.7991V14.8709C2.10334 14.466 2.43172 14.1374 2.8368 14.1374C3.24172 14.1374 3.57025 14.4656 3.57025 14.8709V17.7988C3.57025 17.8808 3.60425 17.9559 3.65855 18.0103C3.71317 18.0649 3.78793 18.0986 3.87027 18.0986H6.79786L6.79789 18.099ZM3.66067 9.56493C3.66067 9.96985 3.33229 10.2984 2.92721 10.2984C2.52229 10.2984 2.19376 9.97017 2.19376 9.56493L2.19392 6.63706C2.19392 6.14994 2.39227 5.70829 2.71197 5.38844C3.03181 5.06859 3.47347 4.87039 3.96059 4.87039H6.88847C7.29339 4.87039 7.62192 5.19877 7.62192 5.60384C7.62192 6.00876 7.29354 6.3373 6.88847 6.3373L3.96071 6.33714C3.8787 6.33714 3.80361 6.37113 3.74899 6.42543C3.69437 6.48006 3.66069 6.55482 3.66069 6.63716L3.66067 9.56493ZM17.2936 6.33684C16.8886 6.33684 16.5601 6.00846 16.5601 5.60339C16.5601 5.19847 16.8885 4.86993 17.2936 4.86993H20.2214C20.7086 4.86993 21.1502 5.06829 21.4701 5.38798C21.7899 5.70783 21.9881 6.14949 21.9881 6.6366V9.56448C21.9881 9.9694 21.6597 10.2979 21.2547 10.2979C20.8497 10.2979 20.5212 9.96971 20.5212 9.56448L20.5214 6.63706C20.5214 6.55504 20.4874 6.47995 20.4331 6.42549C20.3784 6.37087 20.3037 6.33719 20.2215 6.33719H17.2936L17.2936 6.33684Z" fill="#368796"/>
+                                                </svg>
+                                                <div>
+                                                    <p class="fs-8 text-nowrap fw-bold">Print Label</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column">
+                                            <div class="status_track d-flex align-items-center">
+                                                <div
+                                                    class="custom_tooltip custom_tooltip_left position-relative">
+                                                    <span class="d-flex active align-items-center">
+                                                        <svg width="16" height="17" viewBox="0 0 16 17"
+                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <circle cx="8" cy="8.5" r="7.25" fill="#CEF5FD"
+                                                                stroke="#13B9DD" stroke-width="1.5" />
+                                                            <path
+                                                                d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455"
+                                                                stroke="#13B9DD" stroke-width="2"
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round" />
+                                                        </svg>
+                                                    </span>
+                                                    <div class="tooltip" style="bottom: -2.8rem;">
+                                                        <p>Order Date</p>
+                                                        <p class="pt-0">
+                                                            <span class="me-1">{{item?.MonitorDate}}</span> 
+                                                            <!--|  <span class="ms-1">00:46</span> -->
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="custom_tooltip custom_tooltip_left position-relative">
+                                                    <span class="d-flex align-items-center" [class.active]="item?.SalesDate != ''">
+                                                        <svg width="16" height="17" viewBox="0 0 15 4"
+                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <rect y="0.645447" width="30" height="3.70911"
+                                                                fill="#FA7238" />
+                                                        </svg>
+                                                        <svg width="16" height="17" viewBox="0 0 16 17"
+                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <circle cx="8" cy="8.5" r="7.25" fill="#FEDCCD"
+                                                                stroke="#FA7238" stroke-width="1.5" />
+                                                            <path
+                                                                d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455"
+                                                                stroke="#EB6247" stroke-width="2"
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round" />
+                                                        </svg>
+                                                    </span>
+                                                    <div class="tooltip" style="bottom: -2.8rem;">
+                                                        <p>Issued Date</p>
+                                                        <p class="pt-0">
+                                                            <span class="me-1">{{item?.SalesDate}}</span> 
+                                                            <!-- | <span class="ms-1"></span> -->
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="custom_tooltip custom_tooltip_left position-relative d-none">
+                                                    <span class="d-flex align-items-center">
+                                                        <svg width="15" height="4" viewBox="0 0 15 4"
+                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <rect y="0.645447" width="30" height="3.70911"
+                                                                fill="#F2CD4A" />
+                                                        </svg>
+                                                        <svg width="16" height="17" viewBox="0 0 16 17"
+                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <circle cx="8" cy="8.5" r="7.25" fill="#FCF2CF"
+                                                                stroke="#F2CD4A" stroke-width="1.5" />
+                                                            <path
+                                                                d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455"
+                                                                stroke="#EEBD11" stroke-width="2"
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round" />
+                                                        </svg>
+                                                    </span>
+                                                    <div class="tooltip" style="bottom: -2.8rem;">
+                                                        <p>Administrated Date</p>
+                                                        <p class="pt-0">
+                                                            <span class="me-1"></span> 
+                                                            <!-- | <span class="ms-1"></span> -->
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                          
+                                            </div>
+                                            <label for="" class="form-label mb-0">Order Status</label>
+                                        </div>
+                                        <div class="inline_legend pe-2">
+                                            <span class="legend fs-8">{{item.StatusName}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="legend_row bg-primary-50 p-2 d-flex align-items-center justify-content-between"
+            *ngIf="FetchIndividualProcessingDataList != undefined && FetchIndividualProcessingDataList?.length > 0">
+            <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center gap-3 pb-1 me-5">
+                    <div class="d-flex align-items-center gap-1">
+                        <span class="legend square prescribed"></span>
+                        <label for="" class="form-label m-0">New Request</label>
+                    </div>
+                    <div class="d-flex align-items-center gap-1">
+                        <span class="legend square partial"></span>
+                        <label for="" class="form-label m-0">Partially Issued</label>
+                    </div>
+                    <div class="d-flex align-items-center gap-1">
+                        <span class="legend square issued"></span>
+                        <label for="" class="form-label m-0">Issued</label>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-1">
+                        <span class="legend stat"></span>
+                        <label for="" class="form-label m-0">STAT</label>
+                    </div>
+                    <div class="d-flex align-items-center gap-1" (click)="filterDischargeMed()">
+                        <span class="legend discharge"></span>
+                        <label for="" class="form-label m-0">Discharge Medication</label>
+                    </div>
+                    <div class="d-flex align-items-center gap-1">
+                        <span class="legend both"></span>
+                        <label for="" class="form-label m-0">Both </label>
+                    </div>
+                    <div class="d-flex align-items-center gap-1">
+                        <svg width="15" height="15" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M3.21688 1.25366C3.41345 0.827485 4.01916 0.827485 4.21574 1.25366L4.68739 2.2762C4.76751 2.44989 4.93211 2.56949 5.12206 2.59201L6.2403 2.7246C6.70637 2.77985 6.89354 3.35592 6.54897 3.67457L5.72223 4.43912C5.58179 4.56899 5.51892 4.7625 5.5562 4.95011L5.77565 6.05459C5.86712 6.51492 5.37709 6.87094 4.96756 6.6417L3.98495 6.09168C3.81804 5.99825 3.61458 5.99825 3.44767 6.09168L2.46506 6.6417C2.05552 6.87094 1.5655 6.51492 1.65696 6.05459L1.87642 4.95011C1.9137 4.7625 1.85083 4.56899 1.71039 4.43912L0.883649 3.67457C0.539074 3.35592 0.726247 2.77985 1.19231 2.7246L2.31055 2.59201C2.5005 2.56949 2.66511 2.44989 2.74523 2.2762L3.21688 1.25366Z"
+                                fill="#EF5056" />
+                        </svg>
+                        <label for="" class="form-label m-0">Admission Reconciliation</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <app-pagination [currentPage]="currentPage" [totalCount]="totalCount"
+                (pageChange)="handlePageChange($event)"></app-pagination> -->
+            <p>Total Records : {{FetchIndividualProcessingDataList.length}}</p>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="legend_detailModal modal" data-bs-backdrop="static" tabindex="-1" id="legend_detail" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Details</h5>
+
+                <div class="d-flex align-items-center gap-2 ms-auto">
+                    <div class="dropdown hoverServices">
+                        <button class="btn btn-main-outline d-flex align-items-center dropdown-toggle">Actions</button>
+                        <div class="dropdown-menu">
+                            <p class="dropdown-item border-0 py-2 cursor-pointer"> Result Summary</p>
+                            <p class="dropdown-item border-0 py-2 cursor-pointer"> Significant Data</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-main-outline">Print</button>
+                    <div class="ms-auto d-flex align-items-center gap-2">
+                        <button class="btn btn-main-outline">Save</button>
+                        <button class="btn btn-danger-outline">Clear</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="doctor_worklist worklist_patientcard rounded">
+                    <div class="row mx-0">
+                        <div class="col-md-12 p-0">
+                            <div class="row mx-0 gx-2 border-bottom p-2">
+                                <div class="col-lg-3 col-md-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="patient-photo me-3 mb-3">
+                                            <img src="assets/images/icons/female.svg" alt="" class="position-relative">
+                                        </div>
+                                        <div class="mt-1">
+                                            <p class="value fs-7 fw-bold w-100">ASMAA Ibrahim Al Heqail</p>
+                                            <div class="d-flex align-items-center gap-2 mt-1">
+                                                <p>Female | 32 Year(s)</p>
+                                                <p>SSN : <span class="fw-bold">1104472095</span></p>
+                                            </div>
+                                            <p class="m-0 fs-8 mt-1">Saudi</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-9 col-md-8">
+                                    <div class="bg-white h-100 p-1 rounded-2">
+                                        <div class="row mx-0 pb-2">
+                                            <div class="w-max-content">
+                                                <label for="" class="form-label m-0 fw-bold">IP NO</label>
+                                                <p class="text-truncate fs-7 fw-500 text-center">
+                                                    IPC1.087364874
+                                                </p>
+                                            </div>
+                                            <div class="w-max-content">
+                                                <label for="" class="form-label m-0 fw-bold">Order No.</label>
+                                                <p class="text-truncate fs-7 fw-500 text-center">
+                                                    6649706
+                                                </p>
+                                            </div>
+                                            <div class="col-2">
+                                                <label for="" class="form-label m-0 fw-bold">Doctor</label>
+                                                <p class="text-truncate fs-7">ER DOCTORS </p>
+                                            </div>
+                                            <div class="col-2">
+                                                <label for="" class="form-label m-0 fw-bold">Bed Name</label>
+                                                <p class="text-truncate fs-7">4159</p>
+                                            </div>
+                                            <div class="col">
+                                                <label for="" class="form-label m-0 fw-bold">Lactation</label>
+                                                <p class="text-truncate fs-7">No</p>
+                                            </div>
+                                            <div class="col">
+                                                <label for="" class="form-label m-0 fw-bold">Issue Mode</label>
+                                                <div class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                                    <button class="btn selected">System</button>
+                                                    <button class="btn">Manual</button>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="d-flex align-items-center justify-content-end gap-2 mt-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                        viewBox="0 0 22 32" fill="none" class="ms-1 ng-star-inserted">
+                                                        <path
+                                                            d="M21.8822 18.8081C21.5968 18.2219 21.301 17.6204 20.8984 17.1157C20.1133 16.1421 19.2622 15.2296 18.4261 14.3018C18.2374 14.0876 18.054 13.8685 17.8756 13.6441C17.7022 13.4452 17.5392 13.2363 17.3761 13.0221C16.8306 12.3135 16.3106 11.5743 15.6379 11.0086C14.5674 10.1063 14.6031 8.94408 14.394 7.79215C14.394 7.78191 14.3889 7.77167 14.3889 7.76165C14.2768 7.14494 14.18 6.52297 14.0729 5.90602C13.8332 4.5654 13.813 3.10237 13.2572 1.82297C12.4976 0.0692921 10.7697 -0.256777 9.01602 0.166233C8.33807 0.329402 7.73662 0.640259 7.25238 1.14502C7.22689 1.17051 7.2014 1.196 7.17592 1.22649C7.09445 1.3182 7.01275 1.41515 6.92104 1.52734C6.92104 1.52233 6.91603 1.5171 6.9108 1.5171C6.8803 1.56307 6.85481 1.60881 6.82933 1.65978C6.82432 1.69551 6.80885 1.73625 6.77835 1.78722C6.74262 1.84844 6.70689 1.90966 6.6764 1.97064C6.6764 1.97565 6.6714 1.97565 6.6714 1.97565C6.42152 2.45992 6.29408 2.96469 6.32481 3.50491C6.32982 3.61711 6.34006 3.7343 6.36054 3.8515C6.39103 4.04016 6.30456 4.30004 6.18212 4.46321C6.15163 4.49894 6.12614 4.53467 6.09542 4.57016C5.97822 4.70785 5.83554 4.83528 5.69785 4.95749C5.6264 5.0187 5.55517 5.07992 5.48371 5.1409C5.19834 5.39578 5.20835 5.56919 5.54493 5.7321C5.54993 5.73711 5.56018 5.74235 5.57042 5.74735C5.61638 5.76783 5.66213 5.79332 5.7131 5.80857C5.93749 5.88003 5.92725 6.03296 5.82529 6.18588C5.7131 6.35405 5.7081 6.49173 5.71834 6.70588C5.73882 6.96076 5.86102 7.11368 5.93248 7.31759C5.97845 7.43478 5.96298 7.58771 5.93248 7.71515C5.82553 8.17393 5.96298 8.39834 6.42699 8.47477C6.57992 8.50026 6.73285 8.50527 6.89078 8.5105H7.09468H7.10492C7.19663 8.49525 7.70637 8.43904 7.93078 8.77562C8.04297 8.88258 8.13969 9.01525 8.18066 9.1477C8.27237 9.43307 8.30809 9.72367 8.32334 10.0295C8.36931 10.2284 8.37432 10.4271 8.32334 10.6157C8.30286 10.7024 8.26736 10.7839 8.22139 10.8656C8.11443 11.039 8.00725 11.2122 7.89505 11.3856C7.84908 11.4061 7.81358 11.4263 7.78286 11.4366C7.08447 12.5325 6.2586 13.5113 5.23909 14.3779C4.11262 15.3312 3.51618 16.208 4.19406 17.7066C4.3165 17.9767 4.32651 18.2521 4.25528 18.5172C4.18906 18.7618 4.05138 19.0014 3.87296 19.2308C3.32247 19.924 2.6598 20.4238 2.06336 21.0557C0.967415 22.2076 0.483117 23.7369 0.569805 25.3072V25.3122C0.53931 26.4489 0.870654 27.5551 1.51288 28.4574C1.89019 29.1201 2.37446 29.7471 2.96572 30.3078H2.97072C3.21536 30.5422 3.41426 30.8175 3.5467 31.1284C3.66913 31.4138 3.78633 31.7044 3.91877 31.995H10.3825C11.9323 31.995 13.4817 31.995 15.0365 32C15.062 32 15.0875 32 15.108 31.995C15.1844 31.9797 15.2354 31.944 15.2864 31.8626C15.3119 31.8166 15.3324 31.7758 15.3578 31.7301C15.7352 31.0522 16.0155 30.3333 16.1175 29.5534C16.2399 28.6054 16.1125 27.6776 15.7811 26.7855C15.4905 25.9851 15.1489 25.2052 14.8331 24.4101C14.6497 23.9411 14.4865 23.4621 14.4713 22.9573C14.4968 22.9471 14.5222 22.9368 14.5477 22.9268C16.8059 21.9735 19.064 21.0202 21.3225 20.0619C21.8878 19.8225 22.1784 19.4095 21.8823 18.808L21.8822 18.8081ZM17.5242 18.961C16.6526 19.5778 15.786 20.21 14.8837 20.7757C15.1794 19.8683 15.4955 18.971 15.7808 18.0637C15.9082 17.6711 16.0152 17.2786 16.1019 16.876C16.6219 17.3398 17.1214 17.7885 17.6209 18.2421C17.9115 18.5072 17.7734 18.7826 17.5242 18.961L17.5242 18.961Z"
+                                                            fill="#69BAC9"></path>
+                                                    </svg>
+                                                    <div data-bs-toggle="modal" data-bs-target="#quick_info"
+                                                        class="info_img cursor-pointer custom_tooltip custom_tooltip_left">
+                                                        <svg width="20" height="29" viewBox="0 0 28 29" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <rect y="0.422119" width="28" height="28" rx="14"
+                                                                fill="#69BAC9"></rect>
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M14.9692 9.57595C16.1161 9.57595 17.0461 8.64597 17.0461 7.49904C17.0461 6.3521 16.1161 5.42212 14.9692 5.42212C13.8223 5.42212 12.8923 6.3521 12.8923 7.49904C12.8923 8.64597 13.8223 9.57595 14.9692 9.57595ZM10.5385 11.6529C10.5385 11.2706 10.8484 10.9606 11.2308 10.9606H15.6615C16.0862 10.9606 16.4107 11.3392 16.3458 11.7589L14.6923 21.2067C14.5616 22.2031 15.0205 22.4566 15.6615 22.4566C16.242 22.4566 16.6942 22.0035 16.9856 21.5535C17.0767 21.4249 17.2109 21.36 17.3716 21.4249C17.4683 21.4898 17.5001 21.6505 17.4012 21.7791C16.6644 23.0042 15.193 23.4221 14 23.4221C12.0705 23.4221 11.1152 22.4245 11.3692 20.6529L12.5922 12.3452H11.2308C10.8485 12.3452 10.5385 12.0352 10.5385 11.6529Z"
+                                                                fill="#ECF6F8"></path>
+                                                        </svg>
+                                                        <div class="tooltip">
+                                                            <p>Patient Info</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="py-2 bg-white p-1 row mx-0 vital_block border-bottom-primary-200 align-items-center">
+                                <div class="w-max-content border-end px-3">
+                                    <div class="d-flex align-items-center gap-2 bp-s">
+                                        <svg width="39" height="39" viewBox="0 0 39 39" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="19.2642" cy="19.9221" r="19" fill="#DAEEF1"></circle>
+                                            <path
+                                                d="M27.1542 20.7441C26.9619 20.8364 26.7522 20.8848 26.5397 20.8862C26.3263 20.8845 26.1158 20.8345 25.9233 20.74V24.3524C25.9233 24.6364 25.8129 24.9088 25.6164 25.1096C25.42 25.3104 25.1534 25.4232 24.8755 25.4232H22.3084C22.0306 25.4232 21.764 25.3104 21.5675 25.1096C21.3709 24.9088 21.2605 24.6364 21.2605 24.3524V21.3495C20.8808 21.736 20.4712 22.0907 20.0356 22.41V24.3564C20.0356 24.9728 20.275 25.5638 20.7011 26C21.1272 26.4362 21.7053 26.6817 22.3084 26.6828H24.8755C25.4795 26.6828 26.0589 26.4378 26.4861 26.0016C26.9134 25.5654 27.1536 24.9736 27.1542 24.3564V20.7441Z"
+                                                fill="#368796"></path>
+                                            <path
+                                                d="M26.5389 15.2294C25.5883 15.2294 24.8169 16.6333 24.8169 17.9987C24.8169 19.364 25.5884 20.581 26.5389 20.581C27.4894 20.581 28.2628 19.3619 28.2628 17.9987C28.2629 16.6353 27.4913 15.2294 26.5389 15.2294Z"
+                                                fill="#368796"></path>
+                                            <path
+                                                d="M17.0413 13.5555C17.0413 13.5555 15.7329 11.4221 13.6272 11.4221C13.0211 11.4333 12.4272 11.5988 11.8993 11.9037C9.62054 13.137 9.85315 16.6986 11.7959 19.6243C12.638 18.9922 13.673 18.6875 14.7152 18.7648C15.7574 18.8419 16.7384 19.2961 17.4826 20.0457C18.2265 20.7951 18.6849 21.7912 18.7752 22.8548C23.5297 20.2927 25.4702 13.6713 22.1815 11.9037C21.6533 11.6027 21.0602 11.4407 20.4555 11.4323C18.3497 11.4221 17.0414 13.5555 17.0414 13.5555H17.0413Z"
+                                                fill="#368796"></path>
+                                            <path
+                                                d="M14.3936 19.0392C13.3056 19.0392 12.2622 19.4808 11.4929 20.2668C10.7237 21.0529 10.2915 22.119 10.2915 23.2306C10.2915 24.3423 10.7237 25.4083 11.4929 26.1945C12.2622 26.9805 13.3056 27.4221 14.3936 27.4221C15.4815 27.4221 16.5248 26.9805 17.2942 26.1945C18.0634 25.4083 18.4956 24.3423 18.4956 23.2306C18.4956 22.119 18.0634 21.0529 17.2942 20.2668C16.5248 19.4808 15.4815 19.0392 14.3936 19.0392ZM14.3936 26.3756C13.5773 26.375 12.7948 26.0432 12.2179 25.4532C11.6411 24.8631 11.3172 24.0631 11.3175 23.229C11.3179 22.3951 11.6423 21.5954 12.2197 21.0058C12.7971 20.4162 13.58 20.0852 14.3962 20.0853C15.2125 20.0855 15.9952 20.417 16.5723 21.0067C17.1494 21.5965 17.4736 22.3964 17.4736 23.2305C17.4726 24.0647 17.1476 24.8643 16.5702 25.454C15.9928 26.0435 15.21 26.375 14.3936 26.3756H14.3936Z"
+                                                fill="#368796"></path>
+                                            <path
+                                                d="M17.1755 23.2302C17.1755 22.4758 16.8822 21.7523 16.3601 21.2188C15.8381 20.6854 15.13 20.3857 14.3917 20.3857C13.6534 20.3857 12.9454 20.6853 12.4233 21.2188C11.9012 21.7522 11.6079 22.4758 11.6079 23.2302C11.6079 23.9846 11.9013 24.708 12.4233 25.2415C12.9454 25.775 13.6534 26.0746 14.3917 26.0746C15.13 26.0746 15.838 25.775 16.3601 25.2415C16.8822 24.7081 17.1755 23.9846 17.1755 23.2302ZM14.3918 24.0428H14.3917C14.1076 24.0697 13.8311 23.9396 13.6661 23.7017C13.5014 23.4636 13.4732 23.1537 13.5926 22.8889C13.7119 22.624 13.9604 22.4443 14.2446 22.4175V21.3061C14.2441 21.2659 14.2594 21.227 14.287 21.1984C14.3147 21.1698 14.3524 21.1538 14.3917 21.1538C14.4316 21.1532 14.47 21.1689 14.4985 21.1975C14.5269 21.2262 14.5429 21.2653 14.5429 21.3061V22.4256C14.7388 22.4641 14.9133 22.5765 15.032 22.7405L15.5272 22.4946H15.5271C15.6007 22.458 15.6895 22.4888 15.726 22.5637C15.7603 22.6396 15.7296 22.7296 15.6563 22.7668L15.1652 23.0147C15.185 23.0849 15.1957 23.1573 15.1971 23.2301C15.1986 23.4481 15.1144 23.6577 14.9634 23.8116C14.8123 23.9657 14.6071 24.0511 14.3937 24.0489L14.3918 24.0428Z"
+                                                fill="#368796"></path>
+                                            <path
+                                                d="M14.8973 23.2298C14.8973 23.5136 14.672 23.7438 14.3942 23.7438C14.1164 23.7438 13.8911 23.5136 13.8911 23.2298C13.8911 22.9459 14.1164 22.7157 14.3942 22.7157C14.672 22.7157 14.8973 22.9459 14.8973 23.2298Z"
+                                                fill="#368796"></path>
+                                        </svg>
+                                        <div>
+                                            <p class="m-0 fs-7 text-nowrap clr-primary-600">BP</p>
+                                            <p class="m-0 fs-7 text-nowrap fw-bold">120/80</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-max-content border-end px-3">
+                                    <div class="d-flex align-items-center gap-2 temp">
+                                        <svg width="39" height="39" viewBox="0 0 39 39" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="19.2642" cy="19.9221" r="19" fill="#DAEEF1"></circle>
+                                            <path
+                                                d="M22.0465 21.9345C21.7733 21.6706 21.5 21.4787 21.177 21.3109V12.2689C21.177 11.2616 20.3075 10.4221 19.2642 10.4221C18.2208 10.4221 17.3513 11.2616 17.3513 12.2689V21.3109C17.0533 21.4789 16.7551 21.6947 16.4818 21.9345C14.9416 23.4214 14.9416 25.8198 16.4818 27.3069C18.0219 28.7939 20.5061 28.7939 22.0463 27.3069C23.5868 25.8198 23.5868 23.4213 22.0464 21.9345H22.0465ZM19.1401 27.139C17.7737 27.139 16.6559 26.0598 16.6559 24.7406C16.6559 24.5726 16.8049 24.4528 16.954 24.4528C17.103 24.4528 17.252 24.5967 17.252 24.7406C17.252 25.724 18.0966 26.5394 19.1151 26.5394C19.2891 26.5394 19.4132 26.6833 19.4132 26.8272C19.4133 26.971 19.3141 27.139 19.1401 27.139H19.1401ZM20.4071 13.1563H19.2643V14.6433H20.4071V15.1229H19.2643V16.6099H20.4071V17.0895H19.2643V18.5765H20.4071V19.0561H19.2643V20.0873H18.2955V12.2206C18.2955 11.7168 18.7425 11.2852 19.2643 11.2852V12.6524H20.4071V13.1563Z"
+                                                fill="#368796"></path>
+                                        </svg>
+                                        <div>
+                                            <p class="m-0 fs-7 text-nowrap clr-primary-600">Temp</p>
+                                            <p class="m-0 fs-7 text-nowrap fw-bold">38 C</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-max-content border-end px-3">
+                                    <div class="d-flex align-items-center gap-2 ">
+                                        <img src="assets/images/icons/height.svg" alt="">
+                                        <div>
+                                            <p class="fs-7">122.00 Cms</p>
+                                            <p class="fs-8">Height</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-max-content border-end px-3">
+                                    <div class="d-flex align-items-center gap-2 ">
+                                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="39" height="38"
+                                            viewBox="0 0 39 38" fill="none">
+                                            <circle cx="19.5" cy="19" r="19" fill="#DAEEF1"></circle>
+                                            <path
+                                                d="M25.4627 9H13.5373C12.7465 9 11.9882 9.31411 11.4292 9.87328C10.87 10.4323 10.5559 11.1906 10.5559 11.9814V26.0186C10.5559 26.8094 10.87 27.5677 11.4292 28.1267C11.9882 28.6859 12.7465 29 13.5373 29H25.4627C26.2535 29 27.0118 28.6859 27.5708 28.1267C28.13 27.5677 28.4441 26.8094 28.4441 26.0186V11.9814C28.4441 11.1906 28.13 10.4323 27.5708 9.87328C27.0118 9.31411 26.2535 9 25.4627 9ZM25.1496 16.312L22.3621 18.3094L19.9397 20.0387C19.8135 20.1286 19.6624 20.1768 19.5075 20.1768C19.3525 20.1768 19.2014 20.1286 19.0751 20.0387L16.6528 18.3094L13.8504 16.312C13.715 16.2155 13.6158 16.0764 13.5686 15.9171C13.5213 15.7578 13.5287 15.5871 13.5896 15.4324C14.1642 13.7875 15.3985 12.4564 16.9955 11.7593C18.5925 11.0622 20.4076 11.0622 22.0046 11.7593C23.6016 12.4564 24.8359 13.7875 25.4106 15.4324C25.4715 15.5871 25.4788 15.7578 25.4315 15.9171C25.3843 16.0764 25.2851 16.2155 25.1496 16.312ZM23.7857 15.4549L22.0342 16.7145C21.5361 16.2451 20.9163 15.925 20.2454 15.7903V14.9629C20.2454 14.6965 20.1033 14.4505 19.8727 14.3174C19.6421 14.1843 19.3579 14.1843 19.1274 14.3174C18.8968 14.4505 18.7547 14.6966 18.7547 14.9629V15.7903C18.0837 15.925 17.464 16.2451 16.9659 16.7145L15.2143 15.4549C15.7259 14.3631 16.6346 13.5078 17.7553 13.0635C18.8759 12.6191 20.1241 12.6191 21.2448 13.0635C22.3655 13.5079 23.2741 14.3632 23.7857 15.4549ZM18.2178 17.6014C18.5981 17.3502 19.044 17.2161 19.4999 17.2161C19.9558 17.2161 20.4016 17.3501 20.782 17.6014L19.4999 18.5182L18.2178 17.6014Z"
+                                                fill="#368796"></path>
+                                        </svg> -->
+                                        <svg width="39" height="38" viewBox="0 0 19 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <g clip-path="url(#clip0_9441_21695)">
+                                                <path
+                                                    d="M9.18476 18.8205C14.0279 18.8205 17.954 14.8944 17.954 10.0513C17.954 5.20816 14.0279 1.28204 9.18476 1.28204C4.34165 1.28204 0.415527 5.20816 0.415527 10.0513C0.415527 14.8944 4.34165 18.8205 9.18476 18.8205Z"
+                                                    fill="#DAEEF1" />
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M5.9054 4.55127H12.4644C12.8993 4.55127 13.3164 4.72403 13.6238 5.03157C13.9314 5.33903 14.1041 5.7561 14.1041 6.19104V13.9115C14.1041 14.3464 13.9314 14.7635 13.6238 15.071C13.3164 15.3785 12.8993 15.5513 12.4644 15.5513H5.9054C5.47046 15.5513 5.05339 15.3785 4.74594 15.071C4.43838 14.7635 4.26562 14.3464 4.26562 13.9115V6.19104C4.26562 5.7561 4.43838 5.33903 4.74594 5.03157C5.05339 4.72403 5.47046 4.55127 5.9054 4.55127ZM10.759 9.67144L12.2922 8.57287C12.3667 8.51979 12.4212 8.44329 12.4472 8.35567C12.4732 8.26806 12.4692 8.17417 12.4357 8.08909C12.1196 7.18439 11.4408 6.45229 10.5624 6.06888C9.68406 5.68548 8.68576 5.68548 7.80741 6.06888C6.92906 6.45229 6.25019 7.18439 5.93416 8.08909C5.90066 8.17417 5.89659 8.26806 5.92261 8.35567C5.94857 8.44329 6.00313 8.51979 6.0776 8.57287L7.61892 9.67144L8.95118 10.6226C9.02065 10.672 9.10375 10.6985 9.189 10.6985C9.2742 10.6985 9.3573 10.672 9.42671 10.6226L10.759 9.67144ZM10.5787 8.79425L11.542 8.10146C11.2606 7.50103 10.7609 7.03061 10.1445 6.78619C9.52814 6.54177 8.84163 6.54177 8.2253 6.78619C7.60891 7.03056 7.10913 7.50097 6.82775 8.10146L7.79113 8.79425C8.06508 8.53608 8.40591 8.36002 8.77496 8.28593V7.83086C8.77496 7.6844 8.85312 7.54904 8.97995 7.47584C9.10672 7.40263 9.26303 7.40263 9.38986 7.47584C9.5167 7.54904 9.59485 7.68434 9.59485 7.83086V8.28593C9.96384 8.36002 10.3047 8.53608 10.5787 8.79425ZM9.18483 9.07013C8.93408 9.07013 8.68884 9.14388 8.47967 9.28204L9.18483 9.78628L9.88998 9.28204C9.68076 9.14383 9.43557 9.07013 9.18483 9.07013ZM12.9351 11.1235H12.2293V14.6935H12.9351V11.1235ZM8.37558 11.1235H9.36909L10.1198 13.5785H10.1288L10.8391 11.1235H11.8326V14.6935H11.1718V12.1635H11.1628L10.3761 14.6935H9.83213L9.04542 12.1885H9.03643V14.6935H8.37558V11.1235ZM6.85564 12.5685H6.14086V11.7335H6.8017C6.86463 11.7335 6.92457 11.7401 6.98152 11.7535C7.04146 11.7635 7.0939 11.7835 7.13886 11.8135C7.18382 11.8435 7.21978 11.8851 7.24675 11.9385C7.27373 11.9918 7.28721 12.0601 7.28721 12.1435C7.28721 12.2935 7.24675 12.4018 7.16583 12.4685C7.08491 12.5351 6.98152 12.5685 6.85564 12.5685ZM6.94555 11.1235H5.43506V14.6935H6.99051C7.13436 14.6935 7.27373 14.6735 7.40859 14.6335C7.54645 14.5935 7.66783 14.5318 7.77273 14.4485C7.88062 14.3651 7.96604 14.2585 8.02897 14.1285C8.09191 13.9951 8.12338 13.8385 8.12338 13.6585C8.12338 13.4351 8.07393 13.2451 7.97503 13.0885C7.87912 12.9285 7.73227 12.8168 7.53447 12.7535C7.67832 12.6768 7.78622 12.5785 7.85814 12.4585C7.93307 12.3385 7.97053 12.1885 7.97053 12.0085C7.97053 11.8418 7.94506 11.7018 7.89411 11.5885C7.84616 11.4751 7.77722 11.3851 7.68731 11.3185C7.5974 11.2485 7.48951 11.1985 7.36364 11.1685C7.23776 11.1385 7.0984 11.1235 6.94555 11.1235ZM6.8961 14.0835H6.14086V13.1035H6.90959C7.06244 13.1035 7.18531 13.1435 7.27822 13.2235C7.37113 13.3001 7.41758 13.4301 7.41758 13.6135C7.41758 13.7068 7.4026 13.7835 7.37263 13.8435C7.34565 13.9035 7.30819 13.9518 7.26024 13.9885C7.21229 14.0218 7.15684 14.0468 7.0939 14.0635C7.03097 14.0768 6.96503 14.0835 6.8961 14.0835Z"
+                                                    fill="#368796" />
+                                            </g>
+                                            <defs>
+                                                <clipPath id="clip0_9441_21695">
+                                                    <rect width="18" height="20" fill="white"
+                                                        transform="translate(0.18457 0.0512695)" />
+                                                </clipPath>
+                                            </defs>
+                                        </svg>
+                                        <div>
+                                            <p class="fs-7">89.00 Kgs</p>
+                                            <p class="fs-8">Weight</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-max-content border-end px-3">
+                                    <div class="d-flex align-items-center gap-2 allergy">
+                                        <div class="d-flex align-items-center gap-2 allergy">
+                                            <svg width="39" height="39" viewBox="0 0 39 39" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="19.2642" cy="19.9221" r="19" fill="#DAEEF1"></circle>
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M28.2642 19.9221C28.2642 24.8927 24.2347 28.9221 19.2642 28.9221C14.2936 28.9221 10.2642 24.8927 10.2642 19.9221C10.2642 14.9516 14.2936 10.9221 19.2642 10.9221C24.2347 10.9221 28.2642 14.9516 28.2642 19.9221ZM24.8999 25.8535C23.4326 27.2481 21.4483 28.1039 19.2642 28.1039C14.7455 28.1039 11.0823 24.4408 11.0823 19.9221C11.0823 17.7903 11.8976 15.8489 13.2335 14.3928C13.252 14.457 13.2866 14.5176 13.3372 14.5682L16.963 18.194L15.4228 19.7455C15.3171 19.8521 15.2575 19.996 15.2568 20.1461V23.1164L13.7059 24.6674C13.6523 24.7206 13.6097 24.7839 13.5806 24.8536C13.5516 24.9233 13.5366 24.9981 13.5366 25.0737C13.5366 25.1492 13.5516 25.2241 13.5806 25.2938C13.6097 25.3635 13.6523 25.4268 13.7059 25.48C13.7591 25.5337 13.8224 25.5763 13.8921 25.6053C13.9619 25.6344 14.0367 25.6493 14.1122 25.6493C14.1878 25.6493 14.2626 25.6344 14.3323 25.6053C14.4021 25.5763 14.4654 25.5337 14.5186 25.48L16.0695 23.9291H19.0398C19.1899 23.9285 19.3338 23.8688 19.4404 23.7631L20.9919 22.2229L24.5141 25.7452C24.6187 25.8498 24.7659 25.8859 24.8999 25.8535ZM25.2011 25.552C25.2333 25.4181 25.1972 25.2711 25.0927 25.1666L21.5725 21.6465L24.1505 19.0874C24.417 18.8216 24.6284 18.5058 24.7726 18.1581C24.9169 17.8105 24.9912 17.4378 24.9912 17.0614C24.9912 16.685 24.9169 16.3123 24.7726 15.9647C24.6284 15.617 24.417 15.3013 24.1505 15.0355C23.8847 14.769 23.5689 14.5575 23.2212 14.4133C22.8736 14.269 22.5009 14.1948 22.1245 14.1948C21.7481 14.1948 21.3754 14.269 21.0278 14.4133C20.6801 14.5575 20.3644 14.769 20.0985 15.0355L17.5394 17.6134L13.9157 13.9897C13.8652 13.9392 13.8048 13.9046 13.7407 13.8861C15.1962 12.5534 17.1352 11.7403 19.2642 11.7403C23.7829 11.7403 27.446 15.4034 27.446 19.9221C27.446 22.1034 26.5924 24.0852 25.2011 25.552ZM16.4015 20.3808L17.7721 19.0032L18.5711 19.8021L17.712 20.6612C17.6584 20.7144 17.6158 20.7777 17.5868 20.8475C17.5577 20.9172 17.5427 20.992 17.5427 21.0676C17.5427 21.1431 17.5577 21.2179 17.5868 21.2877C17.6158 21.3574 17.6584 21.4207 17.712 21.4739C17.7652 21.5275 17.8285 21.5701 17.8983 21.5992C17.968 21.6282 18.0428 21.6432 18.1184 21.6432C18.1939 21.6432 18.2687 21.6282 18.3385 21.5992C18.4082 21.5701 18.4715 21.5275 18.5247 21.4739L19.3838 20.6148L20.1828 21.4138L18.8051 22.7845H16.4015V20.3808ZM18.3492 18.4232L19.1496 19.2236L21.7182 16.6551C21.8259 16.5473 21.9721 16.4868 22.1245 16.4868C22.2769 16.4868 22.4231 16.5473 22.5308 16.6551C22.6386 16.7628 22.6992 16.909 22.6992 17.0614C22.6992 17.2138 22.6386 17.36 22.5308 17.4678L19.9623 20.0363L20.7628 20.8367L23.3378 18.2747C23.6411 17.9492 23.8062 17.5188 23.7983 17.074C23.7905 16.6292 23.6103 16.2048 23.2957 15.8902C22.9812 15.5756 22.5568 15.3954 22.112 15.3876C21.6672 15.3797 21.2367 15.5449 20.9112 15.8481L18.3492 18.4232Z"
+                                                    fill="#368796"></path>
+                                            </svg>
+                                            <div>
+                                                <p class="m-0 fs-7 text-nowrap clr-primary-600">Allergy</p>
+                                                <p class="m-0 fs-7 text-nowrap">NKA</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="position-relative">
+                                    </div>
+                                </div>
+                                <div class="w-max-content border-end px-3">
+                                    <div class="d-flex align-items-center gap-2 bedno">
+                                        <svg width="39" height="39" viewBox="0 0 39 39" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="19.2642" cy="19.9221" r="19" fill="#DAEEF1"></circle>
+                                            <path
+                                                d="M12.1554 18.5362C13.2228 18.5362 14.0881 17.6709 14.0881 16.6035C14.0881 15.5362 13.2231 14.672 12.1554 14.672C11.0894 14.672 10.2239 15.5364 10.2239 16.6035C10.2239 17.6707 11.0894 18.5362 12.1554 18.5362ZM30.7642 19.5747C30.7642 18.0449 29.5231 16.804 27.9933 16.804H20.1708V22.4179H29.4416V25.1266H30.7639L30.7631 19.5746L30.7642 19.5747ZM14.0878 19.1781H19.3777V16.8042H16.8267C15.4309 16.8044 14.2802 17.837 14.0878 19.1781ZM9.08641 13.3168H7.76416V25.1273H9.08641V22.4184H19.3777V19.9717L9.08641 19.9719V13.3168Z"
+                                                fill="#368796"></path>
+                                        </svg>
+                                        <div>
+                                            <p class="m-0 fs-7 text-nowrap">Bed No.</p>
+                                            <p class="m-0 fs-7 text-nowrap"> ED-ROOM 7-7B</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-max-content px-3">
+                                    <div class="d-flex align-items-end gap-3">
+                                        <div class="">
+                                            <p class="m-0 fs-7 text-nowrap">Prescription.</p>
+                                            <div class="d-felx align-items-center gap-1 mt-1">
+                                                <button class="btn fs-8 btn-main-outline">Discontinued</button>
+                                                <button class="btn fs-8 btn-main-outline">Discontinued</button>
+                                            </div>
+                                        </div>
+                                        <button class="btn fs-8 btn-main-outline">Medical History</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="p-2 d-flex justify-content-between">
+                            <div class="p-2 pb-2 d-flex justify-content-between w-100">
+                                  <div>
+                                  <p class="m-0 fs-7 text-wrap"><span class="fs-7 fw-bold">Prescription saved by: Salma Khalid Zain</span></p>
+                                  </div>
+                            </div>
+                         </div> -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <div class="card card-style-1 overflow-hidden">
+                        <div class="card-header justify-content-between expand active min-height-unset py-1">
+                            <p class="clr-primary-600 fs-6 m-0">Prescription saved by: Salma Khalid Zain</p>
+                            <button class="btn btn-icon-3d">
+                                <img src="assets/images/icons/arrow-down.svg" alt="">
+                            </button>
+                        </div>
+                        <div class="p-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="">
+                                        <table class="table m-0" style="min-height: 10rem;max-height: 10rem;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Substitute</th>
+                                                    <th>QOH</th>
+                                                    <th>Dose</th>
+                                                    <th>UoM</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="">
+                                        <table class="table m-0">
+                                            <tbody>
+                                                <tr>
+                                                    <th>Drug Allergies</th>
+                                                    <td>NKA (No Known Allergy)</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Food Allergies</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Other Allergies</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Diagnosis</th>
+                                                    <td>Acute upper respiratory infection, unspecified
+                                                        Bronchopneumonia, unspecified
+                                                        Asthma, unspecified</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 table-responsive horizontalScroll">
+                    <table class="table m-0">
+                        <thead>
+                            <tr>
+                                <th>Sl.No</th>
+                                <th>Item Code</th>
+                                <th>Item Name</th>
+                                <th>Dose</th>
+                                <th>DUOM</th>
+                                <th>Frequency</th>
+                                <th>Duration</th>
+                                <th>Admin Route</th>
+                                <th>Remarks</th>
+                                <th>Start Date</th>
+                                <th>QOH</th>
+                                <th>QUoM</th>
+                                <th>ReqQty</th>
+                                <th>Hold</th>
+                                <th>Unit</th>
+                                <th>Iss Qty</th>
+                                <th>Batch No</th>
+                                <th>Expiry Date</th>
+                                <th>Type</th>
+                                <th>PNR Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>302</td>
+                                <td>SALBUTAMOL(VENTOLIN) 5MG/ML
+                                    SOLUTION 20ML NEB FOR
+                                    INHALATION (Cr)</td>
+                                <td> 0.5 </td>
+                                <td> ml </td>
+                                <td> Q4H. </td>
+                                <td> 5 Days </td>
+                                <td> ML nebulization </td>
+                                <td> 0.5ML </td>
+                                <td class="text-nowrap"> 18-Dec-2023 </td>
+                                <td> 76 </td>
+                                <td> Bottle </td>
+                                <td> <input type="text" class="form-control"> </td>
+                                <td> </td>
+                                <td> Bottle </td>
+                                <td> 1 </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>302</td>
+                                <td>SALBUTAMOL(VENTOLIN) 5MG/ML
+                                    SOLUTION 20ML NEB FOR
+                                    INHALATION (Cr)</td>
+                                <td> 0.5 </td>
+                                <td> ml </td>
+                                <td> Q4H. </td>
+                                <td> 5 Days </td>
+                                <td> ML nebulization </td>
+                                <td> 0.5ML </td>
+                                <td class="text-nowrap"> 18-Dec-2023 </td>
+                                <td> 76 </td>
+                                <td> Bottle </td>
+                                <td> <input type="text" class="form-control"> </td>
+                                <td> </td>
+                                <td> Bottle </td>
+                                <td> 1 </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                                <td> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal quick_info" data-bs-backdrop="static" id="quick_info" tab-index="-1">
+    <div class="modal-dialog modal-dialog-scrollabel">
+        <div class="modal-content h-100 overflow-auto">
+            <div class="modal-header ps-0">
+                <label for="" class="ssn_label bg-primary clr-light" id="lblSSN">SSN:
+                    {{pinfo?.SSN}}</label>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="clearPatientInfo()"></button>
+            </div>
+            <app-patient-quick-information *ngIf="pinfo" [patientInfo]="pinfo"></app-patient-quick-information>
+        </div>
+    </div>
+</div>
+<div class="modal" id="reviewAndPayment">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{langData?.common?.radReport}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="trustedUrl = ''"></button>
+            </div>
+            <div class="modal-body">
+                <iframe *ngIf="trustedUrl" height="600" width="100%" [src]="(trustedUrl ? trustedUrl :'')| safeUrl"
+                    frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="errorMessageModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <ul *ngIf="errorMessages.length > 0">
+                    <li *ngFor="let error of errorMessages; let i = index"> {{error}}</li>
+                </ul>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="caseRecordModal">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Print Label</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="trustedUrl = ''"></button>
+            </div>
+            <div class="modal-body">
+                <iframe *ngIf="trustedUrl" height="600" width="100%" [src]="(trustedUrl ? trustedUrl :'')| safeUrl"
+                    frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>

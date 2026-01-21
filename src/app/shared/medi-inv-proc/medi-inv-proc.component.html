@@ -1,0 +1,1776 @@
+<div class="card card-style-1">
+    <div class="card-header py-2" style="height: 45px;min-height:45px">
+        <h2 class="card-heading d-flex align-items-center">
+            <span class="text-nowrap"> {{langData?.casesheet?.rx_orders}} </span>            
+            <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start ms-2">
+                <button class="btn fs-7" [class.selected]="toggleValue === 'Normal'"
+                    (click)="toggleStatNormal('normal')"
+                    class="btn selected">{{langData?.prescriptions?.Normal}}</button>
+                <button class="btn fs-7" [class.selected]="toggleValue === 'Stat'"
+                    (click)="toggleStatNormal('stat')">{{langData?.prescriptions?.Stat}}</button>
+            </div>
+        </h2>
+        <div class="actions ms-auto d-flex gap-2 flex-wrap align-items-center justify-content-end">           
+            <button class="btn btn-danger-outline"
+                (click)="ClearPrescriptionsSelected()">{{langData?.common?.Clear}}</button>
+            <button class="btn btn-main-outline" 
+                (click)="onSavePrescriptionClick()" >{{langData?.common?.Save}}</button>
+        </div>
+    </div>
+    <div class="p-2 rxorders_height overflow-auto">
+       
+        <!-- Investigation  Details -->
+        <div class="col-md-12">
+            <div class="accordion card card-style-1 iandp" id="accordionInvestigation">
+                <div class="">
+                    <div class="card-header card-3d-header d-flex align-items-center justify-content-between"
+                        data-bs-toggle="collapse" aria-expanded="true" aria-controls="collapseOne" style="height: 45px;">
+                        <div class="d-flex align-items-center gap-3 w-75">
+                            <div class="w-50">
+                                <div class="d-flex align-items-center gap-2">
+                                    <h2 class="card-heading text-nowrap">
+                                        {{langData?.prescriptions?.Investigation}}
+                                    </h2>
+                                    <form class="CommanSearch__form input-group ps-0 h-auto">
+                                        <input type="text"
+                                            placeholder={{langData?.prescriptions?.Investigation}}
+                                            id="invprocSmartSearch" [matAutocomplete]="auto"
+                                            class="CommonSearch__input form-control pe-2"
+                                            (mousedown)="onInvestigationMouseDown($event)"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : investigationDatasource($event)">
+    
+                                        <mat-autocomplete #auto="matAutocomplete">
+                                            <mat-option *ngFor="let item of investigationData"
+                                                (onSelectionChange)="onItemSelect(item)" [value]="item.Name.trim()">
+                                                {{item.Name}} </mat-option>
+                                        </mat-autocomplete>
+                                        <button type="button" id="button-addon2"
+                                            class="btn btn-secondary-fill btn-icon">
+                                            <img src="assets/images/icons/icon-search.svg" alt="">
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="w-50">
+                                <div class="d-flex align-items-center gap-2">
+                                    <h2 class="card-heading text-nowrap">
+                                        {{langData?.prescriptions?.Procedures}}
+                                    </h2>
+                                    <form class="CommanSearch__form input-group ps-0 h-auto">
+                                        <input type="text"
+                                            placeholder={{langData?.prescriptions?.Procedures}}
+                                            id="procSmartSearch" [matAutocomplete]="auto1"
+                                            class="CommonSearch__input form-control pe-2"
+                                            (mousedown)="onProceduresMouseDown($event)"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : procedureDatasource($event)">
+    
+                                        <mat-autocomplete #auto1="matAutocomplete">
+                                            <mat-option *ngFor="let item of proceduresData"
+                                                (onSelectionChange)="onProcedureItemSelect(item)" [value]="item.Name.trim()">
+                                                {{item.Name}} </mat-option>
+                                        </mat-autocomplete>
+                                        <button type="button" id="button-addon2"
+                                            class="btn btn-secondary-fill btn-icon">
+                                            <img src="assets/images/icons/icon-search.svg" alt="">
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="d-flex align-items-center gap-2">
+                            <button class="btn btn-secondary-outline min-width-unset" data-bs-toggle="modal"
+                                data-bs-target="#lab_reports"
+                                (click)="getLabReports()">{{langData?.prescriptions?.InvestigationOrders}}
+                            </button>
+                        </div> -->
+                    </div>
+                    <div id="accordionInvestigationBody"
+                        class="accordionInvestigationBody accordion-collapse collapse show p-2"
+                        aria-labelledby="headingOne" data-bs-parent="#accordionInvestigation">
+                        <form [formGroup]="investigationsForm"  *ngIf="showInvListdiv">
+                            <div class="card-3d-body">
+                                <div class="mb-2">
+                                    <div class="Investigation_border m-2">
+                                        <span
+                                            class="table-date-heading position-relative w-max-content fs-7"
+                                            style="top: 0;">
+                                            <span>{{langData?.prescriptions?.Investigation}}</span>
+                                        </span>
+                                        <table class="table m-0">
+                                            <thead class="main_head">
+                                                <tr>
+                                                    <th style="width:30%;">{{langData?.common?.ServiceName}}
+                                                    </th>
+                                                    <th style="width:20%;">
+                                                        {{langData?.prescriptions?.Normal}}/{{langData?.prescriptions?.Stat}}
+                                                    </th>
+                                                    <th style="width:15%;">
+                                                        {{langData?.Ward?.Specialization}}
+                                                    </th>
+                                                    <th style="width:10%;">
+                                                        TATRemarks
+                                                    </th>
+                                                    <th style="width:15%;">
+                                                        <div class="d-flex gap-2">
+                                                            Diagnosis
+                                                            <div class="custom_check d-flex align-items-center gap-2 custom_tooltip custom_tooltip_left" [class.active]="isInvesigationsAll" (click)="changeInvestigationDiagnosis()">
+                                                                <svg width="20" height="20" viewBox="0 0 20 21" fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                                    <path
+                                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                                </svg>    
+                                                                <div class="tooltip">
+                                                                    <p>Applicable to All</p>
+                                                                </div>                                                            
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th style="width:10%;" class="text-center">
+                                                        {{langData?.prescriptions?.Qty}}</th>
+                                                    <th class="pe-5 text-end">{{langData?.Advice?.Actions}}
+                                                    </th>
+                                                </tr>
+
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let view of investigationsList;let i=index">
+                                                    <td class="" style="width:30%;">
+                                                        {{ view.Name }}
+                                                    </td>
+                                                    <td class="" style="width:20%;">
+                                                        <div
+                                                            class="d-inline-flex clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start">
+                                                            <div class="normal_tooltip position-relative">
+                                                                <button (click)="view.SOrN = 'N'"
+                                                                    class="btn"
+                                                                    [class.selected]="view.SOrN === 'N'">
+                                                                    <span class="fw-bold">N</span>
+                                                                </button>
+                                                                <div class="tooltip">
+                                                                    <p>{{langData?.prescriptions?.Normal}}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="stat_tooltip position-relative">
+                                                                <button (click)="view.SOrN = 'S'"
+                                                                    class="btn"
+                                                                    [class.selected]="view.SOrN === 'S'">
+                                                                    <span class="fw-bold">S</span>
+                                                                </button>
+                                                                <div class="tooltip">
+                                                                    <p>{{langData?.prescriptions?.Stat}}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="" style="width:15%;">
+                                                        {{ view.Specialisation }}
+                                                    </td>
+                                                    <td class="" style="width:10%;">
+                                                        {{ view.TATRemarks }}
+                                                    </td>
+                                                    <td class="" style="width:15%;">
+                                                        <div class="dropdown custom_dropdown">
+                                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                                {{getDiagnosisMappingName(view.DISID)}}                                                        
+                                                            </button>
+                                                            <ul class="dropdown-menu end-0">
+                                                                <li class="dropdown-item" *ngFor="let dis of visitDiagnosis" (click)="view.DISID = dis.DiseaseID">
+                                                                    {{dis.DiseaseName}}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                    <td class="" style="width:10%;">
+                                                        <input type="text" class="form-control text-center"
+                                                            value="1" [disabled]="true">
+                                                    </td>
+                                                    <td class="">
+                                                        <div class="gap-3 justify-content-end actions">
+                                                            <!-- REMARKS MODAL -->
+                                                            <div class="modal fade"
+                                                                id="investigation_remark" tabindex="-1"
+                                                                aria-labelledby="diagnosisCommentsLabel"
+                                                                aria-hidden="true">
+                                                                <div class="modal-dialog modal-dialog-centered"
+                                                                    style="width: 35%;">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title"
+                                                                                id="diagnosisCommentsLabel">
+                                                                                {{langData?.prescriptions?.Remarksfor}}
+                                                                                {{remarksForSelectedInvName}}
+                                                                            </h5>
+                                                                            <div
+                                                                                class="d-flex gap-2 align-items-center justify-content-end">
+                                                                                <button
+                                                                                    class="btn btn-danger-outline">{{langData?.common?.Clear}}</button>
+                                                                                <button
+                                                                                    class="btn btn-main-outline"
+                                                                                    (click)="investigationRemarks(view, remarksForSelectedInvId)">{{langData?.common?.Save}}</button>
+                                                                                <button type="button"
+                                                                                    class="btn-close ms-3"
+                                                                                    data-bs-dismiss="modal"
+                                                                                    aria-label="Close"></button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <!-- <label for="" class="form-label">Remarks</label> -->
+                                                                            <textarea name="" placeholder=""
+                                                                                [value]="view.Remarks"
+                                                                                formControlName="Remarks"
+                                                                                [class]="(isInvSub && investigationsForm.get('Remarks')?.errors) || (!investigationsForm.get('Remarks')?.pristine && investigationsForm.get('Remarks')?.invalid) ? 
+                                                                                'form-control resize-none mb-2 border-danger-300' : 'form-control resize-none mb-2'"
+                                                                                id="invRem" cols="30"
+                                                                                rows="3"></textarea>
+                                                                            <span
+                                                                                class="position-absolute bottom-0"
+                                                                                *ngIf="(isInvSub && investigationsForm.get('Remarks')?.errors) || (!investigationsForm.get('Remarks')?.pristine && investigationsForm.get('Remarks')?.invalid)">
+                                                                                <div class="text-danger"
+                                                                                    *ngIf="investigationsForm.get('Remarks')?.errors?.['required']">
+                                                                                    {{langData?.messages?.remarksisrequired}}
+                                                                                </div>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div [class]="(view.Remarks == '' || view.Remarks == 'undefined') ? 'remark_svg cursor-pointer custom_tooltip custom_tooltip_left' : 'remark_svg cursor-pointer custom_tooltip custom_tooltip_left active'"
+                                                                (click)="openInvRemarksPopup(view)">
+                                                                <svg width="20" height="25"
+                                                                    viewBox="0 0 24 25" fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                    <path fill-rule="evenodd"
+                                                                        clip-rule="evenodd"
+                                                                        d="M11.3035 13.0436L13.6501 17.1209H15.6449L13.122 12.897C13.9237 12.7014 14.5155 12.3347 14.8968 11.7969C15.288 11.2494 15.4835 10.6432 15.4835 9.97823C15.4835 9.41114 15.3465 8.8979 15.0729 8.43822C14.8088 7.9787 14.403 7.61212 13.8554 7.33834C13.3177 7.06457 12.6577 6.9276 11.8753 6.9276H8.35541V17.1209H10.0273V13.0436H11.3035ZM11.8753 11.7089H10.0273V8.29156H11.8753C12.5109 8.29156 12.9853 8.44315 13.298 8.74631C13.611 9.03964 13.7674 9.45023 13.7674 9.97823C13.7674 10.5062 13.606 10.9267 13.2834 11.2395C12.9704 11.5526 12.5013 11.7089 11.8753 11.7089Z"
+                                                                        fill="#B0B4B5" />
+                                                                    <path fill-rule="evenodd"
+                                                                        clip-rule="evenodd"
+                                                                        d="M23 12.0243C23 18.0995 18.075 23.0243 12 23.0243C5.92499 23.0243 1 18.0995 1 12.0243C1 5.94917 5.92499 1.02432 12 1.02432C18.075 1.02432 23 5.94917 23 12.0243ZM21.7778 12.0243C21.7778 17.4245 17.4 21.8021 12 21.8021C6.59996 21.8021 2.22222 17.4245 2.22222 12.0243C2.22222 6.62414 6.59996 2.24654 12 2.24654C17.4 2.24654 21.7778 6.62414 21.7778 12.0243Z"
+                                                                        fill="#B0B4B5" />
+                                                                    <path fill-rule="evenodd"
+                                                                        clip-rule="evenodd"
+                                                                        d="M11.3035 13.0436L13.6501 17.1209H15.6449L13.122 12.897C13.9237 12.7014 14.5155 12.3347 14.8968 11.7969C15.288 11.2494 15.4835 10.6432 15.4835 9.97823C15.4835 9.41114 15.3465 8.8979 15.0729 8.43822C14.8088 7.9787 14.403 7.61212 13.8554 7.33834C13.3177 7.06457 12.6577 6.9276 11.8753 6.9276H8.35541V17.1209H10.0273V13.0436H11.3035ZM11.8753 11.7089H10.0273V8.29156H11.8753C12.5109 8.29156 12.9853 8.44315 13.298 8.74631C13.611 9.03964 13.7674 9.45023 13.7674 9.97823C13.7674 10.5062 13.606 10.9267 13.2834 11.2395C12.9704 11.5526 12.5013 11.7089 11.8753 11.7089Z"
+                                                                        stroke="#B0B4B5"
+                                                                        stroke-width="0.5" />
+                                                                    <path fill-rule="evenodd"
+                                                                        clip-rule="evenodd"
+                                                                        d="M23 12.0243C23 18.0995 18.075 23.0243 12 23.0243C5.92499 23.0243 1 18.0995 1 12.0243C1 5.94917 5.92499 1.02432 12 1.02432C18.075 1.02432 23 5.94917 23 12.0243ZM21.7778 12.0243C21.7778 17.4245 17.4 21.8021 12 21.8021C6.59996 21.8021 2.22222 17.4245 2.22222 12.0243C2.22222 6.62414 6.59996 2.24654 12 2.24654C17.4 2.24654 21.7778 6.62414 21.7778 12.0243Z"
+                                                                        stroke="#B0B4B5"
+                                                                        stroke-width="0.5" />
+                                                                </svg>
+                                                                <div class="tooltip">
+                                                                    <p>{{langData?.Diagnosis?.Remarks}}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="del_svg cursor-pointer custom_tooltip custom_tooltip_left"
+                                                                
+                                                                (click)="deleteInvestigation(i);">
+                                                                <svg width="23" height="22"
+                                                                    viewBox="0 0 23 22" fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                    <path
+                                                                        d="M20.0995 6.16917H20.0261C15.177 5.68334 10.337 5.5 5.5428 5.98584L3.6728 6.16917C3.58184 6.17866 3.48989 6.17003 3.40228 6.14377C3.31467 6.11751 3.23314 6.07414 3.16239 6.01618C3.09164 5.95822 3.03308 5.8868 2.9901 5.80607C2.94712 5.72534 2.92056 5.63689 2.91197 5.54584C2.8753 5.16084 3.1503 4.83084 3.52614 4.79417L5.39614 4.61084C10.2728 4.11584 15.2136 4.30834 20.1636 4.79417C20.5395 4.83084 20.8145 5.17 20.7778 5.54584C20.764 5.71605 20.6864 5.87477 20.5607 5.99032C20.4349 6.10586 20.2702 6.16973 20.0995 6.16917Z"
+                                                                        fill="#EB6247" />
+                                                                    <path
+                                                                        d="M8.64147 5.24333C8.6048 5.24333 8.56813 5.24333 8.5223 5.23416C8.34445 5.20211 8.18627 5.10159 8.08172 4.95419C7.97717 4.80679 7.93459 4.62427 7.96313 4.44583L8.1648 3.24499C8.31147 2.36499 8.51313 1.14583 10.649 1.14583H13.0506C15.1956 1.14583 15.3973 2.41083 15.5348 3.25416L15.7365 4.44583C15.8006 4.82166 15.544 5.17916 15.1773 5.23416C14.8015 5.29833 14.444 5.04166 14.389 4.67499L14.1873 3.48333C14.059 2.68583 14.0315 2.52999 13.0598 2.52999H10.6581C9.68647 2.52999 9.66813 2.65833 9.53063 3.47416L9.3198 4.66583C9.29369 4.82694 9.2111 4.97351 9.08683 5.07931C8.96255 5.18512 8.80468 5.24325 8.64147 5.24333ZM14.7923 20.856H8.9073C5.70813 20.856 5.5798 19.0868 5.47897 17.6568L4.88313 8.42599C4.85563 8.05016 5.14897 7.72016 5.5248 7.69266C5.9098 7.67433 6.23063 7.95849 6.25813 8.33433L6.85397 17.5652C6.9548 18.9585 6.99147 19.481 8.9073 19.481H14.7923C16.7173 19.481 16.754 18.9585 16.8456 17.5652L17.4415 8.33433C17.469 7.95849 17.799 7.67433 18.1748 7.69266C18.5506 7.72016 18.844 8.041 18.8165 8.42599L18.2206 17.6568C18.1198 19.0868 17.9915 20.856 14.7923 20.856Z"
+                                                                        fill="#EB6247" />
+                                                                    <path
+                                                                        d="M13.3714 15.8125H10.3189C9.94311 15.8125 9.63144 15.5008 9.63144 15.125C9.63144 14.7492 9.94311 14.4375 10.3189 14.4375H13.3714C13.7473 14.4375 14.0589 14.7492 14.0589 15.125C14.0589 15.5008 13.7473 15.8125 13.3714 15.8125ZM14.1414 12.1458H9.55811C9.18227 12.1458 8.87061 11.8342 8.87061 11.4583C8.87061 11.0825 9.18227 10.7708 9.55811 10.7708H14.1414C14.5173 10.7708 14.8289 11.0825 14.8289 11.4583C14.8289 11.8342 14.5173 12.1458 14.1414 12.1458Z"
+                                                                        fill="#EB6247" />
+                                                                </svg>
+                                                                <div class="tooltip">
+                                                                    <p>{{langData?.Diagnosis?.Delete}}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="accordionProceduresBody" *ngIf="showProcListdiv"
+                        class="accordionProceduresBody accordion-collapse collapse show"
+                        aria-labelledby="headingOne" data-bs-parent="#accordionProcedures">
+                        <form [formGroup]="proceduresForm">
+                            <div class="card-3d-body">
+                                <div class="m-2 mt-3">
+                                    <div class="Procedures_border mt-2">
+                                        <span
+                                            class="table-date-heading position-relative w-max-content fs-7"
+                                            style="top: 0;">
+                                            <span>{{langData?.common?.Procedures}}</span>
+                                        </span>
+                                        <table class="table m-0">
+                                            <thead class="main_head">
+                                                <tr>
+                                                    <th style="width:30%;">{{langData?.common?.ServiceName}}
+                                                    </th>
+                                                    <th style="width:20%;">
+                                                        {{langData?.prescriptions?.Normal}}/{{langData?.prescriptions?.Stat}}
+                                                    </th>
+                                                    <th style="width:15%;">
+                                                        {{langData?.Ward?.Specialization}}
+                                                    </th>
+                                                    <th style="width:10%;">
+                                                        TATRemarks
+                                                    </th>
+                                                    <th style="width:15%;">
+                                                        <div class="d-flex gap-2">
+                                                            Diagnosis
+                                                            <div class="custom_check d-flex align-items-center gap-2 custom_tooltip custom_tooltip_left" [class.active]="isProceduresAll" (click)="changeProcedureDiagnosis()">
+                                                                <svg width="20" height="20" viewBox="0 0 20 21" fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                                    <path
+                                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                                </svg>
+                                                                <div class="tooltip">
+                                                                    <p>Applicable to All</p>
+                                                                </div>    
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th style="width:10%;" class="text-center">
+                                                        {{langData?.prescriptions?.Qty}}</th>
+                                                    <th class="pe-5 text-end">{{langData?.Advice?.Actions}}
+                                                    </th>
+                                                </tr>
+
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let view of proceduresList;let i=index">
+                                                    <td class="" style="width:30%;">
+                                                        {{ view.Name }}
+                                                    </td>
+                                                    <td class="" style="width:20%;">
+                                                        <div
+                                                            class="d-inline-flex clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start">
+                                                            <button (click)="view.SOrN = 'N'" class="btn"
+                                                                [class.selected]="view.SOrN === 'N'">
+                                                                <span class="fw-bold">N</span>
+                                                            </button>
+                                                            <button (click)="view.SOrN = 'S'" class="btn"
+                                                                [class.selected]="view.SOrN === 'S'">
+                                                                <span class="fw-bold">S</span>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                    <td class="" style="width:15%;">
+                                                        {{ view.Specialisation }}
+                                                    </td>
+                                                    <td style="width:10%;">
+                                                        {{ view.TATRemarks }}   
+                                                    </td>   
+                                                    <td class="" style="width:15%;">
+                                                        <div class="dropdown custom_dropdown">
+                                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                                {{getDiagnosisMappingName(view.DISID)}}                                                        
+                                                            </button>
+                                                            <ul class="dropdown-menu end-0">
+                                                                <li class="dropdown-item" *ngFor="let dis of visitDiagnosis" (click)="view.DISID = dis.DiseaseID">
+                                                                    {{dis.DiseaseName}}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>                                                            
+                                                    <td class="" style="width:10%;">
+                                                        <input type="text" class="form-control text-center"
+                                                            [value]="view.Quantity" appTwoDigitDecimaNumber
+                                                            maxlength="2"
+                                                            (change)="ProcedureQuantity(i, $event)">
+                                                    </td>
+                                                    <td class="">
+                                                        <div class="gap-3 justify-content-end actions">
+                                                            <!-- REMARKS MODAL -->
+                                                            <div class="modal fade" id="procedure_remark"
+                                                                tabindex="-1"
+                                                                aria-labelledby="diagnosisCommentsLabel"
+                                                                aria-hidden="true">
+                                                                <div class="modal-dialog modal-dialog-centered"
+                                                                    style="width: 35%;">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title"
+                                                                                id="diagnosisCommentsLabel">
+                                                                                {{langData?.prescriptions?.Remarksfor}}
+                                                                                {{remarksForSelectedProcName}}
+                                                                            </h5>
+                                                                            <div
+                                                                                class="d-flex gap-2 align-items-center justify-content-end">
+                                                                                <button
+                                                                                    class="btn btn-danger-outline">{{langData?.common?.Clear}}</button>
+                                                                                <button
+                                                                                    class="btn btn-main-outline"
+                                                                                    data-bs-dismiss="modal"
+                                                                                    (click)="procedureRemarks(view, remarksForSelectedProcId)">{{langData?.common?.Save}}</button>
+                                                                                <button type="button"
+                                                                                    class="btn-close"
+                                                                                    data-bs-dismiss="modal"
+                                                                                    aria-label="Close"></button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <!-- <label for="" class="form-label">Remarks</label> -->
+                                                                            <textarea name="" placeholder=""
+                                                                                formControlName="Remarks"
+                                                                                [class]="(isProSub && proceduresForm.get('Remarks')?.errors) || (!proceduresForm.get('Remarks')?.pristine && proceduresForm.get('Remarks')?.invalid) ? 
+                                                                                'form-control resize-none mb-2 border-danger-300' : 'form-control resize-none mb-2'"
+                                                                                id="procRem" cols="30"
+                                                                                rows="3"></textarea>
+                                                                            <span
+                                                                                class="position-absolute bottom-0"
+                                                                                *ngIf="(isProSub && proceduresForm.get('Remarks')?.errors) || (!proceduresForm.get('Remarks')?.pristine && proceduresForm.get('Remarks')?.invalid)">
+                                                                                <div class="text-danger"
+                                                                                    *ngIf="proceduresForm.get('Remarks')?.errors?.['required']">
+                                                                                    {{langData?.messages?.remarksisrequired}}
+                                                                                </div>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div [class]="(view.Remarks == '' || view.Remarks == 'undefined') ? 'remark_svg cursor-pointer custom_tooltip' : 'remark_svg cursor-pointer custom_tooltip active'"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#procedure_remark"
+                                                                (click)="openProvRemarksPopup(view)">
+                                                                <svg width="20" height="25"
+                                                                    viewBox="0 0 24 25" fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                    <path fill-rule="evenodd"
+                                                                        clip-rule="evenodd"
+                                                                        d="M11.3035 13.0436L13.6501 17.1209H15.6449L13.122 12.897C13.9237 12.7014 14.5155 12.3347 14.8968 11.7969C15.288 11.2494 15.4835 10.6432 15.4835 9.97823C15.4835 9.41114 15.3465 8.8979 15.0729 8.43822C14.8088 7.9787 14.403 7.61212 13.8554 7.33834C13.3177 7.06457 12.6577 6.9276 11.8753 6.9276H8.35541V17.1209H10.0273V13.0436H11.3035ZM11.8753 11.7089H10.0273V8.29156H11.8753C12.5109 8.29156 12.9853 8.44315 13.298 8.74631C13.611 9.03964 13.7674 9.45023 13.7674 9.97823C13.7674 10.5062 13.606 10.9267 13.2834 11.2395C12.9704 11.5526 12.5013 11.7089 11.8753 11.7089Z"
+                                                                        fill="#B0B4B5" />
+                                                                    <path fill-rule="evenodd"
+                                                                        clip-rule="evenodd"
+                                                                        d="M23 12.0243C23 18.0995 18.075 23.0243 12 23.0243C5.92499 23.0243 1 18.0995 1 12.0243C1 5.94917 5.92499 1.02432 12 1.02432C18.075 1.02432 23 5.94917 23 12.0243ZM21.7778 12.0243C21.7778 17.4245 17.4 21.8021 12 21.8021C6.59996 21.8021 2.22222 17.4245 2.22222 12.0243C2.22222 6.62414 6.59996 2.24654 12 2.24654C17.4 2.24654 21.7778 6.62414 21.7778 12.0243Z"
+                                                                        fill="#B0B4B5" />
+                                                                    <path fill-rule="evenodd"
+                                                                        clip-rule="evenodd"
+                                                                        d="M11.3035 13.0436L13.6501 17.1209H15.6449L13.122 12.897C13.9237 12.7014 14.5155 12.3347 14.8968 11.7969C15.288 11.2494 15.4835 10.6432 15.4835 9.97823C15.4835 9.41114 15.3465 8.8979 15.0729 8.43822C14.8088 7.9787 14.403 7.61212 13.8554 7.33834C13.3177 7.06457 12.6577 6.9276 11.8753 6.9276H8.35541V17.1209H10.0273V13.0436H11.3035ZM11.8753 11.7089H10.0273V8.29156H11.8753C12.5109 8.29156 12.9853 8.44315 13.298 8.74631C13.611 9.03964 13.7674 9.45023 13.7674 9.97823C13.7674 10.5062 13.606 10.9267 13.2834 11.2395C12.9704 11.5526 12.5013 11.7089 11.8753 11.7089Z"
+                                                                        stroke="#B0B4B5"
+                                                                        stroke-width="0.5" />
+                                                                    <path fill-rule="evenodd"
+                                                                        clip-rule="evenodd"
+                                                                        d="M23 12.0243C23 18.0995 18.075 23.0243 12 23.0243C5.92499 23.0243 1 18.0995 1 12.0243C1 5.94917 5.92499 1.02432 12 1.02432C18.075 1.02432 23 5.94917 23 12.0243ZM21.7778 12.0243C21.7778 17.4245 17.4 21.8021 12 21.8021C6.59996 21.8021 2.22222 17.4245 2.22222 12.0243C2.22222 6.62414 6.59996 2.24654 12 2.24654C17.4 2.24654 21.7778 6.62414 21.7778 12.0243Z"
+                                                                        stroke="#B0B4B5"
+                                                                        stroke-width="0.5" />
+                                                                </svg>
+                                                                <div class="tooltip">
+                                                                    <p>{{langData?.Diagnosis?.Remarks}}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="del_svg cursor-pointer custom_tooltip"
+                                                                (click)="deleteProcedure(i);">
+                                                                <svg width="23" height="22"
+                                                                    viewBox="0 0 23 22" fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                    <path
+                                                                        d="M20.0995 6.16917H20.0261C15.177 5.68334 10.337 5.5 5.5428 5.98584L3.6728 6.16917C3.58184 6.17866 3.48989 6.17003 3.40228 6.14377C3.31467 6.11751 3.23314 6.07414 3.16239 6.01618C3.09164 5.95822 3.03308 5.8868 2.9901 5.80607C2.94712 5.72534 2.92056 5.63689 2.91197 5.54584C2.8753 5.16084 3.1503 4.83084 3.52614 4.79417L5.39614 4.61084C10.2728 4.11584 15.2136 4.30834 20.1636 4.79417C20.5395 4.83084 20.8145 5.17 20.7778 5.54584C20.764 5.71605 20.6864 5.87477 20.5607 5.99032C20.4349 6.10586 20.2702 6.16973 20.0995 6.16917Z"
+                                                                        fill="#EB6247" />
+                                                                    <path
+                                                                        d="M8.64147 5.24333C8.6048 5.24333 8.56813 5.24333 8.5223 5.23416C8.34445 5.20211 8.18627 5.10159 8.08172 4.95419C7.97717 4.80679 7.93459 4.62427 7.96313 4.44583L8.1648 3.24499C8.31147 2.36499 8.51313 1.14583 10.649 1.14583H13.0506C15.1956 1.14583 15.3973 2.41083 15.5348 3.25416L15.7365 4.44583C15.8006 4.82166 15.544 5.17916 15.1773 5.23416C14.8015 5.29833 14.444 5.04166 14.389 4.67499L14.1873 3.48333C14.059 2.68583 14.0315 2.52999 13.0598 2.52999H10.6581C9.68647 2.52999 9.66813 2.65833 9.53063 3.47416L9.3198 4.66583C9.29369 4.82694 9.2111 4.97351 9.08683 5.07931C8.96255 5.18512 8.80468 5.24325 8.64147 5.24333ZM14.7923 20.856H8.9073C5.70813 20.856 5.5798 19.0868 5.47897 17.6568L4.88313 8.42599C4.85563 8.05016 5.14897 7.72016 5.5248 7.69266C5.9098 7.67433 6.23063 7.95849 6.25813 8.33433L6.85397 17.5652C6.9548 18.9585 6.99147 19.481 8.9073 19.481H14.7923C16.7173 19.481 16.754 18.9585 16.8456 17.5652L17.4415 8.33433C17.469 7.95849 17.799 7.67433 18.1748 7.69266C18.5506 7.72016 18.844 8.041 18.8165 8.42599L18.2206 17.6568C18.1198 19.0868 17.9915 20.856 14.7923 20.856Z"
+                                                                        fill="#EB6247" />
+                                                                    <path
+                                                                        d="M13.3714 15.8125H10.3189C9.94311 15.8125 9.63144 15.5008 9.63144 15.125C9.63144 14.7492 9.94311 14.4375 10.3189 14.4375H13.3714C13.7473 14.4375 14.0589 14.7492 14.0589 15.125C14.0589 15.5008 13.7473 15.8125 13.3714 15.8125ZM14.1414 12.1458H9.55811C9.18227 12.1458 8.87061 11.8342 8.87061 11.4583C8.87061 11.0825 9.18227 10.7708 9.55811 10.7708H14.1414C14.5173 10.7708 14.8289 11.0825 14.8289 11.4583C14.8289 11.8342 14.5173 12.1458 14.1414 12.1458Z"
+                                                                        fill="#EB6247" />
+                                                                </svg>
+                                                                <div class="tooltip">
+                                                                    <p>{{langData?.Diagnosis?.Delete}}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Drug Details -->
+        <div class="col-md-12 mt-2">
+            <div class="card card-style-1">
+                <div class="card-header card-3d-header d-flex align-items-center justify-content-between"
+                    data-bs-toggle="collapse" aria-expanded="true" aria-controls="collapseOne" style="height: 45px;">
+                    <div class="d-flex align-items-center gap-2">
+                        <h2 class="card-heading"> {{langData?.prescriptions?.Medication}} </h2>
+                        <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                            <button class="btn fs-7" [class.selected]="GenericBrandtoggleValue === 'Generic'"
+                                (click)="toggleGenericBrand('Generic')"
+                                class="btn selected">Generic</button>
+                            <button class="btn fs-7" [class.selected]="GenericBrandtoggleValue === 'Brand'"
+                                (click)="toggleGenericBrand('Brand')">Brand</button>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2">
+                            <!-- <button class="btn btn-secondary-outline fs-8"
+                            (click)="PreviousMedicationClick()">{{langData?.prescriptions?.PreviousMedication}}</button> -->
+                            <button class="btn btn-secondary-outline fs-8" *ngIf="selectedView?.PatientType !== '1'"
+                            (click)="viewAllPrescriptions()">View All Prescriptions</button>
+                            <button class="btn btn-secondary-outline position-relative fs-8 px-2"
+                                (click)="openAntibioticTemplate()">Antibiotics
+                                <div class="notfCountBedTransferCount">
+                                    <span>{{getAntibioticsCount()}}</span>
+                                </div>
+                            </button>
+                            <!-- <h6 class="modal-title mx-4 text-danger" *ngIf="!dischargeIntimationRiased&&endofEpisode" style="font-size:0.96rem;">No modification is allowed
+                                after {{PrescriptionRestriction}}hrs.
+                            </h6> -->
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 justify-content-end">
+                        <div class="cursor-pointer custom_tooltip clear_svg">
+                            <svg (click)="ClearPrescriptionItems()" width="18"
+                                height="21" viewBox="0 0 18 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M16.647 10.0809V8.97505C16.647 8.195 16.3371 7.4469 15.7856 6.89532C15.234 6.34375 14.4859 6.03387 13.7058 6.03387H10.7647V1.91623C10.7647 1.4482 10.5787 0.999337 10.2478 0.66839C9.91685 0.337443 9.46799 0.15152 8.99996 0.15152C8.53193 0.15152 8.08307 0.337443 7.75213 0.66839C7.42118 0.999337 7.23526 1.4482 7.23526 1.91623V6.03387H4.29408C3.51403 6.03387 2.76593 6.34375 2.21435 6.89532C1.66278 7.4469 1.3529 8.195 1.3529 8.97505V10.0809L0.176433 19.4927C0.163041 19.6581 0.213567 19.8223 0.317609 19.9515C0.374196 20.014 0.443158 20.0641 0.520119 20.0985C0.59708 20.1329 0.680359 20.151 0.764668 20.1515H17.2353C17.3196 20.151 17.4028 20.1329 17.4798 20.0985C17.5568 20.0641 17.6257 20.014 17.6823 19.9515C17.7864 19.8223 17.8369 19.6581 17.8235 19.4927L16.647 10.0809ZM15.7858 18.975L15.4623 17.1103C15.4492 17.0342 15.4212 16.9613 15.3799 16.896C15.3386 16.8307 15.2849 16.7741 15.2217 16.7295C15.1586 16.6849 15.0873 16.6532 15.0119 16.6362C14.9365 16.6192 14.8585 16.6172 14.7823 16.6303C14.6285 16.6569 14.4915 16.7434 14.4015 16.8709C14.3569 16.9341 14.3252 17.0054 14.3082 17.0808C14.2912 17.1562 14.2892 17.2342 14.3023 17.3103L14.5917 18.975H12.7482L11.9341 13.5927C11.9057 13.4431 11.8204 13.3103 11.6962 13.2223C11.5719 13.1343 11.4184 13.0979 11.2679 13.1208C11.1173 13.1436 10.9815 13.224 10.889 13.3449C10.7965 13.4658 10.7544 13.6179 10.7717 13.7692L11.5588 18.975H4.61761L4.88232 16.088C4.88942 16.0107 4.88124 15.9329 4.85825 15.8588C4.83525 15.7847 4.79789 15.7158 4.74829 15.6562C4.6987 15.5965 4.63783 15.5473 4.56919 15.5111C4.50054 15.475 4.42545 15.4527 4.3482 15.4456C4.27095 15.4385 4.19306 15.4467 4.11897 15.4697C4.04488 15.4927 3.97605 15.5301 3.9164 15.5797C3.85675 15.6293 3.80746 15.6901 3.77133 15.7588C3.7352 15.8274 3.71295 15.9025 3.70584 15.9798L3.43055 18.975H1.43526L2.47055 10.7398H15.5411L16.5647 18.975H15.7858Z"
+                                    fill="#EB6247" />
+                            </svg>
+                            <div class="tooltip">
+                                <p>{{langData?.common?.Clear}}</p>
+                            </div>
+                        </div>
+                        <div [class]="(medicationsForm.get('Remarks')?.value == '' || medicationsForm.get('Remarks')?.value == 'undefined') ? 'remark_svg cursor-pointer custom_tooltip' : 'remark_svg cursor-pointer custom_tooltip active'"
+                            data-bs-toggle="modal" data-bs-target="#medication_remark"
+                            (click)="medicationRemarksPopup(medicationsForm.get('ItemName')?.value , medRem)">
+                            <svg width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M11.3035 13.0436L13.6501 17.1209H15.6449L13.122 12.897C13.9237 12.7014 14.5155 12.3347 14.8968 11.7969C15.288 11.2494 15.4835 10.6432 15.4835 9.97823C15.4835 9.41114 15.3465 8.8979 15.0729 8.43822C14.8088 7.9787 14.403 7.61212 13.8554 7.33834C13.3177 7.06457 12.6577 6.9276 11.8753 6.9276H8.35541V17.1209H10.0273V13.0436H11.3035ZM11.8753 11.7089H10.0273V8.29156H11.8753C12.5109 8.29156 12.9853 8.44315 13.298 8.74631C13.611 9.03964 13.7674 9.45023 13.7674 9.97823C13.7674 10.5062 13.606 10.9267 13.2834 11.2395C12.9704 11.5526 12.5013 11.7089 11.8753 11.7089Z"
+                                    fill="#B0B4B5" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M23 12.0243C23 18.0995 18.075 23.0243 12 23.0243C5.92499 23.0243 1 18.0995 1 12.0243C1 5.94917 5.92499 1.02432 12 1.02432C18.075 1.02432 23 5.94917 23 12.0243ZM21.7778 12.0243C21.7778 17.4245 17.4 21.8021 12 21.8021C6.59996 21.8021 2.22222 17.4245 2.22222 12.0243C2.22222 6.62414 6.59996 2.24654 12 2.24654C17.4 2.24654 21.7778 6.62414 21.7778 12.0243Z"
+                                    fill="#B0B4B5" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M11.3035 13.0436L13.6501 17.1209H15.6449L13.122 12.897C13.9237 12.7014 14.5155 12.3347 14.8968 11.7969C15.288 11.2494 15.4835 10.6432 15.4835 9.97823C15.4835 9.41114 15.3465 8.8979 15.0729 8.43822C14.8088 7.9787 14.403 7.61212 13.8554 7.33834C13.3177 7.06457 12.6577 6.9276 11.8753 6.9276H8.35541V17.1209H10.0273V13.0436H11.3035ZM11.8753 11.7089H10.0273V8.29156H11.8753C12.5109 8.29156 12.9853 8.44315 13.298 8.74631C13.611 9.03964 13.7674 9.45023 13.7674 9.97823C13.7674 10.5062 13.606 10.9267 13.2834 11.2395C12.9704 11.5526 12.5013 11.7089 11.8753 11.7089Z"
+                                    stroke="#B0B4B5" stroke-width="0.5" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M23 12.0243C23 18.0995 18.075 23.0243 12 23.0243C5.92499 23.0243 1 18.0995 1 12.0243C1 5.94917 5.92499 1.02432 12 1.02432C18.075 1.02432 23 5.94917 23 12.0243ZM21.7778 12.0243C21.7778 17.4245 17.4 21.8021 12 21.8021C6.59996 21.8021 2.22222 17.4245 2.22222 12.0243C2.22222 6.62414 6.59996 2.24654 12 2.24654C17.4 2.24654 21.7778 6.62414 21.7778 12.0243Z"
+                                    stroke="#B0B4B5" stroke-width="0.5" />
+                            </svg>
+                            <div class="tooltip">
+                                <p>{{langData?.Diagnosis?.Remarks}}</p>
+                            </div>
+                        </div>
+                        <!-- <div [class]="medicationsForm.get('IsFav')?.value == 1 ? 'fav_svg cursor-pointer custom_tooltip active' : 'fav_svg cursor-pointer custom_tooltip'"
+                            (click)="saveFavouriteMedications()">
+                            <svg width="19" height="20" viewBox="0 0 21 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g opacity="0.6">
+                                    <path
+                                        d="M8.86291 0.995268C9.50183 -0.299327 11.3479 -0.299325 11.9868 0.99527L13.8589 4.78852C14.1126 5.30261 14.603 5.65893 15.1704 5.74137L19.3565 6.34964C20.7851 6.55724 21.3556 8.31294 20.3218 9.32064L17.2927 12.2733C16.8822 12.6734 16.6949 13.25 16.7918 13.815L17.5068 17.9842C17.7509 19.4071 16.2574 20.4922 14.9796 19.8204L11.2354 17.852C10.728 17.5852 10.1217 17.5852 9.61431 17.852L5.87015 19.8204C4.59231 20.4922 3.09882 19.4071 3.34287 17.9842L4.05794 13.815C4.15485 13.25 3.96752 12.6734 3.557 12.2733L0.527911 9.32064C-0.505885 8.31294 0.0645748 6.55724 1.49325 6.34964L5.67934 5.74137C6.24667 5.65893 6.73711 5.30261 6.99082 4.78852L8.86291 0.995268Z"
+                                        fill="#B0B4B5" />
+                                </g>
+                            </svg>
+                            <div class="tooltip">
+                                <p>{{langData?.Diagnosis?.Favourite}}</p>
+                            </div>
+                        </div> -->
+                        <div class="modal fade" id="medication_remark" tabindex="-1"
+                            aria-labelledby="medicationRemarksLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered"
+                                style="width: 35%;">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"
+                                            id="medicationRemarksLabel">
+                                            {{langData?.prescriptions?.Remarksfor}}
+                                            {{remarksForSelectedMedName}}</h5>
+                                        <div
+                                            class="d-flex gap-2 align-items-center justify-content-end">
+                                            <button
+                                                class="btn btn-danger-outline">{{langData?.common?.Clear}}</button>
+                                            <button class="btn btn-main-outline"
+                                                data-bs-dismiss="modal"
+                                                (click)="saveMedicationRemarks(medRem.value)">{{langData?.common?.Save}}</button>
+                                            <button type="button" class="btn-close ms-3"
+                                                data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body">
+                                        <textarea name="" placeholder="" #medRem
+                                            class="form-control resize-none mb-2"
+                                            id="medRem" cols="30" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="" *ngIf="!isEditmode">
+                            <button class="btn btn-main-outline"
+                                (click)="AddPrescriptionItemsToTable()">
+                                <svg class="me-1" width="17" height="16"
+                                    viewBox="0 0 17 16" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M17.0009 3.55613C17.0009 5.52013 15.4088 7.11225 13.4448 7.11225C11.4808 7.11225 9.88867 5.52013 9.88867 3.55613C9.88867 1.59213 11.4808 0 13.4448 0C15.4088 0 17.0009 1.59213 17.0009 3.55613ZM15.3483 3.99384C15.2934 4.23312 15.0548 4.38248 14.8156 4.32745L11.8748 3.65139C11.6355 3.5964 11.4862 3.35783 11.5412 3.11859C11.5962 2.87935 11.8347 2.72995 12.074 2.78498L15.0147 3.46105C15.254 3.51603 15.4034 3.7546 15.3483 3.99384Z"
+                                        fill="#368796" />
+                                    <path
+                                        d="M5.78962 1.44253C5.50179 0.761618 4.53924 0.692936 4.1526 1.32572L1.12869 6.27426C0.779874 6.84511 1.16988 7.57389 1.85018 7.62243L7.12499 7.9988C7.80527 8.04734 8.3002 7.38173 8.04056 6.76745L5.78962 1.44253Z"
+                                        fill="#368796" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M14.0605 13.4951C15.3954 12.8726 15.9731 11.2858 15.3505 9.95075C14.728 8.61578 13.1411 8.03822 11.8062 8.66072L6.97174 10.915C5.63673 11.5376 5.05917 13.1244 5.68167 14.4594C6.30421 15.7944 7.89104 16.372 9.22606 15.7495L14.0605 13.4951ZM11.6413 13.6423L13.6847 12.6894C14.5747 12.2744 14.9598 11.2165 14.5448 10.3265C14.1298 9.43649 13.0719 9.05145 12.1819 9.46645L10.1384 10.4193L11.6413 13.6423Z"
+                                        fill="#368796" />
+                                </svg>
+                                {{langData?.common?.Add}}</button>
+                        </div>
+                        <div class="" *ngIf="isEditmode">
+                            <button class="btn btn-main-outline"
+                                (click)="EditPrescriptionItemsToTable()">{{langData?.common?.Update}}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="medicationsForm">
+                    <form [formGroup]="medicationsForm" (keydown.enter)="$event.preventDefault()">
+                        <!-- NEW MEDICATION -->
+                        <div class="medicationsForm d-flex align-items-start gap-2 p-2">
+                            <div class="col-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="CommanSearch__form bg-white ps-2 w-100">
+                                        <svg id="button-addon2" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M10.8609 2.49805C15.7521 2.49805 19.7218 6.46772 19.7218 11.3589C19.7218 16.2501 15.7521 20.2198 10.8609 20.2198C5.96968 20.2198 2 16.2501 2 11.3589C2 6.46772 5.96968 2.49805 10.8609 2.49805ZM10.8609 18.2507C14.6681 18.2507 17.7527 15.1662 17.7527 11.3589C17.7527 7.55072 14.6681 4.46713 10.8609 4.46713C7.05267 4.46713 3.96909 7.55072 3.96909 11.3589C3.96909 15.1662 7.05267 18.2507 10.8609 18.2507ZM19.2147 18.3206L22 21.1049L20.6069 22.498L17.8226 19.7128L19.2147 18.3206Z"
+                                                fill="#368796" />
+                                        </svg>
+                                        <input type="text"
+                                            [class]="(isMedicationFormSubmitted && medicationsForm.get('ItemName')?.value == '') ? 'CommonSearch__input ps-0 form-control border-danger-300' : 'CommonSearch__input ps-0 form-control'"
+                                            placeholder={{langData?.prescriptions?.drugNameLabel}}
+                                            aria-label="Drug Name" formControlName="ItemName"
+                                            [matAutocomplete]="autoMed"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchItem($event)">
+                                        <mat-autocomplete #autoMed="matAutocomplete">
+                                            <mat-option *ngFor="let item of listOfItems"
+                                                (onSelectionChange)="onItemSelected(item)"
+                                                [value]="item.DisplayName.trim()">
+                                                {{item.DisplayName}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </div>
+                                    <div class="sub_tooltip position-relative custom_tooltip custom_tooltip_left">                                                
+                                        <div class="tooltip">
+                                            <p id="ItemName" for="ItemName" class="form-label m-0">{{medicationsForm.get('ItemName')?.value}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="sub_tooltip position-relative custom_tooltip custom_tooltip_left">           
+                                        <button class="btn btn-icon-3d"
+                                            (click)="fetchSubstituteItems(medicationsForm.get('ItemId')?.value)"><img
+                                                src="assets/images/icons/rx-orders/icon-S.svg"
+                                                alt=""></button>
+                                        <div class="tooltip">
+                                            <p>{{langData?.prescriptions?.Substitute}} </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-1">
+                                    <div class="d-flex align-items-center gap-2 position-relative">
+                                        <div class="d-flex align-items-end">
+                                            <div class=" me-3" >
+                                                <div class="afterlabel_form d-flex align-items-end gap-2">
+                                                    <input type="text" appTwoDigitDecimaNumber style="height: 1.7rem;width: 4rem;"
+                                                        formControlName="Strength"
+                                                        [class]="(isMedicationFormSubmitted && medicationsForm.get('Strength')?.value == '') ? 'form-control border-danger-300 text-center' : 'form-control text-center'"
+                                                        placeholder="">
+                                                        <!-- <label id="StrengthUoM" for="StrengthUoM" class="form-label m-0">5</label> -->
+                                                        <div class="custom_tooltip custom_tooltip_left d-flex">
+                                                            <label id="StrengthUoM" for="StrengthUoM" class="form-label m-0 mini w-auto"></label>
+                                                            <div class="tooltip">
+                                                                <p id="StrengthUoM" for="StrengthUoM" class="form-label m-0">{{medicationsForm.get('Strength')?.value}} {{medicationsForm.get('StrengthUoM')?.value}}</p>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                                <div class="validation_err">
+                                                    <span class="text-danger"
+                                                        *ngIf="isMedicationFormSubmitted && medicationsForm.get('Strength')?.value == ''">
+                                                        <p class="m-0"
+                                                            *ngIf="medicationsForm.get('Strength')?.value == ''"
+                                                            translate>
+                                                            {{langData?.messages?.Strengthisrequired}}</p>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="weight_field merge_field">
+                                                <div class="afterlabel_form d-flex align-items-end gap-1">
+                                                    <input type="text" formControlName="IssueUOMValue" (change)="CalculateQuantity()" style="height: 1.7rem;width: 4rem;"
+                                                    [class]="(isMedicationFormSubmitted && medicationsForm.get('Strength')?.value == '') ? 'form-control border-danger-300 text-center' : 'form-control text-center'"
+                                                    placeholder="">
+                                                    <!-- <label id="Dosage" for="Dosage" class="form-label m-0">5</label> -->
+                                                    <div class="custom_tooltip custom_tooltip_left d-flex">
+                                                        <label id="Dosage" for="Dosage" class="form-label m-0 mini w-auto"></label>
+                                                        <div class="tooltip">
+                                                            <p id="Dosage" for="Dosage" class="form-label m-0">{{medicationsForm.get('IssueUOMValue')?.value}} {{medicationsForm.get('Dosage')?.value}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <svg style="width: 4rem;" (click)="openTaperingPopup()" class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 18 17" fill="none">
+                                                        <path d="M3.16669 13.5024H6.70002C6.80969 13.503 6.91841 13.482 7.01994 13.4406C7.12147 13.3991 7.21382 13.338 7.29169 13.2607L13.0584 7.48574L15.425 5.16908C15.5031 5.09161 15.5651 4.99944 15.6074 4.89789C15.6497 4.79634 15.6715 4.68742 15.6715 4.57741C15.6715 4.4674 15.6497 4.35848 15.6074 4.25693C15.5651 4.15538 15.5031 4.06321 15.425 3.98574L11.8917 0.410744C11.8142 0.332637 11.7221 0.270642 11.6205 0.228335C11.519 0.186027 11.41 0.164246 11.3 0.164246C11.19 0.164246 11.0811 0.186027 10.9795 0.228335C10.878 0.270642 10.7858 0.332637 10.7084 0.410744L8.35835 2.76908L2.57502 8.54408C2.49779 8.62195 2.43668 8.71429 2.39521 8.81582C2.35374 8.91735 2.33272 9.02607 2.33335 9.13575V12.6691C2.33335 12.8901 2.42115 13.1021 2.57743 13.2583C2.73371 13.4146 2.94567 13.5024 3.16669 13.5024ZM11.3 2.17741L13.6584 4.53574L12.475 5.71908L10.1167 3.36074L11.3 2.17741ZM4.00002 9.47741L8.94169 4.53574L11.3 6.89408L6.35835 11.8357H4.00002V9.47741ZM16.5 15.1691H1.50002C1.27901 15.1691 1.06705 15.2569 0.910765 15.4132C0.754484 15.5694 0.666687 15.7814 0.666687 16.0024C0.666687 16.2234 0.754484 16.4354 0.910765 16.5917C1.06705 16.7479 1.27901 16.8357 1.50002 16.8357H16.5C16.721 16.8357 16.933 16.7479 17.0893 16.5917C17.2456 16.4354 17.3334 16.2234 17.3334 16.0024C17.3334 15.7814 17.2456 15.5694 17.0893 15.4132C16.933 15.2569 16.721 15.1691 16.5 15.1691Z" fill="#FFAD0E" />
+                                                    </svg>  
+                                                </div>
+                                            </div>
+                                        </div>                                    
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="route_dropdown">
+                                <div class="dropdown custom_dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{getRouteName(medicationsForm.get("AdmRouteId")?.value)}}
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-item" >Select Route</li>                                                        
+                                        <li class="dropdown-item" *ngFor="let route of AdmRoutesList" (click)="setRouteIdValue(route)">
+                                            {{itemSelected == 'false' ? route.Names : route.RouteName}}
+                                        </li>                                                        
+                                    </ul>
+                                </div>
+                                <div class="validation_err">
+                                    <span class="text-danger"
+                                        *ngIf="isMedicationFormSubmitted && medicationsForm.get('AdmRouteId')?.value == ''">
+                                        <p class="m-0"
+                                            *ngIf="medicationsForm.get('AdmRouteId')?.value == ''"
+                                            translate>{{langData?.messages?.Routeisrequired}}</p>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="freq_dropdown">
+                                <div class="dropdown custom_dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{getFrequencyName(medicationsForm.get("FrequencyId")?.value)}}
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-item">Select Frequency</li>                                                        
+                                        <li class="dropdown-item" *ngFor="let freq of drugFrequenciesList" (click)="setFrequencyValue(freq)">
+                                            {{freq.Frequency}}
+                                        </li>                                                        
+                                    </ul>
+                                </div>
+                                <div class="validation_err">
+                                    <span class="text-danger"
+                                        *ngIf="isMedicationFormSubmitted && medicationsForm.get('FrequencyId')?.value == ''">
+                                        <p class="m-0"
+                                            *ngIf="medicationsForm.get('FrequencyId')?.value == ''"
+                                            translate>{{langData?.messages?.Frequencyisrequired}}
+                                        </p>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="medication_scheduledate d-flex align-items-center">
+                                    <div class="merger_date d-flex pe-1 border-end">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                                            <input matInput class="" formControlName="ScheduleStartDate"
+                                                [matDatepicker]="ScheduleStartDate"
+                                                (click)="ScheduleStartDate.open()">
+                                            <mat-datepicker-toggle matSuffix [for]="ScheduleStartDate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #ScheduleStartDate></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="validation_err">
+                                        <span class="text-danger"
+                                            *ngIf="isMedicationFormSubmitted && medicationsForm.get('ScheduleStartDate')?.value == ''">
+                                            <p class="m-0"
+                                                *ngIf="medicationsForm.get('ScheduleStartDate')?.value == ''"
+                                                translate>
+                                                {{langData?.messages?.ScheduleStartDateisrequired}}
+                                            </p>
+                                        </span>
+                                    </div>
+                                    <div class="input_selct_merge d-flex durationofillness position-relative">
+                                        <input type="text"
+                                        [class]="(isMedicationFormSubmitted && medicationsForm.get('DurationValue')?.value == '') ? 'form-control ps-1 pe-0 border-danger-300' : 'form-control ps-1 pe-0'"
+                                        appTwoDigitDecimaNumber maxlength="2" 
+                                        formControlName="DurationValue"
+                                        (keyup)="CalculateQuantity();" placeholder="" [attr.disabled]="medicationsForm.get('FrequencyId')?.value === '41' ? true : null">
+
+                                        <div class="dropdown custom_dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                {{getDurationName(medicationsForm.get("DurationId")?.value)}}                                                          
+                                            </button>
+                                            <ul class="dropdown-menu end-0">
+                                                <li class="dropdown-item" *ngFor="let dur of durationList" (click)="setDurationValue(dur)">
+                                                    {{dur.Names}}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="validation_err" style="bottom: -1.2rem;">
+                                            <span class="text-danger text-nowrap"
+                                                *ngIf="isMedicationFormSubmitted && medicationsForm.get('DurationId')?.value == ''">
+                                                <p class="m-0"
+                                                    *ngIf="medicationsForm.get('DurationId')?.value == ''"
+                                                    translate>
+                                                    {{langData?.messages?.DurationTypeisrequired}}
+                                                </p>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="med_qty d-flex">
+                                <input type="text"
+                                [class]="(isMedicationFormSubmitted && medicationsForm.get('Quantity')?.value == '') ? 'form-control border-danger-300' : 'form-control px-0 text-center'"
+                                formControlName="Quantity" readonly>
+                                <label id="QuantityUOM" for="IssueUOM" class="form-label d-flex align-items-end ms-1 mb-0"></label>
+                            </div>
+                            <div class="col">
+                                <div class="dropdown custom_dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{getPatientInstructionName(medicationsForm.get("medInstructionId")?.value)}}                                                         
+                                    </button>
+                                    <ul class="dropdown-menu end-0">
+                                        <li class="dropdown-item" *ngFor="let instr of medicationInstructions" (click)="setPatientInstructionsValue(instr)">
+                                            {{instr.name}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="dropdown custom_dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{getDiagnosisMappingName(medicationsForm.get("DiagnosisId")?.value)}}                                                        
+                                    </button>
+                                    <ul class="dropdown-menu end-0" style="width: 30rem;">
+                                        <li class="dropdown-item" *ngFor="let dis of visitDiagnosis" (click)="setDiagnosisMappingValue(dis)">
+                                            {{dis.DiseaseName}}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="validation_err">
+                                    <span class="text-danger"
+                                        *ngIf="isMedicationFormSubmitted && medicationsForm.get('DiagnosisId')?.value == ''">
+                                        <p class="m-0"
+                                            *ngIf="medicationsForm.get('DiagnosisId')?.value == ''"
+                                            translate>Diagnosis is required
+                                        </p>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="w-100" *ngIf="isPRN" >
+                                <div class="dropdown custom_dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Select                                                          
+                                    </button>
+                                    <ul class="dropdown-menu end-0">
+                                        <li class="dropdown-item">Anxiety</li>
+                                        <li class="dropdown-item">Chest Pain</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="medication_drug overflow-hidden">
+                            <div class="bg-primary-50 p-2 medication_drug_header card_item_div row gx-2 mx-0 align-items-start mx-0">
+                                <div class="col-4">
+                                    <p class="clr-primary-600 m-0">{{langData?.prescriptions?.drugNameLabel}}</p>
+                                </div>
+                                <div class="col-1" style="width:10%;">
+                                    <p class="clr-primary-600 m-0"> {{langData?.prescriptions?.StrengthDosage}}</p>
+                                </div>
+                                <div class="col-1">
+                                    <p class="clr-primary-600 m-0"> {{langData?.prescriptions?.Route}}</p>
+                                </div>
+                                <div class="col-1">
+                                    <p class="clr-primary-600 m-0"> {{langData?.prescriptions?.frequency}}</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="clr-primary-600 m-0"> {{langData?.prescriptions?.ScheduleStartDate}}</p>
+                                </div>
+                                <div class="col">
+                                    <p class="clr-primary-600 m-0">{{langData?.common?.Duration}}</p>
+                                </div>
+                                <div class="col-1">
+                                    <p class="clr-primary-600 m-0">{{langData?.prescriptions?.Qty}}</p>
+                                </div>
+                                <div class="col">
+                                    <p class="clr-primary-600 m-0"></p>
+                                </div>
+                            </div>
+                            <div class="medication_drug_body">
+                                <div class="card_item_div_wrapper" *ngFor="let med of selectedItemsList;let i=index">
+                                    <div class="d-flex flex-nowrap p-2">
+                                        <div [class]="med.Class">
+                                            <div class="col-4" (click)="disableControls(med)">
+                                                <p class="text-wrap">{{med.ItemName}}</p>
+                                            </div>
+                                            <div class="col-1" style="width:10%;">
+                                                <p>{{med.Strength}} {{med.Dosage}}</p>
+                                            </div>
+                                            <div class="col-1">
+                                                <p *ngIf="!med.displayRouteDropdown" (click)="toggleRouteDropdown(med)">{{med.Route}}</p>
+                                                <select class="form-select py-1 fs-8 pe-4 "
+                                                    *ngIf="med.displayRouteDropdown"
+                                                    (change)="onRouteRowChange($event, med)">
+                                                    <option dir="ltr" *ngFor="let route of AdmRoutesListGridRow"
+                                                        [value]="route.RouteID"
+                                                        [selected]="med.AdmRouteId === route.RouteID">
+                                                        {{route.RouteName}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-1">
+                                                <p *ngIf="!med.displayDropdown" (click)="toggleDropdown(med)">{{med.Frequency}}</p>
+                                                <select class="form-select py-1 fs-8 pe-4 "
+                                                    *ngIf="med.displayDropdown"
+                                                    (change)="onFrequencyRowChange($event, med)">
+                                                    <option dir="ltr" *ngFor="let freq of drugFrequenciesList"
+                                                        [value]="freq.FrequencyID"
+                                                        [selected]="med.FrequencyId === freq.FrequencyID">
+                                                        {{freq.Frequency}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-2">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p *ngIf="!med.displayStartDateDropdown" (click)="toggledisplayStartDateDropdown(med)"> {{med.ScheduleStartDate}}</p>
+                                                    <mat-form-field appearance="fill" style="width:9rem"
+                                                        *ngIf="med.displayStartDateDropdown">
+                                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                        <input matInput class=""
+                                                            [matDatepicker]="ScheduleStartDateGrid"
+                                                            formControlName="ScheduleStartDate"
+                                                            (click)="ScheduleStartDateGrid.open()"
+                                                            (dateChange)="onDateRowChange($event, med)">
+                                                        <mat-datepicker-toggle matSuffix
+                                                            [for]="ScheduleStartDateGrid">
+                                                        </mat-datepicker-toggle>
+                                                        <mat-datepicker #ScheduleStartDateGrid></mat-datepicker>
+                                                    </mat-form-field>
+                                                    <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M0 4.36009H9.30057L5.58038 0.639908" stroke="#357D83" stroke-width="1.5"/>
+                                                    </svg>      
+                                                    <p>{{med.ScheduleEndDate?.split(' ')[0]}}</p>                                              
+                                                </div>
+                                            </div>
+                                            <div class="col med_duration">
+                                                <p *ngIf="!med.displayDuration" (click)="toggleDuraion(med)">{{med.Duration}}</p>
+                                                <div *ngIf="med.displayDuration">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="" style="width:2rem">
+                                                            <input type="text" class="form-control px-1"
+                                                                appTwoDigitDecimaNumber maxlength="2"
+                                                                [value]="med.DurationValue" placeholder=""
+                                                                (change)="onDurationTextRowChange($event, med)">
+    
+                                                        </div>
+                                                        <div class="" >
+                                                            <select class="form-select pe-4" style="width: 6rem;"
+                                                                (change)="onDurationSelectRowChange($event, med)">
+                                                                <option dir="ltr"
+                                                                    *ngFor="let dur of durationList"
+                                                                    [value]="dur.Id"
+                                                                    [selected]="med.DurationId === dur.Id">
+                                                                    {{dur.Names}}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-1">
+                                                <p>{{med.Quantity}} {{med.IssueUoM}}</p>
+                                            </div>
+                                            <div class="col">
+                                                <div class="d-flex gap-2 align-items-center justify-content-end">
+                                                    <div style="width: 1rem;" class="text-center cursor-pointer custom_tooltip custom_tooltip_left"
+                                                        id="viewMore_toggle" (click)="maximizeSelectedDrugItems(med)">
+                                                        <svg width="17" height="17" viewBox="0 0 4 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <circle cx="1.99994" cy="1.96497" r="1.51752" fill="#368796"/>
+                                                            <circle cx="1.99994" cy="7" r="1.51752" fill="#368796"/>
+                                                            <circle cx="1.99994" cy="12.035" r="1.51752" fill="#368796"/>
+                                                        </svg>                                                            
+                                                        <div class="tooltip" (click)="showItemViewMore(med)">
+                                                            <p id="viewMore_toggle_a">
+                                                                {{langData?.prescriptions?.ViewMore}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div style="width: 1.2rem;" class="cursor-pointer custom_tooltip custom_tooltip_left edit_svg"
+                                                        (click)="EditPrescriptionItem(med)">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                                            height="20" viewBox="0 0 18 17" fill="none">
+                                                            <path
+                                                                d="M3.16669 13.5024H6.70002C6.80969 13.503 6.91841 13.482 7.01994 13.4406C7.12147 13.3991 7.21382 13.338 7.29169 13.2607L13.0584 7.48574L15.425 5.16908C15.5031 5.09161 15.5651 4.99944 15.6074 4.89789C15.6497 4.79634 15.6715 4.68742 15.6715 4.57741C15.6715 4.4674 15.6497 4.35848 15.6074 4.25693C15.5651 4.15538 15.5031 4.06321 15.425 3.98574L11.8917 0.410744C11.8142 0.332637 11.7221 0.270642 11.6205 0.228335C11.519 0.186027 11.41 0.164246 11.3 0.164246C11.19 0.164246 11.0811 0.186027 10.9795 0.228335C10.878 0.270642 10.7858 0.332637 10.7084 0.410744L8.35835 2.76908L2.57502 8.54408C2.49779 8.62195 2.43668 8.71429 2.39521 8.81582C2.35374 8.91735 2.33272 9.02607 2.33335 9.13575V12.6691C2.33335 12.8901 2.42115 13.1021 2.57743 13.2583C2.73371 13.4146 2.94567 13.5024 3.16669 13.5024ZM11.3 2.17741L13.6584 4.53574L12.475 5.71908L10.1167 3.36074L11.3 2.17741ZM4.00002 9.47741L8.94169 4.53574L11.3 6.89408L6.35835 11.8357H4.00002V9.47741ZM16.5 15.1691H1.50002C1.27901 15.1691 1.06705 15.2569 0.910765 15.4132C0.754484 15.5694 0.666687 15.7814 0.666687 16.0024C0.666687 16.2234 0.754484 16.4354 0.910765 16.5917C1.06705 16.7479 1.27901 16.8357 1.50002 16.8357H16.5C16.721 16.8357 16.933 16.7479 17.0893 16.5917C17.2456 16.4354 17.3334 16.2234 17.3334 16.0024C17.3334 15.7814 17.2456 15.5694 17.0893 15.4132C16.933 15.2569 16.721 15.1691 16.5 15.1691Z"
+                                                                fill="#FFAD0E" />
+                                                        </svg>
+                                                        <div class="tooltip">
+                                                            <p>{{langData?.prescriptions?.Edit}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div style="width: 1.4rem;" class="cursor-pointer custom_tooltip custom_tooltip_left del_svg"
+                                                        (click)="DeletePrescriptionItem(i, med)"
+                                                        *ngIf="med.PrescriptionItemStatusNew != '1'">
+                                                        <svg width="23" height="22" viewBox="0 0 23 22" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M20.0995 6.16917H20.0261C15.177 5.68334 10.337 5.5 5.5428 5.98584L3.6728 6.16917C3.58184 6.17866 3.48989 6.17003 3.40228 6.14377C3.31467 6.11751 3.23314 6.07414 3.16239 6.01618C3.09164 5.95822 3.03308 5.8868 2.9901 5.80607C2.94712 5.72534 2.92056 5.63689 2.91197 5.54584C2.8753 5.16084 3.1503 4.83084 3.52614 4.79417L5.39614 4.61084C10.2728 4.11584 15.2136 4.30834 20.1636 4.79417C20.5395 4.83084 20.8145 5.17 20.7778 5.54584C20.764 5.71605 20.6864 5.87477 20.5607 5.99032C20.4349 6.10586 20.2702 6.16973 20.0995 6.16917Z"
+                                                                fill="#EB6247" />
+                                                            <path
+                                                                d="M8.64147 5.24333C8.6048 5.24333 8.56813 5.24333 8.5223 5.23416C8.34445 5.20211 8.18627 5.10159 8.08172 4.95419C7.97717 4.80679 7.93459 4.62427 7.96313 4.44583L8.1648 3.24499C8.31147 2.36499 8.51313 1.14583 10.649 1.14583H13.0506C15.1956 1.14583 15.3973 2.41083 15.5348 3.25416L15.7365 4.44583C15.8006 4.82166 15.544 5.17916 15.1773 5.23416C14.8015 5.29833 14.444 5.04166 14.389 4.67499L14.1873 3.48333C14.059 2.68583 14.0315 2.52999 13.0598 2.52999H10.6581C9.68647 2.52999 9.66813 2.65833 9.53063 3.47416L9.3198 4.66583C9.29369 4.82694 9.2111 4.97351 9.08683 5.07931C8.96255 5.18512 8.80468 5.24325 8.64147 5.24333ZM14.7923 20.856H8.9073C5.70813 20.856 5.5798 19.0868 5.47897 17.6568L4.88313 8.42599C4.85563 8.05016 5.14897 7.72016 5.5248 7.69266C5.9098 7.67433 6.23063 7.95849 6.25813 8.33433L6.85397 17.5652C6.9548 18.9585 6.99147 19.481 8.9073 19.481H14.7923C16.7173 19.481 16.754 18.9585 16.8456 17.5652L17.4415 8.33433C17.469 7.95849 17.799 7.67433 18.1748 7.69266C18.5506 7.72016 18.844 8.041 18.8165 8.42599L18.2206 17.6568C18.1198 19.0868 17.9915 20.856 14.7923 20.856Z"
+                                                                fill="#EB6247" />
+                                                            <path
+                                                                d="M13.3714 15.8125H10.3189C9.94311 15.8125 9.63144 15.5008 9.63144 15.125C9.63144 14.7492 9.94311 14.4375 10.3189 14.4375H13.3714C13.7473 14.4375 14.0589 14.7492 14.0589 15.125C14.0589 15.5008 13.7473 15.8125 13.3714 15.8125ZM14.1414 12.1458H9.55811C9.18227 12.1458 8.87061 11.8342 8.87061 11.4583C8.87061 11.0825 9.18227 10.7708 9.55811 10.7708H14.1414C14.5173 10.7708 14.8289 11.0825 14.8289 11.4583C14.8289 11.8342 14.5173 12.1458 14.1414 12.1458Z"
+                                                                fill="#EB6247" />
+                                                        </svg>
+                                                        <div class="tooltip">
+                                                            <p>{{langData?.Diagnosis?.Delete}}</p>
+                                                        </div>
+                                                    </div>                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="expandable d-flex gap-3 align-items-center card_item_div px-2 pb-2" [class.d-none]="med.viewMore === false">
+                                        <div class=" d-flex align-items-center gap-1">
+                                            <p class="clr-primary-600 fw-bold">Diagnosis:</p>
+                                            <p>{{med.DiagnosisName}}</p>
+                                        </div>
+                                        <div class=" d-flex align-items-center gap-1">
+                                            <p class="clr-primary-600 fw-bold">{{langData?.SHO?.Instruction}}:</p>
+                                            <p>{{med.PresInstr}}</p>
+                                        </div>
+                                        <div class=" d-flex align-items-center gap-1">
+                                            <p class="clr-primary-600 fw-bold">{{langData?.Diagnosis?.Remarks}}</p>
+                                            <p>{{med.Remarks}}</p>
+                                        </div>
+                                        <div class="ms-auto d-flex align-items-center gap-1">
+                                            <p class="clr-primary-600 fw-bold">QOH</p>
+                                            <label for="" class="form-label text-nowrap m-0">
+                                                <span [class]="med.QOH == '0' ? 'qoh_animate d-inline-flex' : ''">{{med.QOH}}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>  
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="activeInvYesNo" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{errorMessages}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal"
+                        (click)="continuePrescribingInvService(selectedService)">{{langData?.common?.yes}}</a>
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal"
+                        (click)="clearSelectedService()">{{langData?.common?.no}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-abackdrop="static" data-bs-keyboard="false" id="showActionableAlerts" tabindex="-1"
+    aria-labelledby="diagnosisCommentsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="width: 35%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="diagnosisCommentsLabel">Justification for {{actionableAlert}} </h5>
+            </div>
+            <div class="modal-body">
+                <textarea name="" placeholder="Enter Justification" class="form-control resize-none mb-2" id=""
+                    cols="30" rows="3"></textarea>
+            </div>
+            <div class="d-flex gap-2 align-items-center justify-content-end me-3 mb-3">
+                <a href="javascript:void(0)" type="button" class="btn btn-danger-outline"
+                    data-bs-dismiss="modal">{{langData?.common?.close}}</a>
+                <button class="btn btn-main-outline"
+                    (click)="allowInvProcSelected()">{{langData?.common?.Save}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="showActionableAlertsMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{actionableAlertmsg}}</p>
+
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="invProcAlreadySelected" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{selectedInvProc}} Already Prescribed.</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorMsg" data-bs-abackdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{errorMessages}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal mapDiagnosisMedicationdiv" data-bs-backdrop="static" data-bs-keyboard="false"
+    id="mapDiagnosisMedicationdiv" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" translate>{{langData?.prescriptions?.MedicationDiagnosisMapping}}</h5>
+                <div class="ms-auto d-flex align-items-center">
+                    <p class="text-danger">Please map Diagnosis for the Drugs selected</p>
+                    <button class="btn btn-danger-outline">{{langData?.common?.Clear}}</button>
+                    <button class="btn btn-main-outline mx-2"
+                        (click)="saveDiagnosisMapping()">{{langData?.common?.Save}}</button>
+                    <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body px-0">
+                <form [formGroup]="form">
+                    <div class="mapDiagnosisMedicationdiv_table px-3">
+                        <div class="table-cards_div m-0 d-flex p-2 flex-nowrap medication_table_div mt-2"
+                            *ngFor="let med of selectedItemsList;let i=index">
+                            <div class="row card_item_div mx-0 g-2 w-100">
+                                <div class="col-md-6">
+                                    <p class="label">{{langData?.prescriptions?.DrugName}}</p>
+                                    <p class="text-wrap">{{med.ItemName}}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="label">{{langData?.Diagnosis?.Diagnosis}}</p>
+                                    <select class="form-select pe-4" (change)="onDiagnosisSelected($event, med)">
+                                        <option dir="ltr" value="" selected translate>{{langData?.common?.Select}}
+                                        </option>
+                                        <option dir="ltr" *ngFor="let dis of visitDiagnosis" [value]="dis.DiseaseID"
+                                            [selected]="med.DiseaseID === dis.DiseaseID">
+                                            {{dis.DiseaseName}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-abackdrop="static" data-bs-keyboard="false" id="antibioticsMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>Please save Antibiotic approval form</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        (click)="openAntibioticTemplate()">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="savePrescriptionMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>{{langData?.prescriptions?.PrescriptionSavedSuccessfully}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        (click)="clearPrescriptionScreen()" data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Refill Modal -->
+<div class="modal fade refill_modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="refill_modal"
+    tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="diagnosisCommentsLabel">{{langData?.prescriptions?.RadiologyForm}}</h5>
+                <div class="actions ms-auto d-flex gap-2 flex-wrap align-items-center justify-content-end">
+                    <button class="btn btn-danger-outline" (click)="closeRadiologyForm()">Close</button>
+                    <button class="btn btn-danger-outline" (click)="clearRad()">{{langData?.common?.Clear}}</button>
+                    <button class="btn btn-main-outline" (click)="saveRad()">{{langData?.common?.Save}}</button>
+                    <button type="button" class="btn-close" (click)="CloseRad()" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-2">
+                <form [formGroup]="radForm">
+                    <div class="border-primary-200 bg-primary-50 rounded-2 p-2">
+                        <div class="row g-2">
+                            <div class="">
+                                <label for=""
+                                    class="form-label">{{langData?.prescriptions?.Provisionaldiagnosis}}:</label>
+                                <textarea [disabled]="true" [readOnly]="true" name="" class="form-control resize-none"
+                                    id="" cols="30" rows="2" formControlName="Diagnosis"
+                                    placeholder="Provisional diagnosis"></textarea>
+
+                                <!-- <div  [disabled]="true" [readOnly]="true" formControlName="Diagnosis"
+                                placeholder="Provisional diagnosis" name="" class="textarea_box p-2 rounded-2 bg-transparent border" contenteditable="true"></div> -->
+                            </div>
+                            
+                            <div class="col-md-4" *ngIf="IsPreg">
+                                <div class="d-flex align-items-start flex-column">
+                                    <label for="" class="form-label me-2">{{langData?.common?.Pregnant}}</label>
+                                    <div
+                                        class="clinical_toggle toggle__switch switch-sm w-100 d-inline-flex align-self-start gap-3">
+                                        <button class="fs-7 btn" [class.selected]="selectedOption === 'No'"
+                                            (click)="selectOption('No')">{{langData?.common?.no}}</button>
+                                        <button class="fs-7 btn" [class.selected]="selectedOption === 'Yes'"
+                                            (click)="selectOption('Yes')">{{langData?.common?.yes}}</button>
+                                        <button class="fs-7 btn" [class.selected]="selectedOption === 'Unsure'"
+                                            (click)="selectOption('Unsure')">{{langData?.prescriptions?.Unsure}}</button>
+                                        <button class="fs-7 btn" [class.selected]="selectedOption === 'Check'"
+                                            (click)="selectOption('Check')">{{langData?.prescriptions?.Check}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4" *ngIf="IsPreg">
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label text-nowrap m-0">{{langData?.prescriptions?.LMPDate}}</label>
+                                    <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" formControlName="LMPDate" [matDatepicker]="LMPDate"
+                                            (click)="LMPDate.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="LMPDate">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #LMPDate></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mx-0 g-2 mt-1">
+                            <div class="col-md-2" *ngIf="IsPed">
+                                <div class="d-flex align-items-start flex-column">
+                                    <label for=""
+                                        class="form-label me-2">{{langData?.prescriptions?.Paediatric}}</label>
+                                    <div
+                                        class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start">
+                                        <button class="fs-7 btn" [class.selected]="selectedPaediatricOption === 'No'"
+                                            (click)="selectPaediatricOption('No')">{{langData?.common?.no}}</button>
+                                        <button class="fs-7 btn" [class.selected]="selectedPaediatricOption === 'Yes'"
+                                            (click)="selectPaediatricOption('Yes')">{{langData?.common?.yes}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="d-flex align-items-start flex-column">
+                                    <label for="" class="form-label me-2">Special need</label>
+                                    <div
+                                        class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start">
+                                        <button class="fs-7 btn" [class.selected]="selectedSpecialOption === 'No'"
+                                            (click)="selectSpecialOption('No')">{{langData?.common?.no}}</button>
+                                        <button class="fs-7 btn" [class.selected]="selectedSpecialOption === 'Yes'"
+                                            (click)="selectSpecialOption('Yes')">{{langData?.common?.yes}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="d-flex align-items-start flex-column">
+                                    <label for="" class="form-label me-2">Sedation required</label>
+                                    <div
+                                        class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start">
+                                        <button class="fs-7 btn" [class.selected]="selectedSedationOption === 'No'"
+                                            (click)="selectSedationOption('No')">{{langData?.common?.no}}</button>
+                                        <button class="fs-7 btn" [class.selected]="selectedSedationOption === 'Yes'"
+                                            (click)="selectSedationOption('Yes')">{{langData?.common?.yes}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="d-flex align-items-start flex-column">
+                                    <label for="" class="form-label me-2">Is Contrast required?</label>
+                                    <div
+                                        class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start">
+                                        <button class="fs-7 btn" [class.selected]="selectedContrastOption === 'No'"
+                                            (click)="selectContrastOption('No')">{{langData?.common?.no}}</button>
+                                        <button class="fs-7 btn" [class.selected]="selectedContrastOption === 'Yes'"
+                                            (click)="selectContrastOption('Yes')">{{langData?.common?.yes}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="laboratory gap-2 p-2 pt-1 mt-3 bg-primary-100 rounded-3 h-100">
+                            <label for=""
+                                class="form-label me-2 clr-primary-600 fw-bold">{{langData?.prescriptions?.Kidneyfunction}}</label>
+                            <div class="row g-2">
+                                <div class="col-md-9">
+                                    <div class="row g-2">
+                                        <div class="col-md-6">
+                                            <div class="d-flex align-items-center">
+                                                <input type="checkbox" formControlName="IsNormalKidneyFunction"
+                                                    class="form-check-input m-0 me-2">
+                                                <label for=""
+                                                    class="form-label m-0">{{langData?.prescriptions?.Normalkidneyfunction}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="d-flex align-items-center">
+                                                <input type="checkbox" formControlName="IsChronicRenalImpairment"
+                                                    class="form-check-input m-0 me-2">
+                                                <label for=""
+                                                    class="form-label m-0">{{langData?.prescriptions?.Chronicrenalimpairment}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="d-flex align-items-center">
+                                                <input type="checkbox" formControlName="IsAcuteKidneyInjury"
+                                                    class="form-check-input m-0 me-2">
+                                                <label for=""
+                                                    class="form-label m-0">{{langData?.prescriptions?.AcuteKidneyInjury}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="d-flex align-items-center">
+                                                <input type="checkbox" formControlName="IsHaemodialysis"
+                                                    class="form-check-input m-0 me-2">
+                                                <label for=""
+                                                    class="form-label m-0">{{langData?.prescriptions?.Haemodialysis}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="d-flex align-items-start flex-column">
+                                        <label for=""
+                                            class="form-label me-2">{{langData?.prescriptions?.Lastserumcreatininelevel}}</label>
+                                        <input type="text" formControlName="SerumCreatinineLevel"
+                                            class="form-control w-100">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="border-primary-200 rounded-2">
+                            <div class="bg-primary-50 rounded-top p-2">
+                                <h6 class="clr-primary-600 fs-7 m-0">{{langData?.prescriptions?.SafetyChecklist}}</h6>
+                            </div>
+                            <div class="p-2">
+                                <div class="row gx-2 mb-2">
+                                    <div class="col-md-2">
+                                        <p class="clr-primary-600 mb-1">{{langData?.prescriptions?.Study}}</p>
+                                    </div>
+                                    <div class="col-md-7 threex">
+                                        <p class="clr-primary-600 mb-1">{{langData?.prescriptions?.ChecklistItem}}</p>
+                                    </div>
+                                </div>
+                                <div *ngFor="let item of radiologyRequestDataList; let i = index"
+                                    class="card card-style-1 rounded p-2 m-0 mb-2 d-flex flex-nowrap">
+                                    <div class="card_item_div g-3 mx-0 row align-items-center  w-100">
+                                        <div class="col-md-2">
+                                            <div class="d-flex align-items-center">
+                                                <p class="me-4"
+                                                    *ngIf="item.SpecialiseID === '214' || item.SpecialiseID === '0' || item.SpecialiseID === 0 || item.SpecialiseID === 214">
+                                                    CT</p>
+                                                <p
+                                                    *ngIf="item.SpecialiseID === '217' || item.SpecialiseID === '0' || item.SpecialiseID === 0 || item.SpecialiseID === 217">
+                                                    MRI</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7 threex">
+                                            <p>{{item.SafetyChecklistName}}</p>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div
+                                                class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start">
+                                                <button class="fs-7 btn" [class.selected]="!item.selectedValue"
+                                                    (click)="onToggleClick(i, false)">{{langData?.common?.no}}</button>
+                                                <button class="fs-7 btn" [class.selected]="item.selectedValue"
+                                                    (click)="onToggleClick(i, true)">{{langData?.common?.yes}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="bg-primary-50 rounded-2 p-2">
+                            <div class="d-flex align-items-center">
+                                <label for=""
+                                    class="form-label me-3">{{langData?.prescriptions?.Previousradiology}}</label>
+                                <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start">
+                                    <button class="fs-7 btn" [class.selected]="selectedPreviousOption === 'No'"
+                                        (click)="selectPreviousOption('No')">{{langData?.common?.no}}</button>
+                                    <button class="fs-7 btn" [class.selected]="selectedPreviousOption === 'Yes'"
+                                        (click)="selectPreviousOption('Yes')">{{langData?.common?.yes}}</button>
+                                </div>
+                            </div>
+                            <div class="mt-2 d-none">
+                                <label for=""
+                                    class="form-label">{{langData?.prescriptions?.Briefclinicalhistory}}</label>
+                                <textarea name="" formControlName="ActiveIssues" class="form-control resize-none" id=""
+                                    cols="30" rows="3" placeholder=""></textarea>
+                            </div>
+                            <div class="p-3">
+                                <div class="row g-2">
+                                    <div class="col-12">
+                                        <label for="" class="form-label">Chief Complaints</label>
+                                        <textarea name="" value="{{prevChiefCompl}}" class="form-control" rows="5"
+                                            id=""></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="" class="form-label">Physical Examination</label>
+                                        <textarea name="" value="{{prevPhyExam}}" class="form-control" rows="5"
+                                            id=""></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <div class="bg-primary-50 rounded-2 p-2">
+                            <div class="">
+                                <label for=""
+                                    class="form-label">{{langData?.prescriptions?.Clinicalquestiontobeanswered}}:</label>
+                                <textarea name="" formControlName="QAndA" class="form-control resize-none" id=""
+                                    cols="30" rows="3" placeholder="Clinical answers"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="validateProceduresMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{langData?.prescriptions?.PleaseenterQuantityforProcedures}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="noPrescriptionSelected" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{langData?.prescriptions?.PleaseselectPrescriptionandthensave}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal mapDiagnosisMedicationdiv" data-bs-backdrop="static" data-bs-keyboard="false"
+    id="mapDiagnosisMedicationdiv" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" translate>{{langData?.prescriptions?.MedicationDiagnosisMapping}}</h5>
+                <div class="ms-auto d-flex align-items-center">
+                    <p class="text-danger">Please map Diagnosis for the Drugs selected</p>
+                    <button class="btn btn-danger-outline">{{langData?.common?.Clear}}</button>
+                    <button class="btn btn-main-outline mx-2"
+                        (click)="saveDiagnosisMapping()">{{langData?.common?.Save}}</button>
+                    <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body px-0">
+                <form [formGroup]="form">
+                    <div class="mapDiagnosisMedicationdiv_table px-3">
+                        <div class="table-cards_div m-0 d-flex p-2 flex-nowrap medication_table_div mt-2"
+                            *ngFor="let med of selectedItemsList;let i=index">
+                            <div class="row card_item_div mx-0 g-2 w-100">
+                                <div class="col-md-6">
+                                    <p class="label">{{langData?.prescriptions?.DrugName}}</p>
+                                    <p class="text-wrap">{{med.ItemName}}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="label">{{langData?.Diagnosis?.Diagnosis}}</p>
+                                    <select class="form-select pe-4" (change)="onDiagnosisSelected($event, med)">
+                                        <option dir="ltr" value="" selected translate>{{langData?.common?.Select}}
+                                        </option>
+                                        <option dir="ltr" *ngFor="let dis of visitDiagnosis" [value]="dis.DiseaseID"
+                                            [selected]="med.DiseaseID === dis.DiseaseID">
+                                            {{dis.DiseaseName}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-abackdrop="static" data-bs-keyboard="false" id="medicationActionableAlerts"
+    tabindex="-1" aria-labelledby="diagnosisCommentsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="width: 35%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="diagnosisCommentsLabel">Justification for {{actionableAlert}} </h5>
+            </div>
+            <div class="modal-body">
+                <textarea name="" placeholder="Enter Justification" class="form-control resize-none mb-2" id=""
+                    cols="30" rows="3"></textarea>
+            </div>
+            <div class="d-flex gap-2 align-items-center justify-content-end me-3 mb-3">
+                <a href="javascript:void(0)" type="button" class="btn btn-danger-outline"
+                    data-bs-dismiss="modal">{{langData?.common?.close}}</a>
+                <button class="btn btn-main-outline"
+                    (click)="allowMedicationSelected()">{{langData?.common?.Save}}</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="NoQohMsgModal"
+    tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{prescriptionValidationMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                      (click)="fetchSubstituteItems(this.medicationsForm.get('ItemId')?.value)"  data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="prescriptionValidationMsgModalYesNo"
+    tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{prescriptionValidationMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal"
+                        (click)="accept()">{{langData?.common?.yes}}</a>
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal"
+                        (click)="decline()">{{langData?.common?.no}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="itemAlreadySelected" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>Drug/Generic Already Prescribed. {{duplicateItemsList}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="cannotPrescribeGreaterQty" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>Selected drug cannot prescribe more than 1 quantity</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal favouriteInvestigations" data-bs-abackdrop="static" data-bs-keyboard="false" id="modalSubstituteItems"
+    tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:70%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" translate>{{langData?.prescriptions?.SubstituteItems}}</h5>
+                <div class="ms-auto d-flex align-items-center">
+                    <button class="btn btn-main-outline mx-2" (click)="loadSubstituteItem()">{{langData?.common?.Select}}</button>
+                    <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+
+            <div class="modal-body p-0">
+                <div class="validation_err" *ngIf="showSubstituteSelectValidationMsg">
+                    <p class="fs-7 m-0 mb-3 text-center">
+                        {{langData?.prescriptions?.Pleaseselectatleastoneitemtoproceed}}</p>
+                </div>
+                <form class="Substitute_table px-3">
+                    <div class="" *ngFor="let sub of substituteItems; let i = index">
+                        <div class="table-cards_left card_item_div mt-3 p-2">
+                            <div class="row mx-0 g-2 w-100">
+                                <div class="col-md-1 d-flex">
+                                    <div class="custom_check d-flex align-items-center gap-2" [class.active]="sub.selected"
+                                        (click)="selectSubstituteItem(sub)">
+                                        <svg width="19" height="19" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="clr-primary-600 text-nowrap">{{langData?.prescriptions?.ItemName}}</p>
+                                    <p class="text-break">{{sub.DisplayName}}</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p class="clr-primary-600 text-nowrap">{{langData?.prescriptions?.GenericName}}</p>
+                                    <p class="text-break">{{sub.GenericName}}</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p class="clr-primary-600 text-nowrap">{{langData?.prescriptions?.GenericQuantity}}
+                                    </p>
+                                    <p class="text-break">{{sub.GenericQuantity}}</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p class="clr-primary-600 text-nowrap">{{langData?.prescriptions?.GenericUOM}}</p>
+                                    <p class="text-break">{{sub.GenericUOMName}}</p>
+                                </div>
+                                <div class="col-md-1">
+                                    <p class="clr-primary-600 text-nowrap">{{langData?.Diagnosis?.Code}}</p>
+                                    <p class="text-break">{{sub.ItemCode}}</p>
+                                </div>
+                                <div class="col-md-1 d-flex align-items-center justify-content-end">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal ViewAllPrescriptions_modal" data-bs-backdrop="static" data-bs-keyboard="false" id="divViewAllPrescriptions"
+    tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:50%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" translate>{{selectedView.PatientType == '3' ? 'Emergency Prescriptions' : 'IP
+                    Prescriptions'}}</h5>
+                <div class="ms-auto d-flex align-items-center">
+                    <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="card card-style-1 rounded group-date p-0 bg-transparent mt-2" *ngFor="let view of allPrescriptionList;let i = index">
+                    <div class="card-header rounded-top justify-content-start p-0 min-height-unset p-0">
+                        <span class="d-block grp_date pe-5">{{view.PrescriptionNo}} | {{view.OrderDate}} | {{view.DoctorName}}</span>
+                    </div>
+
+                    <div class="fixed_alter_list">
+                        <div class="fixed_alter_header bg-primary-50">
+                            <div class="row gx-2 p-2 mx-0">
+                                <div class="col-2">
+                                    <p class="label m-0">Service Name</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="label m-0">Item Name</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="label m-0">Specialisation</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="label m-0">Status</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fixed_alter_body height-unset">
+                            <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let issued of filterViewAllPresc(view);let i = index">
+                                <div class="col-2">
+                                    <p class="m-0">{{issued.ServiceName}} </p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="m-0">{{issued.ServiceCode}}-{{issued.ProcedureName}}</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="m-0">{{issued.Specialisation}}</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="m-0">{{issued.StatusName}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

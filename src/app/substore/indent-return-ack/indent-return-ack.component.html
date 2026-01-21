@@ -1,0 +1,120 @@
+<app-suit-header [IsSwitchWard]="true" *ngIf="refreshHeader"></app-suit-header>
+<div class="page-header sticky-top shadow-sm justify-content-start">
+    <h2 class="page-heading">Indent Return Acknowledgement</h2>
+    <div class="actions ms-auto d-flex align-items-center gap-2">
+        <button class="btn btn-danger-outline" (click)="clearIndentIssueForm()">Clear</button>
+        <button class="btn btn-main-outline" (click)="searchIndentReturnAck()">Search</button>
+    </div>
+</div>
+
+<div class="p-2">
+    <form class="d-flex align-items-center gap-2" [formGroup]="indentIssueForm">
+        <label for="" class="form-label m-0 text-nowrap">Date Range</label>
+        <div style="width: 227px;" class="">
+            <button class="date_range_calendar p-0 position-relative">
+                <mat-date-range-input class="btn btn-main-outline" [rangePicker]="picker">
+                    <input matStartDate formControlName="fromDate">
+                    <input matEndDate formControlName="toDate" (dateChange)="searchIndentReturnAck()">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+            </button>
+        </div>
+        <label for="" class="form-label">Facility</label>
+        <div class="col-3">
+            <select name="" id="" class="form-select w-100" [(ngModel)]="wardID" (change)="selectFacility()"
+                style="width: 22rem;" [ngModelOptions]="{standalone: true}">
+                <option value="{{item.FacilityID}}" *ngFor="let item of FetchUserFacilityDataList;let i=index">
+                    {{item.FacilityName}}</option>
+            </select>
+        </div>
+    </form>
+
+    <div class="mt-2">
+        <div class="fixed_alter_list indentIssue_table rounded rounded-bottom-0 border-primary-200">
+            <div class="fixed_alter_header bg-primary-50 rounded-top">
+                <div class="row gx-2 p-2 mx-0">
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Issue ID</p>
+                    </div>
+                    <div class="" style="width: 15%;">
+                        <p class="label m-0">Issued Date</p>
+                    </div>
+                    <div class="" style="width: 15%;">
+                        <p class="label m-0">Return To</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Returned By</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Reference No.</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Receipt Date</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Receipt By</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Hospital</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Status</p>
+                    </div>
+                </div>
+            </div>
+            <div class="fixed_alter_body">
+                <div [class]="item.class" *ngFor="let item of FetchIndentReturnViewDataList">
+                    <div class="" style="width: 10%;">
+                        <p class="m-0">
+                            <a class="nav_link cursor-pointer"
+                                (click)="navigateToIndentDetails(item)">{{item.IssueNo}}</a>
+                        </p>
+                    </div>
+                    <div class="" style="width: 15%;">
+                        <p class="m-0">{{item.Issuedate}}</p>
+                    </div>
+                    <div class="" style="width: 15%;">
+                        <p class="m-0">{{item.IndentTo}}</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="m-0">{{item.IssuedBy}}</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="m-0">{{item.ReferenceNo}}</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="m-0">{{item.ReceiptDate}}</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="m-0">{{item.ReceiptBy}}</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="m-0">{{item.HospitalName}}</p>
+                    </div>
+                    <div class="inline_legend" style="width: 10%;">
+                        <span class="fs-8">{{item.IssueStatusName}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="indentIssue_legends p-2 rounded-bottom bg-primary-100">
+            <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-1">
+                    <span class="legend newOrder"></span>
+                    <p>New Return</p>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="legend partialIssued"></span>
+                    <p>Acknowledge</p>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="legend fullyIssued"></span>
+                    <p>Cancel Return</p>
+                </div>
+            </div>
+        </div>
+        <app-pagination *ngIf="totalItemsCount > 0" [currentPage]="currentPage" [totalCount]="totalItemsCount"
+            (pageChange)="handlePageChange($event)"></app-pagination>
+    </div>
+</div>

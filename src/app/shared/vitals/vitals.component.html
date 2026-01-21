@@ -1,0 +1,117 @@
+<div *ngFor="let view of tableVitals;let i=index">
+
+
+<div class="table-cards_div mb-2 p-2" *ngIf="view.PARAMETERID !== '10' && view.PARAMETERID !== '11' && view.PARAMETERID !== '12'" >
+    <div class="row align-items-center mx-0" >
+        <div class="col-3">
+            <p class="value">{{view.PARAMETER}}</p>
+        </div >
+        <div class="col-2" *ngIf="view.PARAMETER === 'Consciousness'">
+            <select  name="" id=""  class="form-select">
+                <option value="0">Select</option>
+                <option value="1">Alert</option>
+                <option value="2">To Voice</option>
+                <option value="3">To Pain</option>
+                <option value="4">Unresp.</option>
+                <option value="5">Fully conscious</option>
+                <option value="6">Semi conscious</option>
+                <option value="7">Coma</option>
+                <option value="8">Mild</option>
+                <option value="9">Moderate</option>
+                <option value="10">Serious</option>
+            </select>
+        </div >
+        <div class="col-2" *ngIf="view.PARAMETER != 'Consciousness'">
+            <input #inputField [attr.id]="'input-' + i" type="text" name="view.PARAMVALUE"
+                [(ngModel)]="view.PARAMVALUE" appFocusNext
+                class="form-control" appTwoDigitDecimaNumber
+                placeholder="" autocomplete="off"
+                (change)="checkMaxRangeValue($event, view.PARAMETER,view.PARAMVALUE,view.NORMALMINRANGE,view.NORMALMAXRANGE, i)"
+            >
+        </div>
+
+        <div class="col-3">
+            <p class="label">{{langData?.common?.MinMaxRange}}</p>
+            <p class="value">{{view.NORMALMINRANGE}}-{{view.NORMALMAXRANGE}}</p>
+        </div>
+
+        <div class="col-1">
+            <button class="btn btn-icon-3d" (click)="openRemarks(i)">
+                <img src="assets/images/icons/rx-orders/icon-R.svg" alt="">
+            </button>
+        </div>
+        <div class="col-2" *ngIf="paramter!=null">
+            <div *ngIf="view.VitalHigh">
+                <svg
+                    width="26" height="24"
+                    viewBox="0 0 26 24" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M14.4637 0.739953C13.9426 -0.159169 12.6431 -0.156211 12.1247 0.745278L6.29182 10.887C5.85838 11.6407 6.24254 12.5498 6.9876 12.8263C7.28726 12.9375 7.61232 12.8331 7.89591 12.6857L12.3945 10.3468C12.9706 10.0473 13.6564 10.0461 14.2336 10.3437L18.7262 12.66C19.011 12.8068 19.3373 12.9102 19.6371 12.7971C20.3807 12.5168 20.7617 11.6064 20.3262 10.8551L14.4637 0.739953Z"
+                        fill="#EB6247" />
+                    <path
+                        d="M5.79 16.8927V23.8727H4.39V20.9027H1.4V23.8727H0V16.8927H1.4V19.7627H4.39V16.8927H5.79Z"
+                        fill="#EB6247" />
+                    <path
+                        d="M9.36797 16.8927V23.8727H7.96797V16.8927H9.36797Z"
+                        fill="#EB6247" />
+                    <path
+                        d="M16.4112 18.9927C16.2512 18.6994 16.0312 18.4761 15.7512 18.3227C15.4712 18.1694 15.1445 18.0927 14.7712 18.0927C14.3578 18.0927 13.9912 18.1861 13.6712 18.3727C13.3512 18.5594 13.1012 18.8261 12.9212 19.1727C12.7412 19.5194 12.6512 19.9194 12.6512 20.3727C12.6512 20.8394 12.7412 21.2461 12.9212 21.5927C13.1078 21.9394 13.3645 22.2061 13.6912 22.3927C14.0178 22.5794 14.3978 22.6727 14.8312 22.6727C15.3645 22.6727 15.8012 22.5327 16.1412 22.2527C16.4812 21.9661 16.7045 21.5694 16.8112 21.0627H14.4112V19.9927H18.1912V21.2127C18.0978 21.6994 17.8978 22.1494 17.5912 22.5627C17.2845 22.9761 16.8878 23.3094 16.4012 23.5627C15.9212 23.8094 15.3812 23.9327 14.7812 23.9327C14.1078 23.9327 13.4978 23.7827 12.9512 23.4827C12.4112 23.1761 11.9845 22.7527 11.6712 22.2127C11.3645 21.6727 11.2112 21.0594 11.2112 20.3727C11.2112 19.6861 11.3645 19.0727 11.6712 18.5327C11.9845 17.9861 12.4112 17.5627 12.9512 17.2627C13.4978 16.9561 14.1045 16.8027 14.7712 16.8027C15.5578 16.8027 16.2412 16.9961 16.8212 17.3827C17.4012 17.7627 17.8012 18.2994 18.0212 18.9927H16.4112Z"
+                        fill="#EB6247" />
+                    <path
+                        d="M25.817 16.8927V23.8727H24.417V20.9027H21.427V23.8727H20.027V16.8927H21.427V19.7627H24.417V16.8927H25.817Z"
+                        fill="#EB6247" />
+                </svg>
+            </div>
+            <div *ngIf="view.VitalLow">
+                <svg
+                    width="24" height="26"
+                    viewBox="0 0 24 26" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M10.6422 12.9143C11.1633 13.8135 12.4628 13.8105 12.9812 12.909L18.8141 2.76727C19.2475 2.01363 18.8634 1.10454 18.1183 0.828008C17.8186 0.716788 17.4936 0.821186 17.21 0.96863L12.7114 3.30749C12.1352 3.60704 11.4495 3.60821 10.8723 3.31063L6.37967 0.994329C6.09489 0.847504 5.76858 0.744143 5.46878 0.85718C4.72519 1.13754 4.34423 2.04789 4.77968 2.79922L10.6422 12.9143Z"
+                        fill="#EB6247" />
+                    <path
+                        d="M1.4 24.0384H3.7V25.1484H0V18.1684H1.4V24.0384Z"
+                        fill="#EB6247" />
+                    <path
+                        d="M8.62984 25.2184C7.97651 25.2184 7.37651 25.065 6.82984 24.7584C6.28318 24.4517 5.84984 24.0284 5.52984 23.4884C5.20984 22.9417 5.04984 22.325 5.04984 21.6384C5.04984 20.9584 5.20984 20.3484 5.52984 19.8084C5.84984 19.2617 6.28318 18.835 6.82984 18.5284C7.37651 18.2217 7.97651 18.0684 8.62984 18.0684C9.28984 18.0684 9.88984 18.2217 10.4298 18.5284C10.9765 18.835 11.4065 19.2617 11.7198 19.8084C12.0398 20.3484 12.1998 20.9584 12.1998 21.6384C12.1998 22.325 12.0398 22.9417 11.7198 23.4884C11.4065 24.0284 10.9765 24.4517 10.4298 24.7584C9.88318 25.065 9.28318 25.2184 8.62984 25.2184ZM8.62984 23.9684C9.04984 23.9684 9.41984 23.875 9.73984 23.6884C10.0598 23.495 10.3098 23.2217 10.4898 22.8684C10.6698 22.515 10.7598 22.105 10.7598 21.6384C10.7598 21.1717 10.6698 20.765 10.4898 20.4184C10.3098 20.065 10.0598 19.795 9.73984 19.6084C9.41984 19.4217 9.04984 19.3284 8.62984 19.3284C8.20984 19.3284 7.83651 19.4217 7.50984 19.6084C7.18984 19.795 6.93984 20.065 6.75984 20.4184C6.57984 20.765 6.48984 21.1717 6.48984 21.6384C6.48984 22.105 6.57984 22.515 6.75984 22.8684C6.93984 23.2217 7.18984 23.495 7.50984 23.6884C7.83651 23.875 8.20984 23.9684 8.62984 23.9684Z"
+                        fill="#EB6247" />
+                    <path
+                        d="M23.3714 18.1684L21.4214 25.1484H19.7714L18.4614 20.1784L17.0914 25.1484L15.4514 25.1584L13.5714 18.1684H15.0714L16.3014 23.5884L17.7214 18.1684H19.2814L20.6214 23.5584L21.8614 18.1684H23.3714Z"
+                        fill="#EB6247" />
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="modal fade" id="vitalsComments" tabindex="-1" aria-labelledby="vitalsCommentsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="width: 35%;">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="vitalsCommentsLabel" >
+                {{ selectedParameter?.PARAMETER}}
+              </h5>
+          <div class="d-flex gap-2 align-items-center justify-content-end">
+            <button class="btn btn-danger-outline">Clear</button>
+            <button class="btn btn-main-outline" (click)="saveRemarks()">Save</button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        </div>
+        <div class="modal-body" [formGroup]="remarkForm">
+            <!-- <label for="" class="form-label">Remarks</label> -->
+            <textarea name="" placeholder="Enter Remarks" class="form-control resize-none mb-2" formControlName="CMD" id="" cols="30" rows="3"></textarea>
+            <span class="position-absolute bottom-0"
+            *ngIf="(isSubmitted && this.remarkForm.get('CMD')?.errors) || (!this.remarkForm.get('CMD')?.pristine && this.remarkForm.get('CMD')?.invalid)">
+            <div class="text-danger" *ngIf="this.remarkForm.get('CMD')?.errors?.['required']">
+            Remarks is required</div>
+            </span>
+
+        </div>
+      </div>
+    </div>
+</div>

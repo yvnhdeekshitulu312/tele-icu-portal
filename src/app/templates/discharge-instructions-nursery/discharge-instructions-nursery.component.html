@@ -1,0 +1,1284 @@
+<div class="card card-style-1 rounded main-container" #divdin>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading">Discharge Instructions Nursery / NICU / <span class="arb"> تعليمات الخروج من الحضانة / وحدة العناية المركزة لحديثي الولادة </span></h2>
+        <div class="actions generalConsent_popup position-relative ms-auto d-flex align-items-center gap-2"
+            *ngIf="IsView">
+             <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+            <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+        </div>
+    </div>
+
+
+
+    <div class="p-2 template_scroll" *ngIf="showContent" id="divscroll">
+        <!-- <app-wardheader-summary></app-wardheader-summary> -->
+
+        <div class="">
+            <div class="row gx-0">
+                <div class="col-6">
+                    <div class="card card-style-1 rounded-start rounded-0">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">Medical Instructions</h5>
+                        </div>
+                        <div class="p-2">
+                            <p>Dear Parent,</p>
+                            <p>Please follow these instructions:</p>
+
+                            <div class="mt-2">
+                                <p class="mb-1 fs-7">In case of emergency, please contact your doctor through hospital's
+                                    telephone number at:</p>
+                                <p class="mb-1 fs-7">483-7777 (AHH-Nuzha)</p>
+                                <p class="mb-1 fs-7">425-0000 (AHH-Suwaidi)</p>
+                            </div>
+
+                            <div class="d-flex mt-3 align-items-center">
+                                <div class="col-3">
+                                    <label for="" class="form-label fs-7 fw-bold m-0 clr-primary-600">Discharge
+                                        condition</label>
+                                </div>
+                                <div class="col">
+                                    <div id="toggle_dischargecondition"
+                                        class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn selected" (click)="toggleSelection($event);assignDischargeConditionWell('toggle_dischargeconditionA', 'E')">Well</button>
+                                        <button class="btn" (click)="toggleSelection($event);assignDischargeConditionDAMA('toggle_dischargeconditionA', 'E')">DAMA</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex mt-3 align-items-center">
+                                <div class="col-3">
+                                    <label for="" class="form-label fs-7 fw-bold m-0 clr-primary-600">Mode</label>
+                                </div>
+                                <div class="col">
+                                    <p class="fs-7">Cuddled by parents</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6" dir="rtl">
+                    <div class="card card-style-1 rounded-end rounded-0 border-start-0 h-100">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">التعليمات الطبية</h5>
+                        </div>
+                        <div class="p-2">
+                            <p>نرجو اتباع التوصيات التالية :</p>
+                            <!-- <p>Please follow these instructions:</p> -->
+
+                           <div class="mt-2">
+                                <p class="mb-1 fs-7">في الحالات الطارئة ، الرجاء الاتصال بطبيبك على أحدى الأرقام التالية
+                                </p>
+                                <p class="mb-1 fs-7">مستشفى الحمادي (النزهه)- 4837777</p>
+                                <p class="mb-1 fs-7">4250000-مستشفى الحمادي (السويدي)</p>
+
+                           </div>
+
+                            <div class="d-flex mt-3 align-items-center">
+                                <div class="col-3">
+                                    <label for="" class="form-label fs-7 fw-bold m-0 clr-primary-600">حالة
+                                        الخروج :</label>
+                                </div>
+                                <div class="col">
+                                    <div id="toggle_dischargeconditionA"
+                                        class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn selected" (click)="toggleSelection($event);assignDischargeConditionWell('toggle_dischargecondition', 'A')">جيده</button>
+                                        <button class="btn" (click)="toggleSelection($event);assignDischargeConditionDAMA('toggle_dischargecondition', 'A')">رفض نصيحة الطبيب</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex mt-3 align-items-center">
+                                <div class="col-3">
+                                    <label for="" class="form-label fs-7 fw-bold m-0 clr-primary-600">الوضع عند
+                                        الخروج :</label>
+                                </div>
+                                <div class="col">
+                                    <p class="fs-7">.محمول من أحد الوالدين</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row gx-0 mt-3">
+                <div class="col-6">
+                    <div class="card card-style-1 rounded-start rounded-0">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">Feeding Instructions</h5>
+                        </div>
+                        <div class="p-2">
+                            <p class="fs-7"><b>a) Breastfeeding</b>– Breastfeeding is the best for your baby. Make sure
+                                to
+                                breastfeed your baby at least every 2 hours for 20-30 minutes on each breast every time
+                                you
+                                feed. Burped after each feeding.</p>
+                            <p class="fs-7 mt-2"><b>b) Formula feeding</b> average, a newborn drinks about 1.5-3 oz
+                                (45-90
+                                ml) every 2-3 hours. This amount increases as your baby grows and is able to take more
+                                each
+                                feeding.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6" dir="rtl">
+                    <div class="card card-style-1 rounded-end rounded-0 border-start-0 h-100">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">التعليمات الطبية</h5>
+                        </div>
+                        <div class="p-2">
+                            <p class="fs-7"><b>أ) الرضاعة الطبيعية</b>الأفضل للطفل ، تأكدي أنه يرضع كل ساعتين ،و مدة
+                                الرضاعة
+                                من 20 - 30 دقيقة في كل مرة ، مع مساعدة الطفل على التجشؤ بعد كل رضاعة (خروج الهواء من
+                                المعدة
+                                )</p>
+                            <p class="fs-7 mt-2"><b>ب) الرضاعة الصناعية </b>.من 45 - 90 مل ( كل 2 - 3 ساعات )
+                                كما يمكن زيادة الكمية في كل رضعه بزيادة نمو المولود حيث تزيد قدرته على تقبل كميات أكبر
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-0 mt-3">
+                <div class="col-6">
+                    <div class="card card-style-1 rounded-start rounded-0">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">Observe the following:</h5>
+                        </div>
+                        <div class="p-2">
+                            <p class="fs-7"><b>a) Urine / Stool</b> - should have at least 6-8 wet Diapers every 24
+                                hours.
+                            </p>
+                            <p class="fs-7 mt-2"><b>b) Always check your baby body temperature</b> At least 2x a day.
+                                Normal
+                                body temperature should be 36.6-37.5 ◦ C.</p>
+                            <p class="fs-7 mt-2"><b>c) Jaundice/Icteric or yellow skin & sclera</b></p>
+                            <p class="mt-2">Visit your Pediatrician if you notice the following:</p>
+                            <p class="mt-1">- Your baby skin becomes yellow, including the abdomen, arms and legs.</p>
+                            <p class="mt-1">- The whites of your baby's eyes look yellow.</p>
+                            <p class="mt-1">- Your baby becomes restless or sick or difficult to awaken.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6" dir="rtl">
+                    <div class="card card-style-1 rounded-end rounded-0 border-start-0 h-100">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">راقب مايلي</h5>
+                        </div>
+                        <div class="p-2">
+                            <p class="fs-7"><b>أ ) البول / البراز</b> : 6 - 8 مرات يوميا</p>
+                            <p class="fs-7 mt-2"><b>ب ) راقبي حرارة المولود دائما</b> :على الأقل مرتين في اليوم (
+                                الحرارة
+                                الطبيعية 36.6 - 37.5 درجة مئوية)</p>
+                            <p class="fs-7 mt-2"><b>.ج ) يرقان ( صفار ) المواليد على الجلد أو بياض العين</b></p>
+                            <p class="mt-2">يجب مراجعة الطبيب عند ملاحظة :</p>
+                            <p class="mt-1">.اصفرار الجلد في المناطق التالية : البطن ، الذراع ، الأرجل -</p>
+                            <p class="mt-1">اصفرار بياض العين -</p>
+                            <p class="mt-1">إذا كان المولود منزعجًا باستمرار أو مريض ، أو عند صعوبة إفاقته من النوم -
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-0 mt-3">
+                <div class="col-6">
+                    <div class="card card-style-1 rounded-start rounded-0">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">Bathing and Cord Care:</h5>
+                        </div>
+                        <div class="p-2">
+                            <p class="mt-1">- Bath baby daily with warm water</p>
+                            <p class="mt-1">- Clean Umbilical stump with alcohol 3x a day</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6" dir="rtl">
+                    <div class="card card-style-1 rounded-end rounded-0 border-start-0 h-100">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">الاستحمام و العنايه بالحبل السري :</h5>
+                        </div>
+                        <div class="p-2">
+                            <p class="mt-1">استحمام الطفل يوميا بماء دافئ -</p>
+                            <p class="mt-1">تنظيف منطقة الحبل السري بالمسحة الطبية يوميا 3 مرات -</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-0 mt-3">
+                <div class="col-6">
+                    <div class="card card-style-1 rounded-start rounded-0">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">Laboratory:</h5>
+                        </div>
+                        <div class="p-2">
+                            <p class="mt-1">Newborn Metabolic screening</p>
+                            <div class="d-flex align-items-center gap-3 mt-2">
+                                <div id="toggle_NewbornMetabolicscreening"
+                                    class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                    <button class="btn " (click)="toggleSelection($event);assignDischargeConditionDone('toggle_NewbornMetabolicscreeningA', 'E')">Done</button>
+                                    <button class="btn selected" (click)="toggleSelection($event);assignDischargeConditionNotDone('toggle_NewbornMetabolicscreeningA', 'E')">Not Done</button>
+                                </div>
+                                <div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label m-0">Date</label>
+                                        <!-- <input id="textbox_date" type="text" class="form-control"> -->
+                                        <mat-form-field appearance="fill">
+                                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                                            <input matInput class="" #SocialDate id="textbox_SocialDate" [matDatepicker]="sdate"
+                                                (click)="sdate.open()">
+                                            <mat-datepicker-toggle matSuffix [for]="sdate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #sdate></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div>
+                                    <input id="textbox_reason" type="text" class="form-control" *ngIf="getClassButtonSelectionExistence('toggle_NewbornMetabolicscreening') === 'Not Done' || getClassButtonSelectionExistence('toggle_NewbornMetabolicscreeningA') === 'Not Done'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6" dir="rtl">
+                    <div class="card card-style-1 rounded-end rounded-0 border-start-0 h-100">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">الفحوصات المختبرية :</h5>
+                        </div>
+                        <div class="p-2">
+                            <p class="mt-1">فحص التمثيل الغذائي لحديثي الولادة</p>
+                            <div class="d-flex align-items-center gap-3 mt-2">
+                                <div id="toggle_NewbornMetabolicscreeningA"
+                                    class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                    <button class="btn selected" (click)="toggleSelection($event);assignDischargeConditionDone('toggle_NewbornMetabolicscreening', 'A')">أجريت</button>
+                                    <button class="btn" (click)="toggleSelection($event);assignDischargeConditionNotDone('toggle_NewbornMetabolicscreening', 'A')">لم تعمل</button>
+                                </div>
+                                <div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label m-0">التاريخ</label>
+                                        <!-- <input id="textbox_dateA" type="date" class="form-control"> -->
+                                        <mat-form-field appearance="fill">
+                                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                                            <input matInput class="" #SocialDate1 id="textbox_SocialDate1" [matDatepicker]="sdateDDD"
+                                                (click)="sdateDDD.open()">
+                                            <mat-datepicker-toggle matSuffix [for]="sdateDDD">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #sdateDDD></mat-datepicker>
+                                        </mat-form-field>
+                                         
+                                    </div>
+                                </div>
+                                <div>
+                                    <input id="textbox_reasonA" type="text" class="form-control" *ngIf="getClassButtonSelectionExistence('toggle_NewbornMetabolicscreening') === 'Not Done' || getClassButtonSelectionExistence('toggle_NewbornMetabolicscreeningA') === 'Not Done'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-0 mt-3">
+                <div class="col-6">
+                    <div class="card card-style-1 rounded-start rounded-0">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">Follow-up visit:</h5>
+                        </div>
+                        <div class="p-2">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <label for="" class="form-label">Date:</label>
+                                    <!-- <input id="textbox_followupDate" type="text" class="form-control"> -->
+                                    <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" #SocialDate3 [matDatepicker]="sdate1" id="textbox_SocialDate3"
+                                            (click)="sdate1.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="sdate1">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #sdate1></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <!-- <div class="col-6">
+                                    <label for="" class="form-label">Clinic:</label>
+                                    <input id="textbox_followupClinic" type="text" class="form-control">
+                                </div> -->
+                                
+                                <div class="col-6">
+                                    <label for="" class="form-label">Specialization:</label>
+                                    <!-- <input type="text" class="form-control"> -->
+                                    <div class="input_dropdown position-relative">
+                                        <input type="text" class="form-control" id="Specialization"
+                                            placeholder="Specialization" aria-label="Specialization"  [matAutocomplete]="autoMed"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchSpecItem($event)">
+                                        <mat-autocomplete #autoMed="matAutocomplete">
+                                            <mat-option *ngFor="let item of SpecializationList"
+                                                (onSelectionChange)="onSpecItemSelected(item)"
+                                                [value]="item.name">
+                                                {{item.name}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="" class="form-label">Doctor:</label>
+                                    
+                                    <div class="input_dropdown position-relative">
+                                        <input type="text" class="form-control" id="Doctor"
+                                            placeholder="Doctor" aria-label="Doctor"  [matAutocomplete]="autoMed2"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchDocItem($event)">
+                                        <mat-autocomplete #autoMed2="matAutocomplete">
+                                            <mat-option *ngFor="let item of listOfSpecItems"  
+                                            (onSelectionChange)="onSpecDocItemSelected(item)"                                              
+                                                [value]="item.EmpNo + '-' + item.Fullname">
+                                                {{item.EmpNo}}-{{item.Fullname}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6" dir="rtl">
+                    <div class="card card-style-1 rounded-end rounded-0 border-start-0 h-100">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">المراجعة : يوم عيادة :</h5>
+                        </div>
+                        <div class="p-2">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <label for="" class="form-label">التاريخ:</label>
+                                    <!-- <input id="textbox_followupDateA" type="date" class="form-control"> -->
+                                    <div dir="ltr">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                                            <input matInput class="" #SocialDate4 id="textbox_SocialDate4" [matDatepicker]="sdateA1"
+                                                (click)="sdateA1.open()">
+                                            <mat-datepicker-toggle matSuffix [for]="sdateA1">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #sdateA1></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-6">
+                                    <label for="" class="form-label">الوقت:</label>
+                                    <input id="textbox_followupClinicA" type="text" class="form-control">
+                                </div> -->
+                                <div class="col-6">
+                                    <label for="" class="form-label">التخصص:</label>
+                                    <!-- <input type="text" class="form-control"> -->
+                                    <div class="input_dropdown position-relative">
+                                        <input type="text" class="form-control" id="SpecializationA"
+                                            placeholder="التخصص" aria-label="Specialization"  [matAutocomplete]="autoMed1"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchSpecItem($event)">
+                                        <mat-autocomplete #autoMed1="matAutocomplete">
+                                            <mat-option *ngFor="let item of SpecializationList"
+                                                (onSelectionChange)="onSpecItemSelected(item)"
+                                                [value]="item.name2l">
+                                                {{item.name2l}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="" class="form-label">اليوم:</label>
+                                    
+                                    <div class="input_dropdown position-relative">
+                                        <input type="text" class="form-control" id="DoctorA"
+                                            placeholder="اليوم" aria-label="Doctor"  [matAutocomplete]="autoMed20"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchDocItem($event)">
+                                        <mat-autocomplete #autoMed20="matAutocomplete">
+                                            <mat-option *ngFor="let item of listOfSpecItems" 
+                                            (onSelectionChange)="onSpecDocItemSelected(item)"                                               
+                                                [value]="getSpecItemValue(item)">
+                                                {{item.EmpNo}}-{{item.Fullname2l ? item.Fullname2l : item.Fullname}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-0 mt-3">
+                <div class="col-6">
+                    <div class="card card-style-1 rounded-start rounded-0">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">Circumcision Appointment:</h5>
+                        </div>
+                        <div class="p-2">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <label for="" class="form-label">Date:</label>
+                                    <!-- <input id="textbox_followupDate" type="text" class="form-control"> -->
+                                    <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" #SocialDate2 id="textbox_SocialDate2" [matDatepicker]="sdate2"
+                                            (click)="sdate2.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="sdate2">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #sdate2></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <!-- <div class="col-6">
+                                    <label for="" class="form-label">Clinic:</label>
+                                    <input id="textbox_followupClinicB" type="text" class="form-control">
+                                </div> -->
+                                <div class="col-6">
+                                    <label for="" class="form-label">Specialization:</label>
+                                    <div class="input_dropdown position-relative">
+                                        <input type="text" class="form-control" id="textbox_Specialization"
+                                            placeholder="Specialization" aria-label="Specialization"  [matAutocomplete]="autoMed5"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchSpecItem($event)">
+                                        <mat-autocomplete #autoMed5="matAutocomplete">
+                                            <mat-option *ngFor="let item of SpecializationListR1"
+                                                (onSelectionChange)="onSpecItemSelectedR1(item)"
+                                                [value]="item.name">
+                                                {{item.name}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="" class="form-label">Doctor:</label>
+                                    <div class="input_dropdown position-relative">
+                                        <input type="text" class="form-control" id="textbox_Doctorname"
+                                            placeholder="Doctor" [matAutocomplete]="autoMed6"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchDocItem($event)">
+                                        <mat-autocomplete #autoMed6="matAutocomplete">
+                                            <mat-option *ngFor="let item of listOfSpecItemsR1"  
+                                            (onSelectionChange)="onSpecDocItemSelectedR1(item)"                                              
+                                                [value]="item.EmpNo + '-' + item.Fullname">
+                                                {{item.EmpNo}}-{{item.Fullname}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6" dir="rtl">
+                    <div class="card card-style-1 rounded-end rounded-0 border-start-0 h-100">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">.مواعيد عيادة الطهور(الختان) :</h5>
+                        </div>
+                        <div class="p-2">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <label for="" class="form-label">التاريخ:</label>
+                                    <!-- <input id="textbox_followupDateA" type="date" class="form-control"> -->
+                                    <div dir="ltr">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                                            <input matInput class="" #SocialDate5 id="textbox_SocialDate5" [matDatepicker]="sdateA2"
+                                                (click)="sdateA2.open()">
+                                            <mat-datepicker-toggle matSuffix [for]="sdateA2">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #sdateA2></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-6">
+                                    <label for="" class="form-label">الوقت:</label>
+                                    <input id="textbox_followupClinicC" type="text" class="form-control">
+                                </div> -->
+                                <div class="col-6">
+                                    <label for="" class="form-label">اليوم:</label>
+                                    <div class="input_dropdown position-relative">
+                                        <input type="text" class="form-control" id="textbox_SpecializationA"
+                                            placeholder="التخصص" aria-label="Specialization"  [matAutocomplete]="autoMed7"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchSpecItem($event)">
+                                        <mat-autocomplete #autoMed7="matAutocomplete">
+                                            <mat-option *ngFor="let item of SpecializationListR1"
+                                                (onSelectionChange)="onSpecItemSelectedR1(item)"
+                                                [value]="item.name2l">
+                                                {{item.name2l}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="" class="form-label">التخصص:</label>
+                                    <div class="input_dropdown position-relative">
+                                        <input type="text" class="form-control" id="textbox_DoctornameA"
+                                            placeholder="Doctor" [matAutocomplete]="autoMed8"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchDocItem($event)">
+                                        <mat-autocomplete #autoMed8="matAutocomplete">
+                                            <mat-option *ngFor="let item of listOfSpecItemsR1"  
+                                            (onSelectionChange)="onSpecDocItemSelectedR1(item)"                                              
+                                                [value]="getSpecItemValue(item)">
+                                                {{item.EmpNo}}-{{item.Fullname2l ? item.Fullname2l : item.Fullname}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-0 mt-3">
+                <div class="col-6">
+                    <div class="card card-style-1 rounded-start rounded-0">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">Follow up Referral:</h5>
+                        </div>
+                        <div class="p-2">
+                            <div class="d-flex gap-2">
+                                <p class="fw-bold fs-7">1.</p>
+                                <div class="row g-2 w-100">
+                                    <div class="col-6">
+                                        <label for="" class="form-label">Date:</label>
+                                        <!-- <input id="textbox_FollowupReferralDate1" type="text" class="form-control"> -->
+                                        <mat-form-field appearance="fill">
+                                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                                            <input matInput class="" #SocialDate6 id="textbox_SocialDate6" [matDatepicker]="sdate3"
+                                                (click)="sdate3.open()">
+                                            <mat-datepicker-toggle matSuffix [for]="sdate3">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #sdate3></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <!-- <div class="col-6">
+                                        <label for="" class="form-label">Clinic:</label>
+                                        <input id="textbox_FollowupReferralClinic1" type="text" class="form-control">
+                                    </div> -->
+                                    <div class="col-6">
+                                        <label for="" class="form-label">Specialization:</label>
+                                        <!-- <input type="text" class="form-control"> -->
+                                        <div class="input_dropdown position-relative">
+                                            <input type="text" class="form-control" id="SpecializationR"
+                                                placeholder="Specialization" aria-label="Specialization"  [matAutocomplete]="autoMed3"
+                                                (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchSpecItem($event)">
+                                            <mat-autocomplete #autoMed3="matAutocomplete">
+                                                <mat-option *ngFor="let item of SpecializationListR"
+                                                    (onSelectionChange)="onSpecItemSelectedR(item)"
+                                                    [value]="item.name">
+                                                    {{item.name}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="" class="form-label">Doctor:</label>
+                                        
+                                        <div class="input_dropdown position-relative">
+                                            <input type="text" class="form-control" id="DoctorR"
+                                                placeholder="Doctor" aria-label="Doctor"  [matAutocomplete]="autoMed4"
+                                                (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchDocItem($event)">
+                                            <mat-autocomplete #autoMed4="matAutocomplete">
+                                                <mat-option *ngFor="let item of listOfSpecItemsR"     
+                                                    (onSelectionChange)="onSpecDocItemSelectedR(item)"                                           
+                                                    [value]="item.EmpNo + '-' + item.Fullname">
+                                                    {{item.EmpNo}}-{{item.Fullname}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2 mt-3">
+                                <p class="fw-bold fs-7">2.</p>
+                                <div class="row g-2 w-100">
+                                    <div class="col-6">
+                                        <label for="" class="form-label">Date:</label>
+                                        <!-- <input id="textbox_FollowupReferralDate2" type="text" class="form-control"> -->
+                                        <mat-form-field appearance="fill">
+                                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                                            <input matInput class="" #SocialDate7 id="textbox_SocialDate7" [matDatepicker]="sdate4"
+                                                (click)="sdate4.open()">
+                                            <mat-datepicker-toggle matSuffix [for]="sdate4">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #sdate4></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <!-- <div class="col-6">
+                                        <label for="" class="form-label">Clinic:</label>
+                                        <input id="textbox_FollowupReferralClinic2" type="text" class="form-control">
+                                    </div> -->
+                                    <div class="col-6">
+                                        <label for="" class="form-label">Specialization:</label>
+                                        <div class="input_dropdown position-relative">
+                                            <input type="text" class="form-control" id="SpecializationR2"
+                                                placeholder="Specialization" aria-label="Specialization"  [matAutocomplete]="autoMed9"
+                                                (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchSpecItem($event)">
+                                            <mat-autocomplete #autoMed9="matAutocomplete">
+                                                <mat-option *ngFor="let item of SpecializationListR2"
+                                                    (onSelectionChange)="onSpecItemSelectedR2(item)"
+                                                    [value]="item.name">
+                                                    {{item.name}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="" class="form-label">Doctor:</label>
+                                        <!-- <input id="textbox_FollowupReferralDoctor2" type="text" class="form-control"> -->
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="input_dropdown position-relative">
+                                                <input type="text" class="form-control" id="DoctorR2"
+                                                    placeholder="Doctor" aria-label="Doctor"  [matAutocomplete]="autoMed11"
+                                                    (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchDocItem($event)">
+                                                <mat-autocomplete #autoMed11="matAutocomplete">
+                                                    <mat-option *ngFor="let item of listOfSpecItemsR2"     
+                                                        (onSelectionChange)="onSpecDocItemSelectedR2(item)"                                           
+                                                        [value]="item.EmpNo + '-' + item.Fullname">
+                                                        {{item.EmpNo}}-{{item.Fullname}}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6" dir="rtl">
+                    <div class="card card-style-1 rounded-end rounded-0 border-start-0 h-100">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">متابعة التحويلات :</h5>
+                        </div>
+                        <div class="p-2">
+                            <div class="d-flex gap-2">
+                                <p class="fw-bold fs-7">1.</p>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <label for="" class="form-label">العيادة:</label>
+                                        <!-- <input id="textbox_FollowupReferralDate1A" type="date" class="form-control"> -->
+                                        <div dir="ltr">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                <input matInput class="" #SocialDate9 id="textbox_SocialDate9" [matDatepicker]="sdateA3"
+                                                    (click)="sdateA3.open()">
+                                                <mat-datepicker-toggle matSuffix [for]="sdateA3">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #sdateA3></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-6">
+                                        <label for="" class="form-label">التاريخ:</label>
+                                        <input id="textbox_FollowupReferralClinic1A" type="text" class="form-control">
+                                    </div> -->
+                                    <div class="col-6">
+                                        <label for="" class="form-label">التخصص:</label>
+                                        <!-- <input type="text" class="form-control"> -->
+                                        <div class="input_dropdown position-relative">
+                                            <input type="text" class="form-control" id="SpecializationRA"
+                                                placeholder="التخصص" aria-label="Specialization"  [matAutocomplete]="autoMed13"
+                                                (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchSpecItem($event)">
+                                            <mat-autocomplete #autoMed13="matAutocomplete">
+                                                <mat-option *ngFor="let item of SpecializationListR"
+                                                    (onSelectionChange)="onSpecItemSelectedR(item)"
+                                                    [value]="item.name2l">
+                                                    {{item.name2l}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <label for="" class="form-label">الطبيب:</label>
+                                        <!-- <input id="textbox_FollowupReferralDoctor1A" type="text" class="form-control"> -->
+                                        <!-- <div class="d-flex align-items-center gap-2">
+                                            <div class="CommanSearch__form bg-white pe-2 w-100 input_border_color" style="height: 35px;">
+                                                <svg id="button-addon2" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M10.8609 2.49805C15.7521 2.49805 19.7218 6.46772 19.7218 11.3589C19.7218 16.2501 15.7521 20.2198 10.8609 20.2198C5.96968 20.2198 2 16.2501 2 11.3589C2 6.46772 5.96968 2.49805 10.8609 2.49805ZM10.8609 18.2507C14.6681 18.2507 17.7527 15.1662 17.7527 11.3589C17.7527 7.55072 14.6681 4.46713 10.8609 4.46713C7.05267 4.46713 3.96909 7.55072 3.96909 11.3589C3.96909 15.1662 7.05267 18.2507 10.8609 18.2507ZM19.2147 18.3206L22 21.1049L20.6069 22.498L17.8226 19.7128L19.2147 18.3206Z"
+                                                        fill="#368796" />
+                                                </svg>
+                                                <input type="text" class="form-control" placeholder="">
+                                            </div>
+                                        </div> -->
+                                        
+                                        <div class="input_dropdown position-relative">
+                                            <input type="text" class="form-control" id="DoctorRA"
+                                                placeholder="Doctor" aria-label="Doctor"  [matAutocomplete]="autoMed14"
+                                                (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchDocItem($event)">
+                                            <mat-autocomplete #autoMed14="matAutocomplete">
+                                                <mat-option *ngFor="let item of listOfSpecItemsR"     
+                                                    (onSelectionChange)="onSpecDocItemSelectedR(item)"                                           
+                                                    [value]="getSpecItemValue(item)">
+                                                    {{item.EmpNo}}-{{item.Fullname2l ? item.Fullname2l : item.Fullname}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2 mt-3">
+                                <p class="fw-bold fs-7">2.</p>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <label for="" class="form-label">العيادة:</label>
+                                        <!-- <input id="textbox_FollowupReferralDate2A" type="date" class="form-control"> -->
+                                        <div dir="ltr">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                <input matInput class="" #SocialDate10 id="textbox_SocialDate10" [matDatepicker]="sdateA4"
+                                                    (click)="sdateA4.open()">
+                                                <mat-datepicker-toggle matSuffix [for]="sdateA4">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #sdateA4></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-6">
+                                        <label for="" class="form-label">التاريخ:</label>
+                                        <input id="textbox_FollowupReferralClinic2A" type="text" class="form-control">
+                                    </div> -->
+                                    <div class="col-6">
+                                        <label for="" class="form-label">الطبيب:</label>
+                                        <!-- <input id="textbox_FollowupReferralDoctor2A" type="text" class="form-control"> -->
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="input_dropdown position-relative">
+                                                <input type="text" class="form-control" id="SpecializationR2A"
+                                                    placeholder="التخصص" aria-label="Specialization"  [matAutocomplete]="autoMed10"
+                                                    (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchSpecItem($event)">
+                                                <mat-autocomplete #autoMed10="matAutocomplete">
+                                                    <mat-option *ngFor="let item of SpecializationListR2"
+                                                        (onSelectionChange)="onSpecItemSelectedR2(item)"
+                                                        [value]="item.name2l">
+                                                        {{item.name2l}}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="" class="form-label">التخصص:</label>
+                                        <div class="input_dropdown position-relative">
+                                            <input type="text" class="form-control" id="DoctorR2A"
+                                                placeholder="Doctor" aria-label="Doctor"  [matAutocomplete]="autoMed12"
+                                                (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchDocItem($event)">
+                                            <mat-autocomplete #autoMed12="matAutocomplete">
+                                                <mat-option *ngFor="let item of listOfSpecItemsR2"     
+                                                    (onSelectionChange)="onSpecDocItemSelectedR2(item)"                                           
+                                                    [value]="getSpecItemValue(item)">
+                                                    {{item.EmpNo}}-{{item.Fullname2l ? item.Fullname2l : item.Fullname}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-0 mt-3">
+                <div class="col-6">
+                    <div class="card card-style-1 rounded-start rounded-0">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">Others:</h5>
+                        </div>
+                        <div class="p-2">
+                            <!-- <textarea name="" class="form-control resize-none" id="textarea_Others" cols="30"
+                                rows="3"></textarea> -->
+                                <span name="" class="form-control " id="textarea_Others" cols="30" rows="3" resize-none contenteditable="true"></span>
+                        </div>
+                        <div class="d-flex p-2 gap-2 align-items-center">
+                            <label for="" class="form-label">Vaccination Status:</label>
+                            <div id="toggle_vaccinationstatus"
+                                class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                <button class="btn " (click)="toggleSelection($event);assignVaccinationStatusDone('toggle_vaccinationstatusA', 'E')">Done</button>
+                                <button class="btn selected" (click)="toggleSelection($event);assignVaccinationStatusNotDone('toggle_vaccinationstatusA', 'E')">Not Done</button>
+                            </div>
+                        </div>
+                        <div class="d-flex p-2 gap-2 align-items-center">
+                            <label for="" class="form-label">Hearing Test:</label>
+                            <div id="toggle_hearingtest"
+                                class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                <button class="btn " (click)="toggleSelection($event);assignHearingTestDone('toggle_hearingtestA', 'E')">Done</button>
+                                <button class="btn selected" (click)="toggleSelection($event);assignHearingTestNotDone('toggle_hearingtestA', 'E')">Not Done</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6" dir="rtl">
+                    <div class="card card-style-1 rounded-end rounded-0 border-start-0 h-100">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">أخرى :</h5>
+                        </div>
+                        <div class="p-2">
+                            <!-- <textarea name="" class="form-control resize-none" id="textarea_OthersA" cols="30"
+                                rows="3"></textarea> -->
+                                <span name="" class="form-control " id="textarea_OthersA" cols="30" rows="3" resize-none contenteditable="true"></span>
+                        </div>
+                        <div class="d-flex p-2 gap-2 align-items-center">
+                            <label for="" class="form-label">Vaccination Status:</label>
+                            <div id="toggle_vaccinationstatusA"
+                                class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                <button class="btn " (click)="toggleSelection($event);assignVaccinationStatusDone('toggle_vaccinationstatus', 'A')">أجريت</button>
+                                <button class="btn selected" (click)="toggleSelection($event);assignVaccinationStatusNotDone('toggle_vaccinationstatus', 'A')">لم تعمل</button>
+                            </div>
+                        </div>
+                        <div class="d-flex p-2 gap-2 align-items-center">
+                            <label for="" class="form-label">Hearing Test:</label>
+                            <div id="toggle_hearingtestA"
+                                class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                <button class="btn " (click)="toggleSelection($event);assignHearingTestDone('toggle_hearingtest', 'A')">أجريت</button>
+                                <button class="btn selected" (click)="toggleSelection($event);assignHearingTestNotDone('toggle_hearingtest', 'A')">لم تعمل</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-0 mt-3">
+                <div class="col-6">
+                    <div class="card card-style-1 rounded-start rounded-0">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">Take Home Medications:</h5>
+                        </div>
+                        <div class="p-2">
+                            <!-- <textarea name="" class="form-control resize-none" id="textarea_TakeHomeMedications"
+                                cols="30" rows="3"></textarea> -->
+                                <span name="" class="form-control " id="textarea_TakeHomeMedications" cols="30" rows="3" resize-none contenteditable="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6" dir="rtl">
+                    <div class="card card-style-1 rounded-end rounded-0 border-start-0 h-100">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">متابعة التحويلات :</h5>
+                        </div>
+                        <div class="p-2">
+                            <!-- <textarea name="" class="form-control resize-none" id="textarea_TakeHomeMedicationsA"
+                                cols="30" rows="3"></textarea> -->
+                                <span name="" class="form-control " id="textarea_TakeHomeMedicationsA" cols="30" rows="3" resize-none contenteditable="true"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-0 mt-3">
+                <div class="col-6">
+                    <div class="card card-style-1 rounded-start rounded-0">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">Take home Milk:</h5>
+                        </div>
+                        <div class="p-2">
+                            <div class="row g-2">
+                                <div class="col-4">
+                                    <label for="" class="form-label">Quantity:</label>
+                                    <select name="" class="form-select" id="textbox_TakehomeMilkQuantity" (change)="onQuantityChange($event)">
+                                        <option value="0"></option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label for="" class="form-label">Formula Name:</label>
+                                    <select name="" class="form-select" id="textbox_TakehomeMilkFormulaName" (change)="onFormulaChange($event)">
+                                        <option value="0"></option>
+                                        <option value="1">NAN – 1 Opti pro</option>
+                                        <option value="2">PRE- NAN / Preterm</option>
+                                        <option value="3">S – 26 Regular RTF</option>
+                                        <option value="4">S - 26 Preterm</option>
+                                        <option value="5">S - 26 LBW Preterm </option>
+                                        <option value="6">Others</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label for="" class="form-label">Date of expiry:</label>
+                                    <!--<input id="textbox_TakehomeMilkDateofexpiry" type="date" class="form-control">
+                                     <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" #nursedate [matDatepicker]="sdateA2"
+                                            (click)="sdateA2.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="sdateA2">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #date></mat-datepicker>
+                                    </mat-form-field> -->
+                                    <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" #SocialDate11 id="textbox_SocialDate11" [matDatepicker]="sdateMM"
+                                            (click)="sdateMM.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="sdateMM">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #sdateMM></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-12">
+                                    <div class="p-2 bg-primary-100">
+                                        <p class="clr-primary-600">Please bring vaccination Card on your 1st visit with
+                                            your
+                                            Pediatrician (No vaccine card no checkup). </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6" dir="rtl">
+                    <div class="card card-style-1 rounded-end rounded-0 border-start-0 h-100">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">الحليب المأخوذ للمنزل :</h5>
+                        </div>
+                        <div class="p-2">
+                            <div class="row g-2">
+                                <div class="col-4">
+                                    <label for="" class="form-label"> كمية الحليب المعطاة:</label>
+                                    <select name="" class="form-select" id="textbox_TakehomeMilkQuantityA" (change)="onQuantityChange($event)">
+                                        <option value="0"></option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label for="" class="form-label"> اسم الحليب:</label>
+                                    <select name="" class="form-select" id="textbox_TakehomeMilkFormulaNameA" (change)="onFormulaChange($event)">
+                                        <option value="0"></option>
+                                        <option value="1">NAN – 1 Opti pro</option>
+                                        <option value="2">PRE- NAN / Preterm</option>
+                                        <option value="3">S – 26 Regular RTF</option>
+                                        <option value="4">S - 26 Preterm</option>
+                                        <option value="5">S - 26 LBW Preterm </option>
+                                        <option value="6">Others</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label for="" class="form-label"> تاريخ الانتهاء:</label>
+                                    <!-- <input id="textbox_TakehomeMilkDateofexpiryA" type="date" class="form-control"> -->
+                                    <!-- <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" #nursedate [matDatepicker]="sdateA3"
+                                            (click)="sdateA3.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="sdateA3">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #date></mat-datepicker>
+                                    </mat-form-field> -->
+                                    <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" #SocialDate12 id="textbox_SocialDate12" [matDatepicker]="sdateRe"
+                                            (click)="sdateRe.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="sdateRe">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #sdateRe></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-12">
+                                    <div class="p-2 bg-primary-100">
+                                        <p class="clr-primary-600">الرجاء إحضار كرت التطعيمات عند الزيارة الأولى لطبيب
+                                            الأطفال ( لا يمكن فحص الطفل دون بطاقة التطعيمات)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-0 mt-3">
+                <div class="col-12">
+                    <div class="card card-style-1 rounded-start rounded-0">
+                        <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                            <h5 class="card-heading">For Medical Staff Use Only / لاستخدام الطاقم الطبي فقط</h5>
+                        </div>
+                        <div class="p-2">
+                            <h6 class="clr-primary-600">Discharged by:</h6>
+                            <div class="row gx-2">
+                                <div class="col-6">
+                                    <div class="card card-style-1">
+                                        <div class="card-header justify-content-start">
+                                            <h5 class="card-heading">Nurse Name/Signature and date:</h5>
+                                        </div>
+                                        <div class="p-2">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <label class="form-label text-nowrap">ID / <span class="arb"> رقم الهوية</span></label>
+                                                    <input type="text" class="form-control" id="textbox_nurse_code">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label text-nowrap">Name / <span class="arb"> الإسم</span></label>
+                                                    <div class="d-flex align-items-center input-group w-100">
+                                                        <input id="textbox_nurse_name" type="text" placeholder="search" class="form-control pe-2" aria-label="Search"
+                                                            [matAutocomplete]="nurse"
+                                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : onSearchNurse($event)">
+                                                        <mat-autocomplete #nurse="matAutocomplete">
+                                                            <mat-option *ngFor="let item of nursesList"
+                                                                (onSelectionChange)="onNurseSelect(item, 'textbox_nurse_code')"
+                                                                [value]="item.Fullname">
+                                                                {{item.Fullname}}
+                                                            </mat-option>
+                                                        </mat-autocomplete>
+                                                        <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                                            <img src="assets/images/icons/icon-search.svg" alt="">
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label text-nowrap">Date /<span class="arb"> التاریخ</span></label>
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                        <input matInput class="" #SocialDate13 id="textbox_SocialDate13" [matDatepicker]="dateDischarged "
+                                                            (click)="dateDischarged .open()">
+                                                        <mat-datepicker-toggle matSuffix [for]="dateDischarged ">
+                                                        </mat-datepicker-toggle>
+                                                        <mat-datepicker #dateDischarged></mat-datepicker>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label text-nowrap">Time / <span class="arb"> الوقت</span></label>
+                                                    <!-- <input type="time" class="form-control" id="textbox_DischargedSocialTime1"> -->
+                                                    <app-time-selector [hours]="getHours('textbox_generic_time1')" [minutes]="getMinutes('textbox_generic_time1')" 
+                                                        (timeSelected)="onTimeChange($event, 'textbox_generic_time1')" [disabled]="isTimeSelectorDisable('textbox_generic_time1')"></app-time-selector>
+                                                </div>
+                                                <div class="col-12">
+                                                    <img id="imgFinal" style="display:none" src="" alt="" />
+                                                    <div class="signature_box active text-end ms-auto mt-2">
+                                                        
+                                                        <div class="position-relative">
+                                                            <app-signature #Signature1 class="" (base64Signature)="base64Signature('Signature1', $event)" [imageToDisplay]="getSignature('Signature1')">
+                                                                <canvas style="border: 1px solid #000;"></canvas>
+                                                            </app-signature>
+                                                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                                            (click)="clearSignature('Signature1'); clearbase64Signature(Signature1)"
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                class="delicon cursor-pointer">
+                                                                <path
+                                                                    d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                                    fill="#EB6247"></path>
+                                                                <path
+                                                                    d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                                    fill="#EB6247"></path>
+                                                                <path
+                                                                    d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                                    fill="#EB6247"></path>
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="card card-style-1">
+                                        <div class="card-header justify-content-start">
+                                            <h5 class="card-heading">Doctor Name / Signature and date:</h5>
+                                        </div>
+                                        <div class="p-2">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <label class="form-label text-nowrap">ID / <span class="arb"> رقم الهوية</span></label>
+                                                    <input type="text" class="form-control" id="textbox_doctor_code">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label text-nowrap">Name / <span class="arb"> الإسم</span></label>
+                                                    <div class="d-flex align-items-center input-group w-100">
+                                                        <input id="textbox_physician_name" type="text" placeholder="search" class="form-control pe-2" aria-label="Search"
+                                                            [matAutocomplete]="doctor"
+                                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : onSearchDoctors($event)">
+                                                        <mat-autocomplete #doctor="matAutocomplete">
+                                                            <mat-option *ngFor="let item of doctorsList"
+                                                                (onSelectionChange)="onDoctorSelect(item, 'textbox_doctor_code')"
+                                                                [value]="item.Fullname">
+                                                                {{item.Fullname}}
+                                                            </mat-option>
+                                                        </mat-autocomplete>
+                                                        <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                                            <img src="assets/images/icons/icon-search.svg" alt="">
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label text-nowrap">Date /<span class="arb"> التاریخ</span></label>
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                        <input matInput class="" #docdate id="textbox_docdate" [matDatepicker]="ddate"
+                                                            (click)="ddate.open()">
+                                                        <mat-datepicker-toggle matSuffix [for]="ddate">
+                                                        </mat-datepicker-toggle>
+                                                        <mat-datepicker #ddate></mat-datepicker>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label text-nowrap">Time / <span class="arb"> الوقت</span></label>
+                                                    <!-- <input type="time" class="form-control" id="textbox_DischargedDocSocialTime1"> -->
+                                                    <app-time-selector [hours]="getHours('textbox_generic_time2')" [minutes]="getMinutes('textbox_generic_time2')" 
+                                                        (timeSelected)="onTimeChange($event, 'textbox_generic_time2')" [disabled]="isTimeSelectorDisable('textbox_generic_time2')"></app-time-selector>
+                                                </div>
+                                                <div class="col-12">
+                                                    <img id="imgFinal" style="display:none" src="" alt="" />
+                                                    <div class="signature_box active text-end ms-auto mt-2">
+                                                        
+                                                        <div class="position-relative">
+                                                            <app-signature #Signature2 class="" (base64Signature)="base64Signature('Signature2', $event)" [imageToDisplay]="getSignature('Signature2')">
+                                                                <canvas style="border: 1px solid #000;"></canvas>
+                                                            </app-signature>
+                                                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                                            (click)="clearSignature('Signature2'); clearbase64Signature(Signature2)"
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                class="delicon cursor-pointer">
+                                                                <path
+                                                                    d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                                    fill="#EB6247"></path>
+                                                                <path
+                                                                    d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                                    fill="#EB6247"></path>
+                                                                <path
+                                                                    d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                                    fill="#EB6247"></path>
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <h6 class="clr-primary-600 mb-3">Acknowledgement</h6>
+                <div class="row gx-2">
+                    <div class="col-6">
+                        <div class="card card-style-1">
+                            <div class="card-header justify-content-start">
+                                <h5 class="card-heading">Patient's Family/Guardian Received:</h5>
+                            </div>
+                            <div class="p-2">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="form-label text-nowrap">ID / <span class="arb"> رقم الهوية</span></label>
+                                        <input type="text" id="textbox_PatientsFamilyID" class="form-control">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label text-nowrap">Name / <span class="arb"> الإسم</span></label>
+                                        <input type="text" id="textbox_patientsFamilyName" class="form-control">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label text-nowrap">Date /<span class="arb"> التاریخ</span></label>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                                            <input matInput class="" #patdate id="textbox_patdate" [matDatepicker]="pdate" id="textbox_patdate"
+                                                (click)="pdate.open()">
+                                            <mat-datepicker-toggle matSuffix [for]="pdate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #pdate></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label text-nowrap">Time / <span class="arb"> الوقت</span></label>
+                                        <!-- <input type="time" class="form-control"  id="textbox_PatientFSocialTime1"> -->
+                                        <app-time-selector [hours]="getHours('textbox_generic_time3')" [minutes]="getMinutes('textbox_generic_time3')" 
+                                            (timeSelected)="onTimeChange($event, 'textbox_generic_time3')" [disabled]="isTimeSelectorDisable('textbox_generic_time3')"></app-time-selector>
+                                    </div>
+                                    <div class="col-12">
+                                        <img id="imgFinal" style="display:none" src="" alt="" />
+                                        <div class="signature_box active text-end ms-auto mt-2">
+                                            
+                                            <div class="position-relative">
+                                                <app-signature #Signature3 class="" (base64Signature)="base64Signature('Signature3', $event)" [imageToDisplay]="getSignature('Signature3')">
+                                                    <canvas style="border: 1px solid #000;"></canvas>
+                                                </app-signature>
+                                                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                                (click)="clearSignature('Signature3'); clearbase64Signature(Signature3)"
+                                                    xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                                    <path
+                                                        d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                                        fill="#EB6247"></path>
+                                                    <path
+                                                        d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                                        fill="#EB6247"></path>
+                                                    <path
+                                                        d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                                        fill="#EB6247"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+      [selectedTemplateFn]="selectedTemplate.bind(this)">
+   </app-sharedtemplateview>
+
+
+<!-- <div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+        <div class="modal-content">
+            <div class="modal-header p-2">
+                <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-3">
+                <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                    *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                    <div class="row mx-0 g-2 w-100">
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Template ID</p>
+                            <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                                    tem.PatientTemplatedetailID }}</a></p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Name</p>
+                            <p>{{ tem.PatientName }}</p>
+                        </div>
+
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">DoctorName</p>
+                            <p>{{ tem.Consultant }}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Created By</p>
+                            <p>{{ tem.CreatedBy }}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Date</p>
+                            <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

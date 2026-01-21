@@ -1,0 +1,1473 @@
+<div class="actions generalConsent_popup position-relative d-flex align-items-center gap-2 justify-content-end mb-3" *ngIf="savedMedicalData.length >0">
+    <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+</div>
+<div class="p-2">
+    <div class="bg-white rounded-2 Pulmonology_page">
+        <div class="card card-style-1">
+            <div class="card-header page-header justify-content-start border-bottom-primary-200">
+                <div class="d-flex align-items-center gap-2">
+                    <!-- <button class="bg-primary-200 clr-primary-600 mx-2 fw-bold fs-5 px-4 py-1 rounded-5 lh-sm">1</button> -->
+                    <h2 class="page-heading d-flex align-items-center m-0">Reason of visit</h2>
+                    
+                </div>
+                <!-- <div class="actions ms-auto d-flex align-items-center gap-2" *ngIf="savedMedicalData.length >0">
+                    <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+                </div> -->
+            </div>
+            <div class="p-2">
+                <div class="d-flex align-items-center gap-3 clin_imp" >
+                    <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" [disabled]="visit.disabled" (click)="selectItem(visit, 'FetchReasonofVisitList')" [class.active]="visit.selected" *ngFor="let visit of getDataByKey('FetchReasonofVisitList');let i=index">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                            <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                        </svg>                                            
+                        {{visit.ItemName}}
+                    </button> 
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-style-1 mt-3">
+            <div id="md_header" class="card-header page-header justify-content-between border-bottom-primary-200">
+                    <!-- <button class="bg-primary-200 clr-primary-600 mx-2 fw-bold fs-5 px-4 py-1 rounded-5 lh-sm">2</button> -->
+                <h2 class="page-heading d-flex align-items-center m-0">Medical Background</h2>
+                <button id="mb_btn" onclick="toggleHeader('mb_btn', 'md_header', 'md_toggle')" class="btn btn-icon-3d  active">
+                    <img src="assets/images/icons/arrow-down.svg" alt="">
+                </button>
+            </div>
+            <div class="p-2" id="md_toggle">
+                <div class="card card-style-1 border-primary-100">
+                    <div class="card-header page-header justify-content-start bg-primary-50 border-0">
+                        <h2 class="page-heading d-flex align-items-center m-0">Pulmonology diseases:</h2>
+                    </div>
+                    <div class="p-2">
+                        <div class="d-flex flex-wrap align-items-center gap-3 clin_imp">
+                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" [disabled]="med.disabled" (click)="selectItem(med, 'FetchPulmonologyDiseasesDataList')" [class.active]="med.selected" *ngFor="let med of getDataByKey('FetchPulmonologyDiseasesDataList');let i=index">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                </svg>                                            
+                                {{med.ItemName}}
+                            </button> 
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-style-1 border-primary-100 mt-3">
+                    <div class="card-header page-header justify-content-start bg-primary-50 border-0">
+                        <h2 class="page-heading d-flex align-items-center m-0">Other Chronic medical diseases</h2>
+                    </div>
+                    <div class="p-2">
+                        <div class="">
+                            <div class="d-flex flex-wrap align-items-center gap-3 clin_imp">
+                                <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" [disabled]="med.disabled" (click)="selectItem(med, 'FetchChronicMedicalDiseasesList')" [class.active]="med.selected" *ngFor="let med of getDataByKey('FetchChronicMedicalDiseasesList');let i=index">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                        <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                    </svg>                                            
+                                    {{med.ItemName}}
+                                </button> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-style-1 mt-3">
+            <div id="hc_header" class="card-header page-header justify-content-between border-bottom-primary-200">
+                <!-- <button class="bg-primary-200 clr-primary-600 mx-2 fw-bold fs-5 px-4 py-1 rounded-5 lh-sm">3</button> -->
+                <h2 class="page-heading d-flex align-items-center m-0">History / Chief Complaint</h2>
+                <button id="hc_btn" onclick="toggleHeader('hc_btn', 'hc_header', 'hc_toggle')" class="btn btn-icon-3d  active">
+                    <img src="assets/images/icons/arrow-down.svg" alt="">
+                </button>
+            </div>
+            <div id="hc_toggle">
+            <div class="card-header flex-wrap page-header justify-content-start gap-4 border-bottom-primary-200">
+                <div class="d-flex align-items-center gap-2" *ngFor="let his of getDataByKey('FetchHistoryChiefCompliantList');let i=index">
+                    <label for="" class="form-label text-nowrap fs-7 clr-primary-600 m-0">{{his.SubSectionName}} :</label>
+                    <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start">
+                        <button class="btn" [class.selected]="his.selectedOption === 'NO' || !his.selectedOption" (click)="updateSelection(his, 'NO')">No</button>
+                        <button class="btn" [class.selected]="his.selectedOption === 'YES'" (click)="updateSelection(his, 'YES')">Yes</button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-2">
+                <div *ngIf="getVisibility('FetchHistoryChiefCompliantList', 'Shortness of breath')" class="card card-style-1">
+                    <div class="card-header page-header gap-2 justify-content-start bg-primary-50 border-0">
+                        <!-- <span class="sub_count_letter">A</span> -->
+                        <h2 class="page-heading d-flex align-items-center m-0">Shortness of breath</h2>
+                    </div>
+                    <div class="p-2">
+                        <div class="sob_table">
+                            <div class="row mx-0 gx-2">
+                                <div class="col-lg-3">
+                                    <div class="th">Onset</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantShortofBreathOnsetList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantShortofBreathOnsetList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Type</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantShortofBreathTypeList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantShortofBreathTypeList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Duration</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="td">
+                                        <input type="text" [(ngModel)]="breathDuration" class="form-control w-auto" (change)="updateDurationText('FetchHistoryChiefCompliantShortofBreathDurationList', 'Duration', $event)">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Progression</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantShortofBreathProgressionList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantShortofBreathProgressionList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Character</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantShortofBreathCharacterList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantShortofBreathCharacterList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Severity: NYHA classification</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex flex-wrap align-items-center gap-2 clin_imp">
+                                            
+                                                <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantShortofBreathNYHAList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantShortofBreathNYHAList');let i=index">
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                        <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                    </svg>                                            
+                                                    {{item.ItemName}}
+                                                </button> 
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Exacerbating factors</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex flex-wrap align-items-center gap-2 clin_imp exacerbating">
+                                            
+                                                <button class="btn btn-secondary-outline fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantShortofBreathExacerbatingList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantShortofBreathExacerbatingList');let i=index">
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                        <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                    </svg>                                            
+                                                    {{item.ItemName}}
+                                                </button> 
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Alleviating factors</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantShortofBreathAlleviatingList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantShortofBreathAlleviatingList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="getVisibility('FetchHistoryChiefCompliantList', 'Cough')" class="card card-style-1 mt-3">
+                    <div class="card-header page-header gap-2 justify-content-start bg-primary-50 border-0">
+                        <!-- <span class="sub_count_letter">B</span> -->
+                        <h2 class="page-heading d-flex align-items-center m-0">Cough</h2>
+                    </div>
+                    <div class="p-2">
+                        <div class="hemop_table">
+                            <div class="row mx-0 gx-2">
+                                <div class="col-lg-3">
+                                    <div class="th">Onset</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantCoughOnsetList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantCoughOnsetList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Duration</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="td">
+                                        <input type="text" [(ngModel)]="coughDuration" class="form-control w-auto" (change)="updateDurationText('FetchHistoryChiefCompliantCoughDurationList', 'Duration', $event)">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Progression</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantCoughProgressionList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantCoughProgressionList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Character / Quality</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantCoughCharacterList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantCoughCharacterList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                                <div class="Productive_table p-2">
+                                    <table class="table table-bordered m-0">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 25%;">Sputum content</th>
+                                                <th style="width: 25%;">Sputum Color</th>
+                                                <th style="width: 25%;">Sputum Amount</th>
+                                                <th style="width: 25%;">Sputum Smell</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex flex-wrap align-items-start clin_imp gap-2">
+                                                        <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantCoughSputumList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantCoughSputumList');let i=index">
+                                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                                <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                            </svg>                                            
+                                                            {{item.ItemName}}
+                                                        </button> 
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-wrap align-items-center clin_imp gap-2">
+                                                        <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantCoughSputumColorList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantCoughSputumColorList');let i=index">
+                                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                                <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                            </svg>                                            
+                                                            {{item.ItemName}}
+                                                        </button> 
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-wrap align-items-start clin_imp gap-2">
+                                                        <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantCoughSputumAmountList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantCoughSputumAmountList');let i=index">
+                                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                                <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                            </svg>                                            
+                                                            {{item.ItemName}}
+                                                        </button> 
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-wrap align-items-start clin_imp gap-2">
+                                                        <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantCoughSputumSmellList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantCoughSputumSmellList');let i=index">
+                                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                                <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                            </svg>                                            
+                                                            {{item.ItemName}}
+                                                        </button> 
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                              
+                                <div class="col-lg-3">
+                                    <div class="th">Exacerbating factors</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex flex-wrap align-items-start clin_imp gap-2">
+                                           
+                                                <button class="btn btn-secondary-outline fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantCoughSputumExacerbatingList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantCoughSputumExacerbatingList');let i=index">
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                        <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                    </svg>                                            
+                                                    {{item.ItemName}}
+                                                </button> 
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12" *ngIf="getVisibility('FetchHistoryChiefCompliantCoughSputumExacerbatingList', 'Other, specify')">
+                                    <div class="td">
+                                        <textarea name="" [(ngModel)]="ExacerbatingOthers" class="form-control resize-none" id="" cols="30" rows="2" (change)="updateOthersText('FetchHistoryChiefCompliantCoughSputumExacerbatingList', 'Other, specify', $event)"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Alleviating factors</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantCoughSputumAlleviatingList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantCoughSputumAlleviatingList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12" *ngIf="getVisibility('FetchHistoryChiefCompliantCoughSputumAlleviatingList', 'Other, specify')">
+                                    <div class="td">
+                                        <textarea name="" [(ngModel)]="AlleviatingOthers" class="form-control resize-none" id="" cols="30" rows="2" (change)="updateOthersText('FetchHistoryChiefCompliantCoughSputumAlleviatingList', 'Other, specify', $event)"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="getVisibility('FetchHistoryChiefCompliantList', 'Hemoptysis')" class="card card-style-1 mt-3">
+                    <div class="card-header page-header gap-2 justify-content-start bg-primary-50 border-0">
+                        <!-- <span class="sub_count_letter">C</span> -->
+                        <h2 class="page-heading d-flex align-items-center m-0">Hemoptysis</h2>
+                    </div>
+                    <div class="p-2">
+                        <div class="hemop_table">
+                            <div class="row mx-0 gx-2">
+                                <div class="col-lg-3">
+                                    <div class="th">Onset</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantHemoptysissetList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantHemoptysissetList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Type</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantHemoptysissetOnsetTypeList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantHemoptysissetOnsetTypeList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Duration</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="td">
+                                        <input type="text" [(ngModel)]="hemoptysisDuration" class="form-control w-auto" (change)="updateDurationText('FetchHistoryChiefCompliantHemoptysissetDurationList', 'Duration', $event)">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Progression</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantHemoptysissetProgressionList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantHemoptysissetProgressionList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Episodes</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantHemoptysissetEpisodesList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantHemoptysissetEpisodesList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Character</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantHemoptysissetCharacterList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantHemoptysissetCharacterList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Quantity</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantHemoptysissetQuantityList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantHemoptysissetQuantityList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Bleeding from other body sites</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantHemoptysissetBleedingList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantHemoptysissetBleedingList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="getVisibility('FetchHistoryChiefCompliantList', 'Wheezing/Stridor')" class="card card-style-1 mt-3">
+                    <div class="card-header page-header gap-2 justify-content-start bg-primary-50 border-0">
+                        <!-- <span class="sub_count_letter">D</span> -->
+                        <h2 class="page-heading d-flex align-items-center m-0">Wheezing/Stridor</h2>
+                    </div>
+                    <div class="p-2">
+                        <div class="wheezing_table">
+                            <div class="row mx-0 gx-2">
+                                <div class="col-lg-3">
+                                    <div class="th">Onset</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantWheezingOnsetList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantWheezingOnsetList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Duration</div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="td">
+                                        <input type="text" [(ngModel)]="wheezingDuration" class="form-control w-auto" (change)="updateDurationText('FetchHistoryChiefCompliantWheezingDurationList', 'Duration', $event)">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Progression</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantWheezingProgressionList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantWheezingProgressionList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Character</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantWheezingCharacterList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantWheezingCharacterList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Triggers</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantWheezingTriggerList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantWheezingTriggerList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12" *ngIf="getVisibility('FetchHistoryChiefCompliantWheezingTriggerList', 'Others. Specify:')">
+                                    <div class="td">
+                                        <textarea name="" [(ngModel)]="TriggerOthers" class="form-control resize-none" id="" cols="30" rows="2" (change)="updateOthersText('FetchHistoryChiefCompliantWheezingTriggerList', 'Others. Specify:', $event)"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="th">Response to bronchodilators</div>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="td">
+                                        <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchHistoryChiefCompliantWheezingBronchodilatorsList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchHistoryChiefCompliantWheezingBronchodilatorsList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="card card-style-1 mt-3">
+            <div id="en_header" class="card-header page-header justify-content-between border-bottom-primary-200">
+                <!-- <button class="bg-primary-200 clr-primary-600 mx-2 fw-bold fs-5 px-4 py-1 rounded-5 lh-sm">3</button> -->
+                <h2 class="page-heading d-flex align-items-center m-0">Examination</h2>
+                <button id="en_btn" onclick="toggleHeader('en_btn', 'en_header', 'en_toggle')" class="btn btn-icon-3d  active">
+                    <img src="assets/images/icons/arrow-down.svg" alt="">
+                </button>
+            </div>
+            <div class="p-2" id="en_toggle">
+                <div class="examination_table">
+                    <div class="row mx-0 gx-2">
+                        <div class="col-lg-12">
+                            <div class="th">Vital Signs</div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="td">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="d-flex align-items-center gap-2" *ngFor="let item of getDataByKey('FetchExaminationVitalsList');let i=index">
+                                        <label for="" class="form-label m-0">{{item.ItemName}}</label>
+                                        <input type="text" class="form-control w-50" value="{{item.ItemValue}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="th">General apperance</div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="td">
+                                <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                    <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationGeneralAppearanceList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationGeneralAppearanceList');let i=index">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                            <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                        </svg>                                            
+                                        {{item.ItemName}}
+                                    </button> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="th">Scars</div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="td">
+                                <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                    <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationGeneralScarsList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationGeneralScarsList');let i=index">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                            <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                        </svg>                                            
+                                        {{item.ItemName}}
+                                    </button> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="th">Chest wall deformity</div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="td">
+                                <div class="d-flex flex-wrap align-items-center gap-3 clin_imp">
+                                    <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationChestWallDeformityList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationChestWallDeformityList');let i=index">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                            <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                        </svg>                                            
+                                        {{item.ItemName}}
+                                    </button> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="th">Tracheal position</div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="td">
+                                <div class="d-flex flex-wrap align-items-center gap-3 clin_imp">
+                                    <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationTrachealPositionList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationTrachealPositionList');let i=index">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                            <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                        </svg>                                            
+                                        {{item.ItemName}}
+                                    </button> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="th">Cricosternal distance</div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="td">
+                                <div class="d-flex flex-wrap align-items-center gap-3 clin_imp">
+                                    <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationCricosternalDistanceList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationCricosternalDistanceList');let i=index">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                            <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                        </svg>                                            
+                                        {{item.ItemName}}
+                                    </button> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="th">Chest expansion</div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="td">
+                                <div class="d-flex align-items-center gap-2 clin_imp flex-wrap">
+                                    <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationChestExpansionList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationChestExpansionList');let i=index">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                            <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                        </svg>                                            
+                                        {{item.ItemName}}
+                                    </button> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="anterior_table mt-3">
+            <table class="table m-0 border-neutral">
+                <tbody>
+                    <tr>
+                        <th colspan="2">Percussion</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="d-flex gap-3 clin_imp align-items-start">
+                                <button class="examinationitem btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationPercussionList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationPercussionList');let i=index">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                        <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                    </svg>                                            
+                                    {{item.ItemName}}
+                                </button> 
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="getClassButtonSelectionExistence('examinationitem') === 'Abnormal (select the zone of abnormal finding)'">
+                        <th colspan="">Right Anterior chest wall</th>
+                        <th>Left Anterior chest wall</th>
+                    </tr>
+                    <td *ngIf="getClassButtonSelectionExistence('examinationitem') === 'Abnormal (select the zone of abnormal finding)'" class="p-0">
+                        <table class="table m-0">
+                            <tr>
+                                <th>Apex</th>
+                                <td>
+                                    <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                        <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightAnteriorApexList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightAnteriorApexList');let i=index">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                            </svg>                                            
+                                            {{item.ItemName}}
+                                        </button> 
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Upper Zone</th>
+                                <td>
+                                    <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                        <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightAnteriorUpperzoneList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightAnteriorUpperzoneList');let i=index">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                            </svg>                                            
+                                            {{item.ItemName}}
+                                        </button> 
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Lateral zone under the avilla</th>
+                                <td>
+                                    <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                        <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightAnteriorLateralzoneList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightAnteriorLateralzoneList');let i=index">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                            </svg>                                            
+                                            {{item.ItemName}}
+                                        </button> 
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Middle Zone</th>
+                                <td>
+                                    <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                        <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightAnteriorMiddlezoneList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightAnteriorMiddlezoneList');let i=index">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                            </svg>                                            
+                                            {{item.ItemName}}
+                                        </button> 
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Inferior Zone</th>
+                                <td>
+                                    <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                        <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightAnteriorInferiorzoneList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightAnteriorInferiorzoneList');let i=index">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                            </svg>                                            
+                                            {{item.ItemName}}
+                                        </button> 
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <!-- <tr>
+                        <th>Left Anterior chest wall</th>
+                    </tr> -->
+                    <!-- <tr> -->
+                        <td *ngIf="getClassButtonSelectionExistence('examinationitem') === 'Abnormal (select the zone of abnormal finding)'" class="p-0">
+                            <table class="table m-0">
+                                <tr>
+                                    <th>Apex</th>
+                                    <td>
+                                        <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftAnteriorApexList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftAnteriorApexList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Upper Zone</th>
+
+                                    <td>
+                                        <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftAnteriorUpperzoneList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftAnteriorUpperzoneList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Lateral zone under the avilla</th>
+
+                                    <td>
+                                        <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftAnteriorLateralzoneList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftAnteriorLateralzoneList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Middle Zone</th>
+
+                                    <td>
+                                        <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftAnteriorMiddlezoneList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftAnteriorMiddlezoneList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Inferior Zone</th>
+                                    <td>
+                                        <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftAnteriorInferiorzoneList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftAnteriorInferiorzoneList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    <!-- </tr> -->
+                </tbody>
+            </table>
+        </div>
+
+        <div *ngIf="getClassButtonSelectionExistence('examinationitem') === 'Abnormal (select the zone of abnormal finding)'" class="posterior_table mt-3">
+            <table class="table m-0 border-neutral">
+                <tbody>
+                    <tr>
+                        <th colspan="">Right posterior chest wall</th>
+                        <th colspan="">Left posterior chest wall</th>
+                    </tr>
+                    <!-- <tr> -->
+                        <td class="p-0">
+                            <table class="table m-0">
+                                <tr>
+                                    <th>Apex</th>
+                                    <td>
+                                        <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightPosteriorApexList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightPosteriorApexList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Upper lobe Zone</th>
+                                    <td>
+                                        <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightPosteriorUpperLobezoneList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightPosteriorUpperLobezoneList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Inferior lobe Zone</th>
+                                    <td>
+                                        <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightPosteriorInferiorLobezoneList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightPosteriorInferiorLobezoneList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Lung base</th>
+                                    <td>
+                                        <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightPosteriorLungzoneList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightPosteriorLungzoneList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    <!-- </tr> -->
+                    <!-- <tr>
+                    </tr> -->
+                    <!-- <tr> -->
+                        <td class="p-0">
+                            <table class="table m-0">
+                                <tr>
+                                    <th>Apex</th>
+                                    <td>
+                                        <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftPosteriorApexList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftPosteriorApexList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Upper lobe Zone</th>
+
+                                    <td>
+                                        <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2"  (click)="selectItem(item, 'FetchExaminationLeftPosteriorUpperLobezoneList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftPosteriorUpperLobezoneList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Inferior lobe Zone</th>
+
+                                    <td>
+                                        <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftPosteriorInferiorLobezoneList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftPosteriorInferiorLobezoneList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Lung base</th>
+
+                                    <td>
+                                        <div class="d-flex gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftPosteriorLungzoneList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftPosteriorLungzoneList');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    <!-- </tr> -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="anterior_table mt-3">
+            <table class="table m-0 border-neutral">
+                <tbody>
+                    <tr>
+                        <th>Auscultation</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex gap-3 clin_imp align-items-start">
+                                <button class="examinationitem1 btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationAuscultationList')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationAuscultationList');let i=index">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                        <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                    </svg>                                            
+                                    {{item.ItemName}}
+                                </button> 
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="getClassButtonSelectionExistence('examinationitem1') === 'Abnormal (select the zone of abnormal finding)'">
+                        <th colspan="">Right Anterior chest wall</th>
+                    </tr>
+                    <tr *ngIf="getClassButtonSelectionExistence('examinationitem1') === 'Abnormal (select the zone of abnormal finding)'">
+                        <td class="p-0">
+                            <table class="table m-0">
+                                <tr>
+                                    <th>Apex</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightAnteriorApex14List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightAnteriorApex14List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Upper Zone</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightAnteriorUpperzone14List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightAnteriorUpperzone14List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Lateral zone under the avilla</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightAnteriorLateralzone14List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightAnteriorLateralzone14List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Middle Zone</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightAnteriorMiddlezone14List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightAnteriorMiddlezone14List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Inferior Zone</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightAnteriorInferiorzone14List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightAnteriorInferiorzone14List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr *ngIf="getClassButtonSelectionExistence('examinationitem1') === 'Abnormal (select the zone of abnormal finding)'">
+                        <th colspan="">Left Anterior chest wall</th>
+                    </tr>
+                    <tr *ngIf="getClassButtonSelectionExistence('examinationitem1') === 'Abnormal (select the zone of abnormal finding)'">
+                        <td class="p-0">
+                            <table class="table m-0">
+                                <tr>
+                                    <th>Apex</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftAnteriorApex14List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftAnteriorApex14List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Upper Zone</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftAnteriorUpperzone14List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftAnteriorUpperzone14List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Lateral zone under the avilla</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftAnteriorLateralzone14List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftAnteriorLateralzone14List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Middle Zone</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftAnteriorMiddlezone14List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftAnteriorMiddlezone14List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Inferior Zone</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftAnteriorInferiorzone14List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftAnteriorInferiorzone14List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div *ngIf="getClassButtonSelectionExistence('examinationitem1') === 'Abnormal (select the zone of abnormal finding)'" class="posterior_table mt-3">
+            <table class="table m-0 border-neutral">
+                <tbody>
+                    <tr>
+                        <th colspan="">Right posterior chest wall</th>
+                    </tr>
+                    <tr>
+                        <td class="p-0">
+                            <table class="table m-0">
+                                <tr>
+                                    <th>Apex</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightPosteriorApex16List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightPosteriorApex16List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Upper lobe Zone</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2"  (click)="selectItem(item, 'FetchExaminationRightPosteriorUpperLobezone16List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightPosteriorUpperLobezone16List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Inferior lobe Zone</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightPosteriorInferiorLobezone16List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightPosteriorInferiorLobezone16List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Lung base</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationRightPosteriorLungzone16List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationRightPosteriorLungzone16List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="">Left posterior chest wall</th>
+                    </tr>
+                    <tr>
+                        <td class="p-0">
+                            <table class="table m-0">
+                                <tr>
+                                    <th>Apex</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftPosteriorApex17List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftPosteriorApex17List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Upper lobe Zone</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftPosteriorUpperLobezone17List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftPosteriorUpperLobezone17List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Inferior lobe Zone</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftPosteriorInferiorLobezone17List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftPosteriorInferiorLobezone17List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Lung base</th>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-3 clin_imp align-items-start p-0">
+                                            <button class="btn btn-secondary-outline min-width-unset fs-8 px-2" (click)="selectItem(item, 'FetchExaminationLeftPosteriorLungzone17List')" [class.active]="item.selected" *ngFor="let item of getDataByKey('FetchExaminationLeftPosteriorLungzone17List');let i=index">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"/>
+                                                    <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"/>
+                                                </svg>                                            
+                                                {{item.ItemName}}
+                                            </button> 
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+    
+</div>
+
+<div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline" (click)="savenavigation()"
+                     data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalSaved" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:65%">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" translate>Pulmonology</h5>   
+            <div class="ms-auto d-flex align-items-center">
+                <button type="button" class="btn-close ms-4" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>                                          
+        </div>
+        <div class="modal-body">
+            <div class="table-cards_div d-flex mx-0 mt-0 g-2 p-2 position-relative"
+             *ngFor="let item of savedMedicalData;let i = index">
+                <div class="row mx-0 g-2 w-100">
+                    <div class="col-lg col-md-4 col-12">
+                        <p class="label">Template ID</p>
+                        <p><a href="#" (click)="getDetails($event, item.PatientTemplatedetailID)">{{ item.PatientTemplatedetailID }}</a></p>
+                    </div>
+                    <div class="col-lg col-md-4 col-12">
+                        <p class="label">Name</p>
+                        <p>{{ item.PatientName }}</p>
+                    </div>
+                    <div class="col-lg col-md-4 col-12">
+                        <p class="label">Age | Gender</p>
+                        <p>{{ item.FullAge }} | {{ item.Gender }}</p>
+                    </div>
+                    <div class="col-lg col-md-4 col-12">
+                        <p class="label">Consultant</p>
+                        <p>{{ item.Consultant }}</p>
+                    </div>
+                    <div class="col-lg col-md-4 col-12">
+                        <p class="label">Saved By</p>
+                        <p>{{ item.CreatedBy }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>

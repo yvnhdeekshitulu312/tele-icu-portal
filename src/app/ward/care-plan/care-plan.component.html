@@ -1,0 +1,550 @@
+<app-generic-close *ngIf="readonly"></app-generic-close>
+<app-header [InputHome]="IsHome" [IsSwitchWard]="false" [showAlert]="true" *ngIf="!readonly"></app-header>
+<div class="container__wrapper p-0" style="background-color: #fff;">
+    <div class="page-header sticky-top bg-primary-50 shadow-sm justify-content-between">
+        <h2 class="page-heading d-flex align-items-center m-0">Interdisciplinary Plan Of Care</h2>
+        <div class="d-flex align-items-center gap-2" *ngIf="!readonly">
+            <button class="btn btn-main-fill" (click)="navigatetoBedBoard()">{{langData?.common?.BedBoards}}</button>
+            <button class="btn btn-danger-outline" (click)="clearScreen()">Clear</button>
+            <button class="btn btn-main-outline d-none">Save</button>
+        </div>
+    </div>
+    <div class="m-2" *ngIf="!readonly">
+        <app-wardheader-summary></app-wardheader-summary>
+    </div>
+    <div class="p-2 mt-2 Interdisciplinary_page">
+        <div class="row gx-2">
+            <div class="col-6">
+                <label for="" class="form-label">Care Plan</label>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="d-flex align-items-center input-group">
+                        <input type="text" [(ngModel)]="carePlanSearchText" class="form-control"
+                            [matAutocomplete]="careplansearch" (keyup)="searchCarePlan($event)">
+                        <mat-autocomplete #careplansearch="matAutocomplete">
+                            <mat-option *ngFor="let item of carePlans"
+                                (onSelectionChange)="onCarePlanSelectedFromSearch(item)" [value]="item.CarePlanName">
+                                {{item.CarePlanName}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                            <img src="assets/images/icons/icon-search.svg" alt="">
+                        </button>
+                    </div>
+                    <svg class="cursor-pointer" (click)="openEvaluationModal()" width="32" height="33"
+                        viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_9425_21607)" *ngIf="selectedCarePlan?.PatientCareGroupID">
+                            <circle cx="16" cy="16.5291" r="16" fill="#DAEEF1" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M19.4655 10.5579V9.20555C19.4655 9.20333 19.4633 9.16349 19.4611 9.15907C19.4589 9.15464 19.4589 9.15022 19.4589 9.15022C19.4522 9.1303 19.4478 9.11259 19.4434 9.09267C19.4434 9.09046 19.4412 9.08382 19.439 9.07718C19.4368 9.07295 19.4347 9.06721 19.4329 9.06212C19.4308 9.05656 19.4291 9.05177 19.4279 9.05062C19.419 9.03734 19.4124 9.02627 19.4058 9.01299C19.3991 9.00192 19.3925 8.99086 19.3836 8.97979C19.3836 8.97869 19.3831 8.97813 19.3825 8.97758C19.382 8.97703 19.3814 8.97647 19.3814 8.97537C19.3637 8.95545 19.3438 8.93553 19.3239 8.91782C19.3289 8.92415 19.3159 8.91456 19.3009 8.90353C19.2897 8.89527 19.2774 8.8862 19.2708 8.88241C19.2575 8.87355 19.2442 8.8647 19.2287 8.85806C19.2278 8.85806 19.2265 8.85768 19.225 8.85724C19.2228 8.85661 19.2202 8.85585 19.2176 8.85585L19.138 8.83593C19.1405 8.83718 19.1266 8.8363 19.1109 8.8353C19.0989 8.83454 19.0859 8.83371 19.0782 8.83371H19.045H18.8967H17.6418C17.4736 8.83371 17.2943 8.681 17.3098 8.50172C17.3186 8.39548 17.3164 8.28925 17.3076 8.18301C17.3088 8.20206 17.3055 8.17946 17.3015 8.1521L17.3015 8.15207L17.3015 8.15206C17.298 8.12858 17.2941 8.10163 17.2921 8.09448C17.2832 8.05021 17.2722 8.00594 17.2589 7.96389C17.2456 7.92184 17.2323 7.882 17.2168 7.84216L17.2105 7.82841C17.2005 7.80666 17.1819 7.76632 17.177 7.75806C17.1371 7.6828 17.0929 7.60977 17.042 7.54115C17.0407 7.54115 17.0241 7.52152 17.0081 7.50278L17.0081 7.50278L17.0081 7.50278C16.9958 7.48822 16.9839 7.4742 16.98 7.47033C16.9512 7.43713 16.9202 7.40614 16.8893 7.37737C16.8671 7.35524 16.8428 7.33532 16.8184 7.3154L16.8184 7.3154C16.8229 7.31761 16.7653 7.27334 16.7542 7.2667C16.6856 7.22244 16.6126 7.1826 16.5396 7.14497C16.5351 7.14276 16.5241 7.13834 16.513 7.13391L16.513 7.13391C16.5108 7.13169 16.5108 7.13169 16.5086 7.13169C16.4975 7.12727 16.4864 7.12284 16.482 7.12063C16.4444 7.10735 16.4068 7.09407 16.3691 7.083C16.3249 7.06972 16.2828 7.05866 16.2385 7.0498L16.2146 7.0462C16.1871 7.04217 16.1487 7.03652 16.1567 7.03652C16.0814 7.02988 16.0061 7.02767 15.9309 7.02988L15.8379 7.03652C15.8349 7.03652 15.8308 7.037 15.8265 7.03751C15.8215 7.0381 15.8161 7.03874 15.8114 7.03874H15.8092C15.7829 7.04249 15.7582 7.04785 15.7323 7.05344L15.7184 7.05644C15.641 7.07415 15.5657 7.09849 15.4905 7.12505C15.4882 7.12727 15.4838 7.12948 15.4816 7.12948C15.4805 7.12948 15.4794 7.13003 15.4783 7.13059C15.4772 7.13114 15.4761 7.13169 15.475 7.13169C15.4573 7.13833 15.4395 7.14719 15.4218 7.15604C15.3864 7.17375 15.3532 7.19145 15.32 7.21137L15.32 7.21138L15.32 7.21138C15.2868 7.2313 15.2536 7.25121 15.2226 7.27334C15.2094 7.28441 15.1939 7.29548 15.1784 7.30654L15.1762 7.30876C15.112 7.3663 15.0478 7.42385 14.9902 7.49025L14.9526 7.53451C14.9518 7.53536 14.9509 7.53588 14.9502 7.53633C14.949 7.53705 14.9482 7.53757 14.9482 7.53894L14.934 7.55932C14.9181 7.5821 14.9015 7.60589 14.8862 7.62968C14.8464 7.69387 14.8088 7.76027 14.7778 7.82888C14.7778 7.8298 14.7736 7.84016 14.7684 7.85311C14.761 7.87148 14.7516 7.89504 14.749 7.90413L14.7158 8.01701C14.7047 8.0657 14.6937 8.1144 14.6848 8.16309V8.1653V8.16973V8.17415V8.17637C14.6826 8.17858 14.6826 8.18301 14.6826 8.18522C14.6826 8.1905 14.6821 8.19578 14.6816 8.2013C14.681 8.20735 14.6804 8.21369 14.6804 8.22063C14.6737 8.31138 14.676 8.40212 14.6826 8.49287C14.6981 8.67214 14.5188 8.82486 14.3506 8.82486H13.0647H12.9363H12.9098H12.8766H12.8588C12.8566 8.82597 12.8544 8.82652 12.8522 8.82708C12.85 8.82763 12.8478 8.82818 12.8456 8.82929L12.8456 8.82929L12.8456 8.82929C12.8256 8.83372 12.8057 8.83814 12.7858 8.84478C12.7858 8.8461 12.7701 8.85211 12.7556 8.8577C12.7457 8.86151 12.7363 8.86512 12.7327 8.86691C12.72 8.87327 12.7084 8.88076 12.6963 8.88858L12.6818 8.8979C12.6818 8.89934 12.6659 8.91294 12.6535 8.9235C12.6469 8.92918 12.6413 8.93398 12.6397 8.93553C12.5955 8.98201 12.5556 9.05062 12.5401 9.11259C12.5357 9.12587 12.5335 9.13694 12.5313 9.15022C12.5313 9.15193 12.5309 9.15398 12.5305 9.15649C12.5299 9.16045 12.5291 9.16557 12.5291 9.17235V9.20555V9.22768V9.32728V10.549C12.6312 10.549 12.7332 10.5512 12.8351 10.5535H12.8351H12.8351C12.9363 10.5557 13.0373 10.5579 13.1377 10.5579H19.4655ZM22.8644 24.3909V10.1373C22.8644 10.1196 22.8622 10.0996 22.86 10.0819C22.8179 9.76986 22.5789 9.53746 22.2535 9.52639H20.1294V10.8898C20.1294 11.0182 20.0541 11.131 19.9457 11.1864C19.9014 11.2085 19.8505 11.2218 19.7974 11.2218H19.7841C19.7697 11.2218 19.7559 11.2223 19.7421 11.2229L19.742 11.2229C19.7282 11.2234 19.7143 11.224 19.7 11.224C19.6712 11.224 19.6424 11.224 19.6137 11.2262C19.4695 11.2275 19.3253 11.2258 19.1811 11.2242L19.181 11.2242C19.0729 11.223 18.9648 11.2218 18.8567 11.2218H12.1969C12.1438 11.2218 12.0951 11.2085 12.0486 11.1864C11.9402 11.131 11.8649 11.0182 11.8649 10.8898V9.52639H10.0241C9.99257 9.52639 9.96083 9.52577 9.92898 9.52515H9.92897H9.92896L9.92891 9.52515C9.8265 9.52314 9.72305 9.52111 9.62345 9.53967C9.32466 9.59501 9.13432 9.86281 9.12989 10.1572C9.12841 10.2428 9.12891 10.3283 9.1294 10.4139C9.12964 10.4567 9.12989 10.4995 9.12989 10.5423V25.3913C9.13653 25.7233 9.37335 25.9955 9.71199 26.0176C9.9552 26.0341 10.2025 26.0293 10.4483 26.0244H10.4484H10.4486H10.4487C10.5651 26.0221 10.6813 26.0198 10.7965 26.0198H22.1163C22.1302 26.0198 22.1442 26.0201 22.1582 26.0203C22.1865 26.0208 22.2151 26.0213 22.2447 26.0198C22.5899 26.0088 22.8555 25.7542 22.8666 25.4068C22.8738 25.1876 22.8707 24.9685 22.8677 24.7494L22.8677 24.7492C22.866 24.6298 22.8644 24.5103 22.8644 24.3909ZM18.7298 15.1729H19.7932C19.9162 15.1729 20.0165 15.2726 20.0165 15.3961C20.0165 15.5196 19.9156 15.6206 19.7927 15.6206H18.047L17.0056 14.0899C16.9444 13.9979 16.8471 13.9462 16.7437 13.9569C16.6422 13.9658 16.5537 14.0317 16.5086 14.1326L15.6762 15.9739L15.0789 14.6724C15.0302 14.5667 14.9387 14.502 14.833 14.4984C14.7274 14.4948 14.6324 14.5542 14.5777 14.6557L14.0594 15.6152H13.4318C12.939 14.366 13.4668 13.0918 14.2262 12.8205C15.428 12.3912 16.0146 13.4771 16.0146 13.4771C16.0146 13.4771 16.6018 12.3912 17.803 12.8205C18.4722 13.0597 18.962 14.0786 18.7298 15.1729ZM16.7977 14.5791L17.6777 15.8723C17.7531 15.9851 17.9015 16.0635 18.0369 16.0623H18.3712C17.9615 16.7333 17.2205 17.3609 16.0146 17.7765C15.0836 17.4553 14.4316 17.0064 13.9923 16.5106H12.5126C12.3885 16.5106 12.2888 16.4097 12.2888 16.2862C12.2888 16.1627 12.3885 16.0623 12.5126 16.0623H14.0819C14.2268 16.0623 14.3752 15.9739 14.4435 15.8462L14.8122 15.1646L15.428 16.5053C15.4766 16.6139 15.5705 16.678 15.6773 16.678H15.6785C15.7854 16.678 15.8792 16.6133 15.9279 16.5041L16.7977 14.5791ZM19.1111 20.5207C18.9674 20.5207 18.8338 20.4524 18.7424 20.3319L17.7128 18.9823L18.2798 18.5494L19.0867 19.6075L20.4055 17.4427L21.0141 17.8138L19.5053 20.2927C19.4216 20.4293 19.2874 20.5124 19.1342 20.5207C19.1288 20.5203 19.1241 20.5204 19.1191 20.5206L19.1111 20.5207ZM16.9954 19.9604C16.9954 20.0334 16.936 20.0928 16.863 20.0928H11.9146C11.8416 20.0928 11.7822 20.0334 11.7822 19.9604V19.4314C11.7822 19.3583 11.8416 19.299 11.9146 19.299H16.863C16.936 19.299 16.9954 19.3583 16.9954 19.4314V19.9604ZM16.9954 23.5282C16.9954 23.6012 16.936 23.66 16.863 23.66H11.9146C11.8416 23.66 11.7822 23.6012 11.7822 23.5282V22.9985C11.7822 22.9255 11.8416 22.8661 11.9146 22.8661H16.863C16.936 22.8661 16.9954 22.9255 16.9954 22.9985V23.5282ZM19.1111 24.0881C18.9674 24.0881 18.8338 24.0198 18.7424 23.8993L17.7128 22.5497L18.2798 22.1168L19.0867 23.1743L20.4055 21.0095L21.0141 21.3806L19.5053 23.8601C19.4216 23.9961 19.2874 24.0798 19.1342 24.0881H19.1111Z"
+                                fill="#368796" />
+                        </g>
+                    </svg>
+                    <a href="javascript:void(0)" class="fs-8 text-nowrap">Suggested Care Plan({{FetchElsevierCarePlanICD10AMDataList.length}})</a>
+                </div>
+
+                <div class="mt-2">
+                    <div class="fixed_alter_list careplan_list rounded border-primary-200">
+                        <div class="fixed_alter_header bg-primary-50 rounded-top">
+                            <div class="row gx-2 p-2 mx-0">
+                                <div class="col-5">
+                                    <p class="label m-0">Care Plan</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="label m-0">Assigned On</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="label m-0">D</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="label m-0">Satus</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fixed_alter_body height-unset">
+                            <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of FetchPatientCarePlanDataList">
+                                <div class="col-5">
+                                    <p class="m-0">{{item.CareGroupName}}</p>
+                                </div>
+                                <div class="col-3">
+                                    <p class="m-0">{{item.AssignDate.split(' ')[0]}}</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="m-0"><a href="javascript:void(0)" (click)="onDclick(item)">D</a></p>
+                                </div>
+                                <div class="col-2">
+                                    <div class="custom_check d-flex align-items-center gap-2"
+                                        [class.active]="getCareplanStatus(item)">
+                                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class="mt-2 clr-danger-200">Selected Care Plan: {{selectedCarePlan?.CareGroupName}}</h6>
+                    <div class="mt-2">
+                        <h6 class="mt-2 clr-primary-600">Potential Problems</h6>
+                        <div class="fixed_alter_list careplan_list rounded border-primary-200 mt-2">
+                            <div class="fixed_alter_header bg-primary-50 rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="col-1">
+                                        <div class="custom_check d-flex align-items-center gap-2">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                <path
+                                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="col-7">
+                                        <p class="label m-0">Potential Problem</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="label m-0"></p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="label m-0">I</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body height-unset">
+                                <div class="row gx-2 p-2 mx-0 alter_div"
+                                    *ngFor="let item of FetchElsevierNursingDiagnosisCareMasterDetailsData1List">
+                                    <div class="col-1">
+                                        <div class="custom_check d-flex align-items-center gap-2"
+                                            [class.active]="item.NursingDiagnosisID === (interventionDetails && interventionDetails[0]?.NursingDiagnosisID)">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                <path
+                                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="col-7">
+                                        <p class="label m-0">{{item?.NursingDiagnosis}}</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="m-0"><a href="javascript:void(0)"
+                                                (click)="onPotentialProblemCPGClick(item)">CPG</a></p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="m-0"><a href="javascript:void(0)"
+                                                (click)="onPotentailProblemIClick(item)">I</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2 row gx-2" *ngIf="goalDetails">
+                            <div class="col-4">
+                                <label for="" class="form-label m-0">Expected Outcome:</label>
+                            </div>
+                            <div class="col">
+                                <p>{{goalDetails.ExpectedOutcome}}</p>
+                            </div>
+                        </div>
+                        <div class="row gx-2" *ngIf="goalDetails">
+                            <div class="col-4">
+                                <label for="" class="form-label m-0">Actual Outcome:</label>
+                            </div>
+                            <div class="col">
+                                <textarea name="" class="form-control" rows="3"
+                                    [(ngModel)]="goalDetails.ActualOutcome"></textarea>
+                            </div>
+                        </div>
+                        <div class="row gx-2 mt-2" *ngIf="goalDetails">
+                            <div class="col-4">
+                                <label for="" class="form-label m-0">Outcome Status:</label>
+                            </div>
+                            <div class="col">
+                                <div class="d-flex align-items-center justify-content-between gap-2">
+                                    <select name="" class="form-select pe-5" id=""
+                                        [(ngModel)]="goalDetails.selectedGoal">
+                                        <option [value]="option.GoalListItemID"
+                                            *ngFor="let option of goalDetails.OutcomeStatus">{{option.GoalListName}}
+                                        </option>
+                                    </select>
+                                    <button class="btn btn-main-outline min-width-unset" (click)="saveGoalsClick()"
+                                        [disabled]="!getPatientCareGroupPlanID() || readonly">Save Goal</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card card-style-1 rounded h-100">
+                    <div class="card-header rounded-top justify-content-between py-2 min-height-unset">
+                        <h5 class="card-heading">Interventions Details</h5>
+                        <div class="d-flex align-items-center gap-2">
+                            <button class="btn btn-main-outline" [disabled]="!selectedCarePlan?.PatientCareGroupID"
+                                (click)="onViewInterventionsClick()">View</button>
+                            <button class="btn btn-main-outline" (click)="saveInterventionsClick()"
+                                [disabled]="!interventionDetails || readonly">Save Interventions</button>
+                        </div>
+                    </div>
+                    <div class="p-2">
+                        <div class="fixed_alter_list careplan_list rounded border-primary-200">
+                            <div class="fixed_alter_header bg-primary-50 rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="col-1">
+                                        <p class="label m-0">Sl.No</p>
+                                    </div>
+                                    <div class="col-10">
+                                        <p class="label m-0">Intervention Name</p>
+                                    </div>
+                                    <div class="col-1">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body height-unset">
+                                <div class="row g-2 p-2 mx-0 alter_div align-items-center"
+                                    *ngFor="let item of interventionDetails; let i = index;">
+                                    <div class="col-1">
+                                        <p class="m-0">{{i +1}}</p>
+                                    </div>
+                                    <div class="col-10">
+                                        <p class="m-0">{{item.NursingIntervention}}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <svg class="cursor-pointer" width="18" height="18" viewBox="0 0 22 23"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg"
+                                            (click)="onInterventionInfoClick(item)">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M19.75 11.1666C19.75 15.9991 15.8325 19.9166 11 19.9166C6.16748 19.9166 2.25 15.9991 2.25 11.1666C2.25 6.33414 6.16748 2.41663 11 2.41663C15.8325 2.41663 19.75 6.33414 19.75 11.1666ZM22 11.1666C22 17.2418 17.0751 22.1666 11 22.1666C4.92487 22.1666 0 17.2418 0 11.1666C0 5.09149 4.92487 0.166626 11 0.166626C17.0751 0.166626 22 5.09149 22 11.1666ZM12.125 7.28339C12.125 7.90471 11.6213 8.40839 11 8.40839C10.3787 8.40839 9.875 7.90471 9.875 7.28339C9.875 6.66206 10.3787 6.15839 11 6.15839C11.6213 6.15839 12.125 6.66206 12.125 7.28339ZM9.875 10.5701C9.875 9.94881 10.3787 9.44513 11 9.44513C11.6213 9.44513 12.125 9.94881 12.125 10.5701V15.5679C12.125 16.1892 11.6213 16.6929 11 16.6929C10.3787 16.6929 9.875 16.1892 9.875 15.5679V10.5701Z"
+                                                fill="#368796" />
+                                        </svg>
+                                    </div>
+                                    <div class="col-12" *ngIf="item.children">
+                                        <div class="fixed_alter_list careplan_list rounded border-primary-200">
+                                            <div class="fixed_alter_header bg-primary-50 rounded-top">
+                                                <div class="row gx-2 p-2 mx-0">
+                                                    <div class="col-1">
+                                                        <p class="label m-0">SL.No</p>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <p class="label m-0">Intervention Name</p>
+                                                    </div>
+                                                    <div class="col-5"> </div>
+                                                </div>
+                                            </div>
+                                            <div class="fixed_alter_body height-unset">
+                                                <div class="row gx-2 p-2 mx-0 alter_div align-items-center"
+                                                    *ngFor="let subItem of item.children; let j = index">
+                                                    <div class="col-1">
+                                                        <p class="m-0">{{j + 1}}</p>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <p class="m-0">{{subItem.ChildNursingIntervention}}</p>
+                                                    </div>
+                                                    <div class="col-5">
+                                                        <div class="mat-select-group">
+                                                            <mat-form-field appearance="fill">
+                                                                <mat-select [(ngModel)]="subItem.selectedItems" multiple
+                                                                    [compareWith]="compareFn">
+                                                                    <mat-option
+                                                                        *ngFor="let option of subItem.dropdownItems"
+                                                                        [value]="option">{{option.NursingListItem}}</mat-option>
+                                                                </mat-select>
+                                                            </mat-form-field>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-2">
+            <div class="card card-style-1 rounded h-100">
+                <div class="card-header rounded-top justify-content-between py-2 min-height-unset">
+                    <h5 class="card-heading">Patient Education</h5>
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn btn-main-outline" (click)="savePatientEducation()"
+                            [disabled]="!getPatientCareGroupPlanID() || readonly">Save Patient Education</button>
+                    </div>
+                </div>
+                <div class="p-2" *ngIf="FetchElsevierNursingDiagnosisCareMasterDetailsData9List">
+                    <p class="m-0 fs-7 fw-bold">Expected Outcome:
+                        {{FetchElsevierNursingDiagnosisCareMasterDetailsData9List[0]?.PatientEducation}}</p>
+                    <div class="d-flex flex-column gap-2 mt-2 border rounded p-2 justify-content-center">
+                        <div class="row gx-2 align-items-center"
+                            *ngFor="let item of FetchElsevierNursingDiagnosisCareMasterDetailsData10List">
+                            <div class="col-3">
+                                <p>{{item.EducationObservation}}</p>
+                            </div>
+                            <div class="col-4 d-flex align-items-center gap-2">
+                                <p class="text-nowrap">{{item.firstColumn?.HeaderName}}</p>
+                                <select name="" class="form-select pe-5" [(ngModel)]="item.firstColumn.selectedItem">
+                                    <option *ngFor="let option of item.firstColumn?.dropdownItems"
+                                        [value]="option.PatientEduObsListItemID">{{option.ItemName}}</option>
+                                </select>
+                            </div>
+                            <div class="col-4 d-flex align-items-center gap-2">
+                                <p class="text-nowrap">{{item.secondColumn?.HeaderName}}</p>
+                                <select name="" class="form-select pe-5" [(ngModel)]="item.secondColumn.selectedItem">
+                                    <option *ngFor="let option of item.secondColumn?.dropdownItems"
+                                        [value]="option.PatientEduObsListItemID">{{option.ItemName}}</option>
+                                </select>
+                            </div>
+                            <div class="col-1 text-center">
+                                <svg class="cursor-pointer" width="18" height="18" viewBox="0 0 22 23" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" (click)="onPatientEducationInfoClick(item)">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M19.75 11.1666C19.75 15.9991 15.8325 19.9166 11 19.9166C6.16748 19.9166 2.25 15.9991 2.25 11.1666C2.25 6.33414 6.16748 2.41663 11 2.41663C15.8325 2.41663 19.75 6.33414 19.75 11.1666ZM22 11.1666C22 17.2418 17.0751 22.1666 11 22.1666C4.92487 22.1666 0 17.2418 0 11.1666C0 5.09149 4.92487 0.166626 11 0.166626C17.0751 0.166626 22 5.09149 22 11.1666ZM12.125 7.28339C12.125 7.90471 11.6213 8.40839 11 8.40839C10.3787 8.40839 9.875 7.90471 9.875 7.28339C9.875 6.66206 10.3787 6.15839 11 6.15839C11.6213 6.15839 12.125 6.66206 12.125 7.28339ZM9.875 10.5701C9.875 9.94881 10.3787 9.44513 11 9.44513C11.6213 9.44513 12.125 9.94881 12.125 10.5701V15.5679C12.125 16.1892 11.6213 16.6929 11 16.6929C10.3787 16.6929 9.875 16.1892 9.875 15.5679V10.5701Z"
+                                        fill="#368796" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade evaluation_summaryModal" id="evaluation_summaryModal" tabindex="-1" aria-labelledby="">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 70%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Evaluation Summary</h5>
+                <div class="d-flex gap-2 align-items-center justify-content-end">
+                    <button class="btn btn-main-outline"
+                        (click)="SavePatientCarePlanElsevierEvalutionSummary()">Save</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-2" *ngIf="showEvaluationSummaryContent">
+                <div class="card card-style-1 rounded">
+                    <div class="card-header rounded-top justify-content-start py-2 min-height-unset">
+                        <h5 class="card-heading">Enter Disciplinary Plan Of Care Evaluation </h5>
+                    </div>
+                    <div class="p-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <label for="" class="form-label m-0 text-nowrap">Patient Progress: </label>
+                            <div class="col-4">
+                                <select name="" class="form-select pe-5" [(ngModel)]="evaluationPopupData.ProgressID">
+                                    <option [value]="option.ProgressID"
+                                        *ngFor="let option of FetchElsevierCarePlanProgressDataList">
+                                        {{option.ProgressName}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-style-1 rounded mt-2">
+                    <div class="card-header rounded-top justify-content-start py-2 min-height-unset">
+                        <h5 class="card-heading">Outcome of Problems </h5>
+                    </div>
+                    <div class="p-2">
+                        <div class="fixed_alter_list careplan_list rounded border-primary-200">
+                            <div class="fixed_alter_header bg-primary-50 rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="col-2">
+                                        <p class="label m-0">Care Plan</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="label m-0">Potential Problem</p>
+                                    </div>
+                                    <div class="col-2"> </div>
+                                    <div class="col-2"> </div>
+                                    <div class="col-2"> </div>
+                                    <div class="col-2"> </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body height-unset">
+                                <div class="row gx-2 p-2 mx-0 alter_div"
+                                    *ngFor="let item of evaluationSummaryData.FetchPatientCarePlanOutcomeofProbelmsDataList">
+                                    <div class="col-2">
+                                        <p class="m-0">{{item.TreatmentPlanName}}</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="m-0">{{item.NursingDiagnosis}}</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="m-0">{{item.ActualCome}}</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="m-0">{{item.ActualComeData}}</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="m-0">{{item.OutCome}}</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="m-0">{{item.OutComeData}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-style-1 rounded mt-2">
+                    <div class="card-header rounded-top justify-content-start py-2 min-height-unset">
+                        <h5 class="card-heading">Outcome of Education </h5>
+                    </div>
+                    <div class="p-2"
+                        *ngFor="let item of evaluationSummaryData.FetchPatientCarePlanOutcomeofEducationDataList; let i = index;">
+                        <div class="fixed_alter_list careplan_list rounded border-primary-200">
+                            <div class="fixed_alter_header bg-primary-50 rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="col-1">
+                                        <p class="label m-0">SL.No</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="label m-0"></p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p class="label m-0">Care Plan</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="label m-0">Education Name</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body height-unset">
+                                <div class="row gx-2 p-2 mx-0 alter_div">
+                                    <div class="col-1">
+                                        <p class="m-0">{{i + 1}}</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="m-0"> - </p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p class="m-0">
+                                            {{evaluationSummaryData.FetchPatientCarePlanOutcomeofEducationDetailDataList
+                                            &&
+                                            evaluationSummaryData.FetchPatientCarePlanOutcomeofEducationDetailDataList[0]?.TreatmentPlan}}
+                                        </p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="m-0">{{item.PatientEducation}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column gap-2 mt-2 border rounded p-2 justify-content-center">
+                            <div class="row gx-2 align-items-center"
+                                *ngFor="let subItem of evaluationSummaryData.FetchPatientCarePlanOutcomeofEducationDetailDataList">
+                                <div class="col-4">
+                                    <p>{{subItem.EducationObservation}}</p>
+                                </div>
+                                <div class="col-4 d-flex align-items-center gap-2">
+                                    <p class="text-nowrap">Effectiveness</p>
+                                </div>
+                                <div class="col-4 d-flex align-items-center gap-2">
+                                    <p class="text-nowrap">Education Points</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-style-1 rounded mt-2">
+                    <div class="card-header rounded-top justify-content-start py-2 min-height-unset">
+                        <h5 class="card-heading">Summary </h5>
+                    </div>
+                    <div class="p-2">
+                        <textarea [(ngModel)]="evaluationPopupData.Summary" class="form-control" rows="3"
+                            placeholder="Notes"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="savemsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>{{successMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{errorMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="infopopup" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success" style="max-width: 50rem !important;">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p class="clr-primary-600 fs-6 fw-500">{{infoDetailsHeader}}</p>
+                <ul class="w-100" *ngIf="infoDetails?.length > 0">
+                    <li *ngFor="let infoItem of infoDetails; let i = index"> {{infoItem}}</li>
+                </ul>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" data-bs-backdrop="static" tabindex="-1" id="view_interventions_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">View Interventions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>SNo.</th>
+                            <th>Nursing Intervention</th>
+                            <th>Nursing Intervention Item Name</th>
+                            <th>Parent Nursing Intervention</th>
+                            <th>Expected Output</th>
+                            <th>Goal Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of FetchPatientCarePlanOutcomeofProbelmsViewDataList; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ item.NursingIntervention }}</td>
+                            <td>{{ item.NursingInterventionListItemName }}</td>
+                            <td>{{ item.ParentNursingIntervention }}</td>
+                            <td>{{ item.ExpectedOutput }}</td>
+                            <td>{{ item.GoalListName}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

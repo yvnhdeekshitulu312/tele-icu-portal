@@ -1,0 +1,599 @@
+<div class="page-header justify-content-start sticky-top shadow-sm">
+    <h2 class="page-heading">Radiology KPI Dashboard</h2>
+</div>
+<div class="container-fluid p-0 analytics_graphs IP_graph">
+    <div class="p-2">
+        <div class="row g-2">
+            <div class="col-2" style="width: 13%;">
+                <div class="left_nav">
+                    <div class="sidebar-container rounded">
+                        <form [formGroup]="datesForm" class="d-flex flex-column gap-2">
+                            <label class="form-label m-0">From Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="fromPicker" placeholder="From Date"
+                                    formControlName="fromdate" />
+                                <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #fromPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <label class="form-label m-0">To Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="toPicker" placeholder="To Date"
+                                    formControlName="todate" />
+                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #toPicker></mat-datepicker>
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn btn-main-outline w-100 mt-2" (click)="fetchData()">
+                            Fetch
+                        </button>
+                        <button type="button" class="btn btn-outline-danger w-100 mt-2" (click)="clearFilters()">
+                            Clear
+                        </button>
+                    </div>
+                    <div class="sidebar-container rounded mt-2">
+                        <label class="form-label">Location</label>
+                        <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                            <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_9239_2779)">
+                                    <path
+                                        d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                        fill="#368796" />
+                                </g>
+                            </svg>
+                            <input type="text" class="form-control" [matAutocomplete]="roleAuto2" placeholder="Search">
+                            <mat-autocomplete #roleAuto2="matAutocomplete">
+                                <mat-option *ngFor="let item of locations">
+                                    <div (click)="locationOptionClicked($event, item);">
+                                        <mat-checkbox [checked]="item.selected" (change)="toggleLocationSelection(item)"
+                                            (click)="$event.stopPropagation()">
+                                            {{ item.label }}
+                                        </mat-checkbox>
+                                    </div>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                    <!-- <h5 class="fs-6">Filters</h5>
+                    <div class="d-flex flex-column gap-2">
+                        <div class="dropdown custom_fill_dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" id="" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="d-flex align-items-center gap-2 justify-content-between w-100">
+                                    <span class="">Location</span>
+                                    <span class="fw-semibold" id="">Nuzha</span>
+                                </span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Suwaidi</a></li>
+                            </ul>
+                        </div>
+                        <div class="dropdown custom_fill_dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" id="" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="d-flex align-items-center gap-2 justify-content-between w-100">
+                                    <span class="">Year</span>
+                                    <span class="fw-semibold" id="">2025</span>
+                                </span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Suwaidi</a></li>
+                            </ul>
+                        </div>
+                        <div class="dropdown custom_fill_dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" id="dropdownBtn" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Specialization
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Top Surgery</a></li>
+                                <li><a class="dropdown-item" href="#">Top Lab</a></li>
+                                <li><a class="dropdown-item" href="#">Top Rad</a></li>
+                                <li><a class="dropdown-item" href="#">Top ICD</a></li>
+                                <li><a class="dropdown-item" href="#">Top Procedures</a></li>
+                            </ul>
+                        </div>
+                        <div class="dropdown custom_outline_dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <span class="d-flex align-items-center gap-2 justify-content-between w-100">
+                                    <span>Top-N</span>
+                                    <span id="">10</span>
+                                </span>
+
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">10</a></li>
+                                <li><a class="dropdown-item" href="#">25</a></li>
+                                <li><a class="dropdown-item" href="#">50</a></li>
+                                <li><a class="dropdown-item" href="#">100</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h5 class="mt-2 fs-6">Quick Filters</h5>
+                    <div class="d-flex flex-column gap-2 pb-3 border-bottom">
+                        <div class="dropdown custom_outline_dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <span class="d-flex align-items-center gap-2 justify-content-between w-100">
+                                    <span>Last 30 days</span>
+                                    <span id="">10</span>
+                                </span>
+
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">10</a></li>
+                                <li><a class="dropdown-item" href="#">25</a></li>
+                                <li><a class="dropdown-item" href="#">50</a></li>
+                                <li><a class="dropdown-item" href="#">100</a></li>
+                            </ul>
+                        </div>
+                        <div class="dropdown custom_outline_dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <span class="d-flex align-items-center gap-2 justify-content-between w-100">
+                                    <span>Cardiology</span>
+                                    <span id="">10</span>
+                                </span>
+
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">10</a></li>
+                                <li><a class="dropdown-item" href="#">25</a></li>
+                                <li><a class="dropdown-item" href="#">50</a></li>
+                                <li><a class="dropdown-item" href="#">100</a></li>
+                            </ul>
+                        </div>
+                        <div class="dropdown custom_outline_dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <span class="d-flex align-items-center gap-2 justify-content-between w-100">
+                                    <span>High Revenue</span>
+                                    <span id="">10</span>
+                                </span>
+
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">10</a></li>
+                                <li><a class="dropdown-item" href="#">25</a></li>
+                                <li><a class="dropdown-item" href="#">50</a></li>
+                                <li><a class="dropdown-item" href="#">100</a></li>
+                            </ul>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <div class="col dashboardHeight">
+                <div class="row mx-0 gx-2">
+                    <div class="col-2">
+                        <div class="readmissionCard border rounded">
+                            <div class="rounded-top text-white py-2 fw-bold text-center readmissionCard_header"
+                                style="font-size: 1.1rem;">
+                                All Investigations
+                            </div>
+                            <h4 class="rounded-bottom py-3 fs-3 fw-bold m-0" style="padding: 1rem 0 !important;">
+                                {{allInvestigationsCount| number}}
+                            </h4>
+                        </div>
+                        <div class="bg-white border shadow-sm p-2 rounded mt-2">
+                            <div class="row g-2 mx-0">
+                                <div class="col-12">
+                                    <div style="width: 200px;height: 215px;margin: 0 auto;">
+                                        <apx-chart *ngIf="visitTypeChart" [series]="visitTypeChart.series"
+                                            [chart]="visitTypeChart.chart" [labels]="visitTypeChart.labels"
+                                            [colors]="visitTypeChart.colors" [fill]="visitTypeChart.fill"
+                                            [stroke]="visitTypeChart.stroke" [legend]="visitTypeChart.legend"
+                                            [tooltip]="visitTypeChart.tooltip"
+                                            [dataLabels]="visitTypeChart.dataLabels" [title]="visitTypeChart.title"
+                                            [responsive]="visitTypeChart.responsive"
+                                            [plotOptions]="visitTypeChart.plotOptions || {}">
+                                        </apx-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white border shadow-sm p-2 rounded mt-2">
+                            <div class="row g-2 mx-0">
+                                <div class="col-12">
+                                    <div style="width: 200px;height: 215px;margin: 0 auto;">
+                                        <apx-chart *ngIf="paymentTypeChart" [series]="paymentTypeChart.series"
+                                            [chart]="paymentTypeChart.chart" [labels]="paymentTypeChart.labels"
+                                            [colors]="paymentTypeChart.colors" [fill]="paymentTypeChart.fill"
+                                            [stroke]="paymentTypeChart.stroke" [legend]="paymentTypeChart.legend"
+                                            [tooltip]="paymentTypeChart.tooltip"
+                                            [dataLabels]="paymentTypeChart.dataLabels"
+                                            [title]="paymentTypeChart.title"
+                                            [responsive]="paymentTypeChart.responsive"
+                                            [plotOptions]="paymentTypeChart.plotOptions || {}">
+                                        </apx-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <div class="bg-white p-2 border shadow-sm rounded h-100">
+                            <apx-chart *ngIf="modalityChartData" [series]="modalityChartData.series"
+                                [chart]="modalityChartData.chart" [xaxis]="modalityChartData.xaxis"
+                                [yaxis]="modalityChartData.yaxis" [dataLabels]="modalityChartData.dataLabels"
+                                [plotOptions]="modalityChartData.plotOptions" [title]="modalityChartData.title"
+                                [tooltip]="modalityChartData.tooltip" [colors]="modalityChartData.colors"
+                                [legend]="modalityChartData.legend" [fill]="modalityChartData.fill">
+                            </apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="rounded bg-white border shadow-sm h-100 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center p-2">
+                                <h6 class="m-0 fw-semibold" style="color: #383A88;">Radiology Doctors</h6>
+                                <div class="custom_tooltip custom_tooltip_left"
+                                    (click)="exportRadiologyDoctorsToCSV()" style="cursor: pointer;">
+                                    <svg _ngcontent-dyy-c491=""
+                                        class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                        aria-hidden="true" focusable="false" data-prefix="fas"
+                                        data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 576 512" data-fa-i2svg="">
+                                        <path fill="#8967B3"
+                                            d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                        </path>
+                                    </svg>
+                                    <div class="tooltip">
+                                        <p class="m-0">Export</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="surgery_records graph_fixed_alter_list rounded-top-0 d-flex flex-column justify-content-between h-100">
+                                <div class="fixed_alter_header rounded-top-0">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-8 m-0">
+                                            <p class="fw-semibold fs-9">Department</p>
+                                        </div>
+                                        <div class="col-4 m-0">
+                                            <p class="fw-semibold fs-9 d-flex align-items-center"
+                                                style="cursor: pointer;" (click)="sortDepartmentDoctorsByCount()">
+                                                Count
+                                                <span class="ms-1" style="font-size: 12px;">{{
+                                                    getDepartmentDoctorsSortIcon()
+                                                    }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body" style="height: 455px;">
+                                    <ng-container *ngFor="let dept of groupedDoctors">
+                                        <div class="row gx-2 p-2 alter_div mx-0"
+                                            (click)="dept.Expanded = !dept.Expanded" style="cursor: pointer;">
+                                            <div class="col-8">
+                                                <p class="m-0 d-flex align-items-center">
+                                                    <span class="me-2"
+                                                        style="font-weight: bold; font-style: normal;">{{
+                                                        dept.Expanded ? '−' : '+' }}</span>
+                                                    {{ dept.departmentName }}
+                                                </p>
+                                            </div>
+                                            <div class="col-4 m-0">
+                                                <p class="m-0">{{ getDepartmentTotalDoctorsCount(dept)
+                                                    }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="dept.Expanded">
+                                            <div class="row gx-2 p-2 alter_div mx-0"
+                                                *ngFor="let doc of dept.doctors">
+                                                <div class="col-8 ps-4">
+                                                    <p class="m-0">
+                                                        {{ doc.doctorName }}
+                                                    </p>
+                                                </div>
+                                                <div class="col-4">
+                                                    <p class="m-0">{{ doc.count }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                                <div class="fixed_alter_footer border-top bg-grey-50">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-8 m-0">
+                                            <p class="fw-semibold">Total</p>
+                                        </div>
+                                        <div class="col-4 m-0 d-flex gap-1 align-items-center">
+                                            <p class="fw-semibold">{{ getTotalDoctorsCount() }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-2">
+                    <div class="row mx-0 g-2">
+                        <div class="col-4">
+                            <div class="bg-white p-2 border shadow-sm rounded h-100">
+                                <div>
+                                    <apx-chart *ngIf="criticalResultsChartData"
+                                        [series]="criticalResultsChartData.series"
+                                        [chart]="criticalResultsChartData.chart"
+                                        [xaxis]="criticalResultsChartData.xaxis"
+                                        [yaxis]="criticalResultsChartData.yaxis"
+                                        [dataLabels]="criticalResultsChartData.dataLabels"
+                                        [plotOptions]="criticalResultsChartData.plotOptions"
+                                        [title]="criticalResultsChartData.title"
+                                        [tooltip]="criticalResultsChartData.tooltip"
+                                        [colors]="criticalResultsChartData.colors"
+                                        [legend]="criticalResultsChartData.legend">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="bg-white p-2 border shadow-sm rounded h-100">
+                                <div>
+                                    <select class="form-select mb-2 w-50 ms-auto" style="width: 30% !important;"
+                                        [(ngModel)]="selectedSpecialisation"
+                                        (change)="onSpecialisationChange()">
+                                        <option *ngFor="let department of utilizationSpecialisations"
+                                            [value]="department">
+                                            {{department}}
+                                        </option>
+                                    </select>
+                                    <apx-chart *ngIf="utilizationChartData"
+                                        [series]="utilizationChartData.series"
+                                        [chart]="utilizationChartData.chart"
+                                        [xaxis]="utilizationChartData.xaxis"
+                                        [yaxis]="utilizationChartData.yaxis"
+                                        [dataLabels]="utilizationChartData.dataLabels"
+                                        [title]="utilizationChartData.title"
+                                        [colors]="utilizationChartData.colors"
+                                        [legend]="utilizationChartData.legend"
+                                        [stroke]="utilizationChartData.stroke"
+                                        [fill]="utilizationChartData.fill">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 p-0">
+                            <div class="row mx-0 gx-2">
+                                <div class="col-8">
+                                    <div class="bg-white p-2 border shadow-sm rounded h-100">
+                                        <div>
+                                            <select class="form-select mb-2 w-50 ms-auto" style="width: 30% !important;"
+                                                [(ngModel)]="selectedSpecialisation1"
+                                                (change)="onSpecialisation1Change()">
+                                                <option *ngFor="let department of utilizationSpecialisations"
+                                                    [value]="department">
+                                                    {{department}}
+                                                </option>
+                                            </select>
+                                            <apx-chart *ngIf="utilizationStatiticsChartData"
+                                                [series]="utilizationStatiticsChartData.series"
+                                                [chart]="utilizationStatiticsChartData.chart"
+                                                [xaxis]="utilizationStatiticsChartData.xaxis"
+                                                [yaxis]="utilizationStatiticsChartData.yaxis"
+                                                [dataLabels]="utilizationStatiticsChartData.dataLabels"
+                                                [title]="utilizationStatiticsChartData.title"
+                                                [tooltip]="utilizationStatiticsChartData.tooltip"
+                                                [colors]="utilizationStatiticsChartData.colors"
+                                                [legend]="utilizationStatiticsChartData.legend"
+                                                [stroke]="utilizationStatiticsChartData.stroke"
+                                                [fill]="utilizationStatiticsChartData.fill">
+                                            </apx-chart>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="rounded bg-white border shadow-sm h-100 d-flex flex-column">
+                                        <div class="d-flex justify-content-between align-items-center p-2">
+                                            <h6 class="m-0 fw-semibold" style="color: #383A88;">Radiology Technicians</h6>
+                                            <div class="custom_tooltip custom_tooltip_left"
+                                                (click)="exportRadiologyTechniciansToCSV()" style="cursor: pointer;">
+                                                <svg _ngcontent-dyy-c491=""
+                                                    class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                    aria-hidden="true" focusable="false" data-prefix="fas"
+                                                    data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 576 512" data-fa-i2svg="">
+                                                    <path fill="#8967B3"
+                                                        d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                    </path>
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p class="m-0">Export</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="surgery_records graph_fixed_alter_list rounded-top-0 d-flex flex-column justify-content-between h-100">
+                                            <div class="fixed_alter_header rounded-top-0">
+                                                <div class="row gx-2 p-2 mx-0">
+                                                    <div class="col-8 m-0">
+                                                        <p class="fw-semibold fs-9">Department</p>
+                                                    </div>
+                                                    <div class="col-4 m-0">
+                                                        <p class="fw-semibold fs-9 d-flex align-items-center"
+                                                            style="cursor: pointer;"
+                                                            (click)="sortDepartmentTechniciansByCount()">
+                                                            Count
+                                                            <span class="ms-1" style="font-size: 12px;">{{
+                                                                getDepartmentTechniciansSortIcon()
+                                                                }}</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="fixed_alter_body" style="height: 320px;">
+                                                <ng-container *ngFor="let dept of groupedTechnicians">
+                                                    <div class="row gx-2 p-2 alter_div mx-0"
+                                                        (click)="dept.Expanded = !dept.Expanded" style="cursor: pointer;">
+                                                        <div class="col-8 fw-semibold">
+                                                            <p class="m-0 d-flex align-items-center fw-semibold">
+                                                                <span class="me-2"
+                                                                    style="font-weight: bold; font-style: normal;">{{
+                                                                    dept.Expanded ? '−' : '+' }}</span>
+                                                                {{ dept.departmentName }}
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-4 m-0">
+                                                            <p class="m-0 fw-semibold">{{
+                                                                getDepartmentTotalTechniciansCount(dept)
+                                                                }}</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div *ngIf="dept.Expanded">
+                                                        <div class="row gx-2 p-2 mx-0" *ngFor="let doc of dept.doctors">
+                                                            <div class="col-8 ps-4">
+                                                                <p class="m-0">
+                                                                    {{ doc.doctorName }}
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <p class="m-0">{{ doc.count }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                            <div class="fixed_alter_footer border-top bg-grey-50">
+                                                <div class="row gx-2 p-2 mx-0">
+                                                    <div class="col-8 m-0">
+                                                        <p class="fw-semibold">Total</p>
+                                                    </div>
+                                                    <div class="col-4 m-0 d-flex gap-1 align-items-center">
+                                                        <p class="fw-semibold">{{ getTotalTechniciansCount() }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="bg-white p-2 rounded d-flex align-items-center justify-content-between"
+                                style="background-color: #F4F7FF !important;">
+                                <h6 class="fw-bold text-nowrap m-0" style="color: #383A88;">Waiting Time</h6>
+                                <select class="form-select w-50 ms-auto" [(ngModel)]="selectedWaitingTimeOption"
+                                    (change)="onWaitingTimeOptionChange()" style="width: 26% !important;">
+                                    <option value="{{item.ID}}"
+                                        *ngFor="let item of waitingTimeDropdownData;let i=index">
+                                        {{item.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 p-0">
+                            <div class="row mx-0 gx-2">
+                                <div class="col-6">
+                                    <div class="bg-white p-2 border shadow-sm rounded h-100">
+                                        <apx-chart *ngIf="withInOneHourChartData"
+                                            [series]="withInOneHourChartData.series"
+                                            [chart]="withInOneHourChartData.chart"
+                                            [xaxis]="withInOneHourChartData.xaxis"
+                                            [yaxis]="withInOneHourChartData.yaxis"
+                                            [dataLabels]="withInOneHourChartData.dataLabels"
+                                            [plotOptions]="withInOneHourChartData.plotOptions"
+                                            [title]="withInOneHourChartData.title"
+                                            [tooltip]="withInOneHourChartData.tooltip"
+                                            [colors]="withInOneHourChartData.colors"
+                                            [legend]="withInOneHourChartData.legend"
+                                            [fill]="withInOneHourChartData.fill">
+                                        </apx-chart>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="bg-white p-2 border shadow-sm rounded h-100">
+                                        <div class="">
+                                            <apx-chart *ngIf="withInTwoHourChartData"
+                                                [series]="withInTwoHourChartData.series"
+                                                [chart]="withInTwoHourChartData.chart"
+                                                [xaxis]="withInTwoHourChartData.xaxis"
+                                                [yaxis]="withInTwoHourChartData.yaxis"
+                                                [dataLabels]="withInTwoHourChartData.dataLabels"
+                                                [plotOptions]="withInTwoHourChartData.plotOptions"
+                                                [title]="withInTwoHourChartData.title"
+                                                [tooltip]="withInTwoHourChartData.tooltip"
+                                                [colors]="withInTwoHourChartData.colors"
+                                                [legend]="withInTwoHourChartData.legend"
+                                                [fill]="withInTwoHourChartData.fill">
+                                            </apx-chart>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="bg-white p-2 rounded d-flex align-items-center justify-content-between"
+                                style="background-color: #F4F7FF !important;">
+                                <h6 class="fw-bold text-nowrap m-0" style="color: #383A88;">Reporting Time</h6>
+                            </div>
+                        </div>
+
+                        <div class="col-12 p-0">
+                            <div class="row mx-0 gx-2">
+                                <div class="col-6">
+                                    <div class="bg-white p-2 border shadow-sm rounded h-100">
+                                        <apx-chart *ngIf="withIn24HourChartData"
+                                            [series]="withIn24HourChartData.series"
+                                            [chart]="withIn24HourChartData.chart"
+                                            [xaxis]="withIn24HourChartData.xaxis"
+                                            [yaxis]="withIn24HourChartData.yaxis"
+                                            [dataLabels]="withIn24HourChartData.dataLabels"
+                                            [plotOptions]="withIn24HourChartData.plotOptions"
+                                            [title]="withIn24HourChartData.title"
+                                            [tooltip]="withIn24HourChartData.tooltip"
+                                            [colors]="withIn24HourChartData.colors"
+                                            [legend]="withIn24HourChartData.legend"
+                                            [fill]="withIn24HourChartData.fill">
+                                        </apx-chart>
+                                    </div>
+                                </div>
+                                    <div class="col-6">
+                                    <div class="bg-white p-2 border shadow-sm rounded h-100">
+                                        <div class="">
+                                            <apx-chart *ngIf="withIn48HourChartData"
+                                                [series]="withIn48HourChartData.series"
+                                                [chart]="withIn48HourChartData.chart"
+                                                [xaxis]="withIn48HourChartData.xaxis"
+                                                [yaxis]="withIn48HourChartData.yaxis"
+                                                [dataLabels]="withIn48HourChartData.dataLabels"
+                                                [plotOptions]="withIn48HourChartData.plotOptions"
+                                                [title]="withIn48HourChartData.title"
+                                                [tooltip]="withIn48HourChartData.tooltip"
+                                                [colors]="withIn48HourChartData.colors"
+                                                [legend]="withIn48HourChartData.legend"
+                                                [fill]="withIn48HourChartData.fill">
+                                            </apx-chart>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{ errorMsg }}</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-main-outline" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

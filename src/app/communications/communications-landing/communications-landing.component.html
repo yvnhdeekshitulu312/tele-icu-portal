@@ -1,0 +1,172 @@
+<section>
+    <app-header [InputHome]="true" [IsSwitchWard]="false"></app-header>
+    <div class="page-header sticky-top rounded-3 shadow-sm justify-content-between">
+        <h2 class="page-heading">Communications</h2>
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-main-fill" (click)="navigatetoBedBoard()">Beds Board</button>
+                <button class="btn btn-main-outline" (click)="openQuickActions()">Quick Actions</button>
+                <button class="btn btn-main-outline" (click)="fetchCommunicationNotes()">View</button>
+            <button class="btn btn-danger-outline" (click)="clear()">Clear</button>
+            <button class="btn btn-main-outline" (click)="save()">Save</button>
+        </div>
+    </div>
+</section>
+<div class="p-3 pb-0 communications_page">
+    <div>
+        <app-wardheader-summary></app-wardheader-summary>
+    </div>
+    <div class="row gx-2 mt-3">
+        <div class="col-2">
+            <div class="pat_lefnav border-primary-200 rounded-2">
+                <div class="lef_search bg-primary-50 d-flex align-items-center gap-2 rounded-top rounded-bottom-0">
+                    <form class="CommanSearch__form border-0 w-100 rounded-top rounded-bottom-0 ps-2"
+                        style="height: 3rem;">
+                        <label for="" class="CommonSearch__label">
+                            <svg width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect y="0.5" width="24" height="24" rx="8" fill="#DAEEF1" />
+                                <path
+                                    d="M10.8609 2.49805C15.7521 2.49805 19.7218 6.46772 19.7218 11.3589C19.7218 16.2501 15.7521 20.2198 10.8609 20.2198C5.96968 20.2198 2 16.2501 2 11.3589C2 6.46772 5.96968 2.49805 10.8609 2.49805ZM10.8609 18.2507C14.6681 18.2507 17.7527 15.1662 17.7527 11.3589C17.7527 7.55072 14.6681 4.46713 10.8609 4.46713C7.05267 4.46713 3.96909 7.55072 3.96909 11.3589C3.96909 15.1662 7.05267 18.2507 10.8609 18.2507ZM19.2147 18.3206L22 21.1049L20.6069 22.498L17.8226 19.7128L19.2147 18.3206Z"
+                                    fill="#368796" />
+                            </svg>
+                        </label>
+                        <input type="text" class="CommonSearch__input form-control ps-1" [(ngModel)]="searchText"
+                            [ngModelOptions]="{ standalone: true }" (input)="filterTemplates($event)"
+                            placeholder="Search">
+                    </form>
+                </div>
+                <div class="p-2">
+                    <div class="navlinks_height d-flex flex-column gap-2">
+                        <div class="navbutton rounded-2 d-flex align-items-center gap-3"
+                            [class.active]="template.id === templateId"
+                            *ngFor="let template of filteredTemplates let i = index" (click)="open(template.id)">
+                            <p class="m-0 fs-8">{{template.name}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="pat_rightcont_body">
+                <app-communications-notes #cnotes *ngIf="templateId === 1"></app-communications-notes>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal quick_info walkthrough_info_card walkthrough_info" data-bs-backdrop="static" id="quickaction_info" tab-index="-1">
+    <div class="modal-dialog modal-dialog-scrollabel">
+        <div class="modal-content h-100 overflow-auto">
+            <div class="modal-header ps-0 d-none" style="background-color: #fcfaf7 !important;">
+                <label for="" class="ssn_label bg-primary clr-light" id="lblSSN">SSN:
+                    {{patinfo?.SSN}}</label>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="clearPatientInfo()"aria-label="Close"></button>
+                    </div>
+            </div>
+            <div class="">
+                <app-patient-quick-actions *ngIf="patinfo"
+                    [patientInfo]="patinfo" (closeModal)="closeModal()"></app-patient-quick-actions>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="viewCommModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width:85%">
+        <div class="modal-content">
+            <div class="modal-header p-2">
+                <h5 class="modal-title clr-primary-600 fs-6" translate>Communications</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+            </div>
+            <div class="fixed_alter_list py-2">
+                <div class="fixed_alter_header bg-primary-50">
+                    <div class="row gx-2 p-2 mx-0">
+                        <div class="col-1">
+                            <p class="label m-0">Specialization</p>
+                        </div>
+                        <div class="col-2" style="width: 20%">
+                            <p class="label m-0">Doctor</p>
+                        </div>
+                        <div class="col-2">
+                            <p class="label m-0">Date</p>
+                        </div>
+                        <div class="col-1">
+                            <p class="label m-0">Type</p>
+                        </div>
+                        <div class="col-1">
+                            <p class="label m-0">Number Used</p>
+                        </div>
+                        <div class="col-2">
+                            <p class="label m-0">Mode of Communication</p>
+                        </div>
+                        <div class="col-1">
+                            <p class="label m-0">Out Come</p>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="fixed_alter_body px-2">
+                    <div class="row gx-2 mx-0 p-2 my-2 table-cards_div" *ngFor="let item of communicationsNotesList; let i = index">
+
+                        <div class="col-1">
+                            <p class="m-0">{{item.Specialisation}}</p>
+                        </div>
+                        <div class="col-2" style="width: 20%">
+                            <p class="m-0">{{item.DoctorName}}</p>
+                        </div>
+                        <div class="col-2">
+                            <div class="d-flex align-items-center gap-1">
+                                <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                        fill="#368796" />
+                                </svg>
+                                <p class="m-0 clr-dark-600 text-nowrap">{{item.CommunicationDate?.split(' ')[0]}}</p>         
+                                <svg class="" width="10" height="11" viewBox="0 0 10 11"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                        fill="#368796" />
+                                    <path
+                                        d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                        fill="#368796" />
+                                </svg>
+                                <p class="m-0 clr-dark-600  text-nowrap">{{item.CommunicationDate?.split(' ')[1]}}</p>                                                                    
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <p class="m-0">{{item.CommunicationType === 1 ? 'Call' : 'SMS'}}</p>
+                        </div>
+                        <div class="col-1">
+                            <p class="m-0">{{item.PhoneNo}}</p>
+                        </div>
+                        <div class="col-2">
+                            <p>{{item.IsLandline ? 'Hospital Landline' : 'Cell Phone' }}</p>
+                        </div>
+                        <div class="col-1">
+                            <p>{{item.NoResponse ? 'No Response' : 'Out of Reach' }}</p>
+                        </div>                      
+                        <div class="row gx-2 bg-primary-50 mt-2 p-2 col-12 row gx-2">                           
+                            <div class="col-3 d-flex align-items-center gap-2" style="width: 28%;">
+                                <p class="label fw-bold m-0">Saved user :</p>
+                                <p>{{item.UserName}}</p>
+                            </div>
+                            <div class="col-3 d-flex align-items-center gap-2" style="width: 34%;">
+                                <p class="label fw-bold m-0">Action Taken :</p>
+                                <p>{{getActionTakenItems(item.ActionTaken)}}</p>
+                            </div>
+                            <div class="col d-flex align-items-center gap-2">
+                                <p class="label fw-bold m-0">Notes :</p>
+                                <p>{{item.Notes}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

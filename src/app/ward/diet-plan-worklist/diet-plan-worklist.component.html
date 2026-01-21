@@ -1,0 +1,469 @@
+<app-header *ngIf="isDirectOpen" [InputHome]="true" [IsSwitchWard]="false"></app-header>
+
+<div class="container__wrapper bg-white">
+    <div class="page-header sticky-top shadow-sm justify-content-start">
+        <h2 class="page-heading">Diet Chart</h2>
+        <div class="actions ms-auto gap-2 d-flex align-items-center">
+            <button class="btn btn-main-fill" (click)="navigatetoBedBoard()" *ngIf="!isDirectOpen">Beds Board</button>
+            <button class="btn btn-danger-outline"  (click)="dietStickPrint()">Sticker Print</button>
+            <button class="btn btn-danger-outline"  (click)="PatientPrintCard()">Print</button>
+            <button class="btn btn-danger-outline" (click)="onClear()">Clear</button>
+            <button class="btn btn-main-outline"
+                (click)="onSearch()">Search</button>
+        </div>
+    </div>
+
+    <div class="">
+        <div class="">
+            <form [formGroup]="dietPlanForm">
+                <div class="row g-2 align-items-end p-2 pt-0 bg-primary-50 mx-0">
+                    <div class="col-2">
+                        <label for="" class="form-label">Date</label>
+                        <div class="d-flex align-items-center gap-2 justify-content-end">
+                            <button class="date_range_calendar p-0 position-relative" style="width: 227px;">
+                                <mat-date-range-input class="btn btn-main-outline" [formGroup]="dietPlanForm"
+                                    [rangePicker]="picker">
+                                    <input matStartDate formControlName="fromdate">
+                                    <input matEndDate formControlName="todate">
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker></mat-date-range-picker>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- <div class="col">
+                        <label for="" class="form-label">Ward</label>
+                        <div class="d-flex align-items-center gap-2 w-100">
+                            <input type="text" class="form-control" placeholder="Ward" aria-label="Ward" id="wardSearch"
+                                [matAutocomplete]="autoWard"
+                                (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchWard($event)">
+                            <mat-autocomplete #autoWard="matAutocomplete">
+                                <mat-option *ngFor="let item of listOfWards" (onSelectionChange)="onItemSelected(item)"
+                                    [value]="item.Name.trim()">
+                                    {{item.Name}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div> -->
+                    <div class="col-2">
+                        <label for="" class="form-label text-nowrap m-0">Ward</label>
+                        <div class="input_dropdown position-relative">
+                            <input type="text" class="form-control" id="wardSearch" placeholder="Ward"
+                                aria-label="Ward" [matAutocomplete]="autoWard" formControlName="ward"
+                                (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchSpecItem($event)">
+                            <mat-autocomplete #autoWard="matAutocomplete" (optionSelected)="onItemSelected($event)">
+                                <mat-option value="Select">{{langData?.common?.Select}}</mat-option>
+                                <mat-option *ngFor="let item of listOfWards"
+                                    [value]="item.Name.trim()">
+                                    {{item.Name}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <label for="" class="form-label">Bed No.</label>
+                        <div class="input_dropdown position-relative">
+                            <input type="text" class="form-control" placeholder="Bed" aria-label="Bed" id="bedSearch"
+                                [matAutocomplete]="autoMed1"
+                                (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchBedItem($event)">
+                            <mat-autocomplete #autoMed1="matAutocomplete" (optionSelected)="onItemBedSelected($event)">
+                              
+                                <mat-option *ngFor="let item of listOfBeds"
+                                     [value]="item.BedName.trim()">
+                                    {{item.BedName}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <label for="" class="form-label">SSN</label>
+                        <input type="text" formControlName="SSN" id="ssn" placeholder="SSN" class="form-control"
+                        (keydown.enter)="onEnterPress($event)" (change)="onEnterChange()"
+                        class="form-control" (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
+                    </div>
+                    <div class="col-2">
+                        <label for="" class="form-label" required="">Status</label>
+                        <select name="" class="form-select pe-5" formControlName="Status" id=""
+                            (change)="StatusChange($event)">
+                            <option value="0" selected>All</option>
+                            <option value="1">Planned Diet</option>
+                            <option value="2">UnPlanned Diet</option>
+                        </select>
+                    </div>
+                    <div class="col d-flex justify-content-end gap-2">
+                       <p class="color-highlight fs-7">Total IP Patient Count :{{dietPlanList.length}}</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="p-2">
+            <div class="prescribeditems_body d-none">
+                <div class="Pharmacy_list">
+                    <div class="Pharmacy_list_header p-2 bg-primary-50">
+                        <div class="d-flex gap-2  py-0">
+                            <div class="d-flex align-items-center" style="width: 15%;">
+                                <label for="" class="form-label fw-bold clr-primary-600 m-0">Patient Details</label>
+                            </div>
+                            <div class="d-flex align-items-center" style="width: 8%;">
+                                <label for="" class="form-label fw-bold clr-primary-600 m-0">Admit Date</label>
+                            </div>
+                            <div class="d-flex align-items-center" style="width: 7%;">
+                                <label for="" class="form-label fw-bold clr-primary-600 m-0">Bed Name</label>
+                            </div>
+                            <div class="d-flex align-items-center" style="width: 10%;">
+                                <label for="" class="form-label fw-bold clr-primary-600 m-0">Doctor</label>
+                            </div>
+                            <div class="d-flex align-items-center" style="width: 6%;">
+                                <label for="" class="form-label fw-bold clr-primary-600 m-0">Ward</label>
+                            </div>
+                            <div class="d-flex align-items-center" style="width: 7%;">
+                                <label for="" class="form-label fw-bold clr-primary-600 m-0">Guest Food</label>
+                            </div>
+                            <div class="d-flex align-items-center" style="width: 12%;">
+                                <label for="" class="form-label fw-bold clr-primary-600 m-0">Diet Type</label>
+                            </div>
+                            <div class="d-flex align-items-center" style="width: 10%;">
+                                <label for="" class="form-label fw-bold clr-primary-600 m-0">Diet Category</label>
+                            </div>
+                            <div class="d-flex align-items-center" style="width: 9%;">
+                                <label for="" class="form-label fw-bold clr-primary-600 m-0">Diet Request <br> Date
+                                    </label>
+                            </div>
+                            <div class="d-flex align-items-center" style="width: 5%;">
+                                <label for="" class="form-label fw-bold clr-primary-600 m-0">User</label>
+                            </div>
+                            <div class="d-flex align-items-center" style="width: 7%;">
+                                <label for="" class="form-label fw-bold clr-primary-600 m-0">Diet Plan <br> Date
+                                    </label>
+                            </div>
+                            <div class="" style="width: 4%;">
+                                <!-- <div class="custom_check d-flex align-items-center justify-content-center">
+                                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                        <path
+                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ITEMS LIST -->
+                <div class="">
+                    <div class="itemslist p-2" style="height: calc(100vh - 17rem)">
+                        <div class="itemBlock mb-2 border-primary-200 rounded-2" *ngFor="let item of dietPlanList">
+                            <div class="d-flex gap-2 p-1 align-items-center">
+                                <div class="d-flex align-items-center" style="width: 15%;">
+                                    <div class="">
+                                        <p><b>{{item.PatientName}}</b></p>
+                                        <p>SSN :{{item.SSN}} | {{item.FullAge}} | {{item.Nationality}} || {{item.MobileNo}}</p>
+                                    </div>
+                                </div>
+                                <div class="" style="width: 8%;">
+                                    <p>{{item.AdmitDate ? item.AdmitDate : '-'}}</p>
+                                </div>
+                                <div class="d-flex align-items-center" style="width: 7%;">
+                                    <p>{{item.BedName ? item.BedName : '-'}}</p>
+                                </div>
+                                <div class="d-flex align-items-center" style="width: 10%;">
+                                    <p>{{item.Consultant ? item.Consultant : '-'}}</p>
+                                </div>
+                                <div class="d-flex align-items-center" style="width: 6%;">
+                                    <p>{{item.ward ? item.ward : '-'}}</p>
+                                </div>
+                                <div class="d-flex align-items-center gap-2" style="width: 7%;">
+                                    <p class="text-nowrap">{{item.IsGuestfood === 'True' ? 'Yes' : 'No'}}</p>
+                                </div>
+                                <div class="d-flex align-items-center" style="width: 12%;">
+                                    <p>{{item.DietTypes ? item.DietTypes : '-'}}</p>
+                                </div>
+                                <div class="d-flex align-items-center" style="width: 10%;">
+                                    <p>{{item.DietCategory ? item.DietCategory : '-'}}</p>
+                                </div>
+                                <div class="d-flex align-items-center gap-2" style="width: 9%;">
+                                    <p>{{item.DietRequestDate ? item.DietRequestDate : '-'}}</p>
+                                </div>
+                                <div class="d-flex align-items-center gap-2" style="width: 5%;">
+                                    <p class="text-nowrap">{{item.UserName ? item.UserName : '-'}}</p>
+                                </div>
+                                <div class="" style="width: 7%;">
+                                    <p>{{item.DietPlanDate ? item.DietPlanDate : '-'}}</p>
+                                </div>
+                                <div class="" style="width: 4%;">
+                                    <div [class.active]="item.selected"
+                                        class="custom_check d-flex align-items-center justify-content-center"
+                                        (click)="openDietPlan(item)">
+                                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-primary-50 p-2 endblock">
+                                <div class="d-flex g-2 align-items-center d-flex align-items-center gap-4">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label fw-bold clr-primary-600 m-0">No of Days
+                                            :</label>
+                                        <p class="m-0">{{item.NoOfDays ? item.NoOfDays : '-'}}</p>
+                                    </div>
+                                    <!-- <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label fw-bold clr-primary-600 m-0">IP NO:</label>
+                                        <p class="m-0">{{item.AdmissionNumber ? item.AdmissionNumber : '-'}}</p>
+                                    </div> -->
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label fw-bold clr-primary-600 m-0">Status:</label>
+                                        <p class="m-0">{{getStatus(item)}}</p>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label fw-bold clr-primary-600 m-0">Remarks:</label>
+                                        <p class="m-0">{{item.Remarks ? item.Remarks : '-'}}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column gap-2 dietchart_list">
+                <div class="doc_card rounded shadow-0 cursor-pointer"  (click)="openDietPlan(item)"  *ngFor="let item of dietPlanList">
+                    <div class="row gx-1 mx-0 align-items-center">
+                        <div class="col-3 bg-primary-50 rounded-top cursor-pointer position-relative" style="max-width: 21rem;">
+                            <div class="p-2 py-1 doctor_profile d-flex">
+                                <div class="text-center me-2">
+                                    <div class="profile_img">
+                                        <img src="assets/images/icons/male.svg" *ngIf="item.Gender == 'Male'"
+                                            alt="">
+                                        <img *ngIf="item.Gender == 'Female'"
+                                            src="assets/images/icons/female.svg" alt="">
+                                    </div>
+                                </div>
+                                <div class="d-flex w-100 align-items-center justify-content-between">
+                                    <div class="w-100 position-relative">
+                                        <div class="custom_tooltip custom_tooltip_right">
+                                            <p class="value fs-7 fw-bold text-truncate" style="width: 90%;">{{item.PatientName}}</p>
+                                            <div class="tooltip">
+                                                <p class="value fs-7 fw-bold">{{item.PatientName}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div
+                                                class="full_age_hover custom_tooltip custom_tooltip_right d-flex align-items-center gap-1">
+                                                <p class="">{{item.Gender}}</p>
+                                                <p>|{{item.FullAge}}</p>    
+                                            </div>
+                                            <p><b>SSN</b> : <span>{{item.SSN}}</span></p>
+                                        </div>
+                                        <div>
+                                            <p class="">{{item.Nationality}} | Mobile :{{item.MobileNo}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col doc_details">
+                            <div class="bg-white p-1 rounded d-flex gap-2">
+                                <div class="row g-2 w-100 dietchart_tabgrid">
+                                    <div class="col-3" style="width: 10%;">
+                                        <label for=""
+                                            class="form-label m-0 clr-grey text-nowrap fw-bold">Ward</label>
+                                        <p class="fw-bold">{{item.ward ? item.ward : '-'}}
+                                        </p>
+                                    </div>
+                                    <!-- <div class="col-1 d-flex">
+                                        <label for="" class="form-label m-0 clr-grey text-nowrap fw-bold">Bed Name</label>
+                                        <p class="fw-bold">{{item.BedName ? item.BedName : '-'}}</p>
+                                    </div> -->
+                                    <div class="col-3" style="width: 13%;">
+                                        <label for="" class="form-label m-0 clr-grey text-nowrap fw-bold">Admit Date</label>
+                                        <!-- <p class="fw-bold">{{item.AdmitDate ? item.AdmitDate : '-'}}</p> -->
+                                        <div class="d-flex align-items-center gap-1">
+                                            <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="fw-bold">{{item.AdmitDate?.split(' ')[0]}}</p>         
+                                            <svg class="" width="10" height="11" viewBox="0 0 10 11"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                                    fill="#368796" />
+                                                <path
+                                                    d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="fw-bold">{{item.AdmitDate?.split(' ')[1]}}</p>                                                                    
+                                        </div>
+                                    </div>
+                                    <div class="col-6" style="width: 16%;">
+                                        <label for="" class="form-label m-0 clr-grey text-nowrap fw-bold">Doctor</label>
+                                        <p class="fw-bold">{{item.Consultant ? item.Consultant : '-'}}</p>
+                                    </div>
+                                   
+                                    <div class="col-3" style="width: 15%;">
+                                        <label for="" class="form-label m-0 clr-grey text-nowrap fw-bold">Diet Type</label>
+                                        <p class="m-0 fs-8 fw-bold text-break">{{item.DietTypes ? item.DietTypes : ''}}</p>
+                                    </div>
+                                    <div class="col-3" style="width: 10%;">
+                                        <label for="" class="form-label m-0 clr-grey text-nowrap fw-bold">Diet Category</label>
+                                        <p class="m-0 fs-8 fw-bold">{{item.DietCategory ? item.DietCategory : ''}}</p>
+                                    </div>
+                                    <div class="col-3" style="width: 14%;">
+                                        <label for="" class="form-label m-0 clr-grey text-nowrap fw-bold">Diet Request Date </label>
+                                        <p class="m-0 fs-8 fw-bold">{{item.DietRequestDate ? item.DietRequestDate : ''}}</p>
+                                    </div>
+                                  
+                                    <div class="col-3" style="width: 14%;">
+                                        <label for="" class="form-label m-0 clr-grey text-nowrap fw-bold">Diet Plan Date </label>
+                                        <!-- <p class="m-0 fs-8 fw-bold">{{item.DietPlanDate ? item.DietPlanDate : '-'}}</p> -->
+                                        <div class="d-flex align-items-center gap-1">
+                                            <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="fw-bold">{{item.DietPlanDate?.split(' ')[0]}}</p>         
+                                            <svg class="" width="10" height="11" viewBox="0 0 10 11"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                                    fill="#368796" />
+                                                <path
+                                                    d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="fw-bold">{{item.DietPlanDate?.split(' ')[1]}}</p>                                                                    
+                                        </div>
+                                    </div>                                   
+                                </div>
+                                <div class="">
+                                    <div class="d-flex justify-content-end h-100">
+                                        <div
+                                            class="px-2 position-relative d-flex align-items-center">
+                                            <div class="pb-0 clr-main-2 hoverAllergy"
+                                                id="divAllergyTooltip">
+                                                <span
+                                                    class="allergy_icon d-flex align-items-center gap-1">
+                                                    <svg width="27" height="27" viewBox="0 0 32 32"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="16" cy="15.998" r="16"
+                                                            fill="#DAEEF1" />
+                                                        <path fill-rule="evenodd"
+                                                            clip-rule="evenodd"
+                                                            d="M25 15.998C25 20.9686 20.9706 24.998 16 24.998C11.0294 24.998 7 20.9686 7 15.998C7 11.0275 11.0294 6.99805 16 6.99805C20.9706 6.99805 25 11.0275 25 15.998ZM21.6357 21.9294C20.1684 23.324 18.1841 24.1799 16 24.1799C11.4813 24.1799 7.81818 20.5167 7.81818 15.998C7.81818 13.8662 8.63349 11.9249 9.9693 10.4687C9.98784 10.533 10.0224 10.5935 10.073 10.6442L13.6988 14.27L12.1586 15.8215C12.0529 15.9281 11.9933 16.0719 11.9927 16.2221V19.1923L10.4417 20.7433C10.3881 20.7965 10.3455 20.8598 10.3165 20.9295C10.2874 20.9993 10.2724 21.0741 10.2724 21.1496C10.2724 21.2252 10.2874 21.3 10.3165 21.3697C10.3455 21.4395 10.3881 21.5028 10.4417 21.556C10.4949 21.6096 10.5582 21.6522 10.628 21.6812C10.6977 21.7103 10.7725 21.7252 10.8481 21.7252C10.9236 21.7252 10.9984 21.7103 11.0682 21.6812C11.1379 21.6522 11.2012 21.6096 11.2544 21.556L12.8054 20.005H15.7756C15.9258 20.0044 16.0696 19.9448 16.1762 19.839L17.7277 18.2989L21.25 21.8211C21.3546 21.9257 21.5017 21.9618 21.6357 21.9294ZM21.9369 21.6279C21.9691 21.494 21.933 21.347 21.8285 21.2425L18.3084 17.7224L20.8863 15.1633C21.1528 14.8975 21.3642 14.5817 21.5085 14.2341C21.6527 13.8864 21.727 13.5137 21.727 13.1373C21.727 12.761 21.6527 12.3883 21.5085 12.0406C21.3642 11.693 21.1528 11.3772 20.8863 11.1114C20.6205 10.8449 20.3047 10.6335 19.9571 10.4892C19.6094 10.345 19.2367 10.2707 18.8603 10.2707C18.484 10.2707 18.1113 10.345 17.7636 10.4892C17.416 10.6335 17.1002 10.8449 16.8344 11.1114L14.2753 13.6893L10.6516 10.0656C10.6011 10.0151 10.5406 9.98056 10.4765 9.96199C11.932 8.62936 13.871 7.81623 16 7.81623C20.5187 7.81623 24.1818 11.4794 24.1818 15.998C24.1818 18.1793 23.3283 20.1612 21.9369 21.6279ZM13.1373 16.4567L14.508 15.0791L15.3069 15.8781L14.4479 16.7371C14.3942 16.7904 14.3517 16.8536 14.3226 16.9234C14.2935 16.9931 14.2786 17.0679 14.2786 17.1435C14.2786 17.219 14.2935 17.2938 14.3226 17.3636C14.3517 17.4333 14.3942 17.4966 14.4479 17.5498C14.5011 17.6035 14.5644 17.646 14.6341 17.6751C14.7039 17.7041 14.7787 17.7191 14.8542 17.7191C14.9298 17.7191 15.0046 17.7041 15.0743 17.6751C15.144 17.646 15.2073 17.6035 15.2605 17.5498L16.1196 16.6907L16.9186 17.4897L15.541 18.8604H13.1373V16.4567ZM15.085 14.4991L15.8855 15.2995L18.454 12.731C18.5618 12.6232 18.7079 12.5627 18.8603 12.5627C19.0128 12.5627 19.1589 12.6232 19.2667 12.731C19.3745 12.8388 19.435 12.9849 19.435 13.1373C19.435 13.2898 19.3745 13.4359 19.2667 13.5437L16.6982 16.1122L17.4986 16.9127L20.0736 14.3506C20.3769 14.0252 20.542 13.5947 20.5342 13.1499C20.5263 12.7051 20.3461 12.2807 20.0316 11.9661C19.717 11.6516 19.2926 11.4714 18.8478 11.4635C18.403 11.4557 17.9725 11.6208 17.6471 11.9241L15.085 14.4991Z"
+                                                            fill="#368796" />
+                                                    </svg>
+                                                    <div>
+                                                        <p class="clr-primary-600">Allergy</p>
+                                                        <p class="m-0 fs-8 text-nowrap">
+                                                            {{item.IsAllergy === 1 ? 'Yes' :'NKA'}}
+                                                        </p>
+                                                    </div>
+                                                </span>
+                                                <div class="viewPatientsAllergiesModal end-0 d-none"
+                                                    data-bs-backdrop="static" tabindex="-1"
+                                                    id="viewAllergies" tabindex="-1">
+                                                    <div
+                                                        class="modal-dialog modal-dialog-scrollable modal-l ">
+                                                        <div class="modal-content p-3">
+                                                            <div class="modal-header">
+                                                                <h6 class="modal-title" translate>
+                                                                    {{langData?.common?.Allergies}}
+                                                                </h6>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div
+                                                                    class="d-flex w-100 align-items-center justify-content-between">
+                                                                    <div class="d-flex w-100 mt-2">
+                                                                        <div [innerHtml]="item.AllergyData"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 border-top-primary-200 p-0">
+                            <div class="p-1 bg-grey-50 endblock d-flex justify-content-between align-items-center rounded-bottom">
+                                <div class="d-flex g-2 align-items-center d-flex align-items-center gap-4">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label fw-bold text-nowrap clr-primary-600 m-0">Guest Food :</label>
+                                        <p class="m-0">{{item.IsGuestfood === 'True' ? 'Yes' : 'No'}}</p>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label fw-bold text-nowrap clr-primary-600 m-0">No of Days:</label>
+                                        <p class="m-0">{{item.NoOfDays ? item.NoOfDays : ''}}</p>
+                                    </div>
+                                    <!-- <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label fw-bold text-nowrap clr-primary-600 m-0">IP NO:</label>
+                                        <p class="m-0">{{item.AdmissionNumber ? item.AdmissionNumber : '-'}}</p>
+                                    </div> -->
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label fw-bold text-nowrap clr-primary-600 m-0">Status:</label>
+                                        <p class="m-0">{{getStatus(item)}}</p>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label fw-bold text-nowrap clr-primary-600 m-0">Remarks:</label>
+                                        <p class="m-0">{{item.Remarks ? item.Remarks : ''}}</p>
+                                    </div>
+
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label fw-bold text-nowrap clr-primary-600 m-0">User :</label>
+                                    <p class="m-0">{{item.UserName ? item.UserName : ''}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal" id="caseRecordModal">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Print Card</h5>                    
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="trustedUrl = ''"></button>
+            </div>
+            <div class="modal-body">
+                <iframe *ngIf="trustedUrl" height="600" width="100%" [src]="(trustedUrl ? trustedUrl :'')| safeUrl"
+                    frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorMsg" data-bs-abackdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{errorMessages}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

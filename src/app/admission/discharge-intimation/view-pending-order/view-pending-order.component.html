@@ -1,0 +1,75 @@
+<div class="modal-header">
+  <h5 class="modal-title m-0">Pending Orders</h5>
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="modal"
+    aria-label="Close"
+    (click)="close()"
+  ></button>
+</div>
+<div class="modal-body p-2">
+        <table class="table m-0 d-none">
+          <thead>
+            <tr>
+              <th>Service Name</th>
+              <th>Item Name</th>
+              <th>Order No.</th>
+              <th>Order Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pending of pendingOrderData; index as i">
+              <td>{{ pending?.serviceName }}</td>
+              <td>{{ pending?.itemName }}</td>
+              <td>{{ pending?.orderno }}</td>
+              <td>{{ pending?.orderDate }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="fixed_alter_list pending_orders_table">
+          <div class="fixed_alter_header">
+            <div class="row gx-3 mx-0 p-2 align-items-center">
+              <div class="col-3">
+                <label for="" translate class="form-label fw-bold text-nowrap m-0 clr-primary-600">Service Name</label>
+              </div>
+              <div class="col-5">
+                <label for="" translate class="form-label fw-bold text-nowrap m-0 clr-primary-600">Item Name</label>
+              </div>
+              <div class="col-2">
+                <label for="" translate class="form-label fw-bold text-nowrap m-0 clr-primary-600">Order No.</label>
+              </div>
+              <div class="col-2">
+                <label for="" translate class="form-label fw-bold text-nowrap m-0 clr-primary-600">Order Date</label>
+              </div>
+            </div>
+          </div>
+    
+          <div class="fixed_alter_body">
+            <div class="row gx-3 mx-0 p-2 align-items-center alter_div" *ngFor="let pending of pendingOrderData; index as i">
+              <div class="col-3">
+                <p class="m-0">{{ pending?.serviceName }}</p>
+              </div>
+              <div class="col-5">
+                <p class="m-0" translate>{{ pending?.itemName }}</p>
+              </div>
+              <div class="col-2">
+                <p class="m-0">{{ pending?.orderno }}</p>
+              </div>
+              <div class="col-2">
+                <p class="m-0">
+                  {{ pending?.orderDate }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <p class="p-3 m-0 fw-bold">Above orders are pending for the patient</p>
+  <!-- <div class="text-center">
+    <button type="button" class="btn btn-danger-outline d-none" (click)="close()">
+      Cancel
+    </button>
+  </div> -->
+</div>

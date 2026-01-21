@@ -1,0 +1,1553 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+<!--Container-->
+<form>
+    <div class="container__wrapper bg-white">
+        <div class="page-header justify-content-between sticky-top">
+            <h2 class="page-heading">Employees</h2>
+            <div class="d-flex align-items-center gap-2">
+                <!-- <div class="custom_check d-flex align-items-center gap-2">
+                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="check_svg">
+                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                        <path
+                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                            fill="white" stroke="white" stroke-width="0.25"></path>
+                    </svg>
+                    <p class="m-0 fs-7">Blocked User</p>
+                </div> -->
+                <!-- data-bs-target="#blockedReason_modal" data-bs-toggle="modal" -->
+
+                <!-- <div class="file__upload">
+                    <input type="file" class="input-file-upload" (change)="onSelectFile($event)">
+                </div> -->
+                <!-- <button class="btn btn-main-fill" *ngIf="IsModify" (click)="SickleaveVerifyDoctor()">Seha Verify</button> -->
+                 <span class="form-label ssn_number" *ngIf="SehaVerifiedDate!=null&&SehaVerifiedDate!=''">Seha Verified Date :{{SehaVerifiedDate}}</span>
+                <div class="custom_check d-flex align-items-center gap-2">
+                    <button class="btn btn-secondary-outline fs-8 px-2" [class.active]="IsFitForDischarge"
+                        (click)="SickleaveVerifyDoctor()">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.4"
+                                d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                fill="#B4DDE4"></path>
+                            <path
+                                d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                fill="#8ECBD7"></path>
+                        </svg>
+                        Seha Verify
+                    </button>
+                    
+                </div>
+                 
+
+                <button class="btn btn-main-outline" (click)="navigatetoRoleMapping()">User Role Mapping</button>
+                <button class="btn btn-main-outline" (click)="openEmployeeSignature()">Employee Signature</button>
+                <button class="btn btn-main-outline" (click)="fetchLocations()">Map Location</button>
+                <button class="btn btn-danger-outline" (click)="clear()">Clear</button>
+                <button class="btn btn-main-outline" *ngIf="IsModify&&!isDischargeReturn"
+                    (click)="save('modify')">Modify</button>
+                <button class="btn btn-main-outline" *ngIf="!IsModify" (click)="save('save')">Save</button>
+            </div>
+        </div>
+
+        <div class="col-xl-12 container-fluid ">
+
+            <form>
+                <div class="row mt-3 gx-2">
+                    <div class="col-lg-2 d-none">
+                        <div class="regist__wrapper">
+                            <div class="patient__details">
+                                <div class="patient__profile">
+                                    <div class="patient__photo">
+                                        <img class="w-100" src="assets/images/patient-dp.png" alt="">
+                                    </div>
+                                </div>
+                                <div class="patient__info">
+                                    <div class="file__upload">
+                                        <input type="file" class="input-file-upload" (change)="onSelectFile($event)">
+                                    </div>
+                                    <div class="mb-3">
+                                        <button class="btn btn-main-outline">Signature</button>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <label for="flexSwitchCheckChecked" class="form-check-label me-2">Full
+                                            Time</label>
+                                        <div class="form-check form-switch"
+                                            (click)="empForm.get('IsFullTime')?.setValue(!empForm.get('IsFullTime')?.value)">
+                                            <input class="form-check-input" type="checkbox" role="switch"
+                                                id="flexSwitchCheckChecked"
+                                                [checked]="empForm.get('IsFullTime')?.value">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <nav id="navbar-example2" class="navbar px-2 pt-3">
+                                <ul class="nav nav-pills flex-column border-0 w-100 gap-3">
+                                    <li class="nav-item cursor-pointer" (click)="scrollTo('personal')">
+                                        <a class="nav-link">
+                                            <!-- <img src="assets/images/icons/icon-personal.svg" alt=""> -->
+                                            <span>Personal Information</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item cursor-pointer" (click)="scrollTo('hr')">
+                                        <a class="nav-link">
+                                            <!-- <img src="assets/images/icons/icon-address.svg" alt=""> -->
+                                            <span>HR Profile</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item cursor-pointer" (click)="scrollTo('academic')">
+                                        <a class="nav-link">
+                                            <!-- <img src="assets/images/icons/icon-company.svg" alt=""> -->
+                                            <span>Academic Details</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item cursor-pointer" (click)="scrollTo('contact')">
+                                        <a class="nav-link">
+                                            <!-- <img src="assets/images/icons/icon-company.svg" alt=""> -->
+                                            <span>Contact Details</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <div class="col-2 left-col mini_nav">
+                        <div class="regist__wrapper">
+                            <div class="mb-3 d-flex justify-content-center">
+                                <svg class="cursor-pointer nav_Arrow" xmlns="http://www.w3.org/2000/svg" width="24"
+                                    height="21" viewBox="0 0 24 21" fill="none">
+                                    <path
+                                        d="M1.31602 0.846046C1.52509 0.636946 1.80844 0.519531 2.10413 0.519531L2.10417 0.51995C2.39715 0.51995 2.67809 0.635223 2.88665 0.841104C3.09548 1.04672 3.21451 1.32632 3.21853 1.61906V19.4051C3.21853 19.8032 3.00621 20.171 2.66147 20.3701C2.31648 20.5693 1.89157 20.5693 1.54683 20.3701C1.20209 20.171 0.989502 19.8032 0.989502 19.4051V1.63416C0.989502 1.3385 1.10694 1.05515 1.31602 0.846046Z"
+                                        fill="#43A9BC"></path>
+                                    <path
+                                        d="M9.44447 9.39712H21.8962L21.8959 9.3972C22.2943 9.3972 22.6621 9.60951 22.8612 9.95426C23.0601 10.2992 23.0601 10.7239 22.8612 11.0689C22.6621 11.4136 22.2943 11.626 21.8959 11.626H9.44451L12.8072 14.9964C13.0892 15.2779 13.2 15.6886 13.097 16.0735C12.9943 16.4588 12.6941 16.7598 12.3094 16.8633C11.9245 16.967 11.5135 16.8574 11.2315 16.5759L5.94719 11.2994C5.78876 11.1426 5.68152 10.9418 5.6397 10.7228C5.63193 10.6525 5.63193 10.5818 5.6397 10.5115C5.64399 10.2226 5.76114 9.94671 5.96622 9.74297L11.239 4.45094C11.5228 4.18072 11.9274 4.07939 12.3048 4.18394C12.6825 4.2882 12.9774 4.58335 13.0819 4.9608C13.1862 5.33825 13.0849 5.74302 12.8147 6.02664H12.8149L9.44447 9.39712Z"
+                                        fill="#43A9BC"></path>
+                                </svg>
+                            </div>
+                            <div class="p-2 pb-0">
+                                <div class="patient__details">
+                                    <div class="patient__profile">
+                                        <div class="patient__photo">
+                                            <!-- <img class="w-100" src="assets/images/icons/male.svg" alt=""> -->
+                                            <img src="{{myPhoto ?  myPhoto : 'assets/images/icons/male.svg'}}">
+                                        </div>
+                                        <!-- <div class="file__upload">
+                                            <input type="file" class="input-file-upload" (change)="onSelectFile($event)">
+                                        </div> -->
+                                        <div class="file__upload">
+                                            <input type="file" class="input-file-upload"
+                                                (change)="onSelectFile($event)">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column align-items-center m-4 mt-0">
+                                    <label for="flexSwitchCheckChecked" class="form-label m-0 text-nowrap">Full
+                                        Time</label>
+                                    <div class="form-check form-switch"
+                                        (click)="empForm.get('IsFullTime')?.setValue(!empForm.get('IsFullTime')?.value)">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                            id="flexSwitchCheckChecked" [checked]="empForm.get('IsFullTime')?.value">
+                                    </div>
+                                </div>
+                            </div>
+                            <nav id="navbar-example2" class="navbar p-2">
+                                <ul class="nav nav-pills border-0 gap-3">
+                                    <li class="nav-item custom_tooltip custom_tooltip_right">
+                                        <a class="nav-link cursor-pointer d-flex align-items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+                                                viewBox="0 0 28 28" fill="none">
+                                                <path
+                                                    d="M15.9404 8.61538C15.9404 9.50744 15.2171 10.2308 14.3251 10.2308C13.433 10.2308 12.7097 9.50744 12.7097 8.61538C12.7097 7.72332 13.433 7 14.3251 7C15.2171 7 15.9404 7.72332 15.9404 8.61538Z"
+                                                    fill="#368796" />
+                                                <path
+                                                    d="M11.4174 11.3077C11.12 11.3077 10.8789 11.5488 10.8789 11.8461C10.8789 12.1435 11.12 12.3846 11.4174 12.3846H12.4763L11.5251 18.8462C11.3275 20.2241 12.0705 21 13.5712 21C14.4991 21 15.6436 20.675 16.2166 19.7221C16.2936 19.6221 16.2688 19.4971 16.1936 19.4466C16.0686 19.3961 15.9642 19.4466 15.8933 19.5466C15.6667 19.8966 15.315 20.249 14.8635 20.249C14.365 20.249 14.008 20.0519 14.1097 19.2769L15.3957 11.9286C15.4462 11.6022 15.1938 11.3077 14.8635 11.3077H11.4174Z"
+                                                    fill="#368796" />
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M25.5 14C25.5 20.3513 20.3513 25.5 14 25.5C7.64873 25.5 2.5 20.3513 2.5 14C2.5 7.64873 7.64873 2.5 14 2.5C20.3513 2.5 25.5 7.64873 25.5 14ZM23.25 14C23.25 19.1086 19.1086 23.25 14 23.25C8.89137 23.25 4.75 19.1086 4.75 14C4.75 8.89137 8.89137 4.75 14 4.75C19.1086 4.75 23.25 8.89137 23.25 14Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="fs-7 m-0" translate>Personal Information </p>
+                                        </a>
+                                        <div class="tooltip">
+                                            <p class="m-0 clr-primary-600" translate>Personal Information</p>
+                                        </div>
+                                    </li>
+
+                                    <li class="nav-item custom_tooltip custom_tooltip_right">
+                                        <a class="nav-link cursor-pointer d-flex align-items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+                                                viewBox="0 0 28 28" fill="none">
+                                                <path
+                                                    d="M17.091 14.308C17.7873 13.5603 18.1795 12.5797 18.191 11.558C18.191 10.4552 17.7529 9.39763 16.9732 8.61785C16.1934 7.83807 15.1358 7.4 14.033 7.4C12.9302 7.4 11.8726 7.83807 11.0929 8.61785C10.3131 9.39763 9.875 10.4552 9.875 11.558C9.88648 12.5797 10.2787 13.5603 10.975 14.308C10.0055 14.7908 9.17124 15.5069 8.54721 16.3921C7.92317 17.2773 7.52895 18.3037 7.4 19.379C7.36791 19.6707 7.45302 19.9633 7.63662 20.1923C7.82022 20.4212 8.08726 20.5679 8.379 20.6C8.67074 20.6321 8.96328 20.547 9.19226 20.3634C9.42124 20.1798 9.56791 19.9127 9.6 19.621C9.73127 18.5553 10.2477 17.5743 11.0521 16.8629C11.8565 16.1515 12.8932 15.7589 13.967 15.7589C15.0408 15.7589 16.0775 16.1515 16.8819 16.8629C17.6863 17.5743 18.2027 18.5553 18.334 19.621C18.3646 19.9031 18.503 20.1624 18.7203 20.3448C18.9375 20.5273 19.2169 20.6187 19.5 20.6H19.621C19.9094 20.5668 20.1729 20.421 20.3542 20.1944C20.5355 19.9677 20.6199 19.6786 20.589 19.39C20.4696 18.3203 20.0878 17.2967 19.4776 16.4101C18.8673 15.5236 18.0475 14.8015 17.091 14.308ZM14 13.516C13.6127 13.516 13.2342 13.4012 12.9122 13.186C12.5902 12.9709 12.3392 12.6651 12.191 12.3073C12.0428 11.9495 12.0041 11.5558 12.0796 11.176C12.1552 10.7962 12.3417 10.4473 12.6155 10.1735C12.8893 9.89965 13.2382 9.71317 13.618 9.63762C13.9978 9.56207 14.3915 9.60085 14.7493 9.74904C15.1071 9.89724 15.4129 10.1482 15.628 10.4702C15.8432 10.7922 15.958 11.1707 15.958 11.558C15.958 12.0773 15.7517 12.5753 15.3845 12.9425C15.0173 13.3097 14.5193 13.516 14 13.516ZM21.7 3H6.3C5.42479 3 4.58542 3.34768 3.96655 3.96655C3.34768 4.58542 3 5.42479 3 6.3V21.7C3 22.5752 3.34768 23.4146 3.96655 24.0335C4.58542 24.6523 5.42479 25 6.3 25H21.7C22.5752 25 23.4146 24.6523 24.0335 24.0335C24.6523 23.4146 25 22.5752 25 21.7V6.3C25 5.42479 24.6523 4.58542 24.0335 3.96655C23.4146 3.34768 22.5752 3 21.7 3ZM22.8 21.7C22.8 21.9917 22.6841 22.2715 22.4778 22.4778C22.2715 22.6841 21.9917 22.8 21.7 22.8H6.3C6.00826 22.8 5.72847 22.6841 5.52218 22.4778C5.31589 22.2715 5.2 21.9917 5.2 21.7V6.3C5.2 6.00826 5.31589 5.72847 5.52218 5.52218C5.72847 5.31589 6.00826 5.2 6.3 5.2H21.7C21.9917 5.2 22.2715 5.31589 22.4778 5.52218C22.6841 5.72847 22.8 6.00826 22.8 6.3V21.7Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="fs-7 m-0" translate>HR Profile </p>
+                                        </a>
+                                        <div class="tooltip">
+                                            <p class="m-0 clr-primary-600" translate>HR Profile</p>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item custom_tooltip custom_tooltip_right">
+                                        <a class="nav-link cursor-pointer d-flex align-items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+                                                viewBox="0 0 28 28" fill="none">
+                                                <path
+                                                    d="M16.846 12.6919C17.2288 12.165 17.4584 11.5424 17.5095 10.8931C17.5606 10.2438 17.4311 9.59299 17.1354 9.01267C16.8396 8.43235 16.3892 7.9451 15.8339 7.60479C15.2785 7.26449 14.6399 7.08438 13.9885 7.08438C13.3372 7.08438 12.6986 7.26449 12.1432 7.60479C11.5879 7.9451 11.1374 8.43235 10.8417 9.01267C10.546 9.59299 10.4165 10.2438 10.4676 10.8931C10.5187 11.5424 10.7483 12.165 11.1311 12.6919C10.6455 13.0014 10.2132 13.3874 9.85094 13.8349C9.75638 13.9573 9.68683 14.097 9.64628 14.2462C9.60573 14.3954 9.59497 14.5512 9.6146 14.7045C9.63424 14.8579 9.68389 15.0059 9.76072 15.1401C9.83755 15.2742 9.94006 15.392 10.0624 15.4865C10.1847 15.5811 10.3245 15.6506 10.4737 15.6912C10.6229 15.7317 10.7786 15.7425 10.932 15.7229C11.0854 15.7032 11.2334 15.6536 11.3675 15.5768C11.5017 15.4999 11.6194 15.3974 11.714 15.2751C11.9931 14.9203 12.3489 14.6332 12.7547 14.4352C13.1604 14.2373 13.6057 14.1337 14.0571 14.1321V14.1321C14.5086 14.1337 14.9538 14.2373 15.3596 14.4352C15.7653 14.6332 16.1211 14.9203 16.4002 15.2751C16.5078 15.4077 16.6437 15.5145 16.798 15.5877C16.9523 15.6609 17.121 15.6986 17.2918 15.698C17.506 15.697 17.7157 15.6358 17.8969 15.5214C18.078 15.407 18.2234 15.2439 18.3164 15.0509C18.4093 14.8578 18.4461 14.6425 18.4226 14.4295C18.3991 14.2165 18.3161 14.0145 18.1833 13.8464C17.8048 13.3899 17.3528 12.9998 16.846 12.6919V12.6919ZM14 11.8576C13.7556 11.8574 13.5166 11.7853 13.3128 11.6504C13.109 11.5154 12.9495 11.3234 12.854 11.0984C12.7585 10.8734 12.7313 10.6253 12.7758 10.385C12.8202 10.1446 12.9344 9.92269 13.1041 9.74677C13.2738 9.57085 13.4915 9.44873 13.7301 9.39562C13.9687 9.34251 14.2176 9.36075 14.4459 9.44808C14.6742 9.5354 14.8718 9.68795 15.014 9.88673C15.1562 10.0855 15.2369 10.3217 15.2458 10.566C15.252 10.7334 15.2243 10.9003 15.1644 11.0568C15.1046 11.2133 15.0138 11.3561 14.8975 11.4766C14.7812 11.5972 14.6418 11.6931 14.4875 11.7585C14.3333 11.824 14.1675 11.8577 14 11.8576V11.8576ZM23.6696 11.2861C23.5092 9.61607 22.919 8.01608 21.9565 6.64191C20.994 5.26774 19.6922 4.16622 18.1776 3.44461C16.663 2.723 14.9874 2.4059 13.3139 2.52418C11.6403 2.64246 10.026 3.19209 8.62794 4.11955C7.42689 4.92267 6.41862 5.98182 5.67555 7.22092C4.93248 8.46002 4.47307 9.84831 4.33032 11.2861C4.19029 12.7144 4.36995 14.156 4.85629 15.5063C5.34262 16.8566 6.12343 18.0816 7.14206 19.0927L13.1999 25.1619C13.3061 25.269 13.4326 25.3541 13.5718 25.4121C13.7111 25.4701 13.8605 25.5 14.0114 25.5C14.1623 25.5 14.3117 25.4701 14.451 25.4121C14.5903 25.3541 14.7167 25.269 14.8229 25.1619L20.8579 19.0927C21.8765 18.0816 22.6573 16.8566 23.1437 15.5063C23.63 14.156 23.8097 12.7144 23.6696 11.2861V11.2861ZM19.2577 17.481L14 22.7388L8.74224 17.481C7.9674 16.7062 7.37386 15.7692 7.0043 14.7376C6.63473 13.706 6.49832 12.6053 6.60486 11.5147C6.71209 10.4072 7.06407 9.33746 7.63534 8.38271C8.20661 7.42795 8.98291 6.61207 9.90809 5.99405C11.1207 5.18851 12.5442 4.75882 14 4.75882C15.4558 4.75882 16.8792 5.18851 18.0919 5.99405C19.0142 6.60968 19.7888 7.42196 20.3599 8.37253C20.9311 9.3231 21.2846 10.3884 21.3951 11.4918C21.5051 12.5861 21.3704 13.6912 21.0007 14.7271C20.6311 15.7629 20.0357 16.7036 19.2577 17.481V17.481Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="fs-7 m-0" translate>Academic Details</p>
+                                        </a>
+                                        <div class="tooltip">
+                                            <p class="m-0 clr-primary-600" translate>Academic Details</p>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item custom_tooltip custom_tooltip_right">
+                                        <a class="nav-link cursor-pointer d-flex align-items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+                                                viewBox="0 0 28 28" fill="none">
+                                                <path
+                                                    d="M14.5312 17.2555H14.1612C14.0518 17.2555 13.9596 17.3454 13.9596 17.4549C13.9596 17.5643 14.0472 17.6519 14.1566 17.6519H14.6054C14.6558 17.6519 14.7039 17.6322 14.7412 17.5972L14.82 17.5227L14.9601 17.7417C14.9973 17.7964 15.0586 17.8314 15.1265 17.8314H15.1287C15.1965 17.8292 15.26 17.7942 15.295 17.7373L15.7416 17.017L16.1992 18.0503C16.2298 18.1204 16.2977 18.1664 16.3743 18.1686H16.3787C16.4531 18.1686 16.521 18.127 16.5538 18.0613L16.7618 17.6519H17.239C17.2106 17.7636 17.1734 17.8752 17.123 17.9825C17.0967 18.0394 17.0683 18.0941 17.0376 18.1467C17.007 18.1992 16.972 18.2518 16.9347 18.3021C16.88 18.3765 16.8165 18.451 16.7487 18.5188L13.9969 21.2706L11.2473 18.5188C10.978 18.2495 10.8073 17.9145 10.7372 17.5643C10.7361 17.5588 10.735 17.5539 10.7339 17.5489C10.7328 17.544 10.7317 17.5391 10.7306 17.5336C10.7109 17.4198 10.7 17.3037 10.7 17.1899V17.1877C10.7 16.9162 10.7569 16.6448 10.8729 16.3952C10.8992 16.3383 10.9277 16.2836 10.9583 16.231C11.0043 16.15 11.059 16.0734 11.1181 15.999C11.1378 15.9749 11.1575 15.9508 11.1794 15.9267C11.1991 15.9026 11.2232 15.8786 11.2451 15.8567C11.6107 15.4911 12.0945 15.3072 12.5762 15.3072H12.5893C13.0687 15.3116 13.5438 15.4933 13.9072 15.8567L13.997 15.9464L14.0451 15.9026L14.0911 15.8567C14.113 15.8348 14.137 15.8129 14.1611 15.791C14.1731 15.7812 14.1852 15.7707 14.1973 15.7603C14.2093 15.7499 14.2213 15.7395 14.2334 15.7297C14.807 15.2634 15.5973 15.1868 16.2432 15.4976C16.2782 15.5151 16.3154 15.5348 16.3504 15.5545C16.3637 15.5629 16.3774 15.5709 16.3911 15.5789C16.4134 15.592 16.436 15.6053 16.4577 15.6202C16.4738 15.6296 16.4891 15.6406 16.5045 15.6518C16.5143 15.6589 16.5241 15.666 16.5343 15.6728C16.6088 15.7275 16.6832 15.791 16.7511 15.8588C17.0028 16.1106 17.167 16.4171 17.2458 16.7411C17.2611 16.8002 17.2721 16.8593 17.2808 16.9184C17.2896 16.9775 17.2962 17.0366 17.2984 17.0979C17.3005 17.1505 17.3005 17.203 17.2984 17.2556H16.646C16.5715 17.2556 16.5037 17.2972 16.4708 17.3628L16.3964 17.5117L15.9564 16.5156C15.9279 16.4499 15.8622 16.404 15.79 16.3996C15.7156 16.393 15.6477 16.4302 15.6083 16.4915L15.1289 17.2643L15.0282 17.1089C14.9953 17.0585 14.945 17.0257 14.8859 17.0191C14.8267 17.0125 14.7676 17.0322 14.726 17.0717L14.5312 17.2555Z"
+                                                    fill="#368796" />
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M19.5 7.4H21.7C22.5752 7.4 23.4146 7.74768 24.0335 8.36655C24.6523 8.98542 25 9.82479 25 10.7V21.7C25 22.5752 24.6523 23.4146 24.0335 24.0335C23.4146 24.6523 22.5752 25 21.7 25H6.3C5.42479 25 4.58542 24.6523 3.96655 24.0335C3.34768 23.4146 3 22.5752 3 21.7V10.7C3 9.82479 3.34768 8.98542 3.96655 8.36655C4.58542 7.74768 5.42479 7.4 6.3 7.4H8.5V6.3C8.5 5.42479 8.84768 4.58542 9.46655 3.96655C10.0854 3.34768 10.9248 3 11.8 3H16.2C17.0752 3 17.9146 3.34768 18.5335 3.96655C19.1523 4.58542 19.5 5.42479 19.5 6.3V7.4ZM11.0222 5.52218C10.8159 5.72847 10.7 6.00826 10.7 6.3V7.4H17.3V6.3C17.3 6.00826 17.1841 5.72847 16.9778 5.52218C16.7715 5.31589 16.4917 5.2 16.2 5.2H11.8C11.5083 5.2 11.2285 5.31589 11.0222 5.52218ZM22.4778 22.4778C22.6841 22.2715 22.8 21.9917 22.8 21.7V14H5.2V21.7C5.2 21.9917 5.31589 22.2715 5.52218 22.4778C5.72847 22.6841 6.00826 22.8 6.3 22.8H21.7C21.9917 22.8 22.2715 22.6841 22.4778 22.4778ZM5.2 11.8H22.8V10.7C22.8 10.4083 22.6841 10.1285 22.4778 9.92218C22.2715 9.71589 21.9917 9.6 21.7 9.6H6.3C6.00826 9.6 5.72847 9.71589 5.52218 9.92218C5.31589 10.1285 5.2 10.4083 5.2 10.7V11.8Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="fs-7 m-0" translate>Contact Details</p>
+                                        </a>
+                                        <div class="tooltip">
+                                            <p class="m-0 clr-primary-600" translate>Contact Details</p>
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <!-- Employee Personal Information -->
+                    <div [formGroup]="empForm" class="col empForm" #personal>
+                        <div class="card card-style-1 rounded-3">
+                            <div class="card-header justify-content-start  p-2 border-0">
+                                <h5 class="card-heading">Personal Information</h5>
+                                <div class="ms-auto d-flex align-items-center gap-2">
+                                    <div class="custom_check  ms-auto d-flex align-items-center gap-2"
+                                        [class.active]="isDefaultPassword">
+                                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" (click)="DefaultPassword()"
+                                            class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Default Password</p>
+                                    </div>
+                                    <div class="custom_check  ms-auto d-flex align-items-center gap-2"
+                                        [class.active]="isPasswordExpired">
+                                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" (click)="BlockedEmployeeP()"
+                                            class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Password Expired</p>
+                                    </div>
+
+                                    <div class="custom_check d-flex align-items-center gap-2"
+                                        (click)="BlockedEmployee()" [class.active]="isDischargeReturn"
+                                        [class.disabled]="!FetchEmployeeData1List">
+                                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Blocked</p>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row mx-0">
+                                    <div class="col-lg-4 col-md-4 ps-0">
+
+                                        <label for="" class="form-label" required="">Employee No.</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" [matAutocomplete]="employeeauto"
+                                                appAuditLog="Employee Number" formControlName="EmpName"
+                                                placeholder="Employee Number"
+                                                (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchEmployee($event)">
+                                            <mat-autocomplete #employeeauto="matAutocomplete">
+                                                <mat-option *ngFor="let item of employeeList"
+                                                    (onSelectionChange)="onEmployeeSelected(item)">
+                                                    {{item.Name}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                            <button type="button" id="button-addon2"
+                                                class="btn btn-secondary-fill btn-icon">
+                                                <img src="assets/images/icons/icon-search.svg" alt="">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4">
+                                        <label for="" class="form-label">Employee Code</label>
+                                        <input type="text" class="form-control" placeholder="Code"
+                                            appAuditLog="Employee Code" formControlName="EmpCode">
+                                    </div>
+                                    <div class="col-lg-2 col-md-4">
+                                        <label for="" class="form-label">Clinic No.</label>
+                                        <input type="text" class="form-control" placeholder="Room No."
+                                            appAuditLog="Clinic No" formControlName="RoomNo">
+                                    </div>
+                                    <div class="col-lg-3 col-md-4">
+                                        <label for="" class="form-label" required="">Role</label>
+                                        <div class="input-group">
+                                            <select name="" class="form-select pe-5" id=""
+                                                appAuditLog="EmploymentRoleID" formControlName="EmploymentRoleID">
+                                                <option value="">{{langData?.common?.Select}}</option>
+                                                <option *ngFor="let pr of FetchEmploymentRoleNamesDataList"
+                                                    [value]="pr.ID">
+                                                    {{pr.TypeName}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 border p-2 rounded-3">
+                                    <div class="row mx-0">
+                                        <div class="col-lg-4 col-md-3 ps-0">
+                                            <div class="d-flex gap-2">
+                                                <div class="col-3">
+                                                    <label for="" class="form-label" required="">Title</label>
+                                                    <select name="" class="form-select pe-5" id="" appAuditLog="Title"
+                                                        formControlName="Title" (change)="titleChange($event)">
+                                                        <option value="">{{langData?.common?.Select}}</option>
+                                                        <option *ngFor="let e of FetchEmployeeTitleDataList"
+                                                            [value]="e.Id">
+                                                            {{e.Names}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-9">
+                                                    <label for="" class="form-label" required="">First Name</label>
+                                                    <input type="text" class="form-control" placeholder="First Name"
+                                                        appAuditLog="First Name" formControlName="FirstName">
+                                                    <input type="text" dir="rtl" class="form-control mt-2"
+                                                        placeholder="" formControlName="FirstName2l">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4">
+                                            <label for="" class="form-label">Middle Name</label>
+                                            <input type="text" class="form-control" placeholder="Middle Name"
+                                                appAuditLog="Middle Name" formControlName="MiddleName">
+                                            <input type="text" dir="rtl" class="form-control mt-2" placeholder=""
+                                                formControlName="MiddleName2l">
+                                        </div>
+                                        <div class="col-lg-4 col-md-4">
+                                            <label for="" class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" placeholder="Last Name"
+                                                appAuditLog="Last Name" formControlName="LastName">
+                                            <input type="text" dir="rtl" class="form-control mt-2" placeholder=""
+                                                formControlName="LastName2l">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 row mx-0 g-2">
+                                    <div class="col-lg-3 col-md-4 ps-0">
+                                        <label for="" class="form-label" required="">Date of Birth</label>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                                            <input matInput class="" formControlName="DateofBirth" (click)="DOB.open()"
+                                                appAuditLog="Date of Birth" [matDatepicker]="DOB" [max]="minDate"
+                                                (dateChange)="calculateAge()">
+                                            <mat-datepicker-toggle matSuffix [for]="DOB">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #DOB></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4">
+                                        <label for="" class="form-label" required="">Age</label>
+                                        <input type="text" class="form-control" readonly placeholder="Age"
+                                            appAuditLog="Age" formControlName="Age">
+                                    </div>
+                                    <div class="col-lg-3 col-md-4">
+                                        <label for="" class="form-label" required="">Gender</label>
+                                        <select name="" class="form-select pe-5" formControlName="Gender" id=""
+                                            appAuditLog="Employee Gender" (change)="genderChange($event)">
+                                            <option value="">{{langData?.common?.Select}}</option>
+                                            <option *ngFor="let e of FetchEmployeeGenderDataList" [value]="e.Id">
+                                                {{e.Names}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4">
+                                        <label for="" class="form-label" required="">Marital Status</label>
+                                        <select class="form-select" formControlName="MaritalStatus"
+                                            appAuditLog="Marital Status">
+                                            <option value="">{{langData?.common?.Select}}</option>
+                                            <option *ngFor="let e of FetchEmployeeMartialDataList" [value]="e.Id">
+                                                {{e.Names}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4 ps-0">
+                                        <label for="" class="form-label" required="">Employee Type</label>
+                                        <select class="form-select" formControlName="EmployeeType"
+                                            appAuditLog="Employee Type">
+                                            <option value="">{{langData?.common?.Select}}</option>
+                                            <option *ngFor="let e of FetchEmployeeTypeDataList" [value]="e.Id">
+                                                {{e.Names}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4">
+                                        <label for="" class="form-label" required="">Location</label>
+                                        <select name="" class="form-select pe-5" id="" formControlName="Location"
+                                            appAuditLog="Location" (change)="locationChange($event)">
+                                            <option value="">{{langData?.common?.Select}}</option>
+                                            <option *ngFor="let e of FetchEmployeeLocationDataList"
+                                                [value]="e.HospitalID">
+                                                {{e.Name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4">
+                                        <label for="" class="form-label" required="">Department</label>
+                                        <select name="" class="form-select pe-5" id="" formControlName="Department"
+                                            appAuditLog="Department" (change)="departmentChange($event)">
+                                            <option value="">{{langData?.common?.Select}}</option>
+                                            <option *ngFor="let e of FetchEmployeeDepartmentsDataList"
+                                                [value]="e.HospDeptID">
+                                                {{e.DepartmentName}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4">
+                                        <label for="" class="form-label" required="">Designation</label>
+                                        <select name="" class="form-select pe-5" id="" formControlName="Designation"
+                                            appAuditLog="Designation" (change)="designationChange($event)">
+                                            <option value="">{{langData?.common?.Select}}</option>
+                                            <option *ngFor="let e of FetchEmployeeDesignationDataList"
+                                                [value]="e.DeptDesigID">
+                                                {{e.Designation}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 row mx-0">
+                                    <div class="col-md-4 ps-0">
+                                        <div class="border rounded-3">
+                                            <div class="row mx-0 p-2 g-2">
+                                                <div class="col-md-12 ps-0">
+                                                    <label for="" class="form-label" required="">Religion</label>
+                                                    <div class="input-group">
+                                                        <select name="" class="form-select pe-5" id=""
+                                                            appAuditLog="Religion" formControlName="Religion"
+                                                            (change)="religionChange($event)">
+                                                            <option value="">{{langData?.common?.Select}}</option>
+                                                            <option *ngFor="let pr of FetchReligionsDataList"
+                                                                [value]="pr.ReligionID">
+                                                                {{pr.Religion}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 ps-0">
+                                                    <label for="" class="form-label" required="">Nationality</label>
+                                                    <div class="input-group">
+                                                        <select name="" class="form-select pe-5" id=""
+                                                            appAuditLog="Nationality" formControlName="Nationality"
+                                                            (change)="NationalityChange($event)">
+                                                            <option value="">{{langData?.common?.Select}}</option>
+                                                            <option *ngFor="let pr of AdminMastersInstructionsDataList"
+                                                                [value]="pr.id">
+                                                                {{pr.name}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="p-2 bg-primary-50 my-3">
+                                                <h6 class="m-0 clr-primary-600">Languages</h6>
+                                            </div>
+                                            <div class="p-2">
+                                                <!-- <div class="col-md-12 ps-0">
+                                                    <label for="" class="form-label" required="">Region</label>
+                                                    <div class="input-group">
+                                                        <mat-form-field>
+                                                            <mat-select placeholder="Select options" multiple [(value)]="selectedOptions">
+                                                                <mat-option *ngFor="let language of GetMasterDataList" [value]="language.id">
+                                                                    {{ language.name }}
+                                                                </mat-option>
+                                                            </mat-select>
+                                                          </mat-form-field>
+                                                    </div>
+                                                </div> -->
+
+                                                <div class="col-md-12">
+                                                    <label for="" class="form-label" required="">Language(s)
+                                                        Known</label>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" [matAutocomplete]="lang"
+                                                            appAuditLog="Languages"
+                                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchLanguage($event)">
+                                                        <mat-autocomplete #lang="matAutocomplete">
+                                                            <mat-option *ngFor="let item of GetMasterDataList"
+                                                                (onSelectionChange)="onLangSelected(item)">
+                                                                {{item.name}}
+                                                            </mat-option>
+                                                        </mat-autocomplete>
+                                                        <button type="button" id="button-addon2"
+                                                            class="btn btn-secondary-fill btn-icon">
+                                                            <img src="assets/images/icons/icon-search.svg" alt="">
+                                                        </button>
+                                                    </div>
+
+
+                                                    <div class="col-md-12">
+                                                        <label for="" class="form-label">User Description</label>
+                                                        <textarea name="" id="" cols="" rows="3"
+                                                            appAuditLog="User Description"
+                                                            formControlName="UserDescription"
+                                                            class="form-control"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2" *ngFor="let item of selectedLang; let i = index">
+                                                    <button
+                                                        class="btn btn-main-outline rounded-3 d-flex align-items-center justify-content-between w-100">{{item.name}}
+                                                        <span (click)="removeLangItem(i)">
+                                                            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <rect x="0.5" width="16" height="16" rx="8"
+                                                                    fill="#FAD8D1" />
+                                                                <path
+                                                                    d="M9.89998 7.99989L11.9999 5.89998L10.5999 4.5L8.5 6.59991L6.40009 4.5L5.00011 5.89998L7.10002 7.99989L5 10.0999L6.39998 11.4999L8.5 9.39986L10.6 11.4999L12 10.0999L9.89998 7.99989Z"
+                                                                    fill="#EB6247" />
+                                                            </svg>
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="border  rounded-3">
+                                            <div class="row p-2 mx-0 g-2">
+                                                <div class="col-lg-6 col-md-4">
+                                                    <label for="" class="form-label">UHID</label>
+                                                    <input type="text" class="form-control" placeholder="UHID"
+                                                        formControlName="UHID" appAuditLog="UHID">
+                                                </div>
+                                                <div class="col-lg-6 col-md-4">
+                                                    <label for="" class="form-label">SSN</label>
+                                                    <input type="text" class="form-control" placeholder="SSN No."
+                                                        formControlName="SSN" appAuditLog="SSN No.">
+                                                </div>
+                                                <div class="col-lg-6 col-md-4">
+                                                    <label for="" class="form-label">Iqama Expiry</label>
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                        <input matInput class="" formControlName="IqamaExpiry"
+                                                            appAuditLog="Iqama Expiry" (click)="IEX.open()"
+                                                            [matDatepicker]="IEX">
+                                                        <mat-datepicker-toggle matSuffix [for]="IEX">
+                                                        </mat-datepicker-toggle>
+                                                        <mat-datepicker #IEX></mat-datepicker>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-lg-6 col-md-4">
+                                                    <label for="" class="form-label" required="">Blood Group</label>
+                                                    <select class="form-select" formControlName="BloodGroup"
+                                                        appAuditLog="Blood Group">
+                                                        <option value="">{{langData?.common?.Select}}</option>
+                                                        <option *ngFor="let e of FetchEmployeeBloodGDataList"
+                                                            [value]="e.Id">
+                                                            {{e.Names}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="p-2 bg-primary-50 my-3">
+                                                <h6 class="m-0 clr-primary-600">Passport Details</h6>
+                                            </div>
+                                            <div class="p-2">
+                                                <div class="row mx-0 g-2">
+                                                    <div class="col-lg-4 col-md-4">
+                                                        <label for="" class="form-label">Passport Number</label>
+                                                        <input type="text" class="form-control"
+                                                            appAuditLog="Passport Number" placeholder="Passport Number"
+                                                            formControlName="PassportNumber">
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4">
+                                                        <label for="" class="form-label">Issue Date</label>
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                            <input matInput class="" formControlName="IssueDate"
+                                                                appAuditLog="Issue Date" (click)="ISD.open()"
+                                                                [matDatepicker]="ISD">
+                                                            <mat-datepicker-toggle matSuffix [for]="ISD">
+                                                            </mat-datepicker-toggle>
+                                                            <mat-datepicker #ISD></mat-datepicker>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4">
+                                                        <label for="" class="form-label">Expiry Date</label>
+                                                        <mat-form-field appearance="fill">
+                                                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                            <input matInput class="" formControlName="ExpiryDate"
+                                                                appAuditLog="Expiry Date" (click)="EXD.open()"
+                                                                [matDatepicker]="EXD">
+                                                            <mat-datepicker-toggle matSuffix [for]="EXD">
+                                                            </mat-datepicker-toggle>
+                                                            <mat-datepicker #EXD></mat-datepicker>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4">
+                                                        <label for="" class="form-label">Issue at</label>
+                                                        <input type="text" class="form-control" placeholder="Issue at"
+                                                            appAuditLog="Issue at" formControlName="Issueat">
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4">
+                                                        <label for="" class="form-label">Pan Number</label>
+                                                        <input type="text" class="form-control" placeholder="Pan Number"
+                                                            appAuditLog="Pan Number" formControlName="PanNumber">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Employee Acedemic Details -->
+                        <div class="mt-3" #academic>
+                            <div class="card card-style-1 rounded-3">
+                                <div class="card-header justify-content-start  p-2 border-0">
+                                    <h6 class="card-heading">HR Profile</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mx-0">
+                                        <div class="col-md-4 ps-0">
+                                            <div class="border row mx-0 g-2 p-2 rounded-3">
+                                                <div class="col-md-12">
+                                                    <label for="" class="form-label" required="">Function Type</label>
+                                                    <select class="form-select" formControlName="empFunctionType"
+                                                        appAuditLog="Function Type">
+                                                        <option value="" selected>Select</option>
+                                                        <option value="1">Medical</option>
+                                                        <option value="2">Non-medical</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-12"
+                                                    *ngIf="empForm.get('empFunctionType')?.value === 1 || empForm.get('empFunctionType')?.value === '1'">
+                                                    <label for="" class="form-label" required="">Sub Function
+                                                        Type</label>
+                                                    <select class="form-select" formControlName="empSubFunctionType"
+                                                        appAuditLog="Sub Function Type">
+                                                        <option value="" selected>Select</option>
+                                                        <option value="1">Doctor</option>
+                                                        <option value="2">Nurse</option>
+                                                        <option value="3">Technician</option>
+                                                    </select>
+                                                </div>
+                                                <ng-container
+                                                    *ngIf="empForm.get('empSubFunctionType')?.value === 1 || empForm.get('empSubFunctionType')?.value === '1'">
+                                                    <div class="col-md-12">
+                                                        <div [class.active]="empForm.get('admission')?.value=='True'?true:false"
+                                                            (click)="empForm.get('admission')?.value ? empForm.get('admission')?.setValue(false) : empForm.get('admission')?.setValue(true)"
+                                                            class="custom_check d-flex align-items-center gap-2 my-2">
+                                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                                <circle cx="10" cy="10.5" r="10" fill="#43BC94">
+                                                                </circle>
+                                                                <path
+                                                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                                    fill="white" stroke="white" stroke-width="0.25">
+                                                                </path>
+                                                            </svg>
+                                                            <p class="m-0 fs-7">Admission</p>
+                                                        </div>
+                                                        <div [class.active]="empForm.get('consultation')?.value=='True'?true:false"
+                                                            (click)="empForm.get('consultation')?.value ? empForm.get('consultation')?.setValue(false) : empForm.get('consultation')?.setValue(true)"
+                                                            class="custom_check d-flex align-items-center gap-2 my-2">
+                                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                                <circle cx="10" cy="10.5" r="10" fill="#43BC94">
+                                                                </circle>
+                                                                <path
+                                                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                                    fill="white" stroke="white" stroke-width="0.25">
+                                                                </path>
+                                                            </svg>
+                                                            <p class="m-0 fs-7">Consultation</p>
+                                                        </div>
+                                                        <div [class.active]="empForm.get('applycharges')?.value=='True'?true:false"
+                                                            (click)="empForm.get('applycharges')?.value ? empForm.get('applycharges')?.setValue(false) : empForm.get('applycharges')?.setValue(true)"
+                                                            class="custom_check d-flex align-items-center gap-2 my-2">
+                                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                                <circle cx="10" cy="10.5" r="10" fill="#43BC94">
+                                                                </circle>
+                                                                <path
+                                                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                                    fill="white" stroke="white" stroke-width="0.25">
+                                                                </path>
+                                                            </svg>
+                                                            <p class="m-0 fs-7">Apply Professional Charges</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label for="" class="form-label">Maxconsultation</label>
+                                                        <input type="text" class="form-control"
+                                                            appAuditLog="Maxconsultation" placeholder="Maxconsultation"
+                                                            formControlName="Maxconsultation">
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label for="" class="form-label">Followup
+                                                            days</label>
+                                                        <input type="text" class="form-control"
+                                                            appAuditLog="Followup days" placeholder="Followup days"
+                                                            formControlName="Followupdays">
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label for="" class="form-label">Followup
+                                                            limit</label>
+                                                        <input type="text" class="form-control"
+                                                            appAuditLog="Followup limit" placeholder="Followup limit"
+                                                            formControlName="Followuplimit">
+                                                    </div>
+                                                </ng-container>
+
+                                                <!-- <div class="col-md-12">
+                                                    <label for="" class="form-label">Special Note</label>
+                                                    <textarea name="" id="" cols="" rows="5" appAuditLog="Special Note"
+                                                        formControlName="SpecialNote" class="form-control"></textarea>
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="border row mx-0 h-100 flex-column p-2 rounded-3">
+                                                <div class="col-md-12">
+                                                    <label for="" class="form-label" required="">HR Profile</label>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" appAuditLog="HR Profile"
+                                                            [matAutocomplete]="hrProfile"
+                                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchHRProfile($event)">
+                                                        <mat-autocomplete #hrProfile="matAutocomplete">
+                                                            <mat-option *ngFor="let item of hrProfileList"
+                                                                (onSelectionChange)="onHRItemSelected(item)">
+                                                                {{item.DomainName}}
+                                                            </mat-option>
+                                                        </mat-autocomplete>
+                                                        <button type="button" id="button-addon2"
+                                                            class="btn btn-secondary-fill btn-icon">
+                                                            <img src="assets/images/icons/icon-search.svg" alt="">
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2" *ngFor="let item of selectedHRProfile; let i = index">
+                                                    <button
+                                                        class="btn btn-main-outline rounded-3 d-flex align-items-center justify-content-between w-100">{{item.DomainName}}
+                                                        <span (click)="removeItem(i)">
+                                                            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <rect x="0.5" width="16" height="16" rx="8"
+                                                                    fill="#FAD8D1" />
+                                                                <path
+                                                                    d="M9.89998 7.99989L11.9999 5.89998L10.5999 4.5L8.5 6.59991L6.40009 4.5L5.00011 5.89998L7.10002 7.99989L5 10.0999L6.39998 11.4999L8.5 9.39986L10.6 11.4999L12 10.0999L9.89998 7.99989Z"
+                                                                    fill="#EB6247" />
+                                                            </svg>
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="border row mx-0 h-100 flex-column p-2 rounded-3">
+                                                <div class="col-md-12">
+                                                    <label for="" class="form-label">Specialisation</label>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control"
+                                                            appAuditLog="Specialisation"
+                                                            [matAutocomplete]="hrSpecialisation"
+                                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchSpecialisation($event)">
+                                                        <mat-autocomplete #hrSpecialisation="matAutocomplete">
+                                                            <mat-option *ngFor="let item of SpecialisationList"
+                                                                (onSelectionChange)="onSpecialisationSelected(item)">
+                                                                {{item.name}}
+                                                            </mat-option>
+                                                        </mat-autocomplete>
+                                                        <button type="button" id="button-addon2"
+                                                            class="btn btn-secondary-fill btn-icon">
+                                                            <img src="assets/images/icons/icon-search.svg" alt="">
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2"
+                                                    *ngFor="let item of selectedSpecialisation; let i = index">
+                                                    <button
+                                                        class="btn btn-main-outline rounded-3 d-flex align-items-center justify-content-between w-100">{{item.name}}
+                                                        <span (click)="removeSpecialisationItem(i)">
+                                                            <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <rect x="0.5" width="16" height="16" rx="8"
+                                                                    fill="#FAD8D1" />
+                                                                <path
+                                                                    d="M9.89998 7.99989L11.9999 5.89998L10.5999 4.5L8.5 6.59991L6.40009 4.5L5.00011 5.89998L7.10002 7.99989L5 10.0999L6.39998 11.4999L8.5 9.39986L10.6 11.4999L12 10.0999L9.89998 7.99989Z"
+                                                                    fill="#EB6247" />
+                                                            </svg>
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Hr Profile and Cirtification Information -->
+                        <div class="mt-3" #hr>
+                            <div class="card card-style-1 rounded-3">
+                                <div class="card-header justify-content-start  p-2 border-0">
+                                    <h6 class="card-heading">Academic | Qualification</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mx-0 align-items-end" [formGroup]="HRProfileQualification">
+                                        <div class="col-lg-2 col-md-3 ps-0">
+                                            <label for="" class="form-label">Qualification</label>
+                                            <select class="form-select" formControlName="empQualification"
+                                                appAuditLog="Qualification">
+                                                <option value="">{{langData?.common?.Select}}</option>
+                                                <option *ngFor="let e of FetchEmployeeQualificationDataList"
+                                                    [value]="e.Id">
+                                                    {{e.Names}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3">
+                                            <label for="" class="form-label"> Institute </label>
+                                            <input type="text" class="form-control" formControlName="empInstitute"
+                                                appAuditLog="Institute" placeholder="Institute">
+                                        </div>
+                                        <div class="col-lg-4 col-md-3">
+                                            <label for="" class="form-label"> Board and University </label>
+                                            <input type="text" class="form-control" formControlName="empUniversity"
+                                                appAuditLog="Board and University" placeholder="University Name">
+                                        </div>
+                                        <div class="col-lg-2 col-md-2">
+                                            <label for="" class="form-label">YOP</label>
+                                            <input type="text" class="form-control" formControlName="empYOP"
+                                                appAuditLog="YOP" placeholder="Year of passing" maxlength="4">
+                                        </div>
+                                        <div class="col-md-1 pe-0">
+                                            <button class="btn btn-main-outline w-100" (click)="addItem()">{{
+                                                editingIndex === -1 ? 'Add' : 'Update' }}</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>SNo.</th>
+                                                    <th>Qualification</th>
+                                                    <th>Institute</th>
+                                                    <th>Board and University</th>
+                                                    <th>YOP</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of qualificationList; let i = index">
+                                                    <td>{{ i + 1 }}</td>
+                                                    <td>{{ item.empQualification }}</td>
+                                                    <td>{{ item.empInstitute }}</td>
+                                                    <td>{{ item.empUniversity }}</td>
+                                                    <td>{{ item.empYOP }}</td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <div class="del_svg cursor-pointer custom_tooltip"
+                                                                (click)="deleteItem(i)">
+                                                                <svg width="23" height="22" viewBox="0 0 23 22"
+                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path
+                                                                        d="M20.0995 6.16917H20.0261C15.177 5.68334 10.337 5.5 5.5428 5.98584L3.6728 6.16917C3.58184 6.17866 3.48989 6.17003 3.40228 6.14377C3.31467 6.11751 3.23314 6.07414 3.16239 6.01618C3.09164 5.95822 3.03308 5.8868 2.9901 5.80607C2.94712 5.72534 2.92056 5.63689 2.91197 5.54584C2.8753 5.16084 3.1503 4.83084 3.52614 4.79417L5.39614 4.61084C10.2728 4.11584 15.2136 4.30834 20.1636 4.79417C20.5395 4.83084 20.8145 5.17 20.7778 5.54584C20.764 5.71605 20.6864 5.87477 20.5607 5.99032C20.4349 6.10586 20.2702 6.16973 20.0995 6.16917Z"
+                                                                        fill="#EB6247"></path>
+                                                                    <path
+                                                                        d="M8.64147 5.24333C8.6048 5.24333 8.56813 5.24333 8.5223 5.23416C8.34445 5.20211 8.18627 5.10159 8.08172 4.95419C7.97717 4.80679 7.93459 4.62427 7.96313 4.44583L8.1648 3.24499C8.31147 2.36499 8.51313 1.14583 10.649 1.14583H13.0506C15.1956 1.14583 15.3973 2.41083 15.5348 3.25416L15.7365 4.44583C15.8006 4.82166 15.544 5.17916 15.1773 5.23416C14.8015 5.29833 14.444 5.04166 14.389 4.67499L14.1873 3.48333C14.059 2.68583 14.0315 2.52999 13.0598 2.52999H10.6581C9.68647 2.52999 9.66813 2.65833 9.53063 3.47416L9.3198 4.66583C9.29369 4.82694 9.2111 4.97351 9.08683 5.07931C8.96255 5.18512 8.80468 5.24325 8.64147 5.24333ZM14.7923 20.856H8.9073C5.70813 20.856 5.5798 19.0868 5.47897 17.6568L4.88313 8.42599C4.85563 8.05016 5.14897 7.72016 5.5248 7.69266C5.9098 7.67433 6.23063 7.95849 6.25813 8.33433L6.85397 17.5652C6.9548 18.9585 6.99147 19.481 8.9073 19.481H14.7923C16.7173 19.481 16.754 18.9585 16.8456 17.5652L17.4415 8.33433C17.469 7.95849 17.799 7.67433 18.1748 7.69266C18.5506 7.72016 18.844 8.041 18.8165 8.42599L18.2206 17.6568C18.1198 19.0868 17.9915 20.856 14.7923 20.856Z"
+                                                                        fill="#EB6247"></path>
+                                                                    <path
+                                                                        d="M13.3714 15.8125H10.3189C9.94311 15.8125 9.63144 15.5008 9.63144 15.125C9.63144 14.7492 9.94311 14.4375 10.3189 14.4375H13.3714C13.7473 14.4375 14.0589 14.7492 14.0589 15.125C14.0589 15.5008 13.7473 15.8125 13.3714 15.8125ZM14.1414 12.1458H9.55811C9.18227 12.1458 8.87061 11.8342 8.87061 11.4583C8.87061 11.0825 9.18227 10.7708 9.55811 10.7708H14.1414C14.5173 10.7708 14.8289 11.0825 14.8289 11.4583C14.8289 11.8342 14.5173 12.1458 14.1414 12.1458Z"
+                                                                        fill="#EB6247"></path>
+                                                                </svg>
+                                                                <div class="tooltip">
+                                                                    <p>Delete</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="edit_svg cursor-pointer custom_tooltip"
+                                                                (click)="editItem(i)">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="23"
+                                                                    height="23" viewBox="0 0 18 17" fill="none">
+                                                                    <path
+                                                                        d="M3.16669 13.5024H6.70002C6.80969 13.503 6.91841 13.482 7.01994 13.4406C7.12147 13.3991 7.21382 13.338 7.29169 13.2607L13.0584 7.48574L15.425 5.16908C15.5031 5.09161 15.5651 4.99944 15.6074 4.89789C15.6497 4.79634 15.6715 4.68742 15.6715 4.57741C15.6715 4.4674 15.6497 4.35848 15.6074 4.25693C15.5651 4.15538 15.5031 4.06321 15.425 3.98574L11.8917 0.410744C11.8142 0.332637 11.7221 0.270642 11.6205 0.228335C11.519 0.186027 11.41 0.164246 11.3 0.164246C11.19 0.164246 11.0811 0.186027 10.9795 0.228335C10.878 0.270642 10.7858 0.332637 10.7084 0.410744L8.35835 2.76908L2.57502 8.54408C2.49779 8.62195 2.43668 8.71429 2.39521 8.81582C2.35374 8.91735 2.33272 9.02607 2.33335 9.13575V12.6691C2.33335 12.8901 2.42115 13.1021 2.57743 13.2583C2.73371 13.4146 2.94567 13.5024 3.16669 13.5024ZM11.3 2.17741L13.6584 4.53574L12.475 5.71908L10.1167 3.36074L11.3 2.17741ZM4.00002 9.47741L8.94169 4.53574L11.3 6.89408L6.35835 11.8357H4.00002V9.47741ZM16.5 15.1691H1.50002C1.27901 15.1691 1.06705 15.2569 0.910765 15.4132C0.754484 15.5694 0.666687 15.7814 0.666687 16.0024C0.666687 16.2234 0.754484 16.4354 0.910765 16.5917C1.06705 16.7479 1.27901 16.8357 1.50002 16.8357H16.5C16.721 16.8357 16.933 16.7479 17.0893 16.5917C17.2456 16.4354 17.3334 16.2234 17.3334 16.0024C17.3334 15.7814 17.2456 15.5694 17.0893 15.4132C16.933 15.2569 16.721 15.1691 16.5 15.1691Z"
+                                                                        fill="#FFAD0E" />
+                                                                </svg>
+                                                                <div class="tooltip">
+                                                                    <p>Edit</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="card-header justify-content-start p-2 border-0 rounded-0">
+                                    <h6 class="clr-primary-600 m-0">Academic | Certification Details</h6>
+                                </div>
+
+                                <div class="row mx-0 p-2" [formGroup]="HRProfileCertification">
+                                    <div class="col-lg-12 col-md-12 p-0">
+                                        <div class="row mx-0 align-items-start">
+                                            <div class="col-lg-3 col-md-4">
+                                                <label for="" class="form-label">Certificate</label>
+                                                <input type="text" class="form-control" placeholder="Certificate"
+                                                    appAuditLog="Certificate" formControlName="hrCertificate">
+                                            </div>
+                                            <div class="col-lg-3 col-md-4">
+                                                <label for="" class="form-label">Institute</label>
+                                                <input type="text" class="form-control" placeholder="Institute"
+                                                    appAuditLog="Institute" formControlName="hrInstitute">
+
+                                            </div>
+                                            <div class="col-lg-2 col-md-4 ps-0">
+                                                <label for="" class="form-label">Issue Date</label>
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                    <input matInput class="" formControlName="hrIssueDate"
+                                                        appAuditLog="Issue Date" (click)="IssDate.open()"
+                                                        [matDatepicker]="IssDate">
+                                                    <mat-datepicker-toggle matSuffix [for]="IssDate">
+                                                    </mat-datepicker-toggle>
+                                                    <mat-datepicker #IssDate></mat-datepicker>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-lg-2 align-self-center mt-3">
+                                                <button class="btn btn-main-outline" (click)="addCertificateItem()">{{
+                                                    editingCertIndex === -1 ? 'Add' : 'Update' }}</button>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>SNo.</th>
+                                                        <th>Certificate</th>
+                                                        <th>Institute</th>
+                                                        <th>Issue Date</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let item of certificationDetails; let i = index">
+                                                        <td>{{ i + 1 }}</td>
+                                                        <td>{{ item.hrCertificate }}</td>
+                                                        <td>{{ item.hrInstitute }}</td>
+                                                        <td>{{ item.hrIssueDate | date: 'dd-MMM-yyyy' }}</td>
+                                                        <td>
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <div class="del_svg cursor-pointer custom_tooltip"
+                                                                    (click)="deleteCertificateItem(i)">
+                                                                    <svg width="23" height="22" viewBox="0 0 23 22"
+                                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <path
+                                                                            d="M20.0995 6.16917H20.0261C15.177 5.68334 10.337 5.5 5.5428 5.98584L3.6728 6.16917C3.58184 6.17866 3.48989 6.17003 3.40228 6.14377C3.31467 6.11751 3.23314 6.07414 3.16239 6.01618C3.09164 5.95822 3.03308 5.8868 2.9901 5.80607C2.94712 5.72534 2.92056 5.63689 2.91197 5.54584C2.8753 5.16084 3.1503 4.83084 3.52614 4.79417L5.39614 4.61084C10.2728 4.11584 15.2136 4.30834 20.1636 4.79417C20.5395 4.83084 20.8145 5.17 20.7778 5.54584C20.764 5.71605 20.6864 5.87477 20.5607 5.99032C20.4349 6.10586 20.2702 6.16973 20.0995 6.16917Z"
+                                                                            fill="#EB6247"></path>
+                                                                        <path
+                                                                            d="M8.64147 5.24333C8.6048 5.24333 8.56813 5.24333 8.5223 5.23416C8.34445 5.20211 8.18627 5.10159 8.08172 4.95419C7.97717 4.80679 7.93459 4.62427 7.96313 4.44583L8.1648 3.24499C8.31147 2.36499 8.51313 1.14583 10.649 1.14583H13.0506C15.1956 1.14583 15.3973 2.41083 15.5348 3.25416L15.7365 4.44583C15.8006 4.82166 15.544 5.17916 15.1773 5.23416C14.8015 5.29833 14.444 5.04166 14.389 4.67499L14.1873 3.48333C14.059 2.68583 14.0315 2.52999 13.0598 2.52999H10.6581C9.68647 2.52999 9.66813 2.65833 9.53063 3.47416L9.3198 4.66583C9.29369 4.82694 9.2111 4.97351 9.08683 5.07931C8.96255 5.18512 8.80468 5.24325 8.64147 5.24333ZM14.7923 20.856H8.9073C5.70813 20.856 5.5798 19.0868 5.47897 17.6568L4.88313 8.42599C4.85563 8.05016 5.14897 7.72016 5.5248 7.69266C5.9098 7.67433 6.23063 7.95849 6.25813 8.33433L6.85397 17.5652C6.9548 18.9585 6.99147 19.481 8.9073 19.481H14.7923C16.7173 19.481 16.754 18.9585 16.8456 17.5652L17.4415 8.33433C17.469 7.95849 17.799 7.67433 18.1748 7.69266C18.5506 7.72016 18.844 8.041 18.8165 8.42599L18.2206 17.6568C18.1198 19.0868 17.9915 20.856 14.7923 20.856Z"
+                                                                            fill="#EB6247"></path>
+                                                                        <path
+                                                                            d="M13.3714 15.8125H10.3189C9.94311 15.8125 9.63144 15.5008 9.63144 15.125C9.63144 14.7492 9.94311 14.4375 10.3189 14.4375H13.3714C13.7473 14.4375 14.0589 14.7492 14.0589 15.125C14.0589 15.5008 13.7473 15.8125 13.3714 15.8125ZM14.1414 12.1458H9.55811C9.18227 12.1458 8.87061 11.8342 8.87061 11.4583C8.87061 11.0825 9.18227 10.7708 9.55811 10.7708H14.1414C14.5173 10.7708 14.8289 11.0825 14.8289 11.4583C14.8289 11.8342 14.5173 12.1458 14.1414 12.1458Z"
+                                                                            fill="#EB6247"></path>
+                                                                    </svg>
+                                                                    <div class="tooltip">
+                                                                        <p>Delete</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="edit_svg cursor-pointer custom_tooltip"
+                                                                    (click)="editCertificateItem(i)">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23"
+                                                                        height="23" viewBox="0 0 18 17" fill="none">
+                                                                        <path
+                                                                            d="M3.16669 13.5024H6.70002C6.80969 13.503 6.91841 13.482 7.01994 13.4406C7.12147 13.3991 7.21382 13.338 7.29169 13.2607L13.0584 7.48574L15.425 5.16908C15.5031 5.09161 15.5651 4.99944 15.6074 4.89789C15.6497 4.79634 15.6715 4.68742 15.6715 4.57741C15.6715 4.4674 15.6497 4.35848 15.6074 4.25693C15.5651 4.15538 15.5031 4.06321 15.425 3.98574L11.8917 0.410744C11.8142 0.332637 11.7221 0.270642 11.6205 0.228335C11.519 0.186027 11.41 0.164246 11.3 0.164246C11.19 0.164246 11.0811 0.186027 10.9795 0.228335C10.878 0.270642 10.7858 0.332637 10.7084 0.410744L8.35835 2.76908L2.57502 8.54408C2.49779 8.62195 2.43668 8.71429 2.39521 8.81582C2.35374 8.91735 2.33272 9.02607 2.33335 9.13575V12.6691C2.33335 12.8901 2.42115 13.1021 2.57743 13.2583C2.73371 13.4146 2.94567 13.5024 3.16669 13.5024ZM11.3 2.17741L13.6584 4.53574L12.475 5.71908L10.1167 3.36074L11.3 2.17741ZM4.00002 9.47741L8.94169 4.53574L11.3 6.89408L6.35835 11.8357H4.00002V9.47741ZM16.5 15.1691H1.50002C1.27901 15.1691 1.06705 15.2569 0.910765 15.4132C0.754484 15.5694 0.666687 15.7814 0.666687 16.0024C0.666687 16.2234 0.754484 16.4354 0.910765 16.5917C1.06705 16.7479 1.27901 16.8357 1.50002 16.8357H16.5C16.721 16.8357 16.933 16.7479 17.0893 16.5917C17.2456 16.4354 17.3334 16.2234 17.3334 16.0024C17.3334 15.7814 17.2456 15.5694 17.0893 15.4132C16.933 15.2569 16.721 15.1691 16.5 15.1691Z"
+                                                                            fill="#FFAD0E" />
+                                                                    </svg>
+                                                                    <div class="tooltip">
+                                                                        <p>Edit</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody>
+
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Professional Details -->
+                        <div class="mt-3">
+                            <div class="card card-style-1 rounded-3">
+                                <div class="card-header justify-content-start  p-2 border-0">
+                                    <h6 class="card-heading">Professional Details</h6>
+                                </div>
+                                <div class="card-body" [formGroup]="ProfessionalDetails">
+                                    <div class="row mx-0 align-items-start">
+                                        <div class="col-md-2 ps-0">
+                                            <label for="" class="form-label">License No.</label>
+                                            <input type="text" class="form-control" placeholder="License No"
+                                                appAuditLog="License No." formControlName="empLicenseNo">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="" class="form-label">Institute</label>
+                                            <input type="text" class="form-control" placeholder="Institute"
+                                                appAuditLog="Institute" formControlName="empInstitute1">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="" class="form-label">Issue Place</label>
+                                            <input type="text" class="form-control" placeholder="Issue Place"
+                                                appAuditLog="Issue Place" formControlName="empIssuePlace">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="" class="form-label">Issue Date</label>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                <input matInput class="" formControlName="empIssueDate"
+                                                    appAuditLog="Issue Date" (click)="empIssDate.open()"
+                                                    [matDatepicker]="empIssDate">
+                                                <mat-datepicker-toggle matSuffix [for]="empIssDate">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #empIssDate></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="" class="form-label">Expiry Date</label>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                <input matInput class="" formControlName="empExpDate"
+                                                    appAuditLog="Expiry Date" (click)="empExpDate.open()"
+                                                    [matDatepicker]="empExpDate">
+                                                <mat-datepicker-toggle matSuffix [for]="empExpDate">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #empExpDate></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-2 align-self-center mt-3">
+                                            <button class="btn btn-main-outline"
+                                                (click)="addProfessionalItem()">Add</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>License No.</th>
+                                                    <th>Institute</th>
+                                                    <th>Issue Place</th>
+                                                    <th>Issue Date</th>
+                                                    <th>Expiry Date</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of pDetails; let i = index">
+                                                    <td>{{ item.empLicenseNo }}</td>
+                                                    <td>{{ item.empInstitute1 }}</td>
+                                                    <td>{{ item.empIssuePlace }}</td>
+                                                    <td>{{ item.empIssueDate | date: 'dd-MMM-yyyy' }}</td>
+                                                    <td>{{ item.empExpDate | date: 'dd-MMM-yyyy' }}</td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <div class="del_svg cursor-pointer custom_tooltip"
+                                                                (click)="deleteProfessionalItem(i)">
+                                                                <svg width="23" height="22" viewBox="0 0 23 22"
+                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path
+                                                                        d="M20.0995 6.16917H20.0261C15.177 5.68334 10.337 5.5 5.5428 5.98584L3.6728 6.16917C3.58184 6.17866 3.48989 6.17003 3.40228 6.14377C3.31467 6.11751 3.23314 6.07414 3.16239 6.01618C3.09164 5.95822 3.03308 5.8868 2.9901 5.80607C2.94712 5.72534 2.92056 5.63689 2.91197 5.54584C2.8753 5.16084 3.1503 4.83084 3.52614 4.79417L5.39614 4.61084C10.2728 4.11584 15.2136 4.30834 20.1636 4.79417C20.5395 4.83084 20.8145 5.17 20.7778 5.54584C20.764 5.71605 20.6864 5.87477 20.5607 5.99032C20.4349 6.10586 20.2702 6.16973 20.0995 6.16917Z"
+                                                                        fill="#EB6247"></path>
+                                                                    <path
+                                                                        d="M8.64147 5.24333C8.6048 5.24333 8.56813 5.24333 8.5223 5.23416C8.34445 5.20211 8.18627 5.10159 8.08172 4.95419C7.97717 4.80679 7.93459 4.62427 7.96313 4.44583L8.1648 3.24499C8.31147 2.36499 8.51313 1.14583 10.649 1.14583H13.0506C15.1956 1.14583 15.3973 2.41083 15.5348 3.25416L15.7365 4.44583C15.8006 4.82166 15.544 5.17916 15.1773 5.23416C14.8015 5.29833 14.444 5.04166 14.389 4.67499L14.1873 3.48333C14.059 2.68583 14.0315 2.52999 13.0598 2.52999H10.6581C9.68647 2.52999 9.66813 2.65833 9.53063 3.47416L9.3198 4.66583C9.29369 4.82694 9.2111 4.97351 9.08683 5.07931C8.96255 5.18512 8.80468 5.24325 8.64147 5.24333ZM14.7923 20.856H8.9073C5.70813 20.856 5.5798 19.0868 5.47897 17.6568L4.88313 8.42599C4.85563 8.05016 5.14897 7.72016 5.5248 7.69266C5.9098 7.67433 6.23063 7.95849 6.25813 8.33433L6.85397 17.5652C6.9548 18.9585 6.99147 19.481 8.9073 19.481H14.7923C16.7173 19.481 16.754 18.9585 16.8456 17.5652L17.4415 8.33433C17.469 7.95849 17.799 7.67433 18.1748 7.69266C18.5506 7.72016 18.844 8.041 18.8165 8.42599L18.2206 17.6568C18.1198 19.0868 17.9915 20.856 14.7923 20.856Z"
+                                                                        fill="#EB6247"></path>
+                                                                    <path
+                                                                        d="M13.3714 15.8125H10.3189C9.94311 15.8125 9.63144 15.5008 9.63144 15.125C9.63144 14.7492 9.94311 14.4375 10.3189 14.4375H13.3714C13.7473 14.4375 14.0589 14.7492 14.0589 15.125C14.0589 15.5008 13.7473 15.8125 13.3714 15.8125ZM14.1414 12.1458H9.55811C9.18227 12.1458 8.87061 11.8342 8.87061 11.4583C8.87061 11.0825 9.18227 10.7708 9.55811 10.7708H14.1414C14.5173 10.7708 14.8289 11.0825 14.8289 11.4583C14.8289 11.8342 14.5173 12.1458 14.1414 12.1458Z"
+                                                                        fill="#EB6247"></path>
+                                                                </svg>
+                                                                <div class="tooltip">
+                                                                    <p>Delete</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="edit_svg cursor-pointer custom_tooltip"
+                                                                (click)="editProfessionalItem(i)">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="23"
+                                                                    height="23" viewBox="0 0 18 17" fill="none">
+                                                                    <path
+                                                                        d="M3.16669 13.5024H6.70002C6.80969 13.503 6.91841 13.482 7.01994 13.4406C7.12147 13.3991 7.21382 13.338 7.29169 13.2607L13.0584 7.48574L15.425 5.16908C15.5031 5.09161 15.5651 4.99944 15.6074 4.89789C15.6497 4.79634 15.6715 4.68742 15.6715 4.57741C15.6715 4.4674 15.6497 4.35848 15.6074 4.25693C15.5651 4.15538 15.5031 4.06321 15.425 3.98574L11.8917 0.410744C11.8142 0.332637 11.7221 0.270642 11.6205 0.228335C11.519 0.186027 11.41 0.164246 11.3 0.164246C11.19 0.164246 11.0811 0.186027 10.9795 0.228335C10.878 0.270642 10.7858 0.332637 10.7084 0.410744L8.35835 2.76908L2.57502 8.54408C2.49779 8.62195 2.43668 8.71429 2.39521 8.81582C2.35374 8.91735 2.33272 9.02607 2.33335 9.13575V12.6691C2.33335 12.8901 2.42115 13.1021 2.57743 13.2583C2.73371 13.4146 2.94567 13.5024 3.16669 13.5024ZM11.3 2.17741L13.6584 4.53574L12.475 5.71908L10.1167 3.36074L11.3 2.17741ZM4.00002 9.47741L8.94169 4.53574L11.3 6.89408L6.35835 11.8357H4.00002V9.47741ZM16.5 15.1691H1.50002C1.27901 15.1691 1.06705 15.2569 0.910765 15.4132C0.754484 15.5694 0.666687 15.7814 0.666687 16.0024C0.666687 16.2234 0.754484 16.4354 0.910765 16.5917C1.06705 16.7479 1.27901 16.8357 1.50002 16.8357H16.5C16.721 16.8357 16.933 16.7479 17.0893 16.5917C17.2456 16.4354 17.3334 16.2234 17.3334 16.0024C17.3334 15.7814 17.2456 15.5694 17.0893 15.4132C16.933 15.2569 16.721 15.1691 16.5 15.1691Z"
+                                                                        fill="#FFAD0E" />
+                                                                </svg>
+                                                                <div class="tooltip">
+                                                                    <p>Edit</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Contact Details -->
+                        <div class="mt-3" #contact>
+                            <div class="card card-style-1 rounded-3">
+                                <div class="card-header justify-content-start  p-2 border-0">
+                                    <h6 class="card-heading">Contact Details</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mx-0">
+                                        <div class="col-md-6 ps-0">
+                                            <div class="card card-style-1 rounded-3">
+                                                <div class="card-header justify-content-start  p-2 border-0">
+                                                    <h6 class="card-heading">Present Address</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row g-2 mx-0">
+                                                        <div class="col-md-12">
+                                                            <label for="" class="form-label" required="">Address</label>
+                                                            <textarea name="" id="" cols="" rows="4"
+                                                                appAuditLog="Address" class="form-control"
+                                                                spellcheck="false" placeholder="Address"
+                                                                formControlName="empPresentAddress"></textarea>
+                                                        </div>
+                                                        <div class="col-lg-6 ps-0">
+                                                            <label for="" class="form-label" required="">City</label>
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control"
+                                                                    appAuditLog="City"
+                                                                    formControlName="empPresentCityToShow"
+                                                                    [matAutocomplete]="cityauto" placeholder="City"
+                                                                    (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchCity($event)">
+                                                                <mat-autocomplete #cityauto="matAutocomplete">
+                                                                    <mat-option *ngFor="let item of cityList"
+                                                                        (onSelectionChange)="onPresentCitySelected(item)">
+                                                                        {{item.City}}
+                                                                    </mat-option>
+                                                                </mat-autocomplete>
+                                                                <button type="button" id="button-addon2"
+                                                                    class="btn btn-secondary-fill btn-icon">
+                                                                    <img src="assets/images/icons/icon-search.svg"
+                                                                        alt="">
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <label for="" class="form-label">State</label>
+                                                            <input type="text" class="form-control" readonly
+                                                                appAuditLog="State" placeholder="State"
+                                                                formControlName="empPresentState">
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <label for="" class="form-label">Country</label>
+                                                            <input type="text" class="form-control" readonly
+                                                                appAuditLog="Country" placeholder="Country"
+                                                                formControlName="empPresentCountry">
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <label for="" class="form-label">Pin/Zip Code</label>
+                                                            <input type="text" class="form-control"
+                                                                appAuditLog="Pin/Zip Code" placeholder="Pin Code"
+                                                                formControlName="empPresentPinCode">
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <label for="" class="form-label" required="">Phone </label>
+                                                            <input type="text" class="form-control" placeholder="Phone"
+                                                                appAuditLog="Phone" formControlName="empPresentPhone">
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <label for="" class="form-label" required="">Mobile </label>
+                                                            <input type="text" class="form-control" placeholder="Phone"
+                                                                appAuditLog="Mobile" formControlName="empPresentMobile">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card card-style-1 rounded-3">
+                                                <div class="card-header justify-content-between  p-2 border-0">
+                                                    <h6 class="card-heading">Permanent Address</h6>
+                                                    <div [class.active]="empForm.get('sameaspresent')?.value"
+                                                        (click)="copyPresentToPermanent()"
+                                                        class="custom_check d-flex align-items-center gap-2">
+                                                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                            <path
+                                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                                        </svg>
+                                                        <p class="m-0 fs-7">Same as present</p>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row g-2 mx-0">
+                                                        <div class="col-md-12">
+                                                            <label for="" class="form-label" required="">Address</label>
+                                                            <textarea name="" id="" cols="" rows="4"
+                                                                appAuditLog="PermAddress" class="form-control"
+                                                                spellcheck="false" placeholder="Address"
+                                                                formControlName="empPermanentAddress"></textarea>
+                                                        </div>
+                                                        <div class="col-lg-6 ps-0">
+                                                            <label for="" class="form-label" required="">City</label>
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control"
+                                                                    appAuditLog="PermCity"
+                                                                    [matAutocomplete]="cityPermauto"
+                                                                    formControlName="empPermanentCity"
+                                                                    placeholder="City"
+                                                                    (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchCity($event)">
+                                                                <mat-autocomplete #cityPermauto="matAutocomplete">
+                                                                    <mat-option *ngFor="let item of cityList"
+                                                                        (onSelectionChange)="onCitySelected(item)">
+                                                                        {{item.City}}
+                                                                    </mat-option>
+                                                                </mat-autocomplete>
+                                                                <button type="button" id="button-addon2"
+                                                                    class="btn btn-secondary-fill btn-icon">
+                                                                    <img src="assets/images/icons/icon-search.svg"
+                                                                        alt="">
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <label for="" class="form-label">State</label>
+                                                            <input type="text" class="form-control" readonly
+                                                                appAuditLog="PermState" placeholder="State"
+                                                                formControlName="empPermanentState">
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <label for="" class="form-label">Country</label>
+                                                            <input type="text" class="form-control" readonly
+                                                                appAuditLog="PermCountry" placeholder="Country"
+                                                                formControlName="empPermanentCountry">
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <label for="" class="form-label">Pin/Zip Code</label>
+                                                            <input type="text" class="form-control"
+                                                                appAuditLog="PermPin/Zip Code" placeholder="Pin code"
+                                                                formControlName="empPermanentPinCode">
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <label for="" class="form-label" required="">Phone </label>
+                                                            <input type="text" class="form-control" placeholder="Phone"
+                                                                appAuditLog="PermPhone"
+                                                                formControlName="empPermanentPhone">
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <label for="" class="form-label" required="">Mobile </label>
+                                                            <input type="text" class="form-control" placeholder="Phone"
+                                                                appAuditLog="PermMobile"
+                                                                formControlName="empPermanentMobile">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3" #contact>
+                            <div class="card card-style-1 rounded-3">
+                                <div class="card-header justify-content-start  p-2 border-0">
+                                    <h6 class="card-heading">Doctor Profile</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mx-0 g-2">
+                                        <!-- <div class="col-3">
+                                            <label for="" class="form-label">Language</label>
+                                            <select name="" class="form-select pe-4" id="">
+                                                <option value="">English</option>
+                                                <option value="">Hindi</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-3">
+                                            <label for="" class="form-label">Language2L</label>
+                                            <select name="" class="form-select pe-4" id="">
+                                                <option value="">English</option>
+                                                <option value="">Hindi</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-3">
+                                            <label for="" class="form-label">License</label>
+                                            <select name="" class="form-select pe-4" id="">
+                                                <option value="">Select</option>
+                                                <option value="">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-3">
+                                            <label for="" class="form-label">License</label>
+                                            <select name="" class="form-select pe-4" id="">
+                                                <option value="">Select</option>
+                                                <option value="">Select</option>
+                                            </select>
+                                        </div> -->
+                                        <div class="col-3">
+                                            <label for="" class="form-label">Special Note</label>
+                                            <!-- <span name="" class="form-control textarea_box_single" id="" resize-none contenteditable="true"  ></span> -->
+                                            <textarea name="" id="" cols="" rows="3" appAuditLog="Special Note"
+                                                formControlName="SpecialNote" class="form-control"></textarea>
+                                        </div>
+                                        <div class="col-3">
+                                            <label for="" class="form-label">Special Note Arabic</label>
+                                            <!-- <span name="" class="form-control textarea_box_single" id="" resize-none contenteditable="true"  ></span> -->
+                                            <textarea name="" id="" cols="" rows="3" appAuditLog="Special Note"
+                                                formControlName="SpecialNote2L" class="form-control"></textarea>
+                                        </div>
+                                        <!-- <div class="col-3">
+                                            <label for="" class="form-label">Qualification</label>
+                                            <select name="" class="form-select pe-4" id="">
+                                                <option value="">Select</option>
+                                                <option value="">Select</option>
+                                            </select>
+                                        </div> -->
+                                        <div class="col-3">
+                                            <label for="" class="form-label">Qualification Description</label>
+                                            <!-- <span name="" class="form-control textarea_box_single" id="" resize-none contenteditable="true"  ></span> -->
+                                            <textarea name="" id="" cols="" rows="3" appAuditLog="QualificationDisc"
+                                                formControlName="QualificationDisc" class="form-control"></textarea>
+                                        </div>
+                                        <div class="col-3">
+                                            <label for="" class="form-label">Qualification Description Arabic</label>
+                                            <!-- <span name="" class="form-control textarea_box_single" id="" resize-none contenteditable="true"  ></span> -->
+                                            <textarea name="" id="" cols="" rows="3" appAuditLog="QualificationDisc2L"
+                                                formControlName="QualificationDisc2L" class="form-control"></textarea>
+                                        </div>
+                                        <div class="col-3">
+                                            <label for="" class="form-label">Cases To Be Seen</label>
+                                            <!-- <span name="" class="form-control textarea_box_single" id="" resize-none contenteditable="true"  ></span> -->
+                                            <textarea name="" id="" cols="" rows="3" appAuditLog="CasesToBeSeen"
+                                                formControlName="CasesToBeSeen" class="form-control"></textarea>
+                                        </div>
+                                        <div class="col-3">
+                                            <label for="" class="form-label">Cases To Be Seen Arabic</label>
+                                            <!-- <span name="" class="form-control textarea_box_single" id="" resize-none contenteditable="true"  ></span> -->
+                                            <textarea name="" id="" cols="" rows="3" appAuditLog="CasesToBeSeen2L"
+                                                formControlName="CasesToBeSeen2L" class="form-control"></textarea>
+                                        </div>
+                                        <div class="col-3">
+                                            <label for="" class="form-label">Age Groups</label>
+                                            <!-- <span name="" class="form-control textarea_box_single" id="" resize-none contenteditable="true"  ></span> -->
+                                            <textarea name="" id="" cols="" rows="3" appAuditLog="AgeGroups"
+                                                formControlName="AgeGroups" class="form-control"></textarea>
+                                        </div>
+                                        <div class="col-3">
+                                            <label for="" class="form-label">Age Groups Arabic</label>
+                                            <!-- <span name="" class="form-control textarea_box_single" id="" resize-none contenteditable="true"  ></span> -->
+                                            <textarea name="" id="" cols="" rows="3" appAuditLog="AgeGroups2L"
+                                                formControlName="AgeGroups2L" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <div class="modal" id="savemsg" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+            <div class="modal-content">
+                <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+                <div class="modal-body">
+                    <p>Saved successfully</p>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                            data-bs-dismiss="modal">Ok</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="SucessMsg" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+            <div class="modal-content">
+                <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+                <div class="modal-body">
+                    <p>{{SucessMsg}}</p>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                            data-bs-dismiss="modal">Ok</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="errorMessagesModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+            <div class="modal-content">
+                <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+                <div class="modal-body">
+                    <p class="my-1 fs-8 fw-bold">Following Fields are Mandatory</p>
+                    <p *ngIf="errorMessages.length === 1">{{errorMessages[0]}}</p>
+                    <ul *ngIf="errorMessages.length > 1">
+                        <li *ngFor="let error of errorMessages; let i = index"> {{error}}</li>
+                    </ul>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                            data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal mapDiagnosisMedicationdiv" data-bs-backdrop="static" data-bs-keyboard="false"
+        id="EmployeeHospitalLocations" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" translate>Map Locations</h5>
+                    <div class="ms-auto d-flex align-items-center">
+                        <a type="button" class="btn btn-main-outline" (click)="SaveEmployeeHospitals()"
+                            data-bs-dismiss="modal">Save</a>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeEmpMapLocation()"
+                            aria-label="Close"></button>
+                    </div>
+
+                </div>
+                <div class="modal-body px-0">
+                    <div class="mapDiagnosisMedicationdiv_table px-3">
+                        <div class="border-primary-200 rounded-2 p-2 mb-3">
+                            <div class="col-md-12 d-flex pt-3" *ngFor="let view of hospitalLocations;let i=index">
+                                <div class="custom_check d-flex align-items-center gap-2 px-3"
+                                    [class.active]="view.selected" (click)="selectLocation(view)">
+                                    <svg width="19" height="19" viewBox="0 0 20 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                        <path
+                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-break">{{view.Name}}</p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="doctorSignatureSavedMsg" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+            <div class="modal-content">
+                <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+                <div class="modal-body">
+                    <p>Doctor Signature Saved Succesfully</p>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                            (click)="clearEmployeeInfo()" data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="errorMsg" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+            <div class="modal-content">
+                <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+                <div class="modal-body">
+                    <p>{{errorMsg}}</p>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                            (click)="clearEmployeeInfo()" data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<div class="modal blockedReason_modal" id="blockedReason_modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 26rem;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" translate>Blocked</h5>
+                <div class="ms-auto d-flex align-items-center">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeEmployeeSignature()"
+                        aria-label="Close"></button>
+                </div>
+
+            </div>
+            <div class="modal-body p-3 d-flex flex-column gap-2">
+                <div>
+                    <label for="" class="form-label m-0">Reason</label>
+                    <select name="" class="form-select" id="">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="" class="form-label m-0">Block Date</label>
+                    <input type="date" class="form-control">
+                </div>
+                <div>
+                    <label for="" class="form-label m-0">Remarks</label>
+                    <span class="textarea_box textarea_box_single p-2 rounded-2 bg-transparent border d-block w-100"
+                        contenteditable="true"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

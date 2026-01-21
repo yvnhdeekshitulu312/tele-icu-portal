@@ -1,0 +1,453 @@
+<app-header [InputHome]="true" [IsSwitchWard]="false"></app-header>
+<div class="" (click)="onBodyClick($event)">
+    <div class="page-header sticky-top bg-primary-50 shadow-sm justify-content-between">
+        <h2 class="page-heading col-4"> Admission Assignment Worklist </h2>
+        <div class="d-flex align-items-center gap-2">
+
+            <div class="d-flex align-items-center gap-2 ms-3">
+
+                <div class="d-flex align-items-center gap-2">
+                    <label for="" class="form-label m-0 fw-bold clr-dark-600 text-nowrap">Counter</label>
+                    <select id="counter" class="form-select bg-transparent border-primary-300 clr-primary-600 pe-5"
+                        (change)="onCounterChange($event)">
+                        <option value="0" selected translate>Counter</option>
+
+                        <option value="202161717">01</option>
+                        <option value="202161718">02</option>
+                        <option value="202161719">03</option>
+                        <option value="202161720">04</option>
+                        <option value="202161721">05</option>
+
+
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center d-none">
+                <button class="btn">Manual</button>
+                <button class="btn selected">Automatic</button>
+            </div>
+            <div class="cursor-pointer" (click)="Refresh()">
+                <svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_12447_17303)">
+                        <circle cx="16" cy="16.1666" r="15.5" fill="#FCEBE8" stroke="#E53C1A" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M17.9975 8.4421C19.6247 8.87822 21.0352 9.79888 22.0854 11.0732V8.16953H23.8632V14.3919H17.6409V12.6142H21.0293C20.1923 11.4086 18.9716 10.5437 17.5375 10.1595C15.9314 9.72926 14.2552 9.94975 12.8159 10.781C11.4276 11.5824 10.4262 12.8619 9.97044 14.3919H8.13623C8.14509 14.3532 8.1528 14.3144 8.1605 14.2756C8.1722 14.2167 8.1839 14.1578 8.1996 14.0992C8.75273 12.035 10.0765 10.3098 11.927 9.24141C13.7779 8.17301 15.9342 7.88967 17.9975 8.4421ZM14.4622 22.1734C16.0683 22.6036 17.7445 22.3829 19.1838 21.5517C20.5721 20.7503 21.5735 19.471 22.0293 17.9409H23.8635C23.8546 17.9797 23.8469 18.0185 23.8392 18.0573C23.8275 18.1162 23.8158 18.1751 23.8001 18.2336C23.247 20.2979 21.9232 22.0229 20.0727 23.0913C18.2218 24.1597 16.0655 24.4432 14.0022 23.8906C12.375 23.4546 10.9645 22.534 9.9143 21.2597V24.1632H8.13652V17.9409H14.3588V19.7187H10.9704C11.8075 20.9243 13.0281 21.7892 14.4622 22.1734Z"
+                            fill="#E53C1A" />
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-2">
+
+        <div class="row g-2 pharmacist_token">
+            <div class="col" (click)="fetchAdmissionTokenGeneration('0')">
+                <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center">
+                    <div class="count total_tokenAA d-flex align-items-center gap-2">
+                        <h4 class="m-0 fw-bold">{{PharmacyTokenDataTotalList[0]?.TotalTokens}}</h4>
+                        <p class="m-0 fs-6 fw-bold">Total Tokens</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col cursor-pointer" (click)="fetchAdmissionTokenGeneration('1')">
+                <div class="walkin_cards p-2 border shadow-sm purple d-flex align-items-center">
+                    <div class="count pending_tokenAA d-flex align-items-center gap-2">
+                        <h4 class="m-0 fw-bold">{{PharmacyTokenDataTotalList[0]?.Pending}}</h4>
+                        <p class="m-0 fs-6 fw-bold">Pending Tokens</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col cursor-pointer" (click)="fetchAdmissionTokenGeneration('2')">
+                <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center">
+                    <div class="count assign_tokenAA d-flex align-items-center gap-2">
+                        <h4 class="m-0 fw-bold">{{PharmacyTokenDataTotalList[0]?.Assigned}}</h4>
+                        <p class="m-0 fs-6 fw-bold">Assigned Tokens</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col cursor-pointer" (click)="fetchAdmissionTokenGeneration('3')">
+                <div class="walkin_cards p-2 border shadow-sm purple d-flex align-items-center">
+                    <div class="count dispatch_tokenAA d-flex align-items-center gap-2">
+                        <h4 class="m-0 fw-bold">{{PharmacyTokenDataTotalList[0]?.Dispatched}}</h4>
+                        <p class="m-0 fs-6 fw-bold">Closed Tokens</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-primary-200 rounded-3 mt-3">
+
+            <div class="p-2 border-top-primary-200">
+                <h6 class="clr-primary-600 m-0 fw-bold" *ngIf="selectedStatusID === '1'">Pending Tokens</h6>
+                <h6 class="clr-primary-600 m-0 fw-bold" *ngIf="selectedStatusID === '2'">Assigned Tokens</h6>
+                <h6 class="clr-primary-600 m-0 fw-bold" *ngIf="selectedStatusID === '4'">Dispatched Tokens</h6>
+            </div>
+            <div class="assigned_tokens">
+                <div class="assigned_tokens_header bg-primary-50 d-flex gap-2 p-1 px-2">
+                    <div class="" style="width: 25rem;">
+                        <label for="" class="form-label fw-bold clr-primary-600 m-0">Patient Deatils</label>
+                    </div>
+                    <div class="row g-2 w-100 me-0">
+                        <!-- <div class="" style="width: 15%;">
+                            <label for="" class="form-label fw-bold clr-primary-600 m-0">Admission Number</label>
+                        </div> -->
+                        <div class="" style="width: 15%;">
+                            <label for="" class="form-label fw-bold clr-primary-600 m-0">Company Name</label>
+                        </div>
+                        <div class="" style="width: 18%;">
+                            <label for="" class="form-label fw-bold clr-primary-600 m-0">Insurance Company</label>
+                        </div>
+                        <div class="" style="width: 15%;">
+                            <label for="" class="form-label fw-bold clr-primary-600 m-0">Doctor</label>
+                        </div>
+                        <div class="" style="width: 10%;">
+                            <label for="" class="form-label fw-bold clr-primary-600 m-0">Specialisation</label>
+                        </div>
+                        <div class="" style="width: 10%;">
+                            <label for="" class="form-label fw-bold clr-primary-600 m-0">Token Type</label>
+                        </div>
+                        <div class="" style="width: 12%;">
+                            <label for="" class="form-label fw-bold clr-primary-600 m-0">Token Number</label>
+                        </div>
+                        <div class="" style="width: 6%;">
+                        </div>
+                        <div class="" style="width: 5%;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="assigned_tokens_body p-2 d-flex flex-column gap-2">
+                    <div class="sticky_patient_info border-primary-200 rounded"
+                        *ngFor="let token of FetchAdmissionTokenGenerationDataList">
+                        <div class="patient_card d-flex justify-content-between border-0 rounded">
+                            <div class="d-flex align-items-center gap-2 w-100 rounded">
+                                <div class="bg-primary-50 h-100 rounded-start" style="width: 26rem;">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="patient-info d-flex align-items-center py-1">
+                                            <div class="patient-photo mx-2">
+                                                <img *ngIf="token.Gender.toLowerCase() === 'female'"
+                                                    src="assets/images/icons/female.svg" alt=""
+                                                    class="position-relative ng-star-inserted" style="height: 1.5rem;">
+                                                <img *ngIf="token.Gender.toLowerCase() === 'male'"
+                                                    src="assets/images/icons/male.svg" alt=""
+                                                    class="position-relative ng-star-inserted" style="height: 1.5rem;">
+                                            </div>
+                                            <div>
+                                                <p class="value fs-7 fw-bold w-100">{{token.PatientName}}</p>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <p>{{token.Gender}} | <span>{{token.FullAge}}</span></p>
+                                                    <p><b>ID No.</b> : <span>{{token.SSN}}</span></p>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p><b>DOB</b> :</p>
+                                                    <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                            fill="#368796" />
+                                                    </svg>
+                                                    <p class="m-0 fw-bold text-nowrap">
+                                                        {{token.DOB}}</p>
+                                                </div>
+
+                                                <div class="d-flex align-items-center justify-content-between"
+                                                    style="line-height: 1;">
+                                                    <p class="m-0 fs-8">{{token.Nationality}} | Mobile :
+                                                        {{token.MobileNo}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-2 py-1 w-100 me-0">
+                                    <!-- <div class="" style="width: 15%;">
+                                        <p for="" class="m-0">{{token.AdmissionNumber}}</p>
+                                    </div> -->
+                                    <div class="" style="width: 15%;">
+                                        <p for="" class="m-0">{{token.CompanyName}}</p>
+                                    </div>
+                                    <div class="" style="width: 18%;">
+                                        <p for="" class="m-0">{{token.InsuranceCompanyName}}</p>
+                                    </div>
+                                    <div class="" style="width: 15%;">
+                                        <p for="" class="m-0">{{token.Doctor}}</p>
+                                    </div>
+                                    <div class="" style="width: 10%;">
+                                        <p for="" class="m-0">{{token.Specialisation}}</p>
+                                    </div>
+                                    <div class="" style="width: 10%;">
+                                        <p for="" class="m-0 color-highlight">{{token.ATypeName}}</p>
+                                    </div>
+                                    <div class="" style="width: 7%;">
+                                        <p for="" class="m-0 fw-bold">{{token.TrayNumber}}</p>
+                                    </div>
+                                    <div class="custom_tooltip custom_tooltip_left" style="width: 6%;"
+                                        (click)="token.isclicked = true" *ngIf="token.Status === '1'">
+                                        <svg *ngIf="!token.isclicked" class="cursor-pointer" width="28" height="29"
+                                            viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect y="0.5" width="28" height="28" rx="14" fill="#B4DDE4" />
+                                            <path
+                                                d="M14.1493 8.68164H13.8069C12.6488 8.68163 11.7189 8.68161 10.9885 8.77982C10.2317 8.88156 9.60024 9.09848 9.09949 9.59924C8.59872 10.1 8.38181 10.7315 8.28006 11.4883C8.18186 12.2187 8.18187 13.1484 8.18189 14.3066L8.18189 14.693C8.18187 15.8511 8.18186 16.781 8.28006 17.5113C8.38181 18.2681 8.59872 18.8997 9.09949 19.4004C9.60024 19.9012 10.2317 20.1181 10.9885 20.2198C11.719 20.318 12.6487 20.318 13.8069 20.318H14.1932C15.3514 20.318 16.2812 20.318 17.0116 20.2198C17.7684 20.1181 18.3999 19.9012 18.9007 19.4004C19.4014 18.8997 19.6183 18.2681 19.7201 17.5113C19.8183 16.7809 19.8183 15.8512 19.8182 14.693V14.3506C19.8182 14.0211 19.5511 13.7539 19.2215 13.7539C18.8919 13.7539 18.6248 14.0211 18.6248 14.3506V14.649C18.6248 15.8614 18.6235 16.7107 18.5372 17.3523C18.4533 17.9768 18.2988 18.3144 18.0567 18.5565C17.8147 18.7985 17.477 18.953 16.8526 19.037C16.2109 19.1233 15.3617 19.1245 14.1493 19.1245H13.8509C12.6385 19.1245 11.7892 19.1233 11.1476 19.037C10.5231 18.953 10.1854 18.7985 9.94339 18.5565C9.70134 18.3144 9.54685 17.9768 9.46288 17.3523C9.37663 16.7107 9.37536 15.8614 9.37536 14.649V14.3506C9.37536 13.1382 9.37663 12.2889 9.46288 11.6473C9.54685 11.0229 9.70134 10.6852 9.94339 10.4431C10.1854 10.2011 10.5231 10.0466 11.1476 9.96264C11.7892 9.87638 12.6385 9.87511 13.8509 9.87511H14.1493C14.4788 9.87511 14.746 9.60794 14.746 9.27838C14.746 8.94881 14.4788 8.68164 14.1493 8.68164Z"
+                                                fill="#368796" />
+                                            <path
+                                                d="M19.3866 9.11335C19.7633 9.49004 19.7633 10.1008 19.3866 10.4775L18.6463 11.2178L17.2822 9.85364L18.0225 9.11335C18.3992 8.73665 19.0099 8.73665 19.3866 9.11335Z"
+                                                fill="#368796" />
+                                            <path
+                                                d="M12.7783 16.1176L13.6028 16.0408C13.8106 16.0215 14.0052 15.9301 14.1527 15.7825L17.8869 12.0483L16.5228 10.6842L12.7886 14.4184C12.641 14.566 12.5496 14.7605 12.5303 14.9684L12.4536 15.7929C12.4363 15.9789 12.5923 16.1349 12.7783 16.1176Z"
+                                                fill="#368796" />
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p class="m-0 clr-primary-600" translate>Assign Token</p>
+                                        </div>
+                                    </div>
+                                    <!-- onTokenEnterPress($event) -->
+
+
+
+
+                                    
+
+                                    <div class="custom_tooltip custom_tooltip_left" style="width: 6%;"
+                                        (click)="onTokenEnterPress(token)" *ngIf="(token.Status === '2'&&token.TicketCloseBy=='')">
+                                        <svg width="32" height="32" viewBox="0 0 32 33" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <g clip-path="url(#clip0_9247_12406)">
+                                                <circle cx="16" cy="16.2" r="16" fill="#DAEEF1" />
+                                                <path
+                                                    d="M11.6134 20.7604V23.5685H20.3868V20.7635V18.731C20.3627 18.7298 20.3385 18.7292 20.3142 18.7292H11.6858C11.6615 18.7292 11.6375 18.7298 11.6134 18.731V20.7604ZM20.2239 13.8672C19.8895 13.8672 19.6158 14.1407 19.6158 14.4753C19.6158 14.8098 19.8893 15.0836 20.2237 15.0836C20.5583 15.0836 20.832 14.81 20.832 14.4755C20.832 14.1409 20.5585 13.8672 20.2239 13.8672ZM22.0271 13.8672C21.6925 13.8672 21.4188 14.1407 21.4188 14.4753C21.4188 14.8098 21.6923 15.0836 22.0269 15.0836C22.3615 15.0836 22.6352 14.81 22.6352 14.4755C22.6352 14.1409 22.3617 13.8672 22.0271 13.8672ZM13.1532 20.0771C13.012 20.0771 12.8972 19.9625 12.8972 19.8211C12.8972 19.6798 13.012 19.5653 13.1532 19.5653H18.8472C18.9884 19.5653 19.103 19.6798 19.103 19.8211C19.103 19.9625 18.9884 20.0771 18.8472 20.0771H13.1532ZM17.2214 22.7323C17.0801 22.7323 16.9654 22.6177 16.9654 22.4765C16.9654 22.335 17.0801 22.2204 17.2214 22.2204H18.8472C18.9884 22.2204 19.103 22.335 19.103 22.4765C19.103 22.6177 18.9884 22.7323 18.8472 22.7323H17.2214ZM13.1532 21.4047C13.012 21.4047 12.8972 21.2901 12.8972 21.1487C12.8972 21.0074 13.012 20.8928 13.1532 20.8928H18.8472C18.9884 20.8928 19.103 21.0074 19.103 21.1487C19.103 21.2901 18.9884 21.4047 18.8472 21.4047H13.1532ZM20.5561 18.2323C20.5829 18.2225 20.6122 18.2172 20.6426 18.2172C20.7079 18.2172 20.7673 18.2416 20.8125 18.2816C21.153 18.3715 21.4578 18.5508 21.6999 18.7928C22.0559 19.1491 22.2764 19.6396 22.2764 20.1795V20.5111H22.528C22.792 20.5111 23.0326 20.4029 23.2063 20.2292C23.38 20.0556 23.4882 19.8151 23.4882 19.5509V14.0687C23.4882 13.8045 23.3802 13.5642 23.2067 13.3909C23.0324 13.2165 22.7922 13.1085 22.528 13.1085H20.6494H11.3508H9.47241C9.20844 13.1085 8.96835 13.2167 8.79429 13.3907C8.62024 13.5648 8.51202 13.8049 8.51202 14.0687V19.5509C8.51202 19.8151 8.62024 20.0556 8.79369 20.2292C8.96755 20.4029 9.20805 20.5111 9.47241 20.5111H9.72345V20.1795C9.72345 19.6396 9.94405 19.1491 10.2991 18.7938C10.542 18.5512 10.8474 18.3715 11.1877 18.2816C11.2329 18.2416 11.2923 18.2172 11.3574 18.2172C11.3878 18.2172 11.4171 18.2227 11.4441 18.2323C11.5233 18.2225 11.604 18.2172 11.6858 18.2172H20.3142C20.396 18.2172 20.4767 18.2225 20.5561 18.2323ZM11.1016 21.0229H9.97628H9.47241C9.06781 21.0229 8.6996 20.857 8.43325 20.5909C8.1659 20.3233 8 19.9553 8 19.5509V14.0687C8 13.6637 8.1659 13.2951 8.43245 13.0287C8.69881 12.7622 9.06721 12.5967 9.47241 12.5967H11.1016V8.57547C11.1016 8.43424 11.2162 8.31946 11.3574 8.31946H20.6426C20.784 8.31946 20.8986 8.43424 20.8986 8.57547V12.5967H22.528C22.9316 12.5967 23.2998 12.7622 23.5675 13.0297C23.8347 13.2975 24 13.6653 24 14.0687V19.5509C24 19.9553 23.8343 20.3233 23.5679 20.5899C23.3006 20.857 22.9322 21.0229 22.528 21.0229H22.0172H20.8986V23.8245C20.8986 23.9658 20.784 24.0806 20.6426 24.0806H11.3574C11.2162 24.0806 11.1016 23.9658 11.1016 23.8245V21.0229Z"
+                                                    fill="#368796" />
+                                            </g>
+                                            <defs>
+                                                <clipPath id="clip0_9247_12406">
+                                                    <rect width="32" height="32" fill="white"
+                                                        transform="translate(0 0.200012)" />
+                                                </clipPath>
+                                            </defs>
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p class="m-0 clr-primary-600" translate>Call Token</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-2" style="width: 7%;"
+                                        *ngIf="token.Status === '2' && token.Admissionid==''">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <button class="btn btn-main-outline" *ngIf="token.AType === '2'"
+                                                (click)="navigateToAdmission(token)">Admission</button>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-2" style="width: 7%;"
+                                        *ngIf="token.Status === '2' && token.TicketCloseBy==''">
+
+                                         <button class="btn btn-main-fill lh-1 fs-8" *ngIf="((token.AType === '2' && token.Admissionid==''))"
+                                                        (click)="navigateToAdmission(token)">Admission</button>
+
+
+                                        <div class="d-flex align-items-center gap-2">
+                                            <button class="btn btn-main-outline lh-1 fs-8" 
+                                                (click)="UpdateTokenClose(token)">Close Token</button>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-12" *ngIf="token.isclicked">
+                                        <div
+                                            class="bg-primary-50 rounded-2 p-2 d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="d-flex align-items-center gap-2 d-none">
+                                                    <label for=""
+                                                        class="form-label clr-primary-600 text-nowrap m-0">Tray
+                                                        Number:</label>
+                                                    <p class="fw-bold">{{token.Tokennumber}}</p>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-2"> 
+                                                    <label for=""
+                                                        class="form-label clr-primary-600 text-nowrap m-0">Employee
+                                                        Code</label>
+                                                    <input type="text" class="form-control" style="width: 7rem;" disabled
+                                                        [(ngModel)]="doctorDetails[0].EmpNo">
+                                                </div>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <label for=""
+                                                        class="form-label clr-primary-600 text-nowrap m-0">Assigned
+                                                        To</label>
+                                                    <p class="fw-bold">{{doctorDetails[0].EmployeeName}}</p>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <label for=""
+                                                        class="form-label clr-primary-600 text-nowrap m-0">Assigned
+                                                        On</label>
+                                                    <p class="fw-bold">{{ currentdate | date: 'dd-MMM-yyyy'}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <button class="btn btn-main-fill lh-1 fs-8" *ngIf="token.AType === '2'"
+                                                        (click)="navigateToAdmission(token)">Admission</button>
+                                                         <button class="btn btn-main-outline lh-1 fs-8"
+                                                        (click)="assignToken(token)">Assign</button>
+                                                    <svg class="cursor-pointer" width="28" height="29"
+                                                        (click)="token.isclicked = false" viewBox="0 0 28 29"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <rect y="0.5" width="28" height="28" rx="14" fill="#FFDFD9" />
+                                                        <path
+                                                            d="M19.9999 10.9868H19.9466C16.4199 10.6335 12.8999 10.5001 9.41328 10.8535L8.05328 10.9868C7.98712 10.9937 7.92025 10.9874 7.85653 10.9683C7.79282 10.9492 7.73352 10.9177 7.68207 10.8755C7.63061 10.8334 7.58803 10.7815 7.55676 10.7227C7.5255 10.664 7.50619 10.5997 7.49994 10.5335C7.47328 10.2535 7.67328 10.0135 7.94661 9.98681L9.30661 9.85348C12.8533 9.49348 16.4466 9.63348 20.0466 9.98681C20.3199 10.0135 20.5199 10.2601 20.4933 10.5335C20.4832 10.6573 20.4268 10.7727 20.3354 10.8567C20.2439 10.9408 20.1241 10.9872 19.9999 10.9868Z"
+                                                            fill="#EB6247" />
+                                                        <path
+                                                            d="M11.6665 10.3135C11.6399 10.3135 11.6132 10.3135 11.5799 10.3068C11.4505 10.2835 11.3355 10.2104 11.2594 10.1032C11.1834 9.99602 11.1524 9.86327 11.1732 9.7335L11.3199 8.86016C11.4265 8.22016 11.5732 7.3335 13.1265 7.3335H14.8732C16.4332 7.3335 16.5799 8.2535 16.6799 8.86683L16.8265 9.7335C16.8732 10.0068 16.6865 10.2668 16.4199 10.3068C16.1465 10.3535 15.8865 10.1668 15.8465 9.90016L15.6999 9.0335C15.6065 8.4535 15.5865 8.34016 14.8799 8.34016H13.1332C12.4265 8.34016 12.4132 8.4335 12.3132 9.02683L12.1599 9.8935C12.1409 10.0107 12.0808 10.1173 11.9904 10.1942C11.9 10.2712 11.7852 10.3134 11.6665 10.3135ZM16.1399 21.6682H11.8599C9.53318 21.6682 9.43985 20.3815 9.36652 19.3415L8.93318 12.6282C8.91318 12.3548 9.12652 12.1148 9.39985 12.0948C9.67985 12.0815 9.91318 12.2882 9.93318 12.5615L10.3665 19.2748C10.4399 20.2882 10.4665 20.6682 11.8599 20.6682H16.1399C17.5399 20.6682 17.5665 20.2882 17.6332 19.2748L18.0665 12.5615C18.0865 12.2882 18.3265 12.0815 18.5999 12.0948C18.8732 12.1148 19.0865 12.3482 19.0665 12.6282L18.6332 19.3415C18.5599 20.3815 18.4665 21.6682 16.1399 21.6682Z"
+                                                            fill="#EB6247" />
+                                                        <path
+                                                            d="M15.1063 18.0002H12.8863C12.613 18.0002 12.3863 17.7735 12.3863 17.5002C12.3863 17.2268 12.613 17.0002 12.8863 17.0002H15.1063C15.3797 17.0002 15.6063 17.2268 15.6063 17.5002C15.6063 17.7735 15.3797 18.0002 15.1063 18.0002ZM15.6663 15.3335H12.333C12.0597 15.3335 11.833 15.1068 11.833 14.8335C11.833 14.5602 12.0597 14.3335 12.333 14.3335H15.6663C15.9397 14.3335 16.1663 14.5602 16.1663 14.8335C16.1663 15.1068 15.9397 15.3335 15.6663 15.3335Z"
+                                                            fill="#EB6247" />
+                                                    </svg>
+                                                    <svg class="cursor-pointer d-none" width="28" height="29"
+                                                        viewBox="0 0 28 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <rect y="0.5" width="28" height="28" rx="14" fill="#B4DDE4" />
+                                                        <path
+                                                            d="M9.54683 19.1295V21.9802H18.4532V19.1327V17.0693C18.4288 17.0681 18.4042 17.0675 18.3795 17.0675H9.62034C9.5957 17.0675 9.57126 17.0681 9.54683 17.0693V19.1295ZM18.2878 12.1318C17.9484 12.1318 17.6705 12.4095 17.6705 12.7491C17.6705 13.0888 17.9482 13.3666 18.2876 13.3666C18.6273 13.3666 18.9052 13.089 18.9052 12.7493C18.9052 12.4097 18.6275 12.1318 18.2878 12.1318ZM20.1184 12.1318C19.7787 12.1318 19.5009 12.4095 19.5009 12.7491C19.5009 13.0888 19.7785 13.3666 20.1182 13.3666C20.4578 13.3666 20.7357 13.089 20.7357 12.7493C20.7357 12.4097 20.458 12.1318 20.1184 12.1318ZM11.11 18.4358C10.9666 18.4358 10.8501 18.3195 10.8501 18.1759C10.8501 18.0326 10.9666 17.9163 11.11 17.9163H16.8902C17.0336 17.9163 17.1499 18.0326 17.1499 18.1759C17.1499 18.3195 17.0336 18.4358 16.8902 18.4358H11.11ZM15.2398 21.1313C15.0964 21.1313 14.9799 21.015 14.9799 20.8716C14.9799 20.728 15.0964 20.6117 15.2398 20.6117H16.8902C17.0336 20.6117 17.1499 20.728 17.1499 20.8716C17.1499 21.015 17.0336 21.1313 16.8902 21.1313H15.2398ZM11.11 19.7836C10.9666 19.7836 10.8501 19.6672 10.8501 19.5237C10.8501 19.3803 10.9666 19.264 11.11 19.264H16.8902C17.0336 19.264 17.1499 19.3803 17.1499 19.5237C17.1499 19.6672 17.0336 19.7836 16.8902 19.7836H11.11ZM18.6251 16.5631C18.6523 16.5532 18.682 16.5477 18.7129 16.5477C18.7791 16.5477 18.8395 16.5726 18.8854 16.6132C19.2311 16.7044 19.5404 16.8864 19.7862 17.1321C20.1477 17.4938 20.3714 17.9918 20.3714 18.5398V18.8765H20.6269C20.8948 18.8765 21.1392 18.7666 21.3155 18.5903C21.4918 18.414 21.6016 18.1699 21.6016 17.9017V12.3364C21.6016 12.0682 21.492 11.8242 21.3159 11.6484C21.139 11.4713 20.895 11.3616 20.6269 11.3616H18.7198H9.28028H7.37339C7.10542 11.3616 6.86169 11.4715 6.68499 11.6482C6.5083 11.8249 6.39845 12.0686 6.39845 12.3364V17.9017C6.39845 18.1699 6.5083 18.414 6.68439 18.5903C6.86088 18.7666 7.10502 18.8765 7.37339 18.8765H7.62824V18.5398C7.62824 17.9918 7.85218 17.4938 8.21264 17.1331C8.4592 16.8868 8.76917 16.7044 9.11469 16.6132C9.16053 16.5726 9.22091 16.5477 9.28694 16.5477C9.31784 16.5477 9.34752 16.5534 9.37498 16.5631C9.45535 16.5532 9.53734 16.5477 9.62034 16.5477H18.3795C18.4625 16.5477 18.5445 16.5532 18.6251 16.5631ZM9.02725 19.396H7.8849H7.37339C6.96265 19.396 6.58887 19.2276 6.31848 18.9574C6.04708 18.6858 5.87866 18.3123 5.87866 17.9017V12.3364C5.87866 11.9252 6.04708 11.551 6.31767 11.2806C6.58806 11.01 6.96205 10.842 7.37339 10.842H9.02725V6.75989C9.02725 6.61652 9.14356 6.5 9.28694 6.5H18.7129C18.8565 6.5 18.9728 6.61652 18.9728 6.75989V10.842H20.6269C21.0366 10.842 21.4104 11.01 21.6822 11.2816C21.9534 11.5534 22.1212 11.9268 22.1212 12.3364V17.9017C22.1212 18.3123 21.953 18.6858 21.6826 18.9564C21.4112 19.2276 21.0372 19.396 20.6269 19.396H20.1083H18.9728V22.2401C18.9728 22.3835 18.8565 22.5 18.7129 22.5H9.28694C9.14356 22.5 9.02725 22.3835 9.02725 22.2401V19.396Z"
+                                                            fill="#368796" />
+                                                    </svg>
+                                                   
+                                                    <!-- <button class="btn btn-main-outline">Print</button> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12" *ngIf="token.Status==2||token.Status==3">
+                                        <div
+                                            class="bg-primary-50 rounded-2 p-2 gap-3 d-flex align-items-center justify-content-start">
+                                            <div class="d-flex align-items-center gap-2"
+                                                *ngIf="token.Status==2||token.Status>=3">
+                                                <label for="" class="form-label clr-primary-600 m-0 fw-bold">Assigned
+                                                    To</label>
+                                                <p>{{token.AssignedUserName}}</p>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2"
+                                                *ngIf="token.Status==2||token.Status>=3">
+                                                <label for="" class="form-label clr-primary-600 m-0 fw-bold">Assigned
+                                                    Date</label>
+                                                <p>{{token.AssignedDateTime}}</p>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2" *ngIf="token.Admissionid!=''">
+                                                <label for="" class="form-label clr-primary-600 m-0 fw-bold">Admission No.
+                                                    </label>
+                                                <p>{{token.AdmissionNumber}}</p>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2" *ngIf="token.Admissionid!=''">
+                                                <label for="" class="form-label clr-primary-600 m-0 fw-bold">Admission Date
+                                                    </label>
+                                                <p>{{token.AdmitDate}}</p>
+                                            </div>
+
+                                            <div class="d-flex align-items-center gap-2"
+                                                *ngIf="(token.Status==2||token.Status>=3)&&token.TicketCloseBy!=''">
+                                                <label for="" class="form-label clr-primary-600 m-0 fw-bold">Closed By
+                                                    </label>
+                                                <p>{{token.TicketClosedFullName}}</p>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2"
+                                                *ngIf="(token.Status==2||token.Status>=3)&&token.TicketCloseBy!=''">
+                                                <label for="" class="form-label clr-primary-600 m-0 fw-bold">Closed
+                                                    Date</label>
+                                                <p>{{token.TicketCloseDate}}</p>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="savemsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Assigned successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="iframeContainer">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Token</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="trustedUrl = ''"></button>
+            </div>
+            <div class="modal-body">
+                <iframe *ngIf="trustedUrl" height="600" width="100%" [src]="(trustedUrl ? trustedUrl :'') | safeUrl"
+                    frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+
+                <div class="errormsg" [innerHtml]="errorMessage"></div>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="Tokenmsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <div class="errormsg" [innerHtml]="TokenMessage"></div>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="counterValidation" tabindex="-1">
+   <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+      <div class="modal-content">
+         <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+         <div class="modal-body">
+            <p>Please select Counter</p>
+            <div class="modal-footer">
+               <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                  data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

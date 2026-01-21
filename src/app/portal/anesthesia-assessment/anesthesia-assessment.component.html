@@ -1,0 +1,2221 @@
+<app-generic-close *ngIf="readonly"></app-generic-close>
+<div #divanesassessment *ngIf="showContent">
+    <div class="card card-style-1">
+        <div id="medicbgtoggle_header" class="card-header py-2 justify-content-between">
+            <h6 class="m-0 clr-primary-600">Diagnosis/procedure</h6>
+            <div class="actions generalConsent_popup position-relative ms-auto d-flex align-items-center gap-2 mx-3" *ngIf="IsView">
+                <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+            </div>
+            <button id="diatoggle_btn" onclick="toggle_dia_pro()" class="btn btn-icon-3d diatoggle_btn active">
+                <img src="assets/images/icons/arrow-down.svg" alt="">
+            </button>
+        </div>
+        <div class="p-3" id="dia_pro_toggle">
+            <div class="d-flex flex-column gap-2">
+                <div id="checkbox_diagnosis" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Diagnosis</label>
+                </div>
+                <div id="checkbox_plannedprocedure" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Planned Procedure(s)</label>
+                </div>
+            </div>
+            <div class="row mx-0 mt-3">
+                <div class="col-md-12 p-0 border-primary-200">
+                    <div class="bg-primary-100 p-2 d-flex align-items-center justify-content-between">
+                        <div id="checkbox_procedurelevel" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Procedure Level</label>
+                        </div>
+                        <img src="assets/images/icons/arrow-down.svg" alt="">
+                    </div>
+                    <div class="d-flex flex-column gap-2 p-2">
+                        <div id="checkbox_elective" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Elective</label>
+                        </div>
+                        <div id="checkbox_urgent" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Urgent</label>
+                        </div>
+                        <div id="checkbox_emergency" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Emergency</label>
+                        </div>
+                        <div id="checkbox_stat" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Stat</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card card-style-1 mt-3">
+        <div id="pat_inttoggle_header" class="card-header py-2 justify-content-between">
+            <h6 class="m-0 clr-primary-600">Patient interview and Medical history</h6>
+            <button id="pat_inttoggle_btn" onclick="toggle_pat_int()" class="btn btn-icon-3d pat_inttoggle_btn active">
+                <img src="assets/images/icons/arrow-down.svg" alt="">
+            </button>
+        </div>
+        <div class="p-3" id="pat_int_toggle">
+            <div class="row mx-0">
+                <div class="col-md-12 p-0 border-primary-200">
+                    <div class="bg-primary-100 p-2 d-flex align-items-center justify-content-between">
+                        <div id="checkbox_admissionstatus" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Admission status</label>
+                        </div>
+                        <img src="assets/images/icons/arrow-down.svg" alt="">
+                    </div>
+                    <div class="d-flex flex-column gap-2 p-2">
+                        <div id="checkbox_outpatient" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Out-patient</label>
+                        </div>
+                        <div id="checkbox_inpatient" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">In-patient</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mx-0 mt-3">
+                <div class="col-md-12 p-0 border-primary-200">
+                    <div class="bg-primary-100 p-2 d-flex align-items-center justify-content-between">
+                        <div id="checkbox_anesthesiahistory" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Anesthesia History</label>
+                        </div>
+                        <img src="assets/images/icons/arrow-down.svg" alt="">
+                    </div>
+                    <div class="p-2">
+                        <label for="" class="form-label fs-6 fw-bold clr-primary-600">Previous
+                            anesthesia</label>
+                        <div class="d-flex flex-column gap-2">
+                            <div id="checkbox_nopreviousanesthesia" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">No previous
+                                    anesthesia</label>
+                            </div>
+                            <div id="checkbox_generalanesthesia" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">General
+                                    anesthesia</label>
+                            </div>
+                            <div id="checkbox_spinalanesthesia" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Spinal
+                                    anesthesia</label>
+                            </div>
+                            <div id="checkbox_epiduralanesthesia" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Epidural
+                                    anesthesia</label>
+                            </div>
+                            <div id="checkbox_other" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Other</label>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <label for="" class="form-label">Specify</label>
+                                <textarea name="" id="textarea_specify1" class="form-control" cols="30" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <label for="" class="form-label fs-6 fw-bold clr-primary-600">Previous
+                                problems with anesthesia in patient/ family members</label>
+                            <div class="d-flex flex-column gap-2 p-2">
+                                <div id="checkbox_non" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Non</label>
+                                </div>
+                                <div id="checkbox_difficultintubation" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Difficult
+                                        intubation</label>
+                                </div>
+                                <div id="checkbox_postoperativenauseaandvomiting"
+                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Post-operative
+                                        nausea and vomiting</label>
+                                </div>
+                                <div id="checkbox_postoperativespinalheadache"
+                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Post-operative
+                                        spinal headache</label>
+                                </div>
+                                <div id="checkbox_malignanthyperthermia" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Malignant
+                                        hyperthermia</label>
+                                </div>
+                                <div id="checkbox_patientfrightenedofanesthesia"
+                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Patient frightened
+                                        of anesthesia</label>
+                                </div>
+                                <div id="checkbox_other1" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Other</label>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <label for="" class="form-label">Specify</label>
+                                    <textarea name="" id="textarea_specify2" class="form-control" cols="30"
+                                        rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="row mx-0 mt-3">
+                <div class="col-md-12 p-0 border-primary-200">
+                    <div class="bg-primary-100 p-2 d-flex align-items-center justify-content-between">
+                        <div id="checkbox_foodanddrugallergies" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Food and drug
+                                Allergies/reactions</label>
+                        </div>
+                        <img src="assets/images/icons/arrow-down.svg" alt="">
+                    </div>
+                    <div class="d-flex flex-column gap-2 p-2">
+                        <div id="checkbox_non2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Non</label>
+                        </div>
+                        <div id="checkbox_allergiesreactionsdetails" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Allergies/reactions
+                                details</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mx-0 mt-3">
+                <div class="col-md-12 p-0 border-primary-200">
+                    <div class="bg-primary-100 p-2 d-flex align-items-center justify-content-between">
+                        <div id="checkbox_dailymedications" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Daily Medications</label>
+                        </div>
+                        <img src="assets/images/icons/arrow-down.svg" alt="">
+                    </div>
+                    <div class="d-flex flex-column gap-2 p-2">
+                        <div id="checkbox_non3" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Non</label>
+                        </div>
+                        <div id="checkbox_allegiesreactionsdetails2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Allergies/reactions
+                                details</label>
+                        </div>
+                        <div id="checkbox_antihypertensive" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Antihypertensive</label>
+                        </div>
+                        <div id="checkbox_antiischemicheartdisease" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Anti-ischemic heart
+                                disease</label>
+                        </div>
+                        <div id="checkbox_antidiabetic" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Antidiabetic</label>
+                        </div>
+                        <div class="ps-4 d-flex flex-column gap-2">
+                            <div id="checkbox_insulin" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Insulin</label>
+                            </div>
+                            <div id="checkbox_oralhypoglycemicagent" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Oral hypoglycemic
+                                    agent</label>
+                            </div>
+                        </div>
+                        <div id="checkbox_antiasthma" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Anti-asthma</label>
+                        </div>
+                        <div id="checkbox_anticoagulation" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Anti-coagulation</label>
+                        </div>
+                        <div id="checkbox_others2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Others</label>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="" class="form-label">Specify</label>
+                            <textarea name="" id="textarea_specify3" class="form-control" cols="30" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mx-0 mt-3">
+                <div class="col-md-12 p-0 border-primary-200">
+                    <div class="bg-primary-100 p-2 d-flex align-items-center justify-content-between">
+                        <div id="checkbox_smokinghistory" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Smoking History</label>
+                        </div>
+                        <img src="assets/images/icons/arrow-down.svg" alt="">
+                    </div>
+                    <div class="d-flex flex-column gap-2 p-2">
+                        <div id="checkbox_non4" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Non</label>
+                        </div>
+                        <div id="checkbox_xsmoker" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">X-smoker</label>
+                        </div>
+                        <div id="checkbox_smoking" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Smoking</label>
+                        </div>
+                        <div class="ps-4 d-flex flex-column gap-2">
+                            <div id="checkbox_numberofcigarettepacketsperday"
+                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0 mx-2">Number of
+                                    cigarette packets per day:</label>
+                                <input type="text" class="form-control w-auto border-0 border-bottom rounded-0">
+                            </div>
+                            <div id="checkbox_Patientstoppedsmokingforsurgery"
+                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0 mx-2">Patient stopped
+                                    smoking for surgery, Date stopped:</label>
+                                <input id="textbox_datestopped" type="text"
+                                    class="form-control w-auto border-0 border-bottom rounded-0">
+                            </div>
+                            <div id="checkbox_Patientdidnotstopsmokingforsurgery"
+                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0 mx-2">Patient did not
+                                    stop smoking for surgery</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="row mx-0 mt-3">
+                <div class="col-md-12 p-0 border-primary-200">
+                    <div class="bg-primary-100 p-2 d-flex align-items-center justify-content-between">
+                        <div id="checkbox_Medicalconditionssymptomsreview" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Medical Conditions and
+                                Symptoms Review</label>
+                        </div>
+                        <img src="assets/images/icons/arrow-down.svg" alt="">
+                    </div>
+                    <div class="p-3">
+                        <label for="" class="form-label fs-6 fw-bold clr-primary-600">Endocrine
+                            diseases</label>
+                        <div class="d-flex flex-column gap-2">
+                            <div id="checkbox_non5" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Non</label>
+                            </div>
+                            <div id="checkbox_diabetesmellitus" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Diabetes
+                                    mellitus</label>
+                            </div>
+                        </div>
+                        <div class="ps-4 d-flex flex-column gap-2 mt-2">
+                            <div class="d-flex flex-column gap-2">
+                                <div id="checkbox_type" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Type</label>
+                                </div>
+                                <div class="ps-4 d-flex flex-column gap-2">
+                                    <div id="checkbox_Type1diabetesmellitus" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Type1 diabetes
+                                            mellitus</label>
+                                    </div>
+                                    <div id="checkbox_Type2diabetesmellitus" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Type 2 diabetes
+                                            mellitus</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column gap-2">
+                                <div id="checkbox_complication" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Complication</label>
+                                </div>
+                                <div class="ps-4 d-flex flex-column gap-2">
+                                    <div id="checkbox_Diabeticnephropathy" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Diabetic
+                                            nephropathy</label>
+                                    </div>
+                                    <div id="checkbox_Diabeticretinopathy" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Diabetic
+                                            Retinopathy</label>
+                                    </div>
+                                    <div id="checkbox_Diabeticneuropathy" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Diabetic
+                                            Neuropathy</label>
+                                    </div>
+                                    <div id="checkbox_Diabeticfoot" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Diabetic
+                                            foot</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column gap-2 mt-2">
+                            <div id="checkbox_Dyslipidemia" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Dyslipidemia</label>
+                            </div>
+                            <div id="checkbox_Adrenalinsufficiency" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Adrenal
+                                    Insufficiency</label>
+                            </div>
+                            <div id="checkbox_Hypothyroidism" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Hypothyroidism</label>
+                            </div>
+                        </div>
+    
+                        <div class="mt-3">
+                            <label for="" class="form-label fs-6 fw-bold clr-primary-600">Cardiovascular
+                                diseases</label>
+                            <div class="d-flex flex-column gap-2 mt-2">
+                                <div id="checkbox_non6" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Non</label>
+                                </div>
+                                <div id="checkbox_Systemichypertension" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Systemic
+                                        Hypertension</label>
+                                </div>
+                                <div id="checkbox_Ischemicheartdisease" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Ischemic heart
+                                        disease</label>
+                                </div>
+                            </div>
+                            <div class="ps-4 d-flex flex-column gap-2 mt-2">
+                                <div class="d-flex flex-column gap-2">
+                                    <div id="checkbox_type" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Type</label>
+                                    </div>
+                                    <div class="ps-4 d-flex flex-column gap-2">
+                                        <div id="checkbox_Ischemicheartdisease"
+                                            class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                            <label for="" class="form-label m-0">Ischemic heart
+                                                disease</label>
+                                        </div>
+                                        <div class="ps-4 d-flex flex-column gap-2">
+                                            <div id="checkbox_type" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                    alt="">
+                                                <label for="" class="form-label m-0">Type:</label>
+                                            </div>
+                                            <div class="ps-4 d-flex flex-column gap-2">
+                                                <div id="checkbox_unstableangina"
+                                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                        alt="">
+                                                    <label for="" class="form-label m-0">Unstable
+                                                        angina</label>
+                                                </div>
+                                                <div id="checkbox_NonSTelevationMI"
+                                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                        alt="">
+                                                    <label for="" class="form-label m-0">Non-ST-elevation
+                                                        MI (NSTEMI)</label>
+                                                </div>
+                                                <div id="checkbox_STelevationMI"
+                                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                        alt="">
+                                                    <label for="" class="form-label m-0">ST-elevation
+                                                        MI (STEMI)</label>
+                                                </div>
+                                            </div>
+                                            <div id="checkbox_date" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                    alt="">
+                                                <label for="" class="form-label m-0">Date:</label>
+                                            </div>
+                                            <div class="ps-4 d-flex flex-column gap-2">
+                                                <div class="d-flex align-items-center">
+                                                    <input type="text" id="textbox_weeksago"
+                                                        class="form-control w-auto me-2 border-0 border-bottom rounded-0">
+                                                    <label for="" class="form-label m-0">weeks
+                                                        ago</label>
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <input type="text" id="textbox_monthsago"
+                                                        class="form-control w-auto me-2 border-0 border-bottom rounded-0">
+                                                    <label for="" class="form-label m-0">months
+                                                        ago</label>
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <input type="text" id="textbox_yearsago"
+                                                        class="form-control w-auto me-2 border-0 border-bottom rounded-0">
+                                                    <label for="" class="form-label m-0">years
+                                                        ago</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="checkbox_Anginapectorischroniccoronarysyndrome"
+                                            class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                            <label for="" class="form-label m-0">Angina
+                                                pectoris Chronic coronary syndrome
+                                                (CCS)</label>
+                                        </div>
+                                    </div>
+                                    <div id="checkbox_Coronaryrevascularization"
+                                        class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Coronary
+                                            Revascularization</label>
+                                    </div>
+                                    <div class="ps-4 d-flex flex-column gap-2 mt-2">
+                                        <div id="checkbox_Percutaneouscoronaryinterventionandstenting"
+                                            class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                            <label for="" class="form-label m-0">Percutaneous coronary
+                                                intervention (PCI) and stenting</label>
+                                        </div>
+                                        <div id="checkbox_Coronaryarterybypassgraftsurgery"
+                                            class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                            <label for="" class="form-label m-0">Coronary
+                                                artery bypass graft surgery (CABG)</label>
+                                        </div>
+                                        <div id="checkbox_Thrombolytictherapy"
+                                            class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                            <label for="" class="form-label m-0">Thrombolytic
+                                                therapy</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column gap-2 mt-2">
+                                <div id="checkbox_Heartfailurewithreducedejectionfraction"
+                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Heart failure with
+                                        reduced ejection fraction</label>
+                                </div>
+                                <div class="ps-4">
+                                    <div id="checkbox_ejectionfraction" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Ejection
+                                            fraction</label>
+                                    </div>
+                                    <select name="" class="form-select w-auto pe-5" id="dropdown_ejectionfraction1">
+                                        <option value="1">(≤40 percent - 10%)</option>
+                                        <option value="2">(≤40 percent - 10%)</option>
+                                        <option value="3">(≤40 percent - 10%)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column gap-2 mt-2">
+                                <div id="checkbox_Heartfailurewithpreservedejectionfraction"
+                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Heart failure with
+                                        preserved ejection fraction (diastolic HF)</label>
+                                </div>
+                                <div class="ps-4">
+                                    <div id="checkbox_ejectionfraction2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Ejection
+                                            fraction</label>
+                                    </div>
+                                    <select name="" class="form-select w-auto pe-5" id="dropdown_ejectionfraction2">
+                                        <option value="1">(>50 percent - 100%)</option>
+                                        <option value="2">(>50 percent - 100%)</option>
+                                        <option value="3">(>50 percent - 100%)</option>
+                                    </select>
+                                </div>
+                                <div id="checkbox_Valvularheartdisease" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Valvular Heart
+                                        Disease</label>
+                                </div>
+                                <div id="checkbox_Aorticstenosis" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Aortic
+                                        Stenosis</label>
+                                </div>
+                                <div class="ps-4">
+                                    <div id="checkbox_status" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">{{langData?.common?.Status}}</label>
+                                    </div>
+                                    <div class="ps-4 mt-2 d-flex flex-column gap-2 ">
+                                        <div id="checkbox_Onmedicaltherapy" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                            <label for="" class="form-label m-0">On medical
+                                                therapy</label>
+                                        </div>
+                                        <div id="checkbox_Surgeryintervention"
+                                            class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                            <label for="" class="form-label m-0">Surgery/intervention</label>
+                                        </div>
+                                        <div class="ps-4 d-flex flex-column gap-2">
+                                            <div id="checkbox_Postaorticvalvereplacementavrmechanicalprosthesis"
+                                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                    alt="">
+                                                <label for="" class="form-label m-0">Post
+                                                    aortic valve replacement (AVR),
+                                                    mechanical prosthesis</label>
+                                            </div>
+                                            <div id="checkbox_PostaorticvalvereplacementAVRbioprosthesis"
+                                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                    alt="">
+                                                <label for="" class="form-label m-0">Post
+                                                    aortic valve replacement (AVR),
+                                                    Bioprosthesis</label>
+                                            </div>
+                                            <div id="checkbox_Posttranscatheteraorticvalveimplantation"
+                                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                    alt="">
+                                                <label for="" class="form-label m-0">Post
+                                                    transcatheter aortic valve
+                                                    implantation</label>
+                                            </div>
+                                            <div id="checkbox_Postpercutaneousballoonvalvotomy"
+                                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                    alt="">
+                                                <label for="" class="form-label m-0">Post
+                                                    percutaneous balloon valvotomy</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <div id="checkbox_Aorticregurgitation" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Aortic
+                                            Regurgitation</label>
+                                    </div>
+                                    <div class="ps-4 mt-2">
+                                        <div id="checkbox_status2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                            <label for="" class="form-label m-0">{{langData?.common?.Status}}</label>
+                                        </div>
+                                        <div class="ps-4 mt-2 d-flex flex-column gap-2 ">
+                                            <div id="checkbox_Onmedicaltherapy2"
+                                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                    alt="">
+                                                <label for="" class="form-label m-0">On
+                                                    medical therapy</label>
+                                            </div>
+                                            <div id="checkbox_Surgeryintervention2"
+                                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                    alt="">
+                                                <label for="" class="form-label m-0">Surgery/intervention</label>
+                                            </div>
+                                            <div class="ps-4 d-flex flex-column gap-2 ">
+                                                <div id="checkbox_PostaorticvalvereplacementAVRmechanicalprosthesis2"
+                                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                        alt="">
+                                                    <label for="" class="form-label m-0">Post aortic
+                                                        valve replacement (AVR), mechanical
+                                                        prosthesis</label>
+                                                </div>
+                                                <div id="checkbox_PostaorticvalvereplacementAVRbioprosthesis2"
+                                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                        alt="">
+                                                    <label for="" class="form-label m-0">Post aortic
+                                                        valve replacement (AVR),
+                                                        Bioprosthesis</label>
+                                                </div>
+                                                <div id="checkbox_Posttranscatheteraorticvalveimplantation2"
+                                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                        alt="">
+                                                    <label for="" class="form-label m-0">Post
+                                                        transcatheter aortic valve
+                                                        implantation</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <div id="checkbox_Mitralstenosis" class="custom_check d-flex align-items-center mb-2" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Mitral
+                                            stenosis</label>
+                                    </div>
+                                    <div class="ps-4 mt-2">
+                                        <div id="checkbox_status3" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                            <label for="" class="form-label m-0">{{langData?.common?.Status}}</label>
+                                        </div>
+                                        <div class="ps-4 mt-2 d-flex flex-column gap-2 ">
+                                            <div id="checkbox_Onmedicaltherapy3"
+                                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                    alt="">
+                                                <label for="" class="form-label m-0">On
+                                                    medical therapy</label>
+                                            </div>
+                                            <div id="checkbox_surgeryintervention3"
+                                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                    alt="">
+                                                <label for="" class="form-label m-0">Surgery/intervention</label>
+                                            </div>
+                                            <div class="ps-4 d-flex flex-column gap-2 ">
+                                                <div id="checkbox_MitralvalvereplacementMVRmechanicalprosthesis"
+                                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                        alt="">
+                                                    <label for="" class="form-label m-0">Mitral valve
+                                                        replacement (MVR), mechanical
+                                                        prosthesis</label>
+                                                </div>
+                                                <div id="checkbox_MitralvalvereplacementMVRbioprosthesis"
+                                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                        alt="">
+                                                    <label for="" class="form-label m-0">Mitral valve
+                                                        replacement (MVR),
+                                                        Bioprosthesis</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <div id="checkbox_Mitralregurgitation" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Mitral
+                                            regurgitation</label>
+                                    </div>
+                                    <div class="ps-4 mt-2">
+                                        <div id="checkbox_status4" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                            <label for="" class="form-label m-0">{{langData?.common?.Status}}</label>
+                                        </div>
+                                        <div class="ps-4 mt-2 d-flex flex-column gap-2 ">
+                                            <div id="checkbox_Onmedicaltherapy4"
+                                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                    alt="">
+                                                <label for="" class="form-label m-0">On
+                                                    medical therapy</label>
+                                            </div>
+                                            <div id="checkbox_Surgeryintervention4"
+                                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                    alt="">
+                                                <label for="" class="form-label m-0">Surgery/intervention</label>
+                                            </div>
+                                            <div class="ps-4 d-flex flex-column gap-2 ">
+                                                <div id="checkbox_MitralvalvereplacementMVRmechanicalprosthesis2"
+                                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                        alt="">
+                                                    <label for="" class="form-label m-0">Mitral valve
+                                                        replacement (MVR), mechanical
+                                                        prosthesis</label>
+                                                </div>
+                                                <div id="checkbox_MitralvalvereplacementMVRbioprosthesis2"
+                                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg"
+                                                        alt="">
+                                                    <label for="" class="form-label m-0">Mitral valve
+                                                        replacement (MVR),
+                                                        Bioprosthesis</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="checkbox_arrhythmia" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Arrhythmia</label>
+                                </div>
+                                <div id="checkbox_atrialfibrillation" class="ps-4 d-flex flex-column gap-2 mt-2">
+                                    <div class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Atrial
+                                            fibrillation</label>
+                                    </div>
+                                    <div id="checkbox_atrialflutter" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Atrial
+                                            flutter</label>
+                                    </div>
+                                    <div id="checkbox_Ventricularextrasystoles"
+                                        class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Ventricular
+                                            extrasystoles (ventricular premature
+                                            beats)</label>
+                                    </div>
+                                    <div id="checkbox_AVblockHeartblock" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">AV block/ Heart
+                                            block, specify:</label>
+                                        <input type="text" id="textbox_specify4"
+                                            class="form-control ms-2 border-0 border-bottom rounded-0 w-auto">
+                                    </div>
+                                    <div id="checkbox_pacemaker" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Pacemaker</label>
+                                    </div>
+                                    <div id="checkbox_others3" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Others,specify:</label>
+                                        <input type="text" id="textbox_specify5"
+                                            class="form-control ms-2 border-0 border-bottom rounded-0 w-auto">
+                                    </div>
+                                </div>
+                                <div id="checkbox_Peripheralvasculardiseases"
+                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Peripheral vascular
+                                        diseases</label>
+                                </div>
+                                <div id="checkbox_Deepvenousthrombosis" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Deep venous
+                                        thrombosis</label>
+                                </div>
+                                <div id="checkbox_Pulmonaryembolism" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Pulmonary
+                                        embolism</label>
+                                </div>
+                                <div id="checkbox_Congenitalheartdisease" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Congenital heart
+                                        disease, specify:</label>
+                                    <input type="text" id="textbox_specify6"
+                                        class="form-control ms-2 border-0 border-bottom rounded-0 w-auto">
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="mt-3">
+                            <label for="" class="form-label fs-6 fw-bold clr-primary-600">Respiratory
+                                diseases</label>
+                            <div class="d-flex flex-column gap-2 mt-2">
+                                <div id="checkbox_non7" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Non</label>
+                                </div>
+                                <div id="checkbox_Bronchialasthma" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Bronchial
+                                        Asthma</label>
+                                </div>
+                                <div id="checkbox_Chronicobstructivepulmonarydiseases"
+                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Chronic obstructive
+                                        pulmonary diseases (COPD)</label>
+                                </div>
+                                <div id="checkbox_Interstitiallungdisease" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Interstitial lung
+                                        disease</label>
+                                </div>
+                                <div id="checkbox_Idiopathicpulmonaryfibrosis"
+                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Idiopathic
+                                        pulmonary fibrosis</label>
+                                </div>
+                                <div id="checkbox_sleepapnea" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Sleep Apnea</label>
+                                </div>
+                                <div id="checkbox_Bronchiectasis" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Bronchiectasis</label>
+                                </div>
+                                <div id="checkbox_other2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Other</label>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <label for="" class="form-label">Specify</label>
+                                    <textarea name="" class="form-control resize-none" id="textarea_specify7" cols="30"
+                                        rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="mt-3">
+                            <label for="" class="form-label fs-6 fw-bold clr-primary-600">Renal
+                                diseases</label>
+                            <div class="d-flex flex-column gap-2 mt-2">
+                                <div id="checkbox_non8" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Non</label>
+                                </div>
+                                <div id="checkbox_Chronicrenalimpairment" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Chronic Renal
+                                        impairment</label>
+                                </div>
+                                <div id="checkbox_Acuterenalimpairment" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Acute renal
+                                        impairment</label>
+                                </div>
+                                <div id="checkbox_Hemodialysis" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Hemodialysis</label>
+                                </div>
+                                <div id="checkbox_Peritonealdialysis" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Peritoneal
+                                        dialysis</label>
+                                </div>
+                                <div id="checkbox_other3" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Other</label>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <label for="" class="form-label">Specify</label>
+                                    <textarea name="" class="form-control resize-none" id="textarea_specify8" cols="30"
+                                        rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="mt-3">
+                            <label for="" class="form-label fs-6 fw-bold clr-primary-600">Hematology
+                                diseases</label>
+                            <div class="d-flex flex-column gap-2 mt-2">
+                                <div id="checkobx_non9" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Non</label>
+                                </div>
+                                <div id="checkbox_anemia" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Anemia</label>
+                                </div>
+                                <div class="ps-4 d-flex flex-column gap-2">
+                                    <div id="checkbox_Irondeficiencyanemia" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Iron deficiency
+                                            anemia</label>
+                                    </div>
+                                    <div id="checkbox_Sicklecellanemia" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Sickle cell
+                                            anemia</label>
+                                    </div>
+                                    <div id="checkbox_Sicklecelltrait" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Sickle cell
+                                            trait</label>
+                                    </div>
+                                    <div id="checkbox_Betathalassemia" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Beta
+                                            thalassemia</label>
+                                    </div>
+                                    <div id="checkbox_others4" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Others</label>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <label for="" class="form-label">Specify</label>
+                                        <textarea name="" class="form-control resize-none" id="textarea_specify9" cols="30"
+                                            rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div id="checkbox_Bleedingdisorder" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Bleeding
+                                        disorder</label>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <label for="" class="form-label">Specify</label>
+                                    <textarea name="" class="form-control resize-none" id="textarea_specify10" cols="30"
+                                        rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="mt-3">
+                            <label for="" class="form-label fs-6 fw-bold clr-primary-600">Neurologic
+                                diseases</label>
+                            <div class="d-flex flex-column gap-2 mt-2">
+                                <div id="checkbox_non10" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Non</label>
+                                </div>
+                                <div id="checkbox_stroketia" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Stroke/TIA</label>
+                                </div>
+                                <div id="checkbox_neuromuscular" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Neuromuscular</label>
+                                </div>
+                                <div id="checkbox_seizures" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Seizures</label>
+                                </div>
+                                <div id="checkbox_spinaldisease" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Spinal
+                                        Disease</label>
+                                </div>
+                                <div id="checkbox_other4" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Other</label>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <label for="" class="form-label">Specify</label>
+                                    <textarea name="" class="form-control resize-none" id="textarea_specify11" cols="30"
+                                        rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="mt-3">
+                            <label for="" class="form-label fs-6 fw-bold clr-primary-600">Gastrointestinal
+                                diseases</label>
+                            <div class="d-flex flex-column gap-2 mt-2">
+                                <div id="checkbox_non11" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Non</label>
+                                </div>
+                                <div id="checkbox_GastroesophagealrefluxdiseaseGERD"
+                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Gastroesophageal
+                                        reflux disease (GERD)</label>
+                                </div>
+                                <div id="checkbox_ChronichepatitisB" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Chronic hepatitis
+                                        B</label>
+                                </div>
+                                <div id="checkbox_ChronichepatitisC" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Chronic hepatitis
+                                        C</label>
+                                </div>
+                                <div id="checkbox_Livercirrhosis" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Liver
+                                        cirrhosis</label>
+                                </div>
+                                <div id="checkbox_CrohnsDisease" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Crohn's
+                                        Disease</label>
+                                </div>
+                                <div id="checkbox_Ulcerativecolitis" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Ulcerative
+                                        Colitis</label>
+                                </div>
+                                <div id="chekbox_other5" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Other</label>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <label for="" class="form-label">Specify</label>
+                                    <textarea name="" class="form-control resize-none" id="textarea_specify12" cols="30"
+                                        rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="mt-3">
+                            <label for="" class="form-label fs-6 fw-bold clr-primary-600">Reproductive</label>
+                            <div class="d-flex flex-column gap-2 mt-2">
+                                <div id="checkbox_notsignificant" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Not
+                                        significant</label>
+                                </div>
+                                <div id="checkbox_pregnant" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Pregnant</label>
+                                </div>
+                                <div id="checkbox_recentdelivery" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Recent
+                                        Delivery</label>
+                                </div>
+                                <div id="checkbox_breastfeeding" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Breast
+                                        feeding</label>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="mt-3">
+                            <label for="" class="form-label fs-6 fw-bold clr-primary-600">Musculoskeletal
+                                diseases</label>
+                            <div class="d-flex flex-column gap-2 mt-2">
+                                <div id="checkbox_non12" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Non</label>
+                                </div>
+                                <div id="checkbox_osteoarthritis" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Osteoarthritis</label>
+                                </div>
+                                <div id="checkbox_oesteporosis" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Osteoporosis</label>
+                                </div>
+                                <div id="checkbox_osteopenia" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Osteopenia</label>
+                                </div>
+                                <div id="checkbox_jointreplacement" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Joint
+                                        replacement</label>
+                                </div>
+                                <div id="checkbox_implanteddevices" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Implanted
+                                        devices</label>
+                                </div>
+                                <div id="checkbox_other6" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Other</label>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <label for="" class="form-label">Specify</label>
+                                    <textarea name="" class="form-control resize-none" id="textarea_specify13" cols="30"
+                                        rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="mt-3">
+                            <label for="" class="form-label fs-6 fw-bold clr-primary-600">Rheumatology
+                                diseases</label>
+                            <div class="d-flex flex-column gap-2 mt-2">
+                                <div id="checkbox_non13" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Non</label>
+                                </div>
+                                <div id="checkbox_Rheumatoidarthritis" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Rheumatoid
+                                        arthritis</label>
+                                </div>
+                                <div id="checkbox_Systemiclupuserythematosus"
+                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Systemic Lupus
+                                        Erythematosus</label>
+                                </div>
+                                <div id="checkbox_other7" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Other</label>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <label for="" class="form-label">Specify</label>
+                                    <textarea name="" class="form-control resize-none" id="textarea_specify14" cols="30"
+                                        rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card card-style-1 mt-3">
+        <div id="phy_exmtoggle_header" class="card-header py-2 justify-content-between">
+            <h6 class="m-0 clr-primary-600">Physical Examination</h6>
+            <button id="phy_exmtoggle_btn" onclick="toggle_phy_exm()" class="btn btn-icon-3d phy_exmtoggle_btn active">
+                <img src="assets/images/icons/arrow-down.svg" alt="">
+            </button>
+        </div>
+        <div class="p-3" id="phy_exm_toggle">
+            <label for="" class="form-label fs-6 fw-bold clr-primary-600">Vital
+                signs</label>
+            <div class="d-flex flex-column gap-2">
+                <div id="checkbox_height" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Height(cm):</label>
+                </div>
+                <div id="checkbox_weight" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Weight (kg):</label>
+                </div>
+                <div id="checkbox_mbi" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">MBI:</label>
+                </div>
+                <div id="checkbox_temperature" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Temperature:</label>
+                </div>
+                <div id="checkbox_pulse" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Pulse:</label>
+                </div>
+                <div id="checkbox_Systolicbloodpressure" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Systolic Blood Pressure
+                        (mmHg):</label>
+                </div>
+                <div id="checkbox_Diastolicbloodpressure" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Diastolic Blood Pressure
+                        (mmHg):</label>
+                </div>
+                <div id="checkbox_Respiratoryrate" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Respiratory Rate</label>
+                </div>
+                <div id="checkbox_Oxygensaturation" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Oxygen Saturation (%)</label>
+                </div>
+            </div>
+    
+            <div class="mt-3">
+                <label for="" class="form-label fs-6 fw-bold clr-primary-600">Heart
+                    Auscultation:</label>
+                <div id="checkbox_Firstheartsound" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">First heart sound (S1)</label>
+                </div>
+                <div class="ps-4 mt-2 d-flex flex-column gap-2">
+                    <div id="checkbox_normal" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Normal</label>
+                    </div>
+                    <div id="checkbox_abnormal" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Abnormal</label>
+                    </div>
+                    <div class="ps-4 d-flex flex-column gap-2">
+                        <div id="checkbox_loud" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Loud</label>
+                        </div>
+                        <div id="checkbox_soft" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Soft</label>
+                        </div>
+                        <div id="checkbox_split" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Split</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="checkbox_Secondheartsound" class="custom_check d-flex align-items-center mt-2" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Second heart sound (S2)</label>
+                </div>
+                <div class="ps-4 mt-2 d-flex flex-column gap-2">
+                    <div id="checkbox_normal2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Normal</label>
+                    </div>
+                    <div id="checkbox_abnormal2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Abnormal</label>
+                    </div>
+                    <div class="ps-4 d-flex flex-column gap-2">
+                        <div id="checkbox_louda2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Loud A2</label>
+                        </div>
+                        <div id="checkbox_loudp2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Loud P2</label>
+                        </div>
+                        <div id="checkbox_splits2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Split S2</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 d-flex flex-column gap-2">
+                    <div id="checkbox_Heartmurmurs" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Heart murmurs</label>
+                    </div>
+                    <div id="checkbox_Nomurmur" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">No murmur</label>
+                    </div>
+                </div>
+                <div class="ps-4 d-flex flex-column gap-2 mt-2">
+                    <div id="checkbox_Detectedmurmur" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Detected murmur</label>
+                    </div>
+                    <div class="ps-4">
+                        <div id="checkbox_Siteheard" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Site heard</label>
+                        </div>
+                        <div class="ps-4 d-flex flex-column gap-2 mt-2">
+                            <div id="checkbox_Erbpoint3rdleftparasternalintercostalspace"
+                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Erb point: 3rd left
+                                    parasternal intercostal space</label>
+                            </div>
+                            <div id="checkbox_Aorticvalvearea2ndrightparasternalintercostalspace"
+                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Aortic valve area: 2nd
+                                    right parasternal intercostal space</label>
+                            </div>
+                            <div id="checkbox_Pulmonicvalvearea2ndleftparasternalintercostalspace"
+                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Pulmonic valve area:
+                                    2nd left parasternal intercostal space</label>
+                            </div>
+                            <div id="checkbox_Mitralvalvearea5thleftintercostalspacemidclavicularline"
+                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Mitral valve area: 5th
+                                    left intercostal space, midclavicular line</label>
+                            </div>
+                            <div id="checkbox_Tricuspidvalvearea4thleftparasternalintercostalspace"
+                                class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Tricuspid valve area:
+                                    4th left parasternal intercostal space</label>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <div id="checkbox_timing" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Timing</label>
+                            </div>
+                            <div class="ps-4 d-flex flex-column gap-2 mt-2">
+                                <div id="checkbox_midsystolicejection" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Mid-systolic
+                                        ejection</label>
+                                </div>
+                                <div id="checkbox_Aorticvalvearea2ndrightparasternalintercostalspace"
+                                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Aortic valve area:
+                                        2nd right parasternal intercostal space</label>
+                                </div>
+                                <div id="checkbox_latesystolic" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Late
+                                        systolic</label>
+                                </div>
+                                <div id="checkbox_Pansystolicholosystolic" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Pansystolic
+                                        (holosystolic)</label>
+                                </div>
+                                <div id="checkbox_Earlydiastolic" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Early
+                                        diastolic</label>
+                                </div>
+                                <div id="checkbox_middiastolic" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Mid-diastolic</label>
+                                </div>
+                                <div id="checkbox_presystolic" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Presystolic</label>
+                                </div>
+                                <div id="checkbox_continuous" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Continuous</label>
+                                </div>
+                            </div>
+                            <div id="checkbox_radiation" class="custom_check d-flex align-items-center mt-2" (click)="toggleCheckboxSelection($event)">
+                                <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                <label for="" class="form-label m-0">Radiation</label>
+                            </div>
+                            <div class="ps-4 d-flex flex-column gap-2 mt-2">
+                                <div id="checkbox_noradiation" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">No
+                                        radiation</label>
+                                </div>
+                                <div id="checkbox_radiatesto" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                    <label for="" class="form-label m-0">Radiates to</label>
+                                </div>
+                                <div class="ps-4 d-flex flex-column gap-2">
+                                    <div id="checkbox_Carotidarteries" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Carotid
+                                            arteries</label>
+                                    </div>
+                                    <div id="checkbox_Leftaxilla" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Left
+                                            axilla</label>
+                                    </div>
+                                    <div id="checkbox_Interscapularregion" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                        <label for="" class="form-label m-0">Interscapular
+                                            region</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div id="checkbox_Additionalsoundsspec" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Additional sounds, spec</label>
+                    </div>
+                    <div class="ps-4 d-flex flex-column gap-2 mt-2">
+                        <div id="checkbox_non14" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Non</label>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="" class="form-label">Specify</label>
+                            <textarea name="" class="form-control resize-none" id="textarea_specify15" cols="30"
+                                rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="mt-3">
+                <label for="" class="form-label fs-6 fw-bold clr-primary-600">Lungs
+                    Auscultation:</label>
+                <div id="checkbox_rightside" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Right side</label>
+                </div>
+                <div class="ps-4 d-flex flex-column gap-2">
+                    <div id="checkbox_Vesicularbreathsound" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Vesicular breath sound</label>
+                    </div>
+                    <div id="checkbox_Bronchialbreathsound" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Bronchial breath sound</label>
+                    </div>
+                    <div id="checkbox_wheeze" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Wheeze</label>
+                    </div>
+                    <div id="checkbox_coarsecrackles" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Coarse crackles</label>
+                    </div>
+                    <div id="checkbox_Fineendinspiratorycrackles" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Fine end-inspiratory
+                            crackles</label>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div id="checkbox_leftside" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Left side</label>
+                    </div>
+                    <div class="ps-4 d-flex flex-column gap-2">
+                        <div id="checkbox_Vesicularbreathsound2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Vesicular breath
+                                sound</label>
+                        </div>
+                        <div id="checkbox_Bronchialbreathsound2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Bronchial breath
+                                sound</label>
+                        </div>
+                        <div id="checkbox_wheeze2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Wheeze</label>
+                        </div>
+                        <div id="checkbox_coarsecrackles2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Coarse crackles</label>
+                        </div>
+                        <div id="checkbox_Fineendinspiratorycrackles2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Fine end-inspiratory
+                                crackles</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="mt-3">
+                <label for="" class="form-label fs-6 fw-bold clr-primary-600">Airway
+                    Assessment:</label>
+                <div id="checkbox_cervicalspine" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Cervical spine</label>
+                </div>
+                <div class="ps-4 d-flex flex-column gap-2">
+                    <div id="checkbox_stable" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Stable</label>
+                    </div>
+                    <div id="checkbox_unstable" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Unstable</label>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div id="checkbox_neckmovement" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Neck movement</label>
+                    </div>
+                    <div class="ps-4 d-flex flex-column gap-2">
+                        <div id="checkbox_normal3" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Normal</label>
+                        </div>
+                        <div id="checkbox_restricted" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Restricted</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div id="checkbox_teeth" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Teeth</label>
+                    </div>
+                    <div class="ps-4 d-flex flex-column gap-2">
+                        <div id="checkbox_normal4" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Normal</label>
+                        </div>
+                        <div id="checkbox_denture" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Denture</label>
+                        </div>
+                        <div id="checkbox_loose" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Loose</label>
+                        </div>
+                        <div id="checkbox_chipped" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Chipped</label>
+                        </div>
+                        <div id="checkbox_caps" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">CAPS</label>
+                        </div>
+                        <div id="checkbox_bridge" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Bridge</label>
+                        </div>
+                        <div id="checkbox_warned" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Warned</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div id="checkbox_Temporomandibularjoint" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Temporomandibular joint</label>
+                    </div>
+                    <div class="ps-4 d-flex flex-column gap-2">
+                        <div id="checkbox_normal5" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Normal</label>
+                        </div>
+                        <div id="checkbox_restricted" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Restricted</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div id="checkbox_mallampatiscore" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Mallampati Score</label>
+                    </div>
+                    <div class="mt-2">
+                        <select name="" class="form-select w-auto pe-5" id="dropdown_mallampatiscore">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="mt-3">
+                <label for="" class="form-label fs-6 fw-bold clr-primary-600">Neurologic
+                    Examinations</label>
+                <div class="mt-2 d-flex flex-column gap-2">
+                    <div id="checkbox_alertoriented" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Alert oriented</label>
+                    </div>
+                    <div id="checkbox_alertdisoriented" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Alert disoriented</label>
+                    </div>
+                    <div id="checkbox_drowsy" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Drowsy</label>
+                    </div>
+                    <div id="checkbox_comatose" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Comatose</label>
+                    </div>
+                    <div id="checkbox_glasgowcomascale" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Glasgow Coma Scale
+                            (GCS):</label>
+                    </div>
+                    <div class="">
+                        <select name="" class="form-select w-auto pe-5" id="dropdown_glasgowcomascale">
+                            <option value="1">(1 - 15 ) /15</option>
+                            <option value="2">(1 - 15 ) /15</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card card-style-1 mt-3">
+        <div id="anes_invtoggle_header" class="card-header py-2 justify-content-between">
+            <h6 class="m-0 clr-primary-600">Investigations</h6>
+            <button id="anes_invtoggle_btn" onclick="toggle_anes_inv()" class="btn btn-icon-3d anes_invtoggle_btn active">
+                <img src="assets/images/icons/arrow-down.svg" alt="">
+            </button>
+        </div>
+        <div class="p-3" id="anes_inv_toggle">
+            <div>
+                <label for="" class="form-label fs-6 fw-bold clr-primary-600">Hematology</label>
+                <div class="mt-2 d-flex flex-wrap gap-2">
+                    <div class="d-flex align-items-center me-3">
+                        <label for="" class="form-label m-0">WBC</label>
+                        <input id="textbox_wbc" type="text" style="width:50px" class="form-control ms-2">
+                    </div>
+                    <div class="d-flex align-items-center me-3">
+                        <label for="" class="form-label m-0">HgB</label>
+                        <input id="textbox_hgb" type="text" style="width:50px" class="form-control ms-2">
+                    </div>
+                    <div class="d-flex align-items-center me-3">
+                        <label for="" class="form-label m-0">Hct</label>
+                        <input id="textbox_hct" type="text" style="width:50px" class="form-control ms-2">
+                    </div>
+                    <div class="d-flex align-items-center me-3">
+                        <label for="" class="form-label m-0">PLT</label>
+                        <input id="textbox_plt" type="text" style="width:50px" class="form-control ms-2">
+                    </div>
+                    <div class="d-flex align-items-center me-3">
+                        <label for="" class="form-label m-0">PT</label>
+                        <input id="textbox_pt" type="text" style="width:50px" class="form-control ms-2">
+                    </div>
+                    <div class="d-flex align-items-center me-3">
+                        <label for="" class="form-label m-0">PTT</label>
+                        <input id="textbox_ptt" type="text" style="width:50px" class="form-control ms-2">
+                    </div>
+                    <div class="d-flex align-items-center me-3">
+                        <label for="" class="form-label m-0">INR</label>
+                        <input id="textbox_inr" type="text" style="width:50px" class="form-control ms-2">
+                    </div>
+                    <div class="d-flex align-items-center me-3">
+                        <label for="" class="form-label m-0">B.T</label>
+                        <input id="textbox_bt" type="text" style="width:50px" class="form-control ms-2">
+                    </div>
+                </div>
+            </div>
+            <div class="mt-2">
+                <label for="" class="form-label fs-6 fw-bold clr-primary-600">Chemistry</label>
+                <div class="mt-2 d-flex flex-wrap gap-2">
+                    <div class="d-flex align-items-center me-3">
+                        <label for="" class="form-label m-0">Na+</label>
+                        <input id="textbox_naplus" type="text" style="width:50px" class="form-control ms-2">
+                    </div>
+                    <div class="d-flex align-items-center me-3">
+                        <label for="" class="form-label m-0">K+</label>
+                        <input id="textbox_kplus" type="text" style="width:50px" class="form-control ms-2">
+                    </div>
+                    <div class="d-flex align-items-center me-3">
+                        <label for="" class="form-label m-0">Cl-</label>
+                        <input id="textbox_cl" type="text" style="width:50px" class="form-control ms-2">
+                    </div>
+                    <div class="d-flex align-items-center me-3">
+                        <label for="" class="form-label m-0">Ca+</label>
+                        <input id="textbox_caplus" type="text" style="width:50px" class="form-control ms-2">
+                    </div>
+                    <div class="d-flex align-items-center me-3">
+                        <label for="" class="form-label m-0">RBS</label>
+                        <input id="textbox_rbs" type="text" style="width:50px" class="form-control ms-2">
+                    </div>
+                    <div class="d-flex align-items-center me-3">
+                        <label for="" class="form-label m-0">Urea</label>
+                        <input id="textbox_urea" type="text" style="width:50px" class="form-control ms-2">
+                    </div>
+                    <div class="d-flex align-items-center me-3">
+                        <label for="" class="form-label m-0">Creatinine</label>
+                        <input id="textbox_creatinine" type="text" style="width:50px" class="form-control ms-2">
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <label for="" class="form-label fs-6 fw-bold clr-primary-600">Renal
+                    Function</label>
+                <div class="mt-2">
+                    <div id="checkbox_chestxray" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Chest X-ray</label>
+                    </div>
+                    <div class="ps-4 d-flex flex-column gap-2 mt-2">
+                        <div id="checkbox_normal6" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Normal</label>
+                        </div>
+                        <div id="checkbox_abnormal6" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Abnormal</label>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="" class="form-label">Specify </label>
+                            <textarea name="" id="textarea_specify16" cols="30" rows="3"
+                                class="form-control resize-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div id="checkbox_ecg" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">ECG</label>
+                    </div>
+                    <div class="ps-4 d-flex flex-column gap-2 mt-2">
+                        <div id="checkbox_normal7" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Normal</label>
+                        </div>
+                        <div id="checkbox_abnormal7" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Abnormal</label>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="" class="form-label">Specify </label>
+                            <textarea name="" id="textarea_specify17" cols="30" rows="3"
+                                class="form-control resize-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div id="checkbox_Echocardiography" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Echocardiography</label>
+                    </div>
+                    <div class="ps-4 d-flex flex-column gap-2 mt-2">
+                        <div id="checkbox_normal8" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Normal</label>
+                        </div>
+                        <div id="checkbox_abnormal8" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Abnormal</label>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="" class="form-label">Specify </label>
+                            <textarea name="" id="textarea_specify18" cols="30" rows="3"
+                                class="form-control resize-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div id="checkbox_otherinvestigations" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Other investigations</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card card-style-1 mt-3">
+        <div id="cons_spetoggle_header" class="card-header py-2 justify-content-between">
+            <h6 class="m-0 clr-primary-600">Consultations with other specialties</h6>
+            <button id="cons_spetoggle_btn" onclick="toggle_cons_spe()" class="btn btn-icon-3d cons_spetoggle_btn active">
+                <img src="assets/images/icons/arrow-down.svg" alt="">
+            </button>
+        </div>
+        <div class="p-3" id="cons_spe_toggle">
+            <div class="d-flex flex-column gap-2">
+                <div id="checkbox_notrequired" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Not required</label>
+                </div>
+                <div id="checkbox_Willberequestedtocompleteassessment" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Will be requested to complete
+                        assessment</label>
+                </div>
+                <div id="checkbox_Completedconsultations" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Completed consultations</label>
+                </div>
+            </div>
+            <div class="ps-4 mt-2 d-flex flex-column gap-2">
+                <div id="checkbox_specialty" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Specialty</label>
+                </div>
+                <div class="ps-4 d-flex flex-column gap-2">
+                    <div id="checkbox_cardiology" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Cardiology</label>
+                    </div>
+                    <div id="checkbox_pulmonology" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Pulmonology</label>
+                    </div>
+                    <div id="checkbox_neurology" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Neurology</label>
+                    </div>
+                    <div id="checkbox_endocrinology" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Endocrinology</label>
+                    </div>
+                    <div id="checkbox_gastroenterology" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Gastroenterology</label>
+                    </div>
+                    <div id="checkbox_Internalmedicine" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Internal Medicine</label>
+                    </div>
+                    <div id="checkbox_other8" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Other</label>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <label for="" class="form-label">Specify</label>
+                        <textarea name="" class="form-control resize-none" id="textarea_specify19" cols="30"
+                            rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="d-flex flex-column gap-2">
+                    <div id="checkbox_reason" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Reason</label>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <label for="" class="form-label">Specify</label>
+                        <textarea name="" class="form-control resize-none" id="textarea_specify20" cols="30"
+                            rows="3"></textarea>
+                    </div>
+                    <div id="checkbox_Resultofconsultation" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Result of consultation</label>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <label for="" class="form-label">Specify</label>
+                        <textarea name="" class="form-control resize-none" id="textarea_specify21" cols="30"
+                            rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card card-style-1 mt-3">
+        <div id="asse_anetoggle_header" class="card-header py-2 justify-content-between">
+            <h6 class="m-0 clr-primary-600">Assessment and Anesthetic plan</h6>
+            <button id="asse_anetoggle_btn" onclick="toggle_asse_ane()" class="btn btn-icon-3d asse_anetoggle_btn active">
+                <img src="assets/images/icons/arrow-down.svg" alt="">
+            </button>
+        </div>
+        <div class="p-3" id="asse_ane_toggle">
+            <label for="" class="form-label fs-6 fw-bold clr-primary-600">Patient is fit for
+                planned anesthesia</label>
+            <div class="mt-2">
+                <div id="checkbox_asaclass" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">ASA Class:</label>
+                </div>
+                <div class="ps-4 mt-2 d-flex flex-column gap-2">
+                    <div id="checkbox_1" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">1</label>
+                    </div>
+                    <div id="checkbox_2" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">2</label>
+                    </div>
+                    <div id="checkbox_3" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">3</label>
+                    </div>
+                    <div id="checkbox_4" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">4</label>
+                    </div>
+                    <div id="checkbox_E" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">E</label>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div id="checkbox_painscore" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Pain Score</label>
+                    </div>
+                    <div class="mt-2">
+                        <select name="" class="form-select w-auto pe-5" id="dropdown_painscore">
+                            <option value="1">0</option>
+                            <option value="2">1</option>
+                            <option value="3">2</option>
+                            <option value="4">3</option>
+                            <option value="5">4</option>
+                            <option value="6">5</option>
+                            <option value="7">6</option>
+                            <option value="8">7</option>
+                            <option value="9">8</option>
+                            <option value="10">9</option>
+                            <option value="11">10</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div id="checkbox_typeofanesthesia" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Type of anesthesia:</label>
+                    </div>
+                    <div class="ps-4 mt-2 d-flex flex-column gap-2">
+                        <div id="checkbox_general" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">General</label>
+                        </div>
+                        <div id="checkbox_spinal" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Spinal</label>
+                        </div>
+                        <div id="checkbox_epidural" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Epidural</label>
+                        </div>
+                        <div id="checkbox_other9" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Other</label>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="" class="form-label">Specify</label>
+                            <textarea name="" id="textarea_specify22" class="form-control resize-none" cols="30"
+                                rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div id="checkbox_ICUpostoperatively" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">ICU post-operatively:</label>
+                    </div>
+                    <div class="ps-4 mt-2 d-flex flex-column gap-2">
+                        <div id="checkbox_ICUpostoperativelyno" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">No</label>
+                        </div>
+                        <div id="checkbox_ICUpostoperativelyyes" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Yes</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div id="checkbox_bloodbloodproduct" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Blood/Blood product</label>
+                    </div>
+                    <div class="ps-4 mt-2 d-flex flex-column gap-2">
+                        <div id="checkbox_notrequired" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Not required</label>
+                        </div>
+                        <div id="checkbox_prbc" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">PRBC</label>
+                        </div>
+                        <div id="checkbox_plt" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">PLT</label>
+                        </div>
+                        <div id="checkbox_ffp" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">FFP</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div id="checkbox_preoperativemedications" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Preoperative
+                            Medications</label>
+                    </div>
+                    <div class="ps-4 mt-2 d-flex flex-column gap-2">
+                        <div id="checkbox_preoperativeno" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">No</label>
+                        </div>
+                        <div id="checkbox_preoperativeyes" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Yes</label>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <table class="table m-0 table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Drug</th>
+                                    <th>Dose</th>
+                                    <th>Rout</th>
+                                    <th>Time</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div id="checkbox_npotime" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">NPO Time:</label>
+                    </div>
+                    <div class="ps-4 mt-2 d-flex flex-column gap-2">
+                        <div class="d-flex align-items-center">
+                            <label for="" class="form-label m-0">Solid food:</label>
+                            <input type="text" id="textbox_solidfood"
+                                class="form-control ms-2 border-0 border-bottom rounded-0 w-auto">
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <label for="" class="form-label m-0">Fluid:</label>
+                            <input type="text" id="textbox_fluid"
+                                class="form-control ms-2 border-0 border-bottom rounded-0 w-auto">
+                        </div>
+                    </div>
+                </div>
+                <div id="checkbox_Anestheticplanandrisksofanesthesiahavebeenexplainedtothepatientfamilyandorguardianandallquestionsareanswered"
+                    class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                    <label for="" class="form-label m-0">Anesthetic plan and risks of
+                        anesthesia have been explained to the patient, family, and/or
+                        guardian and all questions are answered</label>
+                </div>
+                <div class="mt-2">
+                    <div id="checkbox_Informedconsentofanesthesiaisobtained" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Informed consent of anesthesia
+                            is obtained</label>
+                    </div>
+                    <div class="ps-4 mt-2 d-flex flex-column gap-2">
+                        <div id="checkbox_no" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">No</label>
+                        </div>
+                        <div id="checkbox_yes" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Yes</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="mt-2">
+                <label for="" class="form-label fs-6 fw-bold clr-primary-600">Patient needs
+                    further assessment</label>
+                <div class="mt-2 d-flex flex-column gap-2">
+                    <div id="checkbox_Moreinvestigationsarerequired" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">More investigations are
+                            required</label>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <label for="" class="form-label">Specify</label>
+                        <textarea name="" class="form-control resize-none" id="textarea_specify23" cols="30"
+                            rows="3"></textarea>
+                    </div>
+                    <div id="checkbox_specialty" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Specialty</label>
+                    </div>
+                    <div class="ps-4 d-flex flex-column gap-2">
+                        <div id="checkbox_cardiology" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Cardiology</label>
+                        </div>
+                        <div id="checkbox_pulmonology" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Pulmonology</label>
+                        </div>
+                        <div id="checkbox_neurology" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Neurology</label>
+                        </div>
+                        <div id="checkbox_endocrinology" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Endocrinology</label>
+                        </div>
+                        <div id="checkbox_gastroenterology" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Gastroenterology</label>
+                        </div>
+                        <div id="checkbox_internalmedicine" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Internal Medicine</label>
+                        </div>
+                        <div id="checkbox_other10" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                            <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                            <label for="" class="form-label m-0">Other</label>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="" class="form-label">Specify</label>
+                            <textarea name="" id="textarea_specify24" class="form-control resize-none" cols="30"
+                                rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div id="checkbox_reason" class="custom_check d-flex align-items-center" (click)="toggleCheckboxSelection($event)">
+                        <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                        <label for="" class="form-label m-0">Reason</label>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <label for="" class="form-label">Specify</label>
+                        <textarea name="" id="textarea_specify25" class="form-control resize-none" cols="30"
+                            rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="signature_block mt-3">
+        <label for="" class="form-label fw-bold">Anesthesiologist Name and Signature</label>
+        <div class="border rounded-3 w-25" style="height: 3rem;">
+    
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+        <div class="modal-content">
+            <div class="modal-header p-2">
+                <h5 class="modal-title clr-primary-600 fs-6" translate>Assessments</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-3">
+                <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                    *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                    <div class="row mx-0 g-2 w-100">
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Template ID</p>
+                            <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                                    tem.PatientTemplatedetailID }}</a></p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Name</p>
+                            <p>{{ tem.PatientName }}</p>
+                        </div>
+
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">DoctorName</p>
+                            <p>{{ tem.Consultant }}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Created By</p>
+                            <p>{{ tem.CreatedBy }}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Date</p>
+                            <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

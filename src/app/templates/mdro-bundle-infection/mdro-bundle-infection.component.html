@@ -1,0 +1,695 @@
+<div class="card card-style-1 rounded main-container" #divmbc>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading"> MDRO Bundle Infection Control Surveillance Form </h2>
+        <div class="actions generalConsent_popup position-relative d-flex align-items-center gap-2" *ngIf="IsView">
+              <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+            <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+        </div>
+    </div>
+
+    <div class="p-2 template_scroll" *ngIf="showContent" id="divscroll">
+        <!-- <app-wardheader-summary></app-wardheader-summary> -->
+        <div class="">
+            <div class="card card-style-1 rounded d-none">
+                <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+                    <h5 class="card-heading">Section I: Patient and Hospital Information</h5>
+                </div>
+                <div class="p-2">
+                    <div class="row ">
+                        <div class="col-3">
+                            <label for="" class="form-label">Patient ID:</label>
+                            <input type="text" id="textbox_SSN" class="form-control">
+                        </div>
+                        <div class="col-3">
+                            <label for="" class="form-label">Date of Birth:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                <input matInput class="" #dobdate id="textbox_DOB"
+                                    [matDatepicker]="dbdate"
+                                    (click)="dbdate.open()">
+                                <mat-datepicker-toggle matSuffix [for]="dbdate">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #dbdate></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-3">
+                            <label for="" class="form-label">Gender/Age:</label>
+                            <input type="text" id="textbox_Gender" class="form-control">
+                            <input type="text" id="textbox_FullAge" class="form-control">
+                        </div>
+                        <div class="col-3">
+                            <label for="" class="form-label">Surveillance Plan date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                <input matInput class="" #surveillancedate id="textbox_surveillancedate"
+                                    [matDatepicker]="svdate"
+                                    (click)="svdate.open()">
+                                <mat-datepicker-toggle matSuffix [for]="svdate">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #svdate></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-3">
+                            <label for="" class="form-label">Location:</label>
+                            <input type="text" id="textbox_Location" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-2 card card-style-1 rounded p-2">
+                <label for="" class="form-label">Infection Type</label>
+                <div class="d-flex align-items-center gap-3">
+                    <div (click)="toggleCheckboxSelection($event)" id="checkbox_InfectionTypeP" class="custom_check d-flex align-items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                        <p class="m-0 fs-7">P,</p>
+                    </div>
+                    <div (click)="toggleCheckboxSelection($event)" id="checkbox_InfectionTypeUTI" class="custom_check d-flex align-items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                        <p class="m-0 fs-7">UTI,</p>
+                    </div>
+                    <div (click)="toggleCheckboxSelection($event)" id="checkbox_InfectionTypeBSI" class="custom_check d-flex align-items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                        <p class="m-0 fs-7">BSI,</p>
+                    </div>
+                    <div (click)="toggleCheckboxSelection($event)" id="checkbox_InfectionTypeSSI" class="custom_check d-flex align-items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                        <p class="m-0 fs-7">SSI</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-2">
+                <div class="d-grid">
+                    <table class="table table-bordered m-0 d-block horizontalScroll">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th colspan="6" class="text-center">Data (DD/MM)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><b>ELEMENTS</b></td>
+                                <td>
+                                    <input type="text" class="form-control" name="" id="textbox_date1">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="" id="textbox_date2">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="" id="textbox_date3">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="" id="textbox_date4">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="" id="textbox_date5">
+                                </td>
+                                <td><b>COMMENT</b></td>
+                            </tr>
+                            <tr>
+                                <td>1. Hand Hygiene	</td>
+                                <td>
+                                    <div id="toggle_HandHygiene1" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input type="text" id="textbox_HandHygiene1" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_HandHygiene2" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input type="text" id="textbox_HandHygiene2" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_HandHygiene3" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input type="text" id="textbox_HandHygiene3" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_HandHygiene4" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input type="text" id="textbox_HandHygiene4" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_HandHygiene5" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input type="text" id="textbox_HandHygiene5" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <input type="text" id="textbox_HandHygienecomments" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2. Contact Precautions	</td>
+                                <td>
+                                    <div id="toggle_ContactPrecautions1" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_ContactPrecautions1" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_ContactPrecautions2" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_ContactPrecautions2" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_ContactPrecautions3" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_ContactPrecautions3" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_ContactPrecautions4" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_ContactPrecautions4" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_ContactPrecautions5" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_ContactPrecautions5" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <input id="textbox_ContactPrecautionsComment" type="text" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3. Restricted Shared Equipments	</td>
+                                <td>
+                                    <div id="toggle_RestrictedSharedEquipments1" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_RestrictedSharedEquipments1" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_RestrictedSharedEquipments2" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_RestrictedSharedEquipments2" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_RestrictedSharedEquipments3" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_RestrictedSharedEquipments3" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_RestrictedSharedEquipments4" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_RestrictedSharedEquipments4" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_RestrictedSharedEquipments5" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_RestrictedSharedEquipments5" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <input id="textbox_RestrictedSharedEquipmentsComment" type="text" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4. Enviromental Cleaning</td>
+                                <td>
+                                    <div id="toggle_EnviromentalCleaning1" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_EnviromentalCleaning1" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_EnviromentalCleaning2" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_EnviromentalCleaning2" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_EnviromentalCleaning3" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_EnviromentalCleaning3" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_EnviromentalCleaning4" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_EnviromentalCleaning4" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_EnviromentalCleaning5" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_EnviromentalCleaning5" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <input id="textbox_EnviromentalCleaningComment" type="text" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>5. Sampling Other Sites	</td>
+                                <td>
+                                    <div id="toggle_SamplingOtherSites1" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_SamplingOtherSites1" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_SamplingOtherSites2" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input type="text" id="textbox_SamplingOtherSites2" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_SamplingOtherSites3" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input type="text" id="textbox_SamplingOtherSites3" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_SamplingOtherSites4" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input type="text" id="textbox_SamplingOtherSites4" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_SamplingOtherSites5" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input type="text" id="textbox_SamplingOtherSites5" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <input type="text" id="textbox_SamplingOtherSitesComment" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>6. Chlorhexidine Bath: <br>
+                                    <ul>
+                                        <li>Use disposable cloths or wipes for washing & bathing.</li>
+                                        <li>Use a clean hospital towel for drying and change daily.</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <div id="toggle_ChlorhexidineBath1" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_ChlorhexidineBath1" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_ChlorhexidineBath2" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_ChlorhexidineBath2" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_ChlorhexidineBath3" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_ChlorhexidineBath3" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_ChlorhexidineBath4" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_ChlorhexidineBath4" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_ChlorhexidineBath5" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_ChlorhexidineBath5" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <input type="text" id="textbox_ChlorhexidineBathComment" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>7. Patient and Sitter Education	</td>
+                                <td>
+                                    <div id="toggle_PatientandSitterEducation1" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_PatientandSitterEducation1" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_PatientandSitterEducation2" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_PatientandSitterEducation2" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_PatientandSitterEducation3" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_PatientandSitterEducation3" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_PatientandSitterEducation4" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_PatientandSitterEducation4" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_PatientandSitterEducation5" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_PatientandSitterEducation5" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <input id="textbox_PatientandSitterEducationComment" type="text" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>8. PPE available (long sleeve gown)	</td>
+                                <td>
+                                    <div id="toggle_PPEavailable1" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input type="text" id="textbox_PPEavailable1" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_PPEavailable2" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input type="text" id="textbox_PPEavailable2" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_PPEavailable3" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input type="text" id="textbox_PPEavailable3" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_PPEavailable4" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input type="text" id="textbox_PPEavailable4" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_PPEavailable5" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input type="text" id="textbox_PPEavailable5" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <input type="text" id="textbox_PPEavailableComment" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>9. Single Room	</td>
+                                <td>
+                                    <div id="toggle_SingleRoom1" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_SingleRoom1" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_SingleRoom2" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_SingleRoom2" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_SingleRoom3" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_SingleRoom3" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_SingleRoom4" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_SingleRoom4" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_SingleRoom5" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_SingleRoom5" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <input id="textbox_SingleRoomComment" type="text" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>10. Antibiotic restriction	</td>
+                                <td>
+                                    <div id="toggle_Antibioticrestriction1" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_Antibioticrestriction1" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_Antibioticrestriction2" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_Antibioticrestriction2" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_Antibioticrestriction3" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_Antibioticrestriction3" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_Antibioticrestriction4" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_Antibioticrestriction4" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <div id="toggle_Antibioticrestriction5" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Met</button>
+                                        <button class="btn" (click)="toggleSelection($event)">Not Met</button>
+                                    </div>
+                                    <input id="textbox_Antibioticrestriction5" type="text" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <input type="text" id="textbox_AntibioticrestrictionComment" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Overall compliance: (compliant for all the above 10 components)all the above 10 components)	</b></td>
+                                <td>
+                                    <div id="toggle_Overallcompliance1" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div id="toggle_Overallcompliance2" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div id="toggle_Overallcompliance3" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div id="toggle_Overallcompliance4" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div id="toggle_Overallcompliance5" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                        <button class="btn" (click)="toggleSelection($event)" (click)="toggleSelection($event)">Yes</button>
+                                        <button class="btn" (click)="toggleSelection($event)">No</button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input id="textbox_OverallcomplianceComment" type="text" class="form-control">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mt-2">
+                <div class="row g-2">
+                    <div class="col-4">
+                        <div class="border p-2 rounded-2 h-100">
+                        <div class="row g-2">
+                            <div class="col-6 offset-6 text-center">
+                                <label for="" class="form-label">DDMMYY</label>
+                            </div>
+                            <div class="col-6">
+                                <label for="" class="form-label">Data data collected</label>
+                            </div>
+                            <div class="col-6">
+                                <mat-form-field appearance="fill">
+                                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                                    <input matInput class="" #datacollecteddate id="textbox_datacollecteddate"
+                                        [matDatepicker]="dcdate"
+                                        (click)="dcdate.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="dcdate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #dcdate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-6">
+                                <label for="" class="form-label">Collector ID</label>
+                            </div>
+                            <div class="col-6">
+                                <input type="text" class="form-control" name="" id="textbox_CollectorID1">
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center d-none">
+                        <div class="border p-2 rounded-2 h-100">
+                            <label for="" class="form-label">Date Entry Stamp</label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="border p-2 rounded-2 h-100">
+                            <div class="row g-2">
+                                <div class="col-6 offset-6 text-center">
+                                    <label for="" class="form-label">DDMMYY</label>
+                                </div>
+                                <div class="col-6">
+                                    <label for="" class="form-label">Data data collected</label>
+                                </div>
+                                <div class="col-6">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" #datacollected1date id="textbox_datacollected1date"
+                                            [matDatepicker]="dc1date"
+                                            (click)="dc1date.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="dc1date">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #dc1date></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-6">
+                                    <label for="" class="form-label">Collector ID</label>
+                                </div>
+                                <div class="col-6">
+                                    <input type="text" class="form-control" name="" id="textbox_CollectorID2">
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+      [selectedTemplateFn]="selectedTemplate.bind(this)">
+</app-sharedtemplateview>
+
+<!-- <div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+       <div class="modal-content">
+          <div class="modal-header p-2">
+             <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+             <div class="d-flex align-items-center gap-2">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+          </div>
+          <div class="modal-body p-2">
+             <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                <div class="row mx-0 g-2 w-100">
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Template ID</p>
+                      <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                            tem.PatientTemplatedetailID }}</a></p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Name</p>
+                      <p>{{ tem.PatientName }}</p>
+                   </div>
+ 
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">DoctorName</p>
+                      <p>{{ tem.Consultant }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Created By</p>
+                      <p>{{ tem.CreatedBy }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Date</p>
+                      <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+
+ <div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div> -->
+ 

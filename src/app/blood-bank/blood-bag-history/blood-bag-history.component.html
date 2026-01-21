@@ -1,0 +1,67 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+<!--Container-->
+<div class="container__wrapper bg-white">
+    <div class="page-header sticky-top shadow-sm">
+        <h2 class="page-heading">Blood  Bag History</h2>
+        <div class="actions ms-auto gap-2 d-flex align-items-center">
+            
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-between p-2 border-bottom">
+        <form class="d-flex align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2">
+                
+                <div class="CommanSearch__form">
+                    <label for="" class="CommonSearch__label">
+                        <img src="assets/images/icons/icon-search.svg" alt="">
+                    </label>
+                    <input class="CommonSearch__input form-control" type="text" id="txtBagno" placeholder="BagNo"
+                    (keypress)="($event.charCode >= 48 && $event.charCode < 58)" (keydown.enter)="FetchPatientCaseRecord()">
+                    <button type="reset" class="reset-btn">
+                        <svg width="20" height="20" viewBox="0 0 20 20">
+                            <path
+                                d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z"
+                                stroke="currentColor" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                                stroke-linejoin="round"></path>
+                        </svg>
+                    </button>
+                </div>             
+
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-danger-outline" (click)="clearScreen()">Clear</button>
+                <button class="btn btn-main-outline" (click)="PrintBagNo()">Print</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal" id="caseRecordModal">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">BagNo History</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="trustedUrl = ''"></button>
+            </div>
+            <div class="modal-body">
+                <iframe *ngIf="trustedUrl" height="600" width="100%" [src]="(trustedUrl ? trustedUrl :'')| safeUrl"
+                    frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="errorMsg" data-bs-abackdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{errorMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

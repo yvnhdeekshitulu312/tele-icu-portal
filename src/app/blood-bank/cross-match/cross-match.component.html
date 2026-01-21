@@ -1,0 +1,1241 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+<div>
+    <div class="page-header sticky-top justify-content-between">
+        <div class="d-flex align-items-center gap-3 w-100">
+            <h2 class="page-heading text-nowrap">Cross Match</h2>
+            <div class="d-flex gap-2 align-items-center w-100">
+                <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                    <button class="fs-7 btn" [class.selected]="selectedPatientType === '3'" (click)="FetchBloodRequestOrdersDisplay('3')">ED</button>
+                    <button class="fs-7 btn" [class.selected]="selectedPatientType === '2'"
+                        (click)="FetchBloodRequestOrdersDisplay('2')">IP</button>
+                    <button class="fs-7 btn" [class.selected]="selectedPatientType === '1'"
+                        (click)="FetchBloodRequestOrdersDisplay('1')">OP</button>
+                </div>
+                <div class="filter_Date position-relative">
+                    <div class="d-flex align-items-center gap-2 fs-8">
+                        Filter
+                        <svg class="cursor-pointer" width="18" height="18" viewBox="0 0 24 25" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2.75" y="3.27435" width="18.5" height="18.5" rx="3.25" stroke="#368796"
+                                stroke-width="1.5" />
+                            <circle cx="7.85547" cy="8.32605" r="1.375" fill="#368796" stroke="#368796"
+                                stroke-width="1.25" />
+                            <rect x="9.125" y="7.70105" width="7" height="1.25" rx="0.625" fill="#368796" />
+                            <circle cx="16.1445" cy="12.5243" r="1.375" fill="#4357BC" stroke="#4357BC"
+                                stroke-width="1.25" />
+                            <rect x="8.12988" y="11.8993" width="7" height="1.25" rx="0.625" fill="#4357BC" />
+                            <circle cx="7.875" cy="16.7227" r="1.375" fill="#368796" stroke="#368796"
+                                stroke-width="1.25" />
+                            <rect x="9.14453" y="16.0977" width="7" height="1.25" rx="0.625" fill="#368796" />
+                        </svg>
+                    </div>
+                    <div class="filter_dropdow">
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('T')">Today</p>
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('W')">This week
+                        </p>
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('M')">This
+                            Month</p>
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('3M')">Three
+                            Months</p>
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('6M')">Six
+                            Months</p>
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('1Y')">This
+                            Year</p>
+                        <p class="m-0 p-2 cursor-pointer">All</p>
+                    </div>
+                </div>
+                <div>
+                    <button class="date_range_calendar p-0 position-relative" style="width: 227px;">
+                        <mat-date-range-input class="btn btn-main-outline" [formGroup]="tablePatientsForm"
+                            [rangePicker]="picker">
+                            <input matStartDate formControlName="FromDate">
+                            <input matEndDate formControlName="ToDate" (dateChange)="onDateChange()">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </button>
+                </div>
+                <form action="" class="CommanSearch__form" style="width: 13rem;">
+                    <label for="" class="CommonSearch__label d-flex">
+                        <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_438_22896)">
+                                <path
+                                    d="M9.2959 1.6665C13.4359 1.6665 16.7959 5.0265 16.7959 9.1665C16.7959 13.3065 13.4359 16.6665 9.2959 16.6665C5.1559 16.6665 1.7959 13.3065 1.7959 9.1665C1.7959 5.0265 5.1559 1.6665 9.2959 1.6665ZM9.2959 14.9998C12.5184 14.9998 15.1292 12.389 15.1292 9.1665C15.1292 5.94317 12.5184 3.33317 9.2959 3.33317C6.07256 3.33317 3.46256 5.94317 3.46256 9.1665C3.46256 12.389 6.07256 14.9998 9.2959 14.9998ZM16.3667 15.059L18.7242 17.4157L17.5451 18.5948L15.1884 16.2373L16.3667 15.059Z"
+                                    fill="#368796" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_438_22896">
+                                    <rect width="20" height="20" fill="white" transform="translate(0.128906)" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                    </label>
+                    <input class="CommonSearch__input form-control px-0" type="text" id="NationalId" placeholder="SSN"
+                        (keydown.enter)="onSSNEnterPress($event)">
+                </form>
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-danger-outline" (click)="clearSearchCriteria()">Clear</button>
+            <button class="btn btn-main-outline" (click)="FetchBloodRequestOrders()">Ok</button>
+        </div>
+    </div>
+    <div class="row gx-2 pharmacist_token rad mx-0 mt-1">
+        <div class="col cursor-pointer" >
+            <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center" (click)="filterCrossMatchOrders(0)">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color:rgb(248, 123, 123)">{{ getCrossMatchOrderCount(0) }}</h4>
+                    <p class="m-0 fs-7 fw-bold">New Order</p>
+                </div>
+            </div>
+        </div>
+        <div class="col cursor-pointer" >
+            <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center" (click)="filterCrossMatchOrders(4)">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color: #75A47F;">{{ getCrossMatchOrderCount(4) }}</h4>
+                    <p class="m-0 fs-7 fw-bold">Partially Issued</p>
+                </div>
+            </div>
+        </div>
+        <div class="col cursor-pointer" >
+            <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center" (click)="filterCrossMatchOrders(3)">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color: #61d668;">{{ getCrossMatchOrderCount(3) }}</h4>
+                    <p class="m-0 fs-7 fw-bold">Fully Issued</p>
+                </div>
+            </div>
+        </div>
+        <div class="col cursor-pointer" >
+            <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center" (click)="filterCrossMatchOrders(2)">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color: #acc369;">{{ getCrossMatchOrderCount(2) }}</h4>
+                    <p class="m-0 fs-7 fw-bold">Cross Matched</p>
+                </div>
+            </div>
+        </div>
+     </div>
+    <div class="worklist_legends d-flex align-items-center justify-content-between gap-2">
+        <!-- <div class="d-flex align-items-center gap-2 legends">
+        <div class="d-flex align-items-center gap-1 cursor-pointer" (click)="filterSurgeryRequests('1','New Request')">
+            <span class="newReq"></span>
+            <label for="" class="form-label m-0">New Request</label>
+        </div>
+        <div class="d-flex align-items-center gap-1 cursor-pointer" (click)="filterSurgeryRequests('3','Sample Collected')">
+            <span class="SampleCollected"></span>
+            <label for="" class="form-label m-0">Sample Collected</label>
+        </div>
+        <div class="d-flex align-items-center gap-1 cursor-pointer" (click)="filterSurgeryRequests('4','Sample Acknowledged')">
+            <span class="SampleAck"></span>
+            <label for="" class="form-label m-0">Sample Acknowledged</label>
+        </div>
+        <div class="d-flex align-items-center gap-1 cursor-pointer" (click)="filterSurgeryRequests('7','Results Entered')">
+            <span class="ResultEntered"></span>
+            <label for="" class="form-label m-0">Results Entered</label>
+        </div>
+        <div class="d-flex align-items-center gap-1 cursor-pointer" (click)="filterSurgeryRequests('8','Results Verified')">
+            <span class="ResultVerified"></span>
+            <label for="" class="form-label m-0">Results Verified</label>
+        </div>
+        <div class="d-flex align-items-center gap-1 cursor-pointer" (click)="filterSurgeryRequests('13','Sample Rejected')">
+            <span class="SampleRejected"></span>
+            <label for="" class="form-label m-0">Sample Rejected</label>
+        </div>
+    </div> -->
+    </div>
+    <div class="nobulkprocess d-flex flex-column align-items-center justify-content-center"
+        *ngIf="bloodRequestOrders.length === 0">
+        <img src="assets/images/nolaboratory.svg" alt="" class="mb-2">
+        <p class="m-0 fs-6">No Results</p>
+    </div>
+
+    <div class="p-2"  *ngIf="bloodRequestOrders.length > 0">
+        <div class="d-flex flex-column gap-2 crossMacthHeight">
+            <div *ngFor="let data of sortedGroupedByDate">
+                <div class="card card-style-1 flex-column gap-1 rounded group-date p-0 border-0 mt-1">
+                    <div class="card-header rounded-top justify-content-start p-0 min-height-unset p-0">
+                        <span class="d-block grp_date">{{ data.RequestDatetime }}</span>
+                    </div>
+                    <div class="doc_card rounded visited cursor-pointer"   *ngFor="let wrk of data.items"
+                    [class.confirm]="wrk.STATUS=='4'"
+                    [class.Booked]="wrk.STATUS=='2'"
+                    [class.visited]="wrk.STATUS=='0' || wrk.STATUS=='-1'">
+                        <div class="rounded">
+                            <div class="row gx-1 mx-0 align-items-center">
+                                <div class="bg-primary-50 rounded-start cursor-pointer position-relative"
+                                    style="width: 21rem;">
+                                    <div class="p-2 doctor_profile d-flex">
+                                        <div class="text-center me-2">
+                                            <div class="profile_img position-relative">
+                                                <img *ngIf="wrk.GenderId == 1" src="assets/images/icons/male.svg"
+                                                    alt="" class="position-relative">
+                                                <img *ngIf="wrk.GenderId == 2" src="assets/images/icons/female.svg"
+                                                    alt="" class="position-relative">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex w-100 align-items-center justify-content-between">
+                                            <div class="w-100 position-relative">
+                                                <div class="custom_tooltip custom_tooltip_right">
+                                                    <p class="value fs-7 fw-bold w-75 text-truncate">
+                                                        {{wrk.PatientName}}
+                                                    </p>
+                                                    <div class="tooltip">
+                                                        <p class="value fs-7 fw-bold">{{wrk.PatientName}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div
+                                                        class="full_age_hover custom_tooltip custom_tooltip_right d-flex align-items-center gap-1">
+                                                        <p>{{wrk.Gender}} | {{wrk.FullAge}} </p>
+                                                    </div>
+                                                    <p><b>SSN</b> : <span>{{wrk.SSN}}</span></p>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p><b>DOB</b> :</p>
+                                                    <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                            fill="#368796" />
+                                                    </svg>
+                                                    <p class="m-0 fw-bold text-nowrap">
+                                                        {{wrk.DOB?.split('
+                                                        ')[0]}}</p>
+        
+                                                    
+                                                </div>
+                                                <div>
+                                                    <p>{{wrk.Nationality}} | Mobile : {{wrk.MobileNo}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col doc_details">
+                                    <div class="bg-white p-1 rounded">
+                                        <div class="row gx-2">
+                                            <div class="col-2 d-flex flex-column" style="width: 14%;">
+                                                <label for="" class="form-label m-0 clr-grey fw-bold">Request
+                                                    Date</label>
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                            fill="#368796" />
+                                                    </svg>
+                                                    <p class="m-0 fw-bold text-nowrap">
+                                                        {{wrk.RequestDatetime?.split('
+                                                        ')[0]}}</p>
+
+                                                    <svg class="" width="10" height="11" viewBox="0 0 10 11"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                                            fill="#368796" />
+                                                        <path
+                                                            d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                                            fill="#368796" />
+                                                    </svg>
+                                                    <p class="m-0 fw-bold text-nowrap">
+                                                        {{wrk.RequestDatetime?.split('
+                                                        ')[1]}}</p>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-2 d-flex flex-column" style="width: 14%;">
+                                                <label for="" class="form-label m-0 clr-grey fw-bold">RegCode</label>
+                                                <p class="fw-bold">{{wrk.RegCode}}</p>
+                                            </div>
+                                            <div class="col-2 d-flex flex-column"  style="width: 13%;" *ngIf="selectedPatientType==='2'">
+                                                <label for="" class="form-label m-0 clr-grey fw-bold">Requested
+                                                    Bed</label>
+                                                <p class="fw-bold">{{wrk.WardName}} | {{wrk.BedName}}</p>
+                                            </div>
+
+                                            <div class="col-1 d-flex flex-column" style="width: 11%;">
+                                                <label for="" class="form-label m-0 clr-grey fw-bold">Type of Transfusion</label>
+                                                <p class="fw-bold">{{wrk.TransfusiontypeName}}</p>                                                  
+                                            </div>
+                                            <div class="col-1 d-flex flex-column" style="width: 11%;">
+                                                <label for="" class="form-label m-0 clr-grey fw-bold">Type of Request</label>
+                                                <p class="fw-bold">{{wrk.RequestTypeName}}</p>                                                  
+                                            </div>
+
+                                           
+                                            <div class="col-2 d-flex flex-column d-none" *ngIf="selectedPatientType==='2'">
+                                                <label for="" class="form-label m-0 clr-grey fw-bold">Admit
+                                                    DateTime</label>
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                            fill="#368796" />
+                                                    </svg>
+                                                    <p class="m-0 fw-bold text-nowrap">
+                                                        {{wrk.Acknowledgedatetime?.split('
+                                                        ')[0]}}</p>
+
+                                                    <svg class="ms-3" width="10" height="11" viewBox="0 0 10 11"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                                            fill="#368796" />
+                                                        <path
+                                                            d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                                            fill="#368796" />
+                                                    </svg>
+                                                    <p class="m-0 fw-bold text-nowrap">
+                                                        {{wrk.Acknowledgedatetime?.split('
+                                                        ')[1]}}</p>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="ms-auto" style="width: 21%;">
+                                                <div class="d-flex justify-content-end align-items-center h-100">
+                                                    <div class="d-flex align-items-center gap-1 trimester custom_tooltip custom_tooltip_left border-end-primary-200 pe-1"
+                                                    *ngIf="wrk?.IsPregnancy=='1'">
+                                                        <svg width="30" height="30" viewBox="0 0 32 32" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <circle cx="16" cy="15.998" r="16" fill="#DADFF1"
+                                                                fill-opacity="0.5"></circle>
+                                                            <path
+                                                                d="M8.97438 17.2531C9.15273 16.8868 9.33764 16.5108 9.58925 16.1953C10.08 15.5869 10.6119 15.0165 11.1345 14.4366C11.2524 14.3028 11.367 14.1658 11.4785 14.0256C11.5869 13.9013 11.6887 13.7707 11.7907 13.6369C12.1316 13.194 12.4566 12.732 12.8771 12.3784C13.5461 11.8145 13.5238 11.0881 13.6545 10.3681C13.6545 10.3617 13.6577 10.3553 13.6577 10.3491C13.7278 9.96363 13.7882 9.57491 13.8552 9.18931C14.005 8.35142 14.0176 7.43703 14.365 6.6374C14.8397 5.54135 15.9197 5.33756 17.0157 5.60194C17.4395 5.70392 17.8154 5.89821 18.118 6.21369C18.1339 6.22962 18.1499 6.24555 18.1658 6.2646C18.2167 6.32192 18.2678 6.38251 18.3251 6.45263C18.3251 6.4495 18.3282 6.44623 18.3315 6.44623C18.3506 6.47496 18.3665 6.50355 18.3824 6.53541C18.3856 6.55774 18.3952 6.5832 18.4143 6.61506C18.4366 6.65332 18.4589 6.69158 18.478 6.7297C18.478 6.73283 18.4811 6.73283 18.4811 6.73283C18.6373 7.03549 18.7169 7.35098 18.6977 7.68862C18.6946 7.75874 18.6882 7.83199 18.6754 7.90524C18.6564 8.02315 18.7104 8.18557 18.7869 8.28755C18.806 8.30988 18.8219 8.33221 18.8411 8.3544C18.9144 8.44045 19.0035 8.5201 19.0896 8.59648C19.1343 8.63474 19.1788 8.673 19.2234 8.71111C19.4018 8.87041 19.3955 8.97879 19.1852 9.08061C19.182 9.08374 19.1756 9.08701 19.1692 9.09014C19.1405 9.10294 19.1119 9.11887 19.0801 9.1284C18.9398 9.17306 18.9462 9.26864 19.0099 9.36422C19.0801 9.46933 19.0832 9.55538 19.0768 9.68922C19.064 9.84852 18.9876 9.9441 18.9429 10.0715C18.9142 10.1448 18.9239 10.2404 18.9429 10.32C19.0098 10.6068 18.9239 10.747 18.6339 10.7948C18.5383 10.8107 18.4427 10.8138 18.344 10.8171H18.2166H18.2102C18.1529 10.8076 17.8343 10.7724 17.694 10.9828C17.6239 11.0497 17.5634 11.1326 17.5378 11.2154C17.4805 11.3937 17.4582 11.5753 17.4487 11.7665C17.4199 11.8908 17.4168 12.015 17.4487 12.1329C17.4615 12.1871 17.4837 12.238 17.5124 12.2891C17.5792 12.3974 17.6462 12.5057 17.7163 12.614C17.7451 12.6269 17.7673 12.6395 17.7865 12.6459C18.223 13.3309 18.7391 13.9426 19.3763 14.4842C20.0804 15.08 20.4531 15.6281 20.0295 16.5647C19.9529 16.7335 19.9467 16.9056 19.9912 17.0713C20.0326 17.2242 20.1186 17.3739 20.2301 17.5173C20.5742 17.9505 20.9884 18.2629 21.3612 18.6579C22.0461 19.3778 22.3488 20.3336 22.2946 21.315V21.3182C22.3137 22.0286 22.1066 22.72 21.7052 23.2839C21.4694 23.6981 21.1667 24.09 20.7972 24.4404H20.7941C20.6412 24.5869 20.5168 24.759 20.4341 24.9533C20.3575 25.1317 20.2843 25.3133 20.2015 25.4949H16.1617C15.1931 25.4949 14.2247 25.4949 13.2529 25.498C13.237 25.498 13.2211 25.498 13.2083 25.4949C13.1605 25.4854 13.1286 25.4631 13.0968 25.4121C13.0808 25.3834 13.068 25.358 13.0521 25.3294C12.8163 24.9056 12.6411 24.4563 12.5773 23.9689C12.5008 23.3764 12.5805 22.7965 12.7875 22.239C12.9692 21.7388 13.1827 21.2513 13.3801 20.7544C13.4947 20.4612 13.5967 20.1619 13.6062 19.8464C13.5903 19.84 13.5744 19.8336 13.5584 19.8273C12.1471 19.2315 10.7357 18.6357 9.32417 18.0367C8.97087 17.8871 8.78926 17.629 8.97429 17.2531L8.97438 17.2531ZM11.6981 17.3487C12.2429 17.7341 12.7845 18.1293 13.3484 18.4828C13.1637 17.9158 12.9661 17.3549 12.7878 16.7879C12.7081 16.5425 12.6413 16.2971 12.5871 16.0455C12.2621 16.3354 11.9499 16.6159 11.6377 16.8993C11.4561 17.065 11.5424 17.2371 11.6981 17.3487L11.6981 17.3487Z"
+                                                                fill="#368796" class="ng-star-inserted"></path>
+                                                        </svg>
+                                                        <div style="width: 1.5rem;">
+                                                            
+                                                            <p class="m-0 clr-grey fs-9">{{wrk?.PregnancyContent}}</p>
+                                                        </div>
+                                                        <div class="tooltip">
+                                                            <p>Pregnancy</p>
+                                                        </div>
+                                                    </div>                                                        
+                                                    <div
+                                                        class="pe-2 ps-1 position-relative d-flex align-items-center">
+                                                        <div id="divAllergyTooltip" class="pb-0 clr-main-2 hoverAllergy">
+                                                            <div class="PatientsList  w-100 " id="divAllergy">
+                                                                <div class="pb-0 clr-main-2 hoverAllergyLab d-inline-block "
+                                                                    id="divAllergyTooltip">
+                                                                    <div class="d-flex align-items-center gap-2">
+                                                                        <svg (mouseover)="openAllergyPopup()" width="30"
+                                                                            height="30" viewBox="0 0 39 39" fill="none"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <circle cx="19.2642" cy="19.9221" r="19"
+                                                                                fill="#DAEEF1" />
+                                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                                d="M28.2642 19.9221C28.2642 24.8927 24.2347 28.9221 19.2642 28.9221C14.2936 28.9221 10.2642 24.8927 10.2642 19.9221C10.2642 14.9516 14.2936 10.9221 19.2642 10.9221C24.2347 10.9221 28.2642 14.9516 28.2642 19.9221ZM24.8999 25.8535C23.4326 27.2481 21.4483 28.1039 19.2642 28.1039C14.7455 28.1039 11.0823 24.4408 11.0823 19.9221C11.0823 17.7903 11.8976 15.8489 13.2335 14.3928C13.252 14.457 13.2866 14.5176 13.3372 14.5682L16.963 18.194L15.4228 19.7455C15.3171 19.8521 15.2575 19.996 15.2568 20.1461V23.1164L13.7059 24.6674C13.6523 24.7206 13.6097 24.7839 13.5806 24.8536C13.5516 24.9233 13.5366 24.9981 13.5366 25.0737C13.5366 25.1492 13.5516 25.2241 13.5806 25.2938C13.6097 25.3635 13.6523 25.4268 13.7059 25.48C13.7591 25.5337 13.8224 25.5763 13.8921 25.6053C13.9619 25.6344 14.0367 25.6493 14.1122 25.6493C14.1878 25.6493 14.2626 25.6344 14.3323 25.6053C14.4021 25.5763 14.4654 25.5337 14.5186 25.48L16.0695 23.9291H19.0398C19.1899 23.9285 19.3338 23.8688 19.4404 23.7631L20.9919 22.2229L24.5141 25.7452C24.6187 25.8498 24.7659 25.8859 24.8999 25.8535ZM25.2011 25.552C25.2333 25.4181 25.1972 25.2711 25.0927 25.1666L21.5725 21.6465L24.1505 19.0874C24.417 18.8216 24.6284 18.5058 24.7726 18.1581C24.9169 17.8105 24.9912 17.4378 24.9912 17.0614C24.9912 16.685 24.9169 16.3123 24.7726 15.9647C24.6284 15.617 24.417 15.3013 24.1505 15.0355C23.8847 14.769 23.5689 14.5575 23.2212 14.4133C22.8736 14.269 22.5009 14.1948 22.1245 14.1948C21.7481 14.1948 21.3754 14.269 21.0278 14.4133C20.6801 14.5575 20.3644 14.769 20.0985 15.0355L17.5394 17.6134L13.9157 13.9897C13.8652 13.9392 13.8048 13.9046 13.7407 13.8861C15.1962 12.5534 17.1352 11.7403 19.2642 11.7403C23.7829 11.7403 27.446 15.4034 27.446 19.9221C27.446 22.1034 26.5924 24.0852 25.2011 25.552ZM16.4015 20.3808L17.7721 19.0032L18.5711 19.8021L17.712 20.6612C17.6584 20.7144 17.6158 20.7777 17.5868 20.8475C17.5577 20.9172 17.5427 20.992 17.5427 21.0676C17.5427 21.1431 17.5577 21.2179 17.5868 21.2877C17.6158 21.3574 17.6584 21.4207 17.712 21.4739C17.7652 21.5275 17.8285 21.5701 17.8983 21.5992C17.968 21.6282 18.0428 21.6432 18.1184 21.6432C18.1939 21.6432 18.2687 21.6282 18.3385 21.5992C18.4082 21.5701 18.4715 21.5275 18.5247 21.4739L19.3838 20.6148L20.1828 21.4138L18.8051 22.7845H16.4015V20.3808ZM18.3492 18.4232L19.1496 19.2236L21.7182 16.6551C21.8259 16.5473 21.9721 16.4868 22.1245 16.4868C22.2769 16.4868 22.4231 16.5473 22.5308 16.6551C22.6386 16.7628 22.6992 16.909 22.6992 17.0614C22.6992 17.2138 22.6386 17.36 22.5308 17.4678L19.9623 20.0363L20.7628 20.8367L23.3378 18.2747C23.6411 17.9492 23.8062 17.5188 23.7983 17.074C23.7905 16.6292 23.6103 16.2048 23.2957 15.8902C22.9812 15.5756 22.5568 15.3954 22.112 15.3876C21.6672 15.3797 21.2367 15.5449 20.9112 15.8481L18.3492 18.4232Z"
+                                                                                fill="#368796" />
+                                                                        </svg>
+                                                                        <div class="">
+                                                                            <p class="fs-8">Allergy</p>
+                                                                            <p class="m-0 fs-8 text-nowrap">{{wrk.IsAllergy
+                                                                                === 1 ? 'Yes' :
+                                                                                'NKA'}}</p>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="viewPatientsAllergiesModal end-0"
+                                                                        *ngIf="wrk?.IsAllergy == 1" data-bs-backdrop="static"
+                                                                        tabindex="-1" id="viewAllergies" tabindex="-1">
+                                                                        <div
+                                                                            class="modal-dialog modal-dialog-scrollable modal-l ">
+                                                                            <div class="modal-content p-3">
+                                                                                <div class="modal-header">
+                                                                                    <h6 class="modal-title" translate>
+                                                                                        {{langData?.common?.Allergies}}</h6>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    <div
+                                                                                        class="d-flex w-100 align-items-center justify-content-between">
+                                                                                        <div class="d-flex w-100 mt-2">
+                                                                                            <div
+                                                                                                [innerHtml]="wrk?.AllergyData">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="modal-footer">
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="px-2 gap-2 position-relative border-start-primary-200 d-flex align-items-center">
+
+
+                                                        <div class="custom_tooltip custom_tooltip_left" (click)="openBloodRequest(wrk)">
+                                                             <svg class="cursor-pointer" width="35" height="40" viewBox="0 0 39 39" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <circle cx="19.2642" cy="19.9221" r="19" fill="#DAEEF1"></circle>
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M22.5058 26.604C25.432 26.604 27.8061 23.9133 27.8061 20.5934C27.8061 17.9453 24.4321 13.0697 23.0696 11.2088C22.7879 10.8266 22.2241 10.8266 21.9463 11.2088C21.2976 12.0928 20.1935 13.6561 19.2207 15.3432C20.7224 17.706 22.3013 20.6398 22.3013 22.57C22.3013 24.0021 21.8998 25.3339 21.2204 26.4264C21.6334 26.5422 22.0619 26.604 22.5058 26.604ZM15.7262 12.655C16.0206 12.253 16.6186 12.253 16.913 12.655H16.9136C18.3539 14.6217 21.9176 19.771 21.9176 22.5702C21.9176 26.0781 19.4114 28.922 16.3199 28.922C13.2283 28.922 10.7222 26.0782 10.7222 22.5702C10.7222 19.7711 14.2858 14.622 15.7262 12.655ZM12.073 22.5698C12.073 25.3276 13.9781 27.5709 16.3196 27.5709L16.3194 27.5707C16.4262 27.5707 16.5125 27.4844 16.5123 27.3776C16.5123 27.271 16.4261 27.1847 16.3193 27.1847C14.1906 27.1847 12.4589 25.1144 12.4589 22.5698C12.4589 22.4632 12.3727 22.3768 12.2659 22.3768C12.1593 22.3768 12.073 22.463 12.073 22.5698Z"
+                                                                    fill="#368796"></path>
+                                                            </svg>
+                                                            <div class="tooltip">
+                                                                <p class="">Blood Request</p>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="custom_tooltip custom_tooltip_left" (click)="openCrossMatchModal(wrk)">
+                                                            <svg  class="cursor-pointer" width="35" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <g clip-path="url(#clip0_16064_4512)">
+                                                                <circle cx="16" cy="16" r="16" fill="#DAEEF1"/>
+                                                                <g clip-path="url(#clip1_16064_4512)">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M24.2565 12.6376H19.7957L23.7208 8.71261C23.7984 8.6339 23.8417 8.5277 23.8413 8.41718C23.8409 8.30666 23.7968 8.20078 23.7187 8.12263C23.6405 8.04448 23.5347 8.0004 23.4241 8C23.3136 7.9996 23.2074 8.04292 23.1287 8.1205L18.6115 12.6376H18.1318V9.45683C18.1318 9.34579 18.0876 9.2393 18.0091 9.16078C17.9306 9.08226 17.8241 9.03814 17.7131 9.03811H7.74343C7.63239 9.03814 7.5259 9.08226 7.44738 9.16078C7.36886 9.2393 7.32474 9.34579 7.32471 9.45683V19.4262C7.32473 19.5372 7.36886 19.6437 7.44738 19.7222C7.5259 19.8007 7.63239 19.8449 7.74343 19.8449H11.4041L7.96589 23.283C7.92655 23.3218 7.89527 23.368 7.87385 23.4189C7.85244 23.4698 7.84131 23.5245 7.84111 23.5797C7.84091 23.635 7.85164 23.6897 7.87269 23.7408C7.89374 23.7918 7.92468 23.8382 7.96374 23.8773C8.0028 23.9164 8.0492 23.9473 8.10027 23.9683C8.15134 23.9894 8.20608 24.0001 8.26131 23.9999C8.31655 23.9997 8.3712 23.9886 8.42212 23.9672C8.47304 23.9458 8.51922 23.9145 8.55799 23.8751L13.8682 18.5651V23.0257C13.8682 23.1367 13.9123 23.2432 13.9908 23.3218C14.0694 23.4003 14.1758 23.4444 14.2869 23.4444H24.2565C24.3675 23.4444 24.474 23.4003 24.5525 23.3218C24.6311 23.2432 24.6752 23.1367 24.6752 23.0257V13.0564C24.6752 12.9453 24.6311 12.8388 24.5525 12.7603C24.474 12.6818 24.3675 12.6377 24.2565 12.6376ZM9.87306 17.5168H13.7322L12.2416 19.0074H8.16217V9.87557H17.2943V12.6376H14.2869C14.1758 12.6377 14.0693 12.6818 13.9908 12.7603C13.9123 12.8388 13.8682 12.9453 13.8682 13.0564V13.1785H13.6125C13.5016 13.1789 13.3955 13.2231 13.3173 13.3016C13.239 13.3801 13.1951 13.4864 13.1951 13.5972C13.1951 13.708 13.239 13.8143 13.3173 13.8928C13.3955 13.9713 13.5016 14.0156 13.6125 14.016H13.8682V14.9292H9.87306C9.76201 14.9292 9.6555 14.9733 9.57698 15.0518C9.49845 15.1304 9.45434 15.2369 9.45434 15.3479C9.45434 15.459 9.49845 15.5655 9.57698 15.644C9.6555 15.7225 9.76201 15.7667 9.87306 15.7667H13.8682V16.6794H9.87306C9.81796 16.6792 9.76336 16.6899 9.7124 16.7108C9.66143 16.7318 9.61511 16.7626 9.57608 16.8015C9.53705 16.8404 9.50608 16.8866 9.48496 16.9375C9.46383 16.9884 9.45295 17.043 9.45295 17.0981C9.45295 17.1532 9.46383 17.2078 9.48496 17.2586C9.50608 17.3095 9.53705 17.3558 9.57608 17.3947C9.61511 17.4336 9.66143 17.4644 9.7124 17.4853C9.76336 17.5063 9.81796 17.517 9.87306 17.5168ZM23.8378 22.607H14.7056V13.4751H23.8378V22.607ZM11.8459 14.0159H9.87305C9.76201 14.0159 9.65552 13.9718 9.577 13.8933C9.49848 13.8147 9.45435 13.7082 9.45432 13.5972V11.8465C9.45435 11.7355 9.49848 11.629 9.577 11.5504C9.65552 11.4719 9.76201 11.4278 9.87305 11.4278H11.8459C11.957 11.4278 12.0635 11.4719 12.142 11.5504C12.2205 11.629 12.2646 11.7355 12.2647 11.8465V13.5972C12.2646 13.7082 12.2205 13.8147 12.142 13.8933C12.0635 13.9718 11.957 14.0159 11.8459 14.0159ZM11.4272 12.2652H10.2918V13.1785H11.4272V12.2652ZM15.5834 12.2652H13.6125C13.5017 12.2649 13.3955 12.2206 13.3173 12.1421C13.239 12.0636 13.1951 11.9573 13.1951 11.8465C13.1951 11.7357 13.239 11.6294 13.3173 11.5509C13.3955 11.4724 13.5017 11.4281 13.6125 11.4278H15.5834C15.6385 11.4276 15.6931 11.4383 15.7441 11.4592C15.7951 11.4802 15.8414 11.511 15.8804 11.5499C15.9195 11.5888 15.9504 11.635 15.9716 11.6859C15.9927 11.7368 16.0036 11.7914 16.0036 11.8465C16.0036 11.9016 15.9927 11.9562 15.9716 12.0071C15.9504 12.058 15.9195 12.1042 15.8804 12.1431C15.8414 12.182 15.7951 12.2128 15.7441 12.2338C15.6931 12.2547 15.6385 12.2654 15.5834 12.2652ZM18.3893 17.6155H16.4167C16.3057 17.6154 16.1992 17.5713 16.1207 17.4928C16.0421 17.4143 15.998 17.3078 15.998 17.1967V15.446C15.998 15.335 16.0421 15.2285 16.1207 15.15C16.1992 15.0715 16.3057 15.0273 16.4167 15.0273H18.3893C18.5004 15.0273 18.6069 15.0715 18.6854 15.15C18.7639 15.2285 18.808 15.335 18.8081 15.446V17.1967C18.808 17.3078 18.7639 17.4143 18.6854 17.4928C18.6069 17.5713 18.5004 17.6154 18.3893 17.6155ZM17.9706 15.8648H16.8355V16.778H17.9706V15.8648ZM16.4167 19.3662H22.1268C22.2379 19.3662 22.3444 19.3221 22.4229 19.2435C22.5014 19.165 22.5455 19.0585 22.5455 18.9475C22.5455 18.8364 22.5014 18.7299 22.4229 18.6514C22.3444 18.5728 22.2379 18.5287 22.1268 18.5287H16.4167C16.3057 18.5287 16.1992 18.5728 16.1206 18.6514C16.0421 18.7299 15.998 18.8364 15.998 18.9475C15.998 19.0585 16.0421 19.165 16.1206 19.2435C16.1992 19.3221 16.3057 19.3662 16.4167 19.3662ZM22.1268 21.1169H16.4167C16.3057 21.1169 16.1992 21.0728 16.1206 20.9942C16.0421 20.9157 15.998 20.8092 15.998 20.6982C15.998 20.5871 16.0421 20.4806 16.1206 20.4021C16.1992 20.3235 16.3057 20.2794 16.4167 20.2794H22.1268C22.2379 20.2794 22.3444 20.3235 22.4229 20.4021C22.5014 20.4806 22.5455 20.5871 22.5455 20.6982C22.5455 20.8092 22.5014 20.9157 22.4229 20.9942C22.3444 21.0728 22.2379 21.1169 22.1268 21.1169ZM20.1559 15.8648H22.1269C22.182 15.865 22.2366 15.8543 22.2876 15.8333C22.3385 15.8123 22.3848 15.7815 22.4239 15.7426C22.4629 15.7037 22.4939 15.6575 22.515 15.6066C22.5361 15.5557 22.547 15.5011 22.547 15.446C22.547 15.3909 22.5361 15.3364 22.515 15.2855C22.4939 15.2346 22.4629 15.1884 22.4239 15.1495C22.3848 15.1106 22.3385 15.0797 22.2876 15.0588C22.2366 15.0378 22.182 15.0271 22.1269 15.0273H20.1559C20.0451 15.0277 19.939 15.072 19.8607 15.1504C19.7825 15.2289 19.7386 15.3352 19.7386 15.446C19.7386 15.5569 19.7825 15.6632 19.8607 15.7416C19.939 15.8201 20.0451 15.8644 20.1559 15.8648ZM22.1269 17.6155H20.156C20.0449 17.6155 19.9384 17.5714 19.8599 17.4928C19.7814 17.4143 19.7372 17.3078 19.7372 17.1967C19.7372 17.0857 19.7814 16.9792 19.8599 16.9007C19.9384 16.8221 20.0449 16.778 20.156 16.778H22.1269C22.238 16.778 22.3445 16.8221 22.423 16.9007C22.5015 16.9792 22.5457 17.0857 22.5457 17.1967C22.5457 17.3078 22.5015 17.4143 22.423 17.4928C22.3445 17.5714 22.238 17.6155 22.1269 17.6155Z" fill="#368796"/>
+                                                                </g>
+                                                                </g>
+                                                            </svg> 
+                                                            <div class="tooltip">
+                                                                <p class="">Cross Match</p>
+                                                            </div>
+                                                        </div>     
+                                                        <div class="custom_tooltip custom_tooltip_left">                                                      
+                                                            <svg (click)="openBloodDeatilsModal(wrk)"  class="cursor-pointer" *ngIf="selectedPatientType==='2'" width="35" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <g clip-path="url(#clip0_16064_4543)">
+                                                                <circle cx="16" cy="16" r="16" fill="#DAEEF1"/>
+                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M20.0024 20.0233V23C20.0024 23.0884 19.9673 23.1732 19.9048 23.2357C19.8423 23.2982 19.7575 23.3333 19.6691 23.3333H9.00244C8.91404 23.3333 8.82925 23.2982 8.76674 23.2357C8.70423 23.1732 8.66911 23.0884 8.66911 23V11.3333H11.3358C11.4242 11.3333 11.509 11.2982 11.5715 11.2357C11.634 11.1732 11.6691 11.0884 11.6691 11V8.66667H19.6691C19.7575 8.66667 19.8423 8.70179 19.9048 8.7643C19.9673 8.82681 20.0024 8.91159 20.0024 9V11.31C20.2338 11.4019 20.4568 11.5134 20.6691 11.6433V9C20.6691 8.73478 20.5638 8.48043 20.3762 8.29289C20.1887 8.10536 19.9343 8 19.6691 8H11.1391C10.9626 8.00074 10.7936 8.07147 10.6691 8.19667L8.19911 10.6667C8.07391 10.7911 8.00319 10.9601 8.00244 11.1367V23C8.00244 23.2652 8.1078 23.5196 8.29533 23.7071C8.48287 23.8946 8.73722 24 9.00244 24H19.6691C19.9343 24 20.1887 23.8946 20.3762 23.7071C20.5638 23.5196 20.6691 23.2652 20.6691 23V20.3967L20.2091 19.9367L20.0024 20.0233ZM12.9225 14.8334H10.5025V15.8334H12.9225V14.8334ZM10.5025 17.5H13.4691V18.5H10.5025V17.5ZM16.5025 20.1667H10.5025V21.1667H16.5025V20.1667ZM21.7922 17.6667L23.7089 19.5867C23.8947 19.7745 23.9986 20.0282 23.998 20.2924C23.9974 20.5565 23.8922 20.8097 23.7055 20.9967L23.6622 21.04C23.4748 21.2263 23.2214 21.3308 22.9572 21.3308C22.693 21.3308 22.4396 21.2263 22.2522 21.04L20.3355 19.1233C20.2279 19.1876 20.1166 19.2455 20.0022 19.2967C19.4804 19.5405 18.9115 19.6668 18.3355 19.6667C17.7379 19.6665 17.1479 19.5325 16.6089 19.2744C16.0699 19.0163 15.5955 18.6406 15.2208 18.1751C14.846 17.7096 14.5803 17.166 14.4432 16.5844C14.3061 16.0027 14.301 15.3977 14.4285 14.8138C14.5559 14.2299 14.8125 13.682 15.1795 13.2103C15.5465 12.7386 16.0146 12.3552 16.5492 12.0882C17.0839 11.8211 17.6716 11.6773 18.2691 11.6672C18.8667 11.6572 19.4589 11.7811 20.0022 12.03C20.2375 12.1362 20.461 12.2669 20.6689 12.42C21.4761 12.9974 22.0386 13.8554 22.2464 14.8258C22.4542 15.7963 22.2922 16.8094 21.7922 17.6667ZM16.6688 18.1611C17.1622 18.4907 17.7422 18.6667 18.3355 18.6667C19.1312 18.6667 19.8942 18.3506 20.4569 17.788C21.0195 17.2254 21.3355 16.4623 21.3355 15.6667C21.3355 15.0733 21.1596 14.4933 20.8299 14C20.5003 13.5066 20.0318 13.1221 19.4836 12.895C18.9354 12.668 18.3322 12.6086 17.7503 12.7243C17.1683 12.8401 16.6338 13.1258 16.2142 13.5454C15.7947 13.9649 15.5089 14.4995 15.3932 15.0814C15.2774 15.6633 15.3368 16.2665 15.5639 16.8147C15.791 17.3629 16.1755 17.8314 16.6688 18.1611Z" fill="#368796"/>
+                                                                </g>
+                                                            </svg> 
+                                                            <div class="tooltip">
+                                                                <p class="">Blood History Details</p>
+                                                            </div> 
+                                                        </div>   
+                                                        <div class=""  (click)="openPatientFolder(wrk)">
+                                                            <div class="d-flex align-items-center gap-2 blood cursor-pointer">
+                                                                <svg class="vital_icon" width="35" height="40" viewBox="0 0 38 38"
+                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <circle cx="19" cy="19" r="19" fill="#DAEEF1" />
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M12.5 9C11.6716 9 11 9.67157 11 10.5V27.5C11 28.3284 11.6716 29 12.5 29H25.5C26.3284 29 27 28.3284 27 27.5V14C27 13.1716 26.3284 12.5 25.5 12.5H13.75C13.3358 12.5 13 12.1642 13 11.75C13 11.3358 13.3358 11 13.75 11H26L26.0283 10.9996C26.5675 10.9846 27 10.5428 27 10C27 9.45719 26.5675 9.01499 26.0283 9H12.5ZM19.1622 17.9603H19.5344L19.7304 17.7753C19.7723 17.7357 19.8318 17.7158 19.8912 17.7224C19.9507 17.7291 20.0014 17.7621 20.0344 17.8128L20.1357 17.9691L20.6181 17.1916C20.6577 17.1299 20.726 17.0925 20.8009 17.0991C20.8736 17.1035 20.9397 17.1498 20.9683 17.2158L21.411 18.2181L21.4859 18.0683C21.519 18.0022 21.5872 17.9603 21.6621 17.9603H22.3185C22.3207 17.9075 22.3207 17.8546 22.3185 17.8018C22.3163 17.7401 22.3097 17.6806 22.3009 17.6211C22.2921 17.5617 22.2811 17.5022 22.2657 17.4427C22.1864 17.1167 22.0212 16.8084 21.7679 16.5551C21.6996 16.4868 21.6247 16.4229 21.5498 16.3678C21.5396 16.361 21.5296 16.3538 21.5198 16.3467C21.5043 16.3355 21.4889 16.3244 21.4727 16.315C21.4509 16.3 21.4282 16.2866 21.4057 16.2734L21.4056 16.2734C21.3918 16.2653 21.3782 16.2572 21.3648 16.2489C21.3295 16.2291 21.2921 16.2092 21.2569 16.1916C20.6071 15.8789 19.8119 15.9559 19.2348 16.4251C19.2226 16.435 19.2105 16.4455 19.1984 16.4559C19.1863 16.4664 19.1741 16.4769 19.162 16.4868C19.1378 16.5088 19.1136 16.5308 19.0916 16.5529L19.0453 16.5991L18.9969 16.6432L18.9066 16.5529C18.5409 16.1872 18.0629 16.0044 17.5806 16H17.5673C17.0828 16 16.596 16.185 16.2281 16.5529C16.2061 16.5749 16.1819 16.5991 16.1621 16.6233C16.14 16.6476 16.1202 16.6718 16.1004 16.696C16.0409 16.7709 15.9859 16.848 15.9396 16.9295C15.9088 16.9824 15.8801 17.0374 15.8537 17.0947C15.737 17.3458 15.6797 17.6189 15.6797 17.8921V17.8943C15.6797 18.0088 15.6907 18.1255 15.7105 18.2401L15.7171 18.2709C15.7876 18.6234 15.9594 18.9604 16.2303 19.2313L18.9968 22L21.7655 19.2314C21.8337 19.1631 21.8976 19.0882 21.9527 19.0133C21.9901 18.9627 22.0254 18.9098 22.0562 18.8569C22.087 18.8041 22.1157 18.749 22.1421 18.6917C22.1928 18.5838 22.2302 18.4715 22.2589 18.3591H21.7787L21.5694 18.771C21.5364 18.8371 21.4681 18.8789 21.3932 18.8789H21.3888C21.3117 18.8767 21.2434 18.8305 21.2126 18.76L20.7522 17.7204L20.3029 18.445C20.2677 18.5023 20.2038 18.5375 20.1355 18.5397H20.1333C20.065 18.5397 20.0034 18.5045 19.9659 18.4494L19.8249 18.2291L19.7456 18.304C19.7082 18.3393 19.6597 18.3591 19.6091 18.3591H19.1575C19.0474 18.3591 18.9593 18.271 18.9593 18.1609C18.9593 18.0507 19.052 17.9603 19.1622 17.9603ZM13.7734 24.2773C13.7734 24.0012 13.9973 23.7773 14.2734 23.7773H23.7275C24.0037 23.7773 24.2275 24.0012 24.2275 24.2773C24.2275 24.5535 24.0037 24.7773 23.7275 24.7773H14.2734C13.9973 24.7773 13.7734 24.5535 13.7734 24.2773ZM14.2734 25.7891C13.9973 25.7891 13.7734 26.0129 13.7734 26.2891C13.7734 26.5652 13.9973 26.7891 14.2734 26.7891H20.8477C21.1238 26.7891 21.3477 26.5652 21.3477 26.2891C21.3477 26.0129 21.1238 25.7891 20.8477 25.7891H14.2734Z"
+                                                                        fill="#3D8496" />
+                                                                </svg>
+                                                                <div class="">
+                                                                    <p class="m-0 fs-8 text-nowrap fw-bold">{{langData?.casesheet?.summary}}</p>
+                                                                    <p class="m-0 fs-8 text-nowrap"></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>                                                                                                                  
+                                                </div>
+                                                </div>
+                                            </div>
+
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="doctor_worklist_ChiefComplaints p-1 d-flex align-items-center gap-2 justify-content-between rounded-bottom">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="d-flex align-items-center gap-1">
+                                        <label for="" class="form-label m-0 fw-bold text-nowrap">Doctor Name</label>
+                                        <div class="custom_tooltip custom_tooltip_left">
+                                            <p class=" fs-8">{{wrk.DoctorName}}</p>    
+                                            <p class=" fs-8">{{wrk.DoctorNAme}}</p>                                          
+                                        </div>
+                                    </div>
+                                 
+                                </div>
+                                <div class="d-flex align-items-center gap-4">
+                                    <div class="col-2 inline_status" style="width: 13%;">                                        
+                                        <p class="fw-bold">{{wrk.STATUSNAME}}</p>                                                  
+                                    </div>
+                                    </div>                               
+                            </div>
+
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal ipCrossmatch_modal" id="ipCrossmatch_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered my-2" style="max-width: 98%;">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between border-bottom-primary-200">
+                <h5 class="modal-title">{{selectedPatient?.PatientType === '2' ? 'IP' : 'OP'}} Crossmatch</h5>
+                <div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-0" *ngIf="selectedPatient && crossMatchPopupData">
+                <div class="doctor_worklist worklist_patientcard m-0 rounded-0 border-0 d-flex">
+                    <div class="d-flex align-items-center w-100">
+                        <div class="row mx-0 gx-0 align-items-center w-100">
+                            <div class="w-max-content">
+                                <div class="d-flex align-items-center p-2 py-1">
+                                    <div class="patient-photo me-2">
+                                        <img *ngIf="selectedPatient.GenderId == 1" src="assets/images/icons/male.svg"
+                                            alt="" class="position-relative">
+                                        <img *ngIf="selectedPatient.GenderId == 2" src="assets/images/icons/female.svg"
+                                            alt="" class="position-relative">
+                                    </div>
+                                    <div>
+                                        <p class="value fs-7 fw-bold w-100">{{selectedPatient.PatientName}}</p>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p>{{selectedPatient.Gender}} | {{selectedPatient.FullAge}}</p>
+                                            <p>ID No. : <span class="fw-bold">{{selectedPatient.SSN}}</span></p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <p><b>DOB</b> :</p>
+                                            <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="m-0 fw-bold text-nowrap">
+                                                {{selectedPatient.DOB?.split('
+                                                ')[0]}}</p>
+
+                                            
+
+                                        </div>
+                                        <p class="m-0 fs-8">{{selectedPatient.Nationality}} | Mobile :
+                                            {{selectedPatient.MobileNo}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col pe-0" style="min-height: 100%;">
+                                <div class="bg-white h-100 p-1" style="border-top-right-radius: 0.8rem;">
+                                    <div class="row mx-0 py-1 position-relative w-100">
+                                        <div class="w-max-content" *ngIf="selectedPatient.PatientType === '2'">
+                                            <p class="label"> Ward. </p>
+                                            <p>{{selectedPatient.WardName}}</p>
+                                        </div>
+                                        <div class="w-max-content" *ngIf="selectedPatient.PatientType === '2'">
+                                            <p class="label m-0"> Bed No. </p>
+                                            <p class="alert_animate fw-bold m-0 token">{{selectedPatient.BedName}}</p>
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="label"> Doctor Name </p>
+                                            <p class="color-highlight">{{selectedPatient.DoctorName ||
+                                                selectedPatient.DoctorNAme}}</p>
+                                        </div>
+                                        <div class="col-2 d-none">
+                                            <p class="label">Order</p>
+                                            <p>-</p>
+                                        </div>
+                                        <div class="col-2 d-none">
+                                            <p class="label">Operator</p>
+                                            <p>-</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-2 ipCrossmatch_content">
+                    <div class="row g-2">
+                        <div class="col-2">
+                            <label for="" class="form-label">Blood Group</label>
+                            <select name="" class="form-select" id="" [(ngModel)]="crossMatchPopupData.PatBloodgroup">
+                                <option value="0">Select</option>
+                                <option [value]="grp.ID" *ngFor="let grp of bloodGroups;">{{grp.Names}}</option>
+                            </select>
+                            <p class="text-danger fs-8" *ngIf="BloodGroup!=''">Panacea Result : {{BloodGroup}}</p>
+                        </div>
+                        <div class="col-2">
+                            <label for="" class="form-label">Type of Transfusion</label>
+                            <!-- <p class="fw-bold">{{crossMatchPopupData.TransfusiontypeName}}</p> -->
+                            <span 
+                            class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100"
+                            contenteditable="true" [innerHTML]="crossMatchPopupData.TransfusiontypeName"></span>
+                        </div>
+                        <div class="col-2">
+                            <label for="" class="form-label">Type of Request</label>
+                            <!-- <p class="fw-bold">{{crossMatchPopupData.RequestTypeName}}</p> -->
+                            <span 
+                            class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100"
+                            contenteditable="true" [innerHTML]="crossMatchPopupData.RequestTypeName"></span>
+                        </div>
+                        <div class="col-6">
+                            <label for="" class="form-label">Indication for Transfusion</label>
+                            <span #TransfusionIndications
+                                class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100"
+                                contenteditable="true" [innerHTML]="crossMatchPopupData.TransfusionIndications"></span>
+                        </div>
+                        <div class="col-12">
+                            <label for="" class="form-label">Diagnosis</label>
+                            <span class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                                contenteditable="false" [innerHTML]="crossMatchPopupData.Diagnosis"></span>
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        
+                        <div class="col-12">
+                            <label for="" class="form-label">Antibody Results</label>
+                            <div class="fixed_alter_list rounded border-primary-200">
+                                <div class="fixed_alter_header bg-primary-50 rounded-top">
+                                    <div class="row gx-2 align-items-center p-2 mx-0">
+                                        <div class="" style="width: 10%;">
+                                            <p class="label m-0">Sl.no</p>
+                                        </div>
+                                        <div class="" style="width: 70%;">
+                                            <p class="label m-0"></p>
+                                        </div>
+                                        <div class="" style="width: 20%;">
+                                            <p class="label m-0">Result</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body height-unset">
+                                    <div class="row gx-2 align-items-center p-2 py-1 mx-0 alter_div"
+                                        *ngFor="let item of antiBodyDataList;let i=index">
+                                        <div class="" style="width: 10%;">
+                                            <p class="m-0">{{i + 1}}</p>
+                                        </div>
+                                        <div class="" style="width: 70%;">
+                                            <p class="label m-0">{{item.Antibody}}</p>
+                                        </div>
+                                        <div class="" style="width: 20%;">
+                                            <select name="" class="form-select" [(ngModel)]="item.selectedValue">
+                                                <option value="0">Select</option>
+                                                <option value="1">Positive</option>
+                                                <option value="2">Negative</option>
+                                                <option value="3" *ngIf="item.AntibodyID != '2'">QNS</option>
+                                            </select>
+                                            <p class="text-danger fs-8" *ngIf="Antibiodies!='' && item.Antibody=='Antibody Screening'">Panacea Result : {{Antibiodies}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="mt-2">
+                        <label for="" class="form-label">Remarks</label>
+                        <span #Remarks
+                            class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                            contenteditable="true" [innerHTML]="crossMatchPopupData.Remarks"></span>
+                    </div>
+                    <div class="mt-2 row g-2">
+                        <div class="col-6">
+                            <div class="card card-style-1 rounded h-100">
+                                <div class="card-header rounded-top py-2 justify-content-start min-height-unset">
+                                    <h5 class="card-heading">Billed Components</h5>
+                                </div>
+                                <div class="p-2">
+                                    <div class="fixed_alter_list rounded border-primary-200">
+                                        <div class="fixed_alter_header bg-primary-50 rounded-top">
+                                            <div class="row gx-2 p-2 mx-0">
+                                                <div class="col-4">
+                                                    <p class="label m-0">Component</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="label m-0">Quantity</p>
+                                                </div>
+                                                <div class="col-3">
+                                                    <p class="label m-0">Volume</p>
+                                                </div>
+                                                <div class="col-3">
+                                                    <p class="label m-0">Requested Date</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="fixed_alter_body height-unset">
+                                            <div class="row gx-2 p-2 mx-0 alter_div newOrder rounded-0"
+                                                *ngFor="let item of bloodOrders;let i=index;">
+                                                <div class="col-4">
+                                                    <p class="m-0">{{item.Component}}</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="m-0">{{item.Quantity}}</p>
+                                                </div>
+                                                <div class="col-3">
+                                                    <p class="m-0">{{item.Volume}}</p>
+                                                </div>
+                                                <div class="col-3">
+                                                    <p class="m-0">{{item.RequiredDate | date: 'dd-MMM-yyyy'}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card card-style-1 rounded h-100">
+                                <div class="card-header rounded-top py-2 justify-content-between min-height-unset">
+                                    <div class="d-flex input-group w-auto">
+                                        <input id="textbox_bloodbagscan" type="text" class="form-control"
+                                            placeholder="Scan" aria-label="Search"
+                                          
+                                            (keydown.enter)="searchscanBloodBags($event,10)"
+                                            (change)="searchscanBloodBags($event,10)">
+                                    </div>
+
+                                    <div class="d-flex input-group w-auto">
+                                        <input id="textbox_bloodbag" type="text" class="form-control"
+                                            placeholder="Search" aria-label="Search"
+                                            [matAutocomplete]="autoBloodComponents"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchBloodBags($event,2)"
+                                            (keydown.enter)="searchBloodBags($event,2)">
+                                        <mat-autocomplete #autoBloodComponents="matAutocomplete">
+                                            <mat-option *ngFor="let item of bloodBagsList" [value]="item.BagNumber"
+                                                (onSelectionChange)="onBloodBagSelection(item)">
+                                                {{item.BagNumber}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <button type="button" class="btn btn-secondary-fill btn-icon">
+                                            <img src="assets/images/icons/icon-search.svg" alt="">
+                                        </button>
+                                    </div>
+                                    <!-- <div class="me-2 w-100 d-none">
+                                        <label for="" class="form-label clr-primary-600" required>Scan Drug</label>
+                                        <input type="text" class="form-control" formControlName="ScanDrug"
+                                            (keydown.enter)="searchBloodBags($event)" (change)="searchBloodBags($event)">
+                                    </div> -->
+                                    
+                                </div>
+                               
+                                <div class="p-2">
+                                    <div class="fixed_alter_list rounded border-primary-200">
+                                        <div class="fixed_alter_header bg-primary-50 rounded-top">
+                                            <div class="row gx-2 p-2 mx-0">
+                                                <div class="col-1">
+                                                    <p class="label m-0"></p>
+                                                </div>
+                                                <div class="col-3">
+                                                    <p class="label m-0">Bag Number</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="label m-0">Blood Group</p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <p class="label m-0">Component</p>
+                                                </div>
+                                                <div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="fixed_alter_body height-unset">
+                                            <div class="row gx-2 p-2 mx-0 alter_div newOrder rounded-0"
+                                                *ngFor="let item of crossMatchPopupData.selectedBloodBags;let i=index">
+                                                <div class="col-1">
+                                                    <!-- <p class="m-0">
+                                                        <i class="fa-solid fa-check mx-2" *ngIf="item.ChkCrossmatched === true"></i>
+                                                        <i class="fa-solid fa-xmark mx-2" *ngIf="item.ChkCrossmatched === false"></i>
+                                                    </p> -->
+                                                    <div class="custom_check d-flex align-items-center gap-1 active" *ngIf="item.ChkCrossmatched === true">
+                                                        <svg width="15" height="15" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                        class="check_svg">
+                                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                        <path
+                                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <div class="custom_check d-flex align-items-center gap-1 active" *ngIf="item.ChkCrossmatched === false">
+                                                        <svg width="15" height="15" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <g clip-path="url(#clip0_15151_26205)">
+                                                                <circle cx="10" cy="10.1498" r="10" fill="#E85D54"/>
+                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M6.99981 7.14997C6.5856 7.56418 6.5856 8.23576 6.99981 8.64997L8.49999 10.1501L7.00017 11.65C6.58596 12.0642 6.58596 12.7357 7.00017 13.15C7.41439 13.5642 8.08596 13.5642 8.50017 13.15L9.99999 11.6501L11.4998 13.15C11.914 13.5642 12.5856 13.5642 12.9998 13.15C13.414 12.7358 13.414 12.0642 12.9998 11.65L11.5 10.1501L13.0002 8.64995C13.4144 8.23574 13.4144 7.56417 13.0002 7.14995C12.586 6.73574 11.9144 6.73574 11.5002 7.14995L9.99999 8.65014L8.49981 7.14997C8.0856 6.73575 7.41403 6.73576 6.99981 7.14997Z" fill="white"/>
+                                                            </g>
+                                                        </svg>  
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <a href="javascript:void(0)" class="m-0 fs-8 d-block"
+                                                        (click)="openCompatabilityModal(item)">{{item.BagNumber}}</a>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="m-0">{{item.BloodGroup}}</p>
+                                                </div>
+                                                <div class="col-4">
+                                                    <p class="m-0">{{item.Component}}</p>
+                                                </div>
+
+                                                <div class="col-2 del_svg cursor-pointer custom_tooltip custom_tooltip_left" (click)="$event.stopPropagation();deleteComponent(item, i)">
+                                                    <svg width="19" height="19" viewBox="0 0 23 22"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M20.0995 6.16917H20.0261C15.177 5.68334 10.337 5.5 5.5428 5.98584L3.6728 6.16917C3.58184 6.17866 3.48989 6.17003 3.40228 6.14377C3.31467 6.11751 3.23314 6.07414 3.16239 6.01618C3.09164 5.95822 3.03308 5.8868 2.9901 5.80607C2.94712 5.72534 2.92056 5.63689 2.91197 5.54584C2.8753 5.16084 3.1503 4.83084 3.52614 4.79417L5.39614 4.61084C10.2728 4.11584 15.2136 4.30834 20.1636 4.79417C20.5395 4.83084 20.8145 5.17 20.7778 5.54584C20.764 5.71605 20.6864 5.87477 20.5607 5.99032C20.4349 6.10586 20.2702 6.16973 20.0995 6.16917Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M8.64147 5.24333C8.6048 5.24333 8.56813 5.24333 8.5223 5.23416C8.34445 5.20211 8.18627 5.10159 8.08172 4.95419C7.97717 4.80679 7.93459 4.62427 7.96313 4.44583L8.1648 3.24499C8.31147 2.36499 8.51313 1.14583 10.649 1.14583H13.0506C15.1956 1.14583 15.3973 2.41083 15.5348 3.25416L15.7365 4.44583C15.8006 4.82166 15.544 5.17916 15.1773 5.23416C14.8015 5.29833 14.444 5.04166 14.389 4.67499L14.1873 3.48333C14.059 2.68583 14.0315 2.52999 13.0598 2.52999H10.6581C9.68647 2.52999 9.66813 2.65833 9.53063 3.47416L9.3198 4.66583C9.29369 4.82694 9.2111 4.97351 9.08683 5.07931C8.96255 5.18512 8.80468 5.24325 8.64147 5.24333ZM14.7923 20.856H8.9073C5.70813 20.856 5.5798 19.0868 5.47897 17.6568L4.88313 8.42599C4.85563 8.05016 5.14897 7.72016 5.5248 7.69266C5.9098 7.67433 6.23063 7.95849 6.25813 8.33433L6.85397 17.5652C6.9548 18.9585 6.99147 19.481 8.9073 19.481H14.7923C16.7173 19.481 16.754 18.9585 16.8456 17.5652L17.4415 8.33433C17.469 7.95849 17.799 7.67433 18.1748 7.69266C18.5506 7.72016 18.844 8.041 18.8165 8.42599L18.2206 17.6568C18.1198 19.0868 17.9915 20.856 14.7923 20.856Z"
+                                                            fill="#EB6247"></path>
+                                                        <path
+                                                            d="M13.3714 15.8125H10.3189C9.94311 15.8125 9.63144 15.5008 9.63144 15.125C9.63144 14.7492 9.94311 14.4375 10.3189 14.4375H13.3714C13.7473 14.4375 14.0589 14.7492 14.0589 15.125C14.0589 15.5008 13.7473 15.8125 13.3714 15.8125ZM14.1414 12.1458H9.55811C9.18227 12.1458 8.87061 11.8342 8.87061 11.4583C8.87061 11.0825 9.18227 10.7708 9.55811 10.7708H14.1414C14.5173 10.7708 14.8289 11.0825 14.8289 11.4583C14.8289 11.8342 14.5173 12.1458 14.1414 12.1458Z"
+                                                            fill="#EB6247"></path>
+                                                    </svg>
+                                                    <div class="tooltip" >
+                                                        <p>Delete</p>
+                                                    </div>
+                                                    <!-- <div class="tooltip" *ngIf="!w.isDelete">
+                                                        <p>Deleting is restricted due to time limitations;</p>
+                                                    </div> -->
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center my-1 gap-2 fixed_alter_list rounded border-primary-200 text-end">
+                                        <p class=" d-flex">Crossmatch not Required </p>
+                                        <!-- <p class="m-0 fs-7 d-flex"><i class="fa-solid fa-check mx-2"></i> Crossmatched
+                                        </p>
+                                        <p class="m-0 fs-7 d-flex"><i class="fa-solid fa-xmark mx-2"></i> Uncrossmatched
+                                        </p> -->
+                                        <div class="custom_check d-flex align-items-center gap-1 active">
+                                            <svg width="15" height="15" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                            class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                            </svg>
+                                            <p>Crossmatched</p>
+                                        </div>
+                                        <div class="custom_check d-flex align-items-center gap-1 active">
+                                            <svg width="15" height="15" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_15151_26205)">
+                                                    <circle cx="10" cy="10.1498" r="10" fill="#E85D54"/>
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M6.99981 7.14997C6.5856 7.56418 6.5856 8.23576 6.99981 8.64997L8.49999 10.1501L7.00017 11.65C6.58596 12.0642 6.58596 12.7357 7.00017 13.15C7.41439 13.5642 8.08596 13.5642 8.50017 13.15L9.99999 11.6501L11.4998 13.15C11.914 13.5642 12.5856 13.5642 12.9998 13.15C13.414 12.7358 13.414 12.0642 12.9998 11.65L11.5 10.1501L13.0002 8.64995C13.4144 8.23574 13.4144 7.56417 13.0002 7.14995C12.586 6.73574 11.9144 6.73574 11.5002 7.14995L9.99999 8.65014L8.49981 7.14997C8.0856 6.73575 7.41403 6.73576 6.99981 7.14997Z" fill="white"/>
+                                                </g>
+                                            </svg>                                                
+                                            <p>Uncrossmatched</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="card card-style-1 rounded h-100">
+                                <div class="card-header rounded-top py-2 justify-content-between min-height-unset">
+                                    <div class="d-flex align-items-center gap-2 w-100">
+                                        <label for="" class="form-label m-0">Crossmatched By</label>
+                                        <div class="d-flex input-group w-25">
+                                            <input id="textbox_crossmatchedby" type="text" placeholder="search"
+                                                class="form-control pe-2" aria-label="Search"
+                                                [matAutocomplete]="crossmatchedby"
+                                                (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : onSearchDoctorsAll($event)">
+                                            <mat-autocomplete #crossmatchedby="matAutocomplete">
+                                                <mat-option *ngFor="let item of doctorsList" [value]="item.Name"
+                                                    (onSelectionChange)="onCrossMatchedSelection(item)">
+                                                    {{item.Name}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                            <button type="button" id="button-addon2"
+                                                class="btn btn-secondary-fill btn-icon">
+                                                <img src="assets/images/icons/icon-search.svg" alt="">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <!-- <div class="custom_check d-flex align-items-center gap-1 ms-auto">
+                                            <svg width="16" height="16" style="min-width:1rem" viewBox="0 0 20 21"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                <path
+                                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                                            </svg>
+                                            <p class="m-0 fs-7"> Verified </p>
+                                        </div> -->
+                                        <!-- <button class="btn btn-main-outline">Print</button>
+                                        <button class="btn btn-danger-outline">Close</button> -->
+                                        <button class="btn btn-main-outline" (click)="onSaveClick()">Save</button>
+                                    </div>
+                                </div>
+                                <div class="p-2">
+                                    <!-- <label for="" class="form-label">Reasons</label>
+                                    <span
+                                        class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                                        contenteditable="true"></span> -->
+
+                                    <div class="d-flex align-items-center gap-3 mt-3">
+                                        <div class="w-max-content">
+                                            <label for="" class="form-label text-nowrap d-block">Inspection Done</label>
+                                            <div
+                                                class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                                                <button class="btn"
+                                                    [class.selected]="crossMatchPopupData.IsInspectionDone === '1'"
+                                                    (click)="crossMatchPopupData.IsInspectionDone = '1'">Yes</button>
+                                                <button class="btn"
+                                                    [class.selected]="crossMatchPopupData.IsInspectionDone === '2'"
+                                                    (click)="crossMatchPopupData.IsInspectionDone = '2'">No</button>
+                                            </div>
+                                        </div>
+                                        <div class="w-max-content">
+                                            <label for="" class="form-label text-nowrap d-block">Review of Serology Results</label>
+                                            <div
+                                                class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                                                <button class="btn"
+                                                    [class.selected]="crossMatchPopupData.ReviewOfSerologyResults === '1'"
+                                                    (click)="crossMatchPopupData.ReviewOfSerologyResults = '1'">Yes</button>
+                                                <button class="btn"
+                                                    [class.selected]="crossMatchPopupData.ReviewOfSerologyResults === '2'"
+                                                    (click)="crossMatchPopupData.ReviewOfSerologyResults = '2'">No</button>
+                                            </div>
+                                        </div>
+                                        <div class="w-max-content">
+                                            <label for="" class="form-label text-nowrap d-block">Compatible test results</label>
+                                            <div
+                                                class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                                                <button class="btn"
+                                                    [class.selected]="crossMatchPopupData.IsCompatabilityOrNot === '1'"
+                                                    (click)="crossMatchPopupData.IsCompatabilityOrNot = '1'">Compatible</button>
+                                                <button class="btn"
+                                                    [class.selected]="crossMatchPopupData.IsCompatabilityOrNot === '2'"
+                                                    (click)="crossMatchPopupData.IsCompatabilityOrNot = '2'">Not
+                                                    Compatible</button>
+                                            </div>
+                                            <p class="text-danger fs-8" *ngIf="XMatch!=''">Panacea Result : {{XMatch}}</p>
+                                        </div>
+                                        <div class="col-3">
+                                            <label for="" class="form-label m-0">Technician</label>
+                                            <div class="d-flex input-group w-auto">
+                                                <input id="textbox_technician" type="text" placeholder="search"
+                                                    class="form-control pe-2" aria-label="Search"
+                                                    [matAutocomplete]="technician"
+                                                    (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : onSearchDoctorsAll($event)">
+                                                <mat-autocomplete #technician="matAutocomplete">
+                                                    <mat-option *ngFor="let item of doctorsList" [value]="item.Name"
+                                                        (onSelectionChange)="onTechnicianSelection(item)">
+                                                        {{item.Name}}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button type="button" id="button-addon2"
+                                                    class="btn btn-secondary-fill btn-icon">
+                                                    <img src="assets/images/icons/icon-search.svg" alt="">
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="" class="form-label m-0">Processing Start Date Time</label>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                <input matInput class="" (click)="startDate.open()"
+                                                    [(ngModel)]="crossMatchPopupData.StartDate"
+                                                    [matDatepicker]="startDate">
+                                                <mat-datepicker-toggle matSuffix [for]="startDate">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #startDate></mat-datepicker>
+                                            </mat-form-field>
+                                            <input type="time" class="form-control" [(ngModel)]="crossMatchPopupData.StartTime">
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="" class="form-label m-0">Processing End Date Time</label>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                <input matInput class="" (click)="endDate.open()"
+                                                    [(ngModel)]="crossMatchPopupData.EndDate"
+                                                    [matDatepicker]="endDate">
+                                                <mat-datepicker-toggle matSuffix [for]="endDate">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #endDate></mat-datepicker>
+                                            </mat-form-field>
+                                            <input type="time" class="form-control" [(ngModel)]="crossMatchPopupData.EndTime">
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="" class="form-label">Special Processing</label>
+                                        <span #SpecialProcessing
+                                            class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                                            contenteditable="true"
+                                            [innerHTML]="crossMatchPopupData.SpecialProcessing"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal patientBloodDetails_modal" id="patientBloodDetails_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 88%;">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between border-bottom-primary-200">
+                <h5 class="modal-title">Patient Blood History Details</h5>
+                <div>
+                    <button class="btn btn-danger-outline" (click)="GetBloodBagHsitoryPrint()" 
+                >Print</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-0" *ngIf="selectedPatient">
+                <div class="doctor_worklist worklist_patientcard m-0 rounded-0 border-0 d-flex">
+                    <div class="d-flex align-items-center w-100">
+                        <div class="row mx-0 gx-0 align-items-center w-100">
+                            <div class="w-max-content">
+                                <div class="d-flex align-items-center p-2 py-0">
+                                    <div class="patient-photo me-3">
+                                        <img *ngIf="selectedPatient.GenderId == 1" src="assets/images/icons/male.svg"
+                                            alt="" class="position-relative">
+                                        <img *ngIf="selectedPatient.GenderId == 2" src="assets/images/icons/female.svg"
+                                            alt="" class="position-relative">
+                                    </div>
+                                    <div>
+                                        <p class="value fs-7 fw-bold w-100">{{selectedPatient.PatientName}}</p>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p>{{selectedPatient.Gender}} | {{selectedPatient.FullAge}}</p>
+                                            <p>ID No. : <span class="fw-bold">{{selectedPatient.SSN}}</span></p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <p><b>DOB</b> :</p>
+                                            <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="m-0 fw-bold text-nowrap">
+                                                {{selectedPatient.DOB?.split('
+                                                ')[0]}}</p>
+
+                                           
+
+                                        </div>
+                                        <p class="m-0 fs-8">{{selectedPatient.Nationality}} | Mobile :
+                                            {{selectedPatient.MobileNo}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col pe-0" style="min-height: 100%;">
+                                <div class="bg-white h-100 p-1" style="border-top-right-radius: 0.8rem;">
+                                    <div class="row mx-0 py-1 position-relative w-100">
+                                        <div class="w-max-content" *ngIf="selectedPatient.PatientType === '2'">
+                                            <p class="label"> Ward. </p>
+                                            <p>{{selectedPatient.WardName}}</p>
+                                        </div>
+                                        <div class="w-max-content" *ngIf="selectedPatient.PatientType === '2'">
+                                            <p class="label m-0"> Bed No. </p>
+                                            <p class="alert_animate fw-bold m-0 token">{{selectedPatient.BedName}}</p>
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="label"> Doctor Name </p>
+                                            <p class="color-highlight">{{selectedPatient.DoctorName ||
+                                                selectedPatient.DoctorNAme}}</p>
+                                        </div>
+                                        <div class="col-2">
+                                            <p class="label">Order</p>
+                                            <p></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-2">
+                    <div class="fixed_alter_list rounded border-primary-200">
+                        <div class="fixed_alter_header bg-primary-50 rounded-top">
+                            <div class="row gx-2 p-2 mx-0">
+                                <div class="col-2">
+                                    <p class="label m-0">Issue Date</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="label m-0">Component</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="label m-0">Bag Number</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="label m-0">Transfusion Date</p>
+                                </div>
+                                <div class="col-1">
+                                    <p class="label m-0">Reaction Observed</p>
+                                </div>
+                                <div class="col-1">
+                                    <p class="label m-0">Transfusion Feedback</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="label m-0">Location</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fixed_alter_body">
+                            <div class="row gx-2 p-2 mx-0 alter_div newOrder rounded-0" *ngFor="let item of FetchBloodIssueDetailsDataList">
+                                <div class="col-2">
+                                    <p class="m-0">{{item.Issuedate}}</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="m-0">{{item.COMPONENT}}</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="m-0">{{item.BagNumber}}</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="m-0">{{item.TransfusionDate}}</p>
+                                </div>
+                                <div class="col-1">
+                                    <p class="m-0">{{item.ReactionObserved}}</p>
+                                </div>
+                                <div class="col-1">
+                                    <p class="m-0">{{item.FeedBackId}}</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="m-0">{{item.HospitalName}}</p>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column align-items-center justify-content-center h-100"
+                                *ngIf="FetchBloodIssueDetailsDataList?.length==0">
+                                <img src="assets/images/icon-no-appointments.svg" style="height: 8rem;" alt="" class="mb-2">
+                                <p class="m-0 fs-7">No Blood Bag History Found</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal patientBloodDetails_modal" id="compatibility_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 50%;">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between border-bottom-primary-200 py-2">
+                <h5 class="modal-title">Cross Match and Compatibility</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn btn-main-outline" (click)="onCompatibilityOkClick()">Ok</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                </div>
+            </div>
+            <div class="modal-body pt-2" *ngIf="compatibilityModalData">
+
+                <label for="" class="form-label">Blood Unit No.</label>
+                <input class="form-control w-auto" type="text" disabled [value]="compatibilityModalData.BagNumber">
+
+                <div class="row g-2 mt-2">
+                    <div class="col-6">
+                        <div class="card card-style-1 rounded h-100">
+                            <div class="card-header justify-content-start py-2 min-height-unset rounded-top">
+                                <h5 class="fs-6 card-heading">Cross Match Type</h5>
+                            </div>
+                            <div class="p-2 d-flex flex-column gap-2">
+                                <div class="custom_check d-flex align-items-center gap-1"
+                                    [class.active]="compatibilityModalData.CrossMatchTypeID === option.ID"
+                                    (click)="onCrossMatchTypeIDCheckClick(option);"
+                                    *ngFor="let option of crossMatchTypeData">
+                                    <svg width="16" height="16" style="min-width:1rem" viewBox="0 0 20 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                        <path
+                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <p class="m-0 fs-7">{{option.Names}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card card-style-1 rounded h-100">
+                            <div class="card-header justify-content-start py-2 min-height-unset rounded-top">
+                                <h5 class="fs-6 card-heading">Compatibility</h5>
+                            </div>
+                            <div class="p-2 d-flex flex-column gap-2">
+                                <div class="custom_check d-flex align-items-center gap-1"
+                                    [class.active]="compatibilityModalData.CompatibilityID === option.ID"
+                                    (click)="onCompatibilityIDCheckClick(option);"
+                                    *ngFor="let option of compatibilityData">
+                                    <svg width="16" height="16" style="min-width:1rem" viewBox="0 0 20 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                        <path
+                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <p class="m-0 fs-7">{{option.Names}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="custom_check d-flex align-items-center gap-1 mt-2"
+                    [class.active]="compatibilityModalData.ChkCrossmatched"
+                    (click)="compatibilityModalData.ChkCrossmatched = !compatibilityModalData.ChkCrossmatched">
+                    <svg width="16" height="16" style="min-width:1rem" viewBox="0 0 20 21" fill="none"
+                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                        <path
+                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                            fill="white" stroke="white" stroke-width="0.25"></path>
+                    </svg>
+                    <p class="m-0 fs-7">Cross Matched</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p *ngIf="errorMessages.length === 1">{{errorMessages[0]}}</p>
+                <ul *ngIf="errorMessages.length > 1">
+                    <li *ngFor="let error of errorMessages; let i = index"> {{error}}</li>
+                </ul>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="savemsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade viewVitals pateintFolderPopup" id="pateintFolderPopup" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered my-2" style="max-width: 99%;">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                    <h5 class="modal-title" id=""></h5>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn-close" (click)="closePatientSummaryPopup()"  aria-label="Close"></button>
+                </div>
+
+            </div>
+            <div class="modal-body p-0">
+                <app-patientfolderml *ngIf="showPatientSummaryinPopUp"></app-patientfolderml>                
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="reviewAndPayment">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Vitals Print</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="trustedUrl = ''"></button>
+            </div>
+            <div class="modal-body">
+                <iframe *ngIf="trustedUrl" height="600" width="100%" [src]="(trustedUrl ? trustedUrl :'')| safeUrl"
+                    frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+  </div>

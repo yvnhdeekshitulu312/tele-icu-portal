@@ -1,0 +1,445 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+
+<div class="" style="background-color: #fff">
+  <div
+    class="page-header sticky-top bg-primary-50 shadow-sm justify-content-between"
+  >
+    <div class="d-flex align-items-center gap-2">
+      <h2 class="page-heading d-flex align-items-center m-0 text-nowrap">
+        UHID Block
+      </h2>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <button
+        class="btn btn-main-outline"
+        [disabled]="!enableBlock"
+        (click)="blockOrRelease('release')"
+      >
+        Release
+      </button>
+      <button
+        class="btn btn-main-outline"
+        [disabled]="enableBlock"
+        (click)="blockOrRelease('block')"
+      >
+        Block
+      </button>
+      <button class="btn btn-danger-outline">Clear</button>
+    </div>
+  </div>
+
+  <form
+    [formGroup]="patientBlockForm"
+    (keydown.enter)="$event.preventDefault()"
+  >
+    <div class="p-2">
+      <div class="row g-2 mx-0">
+        <div class="col-2">
+          <label for="" class="form-label">UHID</label>
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder=""
+              aria-label=""
+              formControlName="uhidorssn"
+              (keyup)="onSearchPatient($event)"
+            />
+            <button
+              class="btn btn-secondary-fill btn-icon"
+              type="button"
+              id="button-addon2"
+            >
+              <img src="assets/images/icons/icon-search.svg" alt="" />
+            </button>
+          </div>
+        </div>
+        <div class="col-2">
+          <label for="" class="form-label">Name</label>
+          <input type="text" class="form-control" formControlName="name" />
+        </div>
+        <div class="col-2">
+          <label for="" class="form-label">Effective Date</label>
+          <mat-form-field appearance="fill">
+            <mat-label translate class="pt-dob-testtttt">dd-MMM-yyyy</mat-label>
+            <input
+              matInput
+              formControlName="effectiveDate"
+              class=""
+              [matDatepicker]="effectiveDate"
+              (click)="effectiveDate.open()"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="effectiveDate"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #effectiveDate></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <label for="" class="form-label">Block Message</label>
+          <select
+            name=""
+            class="form-select"
+            id=""
+            formControlName="blockMessage"
+          >
+            <option value="">Select</option>
+            <option
+              *ngFor="let msg of blockMessageList"
+              [value]="msg.messageID"
+            >
+              {{ msg.discription }}
+            </option>
+          </select>
+        </div>
+        <div class="col-2">
+          <label for="" class="form-label">Block Details</label>
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder=""
+              aria-label=""
+              formControlName="blockDetails"
+            />
+            <button
+              class="btn btn-secondary-fill btn-icon"
+              type="button"
+              id="button-addon2"
+            >
+              <img src="assets/images/icons/icon-search.svg" alt="" />
+            </button>
+          </div>
+        </div>
+        <div class="col-2">
+          <label for="" class="form-label">Outstanding Amount</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="outStandingAmount"
+          />
+        </div>
+        <div class="col-3">
+          <label for="" class="form-label">Authorized by</label>
+          <div class="CommanSearch__form w-100 ps-2" style="height: 2rem">
+            <div class="input-group">
+              <div
+                class="d-flex align-items-center gap-2 justify-content-end w-100"
+              >
+                <div class="input-group align-items-center">
+                  <label for="" class="CommonSearch__label">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="22"
+                      viewBox="0 0 25 24"
+                      fill="none"
+                    >
+                      <g clip-path="url(#clip0_72_1908)">
+                        <path
+                          d="M11.0835 2.00003C16.0515 2.00003 20.0835 6.03203 20.0835 11C20.0835 15.968 16.0515 20 11.0835 20C6.1155 20 2.0835 15.968 2.0835 11C2.0835 6.03203 6.1155 2.00003 11.0835 2.00003ZM11.0835 18C14.9505 18 18.0835 14.867 18.0835 11C18.0835 7.13203 14.9505 4.00003 11.0835 4.00003C7.2155 4.00003 4.0835 7.13203 4.0835 11C4.0835 14.867 7.2155 18 11.0835 18ZM19.5685 18.071L22.3975 20.899L20.9825 22.314L18.1545 19.485L19.5685 18.071V18.071Z"
+                          fill="#368796"
+                        />
+                      </g>
+                    </svg>
+                  </label>
+
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="Authorized By"
+                    formControlName="authorizedBy"
+                    (keyup)="searchSsEmployee($event)"
+                  />
+                </div>
+
+                <ng-container *ngIf="ssEmployeeFilter | async as options">
+                  <div
+                    class="input-group dropdown-main-div w-100 text-start position-absolute"
+                    (click)="$event.stopPropagation()"
+                  >
+                    <div class="w-100">
+                      <div
+                        class="dropdown-style"
+                        *ngFor="let option of options"
+                        (click)="selectAuthorized(option)"
+                      >
+                        <span>{{ option.Name }} </span>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <label for="" class="form-label">Block Type</label>
+          <div class="d-flex align-items-center gap-2 mt-2">
+            <div
+              class="custom_check d-flex align-items-center gap-1"
+              (click)="blockTypeChange('1')"
+              [class.active]="blockType == '1'"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 20 21"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="check_svg"
+              >
+                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                <path
+                  d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                  fill="white"
+                  stroke="white"
+                  stroke-width="0.25"
+                ></path>
+              </svg>
+              <p>Block Complete</p>
+            </div>
+            <div
+              class="custom_check d-flex align-items-center gap-1"
+              (click)="blockTypeChange('2')"
+              [class.active]="blockType == '2'"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 20 21"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="check_svg"
+              >
+                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                <path
+                  d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                  fill="white"
+                  stroke="white"
+                  stroke-width="0.25"
+                ></path>
+              </svg>
+              <p>Credit Block</p>
+            </div>
+            <div
+              class="custom_check d-flex align-items-center gap-1"
+              (click)="blockTypeChange('3')"
+              [class.active]="blockType == '3'"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 20 21"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="check_svg"
+              >
+                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                <path
+                  d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                  fill="white"
+                  stroke="white"
+                  stroke-width="0.25"
+                ></path>
+              </svg>
+              <p>Prompt</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <label for="" class="form-label">Release Type</label>
+          <div class="d-flex align-items-center gap-2 mt-2">
+            <div
+              class="custom_check d-flex align-items-center gap-1"
+              (click)="releaseTypeChange('1')"
+              [class.active]="releaseType == '1'"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 20 21"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="check_svg"
+              >
+                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                <path
+                  d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                  fill="white"
+                  stroke="white"
+                  stroke-width="0.25"
+                ></path>
+              </svg>
+              <p>Release Permanent</p>
+            </div>
+            <div
+              class="custom_check d-flex align-items-center gap-1"
+              (click)="releaseTypeChange('2')"
+              [class.active]="releaseType == '2'"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 20 21"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="check_svg"
+              >
+                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                <path
+                  d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                  fill="white"
+                  stroke="white"
+                  stroke-width="0.25"
+                ></path>
+              </svg>
+              <p>Release Temporary</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <label for="" class="form-label">Release Reason</label>
+          <textarea
+            formControlName="releaseReason"
+            rows="2"
+            cols="10"
+            class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+            contenteditable="true"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="loader-wrapper" *ngIf="loader">
+  <div class="loader">
+    <div class="bar1"></div>
+    <div class="bar2"></div>
+    <div class="bar3"></div>
+    <div class="bar4"></div>
+    <div class="bar5"></div>
+    <div class="bar6"></div>
+    <div class="bar1"></div>
+  </div>
+</div>
+
+<div
+  class="modal"
+  data-bs-backdrop="static"
+  tabindex="-1"
+  id="multiplePatients"
+  tabindex="-1"
+  [ngStyle]="{ display: displayMultiplePatients }"
+>
+  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title m-0" translate>Patient Information</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="closePatientSelectPopup()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th translate>Patient Name</th>
+              <th translate>ID No</th>
+              <th translate>Gender</th>
+              <th translate>Age</th>
+              <th translate>Registration Date</th>
+              <th translate>Mobile No</th>
+              <th translate>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let patient of multiplePatientsList; let i = index">
+              <td>{{ patient.patientName }}</td>
+              <td>{{ patient.ssn }}</td>
+              <td>{{ patient.gender || "-" }}</td>
+              <td>{{ patient.fullAge || "-" }}</td>
+              <td>{{ patient.registrationDate | date : "dd-MMM-yyyy" }}</td>
+              <td>{{ patient.mobileNo || "-" }}</td>
+              <td>
+                <button
+                  class="btn btn-main-outline"
+                  translate
+                  type="button"
+                  (click)="onPatientSelect(patient)"
+                >
+                  Select
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal"
+  id="errorMsg"
+  data-bs-abackdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-toast modal-toast-success"
+  >
+    <div class="modal-content">
+      <img
+        class="modal-header-icon"
+        src="assets/images/icons/toast-info.svg"
+        alt=""
+      />
+      <div class="modal-body">
+        <p>{{ errorMsg }}</p>
+        <div class="modal-footer">
+          <a
+            href="javascript:void(0)"
+            type="button"
+            class="btn btn-main-outline"
+            data-bs-dismiss="modal"
+            >Ok</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="successMsg" tabindex="-1">
+  <div
+    class="modal-dialog modal-dialog-centered modal-toast modal-toast-success"
+  >
+    <div class="modal-content">
+      <img
+        class="modal-header-icon"
+        src="assets/images/icons/toast-success.svg"
+        alt=""
+      />
+      <div class="modal-body">
+        <p>{{ successMsg }}</p>
+        <div class="modal-footer">
+          <a
+            href="javascript:void(0)"
+            type="button"
+            class="btn btn-main-outline"
+            data-bs-dismiss="modal"
+            >OK</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

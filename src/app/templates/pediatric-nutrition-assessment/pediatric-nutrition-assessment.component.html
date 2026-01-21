@@ -1,0 +1,602 @@
+<div class="card card-style-1 rounded main-container" #divpna>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading">Pediatric Nutrition Assessment / Reassessment </h2>
+        <div class="actions generalConsent_popup position-relative d-flex align-items-center gap-2" *ngIf="IsView">
+            <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+            <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+        </div>
+    </div>
+    
+    <div class="p-2 template_scroll" *ngIf="showContent" id="divscroll">
+        <div class="">
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-2">
+                    <label for="" class="form-label">Ward</label>
+                    <input type="text" id="text_Ward" class="form-control">
+                </div>
+                <div id="toggle_PatientType" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                    <button class="btn selected" (click)="toggleSelection($event)">In patient</button>
+                    <button class="btn" (click)="toggleSelection($event)">Out Patient</button>
+                </div>
+            </div>
+            <div class="mt-2">
+                <table class="table m-0">
+                    <tbody>
+                        <tr>
+                            <th>Subjective</th>
+                            <td>
+                                <div class="row g-2">
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Patient is On: </label>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div id="checkbox_Oral" (click)="onCheckboxSelection($event, patientOnIds)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Oral</p>
+                                            </div>
+                                            <div id="checkbox_TubeFeeding" (click)="onCheckboxSelection($event, patientOnIds)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Tube Feeding</p>
+                                            </div>
+                                            <div id="checkbox_TPN" (click)="onCheckboxSelection($event, patientOnIds)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">TPN</p>
+                                            </div>
+                                            <div id="checkbox_NPO" (click)="onCheckboxSelection($event, patientOnIds)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">NPO</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-2 mt-2">
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Diet History:</label>
+                                    </div>
+                                    <div class="col-10">
+                                        <!-- <textarea name="" class="form-control" id="textarea_DietHistory" cols="30" rows="3"></textarea> -->
+                                        <span name="" class="form-control textarea_box_double" id="textarea_DietHistory" cols="30" rows="3" resize-none contenteditable="true">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row g-2 mt-2">
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Appetite: </label>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div id="checkbox_Good" (click)="onCheckboxSelection($event, appetiteIds)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Good</p>
+                                            </div>
+                                            <div id="checkbox_Fair" (click)="onCheckboxSelection($event, appetiteIds)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Fair</p>
+                                            </div>
+                                            <div id="checkbox_Poor" (click)="onCheckboxSelection($event, appetiteIds)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Poor</p>
+                                            </div>
+                                            <div id="checkbox_NotApplicable" (click)="onCheckboxSelection($event, appetiteIds, true)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Not Applicable</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-2 mt-2">
+                                    <div class="col-2">
+                                        <label for="" class="form-label">GI Tract Problems: </label>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div id="checkbox_GITractProblemsNone" (click)="onCheckboxSelection($event, giTractIds, true)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">None</p>
+                                            </div>
+                                            <div id="checkbox_Vomiting" (click)="onCheckboxSelection($event, giTractIds)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Vomiting</p>
+                                            </div>
+                                            <div id="checkbox_Diarrhea" (click)="onCheckboxSelection($event, giTractIds)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Diarrhea</p>
+                                            </div>
+                                            <div id="checkbox_Constipation" (click)="onCheckboxSelection($event, giTractIds)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Constipation</p>
+                                            </div>
+                                            <div id="checkbox_Nausea" (click)="onCheckboxSelection($event, giTractIds)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Nausea</p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-2 mt-2">
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Difficulty In: </label>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div id="checkbox_DifficultyInNone" (click)="onCheckboxSelection($event, ['checkbox_Swallowing', 'checkbox_Chewing', 'checkbox_DifficultyInNone'],true)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">None</p>
+                                            </div>
+                                            <div id="checkbox_Swallowing" (click)="onCheckboxSelection($event, ['checkbox_Swallowing', 'checkbox_Chewing', 'checkbox_DifficultyInNone'])" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Swallowing</p>
+                                            </div>
+                                            <div id="checkbox_Chewing" (click)="onCheckboxSelection($event, ['checkbox_Swallowing', 'checkbox_Chewing', 'checkbox_DifficultyInNone'])" class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Chewing</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-2 mt-2">
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Food Allergies: </label>
+                                    </div>
+                                    <div class="col-10">
+                                        <div id="toggle_FoodAllergies" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                            <button class="btn " (click)="toggleSelection($event)" data-bs-toggle="modal" data-bs-target="#allergies_modal">Yes</button>
+                                            <button class="btn selected" (click)="toggleSelection($event)">No</button>
+                                        </div>
+                                        <label for="" class="form-label ms-2">Specify:</label>
+                                        <!-- <textarea name="" class="form-control mt-2" id="textarea_FoodAllergiesSpecify" cols="30" rows="3"
+                                        *ngIf="getClassButtonSelectionExistence('toggle_FoodAllergies') === 'Yes'"></textarea> -->
+                                        <span name=""  *ngIf="getClassButtonSelectionExistence('toggle_FoodAllergies') === 'Yes'" class="form-control textarea_box_double" id="textarea_FoodAllergiesSpecify" cols="30" rows="3" resize-none contenteditable="true">
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Objective</th>
+                            <td>
+                                <div class="row g-2">
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Weight:</label>
+                                        <input type="text" id="textbox_Weight" class="form-control">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Height:</label>
+                                        <input type="text" id="textbox_Height" class="form-control">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Corrected Age: </label>
+                                        <input type="text" id="textbox_CorrectedAge" class="form-control">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="" class="form-label">BMI:</label>
+                                        <input type="text" id="textbox_BMI" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row g-2 mt-2">
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Wt/Age:</label>
+                                        <input type="text" id="textbox_WtAge" class="form-control">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Ht/Age:</label>
+                                        <input type="text" id="textbox_HtAge" class="form-control">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Wt/Ht: </label>
+                                        <input type="text" id="textbox_WtHt" class="form-control">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Weight-Age:</label>
+                                        <input type="text" id="textbox_WeightAge" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row g-2 mt-2">
+                                    <div class="col-2">
+                                        <label for="" class="form-label">IBW/Age:</label>
+                                        <input type="text" id="textbox_IBWAge" class="form-control">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="" class="form-label">IHT/Age:</label>
+                                        <input type="text" id="textbox_IHTAge" class="form-control">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="" class="form-label">IBW/Ht: </label>
+                                        <input type="text" id="textbox_IBWHt" class="form-control">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Height-Age:</label>
+                                        <input type="text" id="textbox_HeightAge" class="form-control">
+                                    </div>
+                                </div>
+                                
+                                <div class="row g-2 mt-2">
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Diagnosis: </label>
+                                    </div>
+                                    <div class="col-10">
+                                        <!-- <textarea name="" class="form-control" id="textarea_diagnosis" cols="30" rows="3"></textarea> -->
+                                        <span name="" class="form-control textarea_box_double" id="textarea_diagnosis" cols="30" rows="3" resize-none contenteditable="true">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row g-2 mt-2">
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Laboratory Investigations: </label>
+                                    </div>
+                                    <div class="col-10">
+                                        <!-- <textarea name="" class="form-control" id="textarea_Labs" cols="30" rows="3"></textarea> -->
+                                        <span name="" class="form-control textarea_box_double" id="textarea_Labs" cols="30" rows="3" resize-none contenteditable="true">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row g-2 mt-2">
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Food Drug Interactions: </label>
+                                    </div>
+                                    <div class="col-10">
+                                        <div id="toggle_FoodDrugInteractions" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                            <button class="btn " (click)="toggleSelection($event)">Yes</button>
+                                            <button class="btn selected" (click)="toggleSelection($event)">No</button>
+                                        </div>
+                                        <label for="" class="form-label ms-2"> Specify:</label>
+                                        <!-- <textarea name="" class="form-control mt-2" id="textarea_FoodDrugInteractionsSpecify" cols="30" rows="3" *ngIf="getClassButtonSelectionExistence('toggle_FoodDrugInteractions') === 'Yes'"></textarea> -->
+                                        <span name="" class="form-control textarea_box_double" id="textarea_FoodDrugInteractionsSpecify" cols="30" rows="3" resize-none contenteditable="true"  *ngIf="getClassButtonSelectionExistence('toggle_FoodDrugInteractions') === 'Yes'">
+                                        </span>
+                                  
+                                    </div>
+                                </div>
+                                <div class="row g-2 mt-2">
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Physician Diet Order: </label>
+                                    </div>
+                                    <div class="col-10">
+                                        <!-- <textarea name="" class="form-control" id="textarea_PhysicianDietOrder" cols="30" rows="3"></textarea> -->
+                                        <span name="" class="form-control textarea_box_double" id="textarea_PhysicianDietOrder" cols="30" rows="3" resize-none contenteditable="true">
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Assessment</th>
+                            <td>
+                                <div class="row g-2 mt-2 mx-0">
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Nutritional requirements: </label>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="row gx-5">
+                                            <div class="col-3">
+                                                <label for="" class="form-label text-nowrap">Energy requirement</label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="d-flex align-items-center afterlabel">
+                                                        <input type="text" name="" class="form-control pe-6" id="textbox_Energyrequirement1">
+                                                        <label for="" class="form-label label_sm">Kcal/day</label>
+                                                    </div>
+                                                    <div class="d-flex align-items-center afterlabel">
+                                                        <input type="text" name="" class="form-control pe-6" id="textbox_Energyrequirement2">
+                                                        <label for="" class="form-label label_sm">kca/kg</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <label for="" class="form-label text-nowrap">Protien requirements</label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="d-flex align-items-center afterlabel">
+                                                        <input type="text" name="" class="form-control pe-6" id="textbox_Protienrequirements1">
+                                                        <label for="" class="form-label label_sm">gm/day</label>
+                                                    </div>
+                                                    <div class="d-flex align-items-center afterlabel">
+                                                        <input type="text" name="" class="form-control pe-6" id="textbox_Protienrequirements2">
+                                                        <label for="" class="form-label label_sm">gm/kg</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <label for="" class="form-label text-nowrap">Fluids</label>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="d-flex align-items-center afterlabel">
+                                                        <input type="text" name="" class="form-control pe-6" id="textbox_Fluids1">
+                                                        <label for="" class="form-label label_sm">ml/day</label>
+                                                    </div>
+                                                    <div class="d-flex align-items-center afterlabel">
+                                                        <input type="text" name="" class="form-control pe-6" id="textbox_Fluids2">
+                                                        <label for="" class="form-label label_sm">ml/kg</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-2 mt-2 mx-0">
+                                    <div class="col-2">
+                                        <label for="" class="form-label">Others: </label>
+                                    </div>
+                                    <div class="col-10">
+                                        <!-- <textarea name="" class="form-control" id="textarea_Others" cols="30" rows="3"></textarea> -->
+                                        <span name="" class="form-control textarea_box_double" id="textarea_Others" cols="30" rows="3" resize-none contenteditable="true">
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Plan</th>
+                            <td>
+                                <!-- <textarea name="" class="form-control" id="textarea_Plan1" cols="30" rows="1"></textarea> -->
+                                <span class="textarea_box p-2 rounded-2 border bg-transparent d-block w-100" id="textarea_Plan1" contenteditable="true"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-2 row g-2">
+                <div class="col-3">
+                    <label for="" class="form-label">Clinical Dietician: </label>
+                    <input type="text" id="textbox_ClinicalDietician" class="form-control">
+                </div>
+                <div class="col-2">
+                    <label for="" class="form-label">Date: </label>
+                    <div class="d-flex align-items-center gap-1">
+                        <mat-form-field appearance="fill">
+                           <mat-label translate>dd-MMM-yyyy</mat-label>
+                           <input matInput class="" #date id="textbox_date" [matDatepicker]="Date" (click)="Date.open()" [min]="minDate" [max]="minDate">
+                           <mat-datepicker-toggle matSuffix [for]="Date">
+                           </mat-datepicker-toggle>
+                           <mat-datepicker #Date></mat-datepicker>
+                        </mat-form-field>
+                     </div>
+                </div>
+                <div class="col-2">
+                    <label for="" class="form-label">Time: </label>
+                    <app-time-selector [hours]="getHours('textbox_generic_time1')" [minutes]="getMinutes('textbox_generic_time1')" (timeSelected)="onTimeChange($event, 'textbox_generic_time1')" [disabled]="isTimeSelectorDisable('textbox_generic_time1')"></app-time-selector>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+      [selectedTemplateFn]="selectedTemplate.bind(this)">
+</app-sharedtemplateview>
+
+<!-- <div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+       <div class="modal-content">
+          <div class="modal-header p-2">
+             <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+             <div class="d-flex align-items-center gap-2">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+          </div>
+          <div class="modal-body p-3">
+             <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                <div class="row mx-0 g-2 w-100">
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Template ID</p>
+                      <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                            tem.PatientTemplatedetailID }}</a></p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Name</p>
+                      <p>{{ tem.PatientName }}</p>
+                   </div>
+ 
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">DoctorName</p>
+                      <p>{{ tem.Consultant }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Created By</p>
+                      <p>{{ tem.CreatedBy }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Date</p>
+                      <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+
+ <div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div> -->
+ 
+
+ <div class="modal  allergies_modal" id="allergies_modal" tab-index="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:53rem">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="m-0">Allergies</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn btn-danger-outline">Clear</button>
+                        <button class="btn btn-main-outline">Save</button>
+                    </div>
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-center gap-3 allergy_form pb-3">
+                    <button id="btnDrug" class="d-flex align-items-center justify-content-center btn btn-main-outline"
+                    ><span class="dot ms-2"></span>
+                    Drug</button>
+                    <button id="btnFood" class="d-flex align-items-center justify-content-center btn btn-main-outline"><span
+                            class="dot ms-2"></span> Food</button>
+                    <button id="btnContrast"
+                        class="d-flex align-items-center justify-content-center btn btn-main-outline" disabled><span class="dot ms-2"></span>
+                        Contrast</button>
+                    <button id="btnOthers" class="d-flex align-items-center justify-content-center btn btn-main-outline"><span class="dot ms-2"></span>
+                        Others</button>
+                </div>
+
+                <div class="d-flex justify-content-center gap-3 allergy_form pb-3">
+                    <button
+                        class="d-flex align-items-center justify-content-center btn btn-main-outline"><span
+                            class="dot ms-2"></span>Name</button>
+                </div>
+
+                <div class="border-primary-200 bg-primary-50 rounded-3 p-2">
+                    <div class="row mx-0 g-3 align-items-end allergy_fields">
+                        <div class="col-md-5">
+                            <label for="" class="form-label">Name</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="col-md-5">
+                            <label for="" class="form-label">Severity</label>
+                            <select name="" class="form-select" id="ddl_1" formControlName="Severity">
+                                <option value="0">Select</option>
+                                <option value="1">Mild</option>
+                                <option value="2">Uncomfortable</option>
+                                <option value="3">Dangerous</option>
+                            </select>
+                        </div>
+                        <div class="col-md-10">
+                            <label for="" class="form-label">Description</label>
+                            <!-- <textarea name="" class="form-control resize-none" id="" cols="30" rows="1"
+                                formControlName="Description"></textarea> -->
+                                <span name="" class="form-control textarea_box_double" id="ta_Description" cols="30" rows="3" resize-none contenteditable="true">
+                                </span>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="w-100 text-center">
+                                <button class="btn btn-main-fill mt-2">Add</button>
+                                <!-- <button class="btn btn-main-fill mt-2">Update</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-2 border-primary-200 bg-primary-50 rounded-3 p-2 d-none">
+                    <div class="row mx-0">
+                        <div class="col-md-5">
+                            <label for="" class="form-label">To Date</label>
+                            <input type="date" class="form-control">
+                        </div>
+                        <div class="col-md-5">
+                            <label for="" class="form-label">Blocked Remarks</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div >
+                    <div class="card-3d mt-2 p-2">
+                        <div class="row mx-0 align-items-start">
+                            <div class="col-md-1">
+                                <p class="label text-break">Type</p>
+                                <p class="value text-break">Drug</p>
+                            </div>
+                            <div class="col-md-5">
+                                <p class="label text-break">Name</p>
+                                <p class="value text-break">Name</p>
+                            </div>
+                            <div class="col-md-2">
+                                <p class="label text-break">Severity</p>
+                                <p class="value text-break">Mild</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p class="label text-break">Description</p>
+                                <p class="value text-break">Description</p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="label text-break"> </p>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <svg class="cursor-pointer" width="20"
+                                        height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V13"
+                                            stroke="#43A9BC" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path
+                                            d="M16.0399 3.02001L8.15988 10.9C7.85988 11.2 7.55988 11.79 7.49988 12.22L7.06988 15.23C6.90988 16.32 7.67988 17.08 8.76988 16.93L11.7799 16.5C12.1999 16.44 12.7899 16.14 13.0999 15.84L20.9799 7.96001C22.3399 6.60001 22.9799 5.02001 20.9799 3.02001C18.9799 1.02001 17.3999 1.66001 16.0399 3.02001Z"
+                                            stroke="#43A9BC" stroke-width="1.5" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path
+                                            d="M14.9099 4.15002C15.2415 5.32749 15.8699 6.40009 16.7349 7.26507C17.5998 8.13005 18.6724 8.75843 19.8499 9.09002"
+                                            stroke="#43A9BC" stroke-width="1.5" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <svg class="cursor-pointer" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M21 5.98C17.67 5.65 14.32 5.48 10.98 5.48C9 5.48 7.02 5.58 5.04 5.78L3 5.98M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97M18.85 9.14L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5H13.66M9.5 12.5H14.5"
+                                            stroke="#EB6247" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                <div >
+                    <div class="card-3d mt-2 p-2">
+                        <div class="row mx-0 align-items-start">
+                            <div class="col-md-1">
+                                <p class="label text-break">Type</p>
+                                <p class="value text-break">Food</p>
+                            </div>
+                            <div class="col-md-5">
+                                <p class="label text-break">Name</p>
+                                <p class="value text-break">REMARKS</p>
+                            </div>
+                            <div class="col-md-2">
+                                <p class="label text-break">Severity</p>
+                                <p class="value text-break">Mild</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p class="label text-break">Description</p>
+                                <p class="value text-break">Description</p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="label text-break"> </p>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <svg class="cursor-pointer" width="20"
+                                        height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V13"
+                                            stroke="#43A9BC" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path
+                                            d="M16.0399 3.02001L8.15988 10.9C7.85988 11.2 7.55988 11.79 7.49988 12.22L7.06988 15.23C6.90988 16.32 7.67988 17.08 8.76988 16.93L11.7799 16.5C12.1999 16.44 12.7899 16.14 13.0999 15.84L20.9799 7.96001C22.3399 6.60001 22.9799 5.02001 20.9799 3.02001C18.9799 1.02001 17.3999 1.66001 16.0399 3.02001Z"
+                                            stroke="#43A9BC" stroke-width="1.5" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path
+                                            d="M14.9099 4.15002C15.2415 5.32749 15.8699 6.40009 16.7349 7.26507C17.5998 8.13005 18.6724 8.75843 19.8499 9.09002"
+                                            stroke="#43A9BC" stroke-width="1.5" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <svg class="cursor-pointer" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M21 5.98C17.67 5.65 14.32 5.48 10.98 5.48C9 5.48 7.02 5.58 5.04 5.78L3 5.98M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97M18.85 9.14L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5H13.66M9.5 12.5H14.5"
+                                            stroke="#EB6247" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

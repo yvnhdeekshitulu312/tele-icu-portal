@@ -1,0 +1,161 @@
+<app-header [InputHome]="true" [IsSwitchWard]="false"></app-header>
+<div class="container__wrapper p-0 position-relative" style="background-color: #fff;overflow-x: hidden;" [formGroup]="securityOptionsForm">
+    <div class="page-header sticky-top bg-primary-50 shadow-sm justify-content-between">
+        <h2 class="page-heading d-flex align-items-center m-0">
+            Security Options Config
+        </h2>
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-danger-outline" [disabled]="!isNew" (click)="clearForm()">Clear</button>
+            <button class="btn btn-main-outline" (click)="saveForm()">{{isNew ? 'Save' : 'Modify'}}</button>
+        </div>
+    </div>
+    <div class="p-2 border-bottom">
+        <div class="row g-2">
+            <div class="col-3">
+                <label for="" class="form-label">Minimum Password Length</label>
+                <input type="text" class="form-control" formControlName="Min_Pwd_Len">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Maximum Password Length</label>
+                <input type="text" class="form-control" formControlName="Max_Pwd_Len">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Default Password</label>
+                <input type="password" class="form-control" formControlName="Default_Pwd">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Confirm Default Password</label>
+                <input type="password" class="form-control" formControlName="Conf_Default_Pwd">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Password Character</label>
+                <textarea class="form-control" formControlName="Allow_Pwd_Chars" rows="1"></textarea>
+                <!-- <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block"
+                    contenteditable="true"></span> -->
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Lock User or Group After</label>
+                <div class="d-flex align-items-center gap-2">
+                    <input type="text" class="form-control" formControlName="User_Lock_Attempts">
+                    <label for="" class="form-label text-nowrap m-0">Invalid Login(s)</label>
+                </div>
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Password Life Time</label>
+                <div class="d-flex align-items-center gap-2">
+                    <input type="text" class="form-control" formControlName="Pwd_Life_Time">
+                    <label for="" class="form-label m-0 text-nowrap">Days(s)</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="p-2">
+        <div class="d-flex align-items-center gap-4">
+            <div class="max-content d-flex align-items-center gap-2">
+                <label for="" class="form-label m-0  fw-bold">Password Alert Expiry</label>
+                <div class="d-flex align-items-center gap-2">
+                    <input type="text" class="form-control" formControlName="Pwd_Alert_Exp_days">
+                    <label for="" class="form-label m-0 text-nowrap">Days(s)</label>
+                </div>
+            </div>
+            <div class="max-content d-flex align-items-center gap-2">
+                <label for="" class="form-label m-0 fw-bold">Password should not match with previous</label>
+                <div class="d-flex align-items-center gap-2">
+                    <select name="" class="form-select pe-5" id="" formControlName="Pwd_NoofPreviousPWSValidation">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                    </select>
+                    <label for="" class="form-label m-0 text-nowrap">Passwords</label>
+                </div>
+            </div>
+            <div class="max-content d-flex align-items-center gap-2">
+                <label for="" class="form-label m-0  fw-bold">Mandatory Password</label>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="custom_check d-flex align-items-center gap-1" [class.active]="securityOptionsForm.get('Pwd_IsDigitsMD').value" (click)="onCheckboxSelection('Pwd_IsDigitsMD')">
+                        <svg width="14" height="14" style="min-width:1rem" viewBox="0 0 20 21" fill="none"
+                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-8"> Digits </p>
+                    </div>
+                    <div class="custom_check d-flex align-items-center gap-1" [class.active]="securityOptionsForm.get('Pwd_IsUppercaseMD').value" (click)="onCheckboxSelection('Pwd_IsUppercaseMD')">
+                        <svg width="14" height="14" style="min-width:1rem" viewBox="0 0 20 21" fill="none"
+                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-8"> Uppercase Characters </p>
+                    </div>
+                    <div class="custom_check d-flex align-items-center gap-1" [class.active]="securityOptionsForm.get('Pwd_IsSpeCharMD').value" (click)="onCheckboxSelection('Pwd_IsSpeCharMD')">
+                        <svg width="14" height="14" style="min-width:1rem" viewBox="0 0 20 21" fill="none"
+                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-8"> Special Characters </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="savemsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{errorMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

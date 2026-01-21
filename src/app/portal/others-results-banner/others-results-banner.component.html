@@ -1,0 +1,38 @@
+<div class="d-flex gap-2">
+    <div class="">
+        <form [formGroup]="visitsForm">
+            <div class="d-flex align-items-center"  *ngIf="SummaryfromCasesheet == 'false'">
+                <label for="" class="form-label mb-0 px-2">{{langData?.common?.Visits}}</label>
+
+                <select class="form-select pe-5" style="width:400px;" formControlName="visitId"
+                    (change)="visitchange()">
+                    <option dir="ltr" value="" selected translate>{{langData?.common?.SelectVisit}}</option>
+                    <option dir="ltr" *ngFor="let visit of PatientVisitsList" [value]="visit.AdmissionID">
+                        {{visit.VisitDate}} - {{visit.DoctorName}}
+                    </option>
+                </select>
+            </div>
+        </form>
+    </div>
+    <div class="">
+        <button class="date_range_calendar position-relative pd p-0" style="width: 236px;">
+            <mat-date-range-input class="btn btn-main-outline" [formGroup]="tablePatientsForm" [rangePicker]="picker">
+                <input matStartDate formControlName="FromDate">
+                <input matEndDate formControlName="ToDate" (dateChange)="fetchResults()">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+        </button>
+    </div>
+    <div class="clinical_toggle toggle__switch switch-sm panic_toggle d-inline-flex align-self-center" *ngIf="IsLab">
+        <button [class]="allResults" (click)="filterTestResults('all')">
+            {{langData?.medical?.All}}
+        </button>
+        <button [class]="panicResults" (click)="filterTestResults('panic')">
+            Panic
+        </button>
+        <button [class]="abnormalResults" (click)="filterTestResults('abnormal')">
+            {{langData?.medical?.Abnormal}}
+        </button>
+    </div>
+</div>

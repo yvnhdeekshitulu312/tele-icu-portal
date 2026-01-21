@@ -1,0 +1,52 @@
+<div *ngIf="patientTemplatedetailID?.toString() != '0' && isEditEnabled()" class="d-flex gap-2 align-items-center">
+    <p class="text-danger fw-bold fs-7">
+        {{getBlockedText()}}
+    </p>
+    <button class="btn btn-main-outline" (click)="onBlockClick()" [disabled]="getBlockedText()">
+        Block
+    </button>
+</div>
+
+<div class="modal fade" id="remarksModal">
+    <div class="modal-dialog modal-dialog-centered" style="width: 35%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Remarks
+                </h5>
+                <div class="d-flex gap-2 align-items-center justify-content-end">
+                    <button class="btn btn-main-outline" (click)="saveRemarks()"
+                        [disabled]="!remarkForm.valid">Save</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body" [formGroup]="remarkForm">
+                <textarea name="" placeholder="Enter Remarks" class="form-control resize-none mb-2"
+                    formControlName="remarks" id="" cols="30" rows="3"></textarea>
+                <span class="position-absolute bottom-0"
+                    *ngIf="(this.remarkForm.get('remarks')?.errors) || (!this.remarkForm.get('remarks')?.pristine && this.remarkForm.get('remarks')?.invalid)">
+                    <div class="text-danger" *ngIf="remarkForm.get('remarks')?.errors?.['required']">
+                        Remarks Required
+                    </div>
+                    <div class="text-danger" *ngIf="remarkForm.get('remarks')?.errors?.['consecutiveDots']">
+                        Please enter proper Remarks.
+                    </div>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="blockSaveMsg" tabindex="-1">
+   <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+      <div class="modal-content">
+         <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+         <div class="modal-body">
+            <p>Blocked successfully</p>
+            <div class="modal-footer">
+               <a href="javascript:void(0)" type="button" class="btn btn-main-outline" (click)="onOkClick()">Ok</a>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

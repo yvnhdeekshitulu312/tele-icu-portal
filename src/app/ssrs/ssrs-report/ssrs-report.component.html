@@ -1,0 +1,473 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+<section>
+    <div class="page-header d-flex align-items-center justify-content-between sticky-top">
+        <h2 class="page-heading">Reports</h2>
+    </div>
+</section>
+<div class="p-2 pb-0 ssrsReports_page">
+    <div class="row gx-2 flex-nowrap">
+        <div class="col-2">
+            <div class="pat_lefnav border-primary-200 rounded-2">
+                <div class="lef_search bg-primary-50 d-flex align-items-center gap-2 rounded-top rounded-bottom-0">
+                    <form class="CommanSearch__form border-0 w-100 rounded-top rounded-bottom-0 ps-2"
+                        style="height: 2.5rem;">
+                        <label for="" class="CommonSearch__label">
+                            <svg width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect y="0.5" width="24" height="24" rx="8" fill="#DAEEF1" />
+                                <path
+                                    d="M10.8609 2.49805C15.7521 2.49805 19.7218 6.46772 19.7218 11.3589C19.7218 16.2501 15.7521 20.2198 10.8609 20.2198C5.96968 20.2198 2 16.2501 2 11.3589C2 6.46772 5.96968 2.49805 10.8609 2.49805ZM10.8609 18.2507C14.6681 18.2507 17.7527 15.1662 17.7527 11.3589C17.7527 7.55072 14.6681 4.46713 10.8609 4.46713C7.05267 4.46713 3.96909 7.55072 3.96909 11.3589C3.96909 15.1662 7.05267 18.2507 10.8609 18.2507ZM19.2147 18.3206L22 21.1049L20.6069 22.498L17.8226 19.7128L19.2147 18.3206Z"
+                                    fill="#368796" />
+                            </svg>
+                        </label>
+                        <input type="text" class="CommonSearch__input form-control ps-1" [(ngModel)]="searchText"
+                            [ngModelOptions]="{ standalone: true }" (input)="filterReports($event)"
+                            placeholder="Search">
+                    </form>
+                </div>
+                <div class="p-2 navlinks_height">
+                    <div class="d-flex flex-column gap-2">
+                        <div [class.active]="report.ReportID === selectedReport?.ReportID"
+                            [class.disabled]="(report.ReportType !== '2') && !showMISReport(report)"
+                            class="navbutton rounded-2 d-flex align-items-center gap-3" style="cursor: pointer;"
+                            *ngFor="let report of filteredReports; let i = index" (click)="selectReport(report)">
+                            <p class="m-0 fs-8 lh-sm">{{report.ReportTitle}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col" *ngIf="selectedReport">
+            <div class="pat_rightcontent card card-style-1 rounded-2">
+                <div class="card-header rounded-top justify-content-between p-1" style="height: 2.5rem;">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="min_cont" (click)="changeView()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="21" viewBox="0 0 24 21"
+                                fill="none" class="cursor-pointer">
+                                <path
+                                    d="M1.31602 0.846046C1.52509 0.636946 1.80844 0.519531 2.10413 0.519531L2.10417 0.51995C2.39715 0.51995 2.67809 0.635223 2.88665 0.841104C3.09548 1.04672 3.21451 1.32632 3.21853 1.61906V19.4051C3.21853 19.8032 3.00621 20.171 2.66147 20.3701C2.31648 20.5693 1.89157 20.5693 1.54683 20.3701C1.20209 20.171 0.989502 19.8032 0.989502 19.4051V1.63416C0.989502 1.3385 1.10694 1.05515 1.31602 0.846046Z"
+                                    fill="#43A9BC"></path>
+                                <path
+                                    d="M9.44447 9.39712H21.8962L21.8959 9.3972C22.2943 9.3972 22.6621 9.60951 22.8612 9.95426C23.0601 10.2992 23.0601 10.7239 22.8612 11.0689C22.6621 11.4136 22.2943 11.626 21.8959 11.626H9.44451L12.8072 14.9964C13.0892 15.2779 13.2 15.6886 13.097 16.0735C12.9943 16.4588 12.6941 16.7598 12.3094 16.8633C11.9245 16.967 11.5135 16.8574 11.2315 16.5759L5.94719 11.2994C5.78876 11.1426 5.68152 10.9418 5.6397 10.7228C5.63193 10.6525 5.63193 10.5818 5.6397 10.5115C5.64399 10.2226 5.76114 9.94671 5.96622 9.74297L11.239 4.45094C11.5228 4.18072 11.9274 4.07939 12.3048 4.18394C12.6825 4.2882 12.9774 4.58335 13.0819 4.9608C13.1862 5.33825 13.0849 5.74302 12.8147 6.02664H12.8149L9.44447 9.39712Z"
+                                    fill="#43A9BC"></path>
+                            </svg>
+                        </div>
+                        <h5 class="card-heading fs-6">{{selectedReport.ReportTitle}}</h5>
+                    </div>
+                </div>
+                <div class="p-2">
+                    <div *ngIf="selectedReport && selectedReport?.ReportID !== '109' && selectedReport?.ReportID !== '1283'" class="row g-2">
+                        <iframe height="500px" width="100%" [src]="(selectedReport.ReportPath) | safeUrl" frameborder="0"></iframe>
+                    </div>
+                     <!-- Outstanding Bills -->
+                    <div class="" *ngIf="selectedReport?.ReportID === '109'">
+                        <div class="row g-2">
+                            <div class="col-3">
+                                <label for="" class="form-label">Date</label>
+                                <div class="d-flex align-items-center gap-2 justify-content-end">
+                                    <button class="date_range_calendar p-0 position-relative" style="width: 227px;">
+                                        <mat-date-range-input class="btn btn-main-outline" [formGroup]="ipOutstandingReportForm"
+                                            [rangePicker]="medpicker">
+                                            <input matStartDate formControlName="fromdate">
+                                            <input matEndDate formControlName="todate">
+                                        </mat-date-range-input>
+                                        <mat-datepicker-toggle matIconSuffix [for]="medpicker"></mat-datepicker-toggle>
+                                        <mat-date-range-picker #medpicker></mat-date-range-picker>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="form-label">Bill Type</label>
+                                <select name="" class="form-select" id="billType" [(ngModel)]="billType">
+                                    <option value="0" selected>Both</option>
+                                    <option value="1">Cash</option>
+                                    <option value="2">Credit</option>
+                                </select>
+                            </div>
+                            <div class="col text-end">
+                                <div class="d-flex align-items-center gap-2 justify-content-end">
+                                    <button class="btn btn-main-outline" (click)="showIPOutstandingReportData()">Show</button>
+                                    <button class="btn btn-main-outline" (click)="exportIPOutstandingReport()">Export</button>
+                                    <!-- <button class="btn btn-danger-outline">Clear</button> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fixed_alter_list rounded border-primary-200 mt-2 outstandingBills_table">
+                            <div class="fixed_alter_header rounded-top bg-primary-50">
+                                <div class="row gx-1 align-items-start p-2 mx-0">
+                                    <div class="" style="width: 5%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Sl. No</p>
+                                    </div>
+                                    <div class="" style="width: 10%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">SSN</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Patient Name</p>
+                                    </div>
+                                    <div class="" style="width: 10%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Bill No</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Bill Date</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Bill Amount</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Received Amount</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Discount</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Availed Deposit</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Balance</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body height-unset" style="overflow: unset;">
+                                <div class="alter_div" *ngFor="let ip of ipOutstandingData; let i = index">
+                                    <div class="row gx-2 align-items-center p-2 mx-0">
+                                        <div class="" style="width: 5%;">
+                                            <p class="">{{i + 1}}</p>
+                                        </div>
+                                        <div class="" style="width: 10%;">
+                                            <p class="">{{ip.UHID}}</p>
+                                        </div>
+                                        <div class="" style="width: 20%;">
+                                            <p class="">{{ip.PatientName}}</p>
+                                        </div>
+                                        <div class="" style="width: 10%;">
+                                            <p class="">{{ip.BillNo}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{ip.BillDate | date: 'dd-MMM-yyyy'}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{ip.PatientBillAmount}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{ip.ReceivedAmount}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{ip.Discount}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{ip.AvailedDeposits}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{ip.PatientBalance}}</p>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="bg-primary-20 p-2">
+                                        <div class="row mx-0 align-items-center gx-2">
+                                            <div class="col-2">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p class="clr-primary-600 m-0">Bill Type: </p>
+                                                    <p>{{ip.BillType}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p class="clr-primary-600 m-0">Availed Deposits: </p>
+                                                    <p>{{ip.AvailedDeposits}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p class="clr-primary-600 m-0">Patient Bill Amount: </p>
+                                                    <p>{{ip.PatientBillAmount}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p class="clr-primary-600 m-0">Payer Bill Amount: </p>
+                                                    <p>{{ip.PayerBillAmount}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p class="clr-primary-600 m-0">Payer Balance: </p>
+                                                    <p>{{ip.PayerBalance}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p class="clr-primary-600 m-0">Patient Balance: </p>
+                                                    <p>{{ip.PatientBalance}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Daily Collection -->
+                    <div class="" *ngIf="selectedReport?.ReportID === '1283'">
+                        <div class="row g-2">
+                            <div class="col-3">
+                                <!-- <label for="" class="form-label">Date</label> -->
+                                <button class="date_range_calendar p-0 position-relative" style="width: 227px;">
+                                    <mat-date-range-input class="btn btn-main-outline" [formGroup]="dialyCollectionReportForm"
+                                        [rangePicker]="medpicker">
+                                        <input matStartDate formControlName="fromdate">
+                                        <input matEndDate formControlName="todate">
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle matIconSuffix [for]="medpicker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #medpicker></mat-date-range-picker>
+                                </button>
+                            </div>
+                            <!-- <div class="col-2">
+                                <label for="" class="form-label">User Name</label>
+                                <select name="" id="" class="form-select" [(ngModel)]="scrollUserId">
+                                    <option value="0" selected>Select</option>
+                                      <option *ngFor="let user of scrollUsers" [ngValue]="user.SID" translate>
+                                        {{ user.UserName }}
+                                      </option>
+                                  </select>
+                            </div> -->
+                            <div class="col text-end">
+                                <div class="d-flex align-items-center gap-2 justify-content-end">
+                                    <button class="btn btn-main-outline" (click)="showDailyCollectionReportData()">Show</button>
+                                    <button class="btn btn-main-outline" (click)="exportDailyCollectionReport()">Export</button>
+                                    <!-- <button class="btn btn-danger-outline">Clear</button> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fixed_alter_list rounded border-primary-200 mt-2 dailyCollection_table">
+                            <div class="fixed_alter_header rounded-top bg-primary-50">
+                                <div class="row gx-2 align-items-start p-2 mx-0">
+                                    <div class="" style="width: 5%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Sl. No</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">SSN</p>
+                                    </div>
+                                    <div class="" style="width: 13%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Patient Name</p>
+                                    </div>
+                                    <div class="" style="width: 10%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Age/Gender</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Bill No</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Bill Date</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Cashier</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Bill Amount</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Receipt Amount</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Total Refund</p>
+                                    </div>
+                                    <div class="" style="width: 6%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Availed Deposits</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body height-unset" style="overflow: unset;">
+                                <div class="alter_div">
+                                    <div class="row gx-1 align-items-center p-2 mx-0" *ngFor="let coll of dailyCollectionData; let i = index">
+                                        <div class="" style="width: 5%;">
+                                            <p class="">{{i + 1}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{coll.SSN}}</p>
+                                        </div>
+                                        <div class="" style="width: 13%;">
+                                            <p class="">{{coll.PatientName}}</p>
+                                        </div>
+                                        <div class="" style="width: 10%;">
+                                            <p class="">{{coll.FullAge}}/{{coll.Gender}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{coll.BillNO}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{coll.BillDate | date : 'dd-MMM-yyyy'}}</p>
+                                        </div>
+                                        <div class="" style="width: 11%;">
+                                            <p class="">{{coll.CashierName}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{coll.BillAmount}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{coll.ReceiptAmount}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{coll.TotalRefund}}</p>
+                                        </div>
+                                        <div class="" style="width: 6%;">
+                                            <p class="">{{coll.AvailedDeposits}}</p>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="bg-primary-20 p-2">
+                                        <div class="row mx-0 align-items-center gx-2">
+                                            <div class="col">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p class="clr-primary-600 m-0">Receipt Date: </p>
+                                                    <p></p>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p class="clr-primary-600 m-0">Company Code: </p>
+                                                    <p></p>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p class="clr-primary-600 m-0">Net Amount: </p>
+                                                    <p></p>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p class="clr-primary-600 m-0">Company Name: </p>
+                                                    <p></p>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p class="clr-primary-600 m-0">Bill Type: </p>
+                                                    <p></p>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p class="clr-primary-600 m-0">Facility Name: </p>
+                                                    <p></p>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p class="clr-primary-600 m-0">PVAT: </p>
+                                                    <p></p>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p class="clr-primary-600 m-0">CVAT: </p>
+                                                    <p></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deposit Checking Report -->
+                    <div class="" *ngIf="selectedReport?.ReportID === '1283'">
+                        <div class="row g-2">
+                            <div class="col text-end">
+                                <div class="d-flex align-items-center gap-2 justify-content-end">
+                                    <button class="btn btn-main-outline" (click)="showDepositCheckingReportData()">Show</button>
+                                    <button class="btn btn-main-outline" (click)="exportDepositCheckingReport()">Export</button>
+                                    <!-- <button class="btn btn-danger-outline">Clear</button> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fixed_alter_list rounded border-primary-200 mt-2 dailyCollection_table">
+                            <div class="fixed_alter_header rounded-top bg-primary-50">
+                                <div class="row gx-2 align-items-start p-2 mx-0">
+                                    <div class="" style="width: 5%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Sl. No</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">SSN</p>
+                                    </div>
+                                    <div class="" style="width: 13%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Patient Name</p>
+                                    </div>
+                                    <div class="" style="width: 10%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Bed</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Admit Date</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Nationality</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Mobile</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Consultant</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Code</p>
+                                    </div>
+                                    <div class="" style="width: 9%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Bill Amount</p>
+                                    </div>
+                                    <div class="" style="width: 6%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Pat.Deposit</p>
+                                    </div>
+                                    <div class="" style="width: 6%;">
+                                        <p class="clr-primary-600 m-0 fw-bold">Pat.Balance</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body height-unset" style="overflow: unset;">
+                                <div class="alter_div">
+                                    <div class="row gx-1 align-items-center p-2 mx-0" *ngFor="let coll of depositcheckingReportData; let i = index">
+                                        <div class="" style="width: 5%;">
+                                            <p class="">{{i + 1}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{coll.SSN}}</p>
+                                        </div>
+                                        <div class="" style="width: 13%;">
+                                            <p class="">{{coll.PatientName}}</p>
+                                        </div>
+                                        <div class="" style="width: 10%;">
+                                            <p class="">{{coll.BedNAme}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{coll.AdmitDate}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{coll.Nationality }}</p>
+                                        </div>
+                                        <div class="" style="width: 11%;">
+                                            <p class="">{{coll.Mobile}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{coll.Consultant}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{coll.CompanyName}}</p>
+                                        </div>
+                                        <div class="" style="width: 9%;">
+                                            <p class="">{{coll.BillAmount}}</p>
+                                        </div>
+                                        <div class="" style="width: 6%;">
+                                            <p class="">{{coll.Pdeposit}}</p>
+                                        </div>
+                                        <div class="" style="width: 6%;">
+                                            <p class="">{{coll.Balance}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

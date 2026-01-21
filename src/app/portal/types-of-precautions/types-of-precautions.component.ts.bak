@@ -1,0 +1,156 @@
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ConfigService } from 'src/app/services/config.service';
+declare var $: any;
+@Component({
+  selector: 'app-types-of-precautions',
+  templateUrl: './types-of-precautions.component.html',
+  styleUrls: ['./types-of-precautions.component.scss']
+})
+export class TypesOfPrecautionsComponent implements OnInit {
+
+  selectedPrecautionId:any
+  typeOfPrecautions:any;
+  selectedView:any;
+  AdmissionID:any;
+  PatientID:any;
+  doctorID:any;
+  selectedPrecautions:any =[];
+  doctorDetails:any;
+  precautionsSelected: boolean = false;
+  endofEpisode:boolean = false;
+  savedPrecautionIds:any;
+  @Output() savechanges = new EventEmitter<any>();
+  constructor(private config: ConfigService,) { }
+
+  ngOnInit(): void {
+    if(sessionStorage.getItem("ISEpisodeclose") ==="true") {
+      this.endofEpisode = true; 
+    }else {
+      this.endofEpisode = false;
+    }
+    this.doctorDetails = JSON.parse(sessionStorage.getItem("doctorDetails") || '{}');
+    this.selectedView = JSON.parse(sessionStorage.getItem("selectedView") || '{}');
+    this.PatientID = this.selectedView.PatientID;
+    this.AdmissionID = this.selectedView.AdmissionID;
+    this.doctorID = this.doctorDetails[0].EmpId;
+    this.fetchTypePrecautions();
+    this.fetchPatientPrecaution();
+  }
+  clearPrecautionId() {
+    this.fetchPatientPrecaution();
+  }
+  SaveData() {
+    //this.savechanges.emit('typeofprecautions');
+  }
+  typeOfPrecautionsClick(type: any) {
+    const selectedTypeIndex = this.typeOfPrecautions.findIndex((element: any) => element.PrecautionID === type.PrecautionID);  
+    if (selectedTypeIndex !== -1) {
+      if (this.typeOfPrecautions[selectedTypeIndex].Class.includes("active")) {
+        this.typeOfPrecautions[selectedTypeIndex].Class = this.typeOfPrecautions[selectedTypeIndex].Class.replace(" active", "");
+        this.selectedPrecautionId = null;
+      } else {
+        this.typeOfPrecautions[selectedTypeIndex].Class += " active";
+        this.selectedPrecautionId = type.PrecautionID;
+      }
+    }  
+    this.precautionsSelected = this.typeOfPrecautions.some((element: any) => element.Class.includes("active"));
+    // this.showPSValidation = false;
+  }
+
+  fetchTypePrecautions() {
+    this.config.fetchTypeofPrecautions().subscribe(response => {
+      this.typeOfPrecautions = response.TypeofPrecautionsDataList;
+      
+      this.typeOfPrecautions.forEach((element: any, index: any) => {
+        if(this.savedPrecautionIds != undefined) {
+        if (element.PrecautionID == 1) { 
+          element.Class = this.savedPrecautionIds.find((x:any) => x.PrecautionID == element.PrecautionID) != undefined ? "pain_reaction justify-content-center position-relative text-center py-2 cursor-pointer text-center active" : "pain_reaction justify-content-center position-relative text-center py-2 cursor-pointer text-center"; 
+        }
+        else if (element.PrecautionID == 2) {  
+          element.Class = this.savedPrecautionIds.find((x:any) => x.PrecautionID == element.PrecautionID) != undefined ? "pain_reaction justify-content-center position-relative text-center py-2 cursor-pointer text-center active" : "pain_reaction justify-content-center position-relative text-center py-2 cursor-pointer text-center";  
+        }
+        else if (element.PrecautionID == 3) { 
+          element.Class = this.savedPrecautionIds.find((x:any) => x.PrecautionID == element.PrecautionID) != undefined ? "pain_reaction justify-content-center position-relative text-center py-2 cursor-pointer text-center active" : "pain_reaction justify-content-center position-relative text-center py-2 cursor-pointer text-center";   
+          }
+        else if (element.PrecautionID == 4) {  
+          element.Class = this.savedPrecautionIds.find((x:any) => x.PrecautionID == element.PrecautionID) != undefined ? "pain_reaction justify-content-center position-relative text-center py-2 cursor-pointer text-center active" : "pain_reaction justify-content-center position-relative text-center py-2 cursor-pointer text-center";  
+        }
+        else if (element.PrecautionID == 5) {  
+          element.Class = this.savedPrecautionIds.find((x:any) => x.PrecautionID == element.PrecautionID) != undefined ? "pain_reaction justify-content-center position-relative text-center py-2 cursor-pointer text-center active" : "pain_reaction justify-content-center position-relative text-center py-2 cursor-pointer text-center";  
+        }
+        else if (element.PrecautionID == 6) {  
+          element.Class = this.savedPrecautionIds.find((x:any) => x.PrecautionID == element.PrecautionID) != undefined ? "pain_reaction justify-content-center position-relative text-center py-2 cursor-pointer text-center active" : "pain_reaction justify-content-center position-relative text-center py-2 cursor-pointer text-center"; 
+        }
+      }
+      else { 
+        element.Class = "pain_reaction position-relative text-center py-2 justify-content-center cursor-pointer text-center"; 
+    }
+      });
+    })
+    
+  }
+  fetchPatientPrecaution(){
+  this.config.fetchPatientPrecautions(this.AdmissionID).subscribe((data:any)=> {
+    if(data.PatientPrecautionsDataList.length > 0) {
+      this.savedPrecautionIds = data.PatientPrecautionsDataList;
+
+      this.typeOfPrecautions.forEach((element: any, index: any) => {
+        if(this.savedPrecautionIds != undefined) {
+        if (element.PrecautionID == 1) { 
+          element.Class = this.savedPrecautionIds.find((x:any) => x.PrecautionID == element.PrecautionID) != undefined ? "pain_reaction position-relative text-center py-2 cursor-pointer text-center active" : "pain_reaction position-relative text-center py-2 cursor-pointer text-center"; 
+        }
+        else if (element.PrecautionID == 2) {  
+          element.Class = this.savedPrecautionIds.find((x:any) => x.PrecautionID == element.PrecautionID) != undefined ? "pain_reaction position-relative text-center py-2 cursor-pointer text-center active" : "pain_reaction position-relative text-center py-2 cursor-pointer text-center";  
+        }
+        else if (element.PrecautionID == 3) { 
+          element.Class = this.savedPrecautionIds.find((x:any) => x.PrecautionID == element.PrecautionID) != undefined ? "pain_reaction position-relative text-center py-2 cursor-pointer text-center active" : "pain_reaction position-relative text-center py-2 cursor-pointer text-center";   
+          }
+        else if (element.PrecautionID == 4) {  
+          element.Class = this.savedPrecautionIds.find((x:any) => x.PrecautionID == element.PrecautionID) != undefined ? "pain_reaction position-relative text-center py-2 cursor-pointer text-center active" : "pain_reaction position-relative text-center py-2 cursor-pointer text-center";  
+        }
+        else if (element.PrecautionID == 5) {  
+          element.Class = this.savedPrecautionIds.find((x:any) => x.PrecautionID == element.PrecautionID) != undefined ? "pain_reaction position-relative text-center py-2 cursor-pointer text-center active" : "pain_reaction position-relative text-center py-2 cursor-pointer text-center";  
+        }
+        else if (element.PrecautionID == 6) {  
+          element.Class = this.savedPrecautionIds.find((x:any) => x.PrecautionID == element.PrecautionID) != undefined ? "pain_reaction position-relative text-center py-2 cursor-pointer text-center active" : "pain_reaction position-relative text-center py-2 cursor-pointer text-center"; 
+        }
+      }
+      else { 
+        element.Class = "pain_reaction position-relative text-center py-2 cursor-pointer text-center"; 
+      }
+      });
+  }
+  //this.fetchTypePrecautions();
+  }, error => {
+    console.error('Get Data API error:', error); 
+  })
+  }
+  savePatientPrecaution(){
+    this.selectedPrecautions = this.typeOfPrecautions
+    .filter((element: any) => element.Class.includes("active"))
+    .map((element: any) => ({
+      PRECID: element.PrecautionID
+    }));
+    if (this.selectedPrecautions.length > 0) {
+    let payload = {
+      "PatientPrecautionID": 1,      
+      "PatientID": this.selectedView.PatientID,
+      "DoctorID": this.doctorDetails[0].EmpId,
+      "Admissionid": this.selectedView.AdmissionID,
+      "PatientPrecautionList": this.selectedPrecautions
+    }
+    this.config.savePatientPrecautions(payload).subscribe((response) => {
+      if(response.Code == 200) {
+      $("#saveTypeOfPrecautionsMsg").modal('show');
+      this.fetchPatientPrecaution();
+      }
+    }, error => {
+      console.error('Save API error:', error);
+    });
+  } else {
+    $("#showTypeOfPrecautionsValidationMsg").modal('show');
+  }
+  }
+
+
+}

@@ -1,0 +1,84 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+
+<div class="page-header sticky-top bg-primary-50 border-bottom-primary-200 py-2 justify-content-between">
+    <div class="d-flex align-items-center gap-2">
+        <h2 class="page-heading">Discharge Intimation</h2>
+    </div>
+     <div class="d-flex align-items-center gap-2">
+        <form class="d-flex align-items-center gap-2" [formGroup]="datesForm">
+            <div class="d-flex align-items-center gap-2">
+                <label for="" class="form-label text-nowrap m-0">Date :</label>
+                <div class="d-flex align-items-center gap-2 justify-content-end">
+                    <button class="date_range_calendar p-0 position-relative"
+                        style="width: 227px;">
+                        <mat-date-range-input class="btn btn-main-outline" [formGroup]="datesForm"
+                            [rangePicker]="picker">
+                            <input matStartDate formControlName="fromdate">
+                            <input matEndDate formControlName="todate" (dateChange)="dischargeIntimationsSearch()">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </button>
+                </div>
+                <!-- <div class="CommanSearch__form">
+                    <label for="" class="CommonSearch__label">
+                        <img src="assets/images/icons/icon-search.svg" alt="">
+                    </label>
+                    <input class="CommonSearch__input form-control" type="text" id="txtSsn" placeholder="SSN"
+                    (keypress)="($event.charCode >= 48 && $event.charCode < 58)" (keydown.enter)="onSSNEnterPress($event)">
+                    <button type="reset" class="reset-btn">
+                        <svg width="20" height="20" viewBox="0 0 20 20">
+                            <path
+                                d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z"
+                                stroke="currentColor" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                                stroke-linejoin="round"></path>
+                        </svg>
+                    </button>
+                </div> -->
+            </div>
+        </form>
+        <button class="btn btn-danger-outline" >Clear</button>
+        <button class="btn btn-main-outline" (click)="dischargeIntimationsSearch()">Search</button>
+    </div>
+ </div>
+
+<div class="p-3 mt-3">
+    <div class="d-flex flex-column gap-2">
+        <div class="border-primary-200 rounded-3"
+            *ngFor="let item of dischargeIntimationsList">
+            <div class="p-2 d-flex align-items-center justify-content-between gap-4">
+
+                <div class="d-flex flex-column col-1">
+                    <p for="" class="label">SSN</p>
+                    <label for="" class="form-label ">{{ item.SSN }}</label>
+                </div>
+
+                <div class="col-2">
+                    <div class="d-flex gap-2 align-items-center">
+                        <div class="d-flex flex-column">
+                            <p for="" class="label text-nowrap">Patient Name</p>
+                            <label for="" class="m-0 fs-8 fw-bold clr-primary-600">{{ item.PatientName }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column col-1">
+                    <p for="" class="label text-nowrap">Bed Name</p>
+                    <label for="" class="form-label text-nowrap">{{ item.BedName }}</label>
+                </div>
+
+                <div class="d-flex flex-column col">
+                    <p for="" class="label">Req. Discharge Date </p>
+                    <label for="" class="form-label ">{{ item.RequestedDate }}</label>
+                </div>
+                <div class="d-flex flex-column col">
+                    <p for="" class="label text-nowrap">Req Type</p>
+                    <label for="" class="form-label text-nowrap">{{ item.ReqTypeName }} </label>
+                </div>
+                <div class="d-flex flex-column col">
+                    <p for="" class="label text-nowrap">Remarks</p>
+                    <label for="" class="form-label text-nowrap">{{ item.Remarks }} </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

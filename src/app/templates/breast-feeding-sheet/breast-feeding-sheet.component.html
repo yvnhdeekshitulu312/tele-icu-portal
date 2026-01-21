@@ -1,0 +1,1643 @@
+<div class="card card-style-1 rounded main-container" #divbfs>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading">Breast Feeding Monitoring Sheet</h2>
+        <div class="actions generalConsent_popup position-relative ms-auto d-flex align-items-center gap-2" *ngIf="IsView">
+            <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+            <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+        </div>
+    </div>
+   
+
+
+<div class="p-2 template_scroll" *ngIf="showContent" id="divscroll">
+
+    <!-- <app-wardheader-summary></app-wardheader-summary> -->
+
+    <div class="border p-2 rounded-2">
+        <div class="row g-2">
+            <div class="col-3">
+                <label for="" class="form-label">Date and time of baby's birth Date</label>
+                <input type="text" id="textbox_BabyDOB_Time" class="form-control">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Time</label>
+                <!-- <input type="text" id="textbox_Time" class="form-control"> -->
+                <app-time-selector [hours]="getHours('textbox_generic_time1')" [minutes]="getMinutes('textbox_generic_time1')" (timeSelected)="onTimeChange($event, 'textbox_generic_time1')" [disabled]="isTimeSelectorDisable('textbox_generic_time1')"></app-time-selector>
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">AOG</label>
+                <input type="text" id="textbox_Aog" class="form-control">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Type of Birth </label>
+                <input type="text" id="textbox_BirthType" class="form-control">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Time Started </label>
+                <!-- <input type="text" id="textbox_TimeStarted" class="form-control"> -->
+                <app-time-selector [hours]="getHours('textbox_generic_time2')" [minutes]="getMinutes('textbox_generic_time2')" (timeSelected)="onTimeChange($event, 'textbox_generic_time2')" [disabled]="isTimeSelectorDisable('textbox_generic_time2')"></app-time-selector>
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Time Ended </label>
+                <!-- <input type="text" id="textbox_TimeEnded" class="form-control"> -->
+                <app-time-selector [hours]="getHours('textbox_generic_time3')" [minutes]="getMinutes('textbox_generic_time3')" (timeSelected)="onTimeChange($event, 'textbox_generic_time3')" [disabled]="isTimeSelectorDisable('textbox_generic_time3')"></app-time-selector>
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Reason for Ending Skin to Skin Contact </label>
+                <input type="text" id="textbox_EndingContact" class="form-control">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Name of Staff </label>
+                <input type="text" id="textbox_StaffName1" class="form-control">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Time of baby's 1st BreastFeed </label>
+                <!-- <input type="text" id="textbox_BabyFirstBreastFeedTime" class="form-control"> -->
+                <app-time-selector [hours]="getHours('textbox_generic_time4')" [minutes]="getMinutes('textbox_generic_time4')" (timeSelected)="onTimeChange($event, 'textbox_generic_time4')" [disabled]="isTimeSelectorDisable('textbox_generic_time4')"></app-time-selector>
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Name of Staff </label>
+                <input type="text" id="textbox_StaffName2" class="form-control">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Date and Time help offered with 2nd BreastFeed </label>
+                <input type="text" id="textbox_BabySecondBreastFeed_DateTime" class="form-control">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Date </label>
+                <input type="text" id="textbox_Date" class="form-control">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Time </label>
+                <!-- <input type="text" id="textbox_Time" class="form-control"> -->
+                <app-time-selector [hours]="getHours('textbox_generic_time5')" [minutes]="getMinutes('textbox_generic_time5')" (timeSelected)="onTimeChange($event, 'textbox_generic_time5')" [disabled]="isTimeSelectorDisable('textbox_generic_time5')"></app-time-selector>
+            </div>
+        </div>
+        <div class="mt-3">
+            <label for="" class="form-label">SVD:</label>
+            <div class="d-flex align-items-center gap-2">
+                <div (click)="toggleCheckboxSelection($event)" class="custom_check d-flex align-items-center gap-2" id="checkbox_Natural">
+                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="check_svg">
+                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                        <path
+                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                            fill="white" stroke="white" stroke-width="0.25"></path>
+                    </svg>
+                    <p class="m-0 fs-7">Natural</p>
+                </div>
+                <div  (click)="toggleCheckboxSelection($event)"class="custom_check d-flex align-items-center gap-2" id="checkbox_Vaccum">
+                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="check_svg">
+                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                        <path
+                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                            fill="white" stroke="white" stroke-width="0.25"></path>
+                    </svg>
+                    <p class="m-0 fs-7">Vaccum</p>
+                </div>
+                <div (click)="toggleCheckboxSelection($event)" class="custom_check d-flex align-items-center gap-2" id="checkbox_Forcep">
+                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="check_svg">
+                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                        <path
+                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                            fill="white" stroke="white" stroke-width="0.25"></path>
+                    </svg>
+                    <p class="m-0 fs-7">Forcep</p>
+                </div>
+                <div (click)="toggleCheckboxSelection($event)" class="custom_check d-flex align-items-center gap-2" id="checkbox_Epidural">
+                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="check_svg">
+                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                        <path
+                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                            fill="white" stroke="white" stroke-width="0.25"></path>
+                    </svg>
+                    <p class="m-0 fs-7">Epidural</p>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3">
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <label for="" class="form-label m-0">LSCS:</label>
+                <div class="clinical_toggle toggle__switch switch-sm d-inline-flex" id="button_LSCS">
+                    <button class="btn " (click)="toggleSelection($event)">Yes</button>
+                    <button class="btn selected" (click)="toggleSelection($event)">No</button>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <div (click)="toggleCheckboxSelection($event)" class="custom_check d-flex align-items-center gap-2" id="checkbox_Spinal">
+                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="check_svg">
+                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                        <path
+                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                            fill="white" stroke="white" stroke-width="0.25"></path>
+                    </svg>
+                    <p class="m-0 fs-7">Spinal</p>
+                </div>
+                <div (click)="toggleCheckboxSelection($event)" class="custom_check d-flex align-items-center gap-2" id="checkbox_GeneralAnaesthesiaSkinContact">
+                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="check_svg">
+                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                        <path
+                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                            fill="white" stroke="white" stroke-width="0.25"></path>
+                    </svg>
+                    <p class="m-0 fs-7">General Anaesthesia Skin Contact Intitated</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="horizontalScroll mt-3">
+        <div class="breastfeeding_mon_table d-grid">
+            <table class="table m-0 d-block horizontalScroll">
+                <thead>
+                    <tr>
+                        <th class="align-middle">No</th>
+                        <th colspan="4">
+                            <div class="d-flex align-items-center ">
+                                <label class="form-label mb-0 me-2 text-nowrap">DATE:</label>
+                                <input class="form-control" type="text" id="textbox_Date1" name="NA" />
+                            </div>
+                        </th>
+                        <th colspan="4">
+                            <div class="d-flex align-items-center ">
+                                <label class="form-label mb-0 me-2 text-nowrap">DATE:</label>
+                                <input class="form-control" type="text" id="textbox_Date2" name="NA" />
+                            </div>
+                        </th>
+                        <th colspan="4">
+                            <div class="d-flex align-items-center ">
+                                <label class="form-label mb-0 me-2 text-nowrap">DATE:</label>
+                                <input class="form-control" type="text" id="textbox_Date3" name="NA" />
+                            </div>
+                        </th>
+                        <th colspan="4">
+                            <div class="d-flex align-items-center ">
+                                <label class="form-label mb-0 me-2 text-nowrap">DATE:</label>
+                                <input class="form-control" type="text" id="textbox_Date4" name="NA" />
+                            </div>
+                        </th>
+                        <th colspan="4">
+                            <div class="d-flex align-items-center ">
+                                <label class="form-label mb-0 me-2 text-nowrap">DATE:</label>
+                                <input class="form-control" type="text" id="textbox_Date5" name="NA" />
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="bg_lavendar">
+                        <td>1.</td>
+                        <td>BF</td>
+                        <td>MF</td>
+                        <td>REASON</td>
+                        <td>STAFF</td>
+                        <td>BF</td>
+                        <td>MF</td>
+                        <td>REASON</td>
+                        <td>STAFF</td>
+                        <td>BF</td>
+                        <td>MF</td>
+                        <td>REASON</td>
+                        <td>STAFF</td>
+                        <td>BF</td>
+                        <td>MF</td>
+                        <td>REASON</td>
+                        <td>STAFF</td>
+                        <td>BF</td>
+                        <td>MF</td>
+                        <td>REASON</td>
+                        <td>STAFF</td>
+                    </tr>
+                    <tr>
+                        <td>2.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_1_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_2_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_3_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_4_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_5_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>7.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_6_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>8.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_7_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>9.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_8_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>10.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_9_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>11.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_10_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>12.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_11_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>13.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_12_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>14.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_13_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>15.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_14_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>16.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_15_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>17.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_16_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>18.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_17_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>19.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_18_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>20.</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_19_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>TOTAL</td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_BF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_MF1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_Reason1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_Staff1" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_BF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_MF2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_Reason2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_Staff2" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_BF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_MF3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_Reason3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_Staff3" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_BF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_MF4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_Reason4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_Staff4" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_BF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_MF5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_Reason5" name="NA" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" style="min-width:4rem;" id="textbox_20_Staff5" name="NA" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card card-style-1 rounded mt-3">
+        <div class="card-header rounded-top py-2 min-height-unset justify-content-start">
+            <h5 class="card-heading">Legend</h5>
+        </div>
+        <div class="p-2">
+            <div class="row">
+                <div class="col-4">
+                    <div class="border p-2 rounded-2 h-100">
+                        <h6 class="m-0 clr-primary-600 mb-3">Medical Reasons:</h6>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label for="" class="form-label">POST NICU</label>
+                                <input type="text" class="form-control" id="textbox_PostNICU">
+                            </div>
+                            <div class="col-6">
+                                <label for="" class="form-label">LBW</label>
+                                <input type="text" id="txtLBW" class="form-control">
+                            </div>
+                            <div class="col-6">
+                                <label for="" class="form-label">DM</label>
+                                <input type="text" id="textbox_DM" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <label for="" class="form-label">Others, Please Specify</label>
+                                <!-- <textarea name="" class="form-control resize-none" id="textarea_Others1" cols="30"
+                                    rows="3"></textarea> -->
+                                    <span name="" class="form-control " id="textarea_Others1" cols="30" rows="3"
+                                    resize-none contenteditable="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="border p-2 rounded-2 h-100">
+                        <h6 class="m-0 clr-primary-600 mb-3">Maternal Reasons:</h6>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label for="" class="form-label">Nipple Probelms</label>
+                                <input type="text" id="textbox_NippleProbelms" class="form-control">
+                            </div>
+                            <div class="col-6">
+                                <label for="" class="form-label">Sedated</label>
+                                <input type="text" id="textbox_Sedated" class="form-control">
+                            </div>
+                            <div class="col-6">
+                                <label for="" class="form-label">Sick</label>
+                                <input type="text" id="textbox_Sick" class="form-control">
+                            </div>
+                            <div class="col-6">
+                                <label for="" class="form-label">In Pain</label>
+                                <input type="text" id="textbox_InPain" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <label for="" class="form-label">Others, Please Specify</label>
+                                <!-- <textarea name="" class="form-control resize-none" id="textarea_Others2" cols="30"
+                                    rows="3"></textarea> -->
+                                    <span name="" class="form-control " id="textarea_Others2" cols="30" rows="3"
+                                    resize-none contenteditable="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="border p-2 rounded-2 h-100">
+                        <h6 class="m-0 clr-primary-600 mb-3">Non Medical Reasons:</h6>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label for="" class="form-label">Tiered</label>
+                                <input type="text" id="textbox_Tiered" class="form-control">
+                            </div>
+                            <div class="col-6">
+                                <label for="" class="form-label">Sleeping</label>
+                                <input type="text" id="textbox_Sleeping" class="form-control">
+                            </div>
+                            <div class="col-6">
+                                <label for="" class="form-label">Visitors</label>
+                                <input type="text" id="textbox_Visitors" class="form-control">
+                            </div>
+                            <div class="col-6">
+                                <label for="" class="form-label">No Milk</label>
+                                <input type="text" id="textbox_No_Milk" class="form-control">
+                            </div>
+                            <div class="col-6">
+                                <label for="" class="form-label">Personal Reasons</label>
+                                <input type="text" id="textbox_PersonalProblems" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <label for="" class="form-label">Others, Please Specify</label>
+                                <!-- <textarea name="" class="form-control resize-none" id="textareaOthers3" cols="30"
+                                    rows="3"></textarea> -->
+                                    <span name="" class="form-control " id="textareaOthers3" cols="30" rows="3"
+                                    resize-none contenteditable="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+      [selectedTemplateFn]="selectedTemplate.bind(this)">
+   </app-sharedtemplateview>
+
+
+<!-- <div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+       <div class="modal-content">
+          <div class="modal-header p-2">
+             <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+             <div class="d-flex align-items-center gap-2">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+          </div>
+          <div class="modal-body p-3">
+             <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                <div class="row mx-0 g-2 w-100">
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Template ID</p>
+                      <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                            tem.PatientTemplatedetailID }}</a></p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Name</p>
+                      <p>{{ tem.PatientName }}</p>
+                   </div>
+ 
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">DoctorName</p>
+                      <p>{{ tem.Consultant }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Created By</p>
+                      <p>{{ tem.CreatedBy }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Date</p>
+                      <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+
+ <div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div> -->

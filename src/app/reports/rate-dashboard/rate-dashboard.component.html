@@ -1,0 +1,490 @@
+<div class="page-header justify-content-start sticky-top shadow-sm">
+    <h2 class="page-heading">Rate Dashboard</h2>
+</div>
+<div class="container-fluid p-0 analytics_graphs IP_graph">
+    <div class="p-2">
+        <div class="row gx-2 mx-0">
+            <div class="col-2" style="width:13%">
+                <div class="left_nav">
+                    <div class="sidebar-container rounded">
+                        <form [formGroup]="datesForm" class="d-flex flex-column gap-2">
+                            <label class="form-label m-0">From Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="fromPicker" placeholder="From Date"
+                                    formControlName="fromdate" />
+                                <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #fromPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <label class="form-label m-0">To Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="toPicker" placeholder="To Date"
+                                    formControlName="todate" />
+                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #toPicker></mat-datepicker>
+                            </mat-form-field>
+                        </form>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 my-2">
+                        <button type="button" class="btn btn-main-outline w-100" (click)="fetchRateDataFilters()">
+                            Fetch
+                        </button>
+                        <button type="button" class="btn btn-outline-danger w-100" (click)="clearFilters()">
+                            Clear
+                        </button>
+                    </div>
+                    <div class="d-flex flex-column gap-2">
+                        <label class="form-label">Location</label>
+                        <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                            <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_9239_2779)">
+                                    <path
+                                        d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                        fill="#368796" />
+                                </g>
+                            </svg>
+                            <input type="text" class="form-control" [matAutocomplete]="roleAuto2" placeholder="Search">
+                            <mat-autocomplete #roleAuto2="matAutocomplete">
+                                <mat-option *ngFor="let item of locations">
+                                    <div (click)="locationOptionClicked($event, item);">
+                                        <mat-checkbox [checked]="item.selected" (change)="toggleLocationSelection(item)"
+                                            (click)="$event.stopPropagation()">
+                                            {{ item.label }}
+                                        </mat-checkbox>
+                                    </div>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                        <div class="dropdown custom_outline_dropdown">
+                             <div class="mb-1 mt-2">
+                            <label class="form-label d-flex align-items-center">
+                               
+                                Type
+                            </label>
+                        </div>
+
+                            <button class="btn btn-main-outline mb-2 rounded-2 w-100 p-2 d-flex align-items-center gap-2 justify-content-between" type="button" data-bs-toggle="dropdown">
+                                <span class="fw-semibold">{{ selectedType.label }}</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li *ngFor="let type of types">
+                                    <a class="dropdown-item" (click)="fetchReportsByType(type)">
+                                        {{ type.label }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="dropdown custom_fill_dropdown" *ngIf="selectedType.value==1">
+                            <label class="form-label">Number of days</label>
+                            <input type="text" class="form-control" placeholder="Search Specialization"
+                                [(ngModel)]="noOfDays">
+                        </div>
+
+                        <!-- Select All Checkbox -->
+                        <div class="mb-1 mt-2">
+                            <label class="form-label d-flex align-items-center">
+                                <input type="checkbox" class="form-check-input me-1"
+                                    [checked]="getSelectAllDepartmentsStatus()"
+                                    (change)="selectAllDepartments($any($event.target).checked)">
+                                Specialization
+                            </label>
+                        </div>
+
+                        <!-- Searchable Dropdown -->
+                        <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                            <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_9239_2779)">
+                                    <path
+                                        d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                        fill="#368796" />
+                                </g>
+                            </svg>
+                            <input type="text" class="form-control" [matAutocomplete]="deptAuto"
+                                placeholder="Search Specialization" [(ngModel)]="specializationSearchTerm">
+
+                            <!-- Autocomplete Dropdown -->
+                            <mat-autocomplete #deptAuto="matAutocomplete" autoActiveFirstOption>
+                                <mat-option *ngFor="let dep of filteredDepartments()" [value]="dep.DepartmentName">
+                                    <div (click)="specializationOptionClicked($event, dep)">
+                                        <mat-checkbox [checked]="dep.selected" (change)="toggleDepartmentSelection(dep)"
+                                            (click)="$event.stopPropagation()">
+                                            {{ dep.DepartmentName }}
+                                        </mat-checkbox>
+                                    </div>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col dashboardHeight">
+                <div class="row mx-0 text-center gx-2">
+                    <!-- Readmission Rate Card -->
+                    <div class="col-md-4">
+                        <div class="readmissionCard border rounded d-flex flex-column h-100">
+                            <div class="rounded-top text-white py-2 fw-bold readmissionCard_header"
+                                style="font-size: 1.1rem;background-color: #1847e1;">
+                                <!-- Readmission Rate -->
+                                 <label>{{selectedType.value == 1 ? 'Readmission Rate' : selectedType.value == 2 ? 'Mortality Rate' : selectedType.value == 3 ? 'Surgery Cancellation Rate' : ''}}</label>
+                            </div>
+                            <div class="d-flex align-item-center justify-content-between gap-2">
+                                <div></div>
+                                <h4 class="rounded-bottom py-3 w-100" style="font-size: 2rem; font-weight: 700;height: 100% !important;padding: 1rem 0 !important;">
+                                    {{mainData?.Per || 0 | number:'1.0-2'}} %
+                                </h4>
+                                <div *ngFor="let chart of mainDataC" class="ms-auto"
+                                    style="height: 100px;width: 120px;margin-top: -14px;">
+                                    <apx-chart [series]="chart.chartOptions.series"
+                                        [chart]="chart.chartOptions.chart"
+                                        [labels]="chart.chartOptions.labels"
+                                        [colors]="chart.chartOptions.colors"
+                                        [fill]="chart.chartOptions.fill"
+                                        [stroke]="chart.chartOptions.stroke"
+                                        [legend]="chart.chartOptions.legend"
+                                        [tooltip]="chart.chartOptions.tooltip"
+                                        [dataLabels]="chart.chartOptions.dataLabels"
+                                        [plotOptions]="chart.chartOptions.plotOptions">
+                                    </apx-chart>        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Admission Card -->
+                    <div class="col-md-4">
+                        <div class="readmissionCard border rounded d-flex flex-column h-100">
+                            <div class="rounded-top text-white py-2 fw-bold readmissionCard_header"
+                                style="font-size: 1.1rem; background-color: #1847e1;">
+                                <label>{{selectedType.value == 1 ? 'Admission' : selectedType.value == 2 ? 'Discharge' : selectedType.value == 3 ? 'Surgeries' : ''}}</label>
+                            </div>
+                            <h4 class="rounded-bottom py-3" style="font-size: 1.8rem; font-weight: 700;height: 100% !important;padding: 1rem 0 !important;">
+                                {{mainData?.TotalAdmitCnt || 0}}
+                            </h4>
+                            <div *ngFor="let chart of mainDataCAd" class="ms-auto"
+                                                    style="height: 100px;width: 120px;">
+                                                    <apx-chart [series]="chart.chartOptions.series"
+                                                        [chart]="chart.chartOptions.chart"
+                                                        [labels]="chart.chartOptions.labels"
+                                                        [colors]="chart.chartOptions.colors"
+                                                        [fill]="chart.chartOptions.fill"
+                                                        [stroke]="chart.chartOptions.stroke"
+                                                        [legend]="chart.chartOptions.legend"
+                                                        [tooltip]="chart.chartOptions.tooltip"
+                                                        [dataLabels]="chart.chartOptions.dataLabels"
+                                                        [plotOptions]="chart.chartOptions.plotOptions">
+                                                    </apx-chart>
+                                                   
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Readmission Card -->
+                    <div class="col-md-4">
+                        <div class="readmissionCard border rounded d-flex flex-column h-100">
+                            <div class="rounded-top text-white py-2 fw-bold readmissionCard_header"
+                                style="font-size: 1.1rem; background-color: #1847e1;">
+                                <label>{{selectedType.value == 1 ? 'Readmission' : selectedType.value == 2 ? 'Death' : selectedType.value == 3 ? 'Cancellations' : ''}}</label>
+                            </div>
+                            <h4 class="rounded-bottom py-3" style="font-size: 1.8rem; font-weight: 700;height: 100% !important;padding: 1rem 0 !important;">
+                                {{mainData?.ReAdmitCnt || 0}}
+                            </h4>
+                            <div *ngFor="let chart of mainDataCAdR" class="ms-auto"
+                                                    style="height: 100px;width: 120px;">
+                                                    <apx-chart [series]="chart.chartOptions.series"
+                                                        [chart]="chart.chartOptions.chart"
+                                                        [labels]="chart.chartOptions.labels"
+                                                        [colors]="chart.chartOptions.colors"
+                                                        [fill]="chart.chartOptions.fill"
+                                                        [stroke]="chart.chartOptions.stroke"
+                                                        [legend]="chart.chartOptions.legend"
+                                                        [tooltip]="chart.chartOptions.tooltip"
+                                                        [dataLabels]="chart.chartOptions.dataLabels"
+                                                        [plotOptions]="chart.chartOptions.plotOptions">
+                                                    </apx-chart>
+                                                   
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="mt-2">
+                    <div class="row mx-0 gx-2">
+                        <div class="col-9">
+                            <div class="graph_section border shadow-sm h-100">
+                                <div class="mt-2">
+                                    <apx-chart [series]="monthlyChart.series" [chart]="monthlyChart.chart"
+                                        [xaxis]="monthlyChart.xaxis" [yaxis]="monthlyChart.yaxis"
+                                        [title]="monthlyChart.title" [stroke]="monthlyChart.stroke"
+                                        [fill]="monthlyChart.fill" [colors]="monthlyChart.colors"
+                                        [dataLabels]="monthlyChart.dataLabels" [legend]="monthlyChart.legend"
+                                        [markers]="monthlyChart.markers" [tooltip]="monthlyChart.tooltip"
+                                        [grid]="monthlyChart.grid">
+                                    </apx-chart>
+                                    <!-- <div *ngIf="monthlyChart" class="custom_tooltip custom_tooltip_left ms-auto"
+                                        (click)="exportMonthlyChart('csv')">
+                                        <svg _ngcontent-dyy-c491=""
+                                            class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                            aria-hidden="true" focusable="false" data-prefix="fas"
+                                            data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 576 512" data-fa-i2svg="">
+                                            <path fill="#8967B3"
+                                                d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                            </path>
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p class="m-0">Export</p>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="surgery_records graph_fixed_alter_list h-100 rounded border shadow-sm">
+                                <div class="fixed_alter_header rounded-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-4 m-0">
+                                            <p class="fw-semibold text-nowrap">Month</p>
+                                        </div>
+                                        <div class="col-3 m-0">
+                                            <p class="fw-semibold">
+                                                <label>{{selectedType.value == 1 ? 'ReAdmitted' : selectedType.value == 2 ? 'Total Death' : selectedType.value == 3 ? 'Total  Cancelled' : ''}}</label>
+                                            </p>
+                                        </div>
+                                        <div class="col-3 m-0">
+                                            <p class="fw-semibold text-nowrap">
+                                                 <label>{{selectedType.value == 1 ? 'Admission' : selectedType.value == 2 ? 'Admission' : selectedType.value == 3 ? 'Surgery' : ''}}</label>
+                                            </p>
+                                        </div>
+                                        <div class="col-1 m-0 gap-4 d-flex">
+                                            <p class="fw-semibold text-nowrap">%</p>
+                                            <div class="custom_tooltip custom_tooltip_left d-flex" (click)="exportMonthlyDataToCSV()"
+                                                style="cursor: pointer;">
+                                                <svg _ngcontent-dyy-c491="" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="#8967B3" d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path></svg>
+                                                <div class="tooltip">
+                                                    <p class="m-0">Export</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body" style="height: 308px;">
+                                    <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of monthlyData">
+                                        <div class="col-4 m-0">
+                                            <p class="fw-bold">{{ item.MonthName }}</p>
+                                        </div>
+                                        <div class="col-3 m-0">
+                                            <p class="">{{ item.ReAdmitCnt }}</p>
+                                        </div>
+                                         <div class="col-3 m-0">
+                                            <p class="">{{ item.TotalAdmitCnt }}</p>
+                                        </div>
+                                        <div class="col-1 m-0">
+                                            <p class="">{{ item.Per | number:'1.2-2' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="graph_section border shadow-sm mt-2" style="height: 450px;">
+                                <div class="mt-2" *ngIf="series && series.length > 0">
+                                    <apx-chart [series]="series" [chart]="chart" [xaxis]="xaxis" [yaxis]="yaxis"
+                                        [dataLabels]="dataLabels" [plotOptions]="plotOptions" [fill]="fill"
+                                        [title]="title" [tooltip]="tooltip">
+                                    </apx-chart>
+                                </div>
+                                <!-- <div *ngIf="series && series.length > 0"
+                                    class="custom_tooltip custom_tooltip_left ms-auto"
+                                    (click)="exportDepartmentChart('csv')">
+                                    <svg _ngcontent-dyy-c491=""
+                                        class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                        aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export"
+                                        role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
+                                        data-fa-i2svg="">
+                                        <path fill="#8967B3"
+                                            d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                        </path>
+                                    </svg>
+                                    <div class="tooltip">
+                                        <p class="m-0">Export</p>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="col-3 d-flex flex-column">
+                            <div class="surgery_records graph_fixed_alter_list h-100 rounded mt-2 border shadow-sm">
+                                <div class="fixed_alter_header rounded-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <!-- <div class="col-4 m-0">
+                                            <p class="fw-semibold">Department</p>
+                                        </div> -->
+                                        <div class="col-5 m-0">
+                                            <p class="fw-semibold"><label>{{selectedType.value == 1 ? 'ReAdmitted' : selectedType.value == 2 ? 'Total Death' : selectedType.value == 3 ? 'Total  Cancelled' : ''}}</label></p>
+                                        </div>
+                                        <div class="col-4 m-0">
+                                            <p class="fw-semibold"><label>{{selectedType.value == 1 ? 'Admission' : selectedType.value == 2 ? 'Admission' : selectedType.value == 3 ? ' Surgery' : ''}}</label></p>
+                                        </div>
+                                        <div class="col-2 m-0">
+                                            <p class="fw-semibold">%</p>
+                                        </div>
+                                        <div class="col-1 m-0">
+                                            <div class="custom_tooltip custom_tooltip_left d-flex" (click)="exportDepartmentDataToCSV()"
+                                                style="cursor: pointer;">
+                                                <svg _ngcontent-dyy-c491="" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="#8967B3" d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path></svg>
+                                                <div class="tooltip">
+                                                    <p class="m-0">Export</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="fixed_alter_body" style="height: 410px;">
+                                    <div class="row gx-2 p-2 mx-0 alter_div"
+                                        *ngFor="let dept of getSortedDepartmentData(); let i = index"
+                                        [class.even-row]="i % 2 === 0" [class.odd-row]="i % 2 === 1">
+                                        <!-- <div class="col-4 m-0">
+                                            <p class="fw-bold" [title]="dept.Department">{{ dept.Department }}</p>
+                                        </div> -->
+                                        <div class="col-12 m-0 d-flex align-items-center gap-1 border-bottom pb-1 mb-1">
+                                            <p class="fw-bold" [title]="dept.Department">Department: </p>
+                                            <p class="" [title]="dept.Department">{{ dept.Department }}</p>
+                                        </div>
+                                        <div class="col-5 m-0">
+                                            <p class="">{{ dept.ReAdmitCnt }}</p>
+                                        </div>
+                                        <div class="col-4 m-0">
+                                            <p class="">{{ dept.TotalAdmitCnt }}</p>
+                                        </div>
+                                        <div class="col-2 m-0">
+                                            <p class="">{{ formatPercentage(dept.Per) }}</p>
+                                        </div>
+                                        <div class="col-1 m-0">
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="graph_section border shadow-sm mt-2" style="height: 450px;" *ngIf="doctorSeries.length > 0">
+                                <div class="mt-2" *ngIf="doctorSeries && doctorSeries.length > 0">
+                                    <apx-chart [series]="doctorSeries" [chart]="doctorChart" [xaxis]="doctorXaxis"
+                                        [yaxis]="doctorYaxis" [dataLabels]="doctorDataLabels"
+                                        [plotOptions]="doctorPlotOptions" [fill]="doctorFill" [title]="doctorTitle"
+                                        [tooltip]="doctorTooltip">
+                                    </apx-chart>
+                                </div>
+                                <!-- <div *ngIf="series && series.length > 0"
+                                    class="custom_tooltip custom_tooltip_left ms-auto"
+                                    (click)="exportDoctorChart('csv')">
+                                    <svg _ngcontent-dyy-c491=""
+                                        class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                        aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export"
+                                        role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
+                                        data-fa-i2svg="">
+                                        <path fill="#8967B3"
+                                            d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                        </path>
+                                    </svg>
+                                    <div class="tooltip">
+                                        <p class="m-0">Export</p>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="col-3 d-flex flex-column">
+                            <div class="surgery_records graph_fixed_alter_list h-100 rounded mt-2 border shadow-sm"
+                                *ngIf="doctorData.length > 0">
+                                
+                                <div class="fixed_alter_header rounded-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <!-- <div class="col-4 m-0">
+                                            <p class="fw-semibold">Doctor's Name</p>
+                                        </div> -->
+                                        <div class="col-5 m-0">
+                                            <p class="fw-semibold"><label>{{selectedType.value == 1 ? 'ReAdmitted' : selectedType.value == 2 ? 'Total Death' : selectedType.value == 3 ? 'Total  Cancelled' : ''}}</label></p>
+                                        </div>
+                                        <div class="col-5 m-0">
+                                            <p class="fw-semibold"><label>{{selectedType.value == 1 ? 'Admission' : selectedType.value == 2 ? 'Admission' : selectedType.value == 3 ? '  Surgery' : ''}}</label></p>
+                                        </div>
+                                        <div class="col-1 m-0">
+                                            <p class="fw-semibold">%</p>
+                                        </div>
+                                        <div class="col-1 m-0">
+                                            <div class="custom_tooltip custom_tooltip_left d-flex" (click)="exportDoctorDataToCSV()"
+                                                style="cursor: pointer;">
+                                                <svg _ngcontent-dyy-c491="" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="#8967B3" d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path></svg>
+                                                <div class="tooltip">
+                                                    <p class="m-0">Export</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body" style="height: 410px;">
+                                    <div class="row gx-2 p-2 mx-0 alter_div"
+                                        *ngFor="let doctor of getSortedDoctorData(); let i = index"
+                                        [class.even-row]="i % 2 === 0" [class.odd-row]="i % 2 === 1">
+                                        <!-- <div class="col-4 m-0">
+                                            <p class=" doctor-name fw-bold"
+                                                [title]="doctor.DoctorName + ' (' + doctor.Department + ')'">
+                                                {{ doctor.DoctorName }}
+                                                <small class="text-muted d-block">{{ doctor.Department }}</small>
+                                            </p>
+                                        </div> -->
+                                        <div class="col-12 m-0 d-flex align-items-center gap-1 border-bottom pb-1 mb-1">
+                                            <!-- <p class="fw-semibold">Doctor's Name</p> -->
+                                            <p class=" doctor-name"
+                                                [title]="doctor.DoctorName + ' (' + doctor.Department + ')'">
+                                                {{ doctor.DoctorName }}
+                                                <small class="text-muted d-block fw-semibold">{{ doctor.Department }}</small>
+                                            </p>
+                                        </div>
+                                        <div class="col-5 m-0">
+                                            <p class="">{{ doctor.ReAdmitCnt }}
+                                            </p>
+                                        </div>
+                                        <div class="col-5 m-0">
+                                            <p class="">{{ doctor.TotalAdmitCnt }}
+                                            </p>
+                                        </div>
+                                        <div class="col-1 m-0">
+                                            <p class="" [class.high-rate]="parseFloat(doctor.Per) > 10"
+                                                [class.medium-rate]="parseFloat(doctor.Per) > 5 && parseFloat(doctor.Per) <= 10"
+                                                [class.low-rate]="parseFloat(doctor.Per) <= 5">
+                                                {{ formatPercentage(doctor.Per) }}
+                                            </p>
+                                        </div>
+                                        <div class="col-1 m-0">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{ errorMsg }}</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-main-outline" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,1889 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+
+<!--Container-->
+<form [formGroup]="form">
+  <div class="" style="background-color: #EFF0F0;">
+    <div class="page-header sticky-top bg-primary-50 shadow-sm justify-content-between">
+      <h2 class="page-heading"> Procedure Schedule </h2>
+      <div class="d-flex align-items-center gap-2">
+        <div class="clinical_toggle toggle__switch switch-sm d-inline-flex position-relative">
+          <button [class]="BookingInfoTabs ? 'btn selected' : 'btn'"
+            (click)="showBookWaitInfo('Booking')">Booking</button>
+          <button [class]="!BookingInfoTabs ? 'btn selected' : 'btn'" (click)="showBookWaitInfo('Waiting')">Waiting List
+            <span class="d-flex align-items-center upcomingCount justify-content-center gap-2 ms-2"
+              *ngIf="WaitingListCount!=''">{{WaitingListCount}}</span>
+          </button>
+        </div>
+          <div class="dropdown hoverServices d-none">            
+            <button class="btn btn-main-outline d-flex align-items-center dropdown-toggle">Actions</button>
+            <div class="dropdown-menu">
+              <p class="dropdown-item border-0 py-2 cursor-pointer"> Patient Eligibility</p>
+              <p class="dropdown-item border-0 py-2 cursor-pointer"> Service Info</p>
+              <p class="dropdown-item border-0 py-2 cursor-pointer" (click)="viewYakeenSearchModal()"> Patient Info</p>
+            </div>
+          </div>
+          <button class="btn btn-danger-outline" (click)="clearDoctorAppointment()">Clear</button>
+          <button class="btn btn-main-outline" *ngIf="!isReschedule" (click)="saveORAppointment('book')">Save</button>
+          <button class="btn btn-main-outline" *ngIf="isReschedule"
+            (click)="rescheduleAppointment(selectedAppToReschedule)">Reschedule</button>
+          <img src="assets/images/back.svg" alt="" class="back_img cursor-pointer d-none" *ngIf="fromPhysiotherapy || fromEndoscopy"
+                  (click)="navigateBackWorklist()">
+      </div>
+    </div>
+
+
+    <div class="bg-white m-2 rounded-3 border-primary-200">
+      <div class="d-flex align-items-center justify-content-between p-2 gap-3">
+        <div class="d-flex align-items-center gap-2 col">
+          <div class="dropdown neutral-dropdown hoverServices w-25">
+            <button
+              class="btn btn-main-outline d-flex align-items-center justify-content-between dropdown-toggle w-100 bg-grey-10" style="height: 2.1rem;">
+             <span class="d-flex align-items-center">
+                <svg class="me-2" width="12" height="17" viewBox="0 0 12 17" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M6.00015 0.500766C8.77762 0.45442 10.7001 2.51758 10.7504 5.2977C10.804 8.23808 8.13741 10.82 6.46617 12.9966C6.22341 13.3114 5.73815 13.3011 5.51208 12.9659C5.11911 12.3836 4.64064 11.7882 4.14395 11.1702C2.72755 9.40752 1.20654 7.69043 1.25005 5.29788C1.30024 2.51913 3.2218 0.454933 6.00032 0.500943L6.00015 0.500766ZM6.00015 3.14664C7.41899 3.14664 8.56912 4.29677 8.56912 5.71561C8.56912 7.13445 7.41899 8.28471 6.00015 8.28471C4.58118 8.28471 3.43105 7.13432 3.43105 5.71561C3.43105 4.29677 4.58118 3.14664 6.00015 3.14664ZM9.45818 11.9057C11.6858 12.9 11.6858 14.8575 9.45818 15.8518C7.52185 16.7161 4.47851 16.7161 2.5418 15.8518C0.314193 14.8575 0.314193 12.9 2.5418 11.9057C2.86634 11.7608 3.22193 11.6404 3.59846 11.544C3.87409 11.8876 4.15513 12.2275 4.42971 12.5674C3.9135 12.6578 3.43171 12.7948 3.0205 12.9782C1.71696 13.5602 1.71696 14.1973 3.0205 14.7792C4.64231 15.503 7.35766 15.503 8.97954 14.7792C10.2831 14.1973 10.2831 13.5602 8.97954 12.9782C8.5872 12.8032 8.13071 12.6706 7.64132 12.5803C7.91374 12.2485 8.19013 11.9081 8.46064 11.5593C8.81521 11.653 9.15079 11.7684 9.45815 11.9058L9.45818 11.9057Z"
+                    fill="#8ECBD7" />
+                </svg>
+                {{form.get("HospitalName").value}}
+              </span>
+            </button>
+            <div class="dropdown-menu">
+              <p *ngFor="let hl of locationList;let i=index" (click)="selectedHospital(hl)"
+                class="dropdown-item border-0 py-2 cursor-pointer"> {{hl.Name}}</p>
+            </div>
+          </div>
+          <div class="CommanSearch__form bg-grey-10 ps-0 w-25 position-relative d-none">
+            <input type="text" class="form-control pe-5" placeholder="Specialisation" autocomplete="off"
+              formControlName="Specialisation" aria-label="Specialisation" [matAutocomplete]="autoSpecialisation"
+              (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchSpecialisationSearch($event)">
+            <mat-autocomplete #autoSpecialisation="matAutocomplete">
+              <mat-option *ngFor="let item of listOfSpecialisation"
+                (onSelectionChange)="selectSpecialisationItem(item)">
+                {{item.Specialisation}}
+              </mat-option>
+            </mat-autocomplete>
+            <label for="" class="CommonSearch__label me-2 position-absolute end-0">
+              <img src="assets/images/icons/icon-search.svg" alt="">
+            </label>
+          </div>
+          <div class="CommanSearch__form bg-grey-10 ps-0 w-25 position-relative d-none">
+            <input type="text" class="form-control pe-5" placeholder="Doctor" autocomplete="off" id="txtDoctor"
+              formControlName="DoctorName" aria-label="Doctor" [matAutocomplete]="autoDoctor"
+              (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchDoctorSearch($event)">
+            <mat-autocomplete #autoDoctor="matAutocomplete">
+              <mat-option *ngFor="let item of listOfItems" (onSelectionChange)="selectDocor(item)">
+                {{item.DoctorName}}                
+              </mat-option>
+
+            </mat-autocomplete>
+            <label for="" class="CommonSearch__label me-2 position-absolute end-0">
+              <img src="assets/images/icons/icon-search.svg" alt="">
+            </label>
+          </div>
+          <form class="CommanSearch__form bg-grey-10 ps-0 w-25 position-relative">
+            <input type="text" class="CommonSearch__input form-control ps-2 pe-5" placeholder="SSN" id="txtSsn"
+              (keypress)="($event.charCode >= 48 && $event.charCode < 58)" (keydown.enter)="onEnterPress($event)">
+            <label for="" class="CommonSearch__label me-2 position-absolute end-0">
+              <img src="assets/images/icons/icon-search.svg" alt="">
+            </label>
+          </form>
+          <div class="CommanSearch__form bg-grey-10 ps-0 w-25 position-relative">
+            <input type="text" class="form-control pe-5" placeholder="Procedure" autocomplete="off"
+              aria-label="Procedure" [matAutocomplete]="autoProcedure"
+              (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchProcedureSearch($event)">
+            <mat-autocomplete #autoProcedure="matAutocomplete">
+              <mat-option *ngFor="let item of listOfProcedures" (onSelectionChange)="selectProcedureItem(item)">
+                {{item.ProcedureName}}
+              </mat-option>
+            </mat-autocomplete>
+            <label for="" class="CommonSearch__label me-2 position-absolute end-0">
+              <img src="assets/images/icons/icon-search.svg" alt="">
+            </label>
+          </div>
+          <!-- <input type="date" class="form-control w-auto"> -->
+          <p *ngIf="this.form.get('ProcedureName')?.value != ''">Procedure : </p>
+          <p class="fw-bold fs-8">{{this.form.get('ProcedureName')?.value}}</p>
+        </div>
+
+        <div class="p-1 avail_legends">
+          <div class="d-flex align-items-center gap-1">
+              <span class="legend visited"></span>
+              <label for="" class="form-label m-0">{{langData?.Appointments?.Visited}}</label>
+          </div>
+            <div class="d-flex align-items-center gap-1">
+              <span class="legend Booked"></span>
+              <label for="" class="form-label m-0">{{langData?.Appointments?.Booked}}</label>
+          </div>
+          <div class="d-flex align-items-center gap-1">
+              <span class="legend inavailable"></span>
+              <label for="" class="form-label m-0">{{langData?.Appointments?.Avaialble}}</label>
+          </div>
+          <div class="d-flex align-items-center gap-1">
+              <span class="legend change_duty"></span>
+              <label for="" class="form-label m-0">{{langData?.Appointments?.ChangeDuty}}</label>
+          </div>
+          <div class="d-flex align-items-center gap-1">
+              <span class="legend iprounds"></span>
+              <label for="" class="form-label m-0">{{langData?.Appointments?.Meeting}}</label>
+          </div>
+          <div class="d-flex align-items-center gap-1">
+              <span class="legend inor"></span>
+              <label for="" class="form-label m-0">InPatient Sessions</label>
+          </div>
+          <div class="d-flex align-items-center gap-1">
+              <span class="legend onvacation"></span>
+              <label for="" class="form-label m-0">{{langData?.Appointments?.OnVacation}}</label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="border-top-primary-200 rounded-3 rounded-top-0 position-relative" *ngIf="showDoctorSlots">
+        <div class="row mx-0 gx-0">
+          <div class="col-3 resource-doctor-list border-end">
+
+            <!-- <div class="d-flex align-items-center justify-content-between stickhead sticky-top top-0 p-2"
+              style="height: 3rem;">
+              <h5 class="m-0 clr-primary-600 fs-6">Physiotherapist</h5>
+              <div class="d-flex align-items-center gap-2" *ngIf="doctorList != undefined || doctorList.length > 0">
+                <div class="custom_check active d-flex align-items-center gap-2" [class.active]="selectAll"
+                  (click)="selectAllDoctor()">                 
+                </div>
+              </div>
+            </div> -->
+
+            <div *ngIf="doctorList.length > 0" (keydown.enter)="onDoctorEnterPress($event)"
+              (change)="fetchDoctors($event)" class="bg-primary-50 position-relative d-flex align-items-center">
+              <input type="text" placeholder="Search Physiotherapist"
+                class="form-control bg-transparent border-0 py-2 clr-primary-600 pe-5">
+
+              <div class="position-absolute end-0 me-2">
+                <img src="assets/images/icons/icon-search.svg" alt="">
+                <svg width="20" height="20" viewBox="0 0 20 20">
+                  <path d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z"
+                    stroke="#368796" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                  </path>
+                </svg>
+              </div>
+            </div>           
+
+            <div class="doctors-list-cards p-2 d-flex flex-column gap-2">
+              <div (click)="loadSelectedDoctorAvailability(item)" *ngFor="let item of doctorList"
+                [class.active]="item.selected" class="doctor-card cursor-pointer rounded-2 border active">
+                <div class="d-flex justify-content-between p-2">
+                  <div class="d-flex align-items-center gap-2">                   
+                    <div class="profile_img position-relative">
+                      <img class="doc_img" src="assets/images/maleD.svg" alt="" *ngIf="item.GenderID=='1'">
+                      <img class="doc_img" src="assets/images/femaleD.svg" alt="" *ngIf="item.GenderID=='2'">                     
+                    </div>
+                    <div class="">
+                      <div class="custom_tooltip doc_des custom_tooltip_right">
+                        <p class="fw-bold fs-8">{{item.EmpCodeName}}</p>
+                        <div class="tooltip">
+                          <div class="d-flex flex-column">
+                            <label for="" class="form-label fw-bold clr-primary-600">Education and
+                              Qualifications:</label>
+                            <span class="pb-2">{{item.Qualification}}</span>
+                            <label for="" class="form-label fw-bold clr-primary-600">Experience:</label>
+                            <span class="pb-2">-</span>
+                            <label for="" class="form-label fw-bold clr-primary-600">Professional
+                              Memberships:</label>
+                            <span class="pb-2">{{item.License}}</span>
+                            <label for="" class="form-label fw-bold clr-primary-600">Languages
+                              Spoken:</label>
+                            <span class="pb-2">{{item.Languages}}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <p class="clr-primary-600 fw-bold">{{item.Specialization}}</p>
+                        <p class="clr-dark-600">{{item.Nationality}}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="custom_check" [class.active]="item.selected">
+                    <svg width="18" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                      class="check_svg">
+                      <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                      <path
+                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                        fill="white" stroke="white" stroke-width="0.25"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="p-1 bg-white rounded-bottom">
+                  <div class="bg-grey-10 p-1">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <div>
+                        <p class="fs-7 mb-1 clr-dark-600">{{item.THourDifferencestring}} </p>
+                        <div class="d-flex align-items-center gap-3">
+                          <div class="d-flex align-items-center gap-2">
+                            <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="M14.9242 2.07344H13.9204V1.36313C13.9204 1.06356 13.7605 0.78662 13.5009 0.636839C13.2415 0.486864 12.9216 0.486864 12.6623 0.636839C12.4027 0.78662 12.2428 1.06356 12.2428 1.36313V2.07324L6.04733 2.07343V1.36312C6.04733 1.06356 5.88741 0.786615 5.62783 0.636835C5.36845 0.486859 5.04858 0.486859 4.78921 0.636835C4.52963 0.786615 4.36971 1.06356 4.36971 1.36312V2.07323L3.36593 2.07343C2.55032 2.07343 1.76807 2.39737 1.19136 2.97406C0.614453 3.55097 0.290527 4.33322 0.290527 5.14883V15.4488C0.290527 16.2644 0.614468 17.0466 1.19136 17.6235C1.76807 18.2002 2.55032 18.5244 3.36593 18.5244H14.9245C15.7401 18.5244 16.5224 18.2002 17.0991 17.6235C17.676 17.0466 17.9999 16.2644 17.9999 15.4488V5.14883C17.9999 4.33322 17.676 3.55097 17.0991 2.97406C16.5224 2.39735 15.7401 2.07343 14.9245 2.07343L14.9242 2.07344ZM3.36858 3.75108H4.37236V5.02052L4.37217 5.02033C4.37217 5.31989 4.53209 5.59684 4.79167 5.74662C5.05125 5.89659 5.37092 5.89659 5.63049 5.74662C5.88988 5.59684 6.0498 5.31989 6.0498 5.02033V3.75089H12.2427V5.02033C12.2427 5.31989 12.4027 5.59684 12.6622 5.74662C12.9216 5.89659 13.2415 5.89659 13.5009 5.74662C13.7604 5.59684 13.9204 5.31989 13.9204 5.02033V3.75089H14.9241C15.2949 3.75089 15.6504 3.89813 15.9125 4.16044C16.1747 4.42256 16.3221 4.77809 16.3221 5.14885V7.69317H1.96761V5.14885C1.96761 4.7781 2.11505 4.42256 2.37716 4.16044C2.63928 3.89813 2.99481 3.75089 3.36557 3.75089L3.36858 3.75108ZM14.9242 16.8469H3.36559C2.99484 16.8469 2.6393 16.6997 2.37718 16.4376C2.11507 16.1752 1.96763 15.8197 1.96763 15.449V9.37085H16.3221V15.449C16.3221 15.8197 16.1747 16.1752 15.9126 16.4376C15.6504 16.6997 15.2949 16.8469 14.9242 16.8469H14.9242Z"
+                                fill="#368796" />
+                            </svg>
+                            <span class="fs-8">{{item.fullDate}}</span>
+                          </div>
+                          <div class="d-flex align-items-center gap-2">
+                            <svg width="19" height="19" viewBox="0 0 19 19" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="M9.37371 18.5244C11.6749 18.5244 13.9763 17.6358 15.7307 15.8813C19.2395 12.3725 19.2395 6.65339 15.7307 3.14451C12.2219 -0.364372 6.50281 -0.36429 2.99393 3.14451C-0.514946 6.6533 -0.514864 12.3724 2.99393 15.8813C4.77116 17.6358 7.07243 18.5244 9.37371 18.5244ZM4.13318 4.28379C5.56867 2.8483 7.48256 2.11927 9.37371 2.11927C11.2649 2.11927 13.1561 2.84847 14.6142 4.28379C17.508 7.17752 17.508 11.8712 14.6142 14.7649C11.7205 17.6586 7.02687 17.6586 4.13318 14.7649C1.23945 11.8711 1.23945 7.17748 4.13318 4.28379Z"
+                                fill="#368796" />
+                              <path
+                                d="M6.5256 13.9674C6.73063 13.9674 6.95856 13.8763 7.11797 13.7167L10.0801 10.504C10.2167 10.3673 10.2851 10.1623 10.2851 9.95715V5.6508C10.2851 5.21785 9.92048 4.85325 9.48753 4.85325C9.05473 4.85325 8.69014 5.21784 8.69014 5.6508V9.66091L5.93324 12.623C5.63699 12.942 5.65987 13.4432 5.97885 13.7395C6.13827 13.8989 6.32056 13.9672 6.52561 13.9672L6.5256 13.9674Z"
+                                fill="#368796" />
+                            </svg>
+                            <span class="fs-8">{{item.FROMTIME}}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="">
+                        <svg class="cursor-pointer" width="14" height="9" viewBox="0 0 14 9" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path d="M1.47827 4.52588H13M13 4.52588L10.1282 1.28137M13 4.52588L10.1282 7.71857"
+                            stroke="#368796" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="no_doctors flex-column justify-content-center align-items-center gap-2"
+              *ngIf="doctorList === undefined || doctorList.length === 0">
+              <img class="mb-2" src="assets/images/Doctor.svg" alt="" style="height: 7rem;">
+              <p class="fs-7">Select Doctor</p>
+            </div>
+
+          </div>
+          <div class="col">
+            <div class="">
+              <!-- <div class="no-patient-select border-bottom justify-content-between p-2">
+                <p class="fs-7 text-center" *ngIf="patientDetails === undefined || patientDetails?.length === 0">No Patient Selected</p>
+              </div> -->
+
+              <div class="worklist_patientcard p-1 rounded-0 border-0"
+                *ngIf="patientDetails != undefined && patientDetails?.length != 0">
+                <div class="row mx-0 gx-2">
+                  <div class="w-max-content">
+                    <div class="d-flex align-items-center">
+                      <div class="patient-photo me-1">
+                        <svg class="position-relative" xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                          viewBox="0 0 19 20" fill="none">
+                          <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M4.24204 5.40194C4.24204 2.70966 6.60054 0.519531 9.49993 0.519531C12.3993 0.519531 14.758 2.70961 14.758 5.40195C14.758 5.70065 14.7216 6.00638 14.6439 6.35817C14.719 6.59977 14.7581 6.8699 14.7581 7.14592C14.7581 8.11756 14.2953 8.85552 13.6756 8.88894C12.9937 10.9892 11.3501 12.3771 9.50002 12.3771C7.64999 12.3771 6.00646 10.9891 5.32431 8.88894C4.70462 8.85543 4.24199 8.11756 4.24199 7.14592C4.24199 6.86916 4.28127 6.59844 4.35627 6.3563C4.27831 6.00529 4.24204 5.70009 4.24204 5.40194ZM5.03243 6.73058C5.00643 6.8621 4.99309 7.00236 4.99309 7.14592C4.99309 7.82108 5.27477 8.19217 5.3687 8.19217C5.47081 8.13355 5.60825 8.11475 5.7203 8.15726C5.83146 8.19906 5.92615 8.27998 5.95545 8.38811C6.48108 10.3572 7.90531 11.6796 9.50009 11.6796C11.0949 11.6796 12.5189 10.3572 13.0447 8.38811C13.074 8.27998 13.1567 8.19077 13.2678 8.14885C13.379 8.10705 13.506 8.11744 13.6073 8.17606C13.7366 8.19147 14.007 7.82039 14.007 7.14592C14.007 7.00736 13.9945 6.87187 13.9703 6.74435L13.2866 6.7963C13.276 6.797 13.2656 6.797 13.2558 6.797C13.1085 6.797 12.9734 6.71678 12.9134 6.58916C12.899 6.55983 12.6226 5.97683 12.5332 5.39087C10.9587 5.29596 9.3302 4.58038 8.52052 3.8382C8.22161 4.3216 7.57414 4.7045 6.27539 4.7045H6.21831C6.11381 4.92834 6.06652 5.63222 6.1123 6.32828C6.12651 6.36588 6.13481 6.4057 6.13481 6.4482C6.13481 6.64356 5.95689 6.79979 5.75179 6.79699C5.72852 6.79769 5.70979 6.79629 5.68791 6.79349C5.67573 6.79182 5.36674 6.74943 5.03243 6.73058Z"
+                            fill="#0885CA" />
+                          <path
+                            d="M15.2349 12.1162L13.303 11.4919C13.1618 11.4466 13.0048 11.4835 12.9026 11.5853C11.9554 12.5458 10.7469 13.0745 9.49991 13.0745C8.25296 13.0745 7.04442 12.5457 6.09724 11.586C5.99589 11.4842 5.83883 11.4472 5.69684 11.4926L3.76494 12.1169C1.80362 12.7494 0.486206 14.4702 0.486206 16.3987V18.1984C0.486206 18.3909 0.65446 18.5471 0.86182 18.5471C6.54738 19.8454 12.4526 19.8453 18.1382 18.5471C18.3456 18.5471 18.5138 18.3909 18.5138 18.1984V16.3987C18.5137 14.4702 17.1963 12.7496 15.2349 12.1162Z"
+                            fill="#0885CA" />
+                        </svg>                       
+                      </div>
+                      <div class="mt-1">
+                        <p class="value fs-8 fw-bold w-100">{{patientDetails?.PatientName}}</p>
+                        <div class="d-flex align-items-center gap-2">
+                          <p class="fs-8">{{patientDetails?.Gender}} | {{patientDetails?.FullAge}}
+                          </p>
+                          <p class="fs-8"><b>ID No.</b> : <span>{{patientDetails?.SSN}}</span></p>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                          <p class="fs-8">{{patientDetails?.Nationality}}</p>
+                          <p class="fs-8"><b>Mobile</b> :
+                            <span>{{patientDetails?.MobileNo}}</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="bg-white h-100 p-1 rounded">
+                      <div class="row mx-0 pb-2">
+                        <div class="col">
+                          <label for="" class="form-label clr-primary-600 fw-bold m-0">Patient
+                            Type</label>
+                          <p class=" text-truncate">{{patientDetails?.CompanyName != '' &&
+                            patientDetails?.CompanyName != undefined ? 'Insured' : 'Self'}}
+                          </p>
+                        </div>
+                        <div class="col">
+                          <label for="" class="form-label clr-primary-600 fw-bold m-0">Insurance
+                            Name</label>
+                          <p class=" text-truncate">{{patientDetails?.CompanyName}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="multiplePatients != undefined && multiplePatients.length > 0"
+                  class="pt-2 bg-white p-1 doctor-card_relat d-flex align-items-center justify-content-between mx-0 gap-2">                
+                  <div class="doctor-card_relat_scroll d-flex align-items-center gap-2">
+                    <owl-carousel-o [options]="carouselOptions">
+                      <ng-container>
+                        <ng-template carouselSlide *ngFor="let pat of multiplePatients; let i = index">
+                          <div class="doctor-card cursor-pointer w-auto p-0 rounded-2 border"
+                            (click)="selectPatient(pat)">
+                            <div class="d-flex align-items-center justify-content-between p-2">
+                              <div class="d-flex align-items-center gap-2">
+                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
+                                  <rect width="32" height="32" rx="16" fill="#ECF6F8" />
+                                  <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M15.9999 17.7756C19.04 17.7756 21.5038 13.6709 21.5038 10.9422C21.5038 8.21267 19.04 6 15.9999 6C12.9602 6 10.4962 8.21267 10.4962 10.9422C10.4962 13.6713 12.9607 17.7756 15.9999 17.7756ZM11.3222 11.1092C11.6532 9.67606 13.6258 9.91675 15.1147 10.0984L15.2386 10.1135C16.6876 10.2892 18.318 10.0911 18.9463 9.99883L18.9864 9.99289C19.1521 9.96831 19.3179 9.94371 19.4846 9.95827C20.8349 10.0762 20.73 11.8651 20.7282 11.886C20.2961 14.1893 18.3436 17.0016 16.0001 17.0016C13.6703 17.0016 11.7265 14.2201 11.2797 11.9244C11.2413 11.7268 11.2769 11.3053 11.3222 11.1092Z"
+                                    fill="#43A9BC" />
+                                  <path
+                                    d="M23.3883 18.1829C22.9689 17.8969 22.449 18.439 22.5324 18.9398C22.5711 19.1718 22.7429 19.3632 22.9565 19.4618C23.4756 19.7015 23.8315 20.1868 23.8315 20.7458C23.8315 21.5423 23.1098 22.1903 22.2228 22.1903C21.3358 22.1903 20.6141 21.5423 20.6141 20.7458C20.6141 20.2896 20.8095 19.8234 20.9982 19.373C21.2863 18.6852 21.5589 18.0345 21.0966 17.5134C20.9576 17.3567 20.8008 17.2204 20.6278 17.1113C20.5819 17.0823 20.5306 17.0645 20.4768 17.0566C20.2228 17.0188 20.0039 17.2264 19.8882 17.4557C19.4544 18.3163 17.8783 18.9538 15.9994 18.9538C14.1987 18.9538 12.6759 18.3683 12.1708 17.562C11.9993 17.2883 11.7202 17.0225 11.4016 17.0756C11.3291 17.0876 11.2605 17.1141 11.2009 17.1571C10.7299 17.4973 10.3478 18.0745 10.2451 18.7751C10.2185 18.9567 10.3349 19.1206 10.4537 19.2605C10.5268 19.3467 10.6077 19.427 10.7076 19.4799C11.1713 19.7258 11.5813 20.1679 11.9029 20.7716C11.9663 20.8913 11.9835 21.0302 12.0007 21.1692C12.0136 21.2732 12.0264 21.3772 12.0586 21.4733C12.1905 21.8665 12.2635 22.2691 12.2635 22.62C12.2635 23.16 12.2635 23.6752 11.7925 23.9138C11.6049 24.0089 11.4017 24.1111 11.1914 24.1111H10.6746C10.4155 24.1111 10.2046 23.9216 10.2046 23.6891L10.2051 23.6727C10.215 23.4485 10.4242 23.2671 10.6746 23.2671H11.1914C11.2359 23.2671 11.2796 23.2728 11.3221 23.284C11.3379 23.2881 11.3659 23.2861 11.3808 23.2796C11.3899 23.2756 11.391 23.2725 11.3935 23.2657C11.3942 23.2639 11.395 23.2618 11.396 23.2595C11.4448 23.1451 11.4448 22.7937 11.4448 22.6203C11.4448 22.334 11.383 22.0018 11.2712 21.6738C11.2347 21.5669 11.1632 21.4781 11.0913 21.389C11.0382 21.323 10.9849 21.2569 10.9456 21.1831C10.6323 20.594 10.2061 20.2136 9.86012 20.2136C9.50621 20.2136 9.05874 20.6249 8.74666 21.2367C8.70337 21.3212 8.64189 21.3961 8.58061 21.4708C8.4986 21.5707 8.41696 21.6702 8.37975 21.7917C8.29115 22.0809 8.24375 22.3661 8.24375 22.62C8.24375 22.7594 8.24375 23.1079 8.29243 23.2432C8.30058 23.2659 8.3087 23.279 8.33169 23.2861C8.34454 23.2901 8.37221 23.2925 8.3851 23.2886C8.43288 23.2743 8.48335 23.2669 8.53381 23.2669H9.05156C9.29287 23.2669 9.49457 23.432 9.51883 23.6463L9.5213 23.6725C9.5213 23.9216 9.31044 24.1111 9.05156 24.1111H8.53381C8.35216 24.1111 8.17585 24.0351 8.00735 23.9624L7.96103 23.9425C7.81266 23.8791 7.69796 23.7876 7.61414 23.6665C7.45426 23.436 7.42505 23.1334 7.42505 22.62C7.42505 22.2612 7.49856 21.8592 7.6348 21.4601C7.66396 21.3747 7.67746 21.283 7.69094 21.1912C7.70894 21.0688 7.72694 20.9464 7.78218 20.8394C8.00121 20.4091 8.27989 20.0407 8.58777 19.7743C8.70566 19.6723 8.82969 19.5842 8.95841 19.511C9.06609 19.4499 9.15319 19.3579 9.23375 19.2638C9.24109 19.2553 9.24862 19.2469 9.25634 19.2386C9.37302 19.114 9.47701 18.9594 9.49684 18.7898C9.54915 18.3427 9.0812 17.872 8.70501 18.1193C7.06506 19.1972 6 20.9382 6 22.9031C6.00025 25.8547 8.40215 26 11.547 26C11.7164 26 11.888 25.9996 12.0617 25.9992L12.0624 25.9992C12.2399 25.9987 12.4195 25.9983 12.6008 25.9983H19.3994C19.58 25.9983 19.7593 25.9987 19.9367 25.9992C20.1106 25.9996 20.2829 26 20.4527 26C23.5976 26 26 25.8551 26 22.9036C25.9998 20.9761 24.9749 19.2648 23.3883 18.1829Z"
+                                    fill="#43A9BC" />
+                                  <path
+                                    d="M22.9653 20.7458C22.9653 21.114 22.6329 21.4124 22.2228 21.4124C21.8128 21.4124 21.4803 21.114 21.4803 20.7458C21.4803 20.3776 21.8128 20.0791 22.2228 20.0791C22.6329 20.0791 22.9653 20.3776 22.9653 20.7458Z"
+                                    fill="#43A9BC" />
+                                </svg>
+                                <div class="">
+                                  <p class="clr-dark-600 fw-bold fs-7 text-nowrap">
+                                    {{pat.PatientName}}
+                                  </p>
+                                  <p class="clr-dark-600">{{pat.SSN}}</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="custom_check" [class.active]="pat.selected">
+                              <svg width="18" height="18" viewBox="0 0 20 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                <path
+                                  d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                  fill="white" stroke="white" stroke-width="0.25"></path>
+                              </svg>
+                            </div>
+                          </div>
+                        </ng-template>
+                      </ng-container>
+                    </owl-carousel-o>                   
+                  </div>                  
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center gap-2 rounded-top p-2 justify-content-between">                 
+                <div class="d-flex align-items-center gap-2">
+                  <div class="d-flex align-items-center gap-2">
+                      <div class="profile_img position-relative">
+                        <img class="doc_img" src="assets/images/maleD.svg" alt="" *ngIf="selectedDoctor?.GenderID=='1'"
+                          style="width: 2.5rem;height: 2.5rem;min-width: 2.5rem;">
+                        <img class="doc_img" src="assets/images/femaleD.svg" alt="" *ngIf="selectedDoctor?.GenderID=='2'"
+                          style="width: 2.5rem;height: 2.5rem;min-width: 2.5rem;">
+    
+                      </div>
+                      <div class="">
+                        <p class="clr-dark-600 fw-bold fs-7">{{selectedDoctor?.EmpCodeName}}</p>  
+                        <p class="clr-dark-600 fs-7">{{selectedDoctor?.SpecialityName}}</p>
+                      </div>
+                  </div>
+                  <div class="border-start ps-2">
+                    <label for="" class="form-label m-0">Selected Date:</label>
+                      <h6 class="clr-primary-600 lh-1 m-0 fw-bold">{{selectedDate?.fullDate}}</h6>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <button class="date_range_calendar p-0 position-relative" style="width: 227px;">
+                    <mat-date-range-input class="btn btn-main-outline" [formGroup]="tablePatientsForm"
+                      [rangePicker]="picker" [min]="minDate">
+                      <input matStartDate formControlName="FromDate">
+                      <input matEndDate formControlName="ToDate" (dateChange)="doctorAvailabilityDateChange()">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                  </button>
+                  <div class="filter_Date position-relative">
+                    <div class="d-flex align-items-center gap-2 fs-8">
+                      {{langData?.common?.Filters}}
+                      <svg class="cursor-pointer" width="18" height="18" viewBox="0 0 24 25" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2.75" y="3.27435" width="18.5" height="18.5" rx="3.25" stroke="#368796"
+                          stroke-width="1.5" />
+                        <circle cx="7.85547" cy="8.32605" r="1.375" fill="#368796" stroke="#368796"
+                          stroke-width="1.25" />
+                        <rect x="9.125" y="7.70105" width="7" height="1.25" rx="0.625" fill="#368796" />
+                        <circle cx="16.1445" cy="12.5243" r="1.375" fill="#4357BC" stroke="#4357BC"
+                          stroke-width="1.25" />
+                        <rect x="8.12988" y="11.8993" width="7" height="1.25" rx="0.625" fill="#4357BC" />
+                        <circle cx="7.875" cy="16.7227" r="1.375" fill="#368796" stroke="#368796" stroke-width="1.25" />
+                        <rect x="9.14453" y="16.0977" width="7" height="1.25" rx="0.625" fill="#368796" />
+                      </svg>
+                    </div>
+                    <div class="filter_dropdow available_filter end-0">
+                      <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchappointmentwithdates('T')">
+                        {{langData?.common?.Today}}</p>
+                      <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchappointmentwithdates('W')">
+                        {{langData?.common?.Thisweek}}
+                      </p>
+                      <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchappointmentwithdates('M')">
+                        {{langData?.common?.ThisMonth}}
+                      </p>
+                      <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchappointmentwithdates('3M')">
+                        {{langData?.common?.ThreeMonths}}</p>
+                      <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchappointmentwithdates('6M')">
+                        {{langData?.common?.SixMonths}}</p>
+                    
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rounded-2 available_height" [ngClass]="(patientDetails != undefined && patientDetails?.length != 0) ? 'available_height_ptCard' : ''"
+                *ngIf="listOfDates != undefined && listOfDates.length > 0">
+
+                <div class="">
+                  <div class="border-top rounded-bottom">
+                    <div class="p-2 border-bottom bg-grey-10">
+                      <div class="d-flex align-items-center gap-2 justify-content-between">
+                        <div class="d-flex align-items-center gap-2">
+                          <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M14.9242 2.07344H13.9204V1.36313C13.9204 1.06356 13.7605 0.78662 13.5009 0.636839C13.2415 0.486864 12.9216 0.486864 12.6623 0.636839C12.4027 0.78662 12.2428 1.06356 12.2428 1.36313V2.07324L6.04733 2.07343V1.36312C6.04733 1.06356 5.88741 0.786615 5.62783 0.636835C5.36845 0.486859 5.04858 0.486859 4.78921 0.636835C4.52963 0.786615 4.36971 1.06356 4.36971 1.36312V2.07323L3.36593 2.07343C2.55032 2.07343 1.76807 2.39737 1.19136 2.97406C0.614453 3.55097 0.290527 4.33322 0.290527 5.14883V15.4488C0.290527 16.2644 0.614468 17.0466 1.19136 17.6235C1.76807 18.2002 2.55032 18.5244 3.36593 18.5244H14.9245C15.7401 18.5244 16.5224 18.2002 17.0991 17.6235C17.676 17.0466 17.9999 16.2644 17.9999 15.4488V5.14883C17.9999 4.33322 17.676 3.55097 17.0991 2.97406C16.5224 2.39735 15.7401 2.07343 14.9245 2.07343L14.9242 2.07344ZM3.36858 3.75108H4.37236V5.02052L4.37217 5.02033C4.37217 5.31989 4.53209 5.59684 4.79167 5.74662C5.05125 5.89659 5.37092 5.89659 5.63049 5.74662C5.88988 5.59684 6.0498 5.31989 6.0498 5.02033V3.75089H12.2427V5.02033C12.2427 5.31989 12.4027 5.59684 12.6622 5.74662C12.9216 5.89659 13.2415 5.89659 13.5009 5.74662C13.7604 5.59684 13.9204 5.31989 13.9204 5.02033V3.75089H14.9241C15.2949 3.75089 15.6504 3.89813 15.9125 4.16044C16.1747 4.42256 16.3221 4.77809 16.3221 5.14885V7.69317H1.96761V5.14885C1.96761 4.7781 2.11505 4.42256 2.37716 4.16044C2.63928 3.89813 2.99481 3.75089 3.36557 3.75089L3.36858 3.75108ZM14.9242 16.8469H3.36559C2.99484 16.8469 2.6393 16.6997 2.37718 16.4376C2.11507 16.1752 1.96763 15.8197 1.96763 15.449V9.37085H16.3221V15.449C16.3221 15.8197 16.1747 16.1752 15.9126 16.4376C15.6504 16.6997 15.2949 16.8469 14.9242 16.8469H14.9242Z"
+                              fill="#368796" />
+                          </svg>
+                          <h6 class="clr-primary-600 m-0">Available Dates</h6>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                          <div class="d-flex align-items-center flex-wrap gap-3 clin_imp ms-auto">
+                            <h6 class="clr-primary-600 m-0">Clinic Timings :</h6>
+                          </div>
+                          <div class="d-flex align-items-center flex-wrap gap-3 clin_imp ms-auto ">
+
+                            <p class="clr-primary-600 m-0 fw-bold fs-7">{{clinicTimings}}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="d-flex gap-2 position-relative">
+                      <div class="availableDates">
+                        <div class="dateBlock d-flex flex-column gap-1 align-items-center justify-content-center cursor-pointer custom_tooltip custom_tooltip_left" 
+                          *ngFor="let date of listOfDatesFiltered;let i = index"
+                          [class.active]="date?.fullDate === selectedDate?.fullDate"
+                          (click)="addSelectedDate(date)">
+                          <p class="text-center">{{date?.month}}</p>
+                          <h6 class="text-center">{{date?.date}}</h6>
+                          <p class="text-center">{{date?.dayCodeShort}}</p>
+                        </div>
+                      </div>
+                      <!-- <div class="view_more_dates custom_tooltip custom_tooltip_left" (click)="viewMoreDates()" style="height: max-content;">
+                        <svg class="cursor-pointer" width="23" height="23" viewBox="0 0 18 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M16.5176 1.07666L8.94189 8.65186L1.3667 1.07666" stroke="#04657B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>                            
+                        <div class="tooltip">
+                          <p>{{txtViewMore}}</p>
+                        </div>
+                      </div> -->
+                    </div>
+                  </div>
+                </div>
+
+                <div class="">
+                  <div class="border-top rounded-bottom">
+                    <div class="p-2 border-bottom bg-grey-10 availableTime_position">
+                      <div class="d-flex align-items-center gap-2 justify-content-between">
+                        <div class="d-flex align-items-center gap-2">
+                          <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M9.37371 18.5244C11.6749 18.5244 13.9763 17.6358 15.7307 15.8813C19.2395 12.3725 19.2395 6.65339 15.7307 3.14451C12.2219 -0.364372 6.50281 -0.36429 2.99393 3.14451C-0.514946 6.6533 -0.514864 12.3724 2.99393 15.8813C4.77116 17.6358 7.07243 18.5244 9.37371 18.5244ZM4.13318 4.28379C5.56867 2.8483 7.48256 2.11927 9.37371 2.11927C11.2649 2.11927 13.1561 2.84847 14.6142 4.28379C17.508 7.17752 17.508 11.8712 14.6142 14.7649C11.7205 17.6586 7.02687 17.6586 4.13318 14.7649C1.23945 11.8711 1.23945 7.17748 4.13318 4.28379Z"
+                              fill="#368796" />
+                            <path
+                              d="M6.5256 13.9674C6.73063 13.9674 6.95856 13.8763 7.11797 13.7167L10.0801 10.504C10.2167 10.3673 10.2851 10.1623 10.2851 9.95715V5.6508C10.2851 5.21785 9.92048 4.85325 9.48753 4.85325C9.05473 4.85325 8.69014 5.21784 8.69014 5.6508V9.66091L5.93324 12.623C5.63699 12.942 5.65987 13.4432 5.97885 13.7395C6.13827 13.8989 6.32056 13.9672 6.52561 13.9672L6.5256 13.9674Z"
+                              fill="#368796" />
+                          </svg>
+                          <h6 class="clr-primary-600 m-0">Available Time</h6>
+                        </div>                        
+                        <div class="d-flex align-items-center gap-2 pe-5">
+                          <div class="custom_check d-flex align-items-center gap-2 ms-auto" [class.active]="multipleSlots" (click)="onMultipleSlotsClick()">
+                            <svg style="min-width: 1rem" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                              class="check_svg">
+                              <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                              <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                            </svg>
+                            <p class="fw-bold fs-8">Multiple Slots</p>
+                          </div> 
+                          <button class="btn btn-danger-outline" (click)="clearSelections()">Clear</button>
+                          <div class="actions ms-auto">
+                            <button class="btn btn-main-outline d-flex align-items-center" [disabled]="bookappointment()" (click)="saveWaitingListAppointmentPopup()">
+                              <img class="doc_img" src="assets/images/waiting-list.svg" alt="">
+                              Book Waiting Appointment</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="day_avail py-2 border-bottom"
+                      *ngIf="morningTimeSlots != undefined && morningTimeSlots.length > 0">
+                      <div class="d-flex align-items-center justify-content-between  p-2">
+                        <div class="d-flex align-items-center gap-2">
+                          <img style="width: 2.2rem;" src="assets/images/icons/morning.svg" alt="">
+                          <h6 class="m-0 clr-primary-600">Morning</h6>
+                        </div>
+                        <h6 class="clr-primary-600 pe-5">{{morningTimeSlots.length}} slots</h6>
+                      </div>
+
+                      <div class="d-flex  align-items-center gap-3 clin_imp p-2">
+                        <div class="d-flex align-items-center flex-wrap gap-3 clin_imp">
+                          <button *ngFor="let time of morningTimeSlots;let i = index"
+                            class="btn btn-secondary-outline fs-8 px-3 custom_tooltip custom_tooltip_right"
+                            [class.active]="time.selected"
+                            [class.PastTimeDisable]="time.ISAVAILABLE==-2"
+                            [class.ORactive]="time.ISAVAILABLE==2"
+                            [class.Bookedactive]="time.ISAVAILABLE==3"
+                            [class.CDactive]="time.ISAVAILABLE==4"
+                            [class.IPRoundsactive]="time.ISAVAILABLE==5"
+                            [class.Vaccactive]="time.ISAVAILABLE==6"
+                            [class.Visitedactive]="time.ISAVAILABLE==7"
+                            (click)="addSelectedTime(time, 'morning')">
+                            {{time?.modTime}}
+                            <div class="" *ngIf="time.ISAVAILABLE==2">
+                              <p *ngIf="time.ISAVAILABLE==2 &&time?.SSN!=''" class="fw-bold">{{time?.SSN}}</p>
+                              <div class="tooltip p-0" *ngIf="time.ISAVAILABLE==2">
+                                  <p class="fw-bold fs-7 mb-1 text-center p-1 border-bottom bg-primary-400 rounded-top text-white">In OR</p>
+                                  <div class="p-1" *ngIf="time.ISAVAILABLE==2&&time?.SSN!=''">
+                                    <p class="mb-1"><span class="clr-primary-600 fw-bold">Slot Timing:</span> {{time?.AppointmentSlot}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">SSN: </span> {{time?.SSN}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">PatientName :</span> {{time?.PatientName}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">Mobile No: </span> {{time?.MobileNo}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">Nationality :</span> {{time?.Nationality}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">Booked By :</span> {{time?.BookedBy}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">Booked on :</span> {{time?.BookedOn}}</p>
+                                  </div>
+                              </div>
+                           </div>
+                           <div class="" *ngIf="(time.ISAVAILABLE==3||time.ISAVAILABLE==7)">
+                            <p *ngIf="(time.ISAVAILABLE==3||time.ISAVAILABLE==7)" class="fw-bold" style=" color: #fff;">{{time?.SSN}}</p>
+
+                            <div class="tooltip" *ngIf="(time.ISAVAILABLE==3||time.ISAVAILABLE==7)">
+                                <p class="mb-1"><span class="clr-primary-600 fw-bold">Slot Timing:</span> {{time?.AppointmentSlot}}</p>
+                                <p class="mb-1"><span class="clr-primary-600 fw-bold">SSN:</span> {{time?.SSN}}</p>
+                                <p class="mb-1"><span class="clr-primary-600 fw-bold">PatientName :</span> {{time?.PatientName}}</p>
+                                <p class="mb-1"><span class="clr-primary-600 fw-bold">Mobile No: </span> {{time?.MobileNo}}</p>
+                                <p class="mb-1"><span class="clr-primary-600 fw-bold">Nationality :</span> {{time?.Nationality}}</p>
+                                <p class="mb-1"><span class="clr-primary-600 fw-bold">Booked By :</span> {{time?.BookedBy}}</p>
+                                <p class="mb-1"><span class="clr-primary-600 fw-bold">Booked on :</span> {{time?.BookedOn}}</p>
+                            </div>
+                         </div>
+                          <div class="" *ngIf="time.ISAVAILABLE==4">
+                            <div class="tooltip p-0" *ngIf="time.ISAVAILABLE==4">
+                                <p class="fw-bold fs-7 text-center p-1 border-bottom rounded clr-primary-600">Change Duty</p>
+                            </div>
+                         </div>
+                          <div class="" *ngIf="time.ISAVAILABLE==5">
+                            <div class="tooltip p-0" *ngIf="time.ISAVAILABLE==5">
+                                <p class="fw-bold fs-7 text-center p-1 border-bottom rounded clr-primary-600">IP Rounded</p>
+                            </div>
+                         </div>
+                          <div class="" *ngIf="time.ISAVAILABLE==6">
+                            <div class="tooltip p-0" *ngIf="time.ISAVAILABLE==6">
+                                <p class="fw-bold fs-7 text-center p-1 border-bottom rounded clr-primary-600">On Vacation</p>
+                            </div>
+                         </div>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="day_avail py-2 border-bottom"
+                      *ngIf="afternoonTimeSlots != undefined && afternoonTimeSlots.length > 0">
+                      <div class="d-flex align-items-center justify-content-between p-2">
+                        <div class="d-flex align-items-center gap-2">
+                          <img style="width: 2.2rem;" src="assets/images/icons/afternoon.svg" alt="">
+                          <h6 class="m-0 clr-primary-600">Afternoon</h6>
+                        </div>
+                        <h6 class="clr-primary-600 pe-5">{{afternoonTimeSlots.length}} slots</h6>
+                      </div>
+                      <div class="d-flex align-items-center gap-3 clin_imp p-2">
+                        <div class="d-flex align-items-center flex-wrap gap-3 clin_imp">
+                          <button *ngFor="let time of afternoonTimeSlots;let i = index"
+                          class="btn btn-secondary-outline fs-8 px-3 custom_tooltip custom_tooltip_right"
+                          [class.active]="time.selected"
+                          [class.PastTimeDisable]="time.ISAVAILABLE==-2"
+                          [class.ORactive]="time.ISAVAILABLE==2"
+                          [class.Bookedactive]="time.ISAVAILABLE==3"
+                          [class.CDactive]="time.ISAVAILABLE==4"
+                          [class.IPRoundsactive]="time.ISAVAILABLE==5"
+                          [class.Vaccactive]="time.ISAVAILABLE==6"
+                          [class.Visitedactive]="time.ISAVAILABLE==7"
+                          (click)="addSelectedTime(time , 'afternoon')">
+                            {{time?.modTime}}
+                            <div class="" *ngIf="time.ISAVAILABLE==2">
+                              <p *ngIf="time.ISAVAILABLE==2 &&time?.SSN!=''" class="fw-bold">{{time?.SSN}}</p>
+                              <div class="tooltip p-0" *ngIf="time.ISAVAILABLE==2">
+                                <p class="fw-bold fs-7 mb-1 text-center p-1 border-bottom bg-primary-400 rounded-top text-white">In OR</p>
+                                  <div class="p-1" *ngIf="time.ISAVAILABLE==2&&time?.SSN!=''">
+                                    <p class="mb-1"><span class="clr-primary-600 fw-bold">Slot Timing:</span> {{time?.AppointmentSlot}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">SSN: </span> {{time?.SSN}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">PatientName :</span> {{time?.PatientName}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">Mobile No: </span> {{time?.MobileNo}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">Nationality :</span> {{time?.Nationality}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">Booked By :</span> {{time?.BookedBy}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">Booked on :</span> {{time?.BookedOn}}</p>
+                                  </div>
+                              </div>
+                           </div>
+                            <div class="" *ngIf="(time.ISAVAILABLE==3||time.ISAVAILABLE==7)">
+                              <p *ngIf="(time.ISAVAILABLE==3||time.ISAVAILABLE==7)" class="fw-bold" style=" color: #fff;">{{time?.SSN}}</p>
+                              <div class="tooltip" *ngIf="(time.ISAVAILABLE==3||time.ISAVAILABLE==7)">
+                                  <p class="mb-1"><span class="clr-primary-600 fw-bold">Slot Timing:</span> {{time?.AppointmentSlot}}</p>
+                                  <p class="mb-1"><span class="clr-primary-600 fw-bold">SSN: </span> {{time?.SSN}}</p>
+                                  <p class="mb-1"><span class="clr-primary-600 fw-bold">PatientName :</span> {{time?.PatientName}}</p>
+                                  <p class="mb-1"><span class="clr-primary-600 fw-bold">Mobile No: </span> {{time?.MobileNo}}</p>
+                                  <p class="mb-1"><span class="clr-primary-600 fw-bold">Nationality :</span> {{time?.Nationality}}</p>
+                                  <p class="mb-1"><span class="clr-primary-600 fw-bold">Booked By :</span> {{time?.BookedBy}}</p>
+                                  <p class="mb-1"><span class="clr-primary-600 fw-bold">Booked on :</span> {{time?.BookedOn}}</p>
+                              </div>
+                           </div>
+                            <div class="" *ngIf="time.ISAVAILABLE==4">
+                              <div class="tooltip p-0" *ngIf="time.ISAVAILABLE==4">
+                                  <p class="fw-bold fs-7 text-center p-1 border-bottom rounded clr-primary-600">Change Duty</p>
+                              </div>
+                           </div>
+                            <div class="" *ngIf="time.ISAVAILABLE==5">
+                              <div class="tooltip p-0" *ngIf="time.ISAVAILABLE==5">
+                                  <p class="fw-bold fs-7 text-center p-1 border-bottom rounded clr-primary-600">IP Rounded</p>
+                              </div>
+                           </div>
+                            <div class="" *ngIf="time.ISAVAILABLE==6">
+                              <div class="tooltip p-0" *ngIf="time.ISAVAILABLE==6">
+                                  <p class="fw-bold fs-7 text-center p-1 border-bottom rounded clr-primary-600">On Vacation</p>
+                              </div>
+                           </div>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="day_avail py-2" *ngIf="eveningTimeSlots != undefined && eveningTimeSlots.length > 0">
+                      <div class="d-flex align-items-center justify-content-between p-2">
+                        <div class="d-flex align-items-center gap-2">
+                          <img style="width: 2.2rem;" src="assets/images/icons/evening.svg" alt="">
+                          <h6 class="m-0 clr-primary-600">Evening</h6>
+                        </div>
+                        <h6 class="clr-primary-600 pe-5">{{eveningTimeSlots.length}} slots</h6>
+                      </div>
+                      <div class="d-flex align-items-center gap-3 clin_imp p-2">
+                        <div class="d-flex align-items-center flex-wrap gap-3 clin_imp">
+                          <button *ngFor="let time of eveningTimeSlots;let i = index"
+                          class="btn btn-secondary-outline fs-8 px-3 custom_tooltip custom_tooltip_right"
+                          [class.active]="time.selected"
+                          [class.PastTimeDisable]="time.ISAVAILABLE==-2"
+                             [class.ORactive]="time.ISAVAILABLE==2"
+                             [class.Bookedactive]="time.ISAVAILABLE==3"
+                             [class.CDactive]="time.ISAVAILABLE==4"
+                             [class.IPRoundsactive]="time.ISAVAILABLE==5"
+                             [class.Vaccactive]="time.ISAVAILABLE==6"
+                             [class.Visitedactive]="time.ISAVAILABLE==7"
+                          (click)="addSelectedTime(time, 'evening')">
+                            {{time?.modTime}}
+                            <div class="" *ngIf="time.ISAVAILABLE==2">
+                              <p *ngIf="time.ISAVAILABLE==2 &&time?.SSN!=''" class="fw-bold">{{time?.SSN}}</p>
+                              <div class="tooltip p-0" *ngIf="time.ISAVAILABLE==2">
+                                <p class="fw-bold fs-7 mb-1 text-center p-1 border-bottom bg-primary-400 rounded-top text-white">In OR</p>
+                                  <div class="p-1" *ngIf="time.ISAVAILABLE==2&&time?.SSN!=''">
+                                    <p class="mb-1"><span class="clr-primary-600 fw-bold">Slot Timing:</span> {{time?.AppointmentSlot}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">SSN: </span> {{time?.SSN}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">PatientName :</span> {{time?.PatientName}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">Mobile No: </span> {{time?.MobileNo}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">Nationality :</span> {{time?.Nationality}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">Booked By :</span> {{time?.BookedBy}}</p>
+                                      <p class="mb-1"><span class="clr-primary-600 fw-bold">Booked on :</span> {{time?.BookedOn}}</p>
+                                  </div>
+                              </div>
+                           </div>
+                            <div class="" *ngIf="(time.ISAVAILABLE==3||time.ISAVAILABLE==7)">
+                              <p *ngIf="(time.ISAVAILABLE==3||time.ISAVAILABLE==7)" class="fw-bold" style=" color: #fff;">{{time?.SSN}}</p>
+                              <div class="tooltip" *ngIf="(time.ISAVAILABLE==3||time.ISAVAILABLE==7)">
+                                <p class="mb-1"><span class="clr-primary-600 fw-bold">Slot Timing:</span> {{time?.AppointmentSlot}}</p>
+                                  <p class="mb-1"><span class="clr-primary-600 fw-bold">SSN: </span> {{time?.SSN}}</p>
+                                  <p class="mb-1"><span class="clr-primary-600 fw-bold">PatientName :</span> {{time?.PatientName}}</p>
+                                  <p class="mb-1"><span class="clr-primary-600 fw-bold">Mobile No: </span> {{time?.MobileNo}}</p>
+                                  <p class="mb-1"><span class="clr-primary-600 fw-bold">Nationality :</span> {{time?.Nationality}}</p>
+                                  <p class="mb-1"><span class="clr-primary-600 fw-bold">Booked By :</span> {{time?.BookedBy}}</p>
+                                  <p class="mb-1"><span class="clr-primary-600 fw-bold">Booked on :</span> {{time?.BookedOn}}</p>
+                              </div>
+                           </div>
+                            <div class="" *ngIf="time.ISAVAILABLE==4">
+                              <div class="tooltip" p-0 *ngIf="time.ISAVAILABLE==4">
+                                  <p class="fw-bold fs-7 text-center p-1 border-bottom rounded clr-primary-600">Change Duty</p>
+                              </div>
+                           </div>
+                            <div class="" *ngIf="time.ISAVAILABLE==5">
+                              <div class="tooltip" p-0 *ngIf="time.ISAVAILABLE==5">
+                                  <p class="fw-bold fs-7 text-center p-1 border-bottom rounded clr-primary-600">IP Rounded</p>
+                              </div>
+                           </div>
+                            <div class="" *ngIf="time.ISAVAILABLE==6">
+                              <div class="tooltip" p-0 *ngIf="time.ISAVAILABLE==6">
+                                  <p class="fw-bold fs-7 text-center p-1 border-bottom rounded clr-primary-600">On Vacation</p>
+                              </div>
+                           </div>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="fs-7 text-center p-3" *ngIf="!isSlotAvailable">
+                      <p>No slots available</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="patientno_data" *ngIf="selectedDoctor === undefined || selectedDoctor.length === 0">
+              <img class="" style="height:7rem;" src="assets/images/Doctor.svg" alt="">
+              <p class="fs-7 mt-2">Please Select Doctor</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="lastvisited_toggle_parent expand" [class.expand]="isActive">
+  <!-- <div class="lastvisited_toggle_parent"> -->
+
+    <svg width="45" height="221" viewBox="0 0 45 221" fill="none" xmlns="http://www.w3.org/2000/svg" class="curvesvg">
+      <path d="M29.894 42.4507L14.3187 63.2909C-4.25356 88.1412 -4.25357 122.251 14.3187 147.102L29.894 167.942C39.8373 181.246 45.2101 197.41 45.2101 214.02L45.2101 285.328L83 285.328L83 -64L45.2101 -64L45.2101 -3.62711C45.2101 12.9824 39.8373 29.1463 29.894 42.4507Z" fill="#FCFAF7"></path>
+    </svg>
+
+    <div class="lastvisited_toggle cursor-pointer">
+      <svg class="arrow_icon" (click)="lastvisited_toggleClass()" width="32" height="32" viewBox="0 0 32 32"
+        fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="16" fill="#368796" />
+        <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M9.90165 17.3938C9.13185 16.624 9.13186 15.376 9.90165 14.6062L16.5078 8C17.0552 7.45258 17.9428 7.45258 18.4902 8C19.0376 8.54742 19.0376 9.43497 18.4902 9.98239L12.4726 16L18.4902 22.0176C19.0376 22.565 19.0376 23.4526 18.4902 24C17.9428 24.5474 17.0552 24.5474 16.5078 24L9.90165 17.3938Z"
+          fill="#ECF6F8" />
+      </svg>
+    </div>
+
+    <div class="resource-doctor-list p-2 h-100 w-100">
+      <div class="d-flex align-items-center justify-content-center stickhead sticky-top top-0 p-2"
+        style="height: 3rem;">
+
+        <div class="clinical_toggle toggle__switch switch-sm d-inline-flex position-relative">
+          <button [class]="showVisitInfoTab ? 'btn selected' : 'btn'"
+            (click)="showVisitOrUpcomingInfo('visit')">Last
+            Visited</button>
+          <button [class]="!showVisitInfoTab ? 'btn selected' : 'btn'"
+            (click)="showVisitOrUpcomingInfo('upcoming')">Upcoming
+            <span class="d-flex align-items-center upcomingCount justify-content-center gap-2 ms-2"
+              *ngIf="AppointmentCount!=''">{{AppointmentCount}}</span>
+          </button>
+
+          
+
+        </div>
+        <div class="actions ms-auto d-flex gap-2" *ngIf="AppointmentCount!=''">
+          <button class="fs-8 btn btn-main-fill" (click)="printPatientAllPhysiotherapySchedule()"
+          style="min-width: 6rem;">PrintCard</button>
+        </div>
+       
+
+        <!-- <h5 class="m-0 clr-primary-600 fs-6">Last Visited</h5> -->
+        <div class="d-flex align-items-center gap-2">
+          <!-- <div class="search_icon p-1 border-primary-300 rounded-2 ms-3 cursor-pointer bg-primary-20">
+                          <img src="assets/images/icons/icon-search.svg" alt="">
+                      </div> -->
+          <!-- <img src="assets/images/icons/arrow-down.svg" alt=""> -->
+        </div>
+      </div>
+      <div class="bg-primary-50 position-relative d-none align-items-center">
+        <input type="text" placeholder="Search Doctor"
+          class="form-control bg-transparent border-0 py-2 clr-primary-600 pe-5">
+        <div class="position-absolute end-0 me-2">
+          <svg width="20" height="20" viewBox="0 0 20 20">
+            <path d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z"
+              stroke="#368796" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+            </path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="doctors-list-cards d-flex flex-column gap-2">
+
+        <!-- <div class="d-flex align-items-center justify-content-between p-2 bg-primary-20 rounded-top">
+                          <h6 class="clr-primary-600 m-0">Last Visited</h6>
+                          <img src="assets/images/icons/arrow-down.svg" alt="">
+                      </div> -->
+        <div class="doctors-list-cards p-2 d-flex flex-column gap-2" *ngIf="showVisitInfoTab">
+          <div class="" *ngFor="let visit of latestDoctorVisits; let i = index" (click)="loadVisitInfo(visit)">
+            <div class="doctor-card cursor-pointer rounded-2 border" [class.active]="visit.selected">
+              <div class="d-flex justify-content-between p-2">
+                <div class="d-flex align-items-center gap-2">
+                  <!-- <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <rect width="32" height="32" rx="16" fill="#ECF6F8"/>
+                                      <path fill-rule="evenodd" clip-rule="evenodd" d="M15.9999 17.7756C19.04 17.7756 21.5038 13.6709 21.5038 10.9422C21.5038 8.21267 19.04 6 15.9999 6C12.9602 6 10.4962 8.21267 10.4962 10.9422C10.4962 13.6713 12.9607 17.7756 15.9999 17.7756ZM11.3222 11.1092C11.6532 9.67606 13.6258 9.91675 15.1147 10.0984L15.2386 10.1135C16.6876 10.2892 18.318 10.0911 18.9463 9.99883L18.9864 9.99289C19.1521 9.96831 19.3179 9.94371 19.4846 9.95827C20.8349 10.0762 20.73 11.8651 20.7282 11.886C20.2961 14.1893 18.3436 17.0016 16.0001 17.0016C13.6703 17.0016 11.7265 14.2201 11.2797 11.9244C11.2413 11.7268 11.2769 11.3053 11.3222 11.1092Z" fill="#43A9BC"/>
+                                      <path d="M23.3883 18.1829C22.9689 17.8969 22.449 18.439 22.5324 18.9398C22.5711 19.1718 22.7429 19.3632 22.9565 19.4618C23.4756 19.7015 23.8315 20.1868 23.8315 20.7458C23.8315 21.5423 23.1098 22.1903 22.2228 22.1903C21.3358 22.1903 20.6141 21.5423 20.6141 20.7458C20.6141 20.2896 20.8095 19.8234 20.9982 19.373C21.2863 18.6852 21.5589 18.0345 21.0966 17.5134C20.9576 17.3567 20.8008 17.2204 20.6278 17.1113C20.5819 17.0823 20.5306 17.0645 20.4768 17.0566C20.2228 17.0188 20.0039 17.2264 19.8882 17.4557C19.4544 18.3163 17.8783 18.9538 15.9994 18.9538C14.1987 18.9538 12.6759 18.3683 12.1708 17.562C11.9993 17.2883 11.7202 17.0225 11.4016 17.0756C11.3291 17.0876 11.2605 17.1141 11.2009 17.1571C10.7299 17.4973 10.3478 18.0745 10.2451 18.7751C10.2185 18.9567 10.3349 19.1206 10.4537 19.2605C10.5268 19.3467 10.6077 19.427 10.7076 19.4799C11.1713 19.7258 11.5813 20.1679 11.9029 20.7716C11.9663 20.8913 11.9835 21.0302 12.0007 21.1692C12.0136 21.2732 12.0264 21.3772 12.0586 21.4733C12.1905 21.8665 12.2635 22.2691 12.2635 22.62C12.2635 23.16 12.2635 23.6752 11.7925 23.9138C11.6049 24.0089 11.4017 24.1111 11.1914 24.1111H10.6746C10.4155 24.1111 10.2046 23.9216 10.2046 23.6891L10.2051 23.6727C10.215 23.4485 10.4242 23.2671 10.6746 23.2671H11.1914C11.2359 23.2671 11.2796 23.2728 11.3221 23.284C11.3379 23.2881 11.3659 23.2861 11.3808 23.2796C11.3899 23.2756 11.391 23.2725 11.3935 23.2657C11.3942 23.2639 11.395 23.2618 11.396 23.2595C11.4448 23.1451 11.4448 22.7937 11.4448 22.6203C11.4448 22.334 11.383 22.0018 11.2712 21.6738C11.2347 21.5669 11.1632 21.4781 11.0913 21.389C11.0382 21.323 10.9849 21.2569 10.9456 21.1831C10.6323 20.594 10.2061 20.2136 9.86012 20.2136C9.50621 20.2136 9.05874 20.6249 8.74666 21.2367C8.70337 21.3212 8.64189 21.3961 8.58061 21.4708C8.4986 21.5707 8.41696 21.6702 8.37975 21.7917C8.29115 22.0809 8.24375 22.3661 8.24375 22.62C8.24375 22.7594 8.24375 23.1079 8.29243 23.2432C8.30058 23.2659 8.3087 23.279 8.33169 23.2861C8.34454 23.2901 8.37221 23.2925 8.3851 23.2886C8.43288 23.2743 8.48335 23.2669 8.53381 23.2669H9.05156C9.29287 23.2669 9.49457 23.432 9.51883 23.6463L9.5213 23.6725C9.5213 23.9216 9.31044 24.1111 9.05156 24.1111H8.53381C8.35216 24.1111 8.17585 24.0351 8.00735 23.9624L7.96103 23.9425C7.81266 23.8791 7.69796 23.7876 7.61414 23.6665C7.45426 23.436 7.42505 23.1334 7.42505 22.62C7.42505 22.2612 7.49856 21.8592 7.6348 21.4601C7.66396 21.3747 7.67746 21.283 7.69094 21.1912C7.70894 21.0688 7.72694 20.9464 7.78218 20.8394C8.00121 20.4091 8.27989 20.0407 8.58777 19.7743C8.70566 19.6723 8.82969 19.5842 8.95841 19.511C9.06609 19.4499 9.15319 19.3579 9.23375 19.2638C9.24109 19.2553 9.24862 19.2469 9.25634 19.2386C9.37302 19.114 9.47701 18.9594 9.49684 18.7898C9.54915 18.3427 9.0812 17.872 8.70501 18.1193C7.06506 19.1972 6 20.9382 6 22.9031C6.00025 25.8547 8.40215 26 11.547 26C11.7164 26 11.888 25.9996 12.0617 25.9992L12.0624 25.9992C12.2399 25.9987 12.4195 25.9983 12.6008 25.9983H19.3994C19.58 25.9983 19.7593 25.9987 19.9367 25.9992C20.1106 25.9996 20.2829 26 20.4527 26C23.5976 26 26 25.8551 26 22.9036C25.9998 20.9761 24.9749 19.2648 23.3883 18.1829Z" fill="#43A9BC"/>
+                                      <path d="M22.9653 20.7458C22.9653 21.114 22.6329 21.4124 22.2228 21.4124C21.8128 21.4124 21.4803 21.114 21.4803 20.7458C21.4803 20.3776 21.8128 20.0791 22.2228 20.0791C22.6329 20.0791 22.9653 20.3776 22.9653 20.7458Z" fill="#43A9BC"/>
+                                      </svg> -->
+                  <div class="profile_img position-relative">
+                    <img class="doc_img" src="assets/images/maleD.svg" alt="" *ngIf="visit.GenderID=='1'">
+                    <img class="doc_img" src="assets/images/femaleD.svg" alt="" *ngIf="visit.GenderID=='2'">
+                    <!-- <img class="flag_img" src="assets/images/flag1.png" alt=""> -->
+                  </div>
+                  <div class="">
+                    <p class="fw-bold fs-8">{{visit.DoctorFullName}}</p>
+                    <p class="clr-primary-600 fw-bold fs-8">{{visit.DoctorSpecialty}}</p>
+                    <p class="clr-dark-600">{{visit.DoctorNationality}}</p>
+                  </div>
+                </div>
+                <div class="custom_check active">
+                  <svg width="18" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    class="check_svg">
+                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                    <path
+                      d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                      fill="white" stroke="white" stroke-width="0.25"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="p-1 bg-white rounded-bottom">
+                <div class="bg-primary-50 p-1">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-2">
+                      <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M14.9242 2.07344H13.9204V1.36313C13.9204 1.06356 13.7605 0.78662 13.5009 0.636839C13.2415 0.486864 12.9216 0.486864 12.6623 0.636839C12.4027 0.78662 12.2428 1.06356 12.2428 1.36313V2.07324L6.04733 2.07343V1.36312C6.04733 1.06356 5.88741 0.786615 5.62783 0.636835C5.36845 0.486859 5.04858 0.486859 4.78921 0.636835C4.52963 0.786615 4.36971 1.06356 4.36971 1.36312V2.07323L3.36593 2.07343C2.55032 2.07343 1.76807 2.39737 1.19136 2.97406C0.614453 3.55097 0.290527 4.33322 0.290527 5.14883V15.4488C0.290527 16.2644 0.614468 17.0466 1.19136 17.6235C1.76807 18.2002 2.55032 18.5244 3.36593 18.5244H14.9245C15.7401 18.5244 16.5224 18.2002 17.0991 17.6235C17.676 17.0466 17.9999 16.2644 17.9999 15.4488V5.14883C17.9999 4.33322 17.676 3.55097 17.0991 2.97406C16.5224 2.39735 15.7401 2.07343 14.9245 2.07343L14.9242 2.07344ZM3.36858 3.75108H4.37236V5.02052L4.37217 5.02033C4.37217 5.31989 4.53209 5.59684 4.79167 5.74662C5.05125 5.89659 5.37092 5.89659 5.63049 5.74662C5.88988 5.59684 6.0498 5.31989 6.0498 5.02033V3.75089H12.2427V5.02033C12.2427 5.31989 12.4027 5.59684 12.6622 5.74662C12.9216 5.89659 13.2415 5.89659 13.5009 5.74662C13.7604 5.59684 13.9204 5.31989 13.9204 5.02033V3.75089H14.9241C15.2949 3.75089 15.6504 3.89813 15.9125 4.16044C16.1747 4.42256 16.3221 4.77809 16.3221 5.14885V7.69317H1.96761V5.14885C1.96761 4.7781 2.11505 4.42256 2.37716 4.16044C2.63928 3.89813 2.99481 3.75089 3.36557 3.75089L3.36858 3.75108ZM14.9242 16.8469H3.36559C2.99484 16.8469 2.6393 16.6997 2.37718 16.4376C2.11507 16.1752 1.96763 15.8197 1.96763 15.449V9.37085H16.3221V15.449C16.3221 15.8197 16.1747 16.1752 15.9126 16.4376C15.6504 16.6997 15.2949 16.8469 14.9242 16.8469H14.9242Z"
+                          fill="#368796" />
+                      </svg>
+                      <div class="d-flex flex-column">
+                        <p class="fs-8 clr-dark-600 m-0">Last Visited </p>
+                        <p class="fs-8 m-0 fw-bold">{{visit.AppointmentDateTime}}</p>
+                        <p class="fs-8 m-0 fw-bold clr-primary-600">
+                          {{visit.HospitalID === 3 ? 'Nuzha' : 'Suwaidi'}}</p>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                      <p class="clr-primary-600 cursor-pointer">Book Again</p>
+                      <svg class="cursor-pointer" width="14" height="9" viewBox="0 0 14 9" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1.47827 4.52588H13M13 4.52588L10.1282 1.28137M13 4.52588L10.1282 7.71857"
+                          stroke="#368796" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- NO VISIT -->
+        <div class="no-visit d-flex align-items-center justify-content-center flex-column gap-2"
+          *ngIf="showVisitInfoTab && (latestDoctorVisits === undefined || latestDoctorVisits.length === 0)">
+          <img style="height: 7rem;" src="assets/images/no-visits.svg" alt="">
+          <p class="m-0 fs-6 text-center">No Visits</p>
+        </div>
+        <div class="no-visit d-flex align-items-center justify-content-center flex-column gap-2"
+          *ngIf="!showVisitInfoTab && (listofUpcomingAppointments === undefined || listofUpcomingAppointments.length === 0)">
+          <img style="height: 7rem;" src="assets/images/no-visits.svg" alt="">
+          <p class="m-0 fs-6 text-center">No Appointments</p>
+        </div>
+
+        <!-- UPCOMING DOCTOR CARD -->
+        <div class="doctors-list-cards p-2 d-flex flex-column gap-2" *ngIf="!showVisitInfoTab">
+          <div class="doctor-card upcoming_doctor-card cursor-pointer rounded-2 border"
+            *ngFor="let app of listofUpcomingAppointments; let i = index">
+            <div class="d-flex align-items-center justify-content-between p-1">
+              <div class="d-flex align-items-center gap-1">
+                <svg width="17" height="17" viewBox="0 0 21 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M13.4734 10.518C13.8562 9.99103 14.0859 9.36848 14.1369 8.71916C14.188 8.06984 14.0585 7.41904 13.7628 6.83872C13.4671 6.2584 13.0167 5.77115 12.4613 5.43084C11.9059 5.09054 11.2673 4.91043 10.616 4.91043C9.96466 4.91043 9.32602 5.09054 8.77067 5.43084C8.21532 5.77115 7.76489 6.2584 7.46917 6.83872C7.17345 7.41904 7.04397 8.06984 7.09503 8.71916C7.1461 9.36848 7.37572 9.99103 7.75852 10.518C7.27295 10.8274 6.84065 11.2134 6.47838 11.661C6.38382 11.7833 6.31428 11.9231 6.27373 12.0723C6.23318 12.2215 6.22241 12.3772 6.24205 12.5306C6.26168 12.6839 6.31133 12.8319 6.38816 12.9661C6.46499 13.1003 6.5675 13.218 6.68983 13.3126C6.81216 13.4072 6.95192 13.4767 7.10113 13.5172C7.25033 13.5578 7.40607 13.5686 7.55943 13.5489C7.7128 13.5293 7.8608 13.4796 7.99497 13.4028C8.12915 13.326 8.24688 13.2235 8.34145 13.1011C8.62059 12.7463 8.97634 12.4592 9.3821 12.2613C9.78785 12.0634 10.2331 11.9597 10.6846 11.9582C11.136 11.9597 11.5813 12.0634 11.987 12.2613C12.3928 12.4592 12.7485 12.7463 13.0277 13.1011C13.1353 13.2337 13.2712 13.3406 13.4255 13.4138C13.5797 13.4869 13.7485 13.5246 13.9192 13.524C14.1335 13.5231 14.3432 13.4619 14.5243 13.3474C14.7055 13.233 14.8508 13.07 14.9438 12.8769C15.0367 12.6839 15.0736 12.4686 15.05 12.2556C15.0265 12.0426 14.9436 11.8405 14.8107 11.6724C14.4322 11.216 13.9802 10.8258 13.4734 10.518ZM10.6274 9.68361C10.383 9.68345 10.144 9.61139 9.94024 9.47641C9.73647 9.34143 9.57691 9.14949 9.48141 8.92449C9.38592 8.69949 9.35872 8.45137 9.40321 8.21103C9.44769 7.97069 9.56188 7.74874 9.73158 7.57282C9.90127 7.3969 10.119 7.27478 10.3575 7.22167C10.5961 7.16856 10.8451 7.1868 11.0734 7.27413C11.3016 7.36145 11.4992 7.514 11.6414 7.71278C11.7837 7.91155 11.8643 8.14778 11.8733 8.39204C11.8794 8.55945 11.8517 8.72639 11.7919 8.88286C11.732 9.03933 11.6412 9.18212 11.5249 9.3027C11.4086 9.42327 11.2692 9.51915 11.115 9.5846C10.9608 9.65005 10.7949 9.68372 10.6274 9.68361ZM20.2971 9.11212C20.1366 7.44212 19.5464 5.84213 18.5839 4.46796C17.6215 3.09379 16.3196 1.99227 14.805 1.27066C13.2904 0.549052 11.6148 0.231948 9.9413 0.350227C8.26778 0.468507 6.65341 1.01814 5.25539 1.9456C4.05433 2.74871 3.04606 3.80787 2.30299 5.04697C1.55993 6.28607 1.10052 7.67436 0.957763 9.11212C0.817727 10.5405 0.997394 11.9821 1.48373 13.3323C1.97007 14.6826 2.75087 15.9077 3.76951 16.9187L9.82733 22.988C9.93358 23.0951 10.06 23.1801 10.1993 23.2381C10.3386 23.2962 10.488 23.326 10.6388 23.326C10.7897 23.326 10.9391 23.2962 11.0784 23.2381C11.2177 23.1801 11.3441 23.0951 11.4504 22.988L17.4853 16.9187C18.504 15.9077 19.2848 14.6826 19.7711 13.3323C20.2574 11.9821 20.4371 10.5405 20.2971 9.11212ZM15.8851 15.3071L10.6274 20.5648L5.36968 15.3071C4.59484 14.5322 4.00131 13.5953 3.63174 12.5637C3.26217 11.532 3.12576 10.4313 3.2323 9.34072C3.33954 8.23328 3.69151 7.16351 4.26278 6.20876C4.83406 5.254 5.61035 4.43812 6.53553 3.8201C7.74817 3.01456 9.1716 2.58487 10.6274 2.58487C12.0832 2.58487 13.5067 3.01456 14.7193 3.8201C15.6417 4.43573 16.4163 5.24801 16.9874 6.19858C17.5585 7.14915 17.912 8.21442 18.0225 9.31786C18.1325 10.4122 17.9978 11.5173 17.6282 12.5531C17.2585 13.589 16.6631 14.5297 15.8851 15.3071Z"
+                    fill="#368796" />
+                </svg>
+                <label for="" class="clr-primary-600 m-0 fs-8">{{app.HOSPITALBRANCH}}</label>
+              </div>
+              <div class="">
+                <div class="bg-primary-50 p-1 rounded-2 px-1 cursor-pointer">
+                  <p class="clr-primary-600 m-0 fs-8">Clinic Consultation</p>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between p-1 pt-0">
+              <div class="d-flex align-items-center gap-2">
+                <div class="profile_img position-relative">
+                  <img class="doc_img" src="assets/images/maleD.svg" alt="" *ngIf="app.DoctorGender=='Male'">
+                  <img class="doc_img" src="assets/images/femaleD.svg" alt="" *ngIf="app.DoctorGender=='Female'">
+                </div>
+                <div class="">
+                  <p class="fw-bold fs-7">{{app.DOCTORNAME}}</p>
+                  <p class="clr-primary-600 fw-bold">{{app.SPECIALITY}}</p>
+                  <p class="clr-dark-600">{{app.DoctorNationality}}</p>
+                </div>
+              </div>
+              <div class="custom_check active">
+                <svg width="18" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                  class="check_svg">
+                  <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                  <path
+                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                    fill="white" stroke="white" stroke-width="0.25"></path>
+                </svg>
+              </div>
+            </div>
+
+            <div class="p-1 bg-white rounded-bottom">
+              <div class="bg-primary-50 p-2">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="d-flex flex-column">
+                    <p class="fs-8 clr-dark-600 m-0 d-flex align-items-center gap-1">
+                      <span>
+                        <svg width="16" height="16" viewBox="0 0 18 19" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M14.9242 2.07344H13.9204V1.36313C13.9204 1.06356 13.7605 0.78662 13.5009 0.636839C13.2415 0.486864 12.9216 0.486864 12.6623 0.636839C12.4027 0.78662 12.2428 1.06356 12.2428 1.36313V2.07324L6.04733 2.07343V1.36312C6.04733 1.06356 5.88741 0.786615 5.62783 0.636835C5.36845 0.486859 5.04858 0.486859 4.78921 0.636835C4.52963 0.786615 4.36971 1.06356 4.36971 1.36312V2.07323L3.36593 2.07343C2.55032 2.07343 1.76807 2.39737 1.19136 2.97406C0.614453 3.55097 0.290527 4.33322 0.290527 5.14883V15.4488C0.290527 16.2644 0.614468 17.0466 1.19136 17.6235C1.76807 18.2002 2.55032 18.5244 3.36593 18.5244H14.9245C15.7401 18.5244 16.5224 18.2002 17.0991 17.6235C17.676 17.0466 17.9999 16.2644 17.9999 15.4488V5.14883C17.9999 4.33322 17.676 3.55097 17.0991 2.97406C16.5224 2.39735 15.7401 2.07343 14.9245 2.07343L14.9242 2.07344ZM3.36858 3.75108H4.37236V5.02052L4.37217 5.02033C4.37217 5.31989 4.53209 5.59684 4.79167 5.74662C5.05125 5.89659 5.37092 5.89659 5.63049 5.74662C5.88988 5.59684 6.0498 5.31989 6.0498 5.02033V3.75089H12.2427V5.02033C12.2427 5.31989 12.4027 5.59684 12.6622 5.74662C12.9216 5.89659 13.2415 5.89659 13.5009 5.74662C13.7604 5.59684 13.9204 5.31989 13.9204 5.02033V3.75089H14.9241C15.2949 3.75089 15.6504 3.89813 15.9125 4.16044C16.1747 4.42256 16.3221 4.77809 16.3221 5.14885V7.69317H1.96761V5.14885C1.96761 4.7781 2.11505 4.42256 2.37716 4.16044C2.63928 3.89813 2.99481 3.75089 3.36557 3.75089L3.36858 3.75108ZM14.9242 16.8469H3.36559C2.99484 16.8469 2.6393 16.6997 2.37718 16.4376C2.11507 16.1752 1.96763 15.8197 1.96763 15.449V9.37085H16.3221V15.449C16.3221 15.8197 16.1747 16.1752 15.9126 16.4376C15.6504 16.6997 15.2949 16.8469 14.9242 16.8469H14.9242Z"
+                            fill="#368796" />
+                        </svg>
+                      </span>
+                      {{app.SCHEDULEDATE}}
+
+                      <span>
+                        <svg width="16" height="16" viewBox="0 0 19 19" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M9.37371 18.5244C11.6749 18.5244 13.9763 17.6358 15.7307 15.8813C19.2395 12.3725 19.2395 6.65339 15.7307 3.14451C12.2219 -0.364372 6.50281 -0.36429 2.99393 3.14451C-0.514946 6.6533 -0.514864 12.3724 2.99393 15.8813C4.77116 17.6358 7.07243 18.5244 9.37371 18.5244ZM4.13318 4.28379C5.56867 2.8483 7.48256 2.11927 9.37371 2.11927C11.2649 2.11927 13.1561 2.84847 14.6142 4.28379C17.508 7.17752 17.508 11.8712 14.6142 14.7649C11.7205 17.6586 7.02687 17.6586 4.13318 14.7649C1.23945 11.8711 1.23945 7.17748 4.13318 4.28379Z"
+                            fill="#368796"></path>
+                          <path
+                            d="M6.5256 13.9674C6.73063 13.9674 6.95856 13.8763 7.11797 13.7167L10.0801 10.504C10.2167 10.3673 10.2851 10.1623 10.2851 9.95715V5.6508C10.2851 5.21785 9.92048 4.85325 9.48753 4.85325C9.05473 4.85325 8.69014 5.21784 8.69014 5.6508V9.66091L5.93324 12.623C5.63699 12.942 5.65987 13.4432 5.97885 13.7395C6.13827 13.8989 6.32056 13.9672 6.52561 13.9672L6.5256 13.9674Z"
+                            fill="#368796"></path>
+                        </svg>
+                      </span>
+                      <span class="fs-8 m-0 fw-bold d-flex align-items-center gap-1">
+                        {{app.SCHEDULESTARTTIME}} - {{app.SCHEDULEENDTIME}}</span>
+                    </p>
+                    <!-- <p class="fs-8 m-0 fw-bold d-flex align-items-center gap-1">
+                                                  
+                                              </p> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-2 d-flex align-items-center justify-content-center gap-2">
+              <button class="fs-8 btn btn-main-outline" (click)="loadAppointmentForReschedule(app)"
+                style="min-width: 6rem;">Reschedule</button>
+              <button class="fs-8 btn btn-danger-outline" (click)="cancelAppointmentConfirmation(app)"
+                style="min-width: 6rem;">Cancel</button>
+                <button class="fs-8 btn btn-main-fill" (click)="printPhysiotherapySchedule(app)"
+                style="min-width: 6rem;">Print</button>
+            </div>
+            <!-- <div (click)="printPhysiotherapySchedule(app)">
+              <svg width="32" height="33" viewBox="0 0 32 33" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_9247_12406)">
+                      <circle cx="16" cy="16.2" r="16" fill="#DAEEF1" />
+                      <path
+                          d="M11.6134 20.7604V23.5685H20.3868V20.7635V18.731C20.3627 18.7298 20.3385 18.7292 20.3142 18.7292H11.6858C11.6615 18.7292 11.6375 18.7298 11.6134 18.731V20.7604ZM20.2239 13.8672C19.8895 13.8672 19.6158 14.1407 19.6158 14.4753C19.6158 14.8098 19.8893 15.0836 20.2237 15.0836C20.5583 15.0836 20.832 14.81 20.832 14.4755C20.832 14.1409 20.5585 13.8672 20.2239 13.8672ZM22.0271 13.8672C21.6925 13.8672 21.4188 14.1407 21.4188 14.4753C21.4188 14.8098 21.6923 15.0836 22.0269 15.0836C22.3615 15.0836 22.6352 14.81 22.6352 14.4755C22.6352 14.1409 22.3617 13.8672 22.0271 13.8672ZM13.1532 20.0771C13.012 20.0771 12.8972 19.9625 12.8972 19.8211C12.8972 19.6798 13.012 19.5653 13.1532 19.5653H18.8472C18.9884 19.5653 19.103 19.6798 19.103 19.8211C19.103 19.9625 18.9884 20.0771 18.8472 20.0771H13.1532ZM17.2214 22.7323C17.0801 22.7323 16.9654 22.6177 16.9654 22.4765C16.9654 22.335 17.0801 22.2204 17.2214 22.2204H18.8472C18.9884 22.2204 19.103 22.335 19.103 22.4765C19.103 22.6177 18.9884 22.7323 18.8472 22.7323H17.2214ZM13.1532 21.4047C13.012 21.4047 12.8972 21.2901 12.8972 21.1487C12.8972 21.0074 13.012 20.8928 13.1532 20.8928H18.8472C18.9884 20.8928 19.103 21.0074 19.103 21.1487C19.103 21.2901 18.9884 21.4047 18.8472 21.4047H13.1532ZM20.5561 18.2323C20.5829 18.2225 20.6122 18.2172 20.6426 18.2172C20.7079 18.2172 20.7673 18.2416 20.8125 18.2816C21.153 18.3715 21.4578 18.5508 21.6999 18.7928C22.0559 19.1491 22.2764 19.6396 22.2764 20.1795V20.5111H22.528C22.792 20.5111 23.0326 20.4029 23.2063 20.2292C23.38 20.0556 23.4882 19.8151 23.4882 19.5509V14.0687C23.4882 13.8045 23.3802 13.5642 23.2067 13.3909C23.0324 13.2165 22.7922 13.1085 22.528 13.1085H20.6494H11.3508H9.47241C9.20844 13.1085 8.96835 13.2167 8.79429 13.3907C8.62024 13.5648 8.51202 13.8049 8.51202 14.0687V19.5509C8.51202 19.8151 8.62024 20.0556 8.79369 20.2292C8.96755 20.4029 9.20805 20.5111 9.47241 20.5111H9.72345V20.1795C9.72345 19.6396 9.94405 19.1491 10.2991 18.7938C10.542 18.5512 10.8474 18.3715 11.1877 18.2816C11.2329 18.2416 11.2923 18.2172 11.3574 18.2172C11.3878 18.2172 11.4171 18.2227 11.4441 18.2323C11.5233 18.2225 11.604 18.2172 11.6858 18.2172H20.3142C20.396 18.2172 20.4767 18.2225 20.5561 18.2323ZM11.1016 21.0229H9.97628H9.47241C9.06781 21.0229 8.6996 20.857 8.43325 20.5909C8.1659 20.3233 8 19.9553 8 19.5509V14.0687C8 13.6637 8.1659 13.2951 8.43245 13.0287C8.69881 12.7622 9.06721 12.5967 9.47241 12.5967H11.1016V8.57547C11.1016 8.43424 11.2162 8.31946 11.3574 8.31946H20.6426C20.784 8.31946 20.8986 8.43424 20.8986 8.57547V12.5967H22.528C22.9316 12.5967 23.2998 12.7622 23.5675 13.0297C23.8347 13.2975 24 13.6653 24 14.0687V19.5509C24 19.9553 23.8343 20.3233 23.5679 20.5899C23.3006 20.857 22.9322 21.0229 22.528 21.0229H22.0172H20.8986V23.8245C20.8986 23.9658 20.784 24.0806 20.6426 24.0806H11.3574C11.2162 24.0806 11.1016 23.9658 11.1016 23.8245V21.0229Z"
+                          fill="#368796" />
+                  </g>
+                  <defs>
+                      <clipPath id="clip0_9247_12406">
+                          <rect width="32" height="32" fill="white"
+                              transform="translate(0 0.200012)" />
+                      </clipPath>
+                  </defs>
+              </svg>
+              <div class="tooltip">
+                  <p>Print
+                  </p>
+              </div>
+          </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</form>
+
+<div class="substitute_Modal modal" data-bs-backdrop="static" tabindex="-1" id="divMultiplePatients" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 60%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Patients Information</h5>
+
+        <div class="d-flex align-items-center gap-2 ms-auto">
+          <button class="btn btn-main-outline" (click)="fetchSelectedPatientDetails(selectedPatientId)">Select</button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      </div>
+      <div class="modal-body" style="height: calc(100vh - 18rem); overflow: auto;">
+        <div>
+          <p *ngIf="showPatientValidation" class="text-danger">Please select any Patient to continue</p>
+        </div>
+        <div class="" *ngFor="let pat of multiplePatients; let i = index">
+          <div class="border rounded-2 mt-2 p-2">
+            <div class="row mx-0 g-2 w-100">
+              <div class="col-md-5">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="custom_check d-flex align-items-center" [class.active]="pat.selected"
+                    (click)="selectPatient(pat)">
+                    <svg width="18" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                      class="check_svg">
+                      <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                      <path
+                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                        fill="white" stroke="white" stroke-width="0.25"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="clr-primary-600 text-nowrap">Name</p>
+                    <p class="text-break">{{pat.PatientName}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex align-items-start justify-content-between gap-1 col-6">
+                <div class="col-3">
+                  <p class="clr-primary-600 text-nowrap">SSN</p>
+                  <p class="text-break">{{pat.SSN}}</p>
+                </div>
+                <div class="col-4">
+                  <p class="clr-primary-600 text-nowrap">Age | Gender</p>
+                  <p class="text-break">{{pat.FullAge}} | {{pat.Gender}}</p>
+                </div>
+                <div class="col-3">
+                  <p class="clr-primary-600 text-nowrap">MobileNo</p>
+                  <p class="text-break">{{pat.MobileNo}}</p>
+                </div>
+                <div class="col-3">
+                  <p class="clr-primary-600 text-nowrap">Nationality</p>
+                  <p class="text-break">{{pat.Nationality}}</p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="appointmentSaveMsg" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+    <div class="modal-content">
+      <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+      <div class="modal-body">
+        <p>{{appSaveMsg}}</p>
+        <div class="modal-footer">
+          <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+            (click)="loadSelectedDoctorAvailability(selectedDoctor)"
+            data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="substitute_Modal modal" data-bs-backdrop="static" tabindex="-1" id="WatingSaveappointment" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 25%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cancelReasonsLabel">
+          Waiting List Appointment
+        </h5>
+        <div class="d-flex align-items-center gap-2 ms-auto">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      </div>
+      <div class="modal-body d-flex flex-column gap-2">
+
+        <div class="d-flex saveAppointment_row align-items-center gap-2 p-2 border rounded-2 cursor-pointer"
+          [class.active]="item.selected" (click)="selectWaitingSlot(item)"
+          *ngFor="let item of waitingTimeSlots; let i = index">
+          <div class="d-flex align-items-center w-100 gap-2">
+            <div class="custom_check">
+              <svg width="18" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                class="check_svg">
+                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                <path
+                  d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                  fill="white" stroke="white" stroke-width="0.25"></path>
+              </svg>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+              <img style="width: 2.2rem;" src="assets/images/icons/morning.svg" alt="" *ngIf="item.Day == 'Morning'">
+              <img style="width: 2.2rem;" src="assets/images/icons/afternoon.svg" alt=""
+                *ngIf="item.Day == 'Afternoon'">
+              <img style="width: 2.2rem;" src="assets/images/icons/evening.svg" alt="" *ngIf="item.Day == 'Evening'">
+              <h6 class="m-0 clr-primary-600">{{item.Day}} - {{item.Time}}</h6>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer border-0 pb-0">
+          <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal"
+            (click)="saveWaitingListAppointment()">Save</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="doctorAppointmentValidation" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+    <div class="modal-content">
+      <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+      <div class="modal-body">
+        <p class="fw-bold">Below fields are mandatory</p>
+        <p *ngIf="errorMessages.length === 1">{{errorMessages[0]}}</p>
+        <ul class="p-0 m-0" *ngIf="errorMessages.length > 1">
+          <li *ngFor="let error of errorMessages; let i = index" class="pb-1"> {{error}}</li>
+        </ul>
+        <div class="modal-footer">
+          <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+            data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="saveDoctorAppointmentValidation" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+    <div class="modal-content">
+      <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+      <div class="modal-body">
+        <p *ngIf="errorMessages.length === 1">{{errorMessages[0]}}</p>
+        <ul *ngIf="errorMessages.length > 1">
+          <li *ngFor="let error of errorMessages; let i = index"> {{error}}</li>
+        </ul>
+        <div class="modal-footer">
+          <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+            data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="cancelConfirmationMsg" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+    <div class="modal-content">
+      <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+      <div class="modal-body">
+        <p> Are you sure you want to cancel Appointment ? </p>
+        <div class="modal-footer">
+          <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal"
+            (click)="showCancelReasons()">{{langData?.common?.yes}}</a>
+          <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+            data-bs-dismiss="modal">{{langData?.common?.no}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal yakeenServiceModel" data-bs-backdrop="static" tabindex="-1" id="yakeenServiceModel" tabindex="-1"
+  [ngStyle]="{ display: displayYakeenSearchModal }">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 41rem">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title m-0" translate>Patient Information</h5>
+        <button type="button" #closebutton class="btn-close" (click)="closeYakeenSearchModal()"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body card-3d p-2 d-flex rounded-2 m-3 p-0">
+        <ul class="nav nav-pills d-flex p-2 flex-column gap-1 me-3" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button [ngClass]="
+                yakeenSearchDisplay == 1
+                  ? 'btn d-flex align-items-center btn-secondary-fill rounded-2 w-100'
+                  : 'btn d-flex align-items-center clr-primary rounded-2 w-100'
+              " (click)="showYakeenSearch(1)" translate>
+              SAUDI
+            </button>
+          </li>
+
+          <li class="nav-item" role="presentation">
+            <button [ngClass]="
+                yakeenSearchDisplay == 2
+                  ? 'btn d-flex align-items-center btn-secondary-fill rounded-2 w-100'
+                  : 'btn d-flex align-items-center clr-primary rounded-2 w-100'
+              " (click)="showYakeenSearch(2)" translate>
+              IQAMA
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button [ngClass]="
+                yakeenSearchDisplay == 3
+                  ? 'btn d-flex align-items-center btn-secondary-fill rounded-2 w-100'
+                  : 'btn d-flex align-items-center clr-primary rounded-2 w-100'
+              " (click)="showYakeenSearch(3)" translate>
+              GCC
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button [ngClass]="
+                yakeenSearchDisplay == 4
+                  ? 'btn d-flex align-items-center btn-secondary-fill rounded-2 w-100'
+                  : 'btn d-flex align-items-center clr-primary rounded-2 w-100'
+              " (click)="showYakeenSearch(4)" translate>
+              PASSPORT
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button [ngClass]="
+                yakeenSearchDisplay == 5
+                  ? 'btn d-flex align-items-center btn-secondary-fill rounded-2 w-100'
+                  : 'btn d-flex align-items-center clr-primary rounded-2 w-100'
+              " (click)="showYakeenSearch(5)" translate>
+              BORDER
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button [ngClass]="
+                yakeenSearchDisplay == 6
+                  ? 'btn d-flex align-items-center btn-secondary-fill rounded-2 w-100'
+                  : 'btn d-flex align-items-center clr-primary rounded-2 w-100'
+              " (click)="showYakeenSearch(6)" translate>
+              UNKNOWN
+            </button>
+          </li>
+        </ul>
+        <div class="p-3 px-4 card-3d-wrapper w-100">
+          <div class="row g-2 align-items-end" *ngIf="yakeenSearchDisplay == 1">
+            <div class="col-12">
+              <label for="" class="form-label" required translate>National Id</label>
+              <input type="text" class="form-control text-end" [(ngModel)]="saudiIdYakeen"
+                placeholder="{{ 'National Id' }}" />
+
+              <span class="text-danger">
+                <div *ngIf="
+                    this.saudiIdYakeen == '' &&
+                    this.isGetCalledForYakeenData == 'Yes'
+                  " translate>
+                  National Id is required
+                </div>
+              </span>
+            </div>
+
+            <div class="col-6">
+              <label for="" class="form-label" required translate>Month</label>
+
+              <select name="" id="" class="form-select" [(ngModel)]="saudiYakeenMonthNumber">
+                <option value="" selected translate>Select Month</option>
+                <option *ngFor="let yearNum of numsYears" [ngValue]="yearNum">
+                  {{ yearNum }}
+                </option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label for="" class="form-label" required translate>Year</label>
+              <input type="text" class="form-control text-end" [(ngModel)]="saudiYakeenYearNumber" maxlength="4"
+                placeholder="{{ 'Hijri Year' }}" />
+            </div>
+
+            <div class="col-6">
+              <span class="text-danger">
+                <div *ngIf="
+                    this.saudiYakeenMonthNumber == '' &&
+                    this.isGetCalledForYakeenData == 'Yes'
+                  " translate>
+                  Month is required
+                </div>
+              </span>
+            </div>
+
+            <div class="col-6">
+              <span class="text-danger">
+                <div *ngIf="
+                    this.saudiYakeenYearNumber == '' &&
+                    this.isGetCalledForYakeenData == 'Yes'
+                  " translate>
+                  Year is required
+                </div>
+              </span>
+            </div>
+
+            <!-- </div> -->
+
+            <div class="d-flex col-12 align-items-center pt-2">
+              <div class="col-5">
+                <input class="form-check-input" type="checkbox" value="" [(ngModel)]="yakeenNewBornBaby" />
+                <label class="form-check-label ps-1" translate>
+                  Is Newborn
+                </label>
+              </div>
+              <div class="col-7">
+                <!-- <select
+                  name=""
+                  id=""
+                  class="form-select"
+                  [(ngModel)]="yakeenNewBornBabyGender"
+                >
+                  <option value="" selected translate>Select Gender</option>
+                  <option *ngFor="let Gender of Genders" [ngValue]="Gender.id">
+                    {{ this.lang == "ar" ? Gender.name2l : Gender.name }}
+                  </option>
+                </select> -->
+              </div>
+            </div>
+
+            <div class="col-12 text-center">
+              <button class="btn btn-main-outline mt-3" (click)="getPatientDataBYYakeenService(1)" translate>
+                Get Data
+              </button>
+            </div>
+          </div>
+
+          <div class="row align-items-end g-2" *ngIf="yakeenSearchDisplay == 2">
+            <div class="col-12">
+              <label for="" class="form-label" required translate>Iqama</label>
+              <input type="text" class="form-control text-end" [(ngModel)]="iqamaIdYakeen"
+                placeholder="{{ 'Iqama' }}" />
+
+              <span class="text-danger">
+                <div *ngIf="
+                    this.iqamaIdYakeen == '' &&
+                    this.isGetCalledForYakeenData == 'Yes'
+                  " translate>
+                  Iqama is required
+                </div>
+              </span>
+            </div>
+
+            <!-- <div class="d-flex col-12 align-items-center pt-2"> -->
+
+            <div class="col-6">
+              <label for="" class="form-label" required translate>Month</label>
+
+              <select name="" id="" class="form-select" [(ngModel)]="iqamaYakeenMonthNumber">
+                <option value="" selected translate>Select Month</option>
+                <option *ngFor="let yearNum of numsYears" [ngValue]="yearNum">
+                  {{ yearNum }}
+                </option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label for="" class="form-label" required translate>Year</label>
+              <input type="text" class="form-control text-end" [(ngModel)]="iqamaYakeenYearNumber" maxlength="4"
+                placeholder="{{ 'Year' }}" />
+            </div>
+
+            <div class="col-6">
+              <span class="text-danger">
+                <div *ngIf="
+                    this.iqamaYakeenMonthNumber == '' &&
+                    this.isGetCalledForYakeenData == 'Yes'
+                  " translate>
+                  Month is required
+                </div>
+              </span>
+            </div>
+
+            <div class="col-6">
+              <span class="text-danger">
+                <div *ngIf="
+                    this.iqamaYakeenYearNumber == '' &&
+                    this.isGetCalledForYakeenData == 'Yes'
+                  " translate>
+                  Year is required
+                </div>
+              </span>
+            </div>
+
+            <div class="d-flex col-12 align-items-center pt-2">
+              <div class="col-5">
+                <input class="form-check-input" type="checkbox" value="" [(ngModel)]="yakeenNewBornBaby" />
+                <label class="form-check-label ps-1" translate>
+                  Is Newborn
+                </label>
+              </div>
+              <div class="col-7">
+                <!-- <select
+                  name=""
+                  id=""
+                  class="form-select"
+                  [(ngModel)]="yakeenNewBornBabyGender"
+                >
+                  <option value="" selected translate>Select Gender</option>
+                  <option *ngFor="let Gender of Genders" [ngValue]="Gender.id">
+                    {{ this.lang == "ar" ? Gender.name2l : Gender.name }}
+                  </option>
+                </select> -->
+              </div>
+            </div>
+            <div class="col-12 text-center">
+              <button class="btn btn-main-outline mt-3" (click)="getPatientDataBYYakeenService(2)" translate>
+                Get Data
+              </button>
+            </div>
+          </div>
+
+          <div class="row align-items-end g-2" *ngIf="yakeenSearchDisplay == 3">
+            <div class="col-12">
+              <label for="" class="form-label" required translate>GCC National Id</label>
+              <input type="text" class="form-control text-end" [(ngModel)]="gccNinIdYakeen"
+                placeholder="{{ 'GCC National Id' }}" />
+
+              <span class="text-danger">
+                <div *ngIf="
+                    this.gccNinIdYakeen == '' &&
+                    this.isGetCalledForYakeenData == 'Yes'
+                  " translate>
+                  GCC National Id is required
+                </div>
+              </span>
+            </div>
+            <div class="col-12">
+              <label for="" class="form-label" required translate>GCC Country Code</label>
+              <!-- 
+              <select
+                name=""
+                id=""
+                class="form-select"
+                [(ngModel)]="gccNationalityCodeYakeen"
+              >
+                <option value="" selected translate>Select Nationality</option>
+                <option
+                  *ngFor="let Nationality of YakeenNationalities"
+                  [ngValue]="Nationality.yakeenId"
+                >
+                  {{
+                    this.lang == "ar" ? Nationality.name2l : Nationality.name
+                  }}
+                  - {{ Nationality.code }}
+                </option>
+              </select> -->
+
+              <span class="text-danger">
+                <div *ngIf="
+                    this.gccNationalityCodeYakeen == '' &&
+                    this.isGetCalledForYakeenData == 'Yes'
+                  " translate>
+                  GCC Country Code is required
+                </div>
+              </span>
+            </div>
+
+            <div class="d-flex col-12 align-items-center pt-2">
+              <div class="col-5">
+                <!-- <label for="" class="form-label"  translate>Is Newborn</label> -->
+
+                <input class="form-check-input" type="checkbox" value="" [(ngModel)]="yakeenNewBornBaby" />
+                <label class="form-check-label ps-1" translate>
+                  Is Newborn
+                </label>
+                <!-- <input type="text" class="form-control text-end" [(ngModel)]="gccNationalityCodeYakeen"                           
+                              placeholder="{{'GCC Country Code' |translate}}"> -->
+              </div>
+              <div class="col-7">
+                <!-- <label for="" class="form-label"  translate>Select Gender</label> -->
+
+                <!-- <select
+                  name=""
+                  id=""
+                  class="form-select"
+                  [(ngModel)]="yakeenNewBornBabyGender"
+                >
+                  <option value="" selected translate>Select Gender</option>
+                  <option *ngFor="let Gender of Genders" [ngValue]="Gender.id">
+                    {{ this.lang == "ar" ? Gender.name2l : Gender.name }}
+                  </option>
+                </select> -->
+              </div>
+            </div>
+
+            <div class="col-12 text-center">
+              <button class="btn btn-main-outline mt-3" (click)="getPatientDataBYYakeenService(3)" translate>
+                Get Data
+              </button>
+            </div>
+          </div>
+
+          <div class="row align-items-end g-2" *ngIf="yakeenSearchDisplay == 4">
+            <div class="col-12">
+              <label for="" class="form-label" required translate>Passport Number</label>
+              <input type="text" class="form-control text-end" [(ngModel)]="passportNoYakeen"
+                placeholder="{{ 'Passport Number' }}" />
+
+              <span class="text-danger">
+                <div *ngIf="
+                    this.passportNoYakeen == '' &&
+                    this.isGetCalledForYakeenData == 'Yes'
+                  " translate>
+                  Passport Number is required
+                </div>
+              </span>
+            </div>
+            <div class="col-12">
+              <label for="" class="form-label" required translate>Nationality</label>
+
+              <!-- <select
+                name=""
+                id=""
+                class="form-select"
+                [(ngModel)]="nationalityYakeen"
+              >
+                <option value="" selected translate>Select Nationality</option>
+                <option
+                  *ngFor="let Nationality of YakeenNationalities"
+                  [ngValue]="Nationality.yakeenId"
+                >
+                  {{
+                    this.lang == "ar" ? Nationality.name2l : Nationality.name
+                  }}
+                  - {{ Nationality.code }}
+                </option>
+              </select> -->
+
+              <span class="text-danger">
+                <div *ngIf="
+                    this.nationalityYakeen == '' &&
+                    this.isGetCalledForYakeenData == 'Yes'
+                  " translate>
+                  Nationality is required
+                </div>
+              </span>
+            </div>
+
+            <div class="d-flex col-12 align-items-center pt-2">
+              <div class="col-5">
+                <!-- <label for="" class="form-label"  translate>Is Newborn</label> -->
+
+                <input class="form-check-input" type="checkbox" value="" [(ngModel)]="yakeenNewBornBaby" />
+                <label class="form-check-label ps-1" translate>
+                  Is Newborn
+                </label>
+                <!-- <input type="text" class="form-control text-end" [(ngModel)]="gccNationalityCodeYakeen"                           
+                              placeholder="{{'GCC Country Code' |translate}}"> -->
+              </div>
+              <div class="col-7">
+                <!-- <label for="" class="form-label"  translate>Select Gender</label> -->
+
+                <select name="" id="" class="form-select" [(ngModel)]="yakeenNewBornBabyGender">
+                  <option value="" selected translate>Select Gender</option>
+                  <!-- <option *ngFor="let Gender of Genders" [ngValue]="Gender.id">
+                    {{ this.lang == "ar" ? Gender.name2l : Gender.name }}
+                  </option> -->
+                  <option value="1" translate>Male</option>
+                  <option value="2" translate>Female</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-12 text-center">
+              <button class="btn btn-main-outline mt-3" (click)="getPatientDataBYYakeenService(4)" translate>
+                Get Data
+              </button>
+            </div>
+          </div>
+
+          <div class="row align-items-end g-2" *ngIf="yakeenSearchDisplay == 5">
+            <div class="col-12">
+              <label for="" class="form-label" required translate>Border Number</label>
+              <input type="text" class="form-control text-end" [(ngModel)]="borderNumberYakeen"
+                placeholder="{{ 'Border Number' }}" />
+
+              <span class="text-danger">
+                <div *ngIf="
+                    this.borderNumberYakeen == '' &&
+                    this.isGetCalledForYakeenData == 'Yes'
+                  " translate>
+                  Border Number is required
+                </div>
+              </span>
+            </div>
+            <div class="col-6">
+              <label for="" class="form-label" required translate>Month</label>
+
+              <select name="" id="" class="form-select" [(ngModel)]="borderYakeenMonthNumber">
+                <option value="" selected translate>Select Month</option>
+                <option *ngFor="let yearNum of numsYears" [ngValue]="yearNum">
+                  {{ yearNum }}
+                </option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label for="" class="form-label" required translate>Year</label>
+              <input type="text" class="form-control text-end" [(ngModel)]="borderYakeenYearNumber" maxlength="4"
+                placeholder="{{ 'Year' }}" />
+            </div>
+
+            <div class="col-6">
+              <span class="text-danger">
+                <div *ngIf="
+                    this.borderYakeenMonthNumber == '' &&
+                    this.isGetCalledForYakeenData == 'Yes'
+                  " translate>
+                  Month is required
+                </div>
+              </span>
+            </div>
+
+            <div class="col-6">
+              <span class="text-danger">
+                <div *ngIf="
+                    this.borderYakeenYearNumber == '' &&
+                    this.isGetCalledForYakeenData == 'Yes'
+                  " translate>
+                  Year is required
+                </div>
+              </span>
+            </div>
+
+            <!-- </div> -->
+
+            <div class="d-flex col-12 align-items-center pt-2">
+              <div class="col-5">
+                <!-- <label for="" class="form-label"  translate>Is Newborn</label> -->
+
+                <input class="form-check-input" type="checkbox" value="" [(ngModel)]="yakeenNewBornBaby" />
+                <label class="form-check-label ps-1" translate>
+                  Is Newborn
+                </label>
+                <!-- <input type="text" class="form-control text-end" [(ngModel)]="gccNationalityCodeYakeen"                           
+                              placeholder="{{'GCC Country Code' |translate}}"> -->
+              </div>
+              <div class="col-7">
+                <!-- <label for="" class="form-label"  translate>Select Gender</label> -->
+
+                <select name="" id="" class="form-select" [(ngModel)]="yakeenNewBornBabyGender">
+                  <option value="" selected translate>Select Gender</option>
+                  <!-- <option *ngFor="let Gender of Genders" [ngValue]="Gender.id">
+                    {{ this.lang == "ar" ? Gender.name2l : Gender.name }}
+                  </option> -->
+                  <option value="1" translate>Male</option>
+                  <option value="2" translate>Female</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-12 text-center">
+              <button class="btn btn-main-outline mt-3" (click)="getPatientDataBYYakeenService(5)" translate>
+                Get Data
+              </button>
+            </div>
+          </div>
+
+          <div class="row align-items-end g-2 pt-5" *ngIf="yakeenSearchDisplay == 6">
+            <div class="col-12">
+              <label for="" class="form-label" required translate>Gender</label>
+              <select name="" id="" class="form-select" [(ngModel)]="yakeenNewBornBabyGender">
+                <option value="" selected translate>Select Gender</option>
+                <!-- <option *ngFor="let Gender of Genders" [ngValue]="Gender.id">
+                  {{ Gender.name }}
+                </option> -->
+                <option value="1" translate>Male</option>
+                <option value="2" translate>Female</option>
+              </select>
+
+              <span class="text-danger">
+                <div *ngIf="
+                    this.yakeenNewBornBabyGender == '' &&
+                    this.isGetCalledForYakeenData == 'Yes'
+                  " translate>
+                  Gender is required
+                </div>
+              </span>
+            </div>
+
+            <div class="col-12 text-center">
+              <button class="btn btn-main-outline mt-3" (click)="getPatientDataBYYakeenService(6)" translate>
+                Get Data
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="cancelReasons" tabindex="-1" aria-labelledby="cancelReasonsLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="width: 35%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cancelReasonsLabel">
+          Reason For Cancellation
+        </h5>
+        <div class="d-flex gap-2 align-items-center justify-content-end">
+          <button class="btn btn-danger-outline" (click)="clearReasons()">{{langData?.common?.Clear}}</button>
+          <button class="btn btn-main-outline"
+            (click)="cancelAppointment(selectedAppToCancel)">{{langData?.common?.Save}}</button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      </div>
+      <form [formGroup]="cancelForm">
+        <div class="modal-body pb-5">
+          <div class="row g-2 gy-3">
+            <div class="col-6 position-relative d-flex flex-column gap-2 align-items-start">
+              <label for="" class="form-label">Reasons</label>
+              <select class="form-select pe-5" id="CancelReasonID" formControlName="CancelReasonID"
+                (change)="onCancelReasonChange()">
+                <option dir="ltr" value="0" translate>{{langData?.common?.Select}}</option>
+                <option dir="ltr" *ngFor="let can of cancelResonsList" [value]="can.id">
+                  {{can.name}}
+                </option>
+              </select>
+              <span class="position-absolute" style="bottom: -1.1rem;" *ngIf="showReasonMandatoryMsg">
+                <div class="text-danger fs-8" *ngIf="showReasonMandatoryMsg">
+                  Select Cancel Reasons</div>
+              </span>
+            </div>
+            <div class="col-6 position-relative d-flex flex-column gap-2 align-items-start">
+              <label for="" class="form-label">Action Taken</label>
+              <select class="form-select pe-5" id="ActionTypeID" formControlName="ActionTypeID"
+                (change)="onActionTypeChange()">
+                <option dir="ltr" value="0" translate>{{langData?.common?.Select}}</option>
+                <option dir="ltr" *ngFor="let act of actionTakenList" [value]="act.id">
+                  {{act.name}}
+                </option>
+              </select>
+              <span class="position-absolute" style="bottom: -1.1rem;" *ngIf="showActionTakenMandatoryMsg">
+                <div class="text-danger fs-8" *ngIf="showActionTakenMandatoryMsg">
+                  Select Action Taken</div>
+              </span>
+            </div>
+            <div class="col-12 position-relative d-flex gap-2 align-items-center">
+              <textarea name="" placeholder={{langData?.messages?.EnterRemarks}} class="form-control resize-none"
+                (change)="onRemarksChange()" formControlName="Remarks" id="" cols="30" rows="3"></textarea>
+              <span class="position-absolute" style="bottom: -1.1rem;" *ngIf="showRemarksMandatoryMsg">
+                <div class="text-danger fs-8" *ngIf="showRemarksMandatoryMsg">
+                  Enter Cancel Remarks</div>
+              </span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal quick_info show" data-bs-backdrop="static" tabindex="-1" id="divWaitingList" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollabel">
+    <div class="modal-content h-100 overflow-auto">
+      <div class="modal-header" style="background-color: #ecf6f8 !important;">
+        <h5 class="modal-title" id="exampleModalLabel">Waiting List Information</h5>
+
+        <div class="d-flex align-items-center gap-2 ms-auto">
+          <div style=" width: 10rem;">
+            <mat-form-field appearance="fill">
+              <mat-label translate>dd-MMM-yyyy</mat-label>
+              <input matInput class="" [value]="waitinglistdate" (dateChange)="getDocAppointmentsOnDateChange($event)"
+                (click)="AppointmentsDate.open()" [matDatepicker]="AppointmentsDate">
+              <mat-datepicker-toggle matSuffix [for]="AppointmentsDate">
+              </mat-datepicker-toggle>
+              <mat-datepicker #AppointmentsDate></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="closeWaitingList()"></button>
+        </div>
+      </div>
+      <div class="modal-body" style="height: calc(100vh - 18rem); overflow: auto;">
+        <div class="d-flex justify-content-between p-2 mb-3 waitinglist_doccard">
+          <div class="d-flex align-items-center gap-2 ">
+            <div class="profile_img position-relative">
+              <img style="width: 2.5rem" class="doc_img" src="assets/images/maleD.svg" alt=""
+                *ngIf="this.selectedDoctor?.GenderID=='1'">
+              <img style="width: 2.5rem" class="doc_img" src="assets/images/femaleD.svg" alt=""
+                *ngIf="this.selectedDoctor?.GenderID=='2'">
+            </div>
+            <div class="">
+              <div class="custom_tooltip doc_des custom_tooltip_right">
+                <p class="fw-bold fs-8">{{this.selectedDoctor?.EmpCodeName}}</p>
+              </div>
+              <div>
+                <p class="clr-primary-600 fw-bold">{{this.selectedDoctor?.Specialization}}</p>
+                <p class="clr-dark-600">{{this.selectedDoctor?.Nationality}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="doctor-card upcoming_doctor-card cursor-pointer rounded-2 border mb-2"
+          *ngFor="let pat of waitingListAppointments; let i = index">
+
+          <div class="d-flex align-items-center justify-content-between p-1 pb-2 border-bottom">
+            <div class="d-flex align-items-center gap-1">
+              <svg width="17" height="17" viewBox="0 0 21 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M13.4734 10.518C13.8562 9.99103 14.0859 9.36848 14.1369 8.71916C14.188 8.06984 14.0585 7.41904 13.7628 6.83872C13.4671 6.2584 13.0167 5.77115 12.4613 5.43084C11.9059 5.09054 11.2673 4.91043 10.616 4.91043C9.96466 4.91043 9.32602 5.09054 8.77067 5.43084C8.21532 5.77115 7.76489 6.2584 7.46917 6.83872C7.17345 7.41904 7.04397 8.06984 7.09503 8.71916C7.1461 9.36848 7.37572 9.99103 7.75852 10.518C7.27295 10.8274 6.84065 11.2134 6.47838 11.661C6.38382 11.7833 6.31428 11.9231 6.27373 12.0723C6.23318 12.2215 6.22241 12.3772 6.24205 12.5306C6.26168 12.6839 6.31133 12.8319 6.38816 12.9661C6.46499 13.1003 6.5675 13.218 6.68983 13.3126C6.81216 13.4072 6.95192 13.4767 7.10113 13.5172C7.25033 13.5578 7.40607 13.5686 7.55943 13.5489C7.7128 13.5293 7.8608 13.4796 7.99497 13.4028C8.12915 13.326 8.24688 13.2235 8.34145 13.1011C8.62059 12.7463 8.97634 12.4592 9.3821 12.2613C9.78785 12.0634 10.2331 11.9597 10.6846 11.9582C11.136 11.9597 11.5813 12.0634 11.987 12.2613C12.3928 12.4592 12.7485 12.7463 13.0277 13.1011C13.1353 13.2337 13.2712 13.3406 13.4255 13.4138C13.5797 13.4869 13.7485 13.5246 13.9192 13.524C14.1335 13.5231 14.3432 13.4619 14.5243 13.3474C14.7055 13.233 14.8508 13.07 14.9438 12.8769C15.0367 12.6839 15.0736 12.4686 15.05 12.2556C15.0265 12.0426 14.9436 11.8405 14.8107 11.6724C14.4322 11.216 13.9802 10.8258 13.4734 10.518ZM10.6274 9.68361C10.383 9.68345 10.144 9.61139 9.94024 9.47641C9.73647 9.34143 9.57691 9.14949 9.48141 8.92449C9.38592 8.69949 9.35872 8.45137 9.40321 8.21103C9.44769 7.97069 9.56188 7.74874 9.73158 7.57282C9.90127 7.3969 10.119 7.27478 10.3575 7.22167C10.5961 7.16856 10.8451 7.1868 11.0734 7.27413C11.3016 7.36145 11.4992 7.514 11.6414 7.71278C11.7837 7.91155 11.8643 8.14778 11.8733 8.39204C11.8794 8.55945 11.8517 8.72639 11.7919 8.88286C11.732 9.03933 11.6412 9.18212 11.5249 9.3027C11.4086 9.42327 11.2692 9.51915 11.115 9.5846C10.9608 9.65005 10.7949 9.68372 10.6274 9.68361ZM20.2971 9.11212C20.1366 7.44212 19.5464 5.84213 18.5839 4.46796C17.6215 3.09379 16.3196 1.99227 14.805 1.27066C13.2904 0.549052 11.6148 0.231948 9.9413 0.350227C8.26778 0.468507 6.65341 1.01814 5.25539 1.9456C4.05433 2.74871 3.04606 3.80787 2.30299 5.04697C1.55993 6.28607 1.10052 7.67436 0.957763 9.11212C0.817727 10.5405 0.997394 11.9821 1.48373 13.3323C1.97007 14.6826 2.75087 15.9077 3.76951 16.9187L9.82733 22.988C9.93358 23.0951 10.06 23.1801 10.1993 23.2381C10.3386 23.2962 10.488 23.326 10.6388 23.326C10.7897 23.326 10.9391 23.2962 11.0784 23.2381C11.2177 23.1801 11.3441 23.0951 11.4504 22.988L17.4853 16.9187C18.504 15.9077 19.2848 14.6826 19.7711 13.3323C20.2574 11.9821 20.4371 10.5405 20.2971 9.11212ZM15.8851 15.3071L10.6274 20.5648L5.36968 15.3071C4.59484 14.5322 4.00131 13.5953 3.63174 12.5637C3.26217 11.532 3.12576 10.4313 3.2323 9.34072C3.33954 8.23328 3.69151 7.16351 4.26278 6.20876C4.83406 5.254 5.61035 4.43812 6.53553 3.8201C7.74817 3.01456 9.1716 2.58487 10.6274 2.58487C12.0832 2.58487 13.5067 3.01456 14.7193 3.8201C15.6417 4.43573 16.4163 5.24801 16.9874 6.19858C17.5585 7.14915 17.912 8.21442 18.0225 9.31786C18.1325 10.4122 17.9978 11.5173 17.6282 12.5531C17.2585 13.589 16.6631 14.5297 15.8851 15.3071Z"
+                  fill="#368796" />
+              </svg>
+              <label for="" class="clr-primary-600 m-0 fs-8">{{pat.HospitalName}}</label>
+            </div>
+            <div class="doctor-card upcoming_doctor-card cursor-pointer rounded-2 border">
+              <div class="bg-primary-50 p-1 rounded-2 px-1 cursor-pointer">
+                <p class="clr-primary-600 m-0 fs-8">Waiting List</p>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between p-1 pt-2">
+            <div class="d-flex align-items-center gap-2">
+              <div class="Waiting_DocCard">
+                <img class="doc_img" src="assets/images/icons/male.svg" style="width: 2rem;" alt=""
+                  *ngIf="pat.GenderID=='1'">
+                <img class="doc_img" src="assets/images/icons/female.svg" alt="" style="width: 2rem;"
+                  *ngIf="pat.GenderID=='2'">
+              </div>
+              <div class="">
+                <p class="value fs-7 fw-bold w-100">{{pat.PatientName}}</p>
+                <div class="d-flex align-items-center gap-2 mt-1 mb-1">
+                  <p>{{pat.Gender}} | <span>{{pat.FullAge}}</span> </p>
+                  <p><b>SSN</b> : <span>{{pat.SSN}}</span></p>
+                </div>
+                <p class="m-0 fs-8 mt-1">{{pat.Nationality}} | Mobile :{{pat.MobileNo}}</p>
+              </div>
+            </div>
+            <div class="custom_check d-none">
+              <svg width="18" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                class="check_svg">
+                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                <path
+                  d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                  fill="white" stroke="white" stroke-width="0.25"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="p-1 bg-white rounded-bottom">
+            <div class="bg-primary-50 p-2">
+              <div class="d-flex align-items-center gap-2">
+                <div class="d-flex flex-column">
+                  <p class="fs-8 clr-dark-600 m-0 d-flex align-items-center gap-1">
+                    <span>
+                      <svg width="16" height="16" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M14.9242 2.07344H13.9204V1.36313C13.9204 1.06356 13.7605 0.78662 13.5009 0.636839C13.2415 0.486864 12.9216 0.486864 12.6623 0.636839C12.4027 0.78662 12.2428 1.06356 12.2428 1.36313V2.07324L6.04733 2.07343V1.36312C6.04733 1.06356 5.88741 0.786615 5.62783 0.636835C5.36845 0.486859 5.04858 0.486859 4.78921 0.636835C4.52963 0.786615 4.36971 1.06356 4.36971 1.36312V2.07323L3.36593 2.07343C2.55032 2.07343 1.76807 2.39737 1.19136 2.97406C0.614453 3.55097 0.290527 4.33322 0.290527 5.14883V15.4488C0.290527 16.2644 0.614468 17.0466 1.19136 17.6235C1.76807 18.2002 2.55032 18.5244 3.36593 18.5244H14.9245C15.7401 18.5244 16.5224 18.2002 17.0991 17.6235C17.676 17.0466 17.9999 16.2644 17.9999 15.4488V5.14883C17.9999 4.33322 17.676 3.55097 17.0991 2.97406C16.5224 2.39735 15.7401 2.07343 14.9245 2.07343L14.9242 2.07344ZM3.36858 3.75108H4.37236V5.02052L4.37217 5.02033C4.37217 5.31989 4.53209 5.59684 4.79167 5.74662C5.05125 5.89659 5.37092 5.89659 5.63049 5.74662C5.88988 5.59684 6.0498 5.31989 6.0498 5.02033V3.75089H12.2427V5.02033C12.2427 5.31989 12.4027 5.59684 12.6622 5.74662C12.9216 5.89659 13.2415 5.89659 13.5009 5.74662C13.7604 5.59684 13.9204 5.31989 13.9204 5.02033V3.75089H14.9241C15.2949 3.75089 15.6504 3.89813 15.9125 4.16044C16.1747 4.42256 16.3221 4.77809 16.3221 5.14885V7.69317H1.96761V5.14885C1.96761 4.7781 2.11505 4.42256 2.37716 4.16044C2.63928 3.89813 2.99481 3.75089 3.36557 3.75089L3.36858 3.75108ZM14.9242 16.8469H3.36559C2.99484 16.8469 2.6393 16.6997 2.37718 16.4376C2.11507 16.1752 1.96763 15.8197 1.96763 15.449V9.37085H16.3221V15.449C16.3221 15.8197 16.1747 16.1752 15.9126 16.4376C15.6504 16.6997 15.2949 16.8469 14.9242 16.8469H14.9242Z"
+                          fill="#368796" />
+                      </svg>
+                    </span>
+                    {{pat.ScheduleDate}}
+
+                    <!-- <span class="fs-8 m-0 fw-bold d-flex align-items-center gap-1">
+                              {{app.SCHEDULESTARTTIME}} - {{app.SCHEDULEENDTIME}}</span> -->
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="no-patient-select border-bottom"
+          *ngIf="waitingListAppointments === undefined || waitingListAppointments?.length === 0">
+          <p class="fs-7 mt-2">No Waiting List Information Available</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" id="reviewAndPayment">
+  <div class="modal-dialog  modal-xl">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title">{{langData?.common?.radReport}}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="trustedUrl = ''"></button>
+          </div>
+          <div class="modal-body">
+              <iframe *ngIf="trustedUrl" height="600" width="100%" [src]="(trustedUrl ? trustedUrl :'')| safeUrl"
+                  frameborder="0"></iframe>
+          </div>
+      </div>
+  </div>
+</div>

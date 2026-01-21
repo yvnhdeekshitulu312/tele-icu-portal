@@ -1,0 +1,127 @@
+import { Component, OnInit } from '@angular/core';
+import { ConfigService } from 'src/app/services/config.service';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-patientsummary',
+  templateUrl: './patientsummary.component.html',
+  styleUrls: ['./patientsummary.component.scss']
+})
+export class PatientsummaryComponent implements OnInit {
+
+  patientID: any;
+  PatientVisitsList: any;
+  PatientDiagnosisList: any;
+  PatientInvestigationsList: any;
+  PatientProceduresList: any;
+  PatientsVitalsList: any;
+  PatientsAssessmentsList: any;
+  PatientMedicationsList: any;
+  diagnosisCount: any;
+  assessmentsCount: any;
+  medicationsCount: any;
+  investigationsCount: any;
+  proceduresCount: any;
+  hospitalId: any;
+  admissionId: any;
+  uhid: any;
+  patientName: any;
+  age: any;
+  gender: any;
+  nationality: any;
+  mobileNo: any;
+  doctorName: any;
+  admitDate: any;
+  adtDate: any;
+  dischargeDate: any;
+  payer: any;
+  episodeId: any;
+  vitalDate: any;
+  fromPage: any;
+  patientDetails: any;
+  langData: any;
+  constructor(private config: ConfigService, private router: Router) {
+    this.langData = this.config.getLangData();
+
+  }
+
+  ngOnInit(): void {
+    this.hospitalId = sessionStorage.getItem("hospitalId");
+    this.patientID = sessionStorage.getItem("PSpatientId");
+    this.fromPage = sessionStorage.getItem("fromPage");
+    this.patientDetails = JSON.parse(sessionStorage.getItem("PatientDetails") || '{}');
+    if(this.patientDetails.PatientType == '2') {
+      this.patientID = this.patientDetails.PatientID;
+    }
+    this.FetchPatientVisits();
+    
+  }
+  FetchPatientVisits() {
+    this.config.fetchPatientVisits(this.patientID, 3)
+    .subscribe((response: any) => {
+      if (response.Code == 200) {
+       this.PatientVisitsList = response.PatientVisitsDataList;
+      } 
+    },
+      (err) => {
+
+      })
+  }
+  onVisitsChange(event: any) {
+    this.episodeId = event.target.value;
+    var patientdata = this.PatientVisitsList.filter((visit:any) => visit.EpisodeID == event.target.value)[0];
+    this.admissionId = patientdata.AdmissionID;
+    this.uhid = patientdata.RegCode;
+    this.patientName = patientdata.PatientName;
+    this.age = patientdata.Age;
+    this.gender = patientdata.Gender;
+    this.nationality = patientdata.Nationality;
+    this.mobileNo = patientdata.MobileNo;
+    this.doctorName = patientdata.DoctorName;
+    this.payer = "";
+
+    this.FetchPatientFileData();
+    this.FetchPatientMedication();
+  }
+  FetchPatientFileData() {
+    this.config.fetchPatientFileData(this.episodeId, this.admissionId, this.hospitalId)
+    .subscribe((response: any) => { 
+      if (response.Code == 200) {
+       this.PatientDiagnosisList = response.PatientDiagnosisDataList;
+       this.PatientInvestigationsList = response.PatientInvestigationsDataList.filter((inv: any) => inv.Isresult == 4);
+       this.PatientProceduresList = response.PatientInvestigationsDataList.filter((inv: any) => inv.Isresult == 7);
+       this.PatientsVitalsList = response.PatientDataVitalsList;
+       this.PatientsAssessmentsList = response.PatientAssessmentsDataList;
+
+       this.diagnosisCount = response.PatientDiagnosisDataList.length;
+       this.assessmentsCount = response.PatientAssessmentsDataList.length;
+       this.investigationsCount = this.PatientInvestigationsList.length;
+       this.proceduresCount = this.PatientProceduresList.length;
+       this.vitalDate = response.PatientDataVitalsList[0].Datetime.toString();
+      } 
+    },
+      (err) => {
+
+      })
+  }
+  FetchPatientMedication() {
+    this.config.fetchPatientMedication(this.patientDetails.PatientType == '2' ? '2' : '1', this.episodeId, this.admissionId, this.hospitalId)
+    .subscribe((response: any) => {
+      if (response.Code == 200) {
+       this.PatientMedicationsList = response.PatientOrderedOrPrescribedDrugsList;
+       this.medicationsCount = response.PatientOrderedOrPrescribedDrugsList.length;
+      } 
+    },
+      (err) => {
+
+      })
+  }
+  BackToPatients() {
+    if(this.fromPage == "Patients") {
+      this.router.navigate(['/home/patients']);
+    }
+    if(this.fromPage == "") {
+      this.router.navigate(['/home/appointments']);
+    }
+  }
+}

@@ -1,0 +1,90 @@
+<div class="card card-style-1 doctor_request_page">
+    <div class="card-header justify-content-start" style="height: 45px; min-height: 45px;">
+     <div class="d-flex align-items-center gap-3">
+        <h5 class="card-heading">Forms</h5>
+        <ul class="nav nav-pills style-1 advice_assessments gap-1" id="" role="tablist">
+          <li class="nav-item" role="presentation">
+              <button class="nav-link px-2 fs-8 py-1" [class.active]="tabType === 'admrecon'" id="adm-recon-btn" (click)="tabType = 'admrecon'" data-bs-toggle="pill" data-bs-target="#admissionreconciliation" type="button" role="tab" aria-controls="admissionreconciliation" aria-selected="false">
+                  Admission Reconciliation
+              </button>
+          </li>
+          <li class="nav-item" role="presentation">
+              <button class="nav-link px-2 fs-8 py-1" [class.active]="tabType === 'disrecon'" id="dis-recon-btn" (click)="tabType = 'disrecon'" data-bs-toggle="pill" data-bs-target="#dischargereconciliation" type="button" role="tab" aria-controls="dischargereconciliation" aria-selected="false">
+                  Discharge Reconciliation
+              </button>
+          </li>
+          <li class="nav-item" role="presentation" *ngIf="PatientType != '1'">
+              <button class="nav-link px-2 fs-8 py-1" [class.active]="tabType === 'blood'" id="blood-req-btn" (click)="tabType = 'blood'" data-bs-toggle="pill" data-bs-target="#bloodrequest" type="button" role="tab" aria-controls="bloodrequest" aria-selected="false">
+                  Blood Request
+              </button>
+          </li>
+          <li class="nav-item" role="presentation">
+              <button class="nav-link px-2 fs-8 py-1" [class.active]="tabType === 'vte'" id="vte-forms-btn" (click)="tabType = 'vte'" data-bs-toggle="pill" data-bs-target="#vteForms" type="button" role="tab" aria-controls="vteForms" aria-selected="false">
+                  VTE Forms
+              </button>
+          </li>
+          <li class="nav-item" role="presentation" *ngIf="PatientType=='1'">
+            <button class="nav-link px-2 fs-8 py-1" [class.active]="tabType === 'vte'" id="vte-forms-btn" (click)="tablClick('patienteforms')" data-bs-toggle="pill" data-bs-target="#vteForms" type="button" role="tab" aria-controls="vteForms" aria-selected="false">
+                Patient E-Forms
+            </button>
+          </li>
+      </ul>
+     </div>
+    </div>
+    <div class="p-2 doctor_reques_reconciliation">
+        <div class="tab-content doctor_request_tabContent">
+            <div class="tab-pane" [ngClass]="tabType === 'admrecon' ? 'show active' : 'fade'"  id="admissionreconciliation" role="tabpanel" aria-labelledby="endoscopy-tab" *ngIf="tabType === 'admrecon'">
+                <app-admissionreconciliation [fromCaseSheet]="true"></app-admissionreconciliation>
+            </div>
+            <div class="tab-pane" [ngClass]="tabType === 'disrecon' ? 'show active' : 'fade'" id="dischargereconciliation" role="tabpanel" aria-labelledby="endoscopy-tab" *ngIf="tabType === 'disrecon'" >
+                <app-dischargereconciliation [fromCaseSheet]="true"></app-dischargereconciliation>
+            </div>
+            <div class="tab-pane" [ngClass]="tabType === 'blood' ? 'show active' : 'fade'" id="bloodrequest" role="tabpanel" aria-labelledby="endoscopy-tab" *ngIf="tabType === 'blood'">
+                <app-bloodrequest [fromCaseSheet]="true"></app-bloodrequest>
+            </div>
+            <div class="tab-pane" [ngClass]="tabType === 'patienteforms' ? 'show active' : 'fade'" id="patienteforms" role="tabpanel" aria-labelledby="patienteforms-tab" *ngIf="tabType === 'patienteforms'">
+                <app-patient-eforms [fromCaseSheet]="true"></app-patient-eforms>
+            </div>
+            <div class="tab-pane" id="vteForms" role="tabpanel" aria-labelledby="" [ngClass]="tabType === 'vte' ? 'show active' : 'fade'" *ngIf="tabType === 'vte'" >
+                <div class="nav nav-pills pt-2" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button type="button" role="tab" data-bs-toggle="pill" data-bs-target="#medicalform" (click)="toggleVte('medical')"
+                            class="nav-link px-4 active"> VTE Medical Form
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button type="button" role="tab" data-bs-toggle="pill" data-bs-target="#surgicalform"  (click)="toggleVte('surgical')"
+                            class="nav-link px-4"> VTE Surgical Form
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button type="button" role="tab" data-bs-toggle="pill" data-bs-target="#obgassessment" (click)="toggleVte('Obg')"
+                            class="nav-link px-4"> VTE OBG Form
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation" *ngIf="enableVteAntenatal()">
+                        <button type="button" role="tab" data-bs-toggle="pill" data-bs-target="#antenatalassessment" (click)="toggleVte('antenatal')"
+                            class="nav-link px-4"> VTE Antenatal Form
+                        </button>
+                    </li>
+                </div>
+                <div class="tab-content" *ngIf="tabType === 'vte'">
+                    <div class="tab-pane active" id="medicalform" role="tabpanel" aria-labelledby="">
+                        <app-vte-risk-assessment *ngIf="vteType === 'medical'" [fromCaseSheet]="true"></app-vte-risk-assessment>
+                    </div>
+                    <div class="tab-pane" id="surgicalform" role="tabpanel" aria-labelledby="">
+                        <app-vte-surgical-risk-assessment *ngIf="vteType === 'surgical' && !isVTESurgicalNew" [fromCaseSheet]="true"></app-vte-surgical-risk-assessment>
+                        <app-vte-surgical-new *ngIf="vteType === 'surgical' && isVTESurgicalNew" [fromCaseSheet]="true"></app-vte-surgical-new>
+                    </div>
+                    <div class="tab-pane" id="obgassessment" role="tabpanel" aria-labelledby="">
+                        <app-vte-obg-assessment *ngIf="vteType === 'Obg'" [fromCaseSheet]="true"></app-vte-obg-assessment>
+                    </div>
+                    <div class="tab-pane" id="antenatalassessment" role="tabpanel" aria-labelledby="">
+                        <app-vte-antenatal *ngIf="vteType === 'antenatal'" [fromCaseSheet]="true"></app-vte-antenatal>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

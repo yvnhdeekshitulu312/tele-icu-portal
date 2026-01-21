@@ -1,0 +1,707 @@
+<div class="page-header justify-content-start sticky-top shadow-sm">
+    <h2 class="page-heading">INFECTION PREVENTION AND CONTROL KPI DASHBOARD</h2>
+</div>
+<div class="container-fluid p-0 analytics_graphs IP_graph">
+    <div class="mt-2 pe-2">
+        <div class="row g-2">
+            <div class="col-2" style="width: 13%;">
+                <div class="left_nav">
+                    <div class="sidebar-container rounded">
+                        <form [formGroup]="datesForm" class="d-flex flex-column gap-2">
+                            <label class="form-label m-0">From Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="fromPicker" placeholder="From Date"
+                                    formControlName="fromdate" />
+                                <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #fromPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <label class="form-label m-0">To Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="toPicker" placeholder="To Date"
+                                    formControlName="todate" />
+                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #toPicker></mat-datepicker>
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn btn-main-outline w-100 mt-2" (click)="fetchData()">
+                            Fetch
+                        </button>
+                        <button type="button" class="btn btn-outline-danger w-100 mt-2" (click)="clearFilters()">
+                            Clear
+                        </button>
+                    </div>
+                    <div class="d-flex flex-column mt-2">
+                        <label class="form-label">Location</label>
+                        <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                            <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_9239_2779)">
+                                    <path
+                                        d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                        fill="#368796" />
+                                </g>
+                            </svg>
+                            <input type="text" class="form-control" [matAutocomplete]="roleAuto2" placeholder="Search">
+                            <mat-autocomplete #roleAuto2="matAutocomplete">
+                                <mat-option *ngFor="let item of locations">
+                                    <div (click)="locationOptionClicked($event, item);">
+                                        <mat-checkbox [checked]="item.selected" (change)="toggleLocationSelection(item)"
+                                            (click)="$event.stopPropagation()">
+                                            {{ item.label }}
+                                        </mat-checkbox>
+                                    </div>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                    <div class="pt-3 d-none">
+                        <div class="totalPatients_card bg-white p-2 border shadow-sm py-3 rounded text-center">
+                            <h6 class="m-0 fw-bold">Admissions </h6>
+                            <h3 class="fs-4 fw-bold mt-2">894300</h3>
+                        </div>
+                        <div class="totalPatients_card bg-white p-2 border shadow-sm py-3 rounded text-center mt-2">
+                            <h6 class="m-0 fw-bold">Discharges </h6>
+                            <h3 class="fs-4 fw-bold mt-2">21,544</h3>
+                        </div>
+                        <div class="totalPatients_card bg-white p-2 border shadow-sm py-3 rounded text-center mt-2">
+                            <h6 class="m-0 fw-bold">Admission Days </h6>
+                            <h3 class="fs-4 fw-bold mt-2">57,017</h3>
+                        </div>
+                        <div class="totalPatients_card bg-white p-2 border shadow-sm py-3 rounded text-center mt-2">
+                            <h6 class="m-0 fw-bold">Average Lenth of Stay </h6>
+                            <h3 class="fs-4 fw-bold mt-2">3</h3>
+                        </div>
+                        <div class="totalPatients_card bg-white p-2 border shadow-sm py-3 rounded text-center mt-2">
+                            <h6 class="m-0 fw-bold">Bed Turnover Rate </h6>
+                            <h3 class="fs-4 fw-bold mt-2">4</h3>
+                        </div>
+                        <div class="totalPatients_card bg-white p-2 border shadow-sm py-3 rounded text-center mt-2">
+                            <h6 class="m-0 fw-bold">Surgery/ Procedures </h6>
+                            <h3 class="fs-4 fw-bold mt-2">5,532</h3>
+                        </div>
+                        <div class="totalPatients_card bg-white p-2 border shadow-sm py-3 rounded text-center mt-2">
+                            <h6 class="m-0 fw-bold">Surgery Cancellations </h6>
+                            <h3 class="fs-4 fw-bold mt-2">708</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col Population_health_page dashboardHeight">
+                <div class="">
+                    <div class="row g-2 mx-0">
+                        <div class="col-3 d-flex flex-column" style="width: 22%;">
+                            <div class="readmissionCard border rounded cursor-default">
+                                <div class="rounded-top text-center text-white py-2 fw-bold readmissionCard_header">
+                                    TOTAL INPATIENT
+                                </div>
+                                <p class="fs-3 rounded-bottom fw-bold text-center py-3 m-0">
+                                    {{admissionDetails?.TotalInPatients | number}}
+                                </p>
+                            </div>
+                            <div class="readmissionCard border rounded cursor-default mt-2">
+                                <div class="rounded-top text-center text-white py-2 fw-bold readmissionCard_header">
+                                    INFECTIOUS DISEASE CASES
+                                </div>
+                                <p class="fs-3 rounded-bottom fw-bold text-center py-3 m-0">
+                                    {{admissionDetails?.TotalInfectiousDiseaseCases | number}}
+                                </p>
+                            </div>
+                            <div class="bg-white p-2 pb-3 border shadow-sm rounded h-100 mt-2">
+                                <h6 class="fs-7 title_clr fw-semibold">SURVEILLANCE AREA</h6>
+                                <div class="d-flex justify-content-end" *ngIf="surveillanceAreaData?.length">
+                                    <select class="form-select w-auto mb-2" [(ngModel)]="surveillanceAreaWard"
+                                        (change)="loadSurveillanceAreaChart()">
+                                        <option *ngFor="let item of surveillanceAreaData" [value]="item.Ward">{{
+                                            item.Ward }}</option>
+                                    </select>
+                                </div>
+                                <apx-chart *ngIf="surveillanceAreaChartData" [series]="surveillanceAreaChartData.series"
+                                    [chart]="surveillanceAreaChartData.chart"
+                                    [labels]="surveillanceAreaChartData.labels"
+                                    [colors]="surveillanceAreaChartData.colors" [fill]="surveillanceAreaChartData.fill"
+                                    [stroke]="surveillanceAreaChartData.stroke"
+                                    [legend]="surveillanceAreaChartData.legend"
+                                    [title]="surveillanceAreaChartData.title"
+                                    [tooltip]="surveillanceAreaChartData.tooltip"
+                                    [dataLabels]="surveillanceAreaChartData.dataLabels"
+                                    [plotOptions]="surveillanceAreaChartData.plotOptions">
+                                </apx-chart>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-white p-2 border shadow-sm rounded h-100">
+                                <apx-chart *ngIf="ipcAdmissionChartData" [series]="ipcAdmissionChartData.series"
+                                    [chart]="ipcAdmissionChartData.chart" [colors]="ipcAdmissionChartData.colors"
+                                    [xaxis]="ipcAdmissionChartData.xaxis"
+                                    [dataLabels]="ipcAdmissionChartData.dataLabels"
+                                    [plotOptions]="ipcAdmissionChartData.plotOptions"
+                                    [tooltip]="ipcAdmissionChartData.tooltip" [yaxis]="ipcAdmissionChartData.yaxis"
+                                    [title]="ipcAdmissionChartData.title"
+                                    [legend]="ipcAdmissionChartData.legend"></apx-chart>
+
+                            </div>
+                        </div>
+                        <div class="col-3" style="width: 28%;">
+                            <div class="bg-white p-2 border shadow-sm rounded h-100">
+                                <apx-chart *ngIf="seriesIPCAdmission" [series]="seriesIPCAdmission"
+                                    [chart]="chartIPCAdmission" [xaxis]="xaxisIPCAdmission" [yaxis]="yaxisIPCAdmission"
+                                    [dataLabels]="dataLabelsIPCAdmission" [title]="titleIPCAdmission"
+                                    [tooltip]="tooltipIPCAdmission" [colors]="colorsIPCAdmission"
+                                    [plotOptions]="plotOptionsIPCAdmission" [legend]="legendIPCAdmission"
+                                    [fill]="fillIPCAdmission">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-2">
+                    <div class="row mx-0 g-2">
+                        <div class="col-4">
+                            <div class="row g-2">
+                                <div class="col-12">
+                                    <div class="readmissionCard border rounded cursor-default">
+                                        <div
+                                            class="rounded-top text-center text-white p-2 fw-bold readmissionCard_header">
+                                            CENTRAL LINE UTILIZATION RATIO
+                                        </div>
+                                        <p class="fs-3 rounded-bottom fw-bold text-center py-3 m-0">
+                                            {{centralLineData?.CenterlineRate | number : '1.2-2' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2">
+                                    <div class="readmissionCard border rounded cursor-default">
+                                        <div
+                                            class="rounded-top text-center text-white p-2 fw-bold readmissionCard_header">
+                                            CENTRAL LINE <br> DEVICE DAYS
+                                        </div>
+                                        <p class="fs-3 rounded-bottom fw-bold text-center py-3 m-0">
+                                            {{centralLineData?.TotalCenterline | number}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2">
+                                    <div class="readmissionCard border rounded cursor-default">
+                                        <div
+                                            class="rounded-top text-center text-white p-2 fw-bold readmissionCard_header">
+                                            PATIENT <br> DAYS
+                                        </div>
+                                        <p class="fs-3 rounded-bottom fw-bold text-center py-3 m-0">
+                                            {{centralLineData?.TotalPatientDays | number}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex mt-2" *ngIf="centralLineLocationChartData">
+                                    <div class="bg-white p-2 pb-3 border shadow-sm rounded h-100 w-100">
+                                        <apx-chart [series]="centralLineLocationChartData.series"
+                                            [chart]="centralLineLocationChartData.chart"
+                                            [colors]="centralLineLocationChartData.colors"
+                                            [labels]="centralLineLocationChartData.labels"
+                                            [dataLabels]="centralLineLocationChartData.dataLabels"
+                                            [plotOptions]="centralLineLocationChartData.plotOptions"
+                                            [tooltip]="centralLineLocationChartData.tooltip"
+                                            [title]="centralLineLocationChartData.title"
+                                            [legend]="centralLineLocationChartData.legend"
+                                            [fill]="centralLineLocationChartData.fill"
+                                            [stroke]="centralLineLocationChartData.stroke"
+                                            [responsive]="centralLineLocationChartData.responsive">
+                                        </apx-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="bg-white p-2 border shadow-sm rounded h-100">
+                                <apx-chart *ngIf="centralLineBundleChartData"
+                                    [series]="centralLineBundleChartData.series"
+                                    [chart]="centralLineBundleChartData.chart"
+                                    [colors]="centralLineBundleChartData.colors"
+                                    [xaxis]="centralLineBundleChartData.xaxis"
+                                    [yaxis]="centralLineBundleChartData.yaxis"
+                                    [dataLabels]="centralLineBundleChartData.dataLabels"
+                                    [plotOptions]="centralLineBundleChartData.plotOptions"
+                                    [tooltip]="centralLineBundleChartData.tooltip"
+                                    [title]="centralLineBundleChartData.title"
+                                    [legend]="centralLineBundleChartData.legend"
+                                    [grid]="centralLineBundleChartData.grid">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="row mx-0 g-2">
+                        <div class="col-6">
+                            <div class="bg-white border shadow-sm p-2 rounded">
+                                <h6 class="fs-7 title_clr fw-semibold">OVERALL CENTRAL LINE UTILIZATION RATIO </h6>
+                                <div class="d-flex justify-content-end">
+                                    <select class="form-select w-auto mb-2" [(ngModel)]="centralLineWardId"
+                                        (change)="fetchCentralLineUtilizationData()">
+                                        <option *ngFor="let item of wardCollection" [value]="item.WardID">{{
+                                            item.WardName }}</option>
+                                    </select>
+                                </div>
+                                <apx-chart *ngIf="centralLineUtilizationChartData"
+                                    [series]="centralLineUtilizationChartData.series"
+                                    [chart]="centralLineUtilizationChartData.chart"
+                                    [xaxis]="centralLineUtilizationChartData.xaxis"
+                                    [yaxis]="centralLineUtilizationChartData.yaxis"
+                                    [dataLabels]="centralLineUtilizationChartData.dataLabels"
+                                    [title]="centralLineUtilizationChartData.title"
+                                    [tooltip]="centralLineUtilizationChartData.tooltip"
+                                    [stroke]="centralLineUtilizationChartData.stroke"
+                                    [colors]="centralLineUtilizationChartData.colors"
+                                    [markers]="centralLineUtilizationChartData.markers"
+                                    [plotOptions]="centralLineUtilizationChartData.plotOptions">
+                                </apx-chart>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-white border shadow-sm p-2 rounded">
+                                <h6 class="fs-7 title_clr fw-semibold"> CENTRAL LINE UTILIZATION RATIO - NICU
+                                </h6>
+                                <div class="d-flex justify-content-end gap-2">
+                                    <select class="form-select w-auto mb-2" [(ngModel)]="nicuCentralLineWardId"
+                                        (change)="fetchNICUCentralLineData()">
+                                        <option *ngFor="let item of wardCollection" [value]="item.WardID">{{
+                                            item.WardName }}</option>
+                                    </select>
+                                    <select class="form-select w-auto mb-2" [(ngModel)]="selectedNicuWeightRange"
+                                        (change)="onNicuWeightRangeChange()">
+                                        <option *ngFor="let range of nicuWeightRanges" [ngValue]="range">{{
+                                            range.label }}</option>
+                                    </select>
+                                </div>
+                                <apx-chart *ngIf="nicuCentralLineChartData" [series]="nicuCentralLineChartData.series"
+                                    [chart]="nicuCentralLineChartData.chart" [xaxis]="nicuCentralLineChartData.xaxis"
+                                    [yaxis]="nicuCentralLineChartData.yaxis"
+                                    [dataLabels]="nicuCentralLineChartData.dataLabels"
+                                    [title]="nicuCentralLineChartData.title"
+                                    [tooltip]="nicuCentralLineChartData.tooltip"
+                                    [stroke]="nicuCentralLineChartData.stroke"
+                                    [colors]="nicuCentralLineChartData.colors"
+                                    [markers]="nicuCentralLineChartData.markers"
+                                    [plotOptions]="nicuCentralLineChartData.plotOptions">
+                                </apx-chart>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-white border shadow-sm p-2 rounded">
+                                <h6 class="fs-7 title_clr fw-semibold"> CENTRAL LINE ASSOCIATED BLOOD STREAM INFECTION
+                                    (CLABSI)-ADULT ICU</h6>
+                                <div class="d-flex justify-content-end">
+                                    <select class="form-select w-auto mb-2" [(ngModel)]="clabsiWardId"
+                                        (change)="fetchCLABSIData()">
+                                        <option *ngFor="let item of wardCollection" [value]="item.WardID">{{
+                                            item.WardName }}</option>
+                                    </select>
+                                </div>
+                                <apx-chart *ngIf="clabsiChartData" [series]="clabsiChartData.series"
+                                    [chart]="clabsiChartData.chart" [xaxis]="clabsiChartData.xaxis"
+                                    [yaxis]="clabsiChartData.yaxis" [dataLabels]="clabsiChartData.dataLabels"
+                                    [title]="clabsiChartData.title" [tooltip]="clabsiChartData.tooltip"
+                                    [stroke]="clabsiChartData.stroke" [colors]="clabsiChartData.colors"
+                                    [markers]="clabsiChartData.markers" [plotOptions]="clabsiChartData.plotOptions">
+                                </apx-chart>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-white p-2 border shadow-sm rounded">
+                                <h6 class="fs-7 title_clr fw-semibold">CENTRAL LINE ASSOCIATED BLOOD STREAM INFECTION
+                                    (CLABSI)-PEDIATRIC ICU </h6>
+                                <div class="d-flex justify-content-end">
+                                    <select class="form-select w-auto mb-2" [(ngModel)]="clabsiPediatricWardId"
+                                        (change)="fetchCLABSIPediatricData()">
+                                        <option *ngFor="let item of wardCollection" [value]="item.WardID">{{
+                                            item.WardName }}</option>
+                                    </select>
+                                </div>
+                                <apx-chart *ngIf="clabsiPediatricChartData" [series]="clabsiPediatricChartData.series"
+                                    [chart]="clabsiPediatricChartData.chart" [xaxis]="clabsiPediatricChartData.xaxis"
+                                    [yaxis]="clabsiPediatricChartData.yaxis"
+                                    [dataLabels]="clabsiPediatricChartData.dataLabels"
+                                    [title]="clabsiPediatricChartData.title"
+                                    [tooltip]="clabsiPediatricChartData.tooltip"
+                                    [stroke]="clabsiPediatricChartData.stroke"
+                                    [colors]="clabsiPediatricChartData.colors"
+                                    [markers]="clabsiPediatricChartData.markers"
+                                    [plotOptions]="clabsiPediatricChartData.plotOptions">
+                                </apx-chart>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="bg-white border shadow-sm p-2 rounded">
+                                <h6 class="fs-7 title_clr fw-semibold">CENTRAL LINE ASSOCIATED BLOOD STREAM INFECTION
+                                    (CLABSI)-NEONATAL ICU </h6>
+                                <div class="d-flex justify-content-end gap-2">
+                                    <select class="form-select w-auto mb-2" [(ngModel)]="clabsiNeonatalWardId"
+                                        (change)="fetchCLABSINeonatalData()">
+                                        <option *ngFor="let item of wardCollection" [value]="item.WardID">{{
+                                            item.WardName }}</option>
+                                    </select>
+                                    <select class="form-select w-auto mb-2" [(ngModel)]="selectedNeonatalWeightRange"
+                                        (change)="onNeonatalWeightRangeChange()">
+                                        <option *ngFor="let range of nicuWeightRanges" [ngValue]="range">{{
+                                            range.label }}</option>
+                                    </select>
+                                </div>
+                                <apx-chart *ngIf="clabsiNeonatalChartData" [series]="clabsiNeonatalChartData.series"
+                                    [chart]="clabsiNeonatalChartData.chart" [xaxis]="clabsiNeonatalChartData.xaxis"
+                                    [yaxis]="clabsiNeonatalChartData.yaxis"
+                                    [dataLabels]="clabsiNeonatalChartData.dataLabels"
+                                    [title]="clabsiNeonatalChartData.title" [tooltip]="clabsiNeonatalChartData.tooltip"
+                                    [stroke]="clabsiNeonatalChartData.stroke" [colors]="clabsiNeonatalChartData.colors"
+                                    [markers]="clabsiNeonatalChartData.markers"
+                                    [plotOptions]="clabsiNeonatalChartData.plotOptions">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="row mx-0 g-2">
+                        <div class="col-4">
+                            <div class="row g-2">
+                                <div class="col-12">
+                                    <div class="readmissionCard border rounded cursor-default">
+                                        <div
+                                            class="rounded-top text-center text-white p-2 fw-bold readmissionCard_header">
+                                            Ventialtor Utilization Ratio
+                                        </div>
+                                        <p class="fs-3 rounded-bottom fw-bold text-center py-3 m-0">
+                                            {{ventilationStatistics?.VentilationRate || 0 | number:'1.2-2'}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2">
+                                    <div class="readmissionCard border rounded cursor-default">
+                                        <div
+                                            class="rounded-top text-center text-white p-2 fw-bold readmissionCard_header">
+                                            Ventialtor Days
+                                        </div>
+                                        <p class="fs-3 rounded-bottom fw-bold text-center py-3 m-0">
+                                            {{ventilationStatistics?.TotalVentilation || 0 | number}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2">
+                                    <div class="readmissionCard border rounded cursor-default">
+                                        <div
+                                            class="rounded-top text-center text-white p-2 fw-bold readmissionCard_header">
+                                            Total Patient Days
+                                        </div>
+                                        <p class="fs-3 rounded-bottom fw-bold text-center py-3 m-0">
+                                            {{ventilationStatistics?.TotalPatientDays || 0 | number}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex mt-2">
+                                    <div class="bg-white border shadow-sm p-2 rounded w-100 h-100">
+                                        <h6 class="fs-7 title_clr fw-semibold">PATIENT ON VENTILATOR BY LOCATION</h6>
+                                        <div class="d-flex justify-content-end" *ngIf="ventilatorByLocationData?.length">
+                                            <select class="form-select w-auto mb-2" [(ngModel)]="ventilatorByLocationWard"
+                                                (change)="loadVentilationByLocationChart()">
+                                                <option *ngFor="let item of ventilatorByLocationData" [value]="item.Ward">{{
+                                                    item.Ward }}</option>
+                                            </select>
+                                        </div>
+                                        <apx-chart *ngIf="ventilationByLocationChartData"
+                                            [series]="ventilationByLocationChartData.series"
+                                            [chart]="ventilationByLocationChartData.chart"
+                                            [labels]="ventilationByLocationChartData.labels"
+                                            [colors]="ventilationByLocationChartData.colors"
+                                            [fill]="ventilationByLocationChartData.fill"
+                                            [stroke]="ventilationByLocationChartData.stroke"
+                                            [legend]="ventilationByLocationChartData.legend"
+                                            [tooltip]="ventilationByLocationChartData.tooltip"
+                                            [dataLabels]="ventilationByLocationChartData.dataLabels"
+                                            [title]="ventilationByLocationChartData.title"
+                                            [responsive]="ventilationByLocationChartData.responsive"
+                                            [plotOptions]="ventilationByLocationChartData.plotOptions || {}">
+                                        </apx-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8 d-flex flex-column">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                <apx-chart *ngIf="ventilationComplianceChartData"
+                                    [series]="ventilationComplianceChartData.series"
+                                    [chart]="ventilationComplianceChartData.chart"
+                                    [xaxis]="ventilationComplianceChartData.xaxis"
+                                    [yaxis]="ventilationComplianceChartData.yaxis"
+                                    [dataLabels]="ventilationComplianceChartData.dataLabels"
+                                    [title]="ventilationComplianceChartData.title"
+                                    [tooltip]="ventilationComplianceChartData.tooltip"
+                                    [stroke]="ventilationComplianceChartData.stroke"
+                                    [colors]="ventilationComplianceChartData.colors"
+                                    [markers]="ventilationComplianceChartData.markers"
+                                    [plotOptions]="ventilationComplianceChartData.plotOptions">
+                                </apx-chart>
+                            </div>
+                        </div>
+                        <div class="col-6 d-flex flex-column">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                <div class="d-flex justify-content-end">
+                                    <select class="form-select w-auto mb-2" [(ngModel)]="ventilatorUtilizationWardId"
+                                        (change)="fetchVentilationUtilizationRatioData()">
+                                        <option *ngFor="let item of wardCollection" [value]="item.WardID">{{
+                                            item.WardName }}</option>
+                                    </select>
+                                </div>
+                                <apx-chart *ngIf="ventilationUtilizationChartData"
+                                    [series]="ventilationUtilizationChartData.series"
+                                    [chart]="ventilationUtilizationChartData.chart"
+                                    [xaxis]="ventilationUtilizationChartData.xaxis"
+                                    [yaxis]="ventilationUtilizationChartData.yaxis"
+                                    [dataLabels]="ventilationUtilizationChartData.dataLabels"
+                                    [title]="ventilationUtilizationChartData.title"
+                                    [tooltip]="ventilationUtilizationChartData.tooltip"
+                                    [stroke]="ventilationUtilizationChartData.stroke"
+                                    [colors]="ventilationUtilizationChartData.colors"
+                                    [markers]="ventilationUtilizationChartData.markers"
+                                    [plotOptions]="ventilationUtilizationChartData.plotOptions">
+                                </apx-chart>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                <div class="d-flex justify-content-end">
+                                    <select class="form-select w-auto mb-2" [(ngModel)]="ventilatorEventWardId"
+                                        (change)="fetchVentilationEventData()">
+                                        <option *ngFor="let item of wardCollection" [value]="item.WardID">{{
+                                            item.WardName }}</option>
+                                    </select>
+                                </div>
+                                <apx-chart *ngIf="ventilationEventChartData" [series]="ventilationEventChartData.series"
+                                    [chart]="ventilationEventChartData.chart" [xaxis]="ventilationEventChartData.xaxis"
+                                    [yaxis]="ventilationEventChartData.yaxis"
+                                    [dataLabels]="ventilationEventChartData.dataLabels"
+                                    [title]="ventilationEventChartData.title"
+                                    [tooltip]="ventilationEventChartData.tooltip"
+                                    [stroke]="ventilationEventChartData.stroke"
+                                    [colors]="ventilationEventChartData.colors"
+                                    [markers]="ventilationEventChartData.markers"
+                                    [plotOptions]="ventilationEventChartData.plotOptions">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="row mx-0 g-2">
+                        <div class="col-4">
+                            <div class="row g-2">
+                                <div class="col-12">
+                                    <div class="readmissionCard border rounded cursor-default">
+                                        <div
+                                            class="rounded-top text-center text-white p-2 fw-bold readmissionCard_header">
+                                            URINARY CATHETER UTILIZATION RATIO
+                                        </div>
+                                        <p class="fs-3 rounded-bottom fw-bold text-center py-3 m-0">
+                                            {{urinaryStatistics?.UrinaryRate || 0 | number: '1.2-2'}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2">
+                                    <div class="readmissionCard border rounded cursor-default">
+                                        <div
+                                            class="rounded-top text-center text-white p-2 fw-bold readmissionCard_header">
+                                            CENTRAL LINE <br> DEVICE DATE
+                                        </div>
+                                        <p class="fs-3 rounded-bottom fw-bold text-center py-3 m-0">
+                                            {{urinaryStatistics?.TotalUrinary || 0 | number}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6 mt-2">
+                                    <div class="readmissionCard border rounded cursor-default">
+                                        <div
+                                            class="rounded-top text-center text-white p-2 fw-bold readmissionCard_header">
+                                            PATIENT <br> DAYS
+                                        </div>
+                                        <p class="fs-3 rounded-bottom fw-bold text-center py-3 m-0">
+                                            {{urinaryStatistics?.TotalPatientDays || 0 | number}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex mt-2">
+                                    <div class="bg-white border shadow-sm p-2 pb-3 rounded w-100 h-100">
+                                        <h6 class="fs-7 title_clr fw-semibold">PATIENT ON URNIARY CATHETER BY LOCATION
+                                        </h6>
+                                        <div class="d-flex justify-content-end" *ngIf="urinaryByLocationData?.length">
+                                            <select class="form-select w-auto mb-2" [(ngModel)]="urinaryByLocationWard"
+                                                (change)="loadUrinaryByLocationChart()">
+                                                <option *ngFor="let item of urinaryByLocationData" [value]="item.Ward">
+                                                    {{
+                                                    item.Ward }}</option>
+                                            </select>
+                                        </div>
+                                        <apx-chart *ngIf="urinaryByLocationChartData"
+                                            [series]="urinaryByLocationChartData.series"
+                                            [chart]="urinaryByLocationChartData.chart"
+                                            [labels]="urinaryByLocationChartData.labels"
+                                            [colors]="urinaryByLocationChartData.colors"
+                                            [fill]="urinaryByLocationChartData.fill"
+                                            [stroke]="urinaryByLocationChartData.stroke"
+                                            [legend]="urinaryByLocationChartData.legend"
+                                            [tooltip]="urinaryByLocationChartData.tooltip"
+                                            [dataLabels]="urinaryByLocationChartData.dataLabels"
+                                            [title]="urinaryByLocationChartData.title"
+                                            [plotOptions]="urinaryByLocationChartData.plotOptions || {}">
+                                        </apx-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8 d-flex flex-column">
+                            <div class="bg-white border shadow-sm p-2 rounded w-100 h-100">
+                                <apx-chart *ngIf="urinaryComplianceChartData"
+                                    [series]="urinaryComplianceChartData.series"
+                                    [chart]="urinaryComplianceChartData.chart"
+                                    [xaxis]="urinaryComplianceChartData.xaxis"
+                                    [yaxis]="urinaryComplianceChartData.yaxis"
+                                    [dataLabels]="urinaryComplianceChartData.dataLabels"
+                                    [title]="urinaryComplianceChartData.title"
+                                    [tooltip]="urinaryComplianceChartData.tooltip"
+                                    [stroke]="urinaryComplianceChartData.stroke"
+                                    [colors]="urinaryComplianceChartData.colors"
+                                    [markers]="urinaryComplianceChartData.markers"
+                                    [plotOptions]="urinaryComplianceChartData.plotOptions">
+                                </apx-chart>
+                            </div>
+                        </div>
+                        <div class="col-6 d-flex flex-column">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                <div class="d-flex justify-content-end">
+                                    <select class="form-select w-auto mb-2" [(ngModel)]="urinaryUtilizationWardId"
+                                        (change)="fetchUrinaryUtilizationRatioData()">
+                                        <option *ngFor="let item of wardCollection" [value]="item.WardID">{{
+                                            item.WardName }}</option>
+                                    </select>
+                                </div>
+                                <apx-chart *ngIf="urinaryUtilizationChartData"
+                                    [series]="urinaryUtilizationChartData.series"
+                                    [chart]="urinaryUtilizationChartData.chart"
+                                    [xaxis]="urinaryUtilizationChartData.xaxis"
+                                    [yaxis]="urinaryUtilizationChartData.yaxis"
+                                    [dataLabels]="urinaryUtilizationChartData.dataLabels"
+                                    [title]="urinaryUtilizationChartData.title"
+                                    [tooltip]="urinaryUtilizationChartData.tooltip"
+                                    [stroke]="urinaryUtilizationChartData.stroke"
+                                    [colors]="urinaryUtilizationChartData.colors"
+                                    [markers]="urinaryUtilizationChartData.markers"
+                                    [plotOptions]="urinaryUtilizationChartData.plotOptions">
+                                </apx-chart>
+                            </div>
+                        </div>
+                        <div class="col-6 d-flex flex-column">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                <div class="d-flex justify-content-end">
+                                    <select class="form-select w-auto mb-2" [(ngModel)]="urinaryInfectionWardId"
+                                        (change)="fetchUrinaryInfectionData()">
+                                        <option *ngFor="let item of wardCollection" [value]="item.WardID">{{
+                                            item.WardName }}</option>
+                                    </select>
+                                </div>
+                                <apx-chart *ngIf="urinaryInfectionChartData" [series]="urinaryInfectionChartData.series"
+                                    [chart]="urinaryInfectionChartData.chart" [xaxis]="urinaryInfectionChartData.xaxis"
+                                    [yaxis]="urinaryInfectionChartData.yaxis"
+                                    [dataLabels]="urinaryInfectionChartData.dataLabels"
+                                    [title]="urinaryInfectionChartData.title"
+                                    [tooltip]="urinaryInfectionChartData.tooltip"
+                                    [stroke]="urinaryInfectionChartData.stroke"
+                                    [colors]="urinaryInfectionChartData.colors"
+                                    [markers]="urinaryInfectionChartData.markers"
+                                    [plotOptions]="urinaryInfectionChartData.plotOptions">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 d-none">
+                    <div class="row mx-0 g-2">
+                        <div class="col-4">
+                            <div class="row g-2">
+                                <div class="col-12">
+                                    <div class="readmissionCard border rounded cursor-default">
+                                        <div
+                                            class="rounded-top text-center text-white p-2 fw-bold readmissionCard_header">
+                                            Dialysis Event Rate
+                                        </div>
+                                        <p class="fs-3 rounded-bottom fw-bold text-center py-5 m-0">
+                                            2.21%
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="readmissionCard border rounded cursor-default">
+                                        <div
+                                            class="rounded-top text-center text-white p-2 fw-bold readmissionCard_header">
+                                            Tunneled Catheter
+                                        </div>
+                                        <p class="fs-3 rounded-bottom fw-bold text-center py-5 m-0">
+                                            17
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="readmissionCard border rounded cursor-default">
+                                        <div
+                                            class="rounded-top text-center text-white p-2 fw-bold readmissionCard_header">
+                                            AV Fistula
+                                        </div>
+                                        <p class="fs-3 rounded-bottom fw-bold text-center py-5 m-0">
+                                            15
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8 d-flex flex-column">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                <h6 class="fs-6 title_clr fw-semibold">Compliance Rate 0 Hemodialysis Bundle Form For
+                                    Catheter</h6>
+                                <canvas id="procedure2Chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-6 d-flex flex-column">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                <h6 class="fs-6 title_clr fw-semibold"> Dialysis Event (DE) Rate Among Chronic Dialysis
+                                    Patients With Tunneled Catheter</h6>
+                                <canvas id="procedure2Chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-6 d-flex flex-column">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                <h6 class="fs-6 title_clr fw-semibold"> Dialysis Event (DE) Rate Among Chronic Dialysis
+                                    Patients With Tunneled Catheter</h6>
+                                <canvas id="procedure2Chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{ errorMsg }}</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-main-outline" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

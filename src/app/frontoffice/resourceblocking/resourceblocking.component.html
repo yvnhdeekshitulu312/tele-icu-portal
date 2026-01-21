@@ -1,0 +1,819 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+<!--Container-->
+<form [formGroup]="form">
+<div class="" style="background-color: #fff;">
+   <div class="page-header sticky-top bg-primary-50 shadow-sm justify-content-start">
+         <h2 class="page-heading"> Resource Blocking </h2>
+   </div>
+
+   <div class="bg-white m-2 rounded-3 border-primary-200">
+      <div class="d-flex align-items-center justify-content-between p-2">
+         <div class="d-flex align-items-center gap-2 w-75">
+            <div class="dropdown primary-dropdown hoverServices w-25">
+               <button class="btn btn-main-outline d-flex align-items-center justify-content-between dropdown-toggle w-100">
+                  <span>
+                     <svg class="me-2" width="12" height="17" viewBox="0 0 12 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M6.00015 0.500766C8.77762 0.45442 10.7001 2.51758 10.7504 5.2977C10.804 8.23808 8.13741 10.82 6.46617 12.9966C6.22341 13.3114 5.73815 13.3011 5.51208 12.9659C5.11911 12.3836 4.64064 11.7882 4.14395 11.1702C2.72755 9.40752 1.20654 7.69043 1.25005 5.29788C1.30024 2.51913 3.2218 0.454933 6.00032 0.500943L6.00015 0.500766ZM6.00015 3.14664C7.41899 3.14664 8.56912 4.29677 8.56912 5.71561C8.56912 7.13445 7.41899 8.28471 6.00015 8.28471C4.58118 8.28471 3.43105 7.13432 3.43105 5.71561C3.43105 4.29677 4.58118 3.14664 6.00015 3.14664ZM9.45818 11.9057C11.6858 12.9 11.6858 14.8575 9.45818 15.8518C7.52185 16.7161 4.47851 16.7161 2.5418 15.8518C0.314193 14.8575 0.314193 12.9 2.5418 11.9057C2.86634 11.7608 3.22193 11.6404 3.59846 11.544C3.87409 11.8876 4.15513 12.2275 4.42971 12.5674C3.9135 12.6578 3.43171 12.7948 3.0205 12.9782C1.71696 13.5602 1.71696 14.1973 3.0205 14.7792C4.64231 15.503 7.35766 15.503 8.97954 14.7792C10.2831 14.1973 10.2831 13.5602 8.97954 12.9782C8.5872 12.8032 8.13071 12.6706 7.64132 12.5803C7.91374 12.2485 8.19013 11.9081 8.46064 11.5593C8.81521 11.653 9.15079 11.7684 9.45815 11.9058L9.45818 11.9057Z" fill="#8ECBD7"/>
+                     </svg>
+                     {{form.get("HospitalName").value}}
+                  </span>
+               </button>
+               <div class="dropdown-menu">
+                <p *ngFor="let hl of locationList;let i=index" (click)="selectedHospital(hl)"
+                class="dropdown-item border-0 py-2 cursor-pointer"> {{hl.Name}}</p>
+               </div>
+           </div>
+           <div class="CommanSearch__form ps-0 w-25">
+            <input type="text" class="form-control" placeholder="Specialisation" autocomplete="off" autofocus
+                formControlName="Specialisation" aria-label="Specialisation"
+                [matAutocomplete]="autoSpecialisation" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchSpecialisationSearch($event)">
+            <mat-autocomplete #autoSpecialisation="matAutocomplete">
+                <mat-option *ngFor="let item of listOfSpecialisation"
+                    (onSelectionChange)="selectSpecialisationItem(item)">
+                    {{item.Specialisation}}
+                </mat-option>
+            </mat-autocomplete>
+            <label for="" class="CommonSearch__label me-2">
+                <img src="assets/images/icons/icon-search.svg" alt="">
+            </label>
+        </div>
+        <div class="CommanSearch__form ps-0 w-25">
+            <input type="text" class="form-control" placeholder="Doctor" autocomplete="off" id="txtDoctor"
+                formControlName="DoctorName" aria-label="Doctor"
+                [matAutocomplete]="autoDoctor" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchDoctorSearch($event)">
+            <mat-autocomplete #autoDoctor="matAutocomplete">
+                <mat-option *ngFor="let item of listOfItems"
+                    (onSelectionChange)="selectDocor(item)">
+                    {{item.DoctorName}}
+                </mat-option>
+            </mat-autocomplete>
+            <label for="" class="CommonSearch__label me-2">
+                <img src="assets/images/icons/icon-search.svg" alt="">
+            </label>
+        </div>
+         </div>
+         <div class="d-flex align-items-center gap-2">
+            <!-- <button class="btn btn-main-outline" *ngIf="!isReschedule">Save</button> -->
+            <button class="btn btn-danger-outline" (click)="clearResourceBlocking()">Clear</button>
+            <button class="btn btn-main-outline" *ngIf="isReschedule" (click)="rescheduleAppointment(selectedAppToReschedule)">Save</button>
+         </div>
+      </div>
+
+      <div class="border-primary-200 rounded-3 position-relative" *ngIf="showDoctorSlots">
+         <div class="row mx-0 gx-0">
+            <div class="col resource-doctor-list border-end">
+
+               <div class="d-flex align-items-center justify-content-between stickhead sticky-top top-0 p-2"
+                   style="height: 3rem;">
+                   <h5 class="m-0 clr-primary-600 fs-6">Doctors</h5>
+                   <div class="d-flex align-items-center gap-2"
+                        *ngIf="doctorList != undefined || doctorList.length > 0">
+                       <div class="custom_check active d-flex align-items-center gap-2"
+                            [class.active]="selectAll" (click)="selectAllDoctor()">
+                       </div>
+                       <!-- <div
+                           class="search_icon p-1 border-primary-300 rounded-2 ms-3 cursor-pointer bg-primary-20">
+                           <img src="assets/images/icons/icon-search.svg" alt="">
+                       </div> -->
+                   </div>
+               </div>
+
+               <div class="bg-primary-50 position-relative d-flex align-items-center">
+                   <input type="text" placeholder="Search Doctor"
+                       class="form-control bg-transparent border-0 py-2 clr-primary-600 pe-5">
+                       
+                   <div class="position-absolute end-0 me-2">
+                    <img src="assets/images/icons/icon-search.svg" alt="">
+                       <svg width="20" height="20" viewBox="0 0 20 20">
+                           <path
+                               d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z"
+                               stroke="#368796" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                               stroke-linejoin="round"></path>
+                       </svg>
+                   </div>
+               </div>
+               <div class="doctors-list-cards p-2 d-flex flex-column gap-2">
+                   <div (click)="loadSelectedDoctorAvailability(item)" *ngFor="let item of doctorList"
+                        [class.active]="item.selected" class="doctor-card cursor-pointer rounded-2 border active">
+                       <div class="d-flex justify-content-between p-2">
+                           <div class="d-flex align-items-center gap-2">
+                               <div class="profile_img position-relative">
+                                <img class="doc_img" src="assets/images/maleD.svg" alt=""
+                                *ngIf="item.GenderID=='1'">
+                                <img class="doc_img" src="assets/images/femaleD.svg" alt=""
+                                    *ngIf="item.GenderID=='2'">
+                               </div>
+                               <div class="">
+                                   <div class="custom_tooltip doc_des custom_tooltip_right">
+                                       <p class="fw-bold fs-8">{{item.EmpCodeName}}</p>
+                                       <div class="tooltip">
+                                           <div class="d-flex flex-column">
+                                               <label for=""
+                                                   class="form-label fw-bold clr-primary-600">Education and
+                                                   Qualifications:</label>
+                                               <span class="pb-2">{{item.Specialization}}</span>
+                                               <label for=""
+                                                   class="form-label fw-bold clr-primary-600">Specialization:</label>
+                                               <span class="pb-2">{{item.Specialization}}</span>
+                                               <label for=""
+                                                   class="form-label fw-bold clr-primary-600">Experience:</label>
+                                               <span class="pb-2">{{item.Specialization}}</span>
+                                               <label for=""
+                                                   class="form-label fw-bold clr-primary-600">Professional
+                                                   Memberships:</label>
+                                               <span class="pb-2">{{item.Specialization}}</span>
+                                               <label for=""
+                                                   class="form-label fw-bold clr-primary-600">Languages
+                                                   Spoken:</label>
+                                               <span class="pb-2"></span>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div>
+                                       <p class="clr-primary-600 fw-bold">{{item.Specialization}}</p>
+                                       <p class="clr-dark-600">{{item.Nationality}}</p>
+                                   </div>
+                               </div>
+                           </div>
+                           <div class="custom_check active">
+                               <svg width="18" height="18" viewBox="0 0 20 21" fill="none"
+                                   xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                   <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                   <path
+                                       d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                       fill="white" stroke="white" stroke-width="0.25"></path>
+                               </svg>
+                           </div>
+                       </div>
+                       <div class="p-1 bg-white rounded-bottom">
+                           <div class="bg-primary-50 p-1">
+                               <div class="d-flex align-items-center justify-content-between">
+                                   <div>
+                                       <p class="fs-7 mb-1 clr-dark-600">{{item.THourDifferencestring}}</p>
+                                       <div class="d-flex align-items-center gap-3">
+                                           <div class="d-flex align-items-center gap-2">
+                                               <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
+                                                   xmlns="http://www.w3.org/2000/svg">
+                                                   <path
+                                                       d="M14.9242 2.07344H13.9204V1.36313C13.9204 1.06356 13.7605 0.78662 13.5009 0.636839C13.2415 0.486864 12.9216 0.486864 12.6623 0.636839C12.4027 0.78662 12.2428 1.06356 12.2428 1.36313V2.07324L6.04733 2.07343V1.36312C6.04733 1.06356 5.88741 0.786615 5.62783 0.636835C5.36845 0.486859 5.04858 0.486859 4.78921 0.636835C4.52963 0.786615 4.36971 1.06356 4.36971 1.36312V2.07323L3.36593 2.07343C2.55032 2.07343 1.76807 2.39737 1.19136 2.97406C0.614453 3.55097 0.290527 4.33322 0.290527 5.14883V15.4488C0.290527 16.2644 0.614468 17.0466 1.19136 17.6235C1.76807 18.2002 2.55032 18.5244 3.36593 18.5244H14.9245C15.7401 18.5244 16.5224 18.2002 17.0991 17.6235C17.676 17.0466 17.9999 16.2644 17.9999 15.4488V5.14883C17.9999 4.33322 17.676 3.55097 17.0991 2.97406C16.5224 2.39735 15.7401 2.07343 14.9245 2.07343L14.9242 2.07344ZM3.36858 3.75108H4.37236V5.02052L4.37217 5.02033C4.37217 5.31989 4.53209 5.59684 4.79167 5.74662C5.05125 5.89659 5.37092 5.89659 5.63049 5.74662C5.88988 5.59684 6.0498 5.31989 6.0498 5.02033V3.75089H12.2427V5.02033C12.2427 5.31989 12.4027 5.59684 12.6622 5.74662C12.9216 5.89659 13.2415 5.89659 13.5009 5.74662C13.7604 5.59684 13.9204 5.31989 13.9204 5.02033V3.75089H14.9241C15.2949 3.75089 15.6504 3.89813 15.9125 4.16044C16.1747 4.42256 16.3221 4.77809 16.3221 5.14885V7.69317H1.96761V5.14885C1.96761 4.7781 2.11505 4.42256 2.37716 4.16044C2.63928 3.89813 2.99481 3.75089 3.36557 3.75089L3.36858 3.75108ZM14.9242 16.8469H3.36559C2.99484 16.8469 2.6393 16.6997 2.37718 16.4376C2.11507 16.1752 1.96763 15.8197 1.96763 15.449V9.37085H16.3221V15.449C16.3221 15.8197 16.1747 16.1752 15.9126 16.4376C15.6504 16.6997 15.2949 16.8469 14.9242 16.8469H14.9242Z"
+                                                       fill="#368796" />
+                                               </svg>
+                                               <span class="fs-8">{{item.fullDate}}</span>
+                                           </div>
+                                           <div class="d-flex align-items-center gap-2">
+                                               <svg width="19" height="19" viewBox="0 0 19 19" fill="none"
+                                                   xmlns="http://www.w3.org/2000/svg">
+                                                   <path
+                                                       d="M9.37371 18.5244C11.6749 18.5244 13.9763 17.6358 15.7307 15.8813C19.2395 12.3725 19.2395 6.65339 15.7307 3.14451C12.2219 -0.364372 6.50281 -0.36429 2.99393 3.14451C-0.514946 6.6533 -0.514864 12.3724 2.99393 15.8813C4.77116 17.6358 7.07243 18.5244 9.37371 18.5244ZM4.13318 4.28379C5.56867 2.8483 7.48256 2.11927 9.37371 2.11927C11.2649 2.11927 13.1561 2.84847 14.6142 4.28379C17.508 7.17752 17.508 11.8712 14.6142 14.7649C11.7205 17.6586 7.02687 17.6586 4.13318 14.7649C1.23945 11.8711 1.23945 7.17748 4.13318 4.28379Z"
+                                                       fill="#368796" />
+                                                   <path
+                                                       d="M6.5256 13.9674C6.73063 13.9674 6.95856 13.8763 7.11797 13.7167L10.0801 10.504C10.2167 10.3673 10.2851 10.1623 10.2851 9.95715V5.6508C10.2851 5.21785 9.92048 4.85325 9.48753 4.85325C9.05473 4.85325 8.69014 5.21784 8.69014 5.6508V9.66091L5.93324 12.623C5.63699 12.942 5.65987 13.4432 5.97885 13.7395C6.13827 13.8989 6.32056 13.9672 6.52561 13.9672L6.5256 13.9674Z"
+                                                       fill="#368796" />
+                                               </svg>
+                                               <span class="fs-8">{{item.FROMTIME}}</span>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="">
+                                       <svg class="cursor-pointer" width="14" height="9" viewBox="0 0 14 9"
+                                           fill="none" xmlns="http://www.w3.org/2000/svg">
+                                           <path
+                                               d="M1.47827 4.52588H13M13 4.52588L10.1282 1.28137M13 4.52588L10.1282 7.71857"
+                                               stroke="#368796" stroke-width="1.5" stroke-linecap="round"
+                                               stroke-linejoin="round" />
+                                       </svg>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+
+           </div>
+
+            <div class="col-9">
+               <div class="medicine_card">
+                  <div class="d-flex align-items-center gap-2 justify-content-end stickhead sticky-top top-0 p-2" style="height: 3rem;">
+                     <div class="dropdown primary-dropdown hoverServices d-none">
+                        <button class="btn btn-main-outline rounded-5 bg-primary-100 d-flex align-items-center dropdown-toggle" style="height: 2rem;">
+                           Resource Blocking
+                        </button>
+                        <div class="dropdown-menu">
+                            <p class="dropdown-item border-0 py-2 cursor-pointer"> Available</p>
+                            <p class="dropdown-item border-0 py-2 cursor-pointer"> Resource Blocking</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn btn-main-outline" (click)="loadDoctorAvaliabilityForReschedule(selectedTime)" *ngIf="patientDetails != undefined && patientDetails?.PatientID != undefined">Reschedule</button>       
+                        <button class="btn btn-danger-outline" (click)="cancelAppointmentConfirmation(patientDetails)" *ngIf="patientDetails != undefined && patientDetails?.PatientID != undefined">Cancel</button>                                                                      
+                     </div> 
+                    <div class="">
+                        <!-- <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                           <g clip-path="url(#clip0_2761_13929)">
+                           <path d="M7.17965 8.82065C7.17965 9.27382 6.81221 9.64125 6.35904 9.64125C5.90587 9.64125 5.53857 9.27382 5.53857 8.82065C5.53857 8.36748 5.90587 8.00018 6.35904 8.00018C6.81221 8.00018 7.17965 8.36748 7.17965 8.82065Z" fill="#8ECBD7"/>
+                           <path d="M3.07681 9.64125C3.52998 9.64125 3.89728 9.27382 3.89728 8.82065C3.89728 8.36748 3.52998 8.00018 3.07681 8.00018C2.62364 8.00018 2.25635 8.36748 2.25635 8.82065C2.25635 9.27382 2.62364 9.64125 3.07681 9.64125Z" fill="#8ECBD7"/>
+                           <path d="M13.7435 8.82065C13.7435 9.27382 13.3762 9.64126 12.923 9.64126C12.4698 9.64126 12.1025 9.27382 12.1025 8.82065C12.1025 8.36748 12.4698 8.00018 12.923 8.00018C13.3762 8.00018 13.7435 8.36748 13.7435 8.82065Z" fill="#8ECBD7"/>
+                           <path d="M9.64092 9.64125C10.0941 9.64125 10.4614 9.27382 10.4614 8.82065C10.4614 8.36748 10.0941 8.00018 9.64092 8.00018C9.18775 8.00018 8.82031 8.36748 8.82031 8.82065C8.82031 9.27382 9.18775 9.64125 9.64092 9.64125Z" fill="#8ECBD7"/>
+                           <path d="M7.17965 12.1029C7.17965 12.5561 6.81221 12.9234 6.35904 12.9234C5.90587 12.9234 5.53857 12.5561 5.53857 12.1029C5.53857 11.6497 5.90587 11.2823 6.35904 11.2823C6.81221 11.2823 7.17965 11.6497 7.17965 12.1029Z" fill="#8ECBD7"/>
+                           <path d="M3.07681 12.9234C3.52998 12.9234 3.89728 12.5561 3.89728 12.1029C3.89728 11.6497 3.52998 11.2823 3.07681 11.2823C2.62364 11.2823 2.25635 11.6497 2.25635 12.1029C2.25635 12.5561 2.62364 12.9234 3.07681 12.9234Z" fill="#8ECBD7"/>
+                           <path d="M13.7435 12.1029C13.7435 12.5561 13.3762 12.9234 12.923 12.9234C12.4698 12.9234 12.1025 12.5561 12.1025 12.1029C12.1025 11.6497 12.4698 11.2823 12.923 11.2823C13.3762 11.2823 13.7435 11.6497 13.7435 12.1029Z" fill="#8ECBD7"/>
+                           <path d="M9.64092 12.9234C10.0941 12.9234 10.4614 12.5561 10.4614 12.1029C10.4614 11.6497 10.0941 11.2823 9.64092 11.2823C9.18775 11.2823 8.82031 11.6497 8.82031 12.1029C8.82031 12.5561 9.18775 12.9234 9.64092 12.9234Z" fill="#8ECBD7"/>
+                           <path fill-rule="evenodd" clip-rule="evenodd" d="M12.9231 1.64131L12.718 1.64131L12.718 0.61562C12.718 0.395703 12.6007 0.192552 12.4103 0.0826622C12.2199 -0.0272278 11.9853 -0.0272278 11.7949 0.0826622C11.6045 0.192552 11.4872 0.39571 11.4872 0.61562L11.4872 1.64131L8.61538 1.64131L8.61539 0.61562C8.61539 0.395703 8.49808 0.192552 8.30769 0.0826613C8.11731 -0.0272278 7.88269 -0.0272278 7.69231 0.0826613C7.50193 0.192552 7.38462 0.39571 7.38462 0.61562L7.38462 1.64131L4.51277 1.64131L4.51277 0.615619C4.51277 0.395702 4.39547 0.192551 4.20508 0.0826613C4.0147 -0.0272278 3.78008 -0.0272278 3.5897 0.0826613C3.39931 0.192551 3.282 0.39571 3.282 0.615619L3.282 1.64131L3.07692 1.64131C2.26127 1.64241 1.47924 1.96686 0.902471 2.54364C0.325556 3.12041 0.0010903 3.90244 -2.0623e-07 4.71823L-2.06228e-07 13.1965C0.00453285 13.9433 0.305083 14.658 0.835868 15.1836C1.36651 15.7091 2.08394 16.0028 2.83077 16.0002L13.1692 16.0002C13.9161 16.0028 14.6335 15.7091 15.1641 15.1836C15.6949 14.658 15.9955 13.9433 16 13.1965L16 4.71823C15.9989 3.90244 15.6745 3.12041 15.0975 2.54364C14.5208 1.96686 13.7387 1.6424 12.9231 1.64131ZM3.07692 14.7694C2.5875 14.7687 2.11826 14.5741 1.77224 14.2279C1.42608 13.8819 1.23144 13.4127 1.23077 12.9232L1.23077 6.97441L13.7435 6.97441C13.9634 6.97441 14.1665 6.8571 14.2764 6.66671C14.3863 6.47633 14.3863 6.24171 14.2764 6.05133C14.1665 5.86094 13.9634 5.74364 13.7435 5.74364L1.23077 5.74364L1.23077 4.71809C1.23146 4.22867 1.4261 3.75943 1.77224 3.4133C2.11825 3.06728 2.5875 2.8725 3.07692 2.87194L3.282 2.87194L3.282 3.89748C3.282 4.1174 3.39931 4.32055 3.5897 4.43044C3.78008 4.54033 4.0147 4.54033 4.20508 4.43044C4.39547 4.32055 4.51277 4.11739 4.51277 3.89748L4.51277 2.87194L7.38462 2.87194L7.38462 3.89748C7.38462 4.1174 7.50192 4.32055 7.69231 4.43044C7.88269 4.54033 8.11731 4.54033 8.30769 4.43044C8.49808 4.32055 8.61538 4.11739 8.61538 3.89748L8.61538 2.87194L11.4872 2.87194L11.4872 3.89748C11.4872 4.1174 11.6045 4.32055 11.7949 4.43044C11.9853 4.54033 12.2199 4.54033 12.4103 4.43044C12.6007 4.32055 12.718 4.11739 12.718 3.89748L12.718 2.87194L12.9231 2.87194C13.4125 2.87249 13.8817 3.06727 14.2278 3.4133C14.5739 3.75946 14.7686 4.2287 14.7692 4.71809L14.7692 12.9231C14.7685 13.4125 14.5739 13.8818 14.2278 14.2278C13.8817 14.5739 13.4125 14.7686 12.9231 14.7693L3.07692 14.7694Z" fill="#8ECBD7"/>
+                           </g>
+                           <defs>
+                           <clipPath id="clip0_2761_13929">
+                           <rect width="16" height="16" fill="white"/>
+                           </clipPath>
+                           </defs>
+                        </svg>
+                        <span class="clr-primary-600 fs-7">12-Oct-2023</span>                                                                                -->
+                        <mat-form-field appearance="fill">
+                           <mat-label translate>dd-MMM-yyyy</mat-label>
+                           <input matInput class="" formControlName="AppointmentsDate"
+                               (dateChange)="getDocAppointmentsOnDateChange()" (click)="AppointmentsDate.open()"
+                               [matDatepicker]="AppointmentsDate">
+                           <mat-datepicker-toggle matSuffix [for]="AppointmentsDate">
+                           </mat-datepicker-toggle>
+                           <mat-datepicker #AppointmentsDate></mat-datepicker>
+                       </mat-form-field>
+                    </div>
+                   
+                  </div>
+                  <div class="d-flex align-items-center justify-content-between gap-2 p-2 block_shadow d-none">
+                    <div class="d-flex align-items-center gap-2 w-100">
+                        <div class="d-flex align-items-center gap-2 bg-primary-100 rounded-4 px-3 ps-2 py-1 me-3">
+                            <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.01141 18.5056C11.3126 18.5056 13.614 17.617 15.3684 15.8625C18.8772 12.3537 18.8772 6.63465 15.3684 3.12577C11.8596 -0.38311 6.14051 -0.383028 2.63163 3.12577C-0.87725 6.63457 -0.877169 12.3537 2.63163 15.8625C4.40885 17.617 6.71013 18.5056 9.01141 18.5056ZM3.77087 4.26506C5.20637 2.82957 7.12026 2.10053 9.01141 2.10053C10.9026 2.10053 12.7937 2.82973 14.2519 4.26506C17.1457 7.15878 17.1457 11.8524 14.2519 14.7461C11.3582 17.6398 6.66456 17.6398 3.77087 14.7461C0.877148 11.8524 0.877148 7.15874 3.77087 4.26506Z" fill="#43A9BC"/>
+                                <path d="M6.1633 13.9487C6.36833 13.9487 6.59625 13.8576 6.75567 13.698L9.71775 10.4853C9.85443 10.3486 9.92278 10.1436 9.92278 9.93841V5.63206C9.92278 5.19911 9.55818 4.83451 9.12522 4.83451C8.69243 4.83451 8.32783 5.1991 8.32783 5.63206V9.64217L5.57094 12.6042C5.27468 12.9232 5.29756 13.4245 5.61655 13.7208C5.77596 13.8802 5.95826 13.9485 6.16331 13.9485L6.1633 13.9487Z" fill="#43A9BC"/>
+                            </svg>                                            
+                            <span class="clr-primary-600 fs-7">From Time</span>  
+                            <svg width="10" height="4" viewBox="0 0 10 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <path d="M0 3.2904H8L5.93534 0.709717" stroke="#368796" stroke-width="1.28345"/>
+                            </svg>                                         
+                            <span class="clr-primary-600 fs-7">To Time</span>                                                                               
+                         </div>
+                         <div class="d-flex align-items-center gap-2 me-3">
+                            <label for="" class="form-label m-0 clr-primary-600 fw-bold">Status:</label>
+                            <div class="dropdown primary-dropdown hoverServices" style="min-width: 7rem;">
+                                <button class="btn btn-main-outline rounded-2 bg-primary-50 w-100 d-flex align-items-center justify-content-between dropdown-toggle" style="height: 2rem;">
+                                   Block
+                                </button>
+                                <div class="dropdown-menu">
+                                    <p class="dropdown-item border-0 py-2 cursor-pointer"> Available</p>
+                                    <p class="dropdown-item border-0 py-2 cursor-pointer"> Resource Blocking</p>
+                                </div>
+                            </div>
+                         </div>
+                         <div class="d-flex align-items-center gap-2 w-50">
+                            <label for="" class="form-label m-0 clr-primary-600 fw-bold">Reason:</label>
+                            <div class="dropdown primary-dropdown hoverServices w-100">
+                                <button class="btn btn-main-outline rounded-2 bg-primary-50 w-100 d-flex align-items-center justify-content-between dropdown-toggle" style="height: 2rem;">
+                                   Reason
+                                </button>
+                                <div class="dropdown-menu">
+                                    <p class="dropdown-item border-0 py-2 cursor-pointer"> Available</p>
+                                    <p class="dropdown-item border-0 py-2 cursor-pointer"> Resource Blocking</p>
+                                </div>
+                            </div>
+                         </div>
+                    </div>   
+                     <div class="d-flex align-items-center gap-2">
+                        <button class="btn btn-main-outline">Add</button>       
+                        <button class="btn btn-danger-outline">Clear</button>                                                                      
+                     </div>                       
+                </div>
+                <div class="worklist_patientcard p-2 rounded-0 border-0" *ngIf="patientDetails != undefined && patientDetails?.length != 0">
+                  <div class="row mx-0 gx-2 border-bottom">
+                      <div class="col-lg-4 col-md-4">
+                          <div class="d-flex align-items-center">
+                              <div class="patient-photo me-1">
+                                  <svg class="position-relative" xmlns="http://www.w3.org/2000/svg"
+                                      width="25" height="25" viewBox="0 0 19 20" fill="none">
+                                      <path fill-rule="evenodd" clip-rule="evenodd"
+                                          d="M4.24204 5.40194C4.24204 2.70966 6.60054 0.519531 9.49993 0.519531C12.3993 0.519531 14.758 2.70961 14.758 5.40195C14.758 5.70065 14.7216 6.00638 14.6439 6.35817C14.719 6.59977 14.7581 6.8699 14.7581 7.14592C14.7581 8.11756 14.2953 8.85552 13.6756 8.88894C12.9937 10.9892 11.3501 12.3771 9.50002 12.3771C7.64999 12.3771 6.00646 10.9891 5.32431 8.88894C4.70462 8.85543 4.24199 8.11756 4.24199 7.14592C4.24199 6.86916 4.28127 6.59844 4.35627 6.3563C4.27831 6.00529 4.24204 5.70009 4.24204 5.40194ZM5.03243 6.73058C5.00643 6.8621 4.99309 7.00236 4.99309 7.14592C4.99309 7.82108 5.27477 8.19217 5.3687 8.19217C5.47081 8.13355 5.60825 8.11475 5.7203 8.15726C5.83146 8.19906 5.92615 8.27998 5.95545 8.38811C6.48108 10.3572 7.90531 11.6796 9.50009 11.6796C11.0949 11.6796 12.5189 10.3572 13.0447 8.38811C13.074 8.27998 13.1567 8.19077 13.2678 8.14885C13.379 8.10705 13.506 8.11744 13.6073 8.17606C13.7366 8.19147 14.007 7.82039 14.007 7.14592C14.007 7.00736 13.9945 6.87187 13.9703 6.74435L13.2866 6.7963C13.276 6.797 13.2656 6.797 13.2558 6.797C13.1085 6.797 12.9734 6.71678 12.9134 6.58916C12.899 6.55983 12.6226 5.97683 12.5332 5.39087C10.9587 5.29596 9.3302 4.58038 8.52052 3.8382C8.22161 4.3216 7.57414 4.7045 6.27539 4.7045H6.21831C6.11381 4.92834 6.06652 5.63222 6.1123 6.32828C6.12651 6.36588 6.13481 6.4057 6.13481 6.4482C6.13481 6.64356 5.95689 6.79979 5.75179 6.79699C5.72852 6.79769 5.70979 6.79629 5.68791 6.79349C5.67573 6.79182 5.36674 6.74943 5.03243 6.73058Z"
+                                          fill="#0885CA" />
+                                      <path
+                                          d="M15.2349 12.1162L13.303 11.4919C13.1618 11.4466 13.0048 11.4835 12.9026 11.5853C11.9554 12.5458 10.7469 13.0745 9.49991 13.0745C8.25296 13.0745 7.04442 12.5457 6.09724 11.586C5.99589 11.4842 5.83883 11.4472 5.69684 11.4926L3.76494 12.1169C1.80362 12.7494 0.486206 14.4702 0.486206 16.3987V18.1984C0.486206 18.3909 0.65446 18.5471 0.86182 18.5471C6.54738 19.8454 12.4526 19.8453 18.1382 18.5471C18.3456 18.5471 18.5138 18.3909 18.5138 18.1984V16.3987C18.5137 14.4702 17.1963 12.7496 15.2349 12.1162Z"
+                                          fill="#0885CA" />
+                                  </svg>
+                              </div>
+                              <div class="mt-1">
+                                  <p class="value fs-8 fw-bold w-100">{{patientDetails?.PatientName}}</p>
+                                  <div class="d-flex align-items-center gap-2 mt-1">
+                                      <p class="">{{patientDetails?.Gender}} | {{patientDetails?.FullAge}}
+                                      </p>
+                                      <p class=""><b>SSN</b> : <span>{{patientDetails?.SSN}}</span></p>
+                                  </div>
+                                  <div class="d-flex align-items-center gap-2 mt-1">
+                                      <p class="">{{patientDetails?.Nationality}}</p>
+                                      <p class=""><b>Mobile</b> :
+                                          <span>{{patientDetails?.MobileNo}}</span>
+                                      </p>
+                                  </div>
+                              </div>                             
+                          </div>
+                      </div>
+                     
+                  </div>
+              </div>
+                  <div class="prescribeditems_body" >
+                     <div class="medical-item-card-list p-3 d-flex flex-column gap-2">
+                        <div class="medical-item-card active border rounded-2">
+                           <div class="d-flex align-items-center justify-content-between gap-2 p-2 border-bottom">
+                             <div class="d-flex align-items-center gap-2" *ngIf="selectedDoctor != undefined && selectedDoctor?.length != 0">
+                                 <!-- <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="36" height="36" rx="18" fill="#ECF6F8"/>
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M17.9998 19.9975C21.42 19.9975 24.1918 15.3797 24.1918 12.31C24.1918 9.23925 21.42 6.75 17.9998 6.75C14.5802 6.75 11.8082 9.23925 11.8082 12.31C11.8082 15.3802 14.5808 19.9975 17.9998 19.9975ZM12.7375 12.4978C13.1099 10.8856 15.329 11.1563 17.004 11.3607L17.1434 11.3777C18.7736 11.5753 20.6077 11.3525 21.3146 11.2487L21.3597 11.242C21.5461 11.2143 21.7326 11.1867 21.9202 11.2031C23.4393 11.3357 23.3213 13.3482 23.3192 13.3717C22.8331 15.963 20.6366 19.1267 18.0001 19.1267C15.3791 19.1267 13.1923 15.9977 12.6897 13.415C12.6464 13.1926 12.6865 12.7185 12.7375 12.4978Z" fill="#43A9BC"/>
+                                    <path d="M26.3118 20.4558C25.84 20.134 25.2551 20.7439 25.349 21.3072C25.3925 21.5683 25.5857 21.7836 25.826 21.8946C26.41 22.1642 26.8104 22.7101 26.8104 23.339C26.8104 24.235 25.9985 24.964 25.0006 24.964C24.0028 24.964 23.1909 24.235 23.1909 23.339C23.1909 22.8258 23.4106 22.3013 23.6229 21.7946C23.9471 21.0209 24.2538 20.2888 23.7337 19.7026C23.5773 19.5262 23.4009 19.3729 23.2063 19.2502C23.1546 19.2176 23.0969 19.1976 23.0364 19.1886C22.7506 19.1462 22.5043 19.3796 22.3743 19.6377C21.8862 20.6058 20.1131 21.323 17.9993 21.323C15.9735 21.323 14.2604 20.6643 13.6921 19.7573C13.4992 19.4493 13.1852 19.1503 12.8268 19.21C12.7452 19.2236 12.668 19.2534 12.601 19.3018C12.0711 19.6844 11.6413 20.3338 11.5258 21.1219C11.4958 21.3263 11.6268 21.5107 11.7604 21.6681C11.8427 21.765 11.9337 21.8554 12.046 21.9149C12.5677 22.1915 13.029 22.6889 13.3908 23.368C13.4621 23.5027 13.4814 23.659 13.5008 23.8154C13.5152 23.9323 13.5297 24.0494 13.566 24.1574C13.7143 24.5998 13.7964 25.0527 13.7964 25.4475C13.7964 26.055 13.7964 26.6345 13.2666 26.903C13.0555 27.01 12.8269 27.125 12.5903 27.125H12.0089C11.7174 27.125 11.4802 26.9118 11.4802 26.6503L11.4808 26.6318C11.4919 26.3795 11.7272 26.1755 12.0089 26.1755H12.5903C12.6404 26.1755 12.6895 26.1819 12.7374 26.1945C12.7551 26.1992 12.7866 26.1969 12.8034 26.1895C12.8136 26.185 12.8149 26.1816 12.8177 26.1739C12.8185 26.1719 12.8193 26.1696 12.8205 26.1669C12.8754 26.0382 12.8754 25.6429 12.8754 25.4478C12.8754 25.1258 12.8058 24.752 12.6801 24.383C12.6391 24.2628 12.5586 24.1629 12.4778 24.0626C12.418 23.9884 12.358 23.914 12.3138 23.831C11.9613 23.1683 11.4819 22.7403 11.0926 22.7403C10.6945 22.7403 10.1911 23.203 9.83999 23.8913C9.79129 23.9864 9.72213 24.0706 9.65318 24.1546C9.56093 24.267 9.46908 24.3789 9.42721 24.5156C9.32754 24.841 9.27422 25.1619 9.27422 25.4475C9.27422 25.6044 9.27422 25.9964 9.32898 26.1486C9.33815 26.1741 9.34728 26.1888 9.37316 26.1969C9.38761 26.2013 9.41874 26.204 9.43324 26.1997C9.48699 26.1836 9.54376 26.1753 9.60054 26.1753H10.183C10.4545 26.1753 10.6814 26.361 10.7087 26.602L10.7115 26.6315C10.7115 26.9118 10.4742 27.125 10.183 27.125H9.60054C9.39618 27.125 9.19783 27.0395 9.00826 26.9577L8.95616 26.9353C8.78924 26.864 8.6602 26.7611 8.5659 26.6248C8.38604 26.3655 8.35319 26.025 8.35319 25.4475C8.35319 25.0438 8.43588 24.5916 8.58915 24.1427C8.62196 24.0466 8.63714 23.9433 8.65231 23.8402C8.67256 23.7024 8.6928 23.5648 8.75496 23.4443C9.00136 22.9603 9.31487 22.5458 9.66124 22.246C9.79387 22.1313 9.9334 22.0322 10.0782 21.9499C10.1994 21.8811 10.2973 21.7776 10.388 21.6718C10.3962 21.6622 10.4047 21.6527 10.4134 21.6434C10.5446 21.5032 10.6616 21.3293 10.6839 21.1385C10.7428 20.6355 10.2163 20.106 9.79314 20.3842C7.94819 21.5969 6.75 23.5554 6.75 25.766C6.75028 29.0865 9.45242 29.25 12.9904 29.25C13.181 29.25 13.374 29.2495 13.5694 29.249L13.5702 29.249C13.7699 29.2485 13.9719 29.248 14.1759 29.248H21.8243C22.0275 29.248 22.2292 29.2485 22.4288 29.249C22.6244 29.2495 22.8182 29.25 23.0093 29.25C26.5473 29.25 29.25 29.087 29.25 25.7665C29.2498 23.5981 28.0968 21.6729 26.3118 20.4558Z" fill="#43A9BC"/>
+                                    <path d="M25.836 23.339C25.836 23.7532 25.462 24.089 25.0007 24.089C24.5394 24.089 24.1654 23.7532 24.1654 23.339C24.1654 22.9248 24.5394 22.589 25.0007 22.589C25.462 22.589 25.836 22.9248 25.836 23.339Z" fill="#43A9BC"/>
+                                 </svg> -->
+                                 <!-- <div class="">
+                                    <h5 class="clr-primary-600 m-0 fs-6 fw-bold">{{selectedDoctor?.EmpCodeName}}</h5> |
+                                    <p class="fw-bold fs-7 clr-dark-600">{{selectedDoctor?.SpecialityName}}</p>
+                                 </div>   -->
+                                 <div class="profile_img position-relative" >                                          
+                                    <img class="doc_img" src="assets/images/maleD.svg" alt=""
+                                            *ngIf="selectedDoctor?.GenderID=='1'"  style="width: 2.5rem;height: 2.5rem;min-width: 2.5rem;">
+                                        <img class="doc_img" src="assets/images/femaleD.svg" alt=""
+                                            *ngIf="selectedDoctor?.GenderID=='2'"  style="width: 2.5rem;height: 2.5rem;min-width: 2.5rem;">
+                                    
+                                </div>
+                                 <div class="d-flex align-items-center gap-1">
+                                    <p class="clr-dark-600 fw-bold fs-7">{{selectedDoctor?.EmpCodeName}}</p> |
+                                    <p class="clr-dark-600 fw-bold fs-7">{{selectedDoctor?.SpecialityName}}</p>
+                                </div>
+                             </div>  
+                             <div class="d-flex align-items-center gap-1" *ngIf="selectedDoctor === undefined || selectedDoctor.length === 0">                               
+                                <p class="fs-7 mt-2">No Doctor Selected </p>
+                            </div> 
+                            
+                              <div class="d-flex align-items-center gap-2 bg-primary-100 clr-primary-600 border-primary-300 rounded-4 px-3 cursor-pointer py-1 d-none">
+                                 Block                                                                           
+                              </div>                       
+                           </div>
+                           <!-- <div class="patientno_data" *ngIf="selectedDoctor === undefined || selectedDoctor.length === 0">
+                            <img class="" style="height:7rem;" src="assets/images/Doctor.svg" alt="">
+                            <p class="fs-7 mt-2">Please Select Doctor</p>
+                        </div>  -->
+                           <div class="activity_list">
+                              <div *ngIf="!isReschedule">
+                              <div class="d-flex align-items-center gap-2 p-2 activity_row border-bottom" *ngIf="listOfTimeSlots?.length > 0">
+                                 <div class="d-flex align-items-center gap-2 bg-primary rounded-4 px-2 py-1">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                       <g clip-path="url(#clip0_2761_14085)">
+                                       <path d="M7.17959 8.82065C7.17959 9.27382 6.81215 9.64125 6.35898 9.64125C5.90581 9.64125 5.53851 9.27382 5.53851 8.82065C5.53851 8.36748 5.90581 8.00018 6.35898 8.00018C6.81215 8.00018 7.17959 8.36748 7.17959 8.82065Z" fill="#ECF6F8"/>
+                                       <path d="M3.07675 9.64125C3.52992 9.64125 3.89722 9.27382 3.89722 8.82065C3.89722 8.36748 3.52992 8.00018 3.07675 8.00018C2.62358 8.00018 2.25629 8.36748 2.25629 8.82065C2.25629 9.27382 2.62358 9.64125 3.07675 9.64125Z" fill="#ECF6F8"/>
+                                       <path d="M13.7434 8.82065C13.7434 9.27382 13.3761 9.64126 12.9229 9.64126C12.4698 9.64126 12.1025 9.27382 12.1025 8.82065C12.1025 8.36748 12.4698 8.00018 12.9229 8.00018C13.3761 8.00018 13.7434 8.36748 13.7434 8.82065Z" fill="#ECF6F8"/>
+                                       <path d="M9.64086 9.64125C10.094 9.64125 10.4613 9.27382 10.4613 8.82065C10.4613 8.36748 10.094 8.00018 9.64086 8.00018C9.18769 8.00018 8.82025 8.36748 8.82025 8.82065C8.82025 9.27382 9.18769 9.64125 9.64086 9.64125Z" fill="#ECF6F8"/>
+                                       <path d="M7.17959 12.1029C7.17959 12.5561 6.81215 12.9234 6.35898 12.9234C5.90581 12.9234 5.53851 12.5561 5.53851 12.1029C5.53851 11.6497 5.90581 11.2823 6.35898 11.2823C6.81215 11.2823 7.17959 11.6497 7.17959 12.1029Z" fill="#ECF6F8"/>
+                                       <path d="M3.07675 12.9234C3.52992 12.9234 3.89722 12.5561 3.89722 12.1029C3.89722 11.6497 3.52992 11.2823 3.07675 11.2823C2.62358 11.2823 2.25629 11.6497 2.25629 12.1029C2.25629 12.5561 2.62358 12.9234 3.07675 12.9234Z" fill="#ECF6F8"/>
+                                       <path d="M13.7434 12.1029C13.7434 12.5561 13.3761 12.9234 12.9229 12.9234C12.4698 12.9234 12.1025 12.5561 12.1025 12.1029C12.1025 11.6497 12.4698 11.2823 12.9229 11.2823C13.3761 11.2823 13.7434 11.6497 13.7434 12.1029Z" fill="#ECF6F8"/>
+                                       <path d="M9.64086 12.9234C10.094 12.9234 10.4613 12.5561 10.4613 12.1029C10.4613 11.6497 10.094 11.2823 9.64086 11.2823C9.18769 11.2823 8.82025 11.6497 8.82025 12.1029C8.82025 12.5561 9.18769 12.9234 9.64086 12.9234Z" fill="#ECF6F8"/>
+                                       <path fill-rule="evenodd" clip-rule="evenodd" d="M12.923 1.64131L12.7179 1.64131L12.7179 0.61562C12.7179 0.395703 12.6006 0.192552 12.4102 0.0826622C12.2199 -0.0272278 11.9852 -0.0272278 11.7949 0.0826622C11.6045 0.192552 11.4872 0.39571 11.4872 0.61562L11.4872 1.64131L8.61532 1.64131L8.61532 0.61562C8.61532 0.395703 8.49802 0.192552 8.30763 0.0826613C8.11725 -0.0272278 7.88263 -0.0272278 7.69225 0.0826613C7.50186 0.192552 7.38456 0.39571 7.38456 0.61562L7.38456 1.64131L4.51271 1.64131L4.51271 0.615619C4.51271 0.395702 4.39541 0.192551 4.20502 0.0826613C4.01464 -0.0272278 3.78002 -0.0272278 3.58964 0.0826613C3.39925 0.192551 3.28194 0.39571 3.28194 0.615619L3.28194 1.64131L3.07686 1.64131C2.26121 1.64241 1.47918 1.96686 0.90241 2.54364C0.325495 3.12041 0.00102926 3.90244 -6.12414e-05 4.71823L-6.12414e-05 13.1965C0.00447181 13.9433 0.305022 14.658 0.835807 15.1836C1.36644 15.7091 2.08388 16.0028 2.83071 16.0002L13.1692 16.0002C13.916 16.0028 14.6335 15.7091 15.1641 15.1836C15.6948 14.658 15.9954 13.9433 15.9999 13.1965L15.9999 4.71823C15.9988 3.90244 15.6744 3.12041 15.0975 2.54364C14.5207 1.96686 13.7387 1.6424 12.923 1.64131ZM3.07686 14.7694C2.58744 14.7687 2.1182 14.5741 1.77218 14.2279C1.42602 13.8819 1.23138 13.4127 1.23071 12.9232L1.23071 6.97441L13.7434 6.97441C13.9633 6.97441 14.1665 6.8571 14.2764 6.66671C14.3863 6.47633 14.3863 6.24171 14.2764 6.05133C14.1665 5.86094 13.9633 5.74364 13.7434 5.74364L1.23071 5.74364L1.23071 4.71809C1.2314 4.22867 1.42604 3.75943 1.77218 3.4133C2.11819 3.06728 2.58744 2.8725 3.07686 2.87194L3.28194 2.87194L3.28194 3.89748C3.28194 4.1174 3.39925 4.32055 3.58964 4.43044C3.78002 4.54033 4.01464 4.54033 4.20502 4.43044C4.39541 4.32055 4.51271 4.11739 4.51271 3.89748L4.51271 2.87194L7.38456 2.87194L7.38455 3.89748C7.38455 4.1174 7.50186 4.32055 7.69225 4.43044C7.88263 4.54033 8.11725 4.54033 8.30763 4.43044C8.49801 4.32055 8.61532 4.11739 8.61532 3.89748L8.61532 2.87194L11.4872 2.87194L11.4872 3.89748C11.4872 4.1174 11.6045 4.32055 11.7949 4.43044C11.9852 4.54033 12.2199 4.54033 12.4102 4.43044C12.6006 4.32055 12.7179 4.11739 12.7179 3.89748L12.7179 2.87194L12.923 2.87194C13.4124 2.87249 13.8817 3.06727 14.2277 3.4133C14.5739 3.75946 14.7685 4.2287 14.7692 4.71809L14.7692 12.9231C14.7685 13.4125 14.5738 13.8818 14.2277 14.2278C13.8817 14.5739 13.4124 14.7686 12.923 14.7693L3.07686 14.7694Z" fill="#ECF6F8"/>
+                                       </g>
+                                       <defs>
+                                       <clipPath id="clip0_2761_14085">
+                                       <rect width="16" height="16" fill="white"/>
+                                       </clipPath>
+                                       </defs>
+                                    </svg>
+                                       
+                                    <span class="clr-light fs-8 ">{{SelectedDateA}}</span>                                                                             
+                                 </div>
+                                 <div class="d-flex align-items-center gap-2 bg-primary rounded-4 px-3 py-1">
+                                    <span class="clr-light fs-8 ">{{SelectedDay}}</span>                                                                             
+                                 </div>
+                                 <div class="d-flex align-items-center gap-2 alldays">
+                                    <!-- <div class="d-flex align-items-center gap-2 bg-primary-100 rounded-4 px-2 py-1">
+                                       <span class="clr-primary-600 fs-8">08:00 AM</span>  
+                                       <svg width="10" height="4" viewBox="0 0 10 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <path d="M0 3.2904H8L5.93534 0.709717" stroke="#368796" stroke-width="1.28345"/>
+                                       </svg>                                         
+                                       <span class="clr-primary-600 fs-8">11:00 AM</span>                                                                               
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2 bg-primary-100 rounded-4 px-2 py-1">
+                                       <span class="clr-primary-600 fs-8">08:00 AM</span>  
+                                       <svg width="10" height="4" viewBox="0 0 10 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <path d="M0 3.2904H8L5.93534 0.709717" stroke="#368796" stroke-width="1.28345"/>
+                                       </svg>                                         
+                                       <span class="clr-primary-600 fs-8">11:00 AM</span>                                                                               
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2 bg-primary-100 rounded-4 px-2 py-1">
+                                       <span class="clr-primary-600 fs-8">08:00 AM</span>  
+                                       <svg width="10" height="4" viewBox="0 0 10 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <path d="M0 3.2904H8L5.93534 0.709717" stroke="#368796" stroke-width="1.28345"/>
+                                       </svg>                                         
+                                       <span class="clr-primary-600 fs-8">11:00 AM</span>                                                                               
+                                    </div> -->
+                                    <div  class="d-flex">
+                                        <div class="d-flex align-items-center gap-2 bg-primary-100 rounded-4 px-2 py-1 mx-2"
+                                           *ngFor="let conf of listOfResourceTimeSlots; let i = index">                                          
+                                           <span class="clr-primary-600 fs-8">{{ conf.FromDateTime }}</span>
+                                           <svg width="10" height="4" viewBox="0 0 10 4" fill="none"
+                                              xmlns="http://www.w3.org/2000/svg">
+                                              <path d="M0 3.2904H8L5.93534 0.709717" stroke="#368796"
+                                                 stroke-width="1.28345" />
+                                           </svg>
+                                           <span class="clr-primary-600 fs-8">{{ conf.ToDateTime }}</span>
+                                        </div>
+                                    </div>
+
+                                 </div>
+                              </div>
+
+                              <div class="  border-bottom"  *ngIf="listOfTimeSlots === undefined || listOfTimeSlots?.length === 0">
+                                <div class="d-flex align-items-center flex-column gap-2 justify-content-center py-2">
+                                    <img src="assets/images/icon-no-appointments.svg" style="height: 5rem;" alt="">
+                                    <p class="fs-7 mt-2">No Appoinments Available for selected Date</p>
+                                </div>
+                              </div>
+
+                              <div class="avail_block" *ngIf="morningTimeSlots != undefined && morningTimeSlots.length > 0">
+                                <div class="d-flex align-items-center gap-2 p-2">
+                                    <img style="width: 2.2rem;" src="assets/images/icons/morning.svg" alt="">
+                                    <h6 class="m-0 clr-primary-600">Morning</h6>
+                                 </div>
+                                
+                                 <div class="d-flex  align-items-center gap-3 clin_imp p-2">
+                                    <div class="d-flex align-items-center flex-wrap gap-3 clin_imp">
+                                       <button *ngFor="let time of morningTimeSlots;let i = index"
+                                          [class]="time.selected ? 'btn btn-secondary-outline min-width-unset fs-8 px-3 active' : 'btn btn-secondary-outline min-width-unset fs-8 px-3'"
+                                          (click)="addSelectedTime(time)">
+                                          {{time?.modTime}}
+                                       </button>
+                                    </div>
+                                 </div>
+                              </div>
+
+                              <div class="avail_block" *ngIf="afternoonTimeSlots != undefined && afternoonTimeSlots.length > 0">
+                                <div class="d-flex align-items-center gap-2 p-2">
+                                    <img style="width: 2.2rem;" src="assets/images/icons/afternoon.svg" alt="">
+                                       <h6 class="m-0 clr-primary-600">Afternoon</h6>
+                                 </div> 
+                                 <div class="d-flex  align-items-center gap-3 clin_imp p-2">
+                                    <div class="d-flex align-items-center flex-wrap gap-3 clin_imp">
+                                       <button *ngFor="let time of afternoonTimeSlots;let i = index"
+                                          [class]="time.selected ? 'btn btn-secondary-outline min-width-unset fs-8 px-3 active' : 'btn btn-secondary-outline min-width-unset fs-8 px-3'"
+                                          (click)="addSelectedTime(time)">
+                                          {{time?.modTime}}
+                                       </button>
+                                    </div>
+                                 </div>
+                              </div>
+
+                              <div class="avail_block" *ngIf="eveningTimeSlots != undefined && eveningTimeSlots.length > 0">
+                                 <div class="d-flex align-items-center gap-2 p-2">
+                                    <img style="width: 2.2rem;" src="assets/images/icons/evening.svg" alt="">
+                                     <h6 class="m-0 clr-primary-600">Evening</h6>
+                                </div>
+                                <div class="d-flex  align-items-center gap-3 clin_imp p-2">
+                                    <div class="d-flex align-items-center flex-wrap gap-3 clin_imp">
+                                       <button *ngFor="let time of eveningTimeSlots;let i = index"
+                                          [class]="time.selected ? 'btn btn-secondary-outline min-width-unset fs-8 px-3 active' : 'btn btn-secondary-outline min-width-unset fs-8 px-3'"
+                                          (click)="addSelectedTime(time)">
+                                          {{time?.modTime}}
+                                       </button>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <div *ngIf="isReschedule">
+                              <div class="">
+                                 <div class="border-top rounded-bottom">
+                                     <div class="p-2 border-bottom bg-primary-20">
+                                         <div class="d-flex align-items-center gap-2 justify-content-between">
+                                             <div class="d-flex align-items-center gap-2">
+                                                 <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                     <path
+                                                         d="M14.9242 2.07344H13.9204V1.36313C13.9204 1.06356 13.7605 0.78662 13.5009 0.636839C13.2415 0.486864 12.9216 0.486864 12.6623 0.636839C12.4027 0.78662 12.2428 1.06356 12.2428 1.36313V2.07324L6.04733 2.07343V1.36312C6.04733 1.06356 5.88741 0.786615 5.62783 0.636835C5.36845 0.486859 5.04858 0.486859 4.78921 0.636835C4.52963 0.786615 4.36971 1.06356 4.36971 1.36312V2.07323L3.36593 2.07343C2.55032 2.07343 1.76807 2.39737 1.19136 2.97406C0.614453 3.55097 0.290527 4.33322 0.290527 5.14883V15.4488C0.290527 16.2644 0.614468 17.0466 1.19136 17.6235C1.76807 18.2002 2.55032 18.5244 3.36593 18.5244H14.9245C15.7401 18.5244 16.5224 18.2002 17.0991 17.6235C17.676 17.0466 17.9999 16.2644 17.9999 15.4488V5.14883C17.9999 4.33322 17.676 3.55097 17.0991 2.97406C16.5224 2.39735 15.7401 2.07343 14.9245 2.07343L14.9242 2.07344ZM3.36858 3.75108H4.37236V5.02052L4.37217 5.02033C4.37217 5.31989 4.53209 5.59684 4.79167 5.74662C5.05125 5.89659 5.37092 5.89659 5.63049 5.74662C5.88988 5.59684 6.0498 5.31989 6.0498 5.02033V3.75089H12.2427V5.02033C12.2427 5.31989 12.4027 5.59684 12.6622 5.74662C12.9216 5.89659 13.2415 5.89659 13.5009 5.74662C13.7604 5.59684 13.9204 5.31989 13.9204 5.02033V3.75089H14.9241C15.2949 3.75089 15.6504 3.89813 15.9125 4.16044C16.1747 4.42256 16.3221 4.77809 16.3221 5.14885V7.69317H1.96761V5.14885C1.96761 4.7781 2.11505 4.42256 2.37716 4.16044C2.63928 3.89813 2.99481 3.75089 3.36557 3.75089L3.36858 3.75108ZM14.9242 16.8469H3.36559C2.99484 16.8469 2.6393 16.6997 2.37718 16.4376C2.11507 16.1752 1.96763 15.8197 1.96763 15.449V9.37085H16.3221V15.449C16.3221 15.8197 16.1747 16.1752 15.9126 16.4376C15.6504 16.6997 15.2949 16.8469 14.9242 16.8469H14.9242Z"
+                                                         fill="#368796" />
+                                                 </svg>
+                                                 <h6 class="clr-primary-600 m-0">Available Dates</h6>
+                                             </div>
+                                             <div class="d-flex align-items-center gap-2">
+                                                 <div class="d-flex align-items-center flex-wrap gap-3 clin_imp ms-auto">
+                                                     <h6 class="clr-primary-600 m-0">Clinic Timings :</h6>
+                                                 </div>                                               
+                                                 <div class="d-flex align-items-center flex-wrap gap-3 clin_imp ms-auto ">
+                                                 
+                                                     <p class="clr-primary-600 m-0 fw-bold fs-7">{{clinicTimings}}</p>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                        
+                                     </div>
+                                     <div class="d-flex flex-wrap align-items-center gap-3 clin_imp p-2 py-3 position-relative">
+                                         <div class="d-flex align-items-center flex-wrap gap-3 clin_imp custom_tooltip custom_tooltip_left"
+                                             *ngFor="let date of listOfDatesFiltered;let i = index">
+                                             <button [class.active]="date?.fullDate === selectedDate?.fullDate"
+                                                 (click)="addSelectedDate(date)"
+                                                 class="btn btn-secondary-outline fs-8 px-4" style="width:8.5rem">
+                                                 {{date?.fullDate}}
+                                             </button>
+                                             <div class="tooltip">
+                                                <p>{{date?.dayCode}}</p>
+                                             </div>
+                                         </div>
+                                         <div class="view_more_dates custom_tooltip custom_tooltip_left" (click)="viewMoreDates()">
+                                             <svg class="cursor-pointer me-2" width="6" height="20" viewBox="0 0 6 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                 <circle cx="2.99997" cy="2.69016" r="2.655" fill="#43A9BC"/>
+                                                 <circle cx="2.99997" cy="10.0002" r="2.655" fill="#43A9BC"/>
+                                                 <circle cx="2.99997" cy="17.3103" r="2.655" fill="#43A9BC"/>
+                                             </svg>
+                                             <div class="tooltip">
+                                                 <p>{{txtViewMore}}</p>
+                                             </div>                                                    
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="">
+                                 <div class="border-top  rounded-bottom">
+                                     <div class="p-2 border-bottom  bg-primary-20">
+                                         <div class="d-flex align-items-center gap-2">
+                                             <svg width="19" height="19" viewBox="0 0 19 19" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                 <path
+                                                     d="M9.37371 18.5244C11.6749 18.5244 13.9763 17.6358 15.7307 15.8813C19.2395 12.3725 19.2395 6.65339 15.7307 3.14451C12.2219 -0.364372 6.50281 -0.36429 2.99393 3.14451C-0.514946 6.6533 -0.514864 12.3724 2.99393 15.8813C4.77116 17.6358 7.07243 18.5244 9.37371 18.5244ZM4.13318 4.28379C5.56867 2.8483 7.48256 2.11927 9.37371 2.11927C11.2649 2.11927 13.1561 2.84847 14.6142 4.28379C17.508 7.17752 17.508 11.8712 14.6142 14.7649C11.7205 17.6586 7.02687 17.6586 4.13318 14.7649C1.23945 11.8711 1.23945 7.17748 4.13318 4.28379Z"
+                                                     fill="#368796" />
+                                                 <path
+                                                     d="M6.5256 13.9674C6.73063 13.9674 6.95856 13.8763 7.11797 13.7167L10.0801 10.504C10.2167 10.3673 10.2851 10.1623 10.2851 9.95715V5.6508C10.2851 5.21785 9.92048 4.85325 9.48753 4.85325C9.05473 4.85325 8.69014 5.21784 8.69014 5.6508V9.66091L5.93324 12.623C5.63699 12.942 5.65987 13.4432 5.97885 13.7395C6.13827 13.8989 6.32056 13.9672 6.52561 13.9672L6.5256 13.9674Z"
+                                                     fill="#368796" />
+                                             </svg>
+                                             <h6 class="clr-primary-600 m-0">Available Time</h6>
+                                         </div>
+                                     </div>
+                                     <div class="py-2 border-bottom"
+                                         *ngIf="morningTimeSlots != undefined && morningTimeSlots1.length > 0">
+                                         <div class="d-flex align-items-center justify-content-between  p-2">
+                                             <div class="d-flex align-items-center gap-2">
+                                                 <img style="width: 2.2rem;" src="assets/images/icons/morning.svg"
+                                                     alt="">
+                                                 <h6 class="m-0 clr-primary-600">Morning</h6>
+                                             </div>
+                                             <h6 class="clr-primary-600">{{morningTimeSlots1.length}} slots</h6>
+                                         </div>
+
+                                         <div class="d-flex  align-items-center gap-3 clin_imp p-2">
+                                             <div class="d-flex align-items-center flex-wrap gap-3 clin_imp">
+                                                 <button *ngFor="let time of morningTimeSlots1;let i = index"
+                                                     [class]="time.selected ? 'btn btn-secondary-outline min-width-unset fs-8 px-3 active' : 'btn btn-secondary-outline min-width-unset fs-8 px-3'"
+                                                     (click)="addSelectedTime1(time)">
+                                                     {{time?.modTime}}
+                                                 </button>
+
+                                             </div>
+                                         </div>
+                                     </div>
+                                     <div class="py-2 border-bottom"
+                                         *ngIf="afternoonTimeSlots != undefined && afternoonTimeSlots1.length > 0">
+                                         <div class="d-flex align-items-center justify-content-between p-2">
+                                             <div class="d-flex align-items-center gap-2">
+                                                 <img style="width: 2.2rem;" src="assets/images/icons/afternoon.svg"
+                                                     alt="">
+                                                 <h6 class="m-0 clr-primary-600">Afternoon</h6>
+                                             </div>
+                                             <h6 class="clr-primary-600">{{afternoonTimeSlots1.length}} slots</h6>
+                                         </div>
+                                         <div class="d-flex align-items-center gap-3 clin_imp p-2">
+                                             <div class="d-flex align-items-center flex-wrap gap-3 clin_imp">
+                                                 <button *ngFor="let time of afternoonTimeSlots1;let i = index"
+                                                     [class]="time.selected ? 'btn btn-secondary-outline min-width-unset fs-8 px-3 active' : 'btn btn-secondary-outline min-width-unset fs-8 px-3'"
+                                                     (click)="addSelectedTime1(time)">
+                                                     {{time?.modTime}}
+                                                 </button>
+                                             </div>
+                                         </div>
+                                     </div>
+                                     <div class="py-2"
+                                         *ngIf="eveningTimeSlots != undefined && eveningTimeSlots1.length > 0">
+                                         <div class="d-flex align-items-center justify-content-between p-2">
+                                             <div class="d-flex align-items-center gap-2">
+                                                 <img style="width: 2.2rem;" src="assets/images/icons/evening.svg"
+                                                     alt="">
+                                                 <h6 class="m-0 clr-primary-600">Evening</h6>
+                                             </div>
+                                             <h6 class="clr-primary-600">{{eveningTimeSlots1.length}} slots</h6>
+                                         </div>
+                                         <div class="d-flex align-items-center gap-3 clin_imp p-2">
+                                             <div class="d-flex align-items-center flex-wrap gap-3 clin_imp">
+                                                 <button *ngFor="let time of eveningTimeSlots1;let i = index"
+                                                     [class]="time.selected ? 'btn btn-secondary-outline min-width-unset fs-8 px-3 active' : 'btn btn-secondary-outline min-width-unset fs-8 px-3'"
+                                                     (click)="addSelectedTime1(time)">
+                                                     {{time?.modTime}}
+                                                 </button>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                           </div>
+                           </div>
+                           
+
+                           <div class="avail_status d-none">
+                              <div class="p-2 border-bottom">
+                                 <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-3">
+
+                                       <div class="d-flex align-items-center gap-2 bg-primary-100 rounded-4 px-2 py-1">
+                                          <span class="clr-primary-600 fs-8">08:00 AM</span>  
+                                          <svg width="10" height="4" viewBox="0 0 10 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                             <path d="M0 3.2904H8L5.93534 0.709717" stroke="#368796" stroke-width="1.28345"/>
+                                          </svg>                                         
+                                          <span class="clr-primary-600 fs-8">11:00 AM</span>                                                                               
+                                       </div>
+                                       <div class="d-flex align-items-center gap-2 bg-primary-100 clr-primary-600 rounded-4 px-4 py-1 cursor-pointer fs-8">
+                                          Block                                                                           
+                                       </div>  
+                                       <div class="avail_legends">
+                                          <div class="d-flex align-items-center gap-1">
+                                             <span class="legend confirmed"></span>
+                                             <label for="" class="form-label m-0">Confirmed</label>
+                                          </div>
+                                       </div>
+
+                                    </div>
+                                    <div class="">
+                                       <svg width="6" height="20" viewBox="0 0 6 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <circle cx="3" cy="2.68991" r="2.655" fill="#43A9BC"/>
+                                          <circle cx="3" cy="9.99997" r="2.655" fill="#43A9BC"/>
+                                          <circle cx="3" cy="17.31" r="2.655" fill="#43A9BC"/>
+                                       </svg>                                       
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="p-2">
+                                 <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-3">
+
+                                       <div class="d-flex align-items-center gap-2 bg-primary-100 rounded-4 px-2 py-1">
+                                          <span class="clr-primary-600 fs-8">08:00 AM</span>  
+                                          <svg width="10" height="4" viewBox="0 0 10 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                             <path d="M0 3.2904H8L5.93534 0.709717" stroke="#368796" stroke-width="1.28345"/>
+                                          </svg>                                         
+                                          <span class="clr-primary-600 fs-8">11:00 AM</span>                                                                               
+                                       </div>
+                                       <div class="d-flex align-items-center gap-2 bg-primary-100 clr-primary-600 rounded-4 px-4 py-1 cursor-pointer fs-8">
+                                          Block                                                                           
+                                       </div>  
+                                       <div class="avail_legends">
+                                          <div class="d-flex align-items-center gap-1">
+                                             <span class="legend iprounds"></span>
+                                             <label for="" class="form-label m-0">Meeting</label>
+                                          </div>
+                                       </div>
+
+                                    </div>
+                                    <div class="">
+                                       <svg width="6" height="20" viewBox="0 0 6 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <circle cx="3" cy="2.68991" r="2.655" fill="#43A9BC"/>
+                                          <circle cx="3" cy="9.99997" r="2.655" fill="#43A9BC"/>
+                                          <circle cx="3" cy="17.31" r="2.655" fill="#43A9BC"/>
+                                       </svg>                                       
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                  </div>
+                  <div class="p-2 avail_legends border-bottom">
+                              <div class="d-flex align-items-center gap-3">
+                                 <div class="d-flex align-items-center gap-1">
+                                    <span class="legend inavailable"></span>
+                                    <label for="" class="form-label m-0">Avaialble</label>
+                                 </div>
+                                 <!-- <div class="d-flex align-items-center gap-1">
+                                    <span class="legend dep_block"></span>
+                                    <label for="" class="form-label m-0">Department Blocked</label>
+                                 </div>
+                                 <div class="d-flex align-items-center gap-1">
+                                    <span class="legend booked"></span>
+                                    <label for="" class="form-label m-0">Booked</label>
+                                 </div> -->
+                                 <div class="d-flex align-items-center gap-1">
+                                    <span class="legend confirmed"></span>
+                                    <label for="" class="form-label m-0">Confirmed</label>
+                                 </div>
+                                 <!-- <div class="d-flex align-items-center gap-1">
+                                    <span class="legend change_duty"></span>
+                                    <label for="" class="form-label m-0">Change Duty</label>
+                                 </div> -->
+                                 <div class="d-flex align-items-center gap-1">
+                                    <span class="legend iprounds"></span>
+                                    <label for="" class="form-label m-0">Meeting</label>
+                                 </div>
+                                 <div class="d-flex align-items-center gap-1">
+                                    <span class="legend inor"></span>
+                                    <label for="" class="form-label m-0">In OR</label>
+                                 </div>
+                                 <div class="d-flex align-items-center gap-1">
+                                    <span class="legend onvacation"></span>
+                                    <label for="" class="form-label m-0">On Vacation</label>
+                                 </div>
+                                 <!-- <div class="d-flex align-items-center gap-1">
+                                    <span class="legend meeting"></span>
+                                    <label for="" class="form-label m-0">Meeting</label>
+                                 </div> -->
+                              </div>
+                           </div>
+
+               </div>
+            </div>
+
+         </div>
+      </div>
+
+   </div>
+</div>
+</form>
+
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="cancelConfirmationMsg"
+   tabindex="-1">
+   <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+      <div class="modal-content">
+         <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+         <div class="modal-body">
+            <p> Are you sure you want to cancel Appointment ? </p>
+            <div class="modal-footer">
+               <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal"
+                  (click)="showCancelReasons()">{{langData?.common?.yes}}</a>
+               <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                  data-bs-dismiss="modal">{{langData?.common?.no}}</a>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="modal" id="appointmentSaveMsg" tabindex="-1">
+   <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+       <div class="modal-content">
+           <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+           <div class="modal-body">
+               <p>{{appSaveMsg}}</p>
+               <div class="modal-footer">
+                   <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                       (click)="loadSelectedDoctorAvailability(selectedDoctor)" data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+               </div>
+           </div>
+       </div>
+   </div>
+</div>
+<div class="modal fade" id="cancelReasons" tabindex="-1" aria-labelledby="cancelReasonsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="width: 35%;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="cancelReasonsLabel">
+            Reason For Cancellation
+          </h5>
+          <div class="d-flex gap-2 align-items-center justify-content-end">
+            <button class="btn btn-danger-outline">{{langData?.common?.Clear}}</button>
+            <button class="btn btn-main-outline" (click)="cancelAppointment(selectedAppToCancel)">{{langData?.common?.Save}}</button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+        <form [formGroup]="cancelForm">
+        <div class="modal-body" >
+          <div class="d-flex gap-2 align-items-center">
+            <select class="form-select w-85" id="CancelReasonID" formControlName="CancelReasonID" (change)="onCancelReasonChange()">
+              <option dir="ltr" value="0" translate>{{langData?.common?.Select}}</option>
+              <option dir="ltr" *ngFor="let can of cancelResonsList" [value]="can.id">
+                {{can.name}}
+              </option>
+            </select>
+            <span class="position-absolute bottom-0"
+            *ngIf="showReasonMandatoryMsg">
+            <div class="text-danger" *ngIf="showReasonMandatoryMsg">
+              Select Cancel Reasons</div>
+          </span>
+          </div>
+          <div class="d-flex gap-2 align-items-center">
+            <select class="form-select w-85" id="ActionTypeID" formControlName="ActionTypeID" (change)="onActionTypeChange()">
+              <option dir="ltr" value="0" translate>{{langData?.common?.Select}}</option>
+              <option dir="ltr" *ngFor="let act of actionTakenList" [value]="act.id">
+                {{act.name}}
+              </option>
+            </select>
+            <span class="position-absolute bottom-0"
+            *ngIf="showActionTakenMandatoryMsg">
+            <div class="text-danger" *ngIf="showActionTakenMandatoryMsg">
+              Select Action Type</div>
+          </span>
+          </div>
+          <div class="d-flex gap-2 align-items-center">
+          <textarea name="" placeholder={{langData?.messages?.EnterRemarks}} class="form-control resize-none mb-2" (change)="onRemarksChange()"
+            formControlName="Remarks" id="" cols="30" rows="3"></textarea>
+          <span class="position-absolute bottom-0"
+            *ngIf="showRemarksMandatoryMsg">
+            <div class="text-danger" *ngIf="showRemarksMandatoryMsg">
+              Enter Cancel Remarks</div>
+          </span>
+        </div>
+      </div>
+        </form>
+      </div>
+    </div>
+  </div>

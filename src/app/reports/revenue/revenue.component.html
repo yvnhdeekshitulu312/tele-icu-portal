@@ -1,0 +1,1406 @@
+<div class="page-header justify-content-start sticky-top shadow-sm">
+    <h2 class="page-heading">Revenue Dashboard</h2>
+    <div class="d-flex gap-2 align-items-center ms-auto">
+        <app-clara-trigger (onClick)="showAI()"></app-clara-trigger>
+    </div>
+    
+</div>
+<div class="p-0 analytics_graphs">
+    <div class="p-2 revenue_stat_page">
+        <div class="row g-2 mx-0">
+            <div class="col-2" style="width: 13%;">
+                <div class="left_nav">
+                    <div class="sidebar-container rounded">
+                        <div class="summary-value revenue gap-1 d-flex align-item-center" style="line-height: 1;">
+                             <svg width="25" height="30" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#ED1C24"></path>
+                             </svg>
+                            {{ formatValue(totalRevenue) }}</div>
+                        <div class="summary-label">Total Revenue</div>
+                        <div class="divider"></div>
+
+                        <div class="summary-value Netrevenue gap-1 d-flex align-item-center" style="line-height: 1;">
+                             <svg width="25" height="30" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#22C067"></path>
+                             </svg>
+                            {{ formatValue(netRevenue) }}</div>
+                        <div class="summary-label">Net Revenue</div>
+                        <div class="divider"></div>
+
+                        <div class="summary-value discount gap-1 d-flex align-item-center" style="line-height: 1;">
+                            <svg width="25" height="30" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#F38602"></path>
+                             </svg>
+                            {{ formatValue(discount) }}</div>
+                        <div class="summary-label">Discount</div>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="sidebar-container rounded mt-2">
+                        <form [formGroup]="datesForm" class="d-flex flex-column gap-2">
+                            <label class="form-label m-0">From Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="fromPicker" placeholder="From Date"
+                                    formControlName="fromdate" />
+                                <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #fromPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <label class="form-label m-0">To Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="toPicker" placeholder="To Date"
+                                    formControlName="todate" />
+                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #toPicker></mat-datepicker>
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn btn-main-outline w-100 mt-2"
+                            (click)="loadDoctorRevenueGroupedData()">
+                            Fetch
+                        </button>
+                        <button type="button" class="btn btn-outline-danger w-100 mt-2" (click)="clearFilters()">
+                            Clear
+                        </button>
+                    </div>
+                    <div class="sidebar-container rounded mt-2">
+                        <!-- Location -->
+                        <label class="form-label">Location</label>
+                        <!-- <select class="form-select" [(ngModel)]="selectedLocation"
+                            (ngModelChange)="onSelectionChange()">
+                            <option [ngValue]="null" disabled>-- Select Location --</option>
+                            <option *ngFor="let loc of locations" [ngValue]="loc">{{ loc.label }}</option>
+                        </select> -->
+
+                        <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                            <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_9239_2779)">
+                                    <path
+                                        d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                        fill="#368796" />
+                                </g>
+                            </svg>
+                            <input type="text" class="form-control" [matAutocomplete]="roleAuto2" placeholder="Search">
+                            <mat-autocomplete #roleAuto2="matAutocomplete">
+                                <mat-option *ngFor="let item of locations">
+                                    <div (click)="locationOptionClicked($event, item);">
+                                        <mat-checkbox [checked]="item.selected" (change)="toggleLocationSelection(item)"
+                                            (click)="$event.stopPropagation()">
+                                            {{ item.label }}
+                                        </mat-checkbox>
+                                    </div>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+
+                        <!-- Service -->
+                        <!-- <label class="form-label mt-2">Category, Service</label> -->
+                        <!-- <select class="form-select" [(ngModel)]="selectedServiceId"
+                            (ngModelChange)="onSelectionChange()">
+                            <option [value]="0" disabled>-- Select Service --</option>
+                            <option *ngFor="let s of doctorRevenueServices" [value]="s.ServiceID">{{ s.ServiceName }}
+                            </option>
+                        </select> -->
+                        <div class="mb-1 mt-2">
+                            <label class="form-label d-flex align-items-center">
+                                <input type="checkbox" class="form-check-input me-1"
+                                    [checked]="getSelectAllServicesStatus()"
+                                    (change)="selectAllServices($any($event.target).checked)">
+                                Category, Service
+                            </label>
+                        </div>
+                        <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                            <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_9239_2779)">
+                                    <path
+                                        d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                        fill="#368796" />
+                                </g>
+                            </svg>
+                            <input type="text" class="form-control" [matAutocomplete]="roleAuto" placeholder="Search" (input)="filterServices($event)">
+                            <mat-autocomplete #roleAuto="matAutocomplete">
+                                <mat-option *ngFor="let item of doctorRevenueServices">
+                                    <div (click)="serviceOptionClicked($event, item);">
+                                        <mat-checkbox [checked]="item.selected" (change)="toggleServiceSelection(item)"
+                                            (click)="$event.stopPropagation()">
+                                            {{ item.ServiceName }}
+                                        </mat-checkbox>
+                                    </div>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+
+                        <!-- Department -->
+                        <!-- <label class="form-label font-semibold mt-2">Department, Doctor</label> -->
+                        <div class="mb-1 mt-2">
+                            <label class="form-label d-flex align-items-center">
+                                <input type="checkbox" class="form-check-input me-1" [checked]="getSelectAllStatus()"
+                                    (change)="selectAll($any($event.target).checked)">
+                                Department, Doctor
+                            </label>
+                        </div>
+
+                        <button
+                            class="btn btn-main-outline mb-2 rounded-2 py-2 bg-white w-100 d-flex align-items-center gap-2 justify-content-between"
+                            (click)="showDepartmentList = !showDepartmentList">
+                            <p class="fs-7">
+                                {{ showDepartmentList ? 'Hide Departments' : 'Show Departments' }}
+                            </p>
+                            
+                            <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.3971 0.849237L6.74023 6.50609L1.08338 0.849237" stroke="#313435"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+
+                        <!-- Departments -->
+                        <div *ngIf="showDepartmentList" class="departmentsList">
+                            <div *ngFor="let dept of groupedDoctors" class="mb-2 border rounded p-2 bg-white">
+
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <!-- <div>
+                                        <input type="checkbox" class="form-check-input me-2" [checked]="dept.selected"
+                                            (change)="toggleDepartment(dept, $any($event.target).checked)">
+                                        <span class="fw-semibold fs-8">{{ dept.DepartmentName }}</span>
+                                    </div> -->
+                                    <div class="custom_check d-flex align-items-center gap-2"
+                                        [class.active]="dept.selected?true:false"
+                                        (click)="toggleDepartment(dept, $any($event.target).checked)">
+                                        <svg width="16" height="16" style="min-width: 1rem;" viewBox="0 0 20 21"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <span class="fw-semibold fs-8">{{ dept.DepartmentName }}</span>
+                                    </div>
+
+                                    <!-- <button type="button" class="btn btn-sm btn-outline-secondary px-2 py-1 rounded-0 border" -->
+                                    <button type="button" class="p-0" (click)="dept.Expanded = !dept.Expanded">
+                                        {{ dept.Expanded ? '+' : '-' }}
+                                    </button>
+                                </div>
+
+                                <!-- Doctors -->
+                                <div *ngIf="!dept.Expanded" class="mt-2 ps-4 dept_list">
+                                    <div *ngFor="let doc of dept.Doctors" class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input me-2" [(ngModel)]="doc.selected"
+                                            (change)="onDoctorChange(dept)">
+                                        <label class="form-check-label fs-9">{{ doc.DoctorName }}</label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="mb-1 mt-2">
+                            <label class="form-label">
+                                <input type="checkbox" class="form-check-input me-1"
+                                    [checked]="getSelectAllBedTypesStatus()"
+                                    (change)="selectAllBedTypes($any($event.target).checked)">
+                                Bed Type
+                            </label>
+                        </div>
+                        <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                            <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_9239_2779)">
+                                    <path
+                                        d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                        fill="#368796" />
+                                </g>
+                            </svg>
+                            <input type="text" class="form-control" [matAutocomplete]="roleAuto4" placeholder="Search" (input)="filterBedTypes($event)">
+                            <mat-autocomplete #roleAuto4="matAutocomplete">
+                                <mat-option *ngFor="let item of doctorRevenueBedTypes">
+                                    <div (click)="bedTypeOptionClicked($event, item);">
+                                        <mat-checkbox [checked]="item.selected" (change)="toggleBedTypeSelection(item)"
+                                            (click)="$event.stopPropagation()">
+                                            {{ item.BedType }}
+                                        </mat-checkbox>
+                                    </div>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+
+
+                        <div class="mb-1 mt-2">
+                            <label class="form-label">
+                                <input type="checkbox" class="form-check-input me-1"
+                                    [checked]="getSelectAllPayersStatus()"
+                                    (change)="selectAllPayers($any($event.target).checked)">
+                                Payer
+                            </label>
+                        </div>
+                        <!-- Payer -->
+                        <!-- <label class="form-label mt-2">Payer</label> -->
+                        <!-- <select class="form-select" [(ngModel)]="selectedPayerId" (ngModelChange)="onSelectionChange()">
+                            <option [value]="0" disabled>-- Select Payer --</option>
+                            <option *ngFor="let p of doctorRevenuePayers" [value]="p.InsuranceComapnyID">{{
+                                p.InsuranceCompanyName }}</option>
+                        </select> -->
+                        <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                            <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_9239_2779)">
+                                    <path
+                                        d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                        fill="#368796" />
+                                </g>
+                            </svg>
+                            <input type="text" class="form-control" [matAutocomplete]="roleAuto1" placeholder="Search" (input)="filterPayers($event)">
+                            <mat-autocomplete #roleAuto1="matAutocomplete">
+                                <mat-option *ngFor="let item of doctorRevenuePayers">
+                                    <div (click)="payerOptionClicked($event, item);">
+                                        <mat-checkbox [checked]="item.selected" (change)="togglePayerSelection(item)"
+                                            (click)="$event.stopPropagation()">
+                                            {{ item.InsuranceCompanyName }}
+                                        </mat-checkbox>
+                                    </div>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col dashboardHeight">
+                <div class="row mx-0 gx-2 circleGraphs">
+                    <div class="col" style="width: 19%;">
+                        <div
+                            class="graph_Card border card p-2 pt-4 shadow-sm d-flex justify-content-between align-items-center">
+                            <div class="custom_tooltip custom_tooltip_left" style="position: absolute;top:0.3rem;right:0.6rem;">
+                                <svg width="15" height="15" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.75 11.1666C19.75 15.9991 15.8325 19.9166 11 19.9166C6.16748 19.9166 2.25 15.9991 2.25 11.1666C2.25 6.33414 6.16748 2.41663 11 2.41663C15.8325 2.41663 19.75 6.33414 19.75 11.1666ZM22 11.1666C22 17.2418 17.0751 22.1666 11 22.1666C4.92487 22.1666 0 17.2418 0 11.1666C0 5.09149 4.92487 0.166626 11 0.166626C17.0751 0.166626 22 5.09149 22 11.1666ZM12.125 7.28339C12.125 7.90471 11.6213 8.40839 11 8.40839C10.3787 8.40839 9.875 7.90471 9.875 7.28339C9.875 6.66206 10.3787 6.15839 11 6.15839C11.6213 6.15839 12.125 6.66206 12.125 7.28339ZM9.875 10.5701C9.875 9.94881 10.3787 9.44513 11 9.44513C11.6213 9.44513 12.125 9.94881 12.125 10.5701V15.5679C12.125 16.1892 11.6213 16.6929 11 16.6929C10.3787 16.6929 9.875 16.1892 9.875 15.5679V10.5701Z" fill="#368796"/>
+                                </svg>
+
+                                <div class="tooltip" style="width: 14rem;bottom: unset;">
+                                    <p class="m-0 text-wrap"><b>Formula</b> : Total Payment Type net*100/Total Bill count</p>
+                                </div>
+                            </div>
+
+                            <apx-chart class="w-100" *ngIf="paymentTypeChart" [series]="paymentTypeChart.series"
+                                [chart]="paymentTypeChart.chart" [labels]="paymentTypeChart.labels"
+                                [colors]="paymentTypeChart.colors" [fill]="paymentTypeChart.fill"
+                                [stroke]="paymentTypeChart.stroke" [legend]="paymentTypeChart.legend"
+                                [tooltip]="paymentTypeChart.tooltip" [dataLabels]="paymentTypeChart.dataLabels"
+                                [title]="paymentTypeChart.title" [responsive]="paymentTypeChart.responsive"
+                                [plotOptions]="paymentTypeChart.plotOptions || {}">
+                            </apx-chart>
+                            <div class="d-flex align-items-center gap-1 justify-content-end ms-auto">
+                                <div *ngIf="paymentTypeChart" class="custom_tooltip custom_tooltip_left"
+                                    (click)="exportNetRevenueByPaymentType('csv')">
+                                    <!-- <i class="fas fa-file-export me-1 clr-primary-600 fs-7"></i> -->
+                                    <svg _ngcontent-dyy-c491="" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="#8967B3" d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path></svg>
+                                    <div class="tooltip">
+                                        <p class="m-0">Export</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col" style="width: 19%;">
+                        <div
+                            class="graph_Card border card p-2 pt-4 shadow-sm d-flex justify-content-between align-items-center">
+                            <div class="custom_tooltip custom_tooltip_left" style="position: absolute;top:0.3rem;right:0.6rem;">
+                                <svg width="15" height="15" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.75 11.1666C19.75 15.9991 15.8325 19.9166 11 19.9166C6.16748 19.9166 2.25 15.9991 2.25 11.1666C2.25 6.33414 6.16748 2.41663 11 2.41663C15.8325 2.41663 19.75 6.33414 19.75 11.1666ZM22 11.1666C22 17.2418 17.0751 22.1666 11 22.1666C4.92487 22.1666 0 17.2418 0 11.1666C0 5.09149 4.92487 0.166626 11 0.166626C17.0751 0.166626 22 5.09149 22 11.1666ZM12.125 7.28339C12.125 7.90471 11.6213 8.40839 11 8.40839C10.3787 8.40839 9.875 7.90471 9.875 7.28339C9.875 6.66206 10.3787 6.15839 11 6.15839C11.6213 6.15839 12.125 6.66206 12.125 7.28339ZM9.875 10.5701C9.875 9.94881 10.3787 9.44513 11 9.44513C11.6213 9.44513 12.125 9.94881 12.125 10.5701V15.5679C12.125 16.1892 11.6213 16.6929 11 16.6929C10.3787 16.6929 9.875 16.1892 9.875 15.5679V10.5701Z" fill="#368796"/>
+                                </svg>
+
+                                <div class="tooltip" style="width: 14rem;bottom: unset;">
+                                    <p class="m-0 text-wrap"><b>Formula</b> : Total Visit Type net*100/Total Visit count</p>
+                                </div>
+                            </div>
+                            <apx-chart class="w-100" *ngIf="visitTypeChart" [series]="visitTypeChart.series"
+                                [chart]="visitTypeChart.chart" [labels]="visitTypeChart.labels"
+                                [colors]="visitTypeChart.colors" [fill]="visitTypeChart.fill"
+                                [stroke]="visitTypeChart.stroke" [legend]="visitTypeChart.legend"
+                                [tooltip]="visitTypeChart.tooltip" [dataLabels]="visitTypeChart.dataLabels"
+                                [title]="visitTypeChart.title" [responsive]="visitTypeChart.responsive"
+                                [plotOptions]="visitTypeChart.plotOptions || {}">
+                            </apx-chart>
+
+                              <div class="d-flex align-items-center gap-1 justify-content-end ms-auto">
+                                <div *ngIf="visitTypeChart" class="custom_tooltip custom_tooltip_left ms-auto"
+                                    (click)="exportNetRevenueByVisitType('csv')">
+                                    <svg _ngcontent-dyy-c491="" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="#8967B3" d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path></svg>
+                                    <div class="tooltip">
+                                        <p class="m-0">Export</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col" style="width: 19%;">
+                        <div
+                            class="graph_Card border card p-2 pt-4 shadow-sm d-flex justify-content-between align-items-center">
+                             <div class="custom_tooltip custom_tooltip_left" style="position: absolute;top:0.3rem;right:0.6rem;">
+                                <svg width="15" height="15" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.75 11.1666C19.75 15.9991 15.8325 19.9166 11 19.9166C6.16748 19.9166 2.25 15.9991 2.25 11.1666C2.25 6.33414 6.16748 2.41663 11 2.41663C15.8325 2.41663 19.75 6.33414 19.75 11.1666ZM22 11.1666C22 17.2418 17.0751 22.1666 11 22.1666C4.92487 22.1666 0 17.2418 0 11.1666C0 5.09149 4.92487 0.166626 11 0.166626C17.0751 0.166626 22 5.09149 22 11.1666ZM12.125 7.28339C12.125 7.90471 11.6213 8.40839 11 8.40839C10.3787 8.40839 9.875 7.90471 9.875 7.28339C9.875 6.66206 10.3787 6.15839 11 6.15839C11.6213 6.15839 12.125 6.66206 12.125 7.28339ZM9.875 10.5701C9.875 9.94881 10.3787 9.44513 11 9.44513C11.6213 9.44513 12.125 9.94881 12.125 10.5701V15.5679C12.125 16.1892 11.6213 16.6929 11 16.6929C10.3787 16.6929 9.875 16.1892 9.875 15.5679V10.5701Z" fill="#368796"/>
+                                </svg>
+
+                                <div class="tooltip" style="width: 14rem;bottom: unset;">
+                                    <p class="m-0 text-wrap"><b>Avg Payment Type</b> : Total Payment Type net /Total Bill count</p>
+                                    <p class="m-0 text-wrap"><b>Formula</b> : Avg Payment Type Net*100/Total Avg Payment Type net</p>
+                                </div>
+                            </div>
+                            <apx-chart class="w-100" *ngIf="AvgpaymentTypeChart" [series]="AvgpaymentTypeChart.series"
+                                [chart]="AvgpaymentTypeChart.chart" [labels]="AvgpaymentTypeChart.labels"
+                                [colors]="AvgpaymentTypeChart.colors" [fill]="AvgpaymentTypeChart.fill"
+                                [stroke]="AvgpaymentTypeChart.stroke" [legend]="AvgpaymentTypeChart.legend"
+                                [tooltip]="AvgpaymentTypeChart.tooltip" [dataLabels]="AvgpaymentTypeChart.dataLabels"
+                                [title]="AvgpaymentTypeChart.title" [responsive]="AvgpaymentTypeChart.responsive"
+                                [plotOptions]="AvgpaymentTypeChart.plotOptions || {}">
+                            </apx-chart>
+
+
+                              <div class="d-flex align-items-center gap-1 justify-content-end ms-auto">
+                                <div *ngIf="AvgpaymentTypeChart" class="custom_tooltip custom_tooltip_left ms-auto"
+                                    (click)="exportAvgBillByPaymentType('csv')">
+                                    <svg _ngcontent-dyy-c491="" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="#8967B3" d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path></svg>
+                                    <div class="tooltip">
+                                        <p class="m-0">Export</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col" style="width: 19%;">
+                        <div
+                            class="graph_Card border card p-2 pt-4 shadow-sm d-flex justify-content-between align-items-center">
+                             <div class="custom_tooltip custom_tooltip_left" style="position: absolute;top:0.3rem;right:0.6rem;">
+                                <svg width="15" height="15" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.75 11.1666C19.75 15.9991 15.8325 19.9166 11 19.9166C6.16748 19.9166 2.25 15.9991 2.25 11.1666C2.25 6.33414 6.16748 2.41663 11 2.41663C15.8325 2.41663 19.75 6.33414 19.75 11.1666ZM22 11.1666C22 17.2418 17.0751 22.1666 11 22.1666C4.92487 22.1666 0 17.2418 0 11.1666C0 5.09149 4.92487 0.166626 11 0.166626C17.0751 0.166626 22 5.09149 22 11.1666ZM12.125 7.28339C12.125 7.90471 11.6213 8.40839 11 8.40839C10.3787 8.40839 9.875 7.90471 9.875 7.28339C9.875 6.66206 10.3787 6.15839 11 6.15839C11.6213 6.15839 12.125 6.66206 12.125 7.28339ZM9.875 10.5701C9.875 9.94881 10.3787 9.44513 11 9.44513C11.6213 9.44513 12.125 9.94881 12.125 10.5701V15.5679C12.125 16.1892 11.6213 16.6929 11 16.6929C10.3787 16.6929 9.875 16.1892 9.875 15.5679V10.5701Z" fill="#368796"/>
+                                </svg>
+
+                               <div class="tooltip" style="width: 14rem;bottom: unset;">
+                                    <p class="m-0 text-wrap"><b>Avg Visit Type</b> : Total Visit Type net /Total Visit count</p>
+                                    <p class="m-0 text-wrap"><b>Formula</b> : Avg Visit Type Net*100/Total Avg Visit Type net</p>
+                                </div>
+                            </div>
+
+                            <apx-chart class="w-100" *ngIf="AvgBillpaymentVisitTypeChart"
+                                [series]="AvgBillpaymentVisitTypeChart.series"
+                                [chart]="AvgBillpaymentVisitTypeChart.chart"
+                                [labels]="AvgBillpaymentVisitTypeChart.labels"
+                                [colors]="AvgBillpaymentVisitTypeChart.colors"
+                                [fill]="AvgBillpaymentVisitTypeChart.fill"
+                                [stroke]="AvgBillpaymentVisitTypeChart.stroke"
+                                [legend]="AvgBillpaymentVisitTypeChart.legend"
+                                [tooltip]="AvgBillpaymentVisitTypeChart.tooltip"
+                                [dataLabels]="AvgBillpaymentVisitTypeChart.dataLabels"
+                                [title]="AvgBillpaymentVisitTypeChart.title"
+                                [responsive]="AvgBillpaymentVisitTypeChart.responsive"
+                                [plotOptions]="AvgBillpaymentVisitTypeChart.plotOptions || {}">
+                            </apx-chart>
+
+
+                             <div class="d-flex align-items-center gap-1 justify-content-end ms-auto">
+                                <div *ngIf="AvgBillpaymentVisitTypeChart" class="custom_tooltip custom_tooltip_left ms-auto"
+                                    (click)="exportAvgBillByVisitType('csv')">
+                                    <svg _ngcontent-dyy-c491="" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="#8967B3" d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path></svg>
+                                    <div class="tooltip">
+                                        <p class="m-0">Export</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col" style="width: 19%;">
+                        <div
+                            class="graph_Card border card p-2 pt-4 shadow-sm d-flex justify-content-between align-items-center">
+                            <div class="custom_tooltip custom_tooltip_left" style="position: absolute;top:0.3rem;right:0.6rem;">
+                                <svg width="15" height="15" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.75 11.1666C19.75 15.9991 15.8325 19.9166 11 19.9166C6.16748 19.9166 2.25 15.9991 2.25 11.1666C2.25 6.33414 6.16748 2.41663 11 2.41663C15.8325 2.41663 19.75 6.33414 19.75 11.1666ZM22 11.1666C22 17.2418 17.0751 22.1666 11 22.1666C4.92487 22.1666 0 17.2418 0 11.1666C0 5.09149 4.92487 0.166626 11 0.166626C17.0751 0.166626 22 5.09149 22 11.1666ZM12.125 7.28339C12.125 7.90471 11.6213 8.40839 11 8.40839C10.3787 8.40839 9.875 7.90471 9.875 7.28339C9.875 6.66206 10.3787 6.15839 11 6.15839C11.6213 6.15839 12.125 6.66206 12.125 7.28339ZM9.875 10.5701C9.875 9.94881 10.3787 9.44513 11 9.44513C11.6213 9.44513 12.125 9.94881 12.125 10.5701V15.5679C12.125 16.1892 11.6213 16.6929 11 16.6929C10.3787 16.6929 9.875 16.1892 9.875 15.5679V10.5701Z" fill="#368796"/>
+                                </svg>
+
+                               <div class="tooltip" style="width: 14rem;bottom: unset;">
+                                    <p class="m-0 text-wrap"><b>Avg Claim Type Net</b> : Total Company net /Total Invoices</p>
+                                    <p class="m-0 text-wrap"><b>Formula</b> : Avg Claim Net*100/Total Avg Claim net</p>
+                                </div>
+                            </div>
+                            <apx-chart class="w-100" *ngIf="ClaimpaymentTypeChart" [series]="ClaimpaymentTypeChart.series"
+                                [chart]="ClaimpaymentTypeChart.chart" [labels]="ClaimpaymentTypeChart.labels"
+                                [colors]="ClaimpaymentTypeChart.colors" [fill]="ClaimpaymentTypeChart.fill"
+                                [stroke]="ClaimpaymentTypeChart.stroke" [legend]="ClaimpaymentTypeChart.legend"
+                                [tooltip]="ClaimpaymentTypeChart.tooltip"
+                                [dataLabels]="ClaimpaymentTypeChart.dataLabels" [title]="ClaimpaymentTypeChart.title"
+                                [responsive]="ClaimpaymentTypeChart.responsive"
+                                [plotOptions]="ClaimpaymentTypeChart.plotOptions || {}">
+                            </apx-chart>
+
+                             <div class="d-flex align-items-center gap-1 justify-content-end ms-auto">
+                                <div *ngIf="ClaimpaymentTypeChart" class="custom_tooltip custom_tooltip_left ms-auto"
+                                    (click)="exportAvgBillByClaimType('csv')">
+                                    <svg _ngcontent-dyy-c491="" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="#8967B3" d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path></svg>
+                                    <div class="tooltip">
+                                        <p class="m-0">Export</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row gx-2 mt-2 mx-0">
+                    <div class="col-6">
+                        <div class=" graph_Card border card p-2 shadow-sm">
+                            <apx-chart [series]="monthlyRevenueChart.series" [chart]="monthlyRevenueChart.chart"
+                                [xaxis]="monthlyRevenueChart.xaxis" [yaxis]="monthlyRevenueChart.yaxis"
+                                [title]="monthlyRevenueChart.title" [stroke]="monthlyRevenueChart.stroke"
+                                [fill]="monthlyRevenueChart.fill" [colors]="monthlyRevenueChart.colors"
+                                [dataLabels]="monthlyRevenueChart.dataLabels" [legend]="monthlyRevenueChart.legend">
+                            </apx-chart>
+                            <div *ngIf="monthlyRevenueChart" class="custom_tooltip custom_tooltip_left ms-auto"
+                                (click)="exportNetRevenueByMonth('csv')">
+                                <svg _ngcontent-dyy-c491="" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="#8967B3" d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path></svg>
+                                <div class="tooltip">
+                                    <p class="m-0">Export</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class=" graph_Card border card p-2 shadow-sm">
+                            <apx-chart [series]="monthlyAvgBillChart.series" [chart]="monthlyAvgBillChart.chart"
+                                [xaxis]="monthlyAvgBillChart.xaxis" [yaxis]="monthlyAvgBillChart.yaxis"
+                                [title]="monthlyAvgBillChart.title" [stroke]="monthlyAvgBillChart.stroke"
+                                [fill]="monthlyAvgBillChart.fill" [colors]="monthlyAvgBillChart.colors"
+                                [dataLabels]="monthlyAvgBillChart.dataLabels" [legend]="monthlyAvgBillChart.legend">
+                            </apx-chart>
+                            <div *ngIf="monthlyAvgBillChart" class="custom_tooltip custom_tooltip_left ms-auto"
+                                (click)="exportAvgBillByMonth('csv')">
+                                <svg _ngcontent-dyy-c491="" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="#8967B3" d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path></svg>
+                                <div class="tooltip">
+                                    <p class="m-0">Export</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row gx-2 mt-2 mx-0 d-none">
+                    <div class="col-3">
+                        <div class=" graph_Card card p-2 shadow-sm border">
+                            <h6 class="text-center fw-bold">Avg. Bill by Patient Type</h6>
+                            <canvas id="avgBillPatientChart"></canvas>
+                            <div class="d-flex justify-content-center mt-2">
+                                <span class="me-3"><span style="color:#a5d8ff;">●</span> Insurance</span>
+                                <span><span style="color:#1c7ed6;">●</span> Cash</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class=" graph_Card card p-2 shadow-sm border">
+                            <h6 class="text-center fw-bold">Avg. Bill by Visit Type</h6>
+                            <canvas id="avgBillVisitChart"></canvas>
+                            <div class="d-flex justify-content-center mt-2">
+                                <span class="me-3"><span style="color:#ffd8a8;">●</span> OP</span>
+                                <span><span style="color:#f08c00;">●</span> IP</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class=" graph_Card card p-2 shadow-sm border">
+                            <h6 class="text-center fw-bold">Avg. Bill by Month</h6>
+                            <canvas id="avgBillLine"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row gx-2 mt-2 mx-0">
+                    <div class="col-4">
+                        <div class="rounded bg-white border shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center p-2">
+                                <h6 class="m-0 fw-semibold" style="color: #383A88;">Net Revenue by Payer</h6>
+                                <div class="custom_tooltip custom_tooltip_left" (click)="exportNetRevenueByPayerToCSV()"
+                                    style="cursor: pointer;">
+                                    <svg _ngcontent-dyy-c491="" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="#8967B3" d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path></svg>
+                                    <div class="tooltip">
+                                        <p class="m-0">Export</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="surgery_records graph_fixed_alter_list rounded-top-0">
+                                <div class="fixed_alter_header rounded-top-0">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-6 m-0" style="width: 45%;">
+                                            <p class="fw-semibold fs-9">Payer</p>
+                                        </div>
+                                        <div class="col-4 m-0" style="width: 30%;">
+                                            <p class="fw-semibold fs-9 d-flex align-items-center"
+                                                style="cursor: pointer;" (click)="sortPayerByNet()">
+                                                Net Revenue
+                                                <span class="ms-1" style="font-size: 12px;">{{ getPayerSortIcon()
+                                                    }}</span>
+                                            </p>
+                                        </div>
+                                        <div class="col-2 m-0" style="width: 25%;">
+                                            <p class="fw-semibold fs-9">Distribution (%)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body">
+                                    <div class="row gx-2 p-2 alter_div mx-0"
+                                        *ngFor="let item of FetchARMonthlyDoctorRevenueGroupBy4List">
+                                        <div class="col-6 m-0" style="width: 45%;">
+                                            <p class="">{{ item.InsuranceCompanyName }}</p>
+                                        </div>
+                                        <div class="col-4 m-0" style="width: 30%;">
+                                            <p class="">{{ item.Net | number:'1.0-2' }}</p>
+                                        </div>
+                                        <div class="col-2 m-0" style="width: 25%;">
+                                            <p class="">{{ item.NetPer | number:'1.0-2' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_footer">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-6 m-0" style="width: 45%;">
+                                            <p class="fw-semibold">Total</p>
+                                        </div>
+                                        <div class="col-4 m-0 d-flex gap-1 align-items-center"  style="width: 30%;">
+                                            <svg width="12" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                                </path></svg>
+                                            <p class="fw-semibold">{{ totalNetRevenueByPayer | number:'1.0-2' }}</p>
+                                        </div>
+                                        <div class="col-2 m-0" style="width: 25%;">
+                                            <p class="fw-semibold">100%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="rounded bg-white border shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center p-2">
+                                <h6 class="m-0 fw-semibold" style="color: #383A88;">Net Revenue by Category & Service
+                                </h6>
+                                <div class="custom_tooltip custom_tooltip_left"
+                                    (click)="exportNetRevenueByCategoryToCSV()" style="cursor: pointer;">
+                                    <svg _ngcontent-dyy-c491="" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="#8967B3" d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path></svg>
+                                    <div class="tooltip">
+                                        <p class="m-0">Export</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="surgery_records graph_fixed_alter_list rounded-top-0">
+                                <div class="fixed_alter_header rounded-top-0">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-6 m-0" style="width: 45%;">
+                                            <p class="fw-semibold fs-9">Category</p>
+                                        </div>
+                                        <div class="col-4 m-0" style="width: 30%;">
+                                            <p class="fw-semibold fs-9 d-flex align-items-center"
+                                                style="cursor: pointer;" (click)="sortCategoryByNet()">
+                                                Net Revenue
+                                                <span class="ms-1" style="font-size: 12px;">{{ getCategorySortIcon()
+                                                    }}</span>
+                                            </p>
+                                        </div>
+                                        <div class="col-2 m-0" style="width: 25%;">
+                                            <p class="fw-semibold fs-9">Distribution (%)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body">
+                                    <div class="row gx-2 p-2 alter_div mx-0"
+                                        *ngFor="let item of FetchARMonthlyDoctorRevenueGroupBy5List">
+                                        <div class="col-6 m-0" style="width: 45%;">
+                                            <p class="">{{ item.DepartmentName }}</p>
+                                        </div>
+                                        <div class="col-4 m-0" style="width: 30%;">
+                                            <p class="">{{ item.Net | number:'1.0-2' }}</p>
+                                        </div>
+                                        <div class="col-2 m-0" style="width: 25%;">
+                                            <p class="">{{ item.NetPer | number:'1.0-2' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_footer">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-6 m-0" style="width: 45%;">
+                                            <p class="fw-semibold">Total</p>
+                                        </div>
+                                        <div class="col-4 m-0 d-flex gap-1 align-items-center" style="width: 30%;">
+                                             <svg width="12" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51"></path></svg>
+                                            <p class="fw-semibold">{{ totalDepartmentNet | number:'1.0-2' }}</p>
+                                        </div>
+                                        <div class="col-2 m-0" style="width: 25%;">
+                                            <p class="fw-semibold">100%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="rounded bg-white border shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center p-2">
+                                <h6 class="m-0 fw-semibold" style="color: #383A88;">Net Revenue by Department & Doctor
+                                </h6>
+                                <div class="custom_tooltip custom_tooltip_left"
+                                    (click)="exportDepartmentDoctorNetRevenueToCSV()" style="cursor: pointer;">
+                                    <svg _ngcontent-dyy-c491="" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="#8967B3" d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path></svg>
+                                    <div class="tooltip">
+                                        <p class="m-0">Export</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="surgery_records graph_fixed_alter_list rounded-top-0">
+                                <div class="fixed_alter_header rounded-top-0">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-6 m-0" style="width: 45%;">
+                                            <p class="fw-semibold fs-9">Department</p>
+                                        </div>
+                                        <div class="col-4 m-0" style="width: 30%;">
+                                            <p class="fw-semibold fs-9 d-flex align-items-center"
+                                                style="cursor: pointer;" (click)="sortDepartmentByNet()">
+                                                Net Revenue
+                                                <span class="ms-1" style="font-size: 12px;">{{ getDepartmentSortIcon()
+                                                    }}</span>
+                                            </p>
+                                        </div>
+                                        <div class="col-2 m-0" style="width: 25%;">
+                                            <p class="fw-semibold fs-9">Distribution (%)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body">
+                                    <ng-container *ngFor="let dept of groupedDepartments">
+                                        <div class="row gx-2 p-2 alter_div mx-0" (click)="dept.Expanded = !dept.Expanded"
+                                            style="cursor: pointer;">
+                                            <div class="col-6 fw-semibold" style="width: 45%;">
+                                                <p class="m-0 d-flex align-items-center">
+                                                    <span class="me-2" style="font-weight: bold; font-style: normal;">{{
+                                                        dept.Expanded ? '−' : '+' }}</span>
+                                                    {{ dept.DepartmentName }}
+                                                </p>
+                                            </div>
+                                            <div class="col-4 m-0" style="width: 30%;">
+                                                <p class="m-0 fw-semibold">{{ getDepartmentTotalNet(dept) | number:
+                                                    '1.0-2' }}</p>
+                                            </div>
+                                            <div class="col-2 m-0" style="width: 25%;">
+                                                <p class="m-0 fw-semibold">{{ getDepartmentTotalNetPer(dept) | number:
+                                                    '1.0-2' }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="dept.Expanded">
+                                            <div class="row gx-2 p-2 alter_div mx-0" *ngFor="let doc of dept.Doctors">
+                                                <div class="col-6 ps-4" style="width: 45%;">
+                                                    <p class="m-0">
+                                                        <a href="javascript:void(0)" style="color: #234e51;" (click)="openDoctorDetails(doc)"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#doctorPayoutDetails">
+                                                            {{ doc.DoctorName }}
+                                                        </a>
+                                                    </p>
+                                                </div>
+                                                <div class="col-4" style="width: 30%;">
+
+                                                    <p class="m-0">{{ doc.Net | number:'1.0-2' }}</p>
+                                                </div>
+                                                <div class="col-2" style="width: 25%;">
+                                                    <p class="m-0">{{ getDoctorPercentage(dept, doc) }}</p>
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                                <div class="fixed_alter_footer">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-6 m-0" style="width: 45%;">
+                                            <p class="fw-semibold">Total</p>
+                                        </div>
+                                        <div class="col-4 m-0 d-flex gap-1 align-items-center" style="width: 30%;">
+                                             <svg width="12" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51"></path></svg>
+                                            <p class="fw-semibold">{{ getTotalNet() | number:'1.0-2' }}</p>
+                                        </div>
+                                        <div class="col-2 m-0" style="width: 25%;">
+                                            <p class="fw-semibold">{{ getTotalPercentage() }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade doctorPayoutDetails" id="doctorPayoutDetails" tabindex="-1" aria-labelledby="revenueModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered my-2" style="max-width: 99%;">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center justify-content-between" *ngIf="!isPrinting">
+                <h5 class="modal-title" id="revenueModalLabel">Doctor comprehensive Report for the period ({{
+                    getFromDateToDate() }})</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-main-outline" (click)="print()">Export</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="printpage_body" id="printSection">
+
+                    <div class="print-header" style="text-align:center; width:100%;">
+                        <img src="assets/images/header.svg" alt="Header" style="width:100%; max-height:150px;">
+                        <div
+                            style="position:relative; top:-60px; left: 35%; z-index: 1111; text-align:center;display: flex;align-items: center; gap: 0.5rem;">
+                            <p style="color: #fff;font-size: 20px;font-weight: 600;"><strong>Location:</strong>
+                                {{location}}</p>
+                            <p style="color: #fff;font-size: 20px;margin-left: 20px;font-weight: 600;">
+                                <strong>Date:</strong> <span id="currentDate"> {{currentdate}}</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Top Info -->
+                    <div class="payoutheader rounded p-2">
+                        <div class="row g-2 mx-0">
+
+                            <div class="col-5">
+                                <div class="d-flex align-items-center gap-1">
+                                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="24" height="24" rx="12" fill="white" fill-opacity="0.1" />
+                                        <path
+                                            d="M16.7992 17.9996V16.1996C16.7992 14.5026 16.7992 13.654 16.272 13.1268C15.7448 12.5996 14.8963 12.5996 13.1992 12.5996L11.9992 13.7996L10.7992 12.5996C9.10216 12.5996 8.25363 12.5996 7.72643 13.1268C7.19922 13.654 7.19922 14.5026 7.19922 16.1996V17.9996"
+                                            stroke="white" stroke-width="0.9" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path d="M14.4004 12.5996V15.8996" stroke="white" stroke-width="0.9"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path
+                                            d="M9.89922 12.5996V14.9996M9.89922 14.9996C10.562 14.9996 11.0992 15.5368 11.0992 16.1996V16.7996M9.89922 14.9996C9.23648 14.9996 8.69922 15.5368 8.69922 16.1996V16.7996"
+                                            stroke="white" stroke-width="0.9" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path
+                                            d="M14.1004 8.7V8.1C14.1004 6.9402 13.1602 6 12.0004 6C10.8406 6 9.90039 6.9402 9.90039 8.1V8.7C9.90039 9.8598 10.8406 10.8 12.0004 10.8C13.1602 10.8 14.1004 9.8598 14.1004 8.7Z"
+                                            stroke="white" stroke-width="0.9" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path
+                                            d="M14.8492 16.3504C14.8492 16.5989 14.6477 16.8004 14.3992 16.8004C14.1507 16.8004 13.9492 16.5989 13.9492 16.3504C13.9492 16.1019 14.1507 15.9004 14.3992 15.9004C14.6477 15.9004 14.8492 16.1019 14.8492 16.3504Z"
+                                            stroke="white" stroke-width="0.9" />
+                                    </svg>
+
+                                    <div>
+                                        <h6 class="m-0 ">Doctor</h6>
+                                        <p class="mt-1">{{ doctorData?.DoctorName }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="d-flex align-items-center gap-1">
+                                    <svg width="30" height="30" viewBox="0 0 25 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="0.5" width="24" height="24" rx="12" fill="white" fill-opacity="0.1" />
+                                        <path
+                                            d="M17.8993 11.784V17.3993C17.8993 17.5703 17.8408 17.712 17.7238 17.8245C17.6114 17.9415 17.4696 18 17.2986 18H7.70135C7.53487 18 7.39314 17.9415 7.27615 17.8245C7.15917 17.712 7.10067 17.5703 7.10067 17.3993V11.784C6.9072 11.5681 6.75872 11.3251 6.65523 11.0551C6.55174 10.7807 6.5 10.4972 6.5 10.2047V6.60068C6.5 6.4342 6.55849 6.29246 6.67548 6.17548C6.79246 6.05849 6.9342 6 7.10067 6H17.8993C18.0658 6 18.2075 6.05849 18.3245 6.17548C18.4415 6.29246 18.5 6.4342 18.5 6.60068V10.2047C18.5 10.4972 18.4483 10.7807 18.3448 11.0551C18.2413 11.3251 18.0928 11.5681 17.8993 11.784ZM16.698 16.7986V12.5332C16.509 12.5782 16.3088 12.6007 16.0973 12.6007C15.7463 12.6007 15.4156 12.5287 15.1052 12.3847C14.7947 12.2407 14.527 12.0405 14.302 11.784C14.0771 12.0405 13.8093 12.2407 13.4989 12.3847C13.1839 12.5287 12.851 12.6007 12.5 12.6007C12.149 12.6007 11.8183 12.5287 11.5079 12.3847C11.1929 12.2407 10.9229 12.0405 10.698 11.784C10.4775 12.0405 10.2098 12.2407 9.89483 12.3847C9.58436 12.5287 9.25366 12.6007 8.9027 12.6007C8.69573 12.6007 8.4955 12.5782 8.30202 12.5332V16.7986H16.698ZM13.7013 10.2047C13.7013 10.0337 13.7598 9.89201 13.8768 9.77953C13.9893 9.66254 14.131 9.60405 14.302 9.60405C14.4685 9.60405 14.6102 9.66254 14.7272 9.77953C14.8442 9.89201 14.9027 10.0337 14.9027 10.2047C14.9027 10.4207 14.9567 10.6209 15.0647 10.8054C15.1727 10.9854 15.3189 11.1294 15.5034 11.2373C15.6834 11.3453 15.8813 11.3993 16.0973 11.3993C16.3133 11.3993 16.5135 11.3453 16.698 11.2373C16.8825 11.1294 17.0287 10.9854 17.1367 10.8054C17.2447 10.6209 17.2986 10.4207 17.2986 10.2047V7.20135H7.70135V10.2047C7.70135 10.4207 7.75534 10.6209 7.86333 10.8054C7.97132 10.9854 8.11755 11.1294 8.30202 11.2373C8.4865 11.3453 8.68673 11.3993 8.9027 11.3993C9.11867 11.3993 9.3189 11.3453 9.50337 11.2373C9.68785 11.1294 9.83408 10.9854 9.94207 10.8054C10.0501 10.6209 10.104 10.4207 10.104 10.2047C10.104 10.0337 10.1603 9.89201 10.2728 9.77953C10.3898 9.66254 10.5315 9.60405 10.698 9.60405C10.869 9.60405 11.0129 9.66254 11.1299 9.77953C11.2424 9.89201 11.2986 10.0337 11.2986 10.2047C11.2986 10.4207 11.3526 10.6209 11.4606 10.8054C11.5686 10.9854 11.7148 11.1294 11.8993 11.2373C12.0838 11.3453 12.284 11.3993 12.5 11.3993C12.716 11.3993 12.9162 11.3453 13.1007 11.2373C13.2852 11.1294 13.4314 10.9854 13.5394 10.8054C13.6474 10.6209 13.7013 10.4207 13.7013 10.2047Z"
+                                            fill="white" />
+                                    </svg>
+
+                                    <div>
+                                        <h6 class="m-0 ">Department</h6>
+                                        <p class="mt-1">{{ doctorData?.DepartmentName }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="d-flex align-items-center gap-1">
+                                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="24" height="24" rx="12" fill="white" fill-opacity="0.1" />
+                                        <path d="M14.3996 6V8.4M9.59961 6V8.4" stroke="white" stroke-width="0.9"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path
+                                            d="M12.5996 7.2002H11.3996C9.13687 7.2002 8.0055 7.2002 7.30255 7.90314C6.59961 8.60609 6.59961 9.73745 6.59961 12.0002V13.2002C6.59961 15.4629 6.59961 16.5943 7.30255 17.2972C8.0055 18.0002 9.13687 18.0002 11.3996 18.0002H12.5996C14.8623 18.0002 15.9937 18.0002 16.6966 17.2972C17.3996 16.5943 17.3996 15.4629 17.3996 13.2002V12.0002C17.3996 9.73745 17.3996 8.60609 16.6966 7.90314C15.9937 7.2002 14.8623 7.2002 12.5996 7.2002Z"
+                                            stroke="white" stroke-width="0.9" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path d="M6.59961 10.7998H17.3996" stroke="white" stroke-width="0.9"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path
+                                            d="M11.9969 13.2002H12.0023M11.9969 15.6002H12.0023M14.3942 13.2002H14.3996M9.59961 13.2002H9.60499M9.59961 15.6002H9.60499"
+                                            stroke="white" stroke-width="0.9" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                    <div>
+                                        <h6 class="m-0 ">Date</h6>
+                                        <p class="mt-1">{{ today | date: 'dd-MMM-yyyy' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2 visitsadmissions">
+                        <div class="row mx-0 g-2">
+                            <div class="col-6">
+                                <div class="visitCard p-2 rounded">
+                                    <div class="row mx-0 align-items-center gx-2">
+                                        <div class="col-5">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <!-- <svg width="35" height="35" viewBox="0 0 28 28" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect width="28" height="28" rx="14" fill="#4990E2" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M12.0015 7.3327C12.1072 6.63606 12.6023 6.06851 13.2681 5.88107C13.4937 5.81759 13.9487 5.81687 14.182 5.87964C14.6007 5.99226 15.0404 6.33158 15.2406 6.69651C15.4133 7.01129 15.4706 7.24162 15.467 7.60637L15.4637 7.94343L15.3875 8.15875C15.2415 8.57124 14.9799 8.89419 14.6181 9.10834L14.4451 9.21077L14.5518 9.28665C14.8691 9.51237 15.1059 9.89742 15.1576 10.2715C15.1743 10.3917 15.1788 11.5025 15.1677 12.7398C15.1566 13.9771 15.1584 15.0333 15.1717 15.0869C15.1871 15.1488 15.5794 15.5539 16.2489 16.1992L17.3019 17.2142L17.361 17.3634C17.4151 17.5001 17.4965 17.8584 17.9917 20.137C18.2168 21.1729 18.2172 21.1759 18.1485 21.4145C18.0241 21.8468 17.715 22.1129 17.2986 22.1463C17.172 22.1565 16.9981 22.1456 16.9123 22.1222C16.6904 22.0615 16.454 21.8659 16.3409 21.6495L16.2438 21.4636L15.9405 20.0779C15.7376 19.1509 15.6102 18.6465 15.5556 18.5543C15.5108 18.4784 15.2989 18.2704 15.0848 18.0921C13.59 16.8467 13.2109 16.5197 12.9117 16.2178L12.5738 15.8769L12.4297 15.5825L12.2856 15.2881L12.2671 13.6007C12.2569 12.6727 12.2373 11.9386 12.2237 11.9695C12.1839 12.0591 12.098 12.3576 11.9327 12.9807C11.848 13.3 11.7459 13.6153 11.7057 13.6814C11.548 13.9409 11.264 14.1043 10.9704 14.1043H10.7951L10.4852 13.9896L10.3402 13.8387C10.1703 13.6619 10.1021 13.4838 10.1046 13.2242C10.1064 13.0377 10.6302 11.0751 10.7293 10.8834C10.8152 10.7173 11.0096 10.5654 11.8407 10.015C12.2894 9.71783 12.7361 9.41309 12.8336 9.33773L13.0108 9.20073L12.8538 9.11984C12.6252 9.00201 12.2985 8.65255 12.1665 8.38477C12.1035 8.25676 12.0307 8.03246 12.0049 7.8864L11.9579 7.62079L12.0015 7.3327ZM12.4229 7.01762C12.5943 6.6455 12.8906 6.37603 13.3032 6.21705C13.3866 6.18491 13.558 6.16937 13.7696 6.17473L14.1043 6.18319L14.3507 6.30581C14.659 6.45925 14.9358 6.75475 15.0517 7.05406L15.135 7.2693V7.58764V7.90598L15.0517 8.12122C15.0032 8.24642 14.8915 8.4214 14.7845 8.53963C14.456 8.9028 14.1357 9.03138 13.6301 9.00318L13.3238 8.98606L13.1007 8.87123C12.8274 8.73056 12.5543 8.44308 12.4227 8.15758L12.3241 7.94343L12.3241 7.58764L12.3242 7.23185L12.4229 7.01762ZM12.0687 10.2552C13.2732 9.44357 13.2992 9.42777 13.4976 9.38608C13.9988 9.28088 14.5091 9.53949 14.7408 10.016L14.8438 10.228L14.8624 12.756L14.8809 15.284L14.924 15.3597C14.9478 15.4014 15.0645 15.5266 15.1836 15.6379C15.889 16.298 16.967 17.3549 17.0242 17.4426C17.065 17.505 17.2444 18.2488 17.4807 19.3359L17.8701 21.1265L17.848 21.2787C17.8213 21.4628 17.6417 21.6958 17.4709 21.7679C17.3133 21.8344 17.0365 21.8338 16.9089 21.7668C16.7962 21.7075 16.6717 21.5786 16.6097 21.457C16.5869 21.4122 16.426 20.7394 16.2521 19.9618C16.052 19.067 15.9055 18.4921 15.8527 18.3954L15.7694 18.2427L14.4724 17.1492C13.7591 16.5477 13.0936 15.9579 12.9936 15.8383C12.8936 15.7189 12.7644 15.52 12.7063 15.3964L12.6009 15.1717L12.6023 13.3927L12.6037 11.6137L13.1228 11.2621C13.4082 11.0687 13.6584 10.8791 13.6787 10.8408C13.7291 10.7456 13.6593 10.6213 13.5554 10.6213C13.4695 10.6213 12.3337 11.3765 12.1248 11.5725C11.944 11.7423 11.8909 11.8729 11.675 12.6811C11.5677 13.0828 11.4572 13.4561 11.4295 13.5108C11.3597 13.6483 11.148 13.7715 10.9771 13.7739C10.7137 13.7776 10.476 13.587 10.4291 13.3346L10.4058 13.2093L10.579 12.58C10.6743 12.2339 10.8033 11.7654 10.8658 11.5388C10.9283 11.3122 11.0028 11.0801 11.0315 11.023C11.0664 10.9533 11.4075 10.7008 12.0687 10.2552ZM15.4278 12.0581C15.3365 12.0002 15.3192 11.8976 15.3888 11.8272C15.4601 11.7553 15.5486 11.771 16.2602 11.982C16.722 12.1189 16.9758 12.214 17.0674 12.2846C17.5748 12.6755 17.5264 13.4421 16.9753 13.7451L16.7883 13.8479L16.5946 13.8514C16.3844 13.8551 15.4753 13.6079 15.3859 13.5227C15.3226 13.4623 15.357 13.2978 15.4397 13.2658C15.4721 13.2532 15.7327 13.3113 16.0188 13.3948L16.5391 13.5466L16.6554 13.5212C17.0255 13.4403 17.2066 13.0168 17.0091 12.694C16.9063 12.5259 16.8406 12.4958 16.1229 12.2881C15.7865 12.1907 15.4737 12.0872 15.4278 12.0581ZM11.3443 17.2877C11.7098 16.4123 12.0367 15.6749 12.0709 15.6492C12.1072 15.6218 12.1253 15.6077 12.1444 15.606C12.1648 15.6041 12.1864 15.6162 12.2325 15.6411C12.3407 15.6996 12.3218 15.8043 12.1144 16.2953C12.01 16.5424 11.7951 17.0564 11.6369 17.4375C11.4786 17.8186 11.0826 18.7708 10.7567 19.5535C10.431 20.3363 10.1532 21.0237 10.1395 21.0811C10.0856 21.3075 10.2577 21.6432 10.4901 21.7646C10.7191 21.8842 11.0953 21.8016 11.2923 21.5883C11.3373 21.5395 11.7811 20.505 12.2786 19.2892C12.776 18.0735 13.2028 17.0415 13.2269 16.996C13.2982 16.8613 13.5277 16.9063 13.5277 17.0549C13.5277 17.0833 13.3503 17.5392 13.1334 18.0679C12.9166 18.5966 12.6153 19.3326 12.464 19.7034C12.3126 20.0741 12.0785 20.6471 11.9438 20.9767C11.8091 21.3063 11.6649 21.6265 11.6233 21.6883C11.434 21.9695 11.1639 22.1229 10.813 22.1483L10.5639 22.1663L10.3605 22.0659C10.1321 21.9529 9.99087 21.8034 9.88461 21.5618L9.8125 21.3979L9.828 21.1311L9.84346 20.8644L10.2617 19.8719C10.4917 19.326 10.9789 18.1631 11.3443 17.2877Z"
+                                                        fill="white" stroke="white" stroke-width="0.35" />
+                                                </svg> -->
+                                                <div class="op_circle">
+                                                    <p>OP</p>
+                                                </div>
+                                                <div>
+                                                    <p class="fs-6">NUMBER OF</p>
+                                                    <span class="fw-semibold fs-6">VISITS</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-7">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="visit_block p-2 rounded col">
+                                                    <label for="" class="form-label fw-semibold fs-6">AOL</label>
+                                                    <p class="fw-bold fs-6">{{doctorData?.OPVisits_OL}}</p>
+                                                </div>
+                                                <div class="visit_block p-2 rounded col">
+                                                    <label for="" class="form-label fw-semibold fs-6">ASU</label>
+                                                    <p class="fw-bold fs-6">{{doctorData?.OPVisits_SW}}</p>
+                                                </div>
+                                                <div class="visit_block p-2 rounded col">
+                                                    <label for="" class="form-label fw-semibold fs-6">ANU</label>
+                                                    <p class="fw-bold fs-6">{{doctorData?.OPVisits_NZ}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="visitCard p-2 rounded">
+                                    <div class="row mx-0 align-items-center gx-2">
+                                        <div class="col-5">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <!-- <svg width="35" height="35" viewBox="0 0 28 28" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect width="28" height="28" rx="14" fill="#4990E2" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M12.0015 7.3327C12.1072 6.63606 12.6023 6.06851 13.2681 5.88107C13.4937 5.81759 13.9487 5.81687 14.182 5.87964C14.6007 5.99226 15.0404 6.33158 15.2406 6.69651C15.4133 7.01129 15.4706 7.24162 15.467 7.60637L15.4637 7.94343L15.3875 8.15875C15.2415 8.57124 14.9799 8.89419 14.6181 9.10834L14.4451 9.21077L14.5518 9.28665C14.8691 9.51237 15.1059 9.89742 15.1576 10.2715C15.1743 10.3917 15.1788 11.5025 15.1677 12.7398C15.1566 13.9771 15.1584 15.0333 15.1717 15.0869C15.1871 15.1488 15.5794 15.5539 16.2489 16.1992L17.3019 17.2142L17.361 17.3634C17.4151 17.5001 17.4965 17.8584 17.9917 20.137C18.2168 21.1729 18.2172 21.1759 18.1485 21.4145C18.0241 21.8468 17.715 22.1129 17.2986 22.1463C17.172 22.1565 16.9981 22.1456 16.9123 22.1222C16.6904 22.0615 16.454 21.8659 16.3409 21.6495L16.2438 21.4636L15.9405 20.0779C15.7376 19.1509 15.6102 18.6465 15.5556 18.5543C15.5108 18.4784 15.2989 18.2704 15.0848 18.0921C13.59 16.8467 13.2109 16.5197 12.9117 16.2178L12.5738 15.8769L12.4297 15.5825L12.2856 15.2881L12.2671 13.6007C12.2569 12.6727 12.2373 11.9386 12.2237 11.9695C12.1839 12.0591 12.098 12.3576 11.9327 12.9807C11.848 13.3 11.7459 13.6153 11.7057 13.6814C11.548 13.9409 11.264 14.1043 10.9704 14.1043H10.7951L10.4852 13.9896L10.3402 13.8387C10.1703 13.6619 10.1021 13.4838 10.1046 13.2242C10.1064 13.0377 10.6302 11.0751 10.7293 10.8834C10.8152 10.7173 11.0096 10.5654 11.8407 10.015C12.2894 9.71783 12.7361 9.41309 12.8336 9.33773L13.0108 9.20073L12.8538 9.11984C12.6252 9.00201 12.2985 8.65255 12.1665 8.38477C12.1035 8.25676 12.0307 8.03246 12.0049 7.8864L11.9579 7.62079L12.0015 7.3327ZM12.4229 7.01762C12.5943 6.6455 12.8906 6.37603 13.3032 6.21705C13.3866 6.18491 13.558 6.16937 13.7696 6.17473L14.1043 6.18319L14.3507 6.30581C14.659 6.45925 14.9358 6.75475 15.0517 7.05406L15.135 7.2693V7.58764V7.90598L15.0517 8.12122C15.0032 8.24642 14.8915 8.4214 14.7845 8.53963C14.456 8.9028 14.1357 9.03138 13.6301 9.00318L13.3238 8.98606L13.1007 8.87123C12.8274 8.73056 12.5543 8.44308 12.4227 8.15758L12.3241 7.94343L12.3241 7.58764L12.3242 7.23185L12.4229 7.01762ZM12.0687 10.2552C13.2732 9.44357 13.2992 9.42777 13.4976 9.38608C13.9988 9.28088 14.5091 9.53949 14.7408 10.016L14.8438 10.228L14.8624 12.756L14.8809 15.284L14.924 15.3597C14.9478 15.4014 15.0645 15.5266 15.1836 15.6379C15.889 16.298 16.967 17.3549 17.0242 17.4426C17.065 17.505 17.2444 18.2488 17.4807 19.3359L17.8701 21.1265L17.848 21.2787C17.8213 21.4628 17.6417 21.6958 17.4709 21.7679C17.3133 21.8344 17.0365 21.8338 16.9089 21.7668C16.7962 21.7075 16.6717 21.5786 16.6097 21.457C16.5869 21.4122 16.426 20.7394 16.2521 19.9618C16.052 19.067 15.9055 18.4921 15.8527 18.3954L15.7694 18.2427L14.4724 17.1492C13.7591 16.5477 13.0936 15.9579 12.9936 15.8383C12.8936 15.7189 12.7644 15.52 12.7063 15.3964L12.6009 15.1717L12.6023 13.3927L12.6037 11.6137L13.1228 11.2621C13.4082 11.0687 13.6584 10.8791 13.6787 10.8408C13.7291 10.7456 13.6593 10.6213 13.5554 10.6213C13.4695 10.6213 12.3337 11.3765 12.1248 11.5725C11.944 11.7423 11.8909 11.8729 11.675 12.6811C11.5677 13.0828 11.4572 13.4561 11.4295 13.5108C11.3597 13.6483 11.148 13.7715 10.9771 13.7739C10.7137 13.7776 10.476 13.587 10.4291 13.3346L10.4058 13.2093L10.579 12.58C10.6743 12.2339 10.8033 11.7654 10.8658 11.5388C10.9283 11.3122 11.0028 11.0801 11.0315 11.023C11.0664 10.9533 11.4075 10.7008 12.0687 10.2552ZM15.4278 12.0581C15.3365 12.0002 15.3192 11.8976 15.3888 11.8272C15.4601 11.7553 15.5486 11.771 16.2602 11.982C16.722 12.1189 16.9758 12.214 17.0674 12.2846C17.5748 12.6755 17.5264 13.4421 16.9753 13.7451L16.7883 13.8479L16.5946 13.8514C16.3844 13.8551 15.4753 13.6079 15.3859 13.5227C15.3226 13.4623 15.357 13.2978 15.4397 13.2658C15.4721 13.2532 15.7327 13.3113 16.0188 13.3948L16.5391 13.5466L16.6554 13.5212C17.0255 13.4403 17.2066 13.0168 17.0091 12.694C16.9063 12.5259 16.8406 12.4958 16.1229 12.2881C15.7865 12.1907 15.4737 12.0872 15.4278 12.0581ZM11.3443 17.2877C11.7098 16.4123 12.0367 15.6749 12.0709 15.6492C12.1072 15.6218 12.1253 15.6077 12.1444 15.606C12.1648 15.6041 12.1864 15.6162 12.2325 15.6411C12.3407 15.6996 12.3218 15.8043 12.1144 16.2953C12.01 16.5424 11.7951 17.0564 11.6369 17.4375C11.4786 17.8186 11.0826 18.7708 10.7567 19.5535C10.431 20.3363 10.1532 21.0237 10.1395 21.0811C10.0856 21.3075 10.2577 21.6432 10.4901 21.7646C10.7191 21.8842 11.0953 21.8016 11.2923 21.5883C11.3373 21.5395 11.7811 20.505 12.2786 19.2892C12.776 18.0735 13.2028 17.0415 13.2269 16.996C13.2982 16.8613 13.5277 16.9063 13.5277 17.0549C13.5277 17.0833 13.3503 17.5392 13.1334 18.0679C12.9166 18.5966 12.6153 19.3326 12.464 19.7034C12.3126 20.0741 12.0785 20.6471 11.9438 20.9767C11.8091 21.3063 11.6649 21.6265 11.6233 21.6883C11.434 21.9695 11.1639 22.1229 10.813 22.1483L10.5639 22.1663L10.3605 22.0659C10.1321 21.9529 9.99087 21.8034 9.88461 21.5618L9.8125 21.3979L9.828 21.1311L9.84346 20.8644L10.2617 19.8719C10.4917 19.326 10.9789 18.1631 11.3443 17.2877Z"
+                                                        fill="white" stroke="white" stroke-width="0.35" />
+                                                </svg> -->
+                                                <div class="op_circle">
+                                                    <p>IP</p>
+                                                </div>
+                                                <div>
+                                                    <p class="fs-6">NUMBER OF</p>
+                                                    <span class="fw-semibold fs-6">ADMISSIONS</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-7">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="visit_block p-2 rounded col">
+                                                    <label for="" class="form-label fw-semibold fs-6">AOL</label>
+                                                    <p class="fw-bold fs-6">{{doctorData?.IPVisits_OL}}</p>
+                                                </div>
+                                                <div class="visit_block p-2 rounded col">
+                                                    <label for="" class="form-label fw-semibold fs-6">ASU</label>
+                                                    <p class="fw-bold fs-6">{{doctorData?.IPVisits_SW}}</p>
+                                                </div>
+                                                <div class="visit_block p-2 rounded col">
+                                                    <label for="" class="form-label fw-semibold fs-6">ANU</label>
+                                                    <p class="fw-bold fs-6">{{doctorData?.IPVisits_NZ}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Services Table -->
+                    <!-- <h5 class="fw-bold clr-primary-600 ">Services</h5> -->
+
+                    <div class="table_header p-2 mt-2 mb-2 rounded">
+                        <div class="d-flex align-items-center gap-2">
+                            <svg width="20" height="20" viewBox="0 0 12 12" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M10.4069 2.51562H1.59156C1.03771 2.51562 0.576172 2.97716 0.576172 3.53101V8.44639C0.576172 9.00024 1.03771 9.46178 1.59156 9.46178H10.4069C10.9608 9.46178 11.4223 9.00024 11.4223 8.44639V3.55409C11.4223 2.97716 10.9608 2.51562 10.4069 2.51562ZM2.76848 8.44639C2.76848 7.77716 2.23771 7.26947 1.59156 7.26947V4.73101C2.26079 4.73101 2.76848 4.20024 2.76848 3.55409H9.23002C9.23002 4.22332 9.76079 4.73101 10.4069 4.73101V7.26947C9.73771 7.26947 9.23002 7.80024 9.23002 8.44639H2.76848Z"
+                                    fill="white" />
+                                <path
+                                    d="M5.99907 7.59286C6.92946 7.59286 7.68368 6.83864 7.68368 5.90825C7.68368 4.97786 6.92946 4.22363 5.99907 4.22363C5.06868 4.22363 4.31445 4.97786 4.31445 5.90825C4.31445 6.83864 5.06868 7.59286 5.99907 7.59286Z"
+                                    fill="white" />
+                            </svg>
+                            <p class="fs-7">Services</p>
+                        </div>
+                    </div>
+                    <table class="table table-bordered text-center align-middle">
+                        <thead>
+                            <tr class="table-secondary">
+                                <th>Category</th>
+                                <th>AOL</th>
+                                <th>ASU</th>
+                                <th>ANU</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-start" style="width: 30%;font-weight: bold;">CONSULTATIONS</td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.CONSULTATIONS_OL!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.CONSULTATIONS_OL}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.CONSULTATIONS_SW!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.CONSULTATIONS_SW}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.CONSULTATIONS_NZ!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.CONSULTATIONS_NZ}}
+                                    </div>    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start" style="width: 30%;font-weight: bold;">PROCEDURES</td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.PROCEDURES_OL!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.PROCEDURES_OL}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.PROCEDURES_SW!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.PROCEDURES_SW}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.PROCEDURES_NZ!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.PROCEDURES_NZ}}
+                                    </div>    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start" style="width: 30%;font-weight: bold;">BED CHARGES</td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.BEDCHARGES_OL!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.BEDCHARGES_OL}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.BEDCHARGES_SW!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.BEDCHARGES_SW}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.BEDCHARGES_NZ!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.BEDCHARGES_NZ}}
+                                    </div>    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start" style="width: 30%;font-weight: bold;">PACKAGE</td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.PACKAGE_OL!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.PACKAGE_OL}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.PACKAGE_SW!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.PACKAGE_SW}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.PACKAGE_NZ!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.PACKAGE_NZ}}
+                                    </div>    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start" style="width: 30%;font-weight: bold;">LAB</td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.LAB_OL!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.LAB_OL}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.LAB_SW!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.LAB_SW}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.LAB_NZ!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.LAB_NZ}}
+                                    </div>    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start" style="width: 30%;font-weight: bold;">MEDICINES</td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.MEDICINES_OL!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.MEDICINES_OL}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.MEDICINES_SW!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.MEDICINES_SW}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.MEDICINES_NZ!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.MEDICINES_NZ}}
+                                    </div>    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start" style="width: 30%;font-weight: bold;">RADIOLOGY</td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.RADIOLOGY_OL!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.RADIOLOGY_OL}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.RADIOLOGY_SW!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.RADIOLOGY_SW}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.RADIOLOGY_NZ!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.RADIOLOGY_NZ}}
+                                    </div>    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start" style="width: 30%;font-weight: bold;">OTHERS</td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.OTHERS_OL!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.OTHERS_OL}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.OTHERS_SW!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.OTHERS_SW}}
+                                    </div>    
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex align-items-center gap-1" style="min-width: 7rem;">
+                                        <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="doctorData?.OTHERS_NZ!='-'">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.OTHERS_NZ}}
+                                    </div>    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Package Table -->
+                    <div class="table_header p-2 mt-2 mb-2 rounded">
+                        <div class="d-flex align-items-center gap-2">
+                            <svg width="20" height="20" viewBox="0 0 10 10" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_2900_22709)">
+                                    <path
+                                        d="M8.44898 1.06342L9.16732 2.49967H0.833984L1.55232 1.06342C1.5869 0.994224 1.64006 0.936017 1.70585 0.895321C1.77164 0.854626 1.84746 0.833049 1.92482 0.833008H8.07648C8.15384 0.833049 8.22966 0.854626 8.29545 0.895321C8.36124 0.936017 8.4144 0.994224 8.44898 1.06342ZM0.833984 3.33301H9.16732V8.74967C9.16732 8.86018 9.12342 8.96616 9.04528 9.0443C8.96714 9.12244 8.86116 9.16634 8.75065 9.16634H1.25065C1.14014 9.16634 1.03416 9.12244 0.956023 9.0443C0.877883 8.96616 0.833984 8.86018 0.833984 8.74967V3.33301ZM2.08398 7.49967C2.08398 7.61018 2.12788 7.71616 2.20602 7.7943C2.28416 7.87244 2.39014 7.91634 2.50065 7.91634H4.16732C4.27782 7.91634 4.38381 7.87244 4.46195 7.7943C4.54009 7.71616 4.58398 7.61018 4.58398 7.49967C4.58398 7.38917 4.54009 7.28319 4.46195 7.20505C4.38381 7.12691 4.27782 7.08301 4.16732 7.08301H2.50065C2.39014 7.08301 2.28416 7.12691 2.20602 7.20505C2.12788 7.28319 2.08398 7.38917 2.08398 7.49967Z"
+                                        fill="white" />
+                                </g>
+                            </svg>
+                            <p class="fs-7">Packages</p>
+                        </div>
+                    </div>
+                    <table class="table table-bordered" *ngIf="packageList.length">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th style="width: 15%;">Code</th>
+                                <th style="width: 70%;">Description</th>
+                                <th style="width: 15%;">Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let pkg of packageList">
+                                <td>{{ pkg.ServiceCode }}</td>
+                                <td>{{ pkg.ServiceItemName }}</td>
+                                <td>{{ pkg.Count }}</td>
+                            </tr>
+                            <tr class="fw-bold">
+                                <td colspan="2" class="text-end">Total:</td>
+                                <td>{{ getTotal(packageList) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Procedure Table -->
+                    <div class="table_header p-2 mt-2 mb-2 rounded">
+                        <div class="d-flex align-items-center gap-2">
+                            <svg width="20" height="20" viewBox="0 0 10 10" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M5 0C2.243 0 0 2.243 0 5C0 7.757 2.243 10 5 10C7.757 10 10 7.757 10 5C10 2.243 7.757 0 5 0ZM5 9.58333C2.47273 9.58333 0.416667 7.52727 0.416667 5C0.416667 2.47273 2.47273 0.416667 5 0.416667C7.52727 0.416667 9.58333 2.47273 9.58333 5C9.58333 7.52727 7.52727 9.58333 5 9.58333Z"
+                                    fill="white" />
+                                <path
+                                    d="M8.54102 4.0628H7.97731C7.92224 3.88697 7.85231 3.7178 7.76835 3.55716L8.16747 3.15803C8.24614 3.07939 8.28943 2.97491 8.28943 2.86385C8.28943 2.75276 8.2461 2.64828 8.16747 2.56966L7.42999 1.83218C7.35135 1.75353 7.24687 1.71022 7.13579 1.71022C7.02472 1.71022 6.92024 1.75353 6.8416 1.83218L6.44247 2.2313C6.28183 2.14735 6.11264 2.07743 5.93683 2.02235V1.45866C5.93683 1.22891 5.74991 1.04199 5.52016 1.04199H4.47849C4.24874 1.04199 4.06183 1.22891 4.06183 1.45866V2.02237C3.88599 2.07743 3.71683 2.14737 3.55618 2.23133L3.15706 1.8322C3.07841 1.75353 2.97393 1.71024 2.86287 1.71024C2.75179 1.71024 2.64731 1.75358 2.56868 1.8322L1.8312 2.56968C1.75256 2.64833 1.70924 2.7528 1.70924 2.86389C1.70924 2.97495 1.75256 3.07943 1.8312 3.15808L2.23033 3.5572C2.14637 3.71785 2.07645 3.88703 2.02137 4.06285H1.45768C1.22793 4.06285 1.04102 4.24976 1.04102 4.47951V5.52118C1.04102 5.75093 1.22793 5.93785 1.45768 5.93785H2.02137C2.07643 6.11368 2.14637 6.28285 2.23033 6.44349L1.8312 6.84262C1.75254 6.92126 1.70924 7.02574 1.70924 7.1368C1.70924 7.24789 1.75258 7.35237 1.8312 7.43099L2.56868 8.16847C2.64733 8.24712 2.75181 8.29043 2.86289 8.29043C2.97395 8.29043 3.07843 8.24712 3.15708 8.16847L3.5562 7.76935C3.71685 7.8533 3.88604 7.92322 4.06185 7.9783V8.54199C4.06185 8.77174 4.24877 8.95866 4.47852 8.95866H5.52018C5.74993 8.95866 5.93685 8.77174 5.93687 8.54199V7.97828C6.1127 7.92322 6.28187 7.85328 6.44252 7.76932L6.84164 8.16845C6.92029 8.24712 7.02477 8.29041 7.13583 8.29041C7.24691 8.29041 7.35139 8.24708 7.43002 8.16845L8.16749 7.43097C8.24614 7.35232 8.28945 7.24785 8.28945 7.13676C8.28945 7.0257 8.24614 6.92122 8.16749 6.84258L7.76837 6.44345C7.85233 6.2828 7.92224 6.11362 7.97733 5.9378H8.54102C8.77077 5.9378 8.95768 5.75089 8.95768 5.52114V4.47947C8.95768 4.24972 8.77077 4.0628 8.54102 4.0628ZM8.54102 5.52112H7.82022C7.72518 5.52112 7.64222 5.58541 7.61847 5.67743C7.55454 5.92537 7.45772 6.15937 7.3307 6.37299C7.28202 6.45489 7.29508 6.55941 7.36245 6.62678L7.87287 7.1363L7.13627 7.8738L6.62585 7.36339C6.55843 7.29599 6.45391 7.28297 6.37206 7.33164C6.15843 7.45866 5.92441 7.55549 5.67649 7.61941C5.58447 7.64316 5.52018 7.72612 5.52018 7.82116V8.54199H4.47852V7.82118C4.47852 7.72614 4.41422 7.64318 4.3222 7.61943C4.07427 7.55549 3.84027 7.45868 3.62664 7.33166C3.59358 7.31199 3.55679 7.30241 3.52024 7.30241C3.46637 7.30241 3.41302 7.32328 3.37289 7.36347L2.86337 7.87389L2.12587 7.13728L2.63629 6.62687C2.70366 6.55947 2.71672 6.45497 2.66804 6.37308C2.54102 6.15945 2.44418 5.92543 2.38027 5.67751C2.35652 5.58549 2.27356 5.5212 2.17852 5.5212H1.45768V4.47953H2.17843C2.27347 4.47953 2.35643 4.41524 2.38018 4.32322C2.44412 4.07528 2.54093 3.84128 2.66795 3.62766C2.71664 3.54576 2.70358 3.44124 2.6362 3.37387L2.12579 2.86435L2.86239 2.12685L3.37281 2.63726C3.44022 2.70466 3.54474 2.7177 3.6266 2.66901C3.84022 2.54199 4.07424 2.44516 4.32216 2.38124C4.41418 2.35749 4.47847 2.27453 4.47847 2.17949V1.45866H5.52014V2.17941C5.52014 2.27445 5.58443 2.35741 5.67645 2.38116C5.92439 2.4451 6.15839 2.54191 6.37202 2.66893C6.45387 2.71762 6.55841 2.70453 6.62581 2.63718L7.13533 2.12676L7.87283 2.86337L7.36241 3.37378C7.29504 3.44118 7.28197 3.54568 7.33066 3.62758C7.45768 3.8412 7.55452 4.07522 7.61843 4.32314C7.64218 4.41516 7.72514 4.47945 7.82018 4.47945H8.54102V5.52112Z"
+                                    fill="white" />
+                                <path
+                                    d="M6.90737 6.09323L6.07404 5.36406L5.79966 5.67763L6.21572 6.04167H4.99935C4.42497 6.04167 3.95768 5.57437 3.95768 5H3.54102C3.54102 5.80412 4.19522 6.45833 4.99935 6.45833H6.21572L5.79966 6.8224L6.07404 7.13596L6.90737 6.40679C6.95258 6.36725 6.97852 6.31008 6.97852 6.25002C6.97852 6.18996 6.95258 6.13277 6.90737 6.09323Z"
+                                    fill="white" />
+                                <path
+                                    d="M4.20034 4.32257L3.78428 3.95855H5.00065C5.57503 3.95855 6.04232 4.42584 6.04232 5.00022H6.45898C6.45898 4.19609 5.80478 3.54188 5.00065 3.54188H3.78428L4.20034 3.17782L3.92596 2.86426L3.09263 3.59342C3.04742 3.63297 3.02148 3.69013 3.02148 3.7502C3.02148 3.81026 3.04742 3.86742 3.09263 3.90697L3.92596 4.63613L4.20034 4.32257Z"
+                                    fill="white" />
+                            </svg>
+                            <p class="fs-7">Procedures</p>
+                        </div>
+                    </div>
+                    <table class="table table-bordered" *ngIf="procedureList.length">
+                        <thead class="table-secondary">
+                           <tr>
+                                <th style="width: 15%;">Code</th>
+                                <th style="width: 70%;">Description</th>
+                                <th style="width: 15%;">Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let proc of procedureList">
+                                <td>{{ proc.ServiceCode }}</td>
+                                <td>{{ proc.ServiceItemName }}</td>
+                                <td>{{ proc.Count }}</td>
+                            </tr>
+                            <tr class="fw-bold">
+                                <td colspan="2" class="text-end">Total:</td>
+                                <td>{{ getTotal(procedureList) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    <!-- Revenue Summary -->
+                    <div class="table_header p-2 mt-2 mb-2 rounded">
+                        <div class="d-flex align-items-center gap-2">
+                            <svg width="20" height="20" viewBox="0 0 10 10" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_2900_22786)">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M1.13899 0.20678C0.828895 0.253267 0.566877 0.448591 0.427251 0.737366C0.378207 0.83881 0.353267 0.920738 0.335771 1.03791C0.330763 1.07146 0.328185 1.97783 0.328162 3.7116L0.328125 6.33456L0.339732 6.40383C0.373835 6.6075 0.462034 6.78337 0.604478 6.93175C0.736384 7.06914 0.884478 7.15395 1.07173 7.19936L1.13899 7.21567L2.21259 7.21837L3.28618 7.22108L3.3075 7.26521C3.34799 7.34898 3.42272 7.41199 3.50894 7.43507L3.55415 7.44716L4.97401 7.44512L6.39388 7.44306L6.45063 7.41377L6.50737 7.38448L6.54824 7.33837C6.57073 7.313 6.59546 7.27624 6.60321 7.25667L6.6173 7.22109L7.67112 7.21837L8.72494 7.21566L8.79221 7.19936C8.97943 7.15397 9.12755 7.06914 9.25946 6.93175C9.4019 6.78337 9.4901 6.6075 9.5242 6.40383L9.53581 6.33456L9.53577 3.7116C9.53575 1.97783 9.53317 1.07146 9.52816 1.03791C9.49549 0.81913 9.40697 0.636343 9.25955 0.483236C9.11192 0.329934 8.93029 0.237092 8.71747 0.206171L8.64273 0.195312L4.92449 0.196007L1.20626 0.196694L1.13899 0.20678ZM1.20703 0.893876C1.12261 0.912003 1.05318 0.968857 1.01404 1.05192L0.989515 1.10394L0.987602 3.69399L0.985689 6.28403L1.00129 6.33271C1.02858 6.41791 1.0931 6.48574 1.17537 6.51573L1.21373 6.52972H2.24078H3.26782L3.28357 6.46336C3.29224 6.42687 3.30905 6.3812 3.32093 6.36188C3.36757 6.286 3.44582 6.22947 3.52603 6.21367C3.55236 6.20849 4.0477 6.20575 4.95757 6.20575H6.34886L6.39176 6.21742C6.45227 6.23388 6.49055 6.25611 6.53639 6.30139C6.58364 6.34807 6.61419 6.4092 6.62514 6.47897L6.6331 6.52972H7.64165H8.6502L8.68856 6.51573C8.77082 6.48575 8.83535 6.41791 8.86263 6.33274L8.87822 6.2841L8.87632 3.69402L8.87442 1.10394L8.8499 1.05192C8.82237 0.993509 8.77242 0.941386 8.71582 0.912026L8.6801 0.893494L4.96264 0.88959C2.38345 0.886882 1.2335 0.888193 1.20703 0.893876ZM2.7085 1.664C2.67852 1.67489 2.6388 1.71486 2.6257 1.7473L2.61508 1.77362V1.92162V2.06961L2.58331 2.08246C2.24143 2.22076 2.03555 2.50786 2.02137 2.86607C2.01389 3.055 2.06069 3.22364 2.15706 3.35505C2.27065 3.50997 2.45878 3.62317 2.82061 3.75434C2.86993 3.77222 2.94464 3.80417 2.98662 3.82534L3.06295 3.86382L3.11089 3.91066C3.14301 3.94204 3.16434 3.97091 3.17558 3.99817L3.19233 4.03885L3.18892 4.09381C3.18272 4.19381 3.1404 4.26079 3.05725 4.30224L3.00767 4.32696L2.93656 4.33053L2.86544 4.33411L2.81841 4.32153C2.79254 4.31461 2.75221 4.29925 2.72878 4.2874C2.67139 4.25839 2.59887 4.18223 2.58123 4.13248C2.55947 4.07109 2.5322 4.03335 2.49573 4.0141L2.46243 3.99654H2.30682H2.15122L2.12354 4.00862C2.07625 4.02925 2.04878 4.0653 2.03659 4.12268C2.02555 4.17459 2.07552 4.35563 2.13084 4.46413C2.17605 4.55284 2.20036 4.58669 2.27469 4.66447C2.36406 4.75801 2.4436 4.81119 2.56574 4.85911L2.61134 4.87699L2.61508 5.0281L2.61881 5.17921L2.63113 5.20264C2.64588 5.23074 2.66297 5.24717 2.69505 5.26413L2.71897 5.27679H2.89696H3.07495L3.10099 5.26232C3.11531 5.25436 3.13712 5.23299 3.14946 5.21484L3.17188 5.18182L3.17416 5.02367L3.17645 4.86553L3.23769 4.83923C3.63185 4.66992 3.83536 4.28011 3.75305 3.85212C3.72712 3.71727 3.67837 3.62411 3.5792 3.51989C3.45857 3.39312 3.3266 3.31625 3.04482 3.20861C2.7932 3.11248 2.71392 3.07085 2.65684 3.00485C2.59931 2.93833 2.5849 2.85382 2.61602 2.76537L2.63193 2.72019L2.67092 2.68022C2.69653 2.65398 2.72506 2.6341 2.75405 2.62234L2.79818 2.60443L2.87292 2.60392L2.94766 2.60342L3.00372 2.62252C3.1092 2.65845 3.18677 2.73149 3.22102 2.82714C3.23857 2.87617 3.27988 2.92231 3.31556 2.93272C3.32697 2.93605 3.4072 2.93877 3.49385 2.93877H3.6514L3.68749 2.91535C3.75579 2.87103 3.76956 2.80603 3.73747 2.6794C3.6648 2.39267 3.49742 2.18993 3.24581 2.08392L3.1852 2.05838L3.18045 1.98335C3.17783 1.94209 3.17567 1.87782 3.17565 1.84053C3.17563 1.80324 3.17205 1.76284 3.16769 1.75075C3.15587 1.71793 3.10869 1.67107 3.07872 1.66237C3.04362 1.65218 2.7373 1.65353 2.7085 1.664ZM7.0463 1.67234C7.03233 1.68208 7.01502 1.70228 7.00784 1.71723L6.99477 1.74439L6.99476 3.706L6.99475 5.66761L7.00499 5.69273C7.01063 5.70655 7.02435 5.72663 7.03549 5.73737L7.05574 5.75688H7.42193H7.78813L7.81371 5.72773L7.83929 5.69856L7.84046 3.72929C7.84109 2.64618 7.84088 1.75122 7.83996 1.74049C7.83768 1.71342 7.82036 1.68784 7.79218 1.66989L7.76829 1.65467L7.41999 1.65465L7.0717 1.65462L7.0463 1.67234ZM5.66042 3.2315C5.64385 3.24007 5.62451 3.25729 5.61744 3.26977L5.60461 3.29247L5.60464 4.48954L5.60467 5.68662L5.61926 5.71161C5.62728 5.72536 5.64392 5.74205 5.65623 5.74869L5.67861 5.76079H6.0275H6.37639L6.40077 5.74505C6.41417 5.7364 6.43055 5.71742 6.43715 5.70288L6.44916 5.67646V4.48637V3.29627L6.43219 3.26975C6.42286 3.25516 6.40352 3.23708 6.38922 3.22957L6.36321 3.21592L6.02688 3.21591H5.69056L5.66042 3.2315ZM4.26733 4.69718C4.25323 4.70468 4.23473 4.72074 4.22622 4.73286L4.21074 4.75489L4.2087 5.21529L4.20665 5.67569L4.21931 5.70355C4.22627 5.71886 4.24233 5.738 4.25499 5.74606L4.27801 5.76073L4.62928 5.76064L4.98055 5.76056L4.99901 5.7508C5.00916 5.74543 5.02521 5.72904 5.03467 5.71437L5.05188 5.68769L5.04984 5.21745L5.04781 4.7472L5.02913 4.72605C5.01885 4.71442 4.99962 4.70009 4.98639 4.6942L4.96234 4.6835L4.62765 4.68352L4.29295 4.68352L4.26733 4.69718ZM3.37102 7.78319C3.36134 7.78724 3.3432 7.79815 3.3307 7.80744L3.30799 7.82434L3.26514 7.91864C3.22201 8.01356 3.15543 8.16363 3.12114 8.24322C3.11097 8.26684 3.08857 8.31777 3.07137 8.35641C3.05417 8.39505 3.0356 8.43721 3.03009 8.45009C3.02459 8.46297 2.9958 8.52796 2.96613 8.59451C2.93645 8.66106 2.88441 8.77874 2.85049 8.85602C2.78383 9.00787 2.77075 9.03758 2.70269 9.1917C2.67805 9.24751 2.65162 9.3107 2.64395 9.3321L2.63002 9.37103V9.44602V9.52103L2.645 9.56651C2.71098 9.7668 2.91591 9.86488 3.10996 9.78905C3.15861 9.77004 3.22956 9.71176 3.26221 9.66399C3.27541 9.64466 3.39457 9.38295 3.527 9.08241C3.82375 8.40897 3.78426 8.4985 3.90059 8.23541C3.9547 8.11305 4.00079 8.00171 4.00301 7.98799C4.00522 7.97427 4.00469 7.94678 4.00184 7.92689L3.99665 7.89071L3.96946 7.85928C3.9545 7.84199 3.93372 7.82399 3.92329 7.81929C3.91227 7.81432 3.82286 7.80861 3.70999 7.80566L3.51567 7.80057L3.48297 7.78771C3.44718 7.77363 3.39857 7.77166 3.37102 7.78319ZM6.38937 7.79468C6.36273 7.80108 6.28353 7.80482 6.1644 7.80531C6.04937 7.80578 5.97102 7.80937 5.95513 7.81491C5.92136 7.82666 5.87595 7.87278 5.86546 7.90598C5.85198 7.94862 5.86111 8.00676 5.89204 8.07538C5.91836 8.13379 6.08397 8.50702 6.12584 8.60231C6.45214 9.34498 6.58123 9.63367 6.5993 9.6611C6.70254 9.81783 6.92155 9.86183 7.07765 9.75719C7.14289 9.71347 7.1927 9.64614 7.2191 9.56598L7.23391 9.52103L7.2338 9.44613C7.23368 9.35979 7.23029 9.34771 7.16428 9.19855C7.13792 9.13897 7.10783 9.07089 7.09744 9.04728C7.08703 9.02367 7.06683 8.978 7.05254 8.9458C7.03824 8.9136 7.0012 8.82929 6.97021 8.75844C6.93922 8.6876 6.89816 8.59451 6.87893 8.55157C6.85972 8.50864 6.83946 8.46297 6.83392 8.45009C6.82837 8.43721 6.80976 8.39505 6.79256 8.35641C6.77536 8.31777 6.75298 8.26684 6.74283 8.24322C6.72073 8.19182 6.64795 8.02781 6.59869 7.91846L6.56317 7.8396L6.53793 7.82C6.50943 7.79788 6.46955 7.78211 6.44617 7.78372C6.43753 7.78431 6.41197 7.78925 6.38937 7.79468ZM4.58079 8.43643L4.58088 9.0668L4.59108 9.10686C4.62401 9.23604 4.7302 9.34591 4.84975 9.37452C4.92668 9.39293 5.01722 9.38207 5.08816 9.34591C5.17306 9.30264 5.2475 9.20627 5.27285 9.10686L5.28306 9.0668L5.28315 8.43643L5.28324 7.80606H4.93197H4.5807L4.58079 8.43643Z"
+                                        fill="white" />
+                                </g>
+                            </svg>
+
+                            <p class="fs-7">Revenue Summary</p>
+                        </div>
+                    </div>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td style="width: 30%;font-weight: bold;">GROSS AMOUNT</td>
+                                <td>
+                                    <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.Gross}}</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 30%;font-weight: bold;">DISCOUNT AMOUNT</td>
+                                <td>
+                                    <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.TotDiscount}}</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 30%;font-weight: bold;">NET (GROSS-DISCOUNT)</td>
+                                <td>
+                                    <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.TotalNet}}</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 30%;font-weight: bold;">NET AFTER COMPANY REJECTION (-22% From Net)
+                                </td>
+                                <td>
+                                    <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.NetAfterAlldiscounts}}</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 30%;font-weight: bold;">NET WITHOUT MEDICINE (Rejection total -
+                                    Medicine)
+                                </td>
+                                <td>
+                                    <svg width="15" height="12" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M30.8641 21.1848L22.4132 22.6281L22.4147 22.6296C22.3254 22.6442 22.2434 22.5754 22.2434 22.4847V19.2027C22.2434 19.1324 22.2932 19.0724 22.3635 19.0592L30.4045 17.6115C30.4615 17.6012 30.5069 17.5588 30.5201 17.5017L31.3486 14.0704C31.3735 13.9679 31.2842 13.8728 31.1803 13.8918L22.4162 15.4816C22.3254 15.4991 22.2434 15.4289 22.2434 15.3381V0.72148C22.2434 0.589733 22.0853 0.525323 21.9931 0.617546L18.4872 4.13227C18.4594 4.16008 18.4447 4.19814 18.4447 4.2362V15.9412C18.4447 16.0129 18.3935 16.0744 18.3232 16.0861L14.9681 16.66C14.8788 16.6746 14.7968 16.6058 14.7968 16.515V0.654143C14.7968 0.534106 14.6607 0.465305 14.564 0.53557L11.0581 3.09293C11.02 3.12074 10.9981 3.16466 10.9981 3.2115V17.43C10.9981 17.5002 10.9483 17.5602 10.878 17.5734L2.81073 19.0358C2.75656 19.0461 2.71265 19.0856 2.69655 19.1383L1.66892 22.5666C1.63818 22.6706 1.72894 22.7716 1.8358 22.7525L10.8268 21.1335C10.9176 21.1174 10.9995 21.1862 10.9995 21.277V25.9847C10.9995 26.0565 10.9483 26.118 10.878 26.1297L1.61183 27.7136C1.55474 27.7238 1.50789 27.7663 1.49472 27.8233L0.651535 31.2605C0.62665 31.363 0.713017 31.4566 0.815487 31.4405L12.3112 29.6766C13.7399 29.457 14.7953 28.2288 14.7953 26.7825V20.5407C14.7953 20.4704 14.8451 20.4104 14.9154 20.3972L18.2705 19.7941C18.3613 19.778 18.4433 19.8468 18.4433 19.9375V26.9758C18.4433 27.0665 18.5267 27.1368 18.6175 27.1192L30.1249 24.9483C30.3049 24.9147 30.4454 24.7712 30.4762 24.5912L31.0324 21.3531C31.05 21.2536 30.9636 21.1672 30.8641 21.1848ZM18.5809 31.827L18.2486 34.5073H18.2501L30.7997 32.1813L31.2228 28.4382L19.7666 30.5681C19.1386 30.6837 18.6599 31.1932 18.5809 31.827Z" fill="#234e51">
+
+                                        </path>
+                                    </svg>
+                                    {{doctorData?.NetWithoutmedication}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="printedby">
+                        <p>Printed By {{ doctorDetails[0].UserName }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{ errorMsg }}</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-main-outline" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<app-clara-modal *ngIf="showClaraModal" (closeModal)="showClaraModal = false" 
+    [dashboardType]="'revenue'" mode="report" [dateRange]="getDateRange()"></app-clara-modal>

@@ -1,0 +1,513 @@
+<!--Container-->
+<!-- <app-wardheader-summary *ngIf="IsFromBedsBoard"></app-wardheader-summary> -->
+<app-generic-close  *ngIf="!IsFromBedsBoard" [isCardRequired]="data?.fromEHR" [isPrint]="data?.fromEHR"></app-generic-close>
+<div class="container-fluid p-0"  [class.divdisabled]="data?.fromEHR">
+    <div class="container">
+        <div class="actions d-flex align-items-center justify-content-end pe-3 gap-2">
+            <button class="btn btn-danger-outline" (click)="clear()">Clear</button>
+            <button class="btn btn-main-outline m-2" *ngIf="!readonly" (click)="SavePainAssessmentOrder()">Save</button>                
+        </div>
+
+        <div class="container-body">
+            <form class="painScoreForm" [formGroup]="painScoreForm">
+                <div class="d-flex align-items-center custom_check gap-2 border rounded-2 p-2 mt-3">
+                    <button class="btn btn-secondary-outline fs-8 px-2" (click)="toggleIsBaker(painScoreForm.get('IsBaker').value)" [class.active]="painScoreForm.get('IsBaker').value">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"></path>
+                            <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"></path>
+                        </svg>                                                                                     
+                        Wong Baker
+                    </button>
+                    <button class="btn btn-secondary-outline fs-8 px-2" (click)="toggleIsChronic(painScoreForm.get('IsChronic').value)" [class.active]="painScoreForm.get('IsChronic').value">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"></path>
+                            <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"></path>
+                        </svg>                                                                                     
+                        Chronic
+                    </button>
+                    <button class="btn btn-secondary-outline active fs-8 px-2" (click)="toggleIsAcute(painScoreForm.get('IsAcute').value)" [class.active]="painScoreForm.get('IsAcute').value">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"></path>
+                            <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"></path>
+                        </svg>                                                                                     
+                        Acute
+                    </button>
+                </div>
+    
+                <div class="rounded-3 mb-2 d-flex align-items-center" >
+                    <label for="" class="form-label m-0 me-3 text-nowrap">Pain Score</label>
+                    <div class="d-flex flex-wrap align-items-center gap-3 w-100 position-relative py-2">
+                        <div [class]="ps.Class" (click)="psStyleChange(ps)" *ngFor="let ps of painScoreMaster">
+                            <img class="pain_img" [src]="ps.imgsrc" alt="">
+                            <p class="m-0 text-start">{{ps.name}}</p>
+                            <!-- <img class="position-absolute check" src="assets/images/icons/toast-success.svg" alt=""> -->
+                             <svg *ngIf="ps.active==='1'" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                        
+                        </div>
+                    </div>
+                    <!-- <div class="d-flex flex-wrap align-items-center gap-3 w-100 position-relative py-2" *ngIf="readonly">
+                        <div [class]="ps.Class" (click)="psStyleChange(ps)" *ngFor="let ps of painScoreMaster">
+                            <img class="pain_img" [src]="ps.imgsrc" alt="">
+                            <p class="m-0 text-start">{{ps.name}}</p>
+                            <img class="position-absolute check" src="assets/images/icons/toast-success.svg" alt="">
+                        </div>
+                    </div> -->
+                </div>
+    
+                <div class="mt-3 border rounded-2 painScore_tabs">
+                    <ul class="nav nav-pills" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="verbal-tab" data-bs-toggle="pill" data-bs-target="#verbal" type="button" role="tab" aria-controls="verbal" aria-selected="true">Verbal Pain Assessment Score</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="nonverbal-tab" data-bs-toggle="pill" data-bs-target="#nonverbal" type="button" role="tab" aria-controls="nonverbal" aria-selected="false" tabindex="-1">Non Verbal Pain Assessment Score</button>
+                        </li>
+                    </ul>
+                    <div class="p-2 tab-content">
+                        <div class="tab-pane fade show active border rounded-2" id="verbal" role="tabpanel" aria-labelledby="verbal-tab">
+                            <div class="bg-primary-50 p-2">
+                                <h6 class="mb-0 clr-primary-600">Verbal Pain Assessment Score</h6>
+                            </div>
+                            <div class="p-3">
+                                <div class="d-flex align-items-center my-2">
+                                    <div class="d-flex align-items-center me-5">
+                                        <label for="" class="form-label mb-0 me-3">Location</label>
+                                        <!-- <select name="" id="" class="form-select pe-6 w-auto" formControlName="VerbalPainAssessmentLocationID" (change)="onLocationChange()">
+                                            <option value="0">Select</option>
+                                            <option dir="ltr" *ngFor="let item of scoreLocationList" [value]="item.id">{{item.name}}</option>
+                                        </select> -->
+                                        <div class="d-flex align-items-center gap-3 clin_imp flex-wrap">
+                                            <button id="btn_Head" [class.active]="locationIds.includes('1')" (click)="toggleButtonSelection($event, '1')"
+                                                class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4"
+                                                        d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                        fill="#B4DDE4" />
+                                                    <path
+                                                        d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                        fill="#8ECBD7" />
+                                                </svg>                                            
+                                                Head
+                                            </button> 
+                                            <button id="btn_IVF" [class.active]="locationIds.includes('2')" (click)="toggleButtonSelection($event, '2')"
+                                                class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4"
+                                                        d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                        fill="#B4DDE4" />
+                                                    <path
+                                                        d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                        fill="#8ECBD7" />
+                                                </svg>                                            
+                                                Neck/Shoulder
+                                            </button> 
+                                            <button id="btn_Uerl" [class.active]="locationIds.includes('3')" (click)="toggleButtonSelection($event, '3')"
+                                                class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4"
+                                                        d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                        fill="#B4DDE4" />
+                                                    <path
+                                                        d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                        fill="#8ECBD7" />
+                                                </svg>                                            
+                                                UE R/L
+                                            </button> 
+                                            <button id="btn_Back" [class.active]="locationIds.includes('4')" (click)="toggleButtonSelection($event, '4')"
+                                                class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4"
+                                                        d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                        fill="#B4DDE4" />
+                                                    <path
+                                                        d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                        fill="#8ECBD7" />
+                                                </svg>                                            
+                                                Back
+                                            </button> 
+                                            <button id="btn_Chest" [class.active]="locationIds.includes('5')" (click)="toggleButtonSelection($event, '5')"
+                                                class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4"
+                                                        d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                        fill="#B4DDE4" />
+                                                    <path
+                                                        d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                        fill="#8ECBD7" />
+                                                </svg>                                            
+                                                Chest
+                                            </button> 
+                                            <button id="btn_Abdomen" [class.active]="locationIds.includes('6')" (click)="toggleButtonSelection($event, '6')"
+                                                class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4"
+                                                        d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                        fill="#B4DDE4" />
+                                                    <path
+                                                        d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                        fill="#8ECBD7" />
+                                                </svg>                                            
+                                                Abdomen
+                                            </button> 
+                                            <button id="btn_Lerl" [class.active]="locationIds.includes('7')" (click)="toggleButtonSelection($event, '7')"
+                                                class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4"
+                                                        d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                        fill="#B4DDE4" />
+                                                    <path
+                                                        d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                        fill="#8ECBD7" />
+                                                </svg>                                            
+                                                LE R/L
+                                            </button> 
+                                            <button id="btn_Flank" [class.active]="locationIds.includes('8')" (click)="toggleButtonSelection($event, '8')"
+                                                class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4"
+                                                        d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                        fill="#B4DDE4" />
+                                                    <path
+                                                        d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                        fill="#8ECBD7" />
+                                                </svg>                                            
+                                                Flank
+                                            </button> 
+                                            <button id="btn_Incision" [class.active]="locationIds.includes('9')" (click)="toggleButtonSelection($event, '9')"
+                                                class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4"
+                                                        d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                        fill="#B4DDE4" />
+                                                    <path
+                                                        d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                        fill="#8ECBD7" />
+                                                </svg>                                            
+                                                Incision
+                                            </button> 
+                                            <button id="btn_Others" [class.active]="locationIds.includes('10')" (click)="toggleButtonSelection($event, '10')"
+                                                class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path opacity="0.4"
+                                                        d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                        fill="#B4DDE4" />
+                                                    <path
+                                                        d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                        fill="#8ECBD7" />
+                                                </svg>                                            
+                                                Others
+                                            </button>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                                <div class="d-flex align-items-center my-2">
+                                    <label for="" class="form-label mb-0 me-3">Quality</label>
+                                    <!-- <select name="" id="" class="form-select pe-6 w-auto" formControlName="VerbalPainAssessmentQualityID" (change)="verbalClick()">
+                                        <option value="0">Select</option>
+                                        <option dir="ltr" *ngFor="let item of scoreQualityList" [value]="item.id">{{item.name}}</option>
+                                    </select> -->
+                                    <div class="d-flex align-items-center gap-3 clin_imp flex-wrap">
+                                        <button id="btn_Aching" [class.active]="qualityIds.includes('1')" (click)="toggleQualityButtonSelection($event, '1')"
+                                            class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                    d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                    fill="#B4DDE4" />
+                                                <path
+                                                    d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                    fill="#8ECBD7" />
+                                            </svg>                                            
+                                            Aching
+                                        </button> 
+                                        <button id="btn_Burning" [class.active]="qualityIds.includes('2')" (click)="toggleQualityButtonSelection($event, '2')"
+                                            class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                    d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                    fill="#B4DDE4" />
+                                                <path
+                                                    d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                    fill="#8ECBD7" />
+                                            </svg>                                            
+                                            Burning
+                                        </button> 
+                                        <button id="btn_Cramping" [class.active]="qualityIds.includes('3')" (click)="toggleQualityButtonSelection($event, '3')"
+                                            class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                    d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                    fill="#B4DDE4" />
+                                                <path
+                                                    d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                    fill="#8ECBD7" />
+                                            </svg>                                            
+                                            Cramping
+                                        </button> 
+                                        <button id="btn_Dull" [class.active]="qualityIds.includes('4')" (click)="toggleQualityButtonSelection($event, '4')"
+                                            class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                    d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                    fill="#B4DDE4" />
+                                                <path
+                                                    d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                    fill="#8ECBD7" />
+                                            </svg>                                            
+                                            Dull
+                                        </button> 
+                                        <button id="btn_Pricking" [class.active]="qualityIds.includes('5')" (click)="toggleQualityButtonSelection($event, '5')"
+                                            class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                    d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                    fill="#B4DDE4" />
+                                                <path
+                                                    d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                    fill="#8ECBD7" />
+                                            </svg>                                            
+                                            Pricking
+                                        </button> 
+                                        <button id="btn_Radiating" [class.active]="qualityIds.includes('6')" (click)="toggleQualityButtonSelection($event, '6')"
+                                            class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                    d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                    fill="#B4DDE4" />
+                                                <path
+                                                    d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                    fill="#8ECBD7" />
+                                            </svg>                                            
+                                            Radiating
+                                        </button> 
+                                        <button id="btn_Sharp" [class.active]="qualityIds.includes('7')" (click)="toggleQualityButtonSelection($event, '7')"
+                                            class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                    d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                    fill="#B4DDE4" />
+                                                <path
+                                                    d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                    fill="#8ECBD7" />
+                                            </svg>                                            
+                                            Sharp
+                                        </button> 
+                                        <button id="btn_Tearing" [class.active]="qualityIds.includes('8')" (click)="toggleQualityButtonSelection($event, '8')"
+                                            class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                    d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                    fill="#B4DDE4" />
+                                                <path
+                                                    d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                    fill="#8ECBD7" />
+                                            </svg>                                            
+                                            Tearing
+                                        </button> 
+                                        <button id="btn_Throbbing" [class.active]="qualityIds.includes('9')" (click)="toggleQualityButtonSelection($event, '9')"
+                                            class="btn btn-secondary-outline min-width-unset fs-8 px-2">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.4"
+                                                    d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                                    fill="#B4DDE4" />
+                                                <path
+                                                    d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                                    fill="#8ECBD7" />
+                                            </svg>                                            
+                                            Throbbing
+                                        </button>
+                                    </div>
+                                </div>
+                                 <!-- Display the textbox if "Others" is selected -->
+                                <div class=" mt-2" *ngIf="showOtherLocationTextbox">
+                                    <div class="d-flex flex-column">
+                                        <label for="" class="form-label mb-0">Other Location</label>
+                                        <input type="text" class="form-control" formControlName="LocationRemarks">
+                                    </div>
+                                </div>
+                            </div>
+    
+                           
+                        </div>
+                        <div class="tab-pane fade border rounded-2" id="nonverbal" role="tabpanel" aria-labelledby="nonverbal-tab">
+                            <div class="bg-primary-50 p-2">
+                                <h6 class="mb-0 clr-primary-600">Non Verbal Pain Assessment Score</h6>
+                            </div>
+                            <div class="mt-2 p-2" *ngIf="IsNonVerbal">
+                                <table class="table-cards m-0">
+                                    <thead>
+                                      <tr>
+                                        <th>Parameters</th>
+                                        <th>Values</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr *ngFor="let parameter of parametersNonVerbalData">
+                                        <td>{{ parameter.NonVerbalParameter }}</td>
+                                        <td>
+                                          <div class="d-flex align-items-center gap-2">
+                                            <div class="d-flex align-items-center custom_check gap-2" *ngFor="let scoreValue of parameter.ScoreValues; let j = index">
+                                              <!-- <div class="d-flex align-items-center">
+                                                <input class="form-check-input mt-0 me-2" type="radio" [value]="scoreValue.NonVerbalParameterScoreValuesID" [id]="scoreValue.NonVerbalParameterScoreValuesID" 
+                                                [name]="parameter.NonVerbalParameter" (click)="onRadioSelect(parameter, scoreValue.NonVerbalParameterScoreValuesID, j)">
+                                                <label class="form-label pe-2">{{ scoreValue.NonVerbalParameterScoreValues }}</label>
+                                              </div> -->
+
+                                                <button id="{{parameter.NonVerbalParameter + '_' +  j}}" [class.active]="scoreValue.Selected" class="btn btn-secondary-outline fs-8 px-2" (click)="onRadioSelect(parameter, scoreValue.NonVerbalParameterScoreValuesID, j, scoreValue)">
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"></path>
+                                                        <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"></path>
+                                                    </svg>                                                                                     
+                                                    {{ scoreValue.NonVerbalParameterScoreValues }}
+                                                </button>                                              
+                                            </div>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                            </div>
+                            <!-- <div class="w-100 text-end">
+                                <button class="btn btn-danger-outline m-3">Clear</button>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3 mx-0">
+                    <div class="col-lg-7">
+                        <div class="border rounded-2">
+                            <div class="bg-primary-50 p-2">
+                                <h6 class="mb-0 clr-primary-600">Intervention</h6>
+                            </div>
+                            <div class="row p-3 g-2" *ngIf="IsVisible">
+                                <div class="col-4" *ngFor="let item of FetchPainScoreInterventionsDataList">
+                                    <div class="d-flex align-items-center">
+                                        <input
+                                        class="form-check-input mt-0 me-2"
+                                        type="checkbox" [checked]="item.selectedIntervention"
+                                        [value]="item.NursingIntervention"
+                                        (change)="onInterventionChange(item)"
+                                      />
+                                        <label class="form-label pe-2 m-0">{{item.NursingIntervention}}</label>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div *ngIf="showOtherInterventionTextbox" class="mt-3">
+                                    <label for="otherOption" class="form-label">Other Option:</label>
+                                    <input type="text" class="form-control" id="otherOption" formControlName="OtherIntervention" name="otherOption" />
+                                  </div>
+                                  
+                                <div class="tab-pane fade show active border rounded-2" id="verbal" role="tabpanel" aria-labelledby="verbal-tab" *ngIf="showPharmaInstruction" >
+                                    <div class="bg-primary-50 p-2">
+                                        <h6 class="mb-0 clr-primary-600">Pharmaceutical</h6>
+                                    </div>
+                                    <div class="p-3">
+                                    <p class="form-label pb-1 m-0">1. Oral analgesics : one hour</p>
+                                    <p class="form-label pb-1 m-0">2. IM (Intramuscular) analgesics : 30 minutes</p>
+                                    <p class="form-label pb-1 m-0">3. SC (Subcutaneous) analgesics : 30 minutes</p>
+                                    <p class="form-label pb-1 m-0">4. IV (Intravenous) analgesics : 15 minutes</p>
+                                    <p class="form-label pb-1 m-0">5. SL (Sublingual) analgesics : 15 minutes</p>
+                                    <p class="form-label pb-1 m-0">6. PR ( Per rectum) analgesics : 15 minutes</p>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="border rounded-2 h-100">
+                            <div class="bg-primary-50 p-2">
+                                <h6 class="mb-0 clr-primary-600">Adverse Drug Effects</h6>
+                            </div>
+                            <div class="row p-3 g-2" *ngIf="IsVisible">
+                                <div class="col-5" *ngFor="let item of FetchAdverseDrugDataList">
+                                  <div class="d-flex align-items-center">
+                                    <input
+                                      class="form-check-input mt-0 me-2"
+                                      type="checkbox" [checked]="item.selectedAdvDrug"
+                                      [value]="item.Name"
+                                      (change)="onAdverseChange(item)"
+                                    />
+                                    <label class="form-label pe-2 m-0" [for]="item.Name">{{ item.Name }}</label>
+                                  </div>
+                                </div>
+
+                                <div *ngIf="showOtherAdverseTextbox" class="mt-3">
+                                    <label for="otherOption" class="form-label">Other Option:</label>
+                                    <input type="text" class="form-control" id="otherOption" formControlName="OtherAdverse" name="otherOption" />
+                                  </div>
+
+                              </div>
+                              
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="mt-3">
+                    <div class="d-flex align-items-center">
+                        <label for="" class="form-label mb-0 me-3">Reassessment of Pain Post Intervention must be completed with in</label>
+                        <select name="" id="" class="form-select w-auto pe-6" formControlName="PostInterventionTime">
+                            <option value="0">Select</option>
+                            <option dir="ltr" *ngFor="let item of postInterventionList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    
+</div>
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="painScoreMessage" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Score Saved Successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        (click)="closeScore()">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<div class="modal" id="errorMessageM" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p class="label">The Following Fields are Mandatory</p>
+                <p *ngIf="errorMessages.length === 1">{{errorMessages[0]}}</p>
+                <ul *ngIf="errorMessages.length > 1">
+                    <li *ngFor="let error of errorMessages; let i = index"> {{error}}</li>
+                </ul>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

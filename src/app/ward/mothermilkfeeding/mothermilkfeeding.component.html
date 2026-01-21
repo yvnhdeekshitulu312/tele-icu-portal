@@ -1,0 +1,444 @@
+<app-header [InputHome]="IsHome" [IsSwitchWard]="false"></app-header>
+
+<div class="container-fluid">
+    <div class="container__wrapper">
+        <div class="page-header sticky-top">
+            <h2 class="page-heading">Mother's Milk Feeding</h2>
+            <div class="actions ms-auto d-flex align-items-center gap-2">
+                <button class="btn btn-main-fill" (click)="navigatetoBedBoard()">Beds Board</button>
+                <button class="btn btn-danger-outline" (click)="clearMilkFeedingScreen()">Clear</button>
+                <button class="btn btn-main-outline" (click)="saveMilkFeeding()">Save</button>
+                <button class="btn btn-main-outline" (click)="openQuickActions()">Quick Actions</button>
+            </div>
+        </div>
+        <div class="container-body">
+
+            <div class="m-3 card card-style-1 p-2 rounded-2">
+                <div class="row align-items-center">
+                    <div class="col-lg-5 col-md-6">
+                        <div class="d-flex align-items-end">
+                            <div class="w-100">
+                                <label for="" class="form-label clr-primary-600">National ID:</label>
+                                <input autofocus type="text" class="form-control" [(ngModel)]="nationalID"
+                                    (keypress)="($event.charCode >= 48 && $event.charCode < 58)"
+                                    (keydown.enter)="onNationalIDEnterPress($event)">
+                            </div>
+                            <div class="ms-3 text-center">
+                                <svg class="me-2" width="30" height="31" viewBox="0 0 24 25" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M20.4312 14.7041C20.4312 14.2992 20.7596 13.9707 21.1647 13.9707C21.5696 13.9707 21.8982 14.2989 21.8982 14.7041V17.632C21.8982 18.1191 21.6998 18.5608 21.3801 18.8806C21.0603 19.2005 20.6186 19.3987 20.1315 19.3987H17.2033C16.7984 19.3987 16.4698 19.0703 16.4698 18.6652C16.4698 18.2603 16.7982 17.9318 17.2033 17.9318L20.1312 17.9319C20.2132 17.9319 20.2883 17.8979 20.3427 17.8436C20.3973 17.789 20.431 17.7142 20.431 17.6321L20.4309 14.7042L20.4312 14.7041ZM5.45691 16.4165H5.87794L5.8781 12.7846H7.34472V16.4168H9.41429V12.7846H10.8809V16.4168H12.9505V12.7846H14.4171V16.4168H16.4866V12.7846H17.9533V16.4168H18.3928C18.6453 16.4168 18.8512 16.2109 18.8512 15.9584V12.7846H22.2665C22.6715 12.7846 23 12.4564 23 12.0512C23 11.6463 22.6716 11.3177 22.2665 11.3177H1.73345C1.32853 11.3177 1 11.6461 1 12.0512C1 12.4561 1.32838 12.7846 1.73345 12.7846H4.99797V15.9584C4.99845 16.2107 5.20421 16.4165 5.45687 16.4165H5.45691ZM5.87811 9.85122V7.6858H5.45708C5.20459 7.6858 4.99867 7.89172 4.99867 8.1442V9.85139L5.87811 9.85155V9.85122ZM9.41429 9.85122V7.6858H7.34473V9.85122H9.41429ZM12.9506 9.85122V7.6858H10.881V9.85122H12.9506ZM16.4868 9.85122V7.6858H14.4172V9.85122H16.4868ZM18.8514 9.85122V8.14404C18.8514 7.89155 18.6454 7.68563 18.3929 7.68563H17.9534V9.85106H18.8514L18.8514 9.85122ZM6.79789 17.9324C7.20281 17.9324 7.53134 18.2608 7.53134 18.6658C7.53134 19.0708 7.20296 19.3993 6.79789 19.3993L3.87001 19.3991C3.3829 19.3991 2.94124 19.2008 2.62139 18.8811C2.30155 18.5612 2.10334 18.1196 2.10334 17.6325V14.7043C2.10334 14.2993 2.43172 13.9708 2.8368 13.9708C3.24172 13.9708 3.57025 14.299 3.57025 14.7043V17.6321C3.57025 17.7141 3.60425 17.7892 3.65855 17.8437C3.71317 17.8983 3.78793 17.932 3.87027 17.932H6.79786L6.79789 17.9324ZM3.66067 9.39831C3.66067 9.80323 3.33229 10.1318 2.92721 10.1318C2.52229 10.1318 2.19376 9.80354 2.19376 9.39831L2.19392 6.47043C2.19392 5.98332 2.39227 5.54166 2.71197 5.22181C3.03181 4.90197 3.47347 4.70376 3.96059 4.70376H6.88847C7.29339 4.70376 7.62192 5.03214 7.62192 5.43722C7.62192 5.84214 7.29354 6.17067 6.88847 6.17067L3.96071 6.17051C3.8787 6.17051 3.80361 6.20451 3.74899 6.25881C3.69437 6.31343 3.66069 6.38819 3.66069 6.47053L3.66067 9.39831ZM17.2936 6.17022C16.8886 6.17022 16.5601 5.84183 16.5601 5.43676C16.5601 5.03184 16.8885 4.70331 17.2936 4.70331H20.2214C20.7086 4.70331 21.1502 4.90166 21.4701 5.22136C21.7899 5.5412 21.9881 5.98286 21.9881 6.46998V9.39785C21.9881 9.80277 21.6597 10.1313 21.2547 10.1313C20.8497 10.1313 20.5212 9.80309 20.5212 9.39785L20.5214 6.47043C20.5214 6.38841 20.4874 6.31333 20.4331 6.25887C20.3784 6.20424 20.3037 6.17057 20.2215 6.17057H17.2936L17.2936 6.17022Z"
+                                        fill="#368796" />
+                                </svg>
+                                <p class="m-0 clr-primary-600 text-nowrap">Scan Patient</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="d-flex align-items-center gap-2 ms-3 mt-3">
+                            <input type="checkbox" class="form-check-input m-0">
+                            <label for="" class="form-label m-0 text-nowrap clr-primary-600">All Details
+                                Verified</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mx-3">
+                <app-wardheader-summary *ngIf="isNational"></app-wardheader-summary>
+            </div>
+
+            <div class="bg-white p-3 rounded-2" *ngIf="isNational">
+                <div class="doctor_worklist booked mt-2 worklist_patientcard rounded-2">
+                    <div class="row mx-0">
+                        <div class="col-md-12 p-0">
+                            <div
+                                class="py-2 bg-white p-1 d-flex align-items-center justify-content-between rounded-bottom">
+                                <div class="row mx-0 vital_block align-items-center">
+                                    <label for=""
+                                        class="w-max-content fw-bold pe-0 form-label clr-primary-600 m-0">Mother
+                                        Details: </label>
+                                    <div class="w-max-content border-end px-3"
+                                        *ngFor="let mot of FetchAdmittedMotherDetailsListD">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div>
+                                                <p class="m-0 fs-7 text-nowrap">SSN:{{mot.MotherSSN}}</p>
+                                                <p class="m-0 fs-8 text-nowrap">{{mot.MotherName}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feeding_tabs border rounded-2 overflow-hidden mt-3">
+                    <ul id="" role="tablist" class="nav nav-pills bg-primary-50 rounded-top">
+                        <li class="nav-item">
+                            <button data-bs-toggle="pill" data-bs-target="#generalFeeding" type="button" role="tab"
+                                aria-controls="generalFeeding" aria-selected="false" class="nav-link active px-3">
+                                General Feeding </button>
+                        </li>
+                        <li class="nav-item">
+                            <button data-bs-toggle="pill" data-bs-target="#ContinuousFeeeding" type="button" role="tab"
+                                aria-controls="ContinuousFeeeding" aria-selected="false" class="nav-link px-3">
+                                Continuos Feeding </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active p-2" id="generalFeeding" role="tabpanel">
+                            <form class="row g-1" [formGroup]="feedingMilkInfoForm">
+                                <div class="col-2">
+                                    <label for="" class="form-label m-0 text-nowrap">Scan</label>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <input type="text" class="form-control">
+                                        <div class="custom_check">
+                                            <svg width="18" height="18" viewBox="0 0 20 21" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                <path
+                                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                                            </svg>
+                                        </div>
+                                        <span>Or</span>
+                                    </div>
+
+                                </div>
+                                <div class="col-2">
+                                    <label for="" class="form-label m-0 text-nowrap">Select Bottle</label>
+                                    <select class="form-select pe-5 w-50" id="BottleID"
+                                        (change)="onBottleSelected($event)">
+                                        <option dir="ltr" value="0" translate>{{langData?.common?.Select}}</option>
+                                        <option dir="ltr" *ngFor="let allo of FetchActiveMotherMilkInfoListD"
+                                            [value]="allo.MotherMilkExtractionID">
+                                            {{allo.MotherMilkExtractionID}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-2">
+                                    <label for="" class="form-label m-0 text-nowrap">Total Quantity</label>
+                                    <input type="text" (keypress)="($event.charCode >= 48 && $event.charCode < 58)"
+                                        maxlength="3" [attr.disabled]="true" formControlName="TotalQuantity"
+                                        class="form-control">
+                                </div>
+                                <div class="col-2">
+                                    <label for="" class="form-label m-0 text-nowrap">Bal Quantity</label>
+                                    <input type="text" (keypress)="($event.charCode >= 48 && $event.charCode < 58)"
+                                        maxlength="3" [attr.disabled]="true" formControlName="BalanceQuantity"
+                                        class="form-control">
+                                </div>
+                                <div class="col-2">
+                                    <label for="" class="form-label m-0 text-nowrap">Feed Quantity</label>
+                                    <input type="text" (keypress)="($event.charCode >= 48 && $event.charCode < 58)"
+                                        maxlength="3" [attr.disabled]="disableFeedWasteQty == true ? 'true' : null"
+                                        formControlName="FeedQuantity" (change)="validateFeedQty()"
+                                        class="form-control">
+                                </div>
+                                <div class="col-2">
+                                    <label for="" class="form-label m-0 text-nowrap">Waste Quantity</label>
+                                    <input type="text" (keypress)="($event.charCode >= 48 && $event.charCode < 58)"
+                                        maxlength="3" [attr.disabled]="disableFeedWasteQty == true ? 'true' : null"
+                                        formControlName="WasteQuantity" (change)="validateWasteQty()"
+                                        class="form-control">
+                                </div>
+                                <div class="col-6">
+                                    <label for="" class="form-label m-0 text-nowrap">Remarks</label>
+                                    <textarea name="" formControlName="Remarks" class="form-control resize-none"
+                                        id=""></textarea>
+                                </div>
+                                <div class="col-6">
+                                    <label for="" class="form-label m-0 text-nowrap">Manual Entry Remarks</label>
+                                    <textarea name="" formControlName="ManualEntryRemarks"
+                                        class="form-control resize-none" id=""></textarea>
+                                </div>
+                            </form>
+
+                            <!-- <div class="mt-3 bottle_info_table seperate_table">
+                                <table class="table m-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl.No</th>
+                                            <th>Frquency Date</th>
+                                            <th>Frequency DateTime</th>
+                                            <th>Frequency Time</th>
+                                            <th>Quantity To Feed</th>
+                                            <th>Act Feed Quantity</th>
+                                            <th>Wasted Quantity</th>
+                                            <th>Act Feed Date And Time</th>
+                                            <th>Remarks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let feed of fetchFeedingSchedules; let i = index">
+                                            <td>{{i + 1}}</td>
+                                            <td>{{feed.FrquencyDate}}</td>
+                                            <td>{{feed.FrequencyDateTime}}</td>
+                                            <td>{{feed.FrequencyTime}}</td>
+                                            <td>{{feed.Quantity}}</td>
+                                            <td>{{feed.FeedQuantity}}</td>
+                                            <td>{{feed.WastedQuantity}}</td>
+                                            <td>{{feed.FeedDate}}</td>
+                                            <td>{{feed.Remarks}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div> -->
+
+                        </div>
+                        <div class="tab-pane fade" id="ContinuousFeeeding" role="tabpanel">
+                            <div class="p-2">
+                                <div class="d-flex gap-2 justify-content-end align-items-center">
+                                    <button class="btn btn-secondary-outline fs-8 px-2" data-bs-target="#createfeeding"
+                                        data-bs-toggle="modal" (click)="openCreateFeedingPopup()">Create Feeding
+                                        Schedule</button>
+                                    <button class="btn btn-secondary-outline fs-8 px-2" (click)="ModifyFeedingQuantityInSchedule()">Discontinue Feeding</button>
+                                </div>
+
+                                <div class="mt-1 bottle_info_table seperate_table">
+                                    <table class="table m-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Sl.No</th>
+                                                <th></th>
+                                                <th></th>
+                                                <th>Frequency Date</th>
+                                                <th>Frequency Date Time</th>
+                                                <th>Frequency Time</th>
+                                                <th>Quantity to Feed</th>
+                                                <th>Act Feed Quantity</th>
+                                                <th>Wasted Quantity</th>
+                                                <th>Act Feed Date and Time</th>
+                                                <th>Remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let feed of fetchFeedingSchedules; let i = index">
+                                                <td>{{i + 1}}</td>
+                                                <td>
+                                                    <div class="custom_check d-flex align-items-center" *ngIf="feed.Status != '1'"
+                                                        [class.active]="feed.selected"
+                                                        (click)="selectFeedSchedule(feed)">
+                                                        <svg width="18" height="18" viewBox="0 0 20 21" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                            <path
+                                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                                        </svg>
+                                                    </div>
+                                                <td>
+                                                    <button class="btn btn-secondary-outline fs-8 px-2"
+                                                        (click)="feedingDetails(feed)"
+                                                        *ngIf="feed.MotherMilkExtractionID == ''">Feed</button>
+                                                </td>
+                                                <td>{{feed.FrquencyDate}}</td>
+                                                <td>{{feed.FrequencyDateTime}}</td>
+                                                <td>{{feed.FrequencyTime}}</td>
+                                                <td>{{feed.Quantity}}</td>
+                                                <td>{{feed.FeedQuantity}}</td>
+                                                <td>{{feed.WastedQuantity}}</td>
+                                                <td>{{feed.FeedDate}}</td>
+                                                <td>{{feed.Remarks}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="createfeeding modal" data-bs-backdrop="static" tabindex="-1" id="createfeeding" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 23%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Feeding Configuration</h5>
+                <div class="d-flex gap-2 align-items-center justify-content-end">
+                    <button class="btn btn-danger-outline" (click)="clearContinuousFeeding()">Clear</button>
+                    <button class="btn btn-main-outline" (click)="SaveMilkContinousFeedingBaby()">Save</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <form [formGroup]="cotinuousFeedingForm">
+                <div class="modal-body">
+                    <div class="row g-2 p-3 pb-4">
+                        <div class="col-12">
+                            <label for="" class="form-label">Quantity</label>
+                            <input type="text" formControlName="Quantity" class="form-control">
+                        </div>
+                        <div class="col-12">
+                            <label for="" class="form-label">From Date</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                <input matInput class="" formControlName="FromDate" (click)="FromDate.open()"
+                                    [matDatepicker]="FromDate" [min]="minDate">
+                                <mat-datepicker-toggle matSuffix [for]="FromDate">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #FromDate></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div class="fromtotime">
+                            <input type="time" class="form-control" formControlName="FromTime">
+                        </div>
+                        <div class="col-12">
+                            <label for="" class="form-label">No of Hours</label>
+                            <input type="text" formControlName="NoofHours" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="createfeeding modal" data-bs-backdrop="static" tabindex="-1" id="feedingDetails" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="width: 50rem;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Feeding</h5>
+                <div class="d-flex gap-2 align-items-center justify-content-end">
+                    <button class="btn btn-danger-outline" (click)="clearfeedingMilkToBabyDetails()">Clear</button>
+                    <button class="btn btn-main-outline" (click)="SavefeedingMilkToBabyDetails()">Save</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <form  [formGroup]="feedingMilkToBabyDetailsForm">
+                <div class="modal-body pb-5">
+                    <div class="g-2 gy-3">
+                        <div class="d-flex gap-3">
+                            <div class="col-4">
+                                <label for="" class="form-label m-0 text-nowrap">Scan</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="text" class="form-control">
+                                    <div class="custom_check">
+                                        <svg width="18" height="18" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                    </div>
+                                    <span>Or</span>
+                                </div>
+            
+                            </div>
+                            <div class="col-8">
+                                <label for="" class="form-label m-0 text-nowrap">Select Bottle</label>
+                                <select class="form-select pe-5 w-50" id="BottleID" (change)="onBottleSelected($event)">
+                                    <option dir="ltr" value="0" translate>{{langData?.common?.Select}}</option>
+                                    <option dir="ltr" *ngFor="let allo of FetchActiveMotherMilkInfoListD"
+                                        [value]="allo.MotherMilkExtractionID">
+                                        {{allo.MotherMilkExtractionID}}
+                                    </option>
+                                </select>
+                            </div>
+                           
+                        </div>
+                    </div>    
+                    <div class="d-flex gap-3">
+                        <div class="col-2">
+                            <label for="" class="form-label m-0 text-nowrap">Total Quantity</label>
+                            <input type="text" (keypress)="($event.charCode >= 48 && $event.charCode < 58)" maxlength="3"
+                                [attr.disabled]="true" formControlName="TotalQuantity" class="form-control">
+                        </div>
+                        <div class="col-2">
+                            <label for="" class="form-label m-0 text-nowrap">Bal Quantity</label>
+                            <input type="text" (keypress)="($event.charCode >= 48 && $event.charCode < 58)" maxlength="3"
+                                [attr.disabled]="true" formControlName="BalanceQuantity" class="form-control">
+                        </div>
+                        <div class="col-2">
+                            <label for="" class="form-label m-0 text-nowrap">Feed Quantity</label>
+                            <input type="text" (keypress)="($event.charCode >= 48 && $event.charCode < 58)" maxlength="3"
+                                [attr.disabled]="disableFeedWasteQty == true ? 'true' : null" formControlName="FeedQuantity"
+                                (change)="validateFeedQty()" class="form-control">
+                        </div>
+                        <div class="col-2">
+                            <label for="" class="form-label m-0 text-nowrap">Waste Quantity</label>
+                            <input type="text" (keypress)="($event.charCode >= 48 && $event.charCode < 58)" maxlength="3"
+                                [attr.disabled]="disableFeedWasteQty == true ? 'true' : null" formControlName="WasteQuantity"
+                                (change)="validateWasteQty()" class="form-control">
+                        </div>
+                    </div>           
+                
+                
+                <div class="col-9">
+                    <label for="" class="form-label m-0 text-nowrap">Remarks</label>
+                    <textarea name="" formControlName="Remarks" class="form-control resize-none" id=""></textarea>
+                </div>
+                <div class="col-9">
+                    <label for="" class="form-label m-0 text-nowrap">Manual Entry Remarks</label>
+                    <textarea name="" formControlName="ManualEntryRemarks" class="form-control resize-none"
+                        id=""></textarea>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal" id="milkfeedingSavedMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved Successfully </p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        (click)="FetchMilkFeedingSchedules()" data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="milkfeedingDiscontinueMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Discontinued Successfully </p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        (click)="FetchMilkFeedingSchedules()" data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="motherMilkExtractionValidationMsgs" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p *ngIf="errorMessages.length === 1">{{errorMessages[0]}}</p>
+                <ul *ngIf="errorMessages.length > 1">
+                    <li *ngFor="let error of errorMessages; let i = index"> {{error}}</li>
+                </ul>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal quick_info walkthrough_info_card walkthrough_info" data-bs-backdrop="static" id="quickaction_info" tab-index="-1">
+    <div class="modal-dialog modal-dialog-scrollabel">
+        <div class="modal-content h-100 overflow-auto">
+            <div class="modal-header ps-0 d-none" style="background-color: #fcfaf7 !important;">
+                <label for="" class="ssn_label bg-primary clr-light" id="lblSSN">SSN:
+                    {{patinfo?.SSN}}</label>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="clearPatientInfo()"
+                    aria-label="Close"></button>
+            </div>
+            <div class="">
+                <app-patient-quick-actions *ngIf="patinfo"
+                    [patientInfo]="patinfo" (closeModal)="closeModal()"></app-patient-quick-actions>
+            </div>
+        </div>
+    </div>
+</div>

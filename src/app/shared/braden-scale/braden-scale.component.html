@@ -1,0 +1,98 @@
+
+<app-generic-close *ngIf="readonly"></app-generic-close>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width: 20%;">Risk Factors</th>
+                <th style="width: 30%;">Description</th>
+                <th>Criteria</th>
+                <th>Points</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of convertedData">
+                <td>{{item.RiskFactor}}</td>
+                <td>{{item.Description}}</td>
+                <td>
+                    <div class="d-flex action_select align-items-center gap-2 mb-2"
+                        [class.active]="it.Selected" (click)="toggleActive(item, i, it)"
+                        *ngFor="let it of item.Options; let i = index">
+                        <svg width="19" height="19" viewBox="0 0 19 19" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <g opacity="0.4">
+                                <circle cx="9.42578" cy="9.86621" r="9" fill="#43A9BC" />
+                                <path
+                                    d="M12.5085 6.56469L8.0964 10.987L6.39945 9.29009C6.30725 9.18243 6.19379 9.09499 6.0662 9.03326C5.93861 8.97153 5.79963 8.93684 5.65799 8.93137C5.51635 8.9259 5.37511 8.94976 5.24314 9.00147C5.11116 9.05317 4.9913 9.1316 4.89107 9.23183C4.79084 9.33206 4.71242 9.45192 4.66071 9.5839C4.60901 9.71587 4.58514 9.85711 4.59061 9.99875C4.59608 10.1404 4.63077 10.2794 4.6925 10.407C4.75423 10.5346 4.84167 10.648 4.94933 10.7402L7.3662 13.1674C7.46229 13.2627 7.57626 13.3381 7.70157 13.3893C7.82687 13.4404 7.96105 13.4664 8.0964 13.4656C8.3662 13.4645 8.62476 13.3574 8.81631 13.1674L13.9586 8.02509C14.055 7.92949 14.1315 7.81574 14.1837 7.69041C14.2359 7.56509 14.2628 7.43066 14.2628 7.29489C14.2628 7.15913 14.2359 7.0247 14.1837 6.89937C14.1315 6.77405 14.055 6.6603 13.9586 6.56469C13.7659 6.37314 13.5052 6.26562 13.2335 6.26562C12.9618 6.26562 12.7012 6.37314 12.5085 6.56469Z"
+                                    fill="#ECF6F8" />
+                            </g>
+                        </svg>
+                        <label for="" class="form-label p-0">{{ it.RiskFactorValue }}</label>
+                    </div>
+                </td>
+                <td>
+                    <p class="mb-2" *ngFor="let it of item.Options">{{ it.AssessmentScore }}</p>
+                </td>
+                <td>
+                    {{item.SelectedScore ? item.SelectedScore : 0}}
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="bg-primary-50">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <p class="m-0 fs-7 fe-bold">Total: {{ calculateTotalSelectedScore() }}</p>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div class="modal" id="scaleModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                Please select below Risk Factors
+                <ul *ngIf="nursingScaleMandatoryList.length > 0">
+                    <li *ngFor="let item of nursingScaleMandatoryList; let i = index"> {{item}}</li>
+                </ul>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="BradenScaleMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success" style="max-width: 35rem;">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p class="fs-6 clr-primary-600 m-0">Data Saved Successfully</p>
+                <div>
+                    <p class="fs-6 clr-primary-600">{{langData?.common?.NursingInterventions}}</p>
+                </div>
+                <div class="table-cards_div m-0 d-flex p-2 flex-nowrap w-100 mt-2"
+                    *ngFor="let ni of nursingInterventionsAfterSave;let i=index">
+                    <div class="row card_item_div mx-0 g-2 w-100">
+                        <div class="col-md-12">
+                            <p class="text-wrap text-start m-0 p-0">{{ni.NursingIntervention}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- <a href="javascript:void(0)" type="button" (click)="bradenclose()" data-bs-dismiss="modal">{{langData?.common?.ok}}</a> -->
+                    <button class="btn btn-main-outline" (click)="bradenclose()" data-bs-dismiss="modal">{{langData?.common?.ok}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

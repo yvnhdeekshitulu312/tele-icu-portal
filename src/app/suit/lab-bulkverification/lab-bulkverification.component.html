@@ -1,0 +1,598 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+<!--Container-->
+<div class="container__wrapper bg-white">
+    <div class="page-header sticky-top shadow-sm justify-content-start">
+        <h2 class="page-heading">Bulk Results Verification</h2>
+        <div class="d-flex align-items-center gap-2 mx-4">
+            <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                <button class="btn" [class.selected]="selectedPatientType === '3'" (click)="FetchLabWorklistDataDisplay('3')">ED</button>
+                <button class="btn" [class.selected]="selectedPatientType === '2'" (click)="FetchLabWorklistDataDisplay('2')">IP</button>
+                <button class="btn" [class.selected]="selectedPatientType === '1'" (click)="FetchLabWorklistDataDisplay('1')">OP</button>
+            </div>
+
+            <!-- <label for="" class="form-label text-nowrap m-0">Date :</label> -->
+            <div class="d-flex align-items-center gap-2 justify-content-end">
+                <button class="date_range_calendar p-0 position-relative"
+                    style="width: 227px;">
+                    <mat-date-range-input class="btn btn-main-outline" [formGroup]="datesForm"
+                        [rangePicker]="picker">
+                        <input matStartDate formControlName="fromdate">
+                        <input matEndDate formControlName="todate" (dateChange)="FetchLabDataBulkVerification(7)">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </button>
+            </div>
+            <div class="">
+                <div class="filter_Date position-relative">
+                    <div class="d-flex align-items-center gap-2 fs-8">
+                            Filter
+                            <svg class="cursor-pointer" width="18" height="18" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2.75" y="3.27435" width="18.5" height="18.5" rx="3.25" stroke="#368796" stroke-width="1.5"/>
+                            <circle cx="7.85547" cy="8.32605" r="1.375" fill="#368796" stroke="#368796" stroke-width="1.25"/>
+                            <rect x="9.125" y="7.70105" width="7" height="1.25" rx="0.625" fill="#368796"/>
+                            <circle cx="16.1445" cy="12.5243" r="1.375" fill="#4357BC" stroke="#4357BC" stroke-width="1.25"/>
+                            <rect x="8.12988" y="11.8993" width="7" height="1.25" rx="0.625" fill="#4357BC"/>
+                            <circle cx="7.875" cy="16.7227" r="1.375" fill="#368796" stroke="#368796" stroke-width="1.25"/>
+                            <rect x="9.14453" y="16.0977" width="7" height="1.25" rx="0.625" fill="#368796"/>
+                        </svg>                                                     
+                    </div>                                           
+                    <div class="filter_dropdow">
+                            <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('T')">Today</p>
+                            <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('Y')">Yesterday</p>
+                            <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('W')">This week</p>
+                            <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('M')">This Month</p>
+                            <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('3M')">Three Months</p>
+                            <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('6M')">Six Months</p>
+                            
+                        </div>
+                    </div>
+            </div>
+            <div class="d-flex align-items-center gap-2 bed_status" onmouseover="dropdownlabType()" onmouseout="hideDropdownType()">
+                <p class="clr-primaryAllegery fs-8 text-nowrap">Filter By</p>
+                <li class="nav-item bedstatus_li position-relative lab_navlink">
+                    <ul class="dropdown-menu" id="dropdownlabType">
+                        <li class="dropdown-item cursor-pointer" (click)="selectOption('Results Entered')">Results Entered</li>
+                        <li class="dropdown-item cursor-pointer" (click)="selectOption('Order Date')">Order Date</li>
+                        <li class="dropdown-item cursor-pointer" (click)="selectOption('Test Name')">Test Name</li>
+                    </ul>
+                </li>
+            </div>
+        </div>
+        <div class="d-flex gap-2 align-items-center actions ms-auto">
+            <div class="d-flex align-items-center gap-2 resultsverify_count me-5">
+                <div class="form-check form-switch gap-2">
+                    <input class="form-check-input" type="checkbox" (click)="VerifiedFilter()"
+                        role="switch" id="flexSwitchCheckChecked" [checked]="showVerifiedResults"> 
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Verified</label>
+                </div>
+           </div>
+            <div class="d-flex align-items-center gap-2 resultsverify_count me-5">
+                <p class="fw-bold fs-6" *ngIf="!showVerifiedResults">Total Results To Verify</p>
+                <p class="fw-bold fs-6" *ngIf="showVerifiedResults">Total Results Verified</p>
+                <span>{{ FetchLabDataBulkVerificationCDataLists?.length }}</span>
+            </div>
+            <button class="btn btn-danger-outline" (click)="clearBulkVerification()">Clear</button>
+            <button class="btn btn-main-outline" (click)="UpdateBulkVerification()" *ngIf="!showVerifiedResults">Verify</button>
+        </div>
+    </div>
+
+    
+    <div class="d-flex align-items-center justify-content-between p-2">
+        <form class="d-flex align-items-center gap-2 w-100" [formGroup]="datesForm">
+            <div class="d-flex align-items-center gap-2">
+                
+                <div class="CommanSearch__form grey bg-white ps-2">
+                    <label for="" class="CommonSearch__label">
+                        <img src="assets/images/icons/icon-search.svg" alt="">
+                    </label>
+                    <input class="CommonSearch__input form-control px-0" type="text" id="txtSsn" placeholder="ID No." formControlName="SSN"
+                    (keypress)="($event.charCode >= 48 && $event.charCode < 58)" (keydown.enter)="FetchLabDataBulkVerification(7)">
+                    <button type="reset" class="reset-btn">
+                        <svg width="20" height="20" viewBox="0 0 20 20">
+                            <path
+                                d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z"
+                                stroke="currentColor" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                                stroke-linejoin="round"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="CommanSearch__form grey bg-white ps-2 d-none">
+                    <label for="" class="CommonSearch__label">
+                        <img src="assets/images/icons/icon-search.svg" alt="">
+                    </label>
+                    <input class="CommonSearch__input form-control" type="text" id="txtSampleNumber" placeholder="SampleNumber" formControlName="SampleNumber"
+                    (keypress)="($event.charCode >= 48 && $event.charCode < 58)" (keydown.enter)="FetchLabDataBulkVerification(7)">
+                    <button type="reset" class="reset-btn">
+                        <svg width="20" height="20" viewBox="0 0 20 20">
+                            <path
+                                d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z"
+                                stroke="currentColor" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                                stroke-linejoin="round"></path>
+                        </svg>
+                    </button>
+                </div>
+
+
+                <!-- <div class="col d-flex align-items-center gap-2">
+                    <label for="" class="form-label text-nowrap">Ward :</label>
+                    <div class="d-flex align-items-center gap-2 w-100">
+                        <input type="text" class="form-control" placeholder="Ward" aria-label="Ward"
+                            id="wardSearch" [matAutocomplete]="autoMed"
+                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchWard($event)">
+                        <mat-autocomplete #autoMed="matAutocomplete">
+                            <mat-option *ngFor="let item of listOfWards"
+                                (onSelectionChange)="onItemSelected(item)" [value]="item.Name.trim()">
+                                {{item.Name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </div>
+                </div>
+
+                <div class="col d-flex align-items-center gap-2">
+                    <label for="" class="form-label text-nowrap">Bed :</label>
+                    <div class="d-flex align-items-center gap-2 w-100">
+                        <input type="text" class="form-control" placeholder="Bed" aria-label="Bed"
+                            id="BedSearch" [matAutocomplete]="autoMed1"
+                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchBed($event)">
+                        <mat-autocomplete #autoMed1="matAutocomplete">
+                            <mat-option *ngFor="let item of listOfBeds"
+                                (onSelectionChange)="onItemBedSelected(item)" [value]="item.BedName.trim()">
+                                {{item.BedName}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </div>
+                </div> -->
+
+
+
+
+                <div class="CommanSearch__form grey bg-white ps-2">
+                    <label for="" class="CommonSearch__label d-flex">
+                        <svg width="17" height="18" viewBox="0 0 17 18" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0.128906 0.825195V6.26178H1.49183V2.18811H5.5655V0.825195H0.128906Z"
+                                fill="#368796" />
+                            <path d="M0.128906 17.1752V11.7386H1.49183V15.8123H5.5655V17.1752H0.128906Z"
+                                fill="#368796" />
+                            <path d="M15.116 15.8123V11.7386H16.4789V17.1752H11.0423V15.8123H15.116Z"
+                                fill="#368796" />
+                            <path d="M11.0423 2.18811V0.825195H16.4789V6.26178H15.116V2.18811H11.0423Z"
+                                fill="#368796" />
+                            <path d="M2.85352 3.55005H5.57867V14.4507H2.85352V3.55005Z" fill="#368796" />
+                            <path d="M8.30375 3.55005H6.94116V14.4507H8.30375V3.55005Z" fill="#368796" />
+                            <path d="M9.66638 3.55005H11.029V14.4507H9.66638V3.55005Z" fill="#368796" />
+                            <path d="M13.7541 3.55005H12.3915V14.4507H13.7541V3.55005Z" fill="#368796" />
+                        </svg>
+                    </label>
+                    <input class="CommonSearch__input form-control px-0" id="Barcode"  autofocus type="text" placeholder="Barcode" (keypress)="($event.charCode >= 48 && $event.charCode < 58)" 
+                        (keydown.enter)="FetchLabDataBulkVerification(7)">
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-danger-outline" (click)="clearBulkVerification()">Clear</button>
+                <button class="btn btn-main-outline" (click)="FetchLabDataBulkVerification(7)">Search</button>
+            </div>
+            <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                <button class="btn" [class.selected]="isPanicAbnormal === '0'" (click)="filterPanicAbnormalResults('0')" >All ({{fetchStatusCount(0)}})</button>
+                <button class="btn" [class.selected]="isPanicAbnormal === '3'" (click)="filterPanicAbnormalResults('3')">Normal ({{fetchStatusCount(3)}})</button>
+                <button class="btn" [class.selected]="isPanicAbnormal === '1'" (click)="filterPanicAbnormalResults('1')">Panic ({{fetchStatusCount(1)}})</button>
+                <button class="btn" [class.selected]="isPanicAbnormal === '2'" (click)="filterPanicAbnormalResults('2')">Abnormal ({{fetchStatusCount(2)}})</button>
+            </div>
+            <div class="col d-flex align-items-center gap-2">
+                <label for="" class="form-label text-nowrap">Ward :</label>
+                <div class="d-flex align-items-center gap-2 w-100">
+                    <input type="text" class="form-control" placeholder="Ward" aria-label="Ward"
+                        id="wardSearch" [matAutocomplete]="autoMed"
+                        (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchWard($event)">
+                    <mat-autocomplete #autoMed="matAutocomplete">
+                        <mat-option *ngFor="let item of listOfWards"
+                            (onSelectionChange)="onItemSelected(item)" [value]="item.Name.trim()">
+                            {{item.Name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+            </div>
+
+            <div class="col d-flex align-items-center gap-2">
+                <label for="" class="form-label text-nowrap">Bed :</label>
+                <div class="d-flex align-items-center gap-2 w-100">
+                    <input type="text" class="form-control" placeholder="Bed" aria-label="Bed"
+                        id="BedSearch" [matAutocomplete]="autoMed1"
+                        (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchBed($event)">
+                    <mat-autocomplete #autoMed1="matAutocomplete">
+                        <mat-option *ngFor="let item of listOfBeds"
+                            (onSelectionChange)="onItemBedSelected(item)" [value]="item.BedName.trim()">
+                            {{item.BedName}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+            </div>
+            <div class="ms-auto d-flex align-items-center gap-2">
+                <div class="custom_check active d-flex align-items-center gap-2" [class.active]="selectAll" (click)="selectAllData()">
+                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="check_svg">
+                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                        <path
+                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                            fill="white" stroke="white" stroke-width="0.25"></path>
+                    </svg>
+                    <p class="fs-7">Select All</p>
+                </div>
+
+                <div class="legend_row d-flex align-items-center gap-2">
+                    <div class="d-flex align-items-center gap-1 panic_legend">
+                        <span class="legend square LabPanic"></span>
+                        <p>Panic</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-1 abnormal_legend">
+                        <span class="legend square LabAbnormal"></span>
+                        <p>Abnormal</p>
+                    </div>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+
+    <div class="">
+        <div class="nobulkprocess d-flex flex-column align-items-center justify-content-center"
+        *ngIf="showNoRecFound">
+            <img src="assets/images/icons/Isolation_Mode.svg" alt="" class="mb-2">
+            <p class="m-0 fs-6">No Results for Verification for the Day</p>
+        </div>
+        <div class="BulkVerificationCDataLists d-flex flex-column gap-2 p-2" style="background-color: #ebebeb;">
+            <div class="doctor_worklist oveflow-hidden worklist_patientcard Normall rounded border-neutral shadow-0" *ngFor="let item of FetchLabDataBulkVerificationCDataLists; let i=index">
+                <div class="row mx-0">
+                    <div class="col-md-3" style="width: 25%">
+
+                        <div class="d-flex align-items-center h-100 py-1">
+                            <div class="patient-photo me-3">
+                                <img src="assets/images/icons/male.svg" alt="" class="position-relative"
+                                    *ngIf="item.Gender=='Male'">
+                                    <img src="assets/images/icons/female.svg" alt="" class="position-relative"
+                                    *ngIf="item.Gender=='Female'">
+                            </div>
+                            <div class="">
+                                <p class="value fs-7 fw-bold w-100">{{item.PatientName}}</p>
+                                <div class="d-flex align-items-center gap-2 ">
+                                    <p>{{item.Gender}} | {{item.Age}} {{item.AgeUoM}}</p>
+                                    <p>ID No : <span class="fw-bold">{{item.SSN}}</span></p>
+                                </div>
+                                <div class="d-flex align-items-center gap-1">
+                                    <p><b>DOB</b> :</p>
+                                    <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                            fill="#368796" />
+                                    </svg>
+                                    <p class="m-0 fw-bold text-nowrap">{{item.DOB?.split(' ')[0]}}</p>
+                                </div>
+                                <p>{{item.Nationality}} | Mobile : {{item.MobileNo}}</p>
+                            </div>
+                            
+                        </div>
+                       
+                    </div>
+                    <div class="col-md-9 my-1 p-0">
+                        <div class="bg-white h-100 p-1 rounded-2">
+                            <div class="d-flex gap-2">
+                                <div class="row mx-0 g-2 w-100">
+                                    <div class="col-1">
+                                        <label for="" class="form-label m-0 fw-bold clr-grey">Accession No.</label>
+                                        <p class="">{{item.SampleNumber}}</p>
+                                    </div>
+                                    <div class="col-2" *ngIf="selectedPatientType=='2'">
+                                        <label for="" class="form-label m-0 fw-bold clr-grey">Order Bed</label>
+                                        <div class="custom_tooltip custom_tooltip_right">
+                                            <p class="text-truncate fs-8">{{item.Ward}} | {{item.OrderBed}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="" class="form-label m-0 fw-bold clr-grey">Results Entered</label>
+                                        <!-- <div class="custom_tooltip custom_tooltip_right">
+                                            <p class="text-truncate fs-8">{{item.ResultEnteredAt}}</p>
+                                        </div> -->
+                                        <div class="d-flex align-items-center gap-1">
+                                            <!-- Date -->
+                                            <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="m-0 clr-dark-600 text-nowrap">
+                                                {{item.ResultEnteredAt?.split('
+                                                ')[0]}}</p>
+
+                                            <!-- Time -->
+                                            <svg class="" width="10" height="11" viewBox="0 0 10 11"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                                    fill="#368796" />
+                                                <path
+                                                    d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="m-0 clr-dark-600  text-nowrap">
+                                                {{item.ResultEnteredAt?.split('
+                                                ')[1]}}</p>
+                                        
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="" class="form-label m-0 fw-bold clr-grey">Status</label>
+                                        <div class="status_track d-flex align-items-center">
+                                            <span class="d-flex active align-items-center custom_tooltip custom_tooltip_left">
+                                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="8" cy="8.5" r="7.25" fill="#CEF5FD"
+                                                        stroke="#13B9DD" stroke-width="1.5" />
+                                                    <path d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455"
+                                                        stroke="#13B9DD" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p>Sample Collected  {{item.SampleCollectedAt}}</p>
+                                                </div>
+                                            </span>
+                                            <span class="d-flex active align-items-center custom_tooltip custom_tooltip_left">
+                                                <svg width="15" height="4" viewBox="0 0 15 4" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect y="0.645447" width="30" height="3.70911"
+                                                        fill="#F2CD4A" />
+                                                </svg>
+                                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="8" cy="8.5" r="7.25" fill="#FCF2CF"
+                                                        stroke="#F2CD4A" stroke-width="1.5" />
+                                                    <path d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455"
+                                                        stroke="#EEBD11" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p>Sample Acknowledged  {{item.SampleAcknowledgedAt}}</p>
+                                                </div>
+                                            </span>
+                                            <span class="d-flex active align-items-center custom_tooltip custom_tooltip_left">
+                                                <svg width="15" height="4" viewBox="0 0 31 4" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="0.128906" y="0.145508" width="30" height="3.70911"
+                                                        fill="#6280EC" />
+                                                </svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16"
+                                                    viewBox="0 0 17 16" fill="none">
+                                                    <circle cx="8.12891" cy="8" r="7.25" fill="#D2DAF9"
+                                                        stroke="#6280EC" stroke-width="1.5" />
+                                                    <path d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455"
+                                                        stroke="#6280EC" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p>Result Entered  {{item.ResultEnteredAt}}</p>
+                                                </div>
+                                            </span>
+                                           
+                                            <span class="d-flex align-items-center custom_tooltip custom_tooltip_left">
+                                                <svg width="15" height="4" viewBox="0 0 31 4" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="0.128906" y="0.145508" width="30" height="3.70911"
+                                                        fill="#4C9CE5" />
+                                                </svg>
+                                                <svg width="17" height="17" viewBox="0 0 17 17" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="8.12891" cy="8.5" r="7.25" fill="#D2E6F9"
+                                                        stroke="#4C9BE5" stroke-width="1.5" />
+                                                    <path d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455"
+                                                        stroke="#4C9BE5" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p>Results Verified  {{item.ResultsVerifiedAt}}</p>
+                                                </div>
+                                            </span>
+                                            <span class="d-flex align-items-center custom_tooltip custom_tooltip_left d-none">
+                                                <svg width="15" height="4" viewBox="0 0 15 4" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect y="0.645447" width="30" height="3.70911"
+                                                        fill="#85E54C" />
+                                                </svg>
+                                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="8" cy="8.5" r="7.25" fill="#DDF4D7"
+                                                        stroke="#85E64C" stroke-width="1.5" />
+                                                    <path d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455"
+                                                        stroke="#85E54C" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p>Results Dispatched</p>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <label for="" class="form-label mb-0">Results Entered</label>
+                                    </div>
+                                    <div class="col-2">
+                                    
+                                            <label for="" class="form-label m-0 fw-bold clr-grey">Prev. Test Result Date</label>
+                                            <!-- <p class="text-truncate fs-8">{{item.PreviousResultEnterDate}}</p> -->
+                                            <div class="d-flex align-items-center gap-1">
+                                                <!-- Date -->
+                                                <svg width="10" height="11" viewBox="0 0 10 11" fill="none" *ngIf="item.PreviousResultEnterDate!=null"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                        fill="#368796" />
+                                                </svg>
+                                                <p class="m-0 clr-dark-600 text-nowrap">
+                                                    {{item.PreviousResultEnterDate?.split('
+                                                    ')[0]}}</p>
+            
+                                                <!-- Time -->
+                                                <svg class="" width="10" height="11" viewBox="0 0 10 11" *ngIf="item.PreviousResultEnterDate!=null"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                                        fill="#368796" />
+                                                    <path
+                                                        d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                                        fill="#368796" />
+                                                </svg>
+                                                <p class="m-0 clr-dark-600  text-nowrap">
+                                                    {{item.PreviousResultEnterDate?.split('
+                                                    ')[1]}}</p>
+                                            
+                                            </div>
+                                    </div>  
+                                    <div class="col-2">
+                                        <!-- <label for="" class="form-label m-0 fw-bold clr-grey">Order Date</label>
+                                        <div class="custom_tooltip custom_tooltip_right">
+                                            <p class="text-truncate fs-8">{{item.OrderDate}}</p>
+                                        </div> -->
+                                        <label for="" class="form-label m-0 fw-bold clr-grey">Order Date</label>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <!-- Date -->
+                                            <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="m-0 clr-dark-600 text-nowrap">
+                                                {{item.OrderDate?.split('
+                                                ')[0]}}</p>
+
+                                            <!-- Time -->
+                                            <svg class="" width="10" height="11" viewBox="0 0 10 11"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                                    fill="#368796" />
+                                                <path
+                                                    d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="m-0 clr-dark-600  text-nowrap">
+                                                {{item.OrderDate?.split('
+                                                ')[1]}}</p>
+                                        
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-column" style="width: 7%;">
+                                        <button class="btn btn-main-fill lh-1 fs-8" (click)="openPatientSummary(item, $event);">EHR</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9 p-0" style="width: 100%">
+                        <div [class]="item.ClassVer">
+                            <div class="d-flex gap-2">
+                                <div class="row mx-0 g-2 w-100">
+                                    <div class="col-2" *ngIf="selectedPatientType!='2'" style="width: 10%;">
+                                        <label for="" class="form-label m-0 fw-bold clr-grey">Bill No</label>
+                                        <div class="custom_tooltip custom_tooltip_right">
+                                            <p class="text-truncate fs-8">{{item.BillNo}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="" class="form-label m-0 fw-bold clr-grey">Test Name</label>
+                                        <div class="custom_tooltip custom_tooltip_left">
+                                            <p class="text-truncate fs-8 color-highlight"><a href="#" (click)="$event.preventDefault();openResultEntry(item)">{{item.TestName}}</a></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="width: 31%;">
+                                        <div class="gap-2">
+                                            <label for="" class="form-label m-0 fw-bold clr-grey">Test Result</label>
+                                            <!-- <p class="text-break fs-8"> {{item.TestResult}}</p> -->
+                                            <div [innerHtml]="item?.TestResult" class="text-break fs-8"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-2" style="width: 21%;">
+                                        <label for="" class="form-label m-0 fw-bold clr-grey">Prev. Test Result</label>
+                                        <!-- <p class="text-break fs-8">{{item.PreviousTestResult}}</p> -->
+                                        <div [innerHtml]="item?.PreviousTestResult" class="text-break fs-8"></div>
+                                    </div> 
+                                   
+                                    <div class="col-2" style="width: 10%;" *ngIf="!showVerifiedResults">
+                                        <label for="" class="form-label m-0 fw-bold clr-grey">Can be verified</label>
+                                        <p class="text-wrap fs-8">{{item.CanbeVerified === '1' ? 'Yes' : 'No'}}</p>
+                                    </div>
+                                    <div class="col-2" style="width: 10%;" *ngIf="showVerifiedResults">
+                                        <label for="" class="form-label m-0 fw-bold clr-grey">Verified Date</label>
+                                        <p class="text-wrap fs-8">{{item.ResultsVerifiedAt}}</p>
+                                    </div>
+                                    <div class="col-2" style="width: 10%;" *ngIf="showVerifiedResults">
+                                        <label for="" class="form-label m-0 fw-bold clr-grey">Verified By</label>
+                                        <p class="text-wrap fs-8">{{item.ResultVerifiedByName}}</p>
+                                    </div>
+                                </div>
+                                <div class="px-2 d-flex flex-column justify-content-between align-items-end" *ngIf="!showVerifiedResults"> 
+                                    <div class="custom_check d-flex align-items-center gap-2" [class.active]="item.isVerify" (click)="isVerify(item)">
+                                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-8">Verify</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+
+    <div class="p-3 m-3 mt-0 bg-primary-50 rounded-3 d-flex align-items-center justify-content-between d-none">
+        <div class="legend_row d-flex align-items-center gap-2">
+            <div class="d-flex align-items-center gap-1 panic_legend">
+                <span class="legend square LabPanic"></span>
+                <p>Panic</p>
+            </div>
+            <div class="d-flex align-items-center gap-1 abnormal_legend">
+                <span class="legend square LabAbnormal"></span>
+                <p>Abnormal</p>
+            </div>
+        </div>
+        
+    </div>
+</div>
+<div class="modal" id="labresultEntryValidation" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p *ngIf="errorMessages.length === 1">{{errorMessages[0]}}</p>
+                <ul *ngIf="errorMessages.length > 1">
+                    <li *ngFor="let error of errorMessages; let i = index"> {{error}}</li>
+                </ul>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="labResultEntrySaveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Results Verified Successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        (click)="FetchLabDataBulkVerification(7)" data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

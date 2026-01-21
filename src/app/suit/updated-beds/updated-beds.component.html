@@ -1,0 +1,115 @@
+<app-header [InputHome]="IsHome" [IsSwitchWard]="false"></app-header>
+<div class="page-header sticky-top justify-content-between rounded-3 shadow-sm">
+    <div class="d-flex align-items-center gap-2">
+        <h2 class="page-heading">Update bed status</h2>
+        <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start">
+            <button class="fs-7 btn" [class.selected]="type === 1" (click)="setType(1)">Not occupied / Vacant</button>
+            <button class="fs-7 btn" [class.selected]="type === 2" (click)="setType(2)">Vacant / Not in use</button>
+        </div>
+    </div>
+    
+    <div class="d-flex align-items-center gap-2 waiting_count ms-3">
+        <div class="d-flex align-items-center" *ngIf="(FromEMR?.toString() !== 'true') && (FromBedBoard?.toString() !== 'true')">
+            <label for="" class="form-label mb-0 px-2">{{langData?.common?.Facility}}</label>
+            <select name="" id="" class="form-select" [(ngModel)]="wardID" (change)="onWardChange()">
+                <option value="{{item.FacilityID}}" *ngFor="let item of FetchUserFacilityDataList;let i=index">
+                    {{item.FacilityName}}</option>
+            </select>
+        </div>
+        <button class="btn btn-main-fill" (click)="navigatetoBedBoard()" *ngIf="FromEMR?.toString() === 'true' || FromBedBoard?.toString() === 'true'">{{langData?.common?.BedBoards}}</button>
+        <button class="btn btn-danger-outline" (click)="clear()">Clear</button>
+        <button class="btn btn-main-outline" (click)="save()">Save</button>
+    </div>
+</div>
+<div class="p-2">
+    <div class="row mx-0 g-3">
+        <div *ngFor="let room of getKeys(groupedByRoom)" class="col-4" >
+            <div class="room_cards_row d-flex flex-column h-100">
+                <div class="tagline">
+                    <h6 class="clr-primary-600 m-0 bg-primary-100 p-2">{{ room }}</h6>
+                </div>
+                <div class="row mx-0 gx-3 justify-content-start p-3 w-100 h-100">
+                    <div class="col-6 position-relative" (click)="setSelectedRoom(item)" *ngFor="let item of groupedByRoom[room]">                                    
+                        <div class="room_card_details_hover">
+                            <div class="room_card primary" [class.active]="item.selected">
+                                <p class="m-0 fs-6 p-2 bedNum">{{item.Bed}} </p>
+
+                                <div class="bed_card_circle p-3 pb-0">
+                                    <svg class="bed_card" width="50" height="51" viewBox="0 0 50 51" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="25" cy="25.9221" r="25" fill="#DAEEF1"/>
+                                        <path d="M15.6464 25.0903C17.0508 25.0903 18.1894 23.9518 18.1894 22.5474C18.1894 21.143 17.0513 20.0059 15.6464 20.0059C14.2438 20.0059 13.1049 21.1433 13.1049 22.5474C13.1049 23.9515 14.2438 25.0903 15.6464 25.0903ZM40.1316 26.4568C40.1316 24.4439 38.4986 22.8112 36.4857 22.8112H26.1929V30.1979H38.3914V33.7619H40.1312L40.1302 26.4566L40.1316 26.4568ZM18.189 25.935H25.1494V22.8114H21.7929C19.9562 22.8117 18.4421 24.1704 18.189 25.935ZM11.6082 18.2227H9.86841V33.7628H11.6082V30.1985H25.1494V26.9792L11.6082 26.9794V18.2227Z" fill="#368796"/>
+                                    </svg>
+                                </div>
+                                <div class="bed-info-label rounded-0 py-2">  {{item.CurrentBedStatus}}  </div>
+                                <svg class="check_img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <g opacity="0.24">
+                                    <circle cx="10" cy="10" r="10" fill="#43BC94"/>
+                                    <path d="M13.4244 5.94153L8.52215 10.6858L6.63665 8.86533C6.53421 8.74984 6.40814 8.65603 6.26637 8.58981C6.1246 8.52358 5.97018 8.48637 5.81281 8.4805C5.65543 8.47463 5.4985 8.50023 5.35186 8.5557C5.20522 8.61117 5.07204 8.69531 4.96067 8.80283C4.84931 8.91035 4.76217 9.03895 4.70472 9.18053C4.64727 9.32211 4.62075 9.47363 4.62683 9.62558C4.63291 9.77753 4.67145 9.92663 4.74004 10.0635C4.80863 10.2004 4.90579 10.3221 5.02541 10.421L7.71081 13.0249C7.81759 13.1271 7.94422 13.208 8.08345 13.2629C8.22267 13.3178 8.37176 13.3457 8.52215 13.3448C8.82193 13.3436 9.10921 13.2287 9.32205 13.0249L15.0357 7.50825C15.1428 7.40568 15.2278 7.28365 15.2858 7.1492C15.3438 7.01476 15.3737 6.87054 15.3737 6.72489C15.3737 6.57924 15.3438 6.43503 15.2858 6.30058C15.2278 6.16613 15.1428 6.0441 15.0357 5.94153C14.8216 5.73604 14.5319 5.6207 14.2301 5.6207C13.9282 5.6207 13.6385 5.73604 13.4244 5.94153Z" fill="white"/>
+                                    </g>
+                                </svg>
+                                <p class="mb-2">Name : {{item.PatientName}}</p>
+                                <p class="mb-2">ID No. : {{item.SSN}} | {{item.Gender}}</p>
+                                <div class="text-start p-2" (click)="$event.stopPropagation()">
+                                    <p class="mb-2">Change to status</p>
+                                    <select name="" (change)="changeStatus($event, item)" [disabled]="!item.selected" class="form-select" id="">
+                                        <option value="">Select</option>
+                                        <option *ngFor="let stat of item.BedStatusArray" value="{{stat.BedStatusID}}" [selected]="stat.BedStatusID === item.selectedStatus">{{stat.BedStatus}}</option>
+                                    </select>
+                               </div>
+
+                            </div>                                        
+                            <!-- <div class="room_card_details position-absolute z-index-9 bg-white overflow-hidden">
+                                <div class="d-flex flex-column gap-1">
+                                    <div class="p-2">
+                                        <p class="m-0 fs-8 clr-primary-600 text-start">MS. Lama Abdul Amir</p>
+                                        <p class="m-0 fs-8 text-start">Female<span> | </span> 1172292482</p>
+                                    </div>
+                                    <p class="m-0 fs-8 bg-primary-100 p-2 text-start d-flex align-items-center gsp-1">
+                                        <svg style="min-width: 1rem;width: 1rem;" class="me-1" width="20" height="22" viewBox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M15.8697 12.5782C16.2368 13.1849 16.4541 13.9248 16.4974 14.6721C17.2051 14.8327 17.735 15.4653 17.735 16.2204C17.735 17.0965 17.0222 17.8093 16.1461 17.8093C15.27 17.8093 14.5572 17.0965 14.5572 16.2204C14.5572 15.4758 15.0728 14.8508 15.765 14.6794C15.6949 13.6655 15.2385 12.6466 14.5013 12.1758C14.3223 12.1443 14.1407 12.1186 13.9569 12.1017C13.9302 13.2905 12.1693 14.2492 9.99934 14.2492C7.8294 14.2492 6.06818 13.2905 6.04227 12.1017C5.80785 12.1233 5.57734 12.1582 5.35074 12.2039C4.77825 12.6131 4.31551 13.4117 4.29009 14.3814C4.43187 14.4636 4.54651 14.5909 4.61667 14.7452C5.1388 14.9916 5.60007 15.5103 5.95329 16.2487C6.01245 16.3732 6.02027 16.5135 5.97676 16.6416C6.18845 17.1864 6.30945 17.7819 6.30945 18.282C6.30945 18.9829 6.30945 19.6455 5.54556 19.8157C5.46294 19.8846 5.35929 19.9223 5.25051 19.9223H4.74011C4.48418 19.9223 4.27591 19.7137 4.27591 19.4581L4.2764 19.44C4.28618 19.1933 4.49274 18.9939 4.74011 18.9939H5.25051C5.30282 18.9939 5.35391 19.0027 5.40329 19.02C5.43409 19.0112 5.44411 19.0039 5.44411 19.0039C5.50082 18.9032 5.50082 18.4837 5.50082 18.2823C5.50082 17.876 5.39914 17.3854 5.22094 16.9295C5.12854 16.877 5.05374 16.7975 5.00778 16.7015C4.69831 16.0534 4.27738 15.6349 3.93565 15.6349C3.58609 15.6349 3.14414 16.0874 2.83589 16.7604C2.78554 16.8699 2.69729 16.9593 2.58876 17.0126C2.42767 17.449 2.33918 17.898 2.33918 18.282C2.33918 18.4512 2.33918 18.9002 2.40371 19.0056C2.40445 19.0056 2.41887 19.0144 2.45945 19.0244C2.51225 19.0041 2.56896 18.9936 2.62567 18.9936H3.13705C3.37538 18.9936 3.5746 19.1752 3.59856 19.4109L3.601 19.4397C3.601 19.7137 3.39274 19.9223 3.13705 19.9223H2.62567C2.52422 19.9223 2.4262 19.8885 2.34554 19.8267C2.05342 19.7717 1.8476 19.6429 1.71731 19.4331C1.5594 19.1796 1.53056 18.8467 1.53056 18.282C1.53056 17.7865 1.64496 17.2163 1.85274 16.6714C1.82218 16.5548 1.83245 16.4331 1.88329 16.3233C2.09962 15.8501 2.37487 15.4448 2.67896 15.1517C2.84616 14.9906 3.02582 14.861 3.2138 14.7664C3.2842 14.6014 3.40716 14.466 3.557 14.3805C3.57142 13.7381 3.7484 13.1284 4.0388 12.6161C1.73418 13.621 0.123047 15.9185 0.123047 18.5935C0.123291 21.8402 2.49562 22 5.60178 22C5.94034 22 6.28794 21.9981 6.64262 21.9981H13.3575C13.7107 21.9981 14.0588 22 14.3979 22C17.504 22 19.8768 21.8407 19.8768 18.5939C19.8766 15.8835 18.2224 13.5618 15.8697 12.5782Z" fill="#368796"/>
+                                            <path d="M9.99992 12.9531C13.0027 12.9531 15.4361 8.43798 15.4361 5.43644C15.4361 2.43393 13.0027 0 9.99992 0C6.99765 0 4.56396 2.43393 4.56396 5.43644C4.56396 8.43847 6.99814 12.9531 9.99992 12.9531ZM6.75248 2.99347C7.56428 5.46504 13.1733 4.35233 13.1733 4.35233C14.7888 4.22913 14.672 6.45016 14.67 6.4746C14.2432 9.00827 12.3148 12.1017 10.0002 12.1017C7.59825 12.1017 5.61165 8.76822 5.2885 6.18836C5.54223 3.99838 6.75248 2.99347 6.75248 2.99347Z" fill="#368796"/>
+                                            <path d="M16.1459 16.9537C16.5509 16.9537 16.8793 16.6253 16.8793 16.2203C16.8793 15.8153 16.5509 15.487 16.1459 15.487C15.7409 15.487 15.4126 15.8153 15.4126 16.2203C15.4126 16.6253 15.7409 16.9537 16.1459 16.9537Z" fill="#368796"/>
+                                        </svg>
+
+                                        Dr FAWAZ ABDULRAHMAN HOUZANI </p>
+                                </div>
+                            </div> -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="validationMessage" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>Please select status in following selected Rooms</p>   
+                <p class="p-2 px-3 rounded-4 bg-primary-100 my-2 clr-primary-600" *ngFor="let error of errorMessages; let i = index"> {{error}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                     data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+    <div class="modal-content">
+        <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+        <div class="modal-body">
+        <p>Status updated Successfully</p>
+        <div class="modal-footer">
+            <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+            data-bs-dismiss="modal">Ok</a>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>

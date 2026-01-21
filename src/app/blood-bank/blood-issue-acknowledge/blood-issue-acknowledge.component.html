@@ -1,0 +1,247 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+<div>
+    <div class="page-header sticky-top justify-content-between">
+        <div class="d-flex align-items-center gap-3 w-100">
+            <h2 class="page-heading text-nowrap">Blood Issue Acknowledge</h2>
+            <div class="d-flex gap-2 align-items-center w-100">
+                <div class="filter_Date position-relative">
+                    <div class="d-flex align-items-center gap-2 fs-8">
+                        Filter
+                        <svg class="cursor-pointer" width="18" height="18" viewBox="0 0 24 25" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2.75" y="3.27435" width="18.5" height="18.5" rx="3.25" stroke="#368796"
+                                stroke-width="1.5" />
+                            <circle cx="7.85547" cy="8.32605" r="1.375" fill="#368796" stroke="#368796"
+                                stroke-width="1.25" />
+                            <rect x="9.125" y="7.70105" width="7" height="1.25" rx="0.625" fill="#368796" />
+                            <circle cx="16.1445" cy="12.5243" r="1.375" fill="#4357BC" stroke="#4357BC"
+                                stroke-width="1.25" />
+                            <rect x="8.12988" y="11.8993" width="7" height="1.25" rx="0.625" fill="#4357BC" />
+                            <circle cx="7.875" cy="16.7227" r="1.375" fill="#368796" stroke="#368796"
+                                stroke-width="1.25" />
+                            <rect x="9.14453" y="16.0977" width="7" height="1.25" rx="0.625" fill="#368796" />
+                        </svg>
+                    </div>
+                    <div class="filter_dropdow">
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('T')">Today</p>
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('W')">This week
+                        </p>
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('M')">This
+                            Month</p>
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('3M')">Three
+                            Months</p>
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('6M')">Six
+                            Months</p>
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('1Y')">This
+                            Year</p>
+                        <p class="m-0 p-2 cursor-pointer">All</p>
+                    </div>
+                </div>
+                <div>
+                    <button class="date_range_calendar p-0 position-relative" style="width: 227px;">
+                        <mat-date-range-input class="btn btn-main-outline" [formGroup]="tablePatientsForm"
+                            [rangePicker]="picker">
+                            <input matStartDate formControlName="FromDate">
+                            <input matEndDate formControlName="ToDate" (dateChange)="onDateChange()">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </button>
+                </div>
+                <div class="d-flex align-items-center">
+                    <label for="" class="form-label mb-0 px-2">{{langData?.common?.Facility}}</label>
+                    <select name="" id="" class="form-select" [(ngModel)]="selectedWardId" (change)="onWardChange()">
+                        <option value="{{item.FacilityID}}" *ngFor="let item of FetchUserFacilityDataList;let i=index">
+                            {{item.FacilityName}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-main-outline" (click)="onAcknowledgeClick()">Acknowledge</button>
+            <button class="btn btn-main-outline" (click)="FetchBloodIssuesDetailsNurse()">Ok</button>
+        </div>
+    </div>
+    <div class="nobulkprocess d-flex flex-column align-items-center justify-content-center"
+        *ngIf="BloodIssuesDetails.length === 0">
+        <img src="assets/images/nolaboratory.svg" alt="" class="mb-2">
+        <p class="m-0 fs-6">No Results</p>
+    </div>
+
+    <div class="container-body p-2">
+        <div class="d-flex flex-column gap-2 BloodIssueHeight">
+            <div *ngIf="BloodIssuesDetails.length > 0">
+                <div *ngFor="let data of sortedGroupedByDate">
+                    <div class="card card-style-1 flex-column gap-1 rounded group-date p-0 border-0 mt-1">
+                        <div class="card-header rounded-top justify-content-start p-0 min-height-unset p-0">
+                            <span class="d-block grp_date">{{ data.IssueDate }}</span>
+                        </div>
+                        <div class="doc_card rounded cursor-pointer" *ngFor="let wrk of data.items">
+                            <div class="rounded">
+                                <div class="row gx-1 mx-0 align-items-center">
+                                    <div class="bg-primary-50 rounded-start cursor-pointer position-relative"
+                                        style="width: 22rem;">
+                                        <div class="p-2 doctor_profile d-flex">
+                                            <div class="text-center me-2">
+                                                <div class="profile_img position-relative">
+                                                    <img *ngIf="wrk.GenderId == 1" src="assets/images/icons/male.svg"
+                                                        alt="" class="position-relative">
+                                                    <img *ngIf="wrk.GenderId == 2" src="assets/images/icons/female.svg"
+                                                        alt="" class="position-relative">
+                                                </div>
+                                            </div>
+                                            <div class="d-flex w-100 align-items-center justify-content-between">
+                                                <div class="w-100 position-relative">
+                                                    <div class="custom_tooltip custom_tooltip_right">
+                                                        <p class="value fs-7 fw-bold w-75 text-truncate">
+                                                            {{wrk.PatientName}}
+                                                        </p>
+                                                        <div class="tooltip">
+                                                            <p class="value fs-7 fw-bold">{{wrk.PatientName}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <div
+                                                            class="full_age_hover custom_tooltip custom_tooltip_right d-flex align-items-center gap-1">
+                                                            <p>{{wrk.Gender}} | {{wrk.FullAge}} </p>
+                                                        </div>
+                                                        <p><b>SSN</b> : <span>{{wrk.SSN}}</span></p>
+                                                    </div>
+                                                    <div>
+                                                        <p>{{wrk.Nationality}} | Mobile : {{wrk.MobileNo}}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col doc_details">
+                                        <div class="bg-white p-1 rounded">
+                                            <div class="row gx-2">
+                                                <div class="col-1 d-flex flex-column" style="width: 8rem;">
+                                                    <label for="" class="form-label m-0 clr-grey fw-bold">Issue
+                                                        Date</label>
+                                                    <div class="d-flex align-items-center gap-1">
+                                                        <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                                fill="#368796" />
+                                                        </svg>
+                                                        <p class="m-0 fw-bold text-nowrap">
+                                                            {{wrk.IssueDate}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-2 d-flex flex-column">
+                                                    <label for="" class="form-label m-0 clr-grey fw-bold">Doctor</label>
+                                                    <p class="fw-bold">{{wrk.doctorName}}</p>
+                                                </div>
+                                                <div class="col-1 d-flex flex-column">
+                                                    <label for="" class="form-label m-0 clr-grey fw-bold">
+                                                        Bed Name</label>
+                                                    <p class="fw-bold">{{wrk.BedName}}</p>
+                                                </div>
+                                                <div class="col-1 d-flex flex-column">
+                                                    <label for="" class="form-label m-0 clr-grey fw-bold">Order
+                                                        No</label>
+                                                    <p class="fw-bold">{{wrk.OrderNumber}}</p>
+                                                </div>
+
+                                                <div class="col-1 d-flex flex-column">
+                                                    <label for="" class="form-label m-0 clr-grey fw-bold">Issue
+                                                        Slno</label>
+                                                    <p class="fw-bold">{{wrk.IssueSlno}}</p>
+                                                </div>
+
+                                                <div class="col-2 d-flex flex-column">
+                                                    <label for="" class="form-label m-0 clr-grey fw-bold">Acknowledge
+                                                        By</label>
+                                                    <p class="fw-bold">{{wrk.AcknowledgeBy}}</p>
+                                                </div>
+
+                                                <div class="col-2 d-flex flex-column">
+                                                    <label for="" class="form-label m-0 clr-grey fw-bold">Acknowledge
+                                                        Date</label>
+                                                    <div class="d-flex align-items-center gap-1" *ngIf="wrk.AcknowledgeBy!=''">
+                                                        <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                                fill="#368796" />
+                                                        </svg>
+                                                        <p class="m-0 fw-bold text-nowrap">
+                                                            {{wrk.AcknowledgeDate?.split('
+                                                            ')[0]}}</p>
+
+                                                        <!-- <svg class="ms-3" width="10" height="11" viewBox="0 0 10 11"
+                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                                                fill="#368796" />
+                                                            <path
+                                                                d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                                                fill="#368796" />
+                                                        </svg>
+                                                        <p class="m-0 fw-bold text-nowrap">
+                                                            {{wrk.AcknowledgeDate?.split('
+                                                            ')[1]}}</p> -->
+                                                    </div>
+                                                </div>
+                                                <div class="col-1 d-flex flex-column">
+                                                    <div class="custom_check d-flex align-items-center" 
+                                                        [class.disabled]="wrk.AcknowledgeDate"
+                                                        [class.active]="wrk.selected || wrk.AcknowledgeDate" (click)="wrk.selected = !wrk.selected">
+                                                        <svg width="16" height="16" style="min-width:1rem"
+                                                            viewBox="0 0 20 21" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                            <path
+                                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="savemsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p *ngIf="errorMessages.length === 1">{{errorMessages[0]}}</p>
+                <ul *ngIf="errorMessages.length > 1">
+                    <li *ngFor="let error of errorMessages; let i = index"> {{error}}</li>
+                </ul>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

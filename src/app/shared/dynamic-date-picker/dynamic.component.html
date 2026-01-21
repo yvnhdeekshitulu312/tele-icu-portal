@@ -1,0 +1,38 @@
+<div *ngIf="type === 'date'">
+  <div class="d-flex align-items-center input-group">
+    <mat-form-field appearance="fill">
+      <mat-label translate>dd-MMM-yyyy</mat-label>
+      <input matInput class="" [(ngModel)]="inputDynamicValue"
+        (click)="dynamicdate.open()" [matDatepicker]="dynamicdate">
+      <mat-datepicker-toggle matSuffix [for]="dynamicdate">
+      </mat-datepicker-toggle>
+      <mat-datepicker #dynamicdate></mat-datepicker>
+    </mat-form-field>
+  </div>
+</div>
+<div *ngIf="type === 'search'">
+  <div class="d-flex align-items-center input-group">
+    <input type="text" class="form-control" placeholder="Search"
+        aria-label="Country Name"   [matAutocomplete]="mySearch" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchSearch($event)">
+        <mat-autocomplete #mySearch="matAutocomplete">
+            <mat-option *ngFor="let item of listOfItems" (onSelectionChange)="selectedItem(item)"  >
+              {{item.Name}} 
+            </mat-option>
+        </mat-autocomplete>
+    <button class="btn btn-secondary-fill btn-icon" type="button" 
+        id="button-addon2">
+        <img src="assets/images/icons/icon-search.svg" alt="">
+    </button>
+  </div>
+</div>
+<div *ngIf="type === 'dropdown'">
+  <div class="d-flex align-items-center input-group">
+    <select #mySelect class="form-select pe-5" (change)="dropdownchange($event)">
+      <option dir="ltr" value="0" selected translate>{{langData?.common?.Select}}</option>
+      <option [value]="item.ID" *ngFor="let item of listOfItems" >{{item.Name}} </option>
+    </select>
+  </div>
+  <p class="errorMsg" *ngIf="errorMessage">{{errorMessage}}</p>
+</div>
+
+  

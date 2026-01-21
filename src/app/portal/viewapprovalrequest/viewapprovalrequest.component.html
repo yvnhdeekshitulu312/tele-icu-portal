@@ -1,0 +1,460 @@
+<app-generic-close [title]="'noname'" *ngIf="showClose"></app-generic-close>
+<div class="page-header sticky-top justify-content-between" *ngIf="isDoctorApprovals">
+    <div class="d-flex align-items-center gap-3 w-100">
+        <h2 class="page-heading text-nowrap">View Approvals</h2>
+        <form [formGroup]="approvalForm">
+            <div class="d-flex gap-2 align-items-center w-100">
+                <div>
+                    <button class="date_range_calendar p-0 position-relative" style="width: 227px;">
+                        <mat-date-range-input class="btn btn-main-outline"
+                            [rangePicker]="picker">
+                            <input matStartDate formControlName="FromDate">
+                            <input matEndDate formControlName="ToDate" (dateChange)="onDateChange()">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </button>
+                </div>
+                <div action="" class="CommanSearch__form" style="width: 13rem;">
+                    <label for="" class="CommonSearch__label d-flex">
+                        <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_438_22896)">
+                                <path
+                                    d="M9.2959 1.6665C13.4359 1.6665 16.7959 5.0265 16.7959 9.1665C16.7959 13.3065 13.4359 16.6665 9.2959 16.6665C5.1559 16.6665 1.7959 13.3065 1.7959 9.1665C1.7959 5.0265 5.1559 1.6665 9.2959 1.6665ZM9.2959 14.9998C12.5184 14.9998 15.1292 12.389 15.1292 9.1665C15.1292 5.94317 12.5184 3.33317 9.2959 3.33317C6.07256 3.33317 3.46256 5.94317 3.46256 9.1665C3.46256 12.389 6.07256 14.9998 9.2959 14.9998ZM16.3667 15.059L18.7242 17.4157L17.5451 18.5948L15.1884 16.2373L16.3667 15.059Z"
+                                    fill="#368796" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_438_22896">
+                                    <rect width="20" height="20" fill="white" transform="translate(0.128906)" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                    </label>
+                    <input class="CommonSearch__input form-control px-0" type="text" id="NationalId" placeholder="SSN"
+                        (keydown.enter)="onSSNEnterPress()" formControlName="SSN">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-danger-outline" (click)="clearForm()">Clear</button>
+        <button class="btn btn-main-outline" (click)="fetchApprovalRequestsForDoctor()">Search</button>
+    </div>
+</div>
+<div class="card card-style-1 approval_accord m-2" *ngFor="let appr of aprrovalRequests;let i=index">
+    <div class="card-header py-2 justify-content-between" id="toggle_header">
+        <div class="d-flex gap-2 w-100">
+            <div class="col">
+                <p class="clr-primary-600 fs-7 fw-bold mb-1 text-nowrap">
+                    {{langData?.home?.Approval_No}} </p>
+                <p>{{appr.EntryID}}</p>
+            </div>
+            <div class="col">
+                <p class="clr-primary-600 fs-7 fw-bold mb-1 text-nowrap">
+                    {{langData?.home?.Referral_No}} </p>
+                <p>{{appr.ReferalBasisNo}}</p>
+            </div>
+             <div class="col">
+                <p class="clr-primary-600 fs-7 fw-bold mb-1 text-nowrap">
+                    SSN </p>
+                <p>{{appr.SSN}}</p>
+            </div>
+             <div class="col">
+                <p class="clr-primary-600 fs-7 fw-bold mb-1 text-nowrap">
+                    Patient Name </p>
+                <p>{{appr.PatientName}}</p>
+            </div>
+            <div class="col-2">
+                <p class="clr-primary-600 fs-7 fw-bold mb-1 text-nowrap">
+                    {{langData?.home?.DoctorName}} </p>
+                <p>{{appr.DoctorName}}</p>
+            </div>
+            <div class="col-2">
+                <p class="clr-primary-600 fs-7 fw-bold mb-1 text-nowrap">
+                    {{langData?.home?.RequestedDate}} </p>
+                    <div class="d-flex align-items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                            viewBox="0 0 16 16" fill="none">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M13.8552 1.56632H13.131V1.39789C13.131 0.623158 12.5079 0 11.7331 0C10.9584 0 10.3352 0.623158 10.3352 1.39789V1.56632H9.24049V1.39789C9.24049 0.623158 8.61733 0 7.84259 0C7.06785 0 6.4447 0.623158 6.4447 1.39789V1.56632H5.34996V1.39789C5.34996 0.623158 4.7268 0 3.95206 0C3.17733 0 2.55417 0.623158 2.55417 1.39789V1.56632H1.82996C0.886801 1.56632 0.128906 2.32421 0.128906 3.26737V14.2989C0.128906 15.2421 0.886801 16 1.82996 16H13.8215C14.7647 16 15.5226 15.2421 15.5226 14.2989V3.28421C15.5563 2.34105 14.7984 1.56632 13.8552 1.56632ZM11.2279 1.41474C11.2279 1.12842 11.4636 0.909474 11.7331 0.909474C12.0194 0.909474 12.2384 1.14526 12.2384 1.41474V2.62737C12.2384 2.91368 12.0026 3.13263 11.7331 3.13263C11.4468 3.13263 11.2279 2.89684 11.2279 2.62737V1.41474ZM7.35417 1.41474C7.35417 1.12842 7.58996 0.909474 7.85943 0.909474C8.14575 0.909474 8.3647 1.14526 8.3647 1.41474V2.62737C8.3647 2.91368 8.12891 3.13263 7.85943 3.13263C7.57312 3.13263 7.35417 2.89684 7.35417 2.62737V1.41474ZM3.46364 1.41474C3.46364 1.12842 3.69943 0.909474 3.96891 0.909474C4.25522 0.909474 4.47417 1.14526 4.47417 1.41474V2.62737C4.47417 2.91368 4.23838 3.13263 3.96891 3.13263C3.68259 3.13263 3.46364 2.89684 3.46364 2.62737V1.41474ZM14.6805 14.3158C14.6805 14.7705 14.31 15.1411 13.8552 15.1411H1.86364C1.40891 15.1411 1.03838 14.7705 1.03838 14.3158V5.38947H14.6636V14.3158H14.6805ZM10.9753 13.3221C11.0932 13.44 11.2279 13.4905 11.3795 13.4905C11.5311 13.4905 11.6658 13.44 11.7837 13.3221L13.3332 11.7726C13.5521 11.5537 13.5521 11.1832 13.3332 10.9642C13.1142 10.7453 12.7437 10.7453 12.5248 10.9642L11.3795 12.1095L10.9584 11.6884C10.7395 11.4695 10.369 11.4695 10.15 11.6884C9.93107 11.9074 9.93107 12.2779 10.15 12.4968L10.9753 13.3221ZM4.92888 9.7179H3.19414C2.95835 9.7179 2.75625 9.51579 2.75625 9.28V7.52842C2.75625 7.29263 2.95835 7.09053 3.19414 7.09053H4.92888C5.16467 7.09053 5.36678 7.29263 5.36678 7.52842V9.28C5.36678 9.51579 5.16467 9.7179 4.92888 9.7179ZM7.0006 9.7179H8.73533C8.97112 9.7179 9.17323 9.51579 9.17323 9.28V7.52842C9.17323 7.29263 8.97112 7.09053 8.73533 7.09053H7.0006C6.76481 7.09053 6.5627 7.29263 6.5627 7.52842V9.28C6.54586 9.51579 6.74796 9.7179 7.0006 9.7179ZM12.5247 9.7179H10.79C10.5542 9.7179 10.3521 9.51579 10.3521 9.28V7.52842C10.3521 7.29263 10.5542 7.09053 10.79 7.09053H12.5247C12.7605 7.09053 12.9626 7.29263 12.9626 7.52842V9.28C12.9626 9.51579 12.7605 9.7179 12.5247 9.7179ZM3.19414 13.4569H4.92888C5.16467 13.4569 5.36678 13.2548 5.36678 13.019V11.2674C5.36678 11.0316 5.16467 10.8295 4.92888 10.8295H3.19414C2.95835 10.8295 2.75625 11.0316 2.75625 11.2674V13.019C2.75625 13.2548 2.95835 13.4569 3.19414 13.4569ZM8.73533 13.4569H7.0006C6.74796 13.4569 6.54586 13.2548 6.5627 13.019V11.2674C6.5627 11.0316 6.76481 10.8295 7.0006 10.8295H8.73533C8.97112 10.8295 9.17323 11.0316 9.17323 11.2674V13.019C9.17323 13.2548 8.97112 13.4569 8.73533 13.4569Z"
+                                                                fill="#7C8283" />
+                                                        </svg>
+                                                        <p>{{appr.CREATEDATE}} </p>
+                   
+                        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16"
+                            viewBox="0 0 17 16" fill="none">
+                            <path
+                                d="M11.1608 9.78246H8.17179C7.67948 9.78246 7.29267 9.39565 7.29267 8.90334V4.33191C7.29267 3.83961 7.67948 3.45279 8.17179 3.45279C8.6641 3.45279 9.05091 3.83961 9.05091 4.33191V8.02422H11.1608C11.6531 8.02422 12.0399 8.41104 12.0399 8.90334C12.0399 9.39565 11.6531 9.78246 11.1608 9.78246Z"
+                                fill="#7C8283" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M16.5234 8C16.5234 12.4132 12.9366 16 8.52344 16C4.11025 16 0.523438 12.4132 0.523438 8C0.523438 3.58681 4.11025 0 8.52344 0C12.9366 0 16.5234 3.58681 16.5234 8ZM14.7652 8C14.7652 4.55385 11.9696 1.75824 8.52344 1.75824C5.07728 1.75824 2.28168 4.55385 2.28168 8C2.28168 11.4462 5.07728 14.2418 8.52344 14.2418C11.9696 14.2418 14.7652 11.4462 14.7652 8Z"
+                                fill="#7C8283" />
+                        </svg>
+                        <p> {{appr.CREATEDATETIME}}</p>
+                    </div>
+            </div>
+            <div class="col">
+                <p class="clr-primary-600 fs-7 fw-bold mb-1 text-nowrap">
+                    Status</p>
+                 <div class="d-flex align-items-center">
+                    <!--<span class="d-flex align-items-center custom_tooltip custom_tooltip_left">
+                        <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="8" cy="8.5" r="7.25" fill="#CEF5FD" stroke="#13B9DD" stroke-width="1.5" />
+                            <path d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455" stroke="#13B9DD" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <div class="tooltip">
+                            <p>Pending</p>
+                        </div>
+                    </span>
+                    <span class="d-flex align-items-center custom_tooltip custom_tooltip_left">
+                        <svg width="15" height="4" viewBox="0 0 15 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect y="0.645447" width="30" height="3.70911" fill="#F2CD4A" />
+                        </svg>
+                        <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="8" cy="8.5" r="7.25" fill="#FCF2CF" stroke="#F2CD4A" stroke-width="1.5" />
+                            <path d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455" stroke="#EEBD11" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <div class="tooltip">
+                            <p>Conditionally Approved</p>
+                        </div>
+                    </span>
+                    <span class="d-flex align-items-center custom_tooltip custom_tooltip_left">
+                        <svg width="15" height="4" viewBox="0 0 15 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect y="0.645447" width="30" height="3.70911" fill="#FA7238" />
+                        </svg>
+                        <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="8" cy="8.5" r="7.25" fill="#FEDCCD" stroke="#FA7238" stroke-width="1.5" />
+                            <path d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455" stroke="#EB6247" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <div class="tooltip">
+                            <p>Rejected</p>
+                        </div>
+                    </span>
+                    <span class="d-flex align-items-center  custom_tooltip custom_tooltip_left">
+                        <svg width="15" height="4" viewBox="0 0 15 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect y="0.645447" width="30" height="3.70911" fill="#85E54C" />
+                        </svg>
+                        <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="8" cy="8.5" r="7.25" fill="#DDF4D7" stroke="#85E64C" stroke-width="1.5" />
+                            <path d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455" stroke="#85E54C" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <div class="tooltip">
+                            <p>Approved</p>
+                        </div>
+                    </span>-->
+                    <label for="" class="form-label mb-0">{{appr.StatusName}}</label>
+                    <div (click)="showCommunicationRequest()" class="custom_tooltip custom_tooltip_left d-none">
+                        <svg width="38" height="38" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_10840_2006)">
+                            <circle cx="16.5" cy="16.1666" r="16" fill="#DAEEF1"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M10.2866 15.6788H9.83452C9.29204 15.6788 8.84424 16.105 8.80535 16.6389C8.80535 18.9685 8.80127 21.294 8.80127 23.6187C8.80127 24.1875 9.26618 24.6526 9.83452 24.6526H23.6094C24.178 24.6526 24.6427 24.1873 24.6427 23.6187C24.6427 20.6697 24.6384 17.7155 24.6384 14.7614C24.6042 14.2275 24.1519 13.8057 23.6094 13.8057H23.1574V8.733C23.1574 7.86307 22.4424 7.15259 21.5729 7.15259H11.8715C11.0016 7.15259 10.2868 7.86307 10.2868 8.733L10.2866 15.6788ZM24.6427 13.7881V12.9187C24.6427 12.35 24.1778 11.8849 23.6094 11.8849H23.5921V13.3663H23.6094C24.0098 13.3663 24.3757 13.5298 24.6427 13.7881ZM9.85183 10.0076H9.83452C9.26598 10.0076 8.80127 10.4727 8.80127 11.0412L8.80535 15.666C9.07232 15.4027 9.43417 15.2436 9.83452 15.2436H9.85183V10.0076ZM16.7243 17.504C18.1925 17.504 19.3854 18.6971 19.3854 20.1655C19.3854 21.6376 18.1925 22.8268 16.7243 22.8268C15.2516 22.8268 14.0587 21.6378 14.0587 20.1655C14.0587 18.6971 15.2516 17.504 16.7243 17.504ZM16.2894 18.7144H17.1546V19.7305H18.1752V20.6005H17.1546V21.6168H16.2894V20.6003H15.2687V19.7303H16.2894V18.7144ZM22.7181 13.8057V8.733C22.7181 8.10437 22.2015 7.58755 21.5727 7.58755H11.8715C11.2427 7.58755 10.726 8.10418 10.726 8.733V15.6788H16.0224L18.5371 13.8057H22.7181Z" fill="#368796"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M20.1871 11.3736H19.175C19.3959 10.3321 18.9297 9.36241 18.2928 9.13467C17.1496 8.7261 16.5907 9.75968 16.5907 9.75968C16.5907 9.75968 16.0324 8.7261 14.8886 9.13467C14.1659 9.39292 13.6635 10.6056 14.1325 11.7946H14.7299L15.2232 10.8814C15.2752 10.7848 15.3656 10.7283 15.4662 10.7317C15.5668 10.735 15.6538 10.7966 15.7001 10.8972L16.2686 12.1359L17.0609 10.3836C17.1039 10.2875 17.1881 10.2248 17.2847 10.2163C17.383 10.2061 17.4757 10.2553 17.5339 10.3429L18.5251 11.7997H20.1865C20.3035 11.7997 20.3996 11.7036 20.3996 11.5861C20.3996 11.4686 20.3041 11.3736 20.1871 11.3736ZM18.1736 12.0393L17.3361 10.8085L16.5082 12.6406C16.4619 12.7445 16.3726 12.8061 16.2709 12.8061H16.2697C16.168 12.8061 16.0787 12.7451 16.0324 12.6417L15.4464 11.3657L15.0954 12.0144C15.0305 12.1359 14.8892 12.2201 14.7513 12.2201H13.2577C13.1396 12.2201 13.0447 12.3156 13.0447 12.4332C13.0447 12.5507 13.1396 12.6468 13.2577 12.6468H14.666C15.0841 13.1187 15.7046 13.5459 16.5907 13.8516C17.7384 13.456 18.4437 12.8587 18.8336 12.2201H18.5155C18.3866 12.2213 18.2453 12.1467 18.1736 12.0393Z" fill="#368796"/>
+                            </g>
+                            <defs>
+                            <clipPath id="clip0_10840_2006">
+                            <rect width="32" height="32" fill="white" transform="translate(0.5 0.166626)"/>
+                            </clipPath>
+                            </defs>
+                        </svg>                                        
+                        <div class="tooltip">
+                            <p class="m-0 clr-primary-600">Communication Request</p>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="col">
+                <div class="" *ngIf="appr.Status != '0' && appr.Status != '1'" (click)="showDoctorJustificationPopup(appr)">
+                    <p class="clr-primary-600 fs-7 fw-bold mb-1 text-nowrap">Add Communication</p>
+                    <div class="custom_tooltip custom_tooltip_left d-inline-block">
+                        <svg class="cursor-pointer" width="40" height="40" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_12447_17265)">
+                            <path d="M14.8653 28.389C22.363 28.389 28.4411 22.3109 28.4411 14.8132C28.4411 7.31556 22.363 1.23749 14.8653 1.23749C7.36762 1.23749 1.28955 7.31556 1.28955 14.8132C1.28955 22.3109 7.36762 28.389 14.8653 28.389Z" fill="#DAEEF1"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M16.8651 11.0571C16.8651 10.3424 16.2803 9.75821 15.5667 9.75821L10.2672 9.75878C9.55238 9.75878 8.96766 10.3429 8.96766 11.0577V14.9043C8.96766 15.6191 9.55238 16.2033 10.2672 16.2033H10.7828C11.0453 16.2033 11.2843 16.3099 11.4554 16.4828C11.6283 16.6551 11.7349 16.8935 11.7349 17.1565V17.6505L13.0493 16.4628C13.2284 16.3008 13.4549 16.2061 13.6985 16.2061L15.5661 16.2038C16.2798 16.2038 16.8645 15.6197 16.8645 14.9049V11.0583L16.8651 11.0571ZM15.0847 13.7217C14.6757 13.7217 14.3437 13.3897 14.3437 12.9807C14.3437 12.5717 14.6757 12.2397 15.0847 12.2397C15.4937 12.2397 15.8257 12.5717 15.8257 12.9807C15.8257 13.3903 15.4949 13.7217 15.0847 13.7217ZM12.9175 12.2392C13.3265 12.2392 13.6586 12.5712 13.6586 12.9802C13.6586 13.3898 13.3265 13.7212 12.9175 13.7212C12.5085 13.7212 12.1765 13.3892 12.1765 12.9802C12.1765 12.5712 12.5085 12.2392 12.9175 12.2392ZM10.7486 13.7217C10.3396 13.7217 10.0076 13.3897 10.0076 12.9807C10.0076 12.5717 10.3396 12.2397 10.7486 12.2397C11.1576 12.2397 11.4896 12.5717 11.4896 12.9807C11.4896 13.3903 11.1576 13.7217 10.7486 13.7217ZM7.78271 11.0571C7.78271 9.68804 8.89796 8.57275 10.2671 8.57275H15.5666C16.9357 8.57275 18.051 9.688 18.051 11.0577V12.8216H19.0122C20.2296 12.8216 21.2216 13.8136 21.2216 15.0315V15.6128C21.2216 15.9403 20.9569 16.2061 20.6284 16.2061C20.3004 16.2061 20.0362 15.9409 20.0362 15.6128V15.0315C20.0362 14.4685 19.5747 14.0076 19.0117 14.0076H18.0505V14.9043C18.0505 16.274 16.9352 17.387 15.5661 17.387H13.7879L13.4571 17.6853V18.3202C13.4571 18.8833 13.9169 19.3465 14.4816 19.3465L16.0772 19.3442C16.306 19.3442 16.521 19.4355 16.6905 19.5884L17.6705 20.4743V20.2455C17.6705 19.7509 18.0772 19.3448 18.5707 19.3448H19.0122C19.5753 19.3448 20.0368 18.8839 20.0368 18.3208V17.9557C20.0368 17.6283 20.3014 17.363 20.6289 17.363C20.9558 17.363 21.2222 17.6283 21.2222 17.9557V18.3208C21.2222 19.5387 20.2296 20.5308 19.0128 20.5308H18.8576V21.1132C18.8576 21.8748 17.95 22.3169 17.3442 21.7698L15.97 20.5279L14.4827 20.5302C13.4097 20.5302 12.501 19.7578 12.3093 18.723C12.1068 18.9056 11.967 19.0499 11.6778 19.1058C11.0993 19.2176 10.55 18.7709 10.55 18.1708V17.3887H10.2676C8.8985 17.3887 7.78321 16.2735 7.78321 14.9037V11.0571L7.78271 11.0571Z" fill="#368796"/>
+                            </g>
+                            <defs>
+                            <clipPath id="clip0_12447_17265">
+                            <rect width="28" height="28" fill="white" transform="translate(0.865234 0.929993)"/>
+                            </clipPath>
+                            </defs>
+                        </svg>   
+                        <div class="tooltip">
+                            <p class="m-0 clr-primary-600">Doctor Justification</p>
+                        </div>
+                    </div>                     
+                </div>
+            </div>
+        </div>
+        
+        <div>            
+            <!-- <button class="btn btn-icon-3d toggle_btn" >
+                <img src="assets/images/icons/arrow-down.svg" alt="">
+            </button> -->
+            <svg class="cursor-pointer" id="approvaltoggle_btn" onclick="toggle_approvaltable()" xmlns="http://www.w3.org/2000/svg" width="16" height="11" viewBox="0 0 16 11" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M8 5.35705L12.714 0.643L15.0711 3.00002L8 10.0711L0.928932 3.00002L3.28595 0.643L8 5.35705Z" fill="#368796"/>
+            </svg>
+        </div>        
+    </div>
+    <!-- <p class="text-danger" style="font-size: 18px;">Nphies Reason : {{nphiesRejectedReason}}</p> -->
+    <div class="col-12 Cheifcomplaint_textarea p-2" *ngIf="adjCategoryList.length > 0">
+        <div class="card card-style-1 rounded">
+            <div class="card-header rounded-top justify-content-between p-0 min-height-unset">
+                <label for="" class="form-label m-0">Payer Response</label>
+            </div>                                                            
+            <div class="border-bottom-primary-200" *ngFor="let itemAdj of adjCategoryList; let i = index;">
+                <div class="row gx-2 mx-0 p-2 align-items-center alter_div">
+                    <div class="" style="width: 30%;">
+                        <p for="" translate="" class="m-0 fs-7">{{itemAdj.code}}-{{itemAdj.name}}</p>
+                    </div> 
+                    <div class="" style="width: 10%;">
+                        <p for="" translate="" class="m-0 fs-7">{{itemAdj.status}}</p>
+                    </div>                                 
+                </div>
+                <div class="d-flex gap-3 p-1 rounded-bottom justify-content-start">                                    
+                    <div class="d-flex gap-3">
+                        <div class="d-flex gap-1 align-items-center">
+                            <label for="" class="m-0 fw-bold clr-primary-600 fs-6 text-nowrap">Reason : </label>
+                            <p for="" translate="" class="m-0 fs-6" style="color: red;">{{itemAdj.itemReason}}</p>
+                        </div>                                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="" id="approvaltable_toggle">
+        <div class="approvaltable">
+            <table class="table table_alter mb-0">
+                <thead>
+                    <tr>
+                        <th>Service Name </th>
+                        <th>Item Name </th>
+                        <th>{{langData?.prescriptions?.Qty}} </th>
+                        <th>{{langData?.common?.Status}}</th>
+                        <th>{{langData?.common?.RequestDate}} </th>
+                        <th>{{langData?.common?.NphiesStatus}} </th>
+                        <th>More info</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let req of filterApprovalItems(appr);let i=index">
+                        <td>{{i + 1}} -  {{req.ServiceName}}</td>
+                        <td>{{req.ItemName}}</td>
+                        <td>{{req.Quantity}}</td>
+                        <td>{{req.StatusName}}</td>
+                        <td>                          
+                            <div class="col">                               
+                                    <div class="d-flex align-items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                                            viewBox="0 0 16 16" fill="none">
+                                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                                d="M13.8552 1.56632H13.131V1.39789C13.131 0.623158 12.5079 0 11.7331 0C10.9584 0 10.3352 0.623158 10.3352 1.39789V1.56632H9.24049V1.39789C9.24049 0.623158 8.61733 0 7.84259 0C7.06785 0 6.4447 0.623158 6.4447 1.39789V1.56632H5.34996V1.39789C5.34996 0.623158 4.7268 0 3.95206 0C3.17733 0 2.55417 0.623158 2.55417 1.39789V1.56632H1.82996C0.886801 1.56632 0.128906 2.32421 0.128906 3.26737V14.2989C0.128906 15.2421 0.886801 16 1.82996 16H13.8215C14.7647 16 15.5226 15.2421 15.5226 14.2989V3.28421C15.5563 2.34105 14.7984 1.56632 13.8552 1.56632ZM11.2279 1.41474C11.2279 1.12842 11.4636 0.909474 11.7331 0.909474C12.0194 0.909474 12.2384 1.14526 12.2384 1.41474V2.62737C12.2384 2.91368 12.0026 3.13263 11.7331 3.13263C11.4468 3.13263 11.2279 2.89684 11.2279 2.62737V1.41474ZM7.35417 1.41474C7.35417 1.12842 7.58996 0.909474 7.85943 0.909474C8.14575 0.909474 8.3647 1.14526 8.3647 1.41474V2.62737C8.3647 2.91368 8.12891 3.13263 7.85943 3.13263C7.57312 3.13263 7.35417 2.89684 7.35417 2.62737V1.41474ZM3.46364 1.41474C3.46364 1.12842 3.69943 0.909474 3.96891 0.909474C4.25522 0.909474 4.47417 1.14526 4.47417 1.41474V2.62737C4.47417 2.91368 4.23838 3.13263 3.96891 3.13263C3.68259 3.13263 3.46364 2.89684 3.46364 2.62737V1.41474ZM14.6805 14.3158C14.6805 14.7705 14.31 15.1411 13.8552 15.1411H1.86364C1.40891 15.1411 1.03838 14.7705 1.03838 14.3158V5.38947H14.6636V14.3158H14.6805ZM10.9753 13.3221C11.0932 13.44 11.2279 13.4905 11.3795 13.4905C11.5311 13.4905 11.6658 13.44 11.7837 13.3221L13.3332 11.7726C13.5521 11.5537 13.5521 11.1832 13.3332 10.9642C13.1142 10.7453 12.7437 10.7453 12.5248 10.9642L11.3795 12.1095L10.9584 11.6884C10.7395 11.4695 10.369 11.4695 10.15 11.6884C9.93107 11.9074 9.93107 12.2779 10.15 12.4968L10.9753 13.3221ZM4.92888 9.7179H3.19414C2.95835 9.7179 2.75625 9.51579 2.75625 9.28V7.52842C2.75625 7.29263 2.95835 7.09053 3.19414 7.09053H4.92888C5.16467 7.09053 5.36678 7.29263 5.36678 7.52842V9.28C5.36678 9.51579 5.16467 9.7179 4.92888 9.7179ZM7.0006 9.7179H8.73533C8.97112 9.7179 9.17323 9.51579 9.17323 9.28V7.52842C9.17323 7.29263 8.97112 7.09053 8.73533 7.09053H7.0006C6.76481 7.09053 6.5627 7.29263 6.5627 7.52842V9.28C6.54586 9.51579 6.74796 9.7179 7.0006 9.7179ZM12.5247 9.7179H10.79C10.5542 9.7179 10.3521 9.51579 10.3521 9.28V7.52842C10.3521 7.29263 10.5542 7.09053 10.79 7.09053H12.5247C12.7605 7.09053 12.9626 7.29263 12.9626 7.52842V9.28C12.9626 9.51579 12.7605 9.7179 12.5247 9.7179ZM3.19414 13.4569H4.92888C5.16467 13.4569 5.36678 13.2548 5.36678 13.019V11.2674C5.36678 11.0316 5.16467 10.8295 4.92888 10.8295H3.19414C2.95835 10.8295 2.75625 11.0316 2.75625 11.2674V13.019C2.75625 13.2548 2.95835 13.4569 3.19414 13.4569ZM8.73533 13.4569H7.0006C6.74796 13.4569 6.54586 13.2548 6.5627 13.019V11.2674C6.5627 11.0316 6.76481 10.8295 7.0006 10.8295H8.73533C8.97112 10.8295 9.17323 11.0316 9.17323 11.2674V13.019C9.17323 13.2548 8.97112 13.4569 8.73533 13.4569Z"
+                                                                                fill="#7C8283" />
+                                                                        </svg>
+                                                                        <p>{{req?.CREATEDATE}} </p>
+                                   
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16"
+                                            viewBox="0 0 17 16" fill="none">
+                                            <path
+                                                d="M11.1608 9.78246H8.17179C7.67948 9.78246 7.29267 9.39565 7.29267 8.90334V4.33191C7.29267 3.83961 7.67948 3.45279 8.17179 3.45279C8.6641 3.45279 9.05091 3.83961 9.05091 4.33191V8.02422H11.1608C11.6531 8.02422 12.0399 8.41104 12.0399 8.90334C12.0399 9.39565 11.6531 9.78246 11.1608 9.78246Z"
+                                                fill="#7C8283" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M16.5234 8C16.5234 12.4132 12.9366 16 8.52344 16C4.11025 16 0.523438 12.4132 0.523438 8C0.523438 3.58681 4.11025 0 8.52344 0C12.9366 0 16.5234 3.58681 16.5234 8ZM14.7652 8C14.7652 4.55385 11.9696 1.75824 8.52344 1.75824C5.07728 1.75824 2.28168 4.55385 2.28168 8C2.28168 11.4462 5.07728 14.2418 8.52344 14.2418C11.9696 14.2418 14.7652 11.4462 14.7652 8Z"
+                                                fill="#7C8283" />
+                                        </svg>
+                                        <p> {{req?.CREATEDATETIME}}</p>
+                                    </div>
+                               
+                            </div>
+                        </td>
+                        <td>
+                            <div [class]="req.class">
+                                <p class="m-0">{{req.StatusName}}</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="custom_tooltip custom_tooltip_left info_tooltip d-none">
+                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="28" height="28" rx="14" fill="#69BAC9"/>
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M14.9693 9.15383C16.1163 9.15383 17.0462 8.22385 17.0462 7.07692C17.0462 5.92998 16.1163 5 14.9693 5C13.8224 5 12.8924 5.92998 12.8924 7.07692C12.8924 8.22385 13.8224 9.15383 14.9693 9.15383ZM10.5386 11.2308C10.5386 10.8484 10.8486 10.5384 11.2309 10.5384H15.6616C16.0863 10.5384 16.4108 10.9171 16.3459 11.3368L14.6924 20.7846C14.5617 21.781 15.0207 22.0344 15.6617 22.0344C16.2421 22.0344 16.6943 21.5813 16.9857 21.1314C17.0768 21.0028 17.211 20.9379 17.3717 21.0028C17.4684 21.0677 17.5003 21.2284 17.4014 21.357C16.6646 22.5821 15.1931 23 14.0001 23C12.0706 23 11.1153 22.0024 11.3694 20.2308L12.5923 11.9231H11.2309C10.8486 11.9231 10.5386 11.6131 10.5386 11.2308Z" fill="#ECF6F8"/>
+                                </svg>
+                                <div class="tooltip">
+                                    <div class="">
+                                        <label for="" class="form-label">Remarks</label>
+                                        <span name="" class="form-control" style="min-height: 6rem;"
+                                            id="" role="textbox" contenteditable></span>
+                                    </div>
+                                </div>                                    
+                            </div>
+                        </td>
+                    </tr>
+                 </tbody>
+            </table>            
+        </div>
+    </div>
+</div>
+<div class="nobulkprocess d-flex flex-column align-items-center justify-content-center"
+    *ngIf="aprrovalRequests.length === 0">
+    <img src="assets/images/icons/icon-company.svg" alt="">
+    <p class="m-0 fs-6">No Approvals raised</p>
+</div>
+<div class="modal" id="commReqModal">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Communication Request</h5>
+                <div class="d-flex align-items-center px-5">
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="border-primary-200 rounded-2">
+                    <div class="fixed_alter_list">
+                        <div class="fixed_alter_header rounded-top" >
+                            <div class="row gx-2 mx-0 p-2 align-items-center">
+                                <div class="col-3">
+                                    <label for="" translate="" class="form-label m-0 clr-primary-600">Reason</label>
+                                </div>
+                                <div class="col">
+                                    <label for="" translate="" class="form-label m-0 clr-primary-600">Info Needed</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fixed_alter_body height-unset">
+                            <div class="row gx-2 mx-0 p-2 align-items-center alter_div">
+                                <div class="col-3" *ngFor="let r of commRequestReasons; let i = index;">
+                                    <p for="" translate="" class="m-0">{{r?.reason}}</p>
+                                </div>
+                                <div class="col" *ngFor="let p of commRequestPayloads; let i = index;">
+                                    <p for="" translate="" class="m-0">{{p?.info}}</p>
+                                </div>
+                            </div>
+                            <div class="row gx-2 mx-0 p-2 align-items-center alter_div">
+                                <div class="col-3" *ngFor="let r of commResponsePayloads; let i = index;">
+                                    <p for="" translate="" class="m-0">{{r?.reason}}</p>
+                                </div>
+                                <div class="col" *ngFor="let p of commResponseReasons; let i = index;">
+                                    <p for="" translate="" class="m-0">{{p?.info}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-2">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Communication Response</h5>
+                    </div>
+                    <div class="border-primary-200 rounded-2">
+                        <div class="fixed_alter_list">
+                            <div class="fixed_alter_header rounded-top" >
+                                <div class="row gx-2 mx-0 p-2 align-items-center">                                    
+                                    <div class="col-3">
+                                        <label for="" translate="" class="form-label m-0 clr-primary-600">Type</label>
+                                    </div>
+                                    <div class="col">
+                                        <label for="" translate="" class="form-label m-0 clr-primary-600"> Response </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body height-unset">
+                                <div class="row gx-2 mx-0 p-2 align-items-center alter_div">
+                                    <div class="col-3" *ngFor="let p of commResponseReasons; let i = index;">
+                                        <p for="" translate="" class="m-0">{{p?.reason}}</p>
+                                    </div>
+                                    <div class="col" *ngFor="let r of commResponsePayloads; let i = index;">                                        
+                                        <p for="" translate="" class="m-0">{{r?.info}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-primary-200 rounded-2 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Reason</label>
+                        <select class="form-select" #reasonComm>
+                            <option value="0">Select</option>
+                            <option value="Missing-info">Missing-info</option>
+                            <option value="Missing-attach">Missing-attach</option>
+                            <option value="Info-Correct">Info-Correction</option>
+                        </select>
+                        <!-- <div *ngIf="(isCommFormSubmitted && this.commRequestForm.get('reason')?.errors) ||
+                        (!this.commRequestForm.get('reason')?.pristine && this.commRequestForm.get('reason')?.invalid)"
+                            style="color: red;">
+                            <div *ngIf="this.commRequestForm.get('reason')?.errors?.['required']">
+                                Required
+                            </div>   
+                        </div> -->
+                    </div> 
+                    <div class="col-md-8">
+                        <label class="form-label">Info Needed</label>
+                        <!-- <input type="textarea" class="form-control"> -->
+                        <textarea placeholder="Response" name=""  id="infoNeeded" cols="30" rows="9" class="form-control resize-none"></textarea>
+                        <!-- <div *ngIf="(isCommFormSubmitted && this.commRequestForm.get('infoNeeded')?.errors) ||
+                        (!this.commRequestForm.get('infoNeeded')?.pristine && this.commRequestForm.get('infoNeeded')?.invalid)"
+                            style="color: red;">
+                            <div *ngIf="this.commRequestForm.get('infoNeeded')?.errors?.['required']">
+                                Required
+                            </div>   
+                        </div> -->
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{errorMessage}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="justificationModal">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Justification</h5>
+                <div class="ms-auto d-flex align-items-center">
+                    <button class="btn btn-main-outline mx-2" (click)="saveDoctorResponse()">Send</button>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">     
+                <div class="border-primary-200 rounded-2 mb-3">
+                    <div class="col-md-12">
+                        <textarea placeholder="Response" name=""  id="justification" cols="30" rows="20" class="form-control resize-none"></textarea>                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="saveMsg" data-bs-abackdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>{{saveMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

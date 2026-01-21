@@ -1,0 +1,1003 @@
+<div class="card card-style-1 rounded main-container" #divpicu>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading">Pediatric Intensive Care Unit</h2>
+        <div class="actions generalConsent_popup position-relative d-flex align-items-center gap-2" *ngIf="IsView">
+             <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+            <button class="btn btn-main-outline" (click)="viewWorklist()" *ngIf="IsView">View</button>
+        </div>
+    </div>
+
+    <div class="p-2 template_scroll" id="divscroll">
+        <div *ngIf="showContent">
+            <!-- Patient Info Section -->
+            <div class="row g-2">
+                <div class="col-md-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-control" id="textbox_PatientName">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Date of birth</label>
+                    <mat-form-field appearance="fill">
+                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                        <input matInput class="" #date1 id="textbox_DOB" [matDatepicker]="Date1"
+                            (click)="Date1.open()">
+                        <mat-datepicker-toggle matSuffix [for]="Date1">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #Date1></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Age</label>
+                    <input type="text" class="form-control" id="textbox_FullAge">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Date</label>
+                    <mat-form-field appearance="fill">
+                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                        <input matInput class="" #date2 id="textbox_Date" [matDatepicker]="Date2"
+                            (click)="Date2.open()">
+                        <mat-datepicker-toggle matSuffix [for]="Date2">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #Date2></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Date of Admission In PICU</label>
+                    <mat-form-field appearance="fill">
+                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                        <input matInput class="" #date3 id="textbox_AdmitDate" [matDatepicker]="Date3"
+                            (click)="Date3.open()">
+                        <mat-datepicker-toggle matSuffix [for]="Date3">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #Date3></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Previous WT</label>
+                    <input type="text" class="form-control" id="textbox_PreviousWt">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Present WT</label>
+                    <input type="text" class="form-control" id="textbox_Weight">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">IVF</label>
+                    <input type="text" class="form-control" id="textbox_IVF">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Total Intake (ml/kg/hr)</label>
+                    <input type="text" class="form-control" id="textbox_TotalIntake">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Total Output</label>
+                    <input type="text" class="form-control" id="textbox_TotalOutput">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">IV Line</label>
+                    <input type="text" class="form-control" id="textbox_IvLine">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Feeding</label>
+                    <input type="text" class="form-control" id="textbox_Feeding">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Balance</label>
+                    <input type="text" class="form-control" id="textbox_Balance">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">BM</label>
+                    <input type="text" class="form-control" id="textbox_BM">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">TFR</label>
+                    <input type="text" class="form-control" id="textbox_TFR">
+                </div>
+            </div>
+
+            <!-- Color Codes Section -->
+            <div class="card card-style-1 rounded mt-2">
+                <div class="card-header rounded-top justify-content-start py-2 min-height-unset">
+                    <h6 class="card-heading">Reference Codes</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2">
+                        <div class="" style="width: 10rem;">
+                            <p class="fw-bold fs-7 clr-primary-600 m-0">Colours:</p>
+                        </div>
+                        <div class="col-10">
+                            <p>P-PINK, PP-PALE PINK, C-CYANOTIC, J-JAUNDICE</p>
+                        </div>
+                        <div class="" style="width: 10rem;">
+                            <p class="fw-bold fs-7 clr-primary-600 m-0">Suctioning:</p>
+                        </div>
+                        <div class="col-10">
+                            <p>S-SCANT, M-MODERATE, L-LARGE, T-THIN, TH-THICK, V-VISCOUS, Y-YELLOW, G-GREEN, B-BLOODY</p>
+                        </div>
+                        <div class="" style="width: 10rem;">
+                            <p class="fw-bold fs-7 clr-primary-600 m-0">Resp.Code:</p>
+                        </div>
+                        <div class="col-10">
+                            <p>RA-ROOM AIR, NP-02/NASAL PRONG, M-02/MASK</p>
+                        </div>
+                        <div class="" style="width: 10rem;">
+                            <p class="fw-bold fs-7 clr-primary-600 m-0">Ventilator Modes:</p>
+                        </div>
+                        <div class="col-10">
+                            <p>(S)CMV+, ASV, SIMV, SPONT.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Respiratory Table -->
+            <div class="table-responsive mt-2">
+                <table class="table table-bordered table-sm pediatric_respiratory_table">
+                    <thead class="bg-light">
+                        <tr>
+                            <th rowspan="3">TIME</th>
+                            <th rowspan="3">RBS</th>
+                            <th colspan="10" class="text-center">RESPIRATORY</th>
+                            <th rowspan="2" colspan="2">BREATH SOUNDS</th>
+                            <th rowspan="3">O2SAT</th>
+                        </tr>
+                        <tr>
+                            <th colspan="10">
+                                <div class="d-flex align-items-center gap-3 flex-wrap">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label text-nowrap m-0">VENTILATOR:</label>
+                                        <input type="text" class="form-control" id="textbox_Ventilator">
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label text-nowrap m-0">ETT SIZE:</label>
+                                        <input type="text" class="form-control" id="textbox_EttSize">
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label text-nowrap m-0">LEVEL:</label>
+                                        <input type="text" class="form-control" id="textbox_Level">
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label text-nowrap m-0">C:</label>
+                                        <input type="text" class="form-control" id="textbox_c">
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label text-nowrap m-0">UC:</label>
+                                        <input type="text" class="form-control" id="textbox_uc">
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>COLOUR</th>
+                            <th>SUCT</th>
+                            <th>MODE</th>
+                            <th>P.Sup</th>
+                            <th>RATE</th>
+                            <th>TV</th>
+                            <th>PEEP</th>
+                            <th>PEAK</th>
+                            <th>PD/Pi</th>
+                            <th>FiO2</th>
+                            <th>RT</th>
+                            <th>LT</th>
+                        </tr>
+                        <tr>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td>
+                                <app-time-selector [hours]="getHours('textbox_generic_time1')"
+                                    [minutes]="getMinutes('textbox_generic_time1')"
+                                    (timeSelected)="onTimeChange($event, 'textbox_generic_time1')" [disabled]="isTimeSelectorDisable('textbox_generic_time1')"></app-time-selector>
+                            </td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rbs_1"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_color_1"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_suct_1"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_mode_1"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_psup_1"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="tetbox_rate_1"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_tv_1"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peep_1"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peak_1"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_pdpi_1"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_FiO2_1"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rt_1"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_Lt_1"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_o2sat_1"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <app-time-selector [hours]="getHours('textbox_generic_time2')"
+                                    [minutes]="getMinutes('textbox_generic_time2')"
+                                    (timeSelected)="onTimeChange($event, 'textbox_generic_time2')" [disabled]="isTimeSelectorDisable('textbox_generic_time2')"></app-time-selector>
+                            </td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rbs_2"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_color_2"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_suct_2"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_mode_2"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_psup_2"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="tetbox_rate_2"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_tv_2"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peep_2"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peak_2"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_pdpi_2"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_FiO2_2"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rt_2"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_Lt_2"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_o2sat_2"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <app-time-selector [hours]="getHours('textbox_generic_time3')"
+                                    [minutes]="getMinutes('textbox_generic_time3')"
+                                    (timeSelected)="onTimeChange($event, 'textbox_generic_time3')" [disabled]="isTimeSelectorDisable('textbox_generic_time3')"></app-time-selector>
+                            </td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rbs_3"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_color_3"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_suct_3"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_mode_3"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_psup_3"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="tetbox_rate_3"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_tv_3"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peep_3"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peak_3"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_pdpi_3"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_FiO2_3"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rt_3"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_Lt_3"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_o2sat_3"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <app-time-selector [hours]="getHours('textbox_generic_time4')"
+                                    [minutes]="getMinutes('textbox_generic_time4')"
+                                    (timeSelected)="onTimeChange($event, 'textbox_generic_time4')" [disabled]="isTimeSelectorDisable('textbox_generic_time4')"></app-time-selector>
+                            </td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rbs_4"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_color_4"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_suct_4"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_mode_4"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_psup_4"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="tetbox_rate_4"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_tv_4"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peep_4"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peak_4"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_pdpi_4"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_FiO2_4"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rt_4"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_Lt_4"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_o2sat_4"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <app-time-selector [hours]="getHours('textbox_generic_time5')"
+                                    [minutes]="getMinutes('textbox_generic_time5')"
+                                    (timeSelected)="onTimeChange($event, 'textbox_generic_time5')" [disabled]="isTimeSelectorDisable('textbox_generic_time5')"></app-time-selector>
+                            </td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rbs_5"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_color_5"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_suct_5"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_mode_5"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_psup_5"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="tetbox_rate_5"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_tv_5"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peep_5"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peak_5"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_pdpi_5"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_FiO2_5"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rt_5"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_Lt_5"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_o2sat_5"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <app-time-selector [hours]="getHours('textbox_generic_time6')"
+                                    [minutes]="getMinutes('textbox_generic_time6')"
+                                    (timeSelected)="onTimeChange($event, 'textbox_generic_time6')" [disabled]="isTimeSelectorDisable('textbox_generic_time6')"></app-time-selector>
+                            </td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rbs_6"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_color_6"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_suct_6"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_mode_6"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_psup_6"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="tetbox_rate_6"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_tv_6"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peep_6"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peak_6"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_pdpi_6"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_FiO2_6"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rt_6"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_Lt_6"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_o2sat_6"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <app-time-selector [hours]="getHours('textbox_generic_time7')"
+                                    [minutes]="getMinutes('textbox_generic_time7')"
+                                    (timeSelected)="onTimeChange($event, 'textbox_generic_time7')" [disabled]="isTimeSelectorDisable('textbox_generic_time7')"></app-time-selector>
+                            </td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rbs_7"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_color_7"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_suct_7"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_mode_7"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_psup_7"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="tetbox_rate_7"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_tv_7"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peep_7"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peak_7"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_pdpi_7"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_FiO2_7"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rt_7"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_Lt_7"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_o2sat_7"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <app-time-selector [hours]="getHours('textbox_generic_time8')"
+                                    [minutes]="getMinutes('textbox_generic_time8')"
+                                    (timeSelected)="onTimeChange($event, 'textbox_generic_time8')" [disabled]="isTimeSelectorDisable('textbox_generic_time8')"></app-time-selector>
+                            </td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rbs_8"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_color_8"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_suct_8"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_mode_8"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_psup_8"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="tetbox_rate_8"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_tv_8"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peep_8"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peak_8"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_pdpi_8"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_FiO2_8"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rt_8"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_Lt_8"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_o2sat_8"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <app-time-selector [hours]="getHours('textbox_generic_time9')"
+                                    [minutes]="getMinutes('textbox_generic_time9')"
+                                    (timeSelected)="onTimeChange($event, 'textbox_generic_time9')" [disabled]="isTimeSelectorDisable('textbox_generic_time9')"></app-time-selector>
+                            </td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rbs_9"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_color_9"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_suct_9"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_mode_9"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_psup_9"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="tetbox_rate_9"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_tv_9"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peep_9"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peak_9"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_pdpi_9"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_FiO2_9"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rt_9"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_Lt_9"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_o2sat_9"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <app-time-selector [hours]="getHours('textbox_generic_time10')"
+                                    [minutes]="getMinutes('textbox_generic_time10')"
+                                    (timeSelected)="onTimeChange($event, 'textbox_generic_time10')" [disabled]="isTimeSelectorDisable('textbox_generic_time10')"></app-time-selector>
+                            </td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rbs_10"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_color_10"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_suct_10"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_mode_10"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_psup_10"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="tetbox_rate_10"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_tv_10"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peep_10"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peak_10"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_pdpi_10"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_FiO2_10"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rt_10"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_Lt_10"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_o2sat_10"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <app-time-selector [hours]="getHours('textbox_generic_time11')"
+                                    [minutes]="getMinutes('textbox_generic_time11')"
+                                    (timeSelected)="onTimeChange($event, 'textbox_generic_time11')" [disabled]="isTimeSelectorDisable('textbox_generic_time11')"></app-time-selector>
+                            </td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rbs_11"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_color_11"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_suct_11"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_mode_11"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_psup_11"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="tetbox_rate_11"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_tv_11"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peep_11"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peak_11"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_pdpi_11"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_FiO2_11"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rt_11"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_Lt_11"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_o2sat_11"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <app-time-selector [hours]="getHours('textbox_generic_time12')"
+                                    [minutes]="getMinutes('textbox_generic_time12')"
+                                    (timeSelected)="onTimeChange($event, 'textbox_generic_time12')" [disabled]="isTimeSelectorDisable('textbox_generic_time12')"></app-time-selector>
+                            </td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rbs_12"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_color_12"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_suct_12"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_mode_12"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_psup_12"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="tetbox_rate_12"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_tv_12"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peep_12"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_peak_12"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_pdpi_12"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_FiO2_12"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_rt_12"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_Lt_12"></td>
+                            <td><input type="text" class="form-control form-control-sm" id="textbox_o2sat_12"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Neuro Vital Signs -->
+            <div class="card card-style-1 rounded mt-2">
+                <div class="card-header rounded-top min-height-unset justify-content-start py-2">
+                    <h6 class="card-heading">Neuro Vital Signs</h6>
+                </div>
+                <div class="p-2">
+                    <div class="table-responsive neutroVital_table">
+                        <table class="table table-bordered table-sm m-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>PARAMETER</th>
+                                    <th>CHILD</th>
+                                    <th>INFANT</th>
+                                    <th>SCORE</th>
+                                    <th colspan="12">TIME</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Eye Opening -->
+                                <tr>
+                                    <td rowspan="4">EYE OPENING</td>
+                                    <td>SPONTANEOUS</td>
+                                    <td>SPONTANEOUS</td>
+                                    <td>4</td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_PARAMETER"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_CHILD"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_INFANT"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_SCORE"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_PARAMETER1">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_CHILD1"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_INFANT1"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_SCORE1"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_PARAMETER2">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_CHILD2"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_INFANT2"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_SCORE2"></td>
+                                </tr>
+                                <tr>
+                                    <td>TO SPEECH</td>
+                                    <td>TO SPEECH</td>
+                                    <td>3</td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_TOSPEECH"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_TOSPEECH1"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_TOSPEECH2"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_TOSPEECH3"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_TOSPEECH4"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_TOSPEECH5"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_TOSPEECH6"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_TOSPEECH7"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_TOSPEECH8"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_TOSPEECH9"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_TOSPEECH10">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_TOSPEECH11">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>TO PAIN</td>
+                                    <td>TO PAIN</td>
+                                    <td>2</td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_topain"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_topain1"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_topain2"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_topain3"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_topain4"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_topain5"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_topain6"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_topain7"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_topain8"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_topain9"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_topain10"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_topain11"></td>
+                                </tr>
+                                <tr>
+                                    <td>NONE</td>
+                                    <td>NONE</td>
+                                    <td>1</td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE1"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE2"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE3"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE4"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE5"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE6"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE7"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE8"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE9"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE10"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE11"></td>
+                                </tr>
+
+                                <!-- Best Verbal Response -->
+                                <tr>
+                                    <td rowspan="5">BEST VERBAL RESPONSE</td>
+                                    <td>ORIENTED, APPROPRIATE</td>
+                                    <td>COOS AND BABBLES</td>
+                                    <td>5</td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE0"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE1"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE2"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE3"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE4"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE5"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE6"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE7"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE8"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE9"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE10">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE11">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>CONFUSED</td>
+                                    <td>IRRITABLE CRIES</td>
+                                    <td>4</td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_CONFUSED"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_CONFUSED1"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_CONFUSED2"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_CONFUSED3"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_CONFUSED4"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_CONFUSED5"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_CONFUSED6"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_CONFUSED7"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_CONFUSED8"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_CONFUSED9"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_CONFUSED10">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_CONFUSED11">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>INAPPROPRIATE WORDS</td>
+                                    <td>CRIES IN RESPONSE TO PAIN</td>
+                                    <td>3</td>
+                                    <td><input type="text" class="form-control" name=""
+                                            id="textbox_INAPPROPRIATEWORDS">
+                                    </td>
+                                    <td><input type="text" class="form-control" name=""
+                                            id="textbox_INAPPROPRIATEWORDS1"></td>
+                                    <td><input type="text" class="form-control" name=""
+                                            id="textbox_INAPPROPRIATEWORDS2"></td>
+                                    <td><input type="text" class="form-control" name=""
+                                            id="textbox_INAPPROPRIATEWORDS3"></td>
+                                    <td><input type="text" class="form-control" name=""
+                                            id="textbox_INAPPROPRIATEWORDS4"></td>
+                                    <td><input type="text" class="form-control" name=""
+                                            id="textbox_INAPPROPRIATEWORDS5"></td>
+                                    <td><input type="text" class="form-control" name=""
+                                            id="textbox_INAPPROPRIATEWORDS6"></td>
+                                    <td><input type="text" class="form-control" name=""
+                                            id="textbox_INAPPROPRIATEWORDS7"></td>
+                                    <td><input type="text" class="form-control" name=""
+                                            id="textbox_INAPPROPRIATEWORDS8"></td>
+                                    <td><input type="text" class="form-control" name=""
+                                            id="textbox_INAPPROPRIATEWORDS9"></td>
+                                    <td><input type="text" class="form-control" name=""
+                                            id="textbox_INAPPROPRIATEWORDS10"></td>
+                                    <td><input type="text" class="form-control" name=""
+                                            id="textbox_INAPPROPRIATEWORDS11"></td>
+                                </tr>
+                                <tr>
+                                    <td>INCOMPREHENSIBLE SOUNDS</td>
+                                    <td>MOANS IN RESPONSE TO PAIN</td>
+                                    <td>2</td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_SOUNDS"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_SOUNDS1"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_SOUNDS2"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_SOUNDS3"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_SOUNDS4"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_SOUNDS5"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_SOUNDS6"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_SOUNDS7"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_SOUNDS8"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_SOUNDS9"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_SOUNDS10"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_SOUNDS11"></td>
+                                </tr>
+                                <tr>
+                                    <td>NONE</td>
+                                    <td>NONE</td>
+                                    <td>1</td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE12"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE13"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE14"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE15"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE16"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE17"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE18"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE19"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE20"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE21"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE22"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_NONE23"></td>
+                                </tr>
+
+                                <!-- Best Motor Response -->
+                                <tr>
+                                    <td rowspan="4">BEST MOTOR RESPONSE</td>
+                                    <td>OBEYS COMMANDS</td>
+                                    <td>MOVES SPONTANEOUSLY AND PURPOSELY</td>
+                                    <td>6</td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE2000"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE2001"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE2002"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE2003"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE2004"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE2005"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE2006"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE2007"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE2008"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE2009"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE2010">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_RESPONSE2011">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>LOCALIZES PAINFUL STIMULUS</td>
+                                    <td>WITHDRAWS IN RESPONSE TO TOUCH</td>
+                                    <td>5</td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_STIMULUS"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_STIMULUS1"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_STIMULUS2"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_STIMULUS3"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_STIMULUS4"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_STIMULUS5"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_STIMULUS6"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_STIMULUS7"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_STIMULUS8"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_STIMULUS9"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_STIMULUS10">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_STIMULUS11">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>WITHDRAWS IN RESPONSE TO PAIN</td>
+                                    <td>WITHDRAWS IN RESPONSE TO PAIN</td>
+                                    <td>4</td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_PAIN"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_PAIN1"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_PAIn2"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_PAIN3"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_PAIN4"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_PAIN5"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_PAIN6"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_PAIN7"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_PAIN8"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_PAIN9"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_PAIN10"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_PAIN11"></td>
+                                </tr>
+                                <tr>
+                                    <td>FLEXION IN RESPONSE TO PAIN</td>
+                                    <td>ABNORMAL FLEXION POSTURE TO PAIN</td>
+                                    <td>3</td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_FLEXION"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_FLEXION1"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_FLEXION2"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_FLEXION3"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_FLEXION4"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_FLEXION5"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_FLEXION6"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_FLEXION7"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_FLEXION8"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_FLEXION9"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_FLEXION10"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_FLEXION11"></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>EXTENSION IN RESPONSE TO PAIN</td>
+                                    <td>ABNORMAL EXTENSION POSTURE TO PAIN</td>
+                                    <td>2</td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_EXTENSION"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_EXTENSION1"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_EXTENSION2"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_EXTENSION3"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_EXTENSION4"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_EXTENSION5"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_EXTENSION6"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_EXTENSION7"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_EXTENSION8"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_EXTENSION9"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_EXTENSION10"></td>
+                                    <td><input type="text" class="form-control" name="" id="textbox_EXTENSION11"></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>NONE</td>
+                                    <td>NONE</td>
+                                    <td>1</td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNone"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNone1"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNone2"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNone3"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNone4"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNone5"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNone6"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNone7"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNone8"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNone9"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNone10"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNone11"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone1" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone2001" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone3" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="" id="textboxNoneA">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneB"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneC"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneD"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneF"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneG"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneH"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneI"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneJ"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneK"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneL"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneM"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneN"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone1000" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone2002" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone3001" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="" id="textboxNoneO">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneP"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneQ"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneR"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneS"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneT"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneU"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneV"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneW"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneX"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneY"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneZ"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA1"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone1001" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone2003" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone3002" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="" id="textboxNoneA2">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA3"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA4"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA5"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA6"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA7"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA8"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA9"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA10"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA11"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA12"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA13"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA14"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone1002" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone2004" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone3003" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="" id="textboxNoneA15">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA16"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA17"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA18"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA19"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA20"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA21"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA22"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA23"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA24"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA25"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA26"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA27"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone1005" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone2005" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone3004" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="" id="textboxNoneA2810">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA28"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA29"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA30"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA31"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA32"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA33"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA34"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA35"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA36"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA37"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA38"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneA39"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone1006" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone2006" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone3005" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="" id="textboxNoneB1">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneB2"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneB3"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneB4"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneB5"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneB6"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneB7"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneB8"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneB9"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneB10"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneB11"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneB12"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneB13"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone1007" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone2" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100" id="textareaNone3006" contenteditable="true"></span>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="" id="textboxNoneC1">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneC2"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneC3"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneC4"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneC5"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneC6"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneC7"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneC8"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneC9"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneC10"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneC11"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneC12"></td>
+                                    <td><input type="text" class="form-control" name="" id="textboxNoneC13"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+      [selectedTemplateFn]="selectedTemplate.bind(this)">
+</app-sharedtemplateview>
+
+<!-- <div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+        <div class="modal-content">
+            <div class="modal-header p-2">
+                <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-2">
+                <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                    *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                    <div class="row mx-0 g-2 w-100">
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Template ID</p>
+                            <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                                    tem.PatientTemplatedetailID }}</a></p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Name</p>
+                            <p>{{ tem.PatientName }}</p>
+                        </div>
+
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">DoctorName</p>
+                            <p>{{ tem.Consultant }}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Created By</p>
+                            <p>{{ tem.CreatedBy }}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Date</p>
+                            <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

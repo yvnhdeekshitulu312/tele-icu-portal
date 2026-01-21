@@ -1,0 +1,1558 @@
+<form [formGroup]="itemForm">
+   <!--Container-->
+   <div class="container__wrapper GlobalItemMaster" style="background-color: #EFF0F0;">
+      <div class="page-header sticky-top rounded-3 shadow-sm">
+         <h2 class="page-heading">Global Item Master</h2>
+         <div class="actions ms-auto d-flex align-items-center gap-2">
+            <button class="btn btn-danger-outline" (click)="clearGlobalItemMaster()">Clear</button>
+            <button class="btn btn-main-outline" *appHasPermission="'Save'" (click)="save()">Save</button>
+            <button class="btn btn-main-outline" *ngIf="IsEdit" (click)="save()">Modify</button>
+         </div>
+      </div>
+
+      <div class="row p-3 px-2 g-2 mx-0 pb-0">
+         <div class="casesheet_div d-none" id="">
+            <div class="card card-style-1 border-0 h-100">
+               <div class="p-3">
+                  <ul class="nav nav-pills d-flex flex-column gap-1 border-0" id="pills-tab" role="tablist">
+                     <li class="nav-item" role="presentation">
+                        <button class="nav-link d-flex align-items-center active w-100" data-bs-toggle="tab"
+                           type="button" role="tab" aria-controls="" aria-selected="true">
+                           <!-- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1111 0C11.4179 0 11.6667 0.248733 11.6667 0.555556V2.22267C11.6667 2.5295 11.9154 2.77822 12.2222 2.77822C12.5291 2.77822 12.7778 2.5295 12.7778 2.22267V1.11111H13.3333C14.2538 1.11111 15 1.85731 15 2.77778V16.1111C15 17.0316 14.2538 17.7778 13.3333 17.7778H3.88889C2.96839 17.7778 2.22222 17.0316 2.22222 16.1111V2.77778C2.22222 1.85731 2.96839 1.11111 3.88889 1.11111H5V0.555556C5 0.248733 5.24872 0 5.55556 0C5.86239 0 6.11111 0.248733 6.11111 0.555556V2.22267C6.11111 2.5295 6.35983 2.77822 6.66667 2.77822C6.9735 2.77822 7.22222 2.5295 7.22222 2.22267V1.11111H10.5556V0.555556C10.5556 0.248733 10.8043 0 11.1111 0ZM5 6.66667C4.69317 6.66667 4.44444 6.91539 4.44444 7.22222C4.44444 7.52906 4.69317 7.77778 5 7.77778H12.2222C12.5291 7.77778 12.7778 7.52906 12.7778 7.22222C12.7778 6.91539 12.5291 6.66667 12.2222 6.66667H5ZM4.44444 10C4.44444 9.69317 4.69317 9.44444 5 9.44444H8.88889C9.19572 9.44444 9.44444 9.69317 9.44444 10C9.44444 10.3068 9.19572 10.5556 8.88889 10.5556H5C4.69317 10.5556 4.44444 10.3068 4.44444 10ZM5 12.2222C4.69317 12.2222 4.44444 12.4709 4.44444 12.7778C4.44444 13.0846 4.69317 13.3333 5 13.3333H11.1111C11.4179 13.3333 11.6667 13.0846 11.6667 12.7778C11.6667 12.4709 11.4179 12.2222 11.1111 12.2222H5Z" fill="#368796"/>
+                                 <path d="M1.11111 2.22222V16.1111C1.11111 17.6452 2.35478 18.8889 3.88889 18.8889H13.3333V20H3.88889C1.74112 20 0 18.2589 0 16.1111V2.22222H1.11111Z" fill="#368796"/>
+                                 <path d="M16.6667 3.88889C16.6667 2.96839 17.4128 2.22222 18.3333 2.22222C19.2538 2.22222 20 2.96839 20 3.88889V5.55556H16.6667V3.88889Z" fill="#368796"/>
+                                 <path d="M16.6667 15V6.66667H20V15L18.3333 17.2222L16.6667 15Z" fill="#368796"/>
+                              </svg> -->
+                           <p class="m-0 ms-2">Basic Information</p>
+                           <!-- <div class="tooltip rounded-3">
+                                 <p class="m-0 clr-primary-600">{{langData?.casesheet?.clinical_info}}</p>
+                              </div> -->
+                        </button>
+                     </li>
+
+                     <li class="nav-item" role="presentation" #assessment>
+                        <button class="nav-link d-flex align-items-center w-100" id="" data-bs-toggle="tab"
+                           type="button" role="tab" aria-controls="" aria-selected="true">
+                           <!-- <svg width="17" height="20" viewBox="0 0 17 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M3.0228 0.000183106V1.73378C3.0228 2.44338 2.4444 3.02298 1.7348 3.02298H0L0.018249 17.5033C0.0199875 18.8828 1.13877 20.0002 2.51825 20.0002H13.5088C14.8895 20.0002 16.0088 18.8809 16.0084 17.5002C16.007 12.5001 16.0019 7.50002 16.0004 2.49994C16 1.1192 14.8807 -9.5748e-05 13.5 -6.32783e-05L3.0228 0.000183106ZM0.4084 2.44698H1.7352C2.1276 2.44698 2.4472 2.12618 2.4472 1.73378V0.406983L0.4084 2.44698ZM7.1752 6.89178C7.0152 6.89178 6.8872 6.76258 6.8872 6.60378C6.8872 6.44498 7.0152 6.31578 7.1752 6.31578H9.7684C9.9284 6.31578 10.0564 6.44498 10.0564 6.60378C10.0564 6.76258 9.9284 6.89178 9.7684 6.89178H7.1752ZM7.1752 5.17178C7.0152 5.17178 6.8872 5.04258 6.8872 4.88378C6.8872 4.72378 7.0152 4.59578 7.1752 4.59578H12.7584C12.9184 4.59578 13.0464 4.72378 13.0464 4.88378C13.0464 5.04258 12.9184 5.17178 12.7584 5.17178H7.1752ZM7.1752 15.5806C7.0152 15.5806 6.8872 15.4526 6.8872 15.2926C6.8872 15.1338 7.0152 15.0046 7.1752 15.0046H8.7468C8.9056 15.0046 9.0348 15.1338 9.0348 15.2926C9.0348 15.4526 8.9056 15.5806 8.7468 15.5806H7.1752ZM7.1752 17.3018C7.0152 17.3018 6.8872 17.1726 6.8872 17.0138C6.8872 16.8538 7.0152 16.7246 7.1752 16.7246H9.384C9.544 16.7246 9.672 16.8538 9.672 17.0138C9.672 17.1726 9.544 17.3018 9.384 17.3018H7.1752ZM5.6772 5.44698C5.626 5.29618 5.708 5.13418 5.8576 5.08418C6.0084 5.03298 6.1716 5.11498 6.2216 5.26458C6.6628 6.58338 5.6728 7.90778 4.3088 7.90778C3.1932 7.90778 2.2884 7.00298 2.2884 5.88858C2.2884 4.63458 3.4188 3.68338 4.6604 3.89858C4.7736 3.91778 4.8848 3.94858 4.9936 3.98938C5.142 4.04498 5.218 4.20938 5.1624 4.35778C5.1068 4.50618 4.9424 4.58218 4.794 4.52658C4.2836 4.33618 3.6748 4.48018 3.2872 4.86658C2.7236 5.43138 2.7236 6.34498 3.2872 6.90858C3.8552 7.47658 4.7716 7.46978 5.336 6.90858C5.7292 6.51658 5.8472 5.95498 5.6772 5.44698ZM3.422 5.58898C3.328 5.46218 3.354 5.28058 3.4808 5.18658C3.6076 5.09138 3.788 5.11738 3.8832 5.24458L4.2856 5.78418L5.8424 3.69578C5.9376 3.56778 6.118 3.54138 6.246 3.63698C6.3728 3.73218 6.3992 3.91258 6.304 4.03938L4.5192 6.43298C4.4068 6.58698 4.1724 6.59618 4.0544 6.43738L3.422 5.58898ZM5.6772 10.6846C5.626 10.535 5.708 10.3718 5.8576 10.3218C6.0084 10.2706 6.1716 10.3526 6.2216 10.5022C6.6628 11.821 5.6728 13.1454 4.3088 13.1454C3.1932 13.1454 2.2884 12.2418 2.2884 11.1258C2.2884 9.87178 3.4188 8.92058 4.6604 9.13578C4.7736 9.15498 4.8848 9.18578 4.9936 9.22658C5.142 9.28218 5.218 9.44658 5.1624 9.59498C5.1068 9.74338 4.9424 9.81938 4.794 9.76378C4.2836 9.57338 3.6748 9.71738 3.2872 10.1038C2.7236 10.6686 2.7236 11.5822 3.2872 12.1458C3.8552 12.7138 4.7716 12.707 5.336 12.1458C5.7292 11.755 5.8472 11.1926 5.6772 10.6846ZM3.422 10.8262C3.328 10.6994 3.354 10.519 3.4808 10.4238C3.6076 10.3286 3.788 10.3546 3.8832 10.4818L4.2856 11.0214L5.8424 8.93298C5.9376 8.80618 6.118 8.77858 6.246 8.87418C6.3728 8.96938 6.3992 9.14978 6.304 9.27778L4.5192 11.6702C4.4068 11.8242 4.1724 11.8334 4.0544 11.6746L3.422 10.8262ZM7.1752 10.409C7.0152 10.409 6.8872 10.2798 6.8872 10.121C6.8872 9.96098 7.0152 9.83298 7.1752 9.83298H11.1472C11.306 9.83298 11.4352 9.96098 11.4352 10.121C11.4352 10.2798 11.306 10.409 11.1472 10.409H7.1752ZM7.1752 12.129C7.0152 12.129 6.8872 11.9998 6.8872 11.841C6.8872 11.6822 7.0152 11.553 7.1752 11.553H9.826C9.9848 11.553 10.114 11.6822 10.114 11.841C10.114 11.9998 9.9848 12.129 9.826 12.129H7.1752ZM5.6772 15.857C5.626 15.7062 5.708 15.5442 5.8576 15.493C6.0084 15.443 6.1716 15.5238 6.2216 15.6746C6.6628 16.9922 5.6728 18.3178 4.3088 18.3178C3.1932 18.3178 2.2884 17.413 2.2884 16.2974C2.2884 15.0434 3.4188 14.093 4.6604 14.3074C4.7736 14.3278 4.8848 14.3574 4.9936 14.3982C5.142 14.4538 5.218 14.6194 5.1624 14.7678C5.1068 14.9162 4.9424 14.991 4.794 14.9366C4.2836 14.7462 3.6748 14.889 3.2872 15.2766C2.7236 15.8402 2.7236 16.7542 3.2872 17.3186C3.8552 17.8854 4.7716 17.8798 5.336 17.3174C5.7292 16.9262 5.8472 16.365 5.6772 15.857ZM3.422 15.9978C3.328 15.871 3.354 15.6906 3.4808 15.5954C3.6076 15.5002 3.788 15.5262 3.8832 15.6542L4.2856 16.1926L5.8424 14.1042C5.9376 13.9774 6.118 13.951 6.246 14.0462C6.3728 14.1414 6.3992 14.3218 6.304 14.4486L4.5192 16.841C4.4068 16.9962 4.1724 17.0042 4.0544 16.8466L3.422 15.9978Z" fill="#368796"/>
+                             </svg> -->
+                           <p class="m-0 ms-2">Package Information</p>
+                           <!-- <div class="tooltip rounded-3">
+                                 <p class="m-0 clr-primary-600">{{langData?.common?.Assessments}}</p>
+                             </div> -->
+                        </button>
+                     </li>
+                     <li class="nav-item" role="presentation" #diagnosis>
+                        <!-- (click)="diagnosisLoadClick()" -->
+                        <button class="nav-link d-flex align-items-center w-100" id="" data-bs-toggle="tab"
+                           type="button" role="tab" aria-controls="" aria-selected="false">
+                           <!-- <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="none">
+                                 <path d="M14.4635 13.7942L14.8055 13.5028L17.3608 16.5018L15.483 17.8889L13.0333 15.0124L13.3753 14.721L12.6969 13.9256C12.2064 14.2704 11.6861 14.5497 11.1479 14.7653V13.4792C11.6241 13.246 12.0784 12.9507 12.4999 12.5917C15.2213 10.2737 15.5494 6.17421 13.2313 3.45295C10.9132 0.731545 6.81304 0.403443 4.09178 2.72152C1.37082 5.03957 1.04302 9.13976 3.3611 11.861C3.93312 12.5328 4.61415 13.0583 5.35588 13.4346V14.7289C4.27226 14.2804 3.27618 13.5765 2.46477 12.6242C-0.274329 9.40899 0.113276 4.56488 3.32858 1.82564C6.54381 -0.913497 11.388 -0.525856 14.1275 2.6893C16.7103 5.72093 16.512 10.2003 13.7858 12.998L14.4635 13.7942Z" fill="#368796"/>
+                                 <path d="M8.23753 5.50694C9.21054 5.53263 10.0128 4.74169 10.0109 3.78076C10.009 2.73822 9.2512 2.00348 8.25032 1.99505C7.26207 1.98692 6.54299 2.76684 6.49582 3.66532C6.44123 4.70207 7.29679 5.53552 8.23753 5.50694Z" fill="#368796"/>
+                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M12.4243 11.061L11.1725 7.33996C11.0409 6.94812 10.7524 6.62641 10.3742 6.45902C8.60808 5.67753 7.01128 6.0968 6.16293 6.44987C5.76904 6.61407 5.46532 6.94132 5.32915 7.3465L5.27194 7.51694C4.86732 7.69087 4.58408 8.09287 4.58408 8.56123C4.58408 8.76507 4.63779 8.95672 4.73173 9.12192L4.07942 11.0611C3.96793 11.3938 4.14679 11.7545 4.47941 11.866C4.53472 11.8845 4.59032 11.8953 4.64564 11.8985C4.92467 11.9144 5.19094 11.7437 5.2843 11.4663L5.8833 9.68636C5.94341 9.67794 6.00235 9.66429 6.05926 9.64672V19.1296C6.05926 19.3885 6.17831 19.6331 6.38345 19.7905C6.38726 19.7937 6.39127 19.7967 6.39524 19.7997C6.39808 19.8019 6.40091 19.804 6.40363 19.8062C7.0375 20.28 7.94383 19.8303 7.97215 19.0401L8.10673 13.6908C8.12139 13.5119 8.38315 13.5119 8.39781 13.6908L8.44006 15.3666C8.35251 15.5279 8.30286 15.7122 8.30286 15.9084C8.30286 16.125 8.36297 16.3275 8.46866 16.5L8.53239 19.0402C8.56099 19.8307 9.46764 20.2805 10.1009 19.806C10.108 19.8015 10.1146 19.7966 10.1211 19.7911C10.3259 19.6337 10.4453 19.3891 10.4453 19.1302V16.4397C10.5298 16.2813 10.577 16.1006 10.577 15.9087C10.577 15.7172 10.5298 15.5363 10.4453 15.3779V9.16336L11.2203 11.4668C11.3136 11.7442 11.5799 11.915 11.8589 11.899C11.9142 11.8954 11.9698 11.8851 12.0252 11.8665C12.3572 11.7547 12.536 11.3938 12.4244 11.061L12.4243 11.061ZM6.05924 9.18065C6.05662 9.18224 6.05474 9.18326 6.05212 9.18428C5.95325 9.23756 5.84045 9.26718 5.72039 9.26718C5.33044 9.26718 5.01438 8.95112 5.01438 8.56117C5.01438 8.17152 5.33044 7.85576 5.72039 7.85576C6.11033 7.85576 6.42639 8.17182 6.42639 8.56117C6.42639 8.82859 6.27846 9.06101 6.05924 9.18065ZM9.38864 7.10195C9.77859 7.10195 10.0946 7.41801 10.0946 7.80736C10.0946 8.19731 9.77859 8.51337 9.38864 8.51337C8.9987 8.51337 8.68264 8.19731 8.68264 7.80736C8.68264 7.41812 8.99869 7.10195 9.38864 7.10195ZM9.43902 16.6142C9.04907 16.6142 8.73301 16.2982 8.73301 15.9082C8.73301 15.5183 9.04907 15.2028 9.43902 15.2028C9.82897 15.2028 10.145 15.5183 10.145 15.9082C10.145 16.2982 9.82897 16.6142 9.43902 16.6142Z" fill="#368796"/>
+                             </svg> -->
+                           <p class="m-0 ms-2">Other Details</p>
+                           <!-- <div class="tooltip rounded-3">
+                                 <p class="m-0 clr-primary-600">{{langData?.common?.Diagnosis}}</p>
+                             </div> -->
+                        </button>
+                     </li>
+                     <li class="nav-item" role="presentation">
+                        <button class="nav-link d-flex align-items-center w-100" id="" data-bs-toggle="tab"
+                           type="button" role="tab" aria-controls="" aria-selected="false">
+                           <!-- <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                 <path d="M16.0088 5.43657V3.87688C16.0088 3.87431 16.0063 3.82842 16.0037 3.82329C16.0012 3.81816 16.0012 3.8131 16.0012 3.8131C15.9934 3.79009 15.9883 3.7697 15.9832 3.74669C15.9832 3.74419 15.9807 3.7365 15.9783 3.72887C15.9731 3.71861 15.968 3.70079 15.9653 3.69823L15.9512 3.67564L15.9399 3.65483L15.9377 3.65154C15.9307 3.63988 15.9236 3.62822 15.9143 3.6165C15.9143 3.614 15.9119 3.614 15.9119 3.61144C15.8914 3.58843 15.8684 3.56548 15.8455 3.54503C15.8513 3.55235 15.8362 3.54125 15.8188 3.52849C15.8059 3.51897 15.7917 3.50853 15.7842 3.5042C15.7688 3.494 15.7534 3.48381 15.7356 3.47612L15.7314 3.47521C15.7288 3.47447 15.7258 3.47356 15.7229 3.47356L15.6311 3.45061C15.636 3.45317 15.5825 3.44804 15.562 3.44804H13.9055C13.7114 3.44804 13.5046 3.2719 13.5225 3.06517C13.5261 3.02165 13.5281 2.97814 13.5288 2.93462C13.53 2.85558 13.5266 2.7766 13.52 2.69756C13.5215 2.72014 13.5173 2.69194 13.5125 2.65923C13.5085 2.6328 13.5044 2.60344 13.5022 2.59544C13.4919 2.54442 13.479 2.49333 13.4639 2.44487C13.4485 2.39635 13.4331 2.35039 13.4153 2.30449L13.4106 2.29472C13.4004 2.27202 13.3755 2.21782 13.3694 2.20744C13.3235 2.12065 13.2725 2.03642 13.2136 1.95732C13.2136 1.95732 13.1934 1.93511 13.175 1.91368C13.1606 1.89665 13.1467 1.88011 13.1421 1.8756C13.1089 1.83733 13.0732 1.80162 13.0376 1.76842C13.012 1.74291 12.9839 1.7199 12.9558 1.69695C12.9609 1.69951 12.8945 1.64842 12.8818 1.64079C12.8328 1.60912 12.7817 1.57945 12.73 1.55113C12.6982 1.53374 12.6663 1.51683 12.6343 1.50035L12.6035 1.4876L12.6016 1.48558L12.5984 1.48509L12.5679 1.47228C12.5244 1.45696 12.481 1.4417 12.4377 1.42888C12.3865 1.41356 12.3381 1.4008 12.2871 1.39061C12.2717 1.38805 12.1799 1.37529 12.1926 1.37529C12.1057 1.36766 12.019 1.3651 11.9321 1.36766L11.825 1.37529L11.812 1.37645C11.8062 1.37712 11.8 1.37785 11.7944 1.37785H11.7917C11.761 1.38231 11.7319 1.3886 11.7014 1.39519L11.6873 1.3983C11.5979 1.41869 11.511 1.44676 11.4243 1.4774C11.4216 1.47997 11.4165 1.48253 11.4141 1.48253L11.4062 1.48509C11.386 1.49272 11.3655 1.50292 11.3452 1.51317C11.3042 1.53356 11.2659 1.554 11.2278 1.57695C11.1895 1.59996 11.1511 1.62291 11.1155 1.64842C11.1001 1.66118 11.0823 1.67394 11.0642 1.68675L11.0618 1.68926C10.9878 1.75566 10.9138 1.82201 10.8474 1.89861L10.804 1.94963C10.8013 1.9522 10.7988 1.9522 10.7988 1.95476L10.7808 1.9807C10.7629 2.00627 10.7444 2.03282 10.7273 2.05943C10.6814 2.13341 10.6379 2.21001 10.6023 2.28917C10.6023 2.29167 10.5742 2.35808 10.5691 2.37596L10.5308 2.50615C10.5181 2.5623 10.5054 2.61845 10.4951 2.67461V2.68993C10.4924 2.69249 10.4924 2.69756 10.4924 2.70012C10.4924 2.71288 10.49 2.72563 10.49 2.74095C10.4824 2.84563 10.4849 2.9503 10.4924 3.05492C10.5105 3.2617 10.3037 3.43785 10.1096 3.43785H8.38916C8.38403 3.44042 8.37891 3.44042 8.37378 3.44292C8.35083 3.44804 8.32788 3.45317 8.30493 3.4608C8.30493 3.4608 8.28638 3.46941 8.26953 3.47588L8.24365 3.48631C8.22314 3.49657 8.20532 3.50932 8.18481 3.52208C8.18481 3.52208 8.1665 3.53954 8.1521 3.55174L8.13647 3.56548C8.08545 3.61907 8.03931 3.69823 8.02148 3.7697C8.01636 3.78502 8.01392 3.79778 8.01123 3.8131L8.01025 3.8203C8.00977 3.82488 8.00879 3.8308 8.00879 3.83861V5.42638C8.12646 5.42638 8.24414 5.42894 8.36157 5.4315C8.47852 5.43407 8.59497 5.43657 8.71069 5.43657H16.0088Z" fill="#368796"/>
+                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M7.00879 4.14H5.50879C4.4043 4.14 3.50879 5.03545 3.50879 6.14V20.6332C3.50879 21.7378 4.4043 22.6332 5.50879 22.6332H18.5088C19.6133 22.6332 20.5088 21.7378 20.5088 20.6332V6.14C20.5088 5.03545 19.6133 4.14 18.5088 4.14H17.0088V5.76219C17.0088 6.03832 16.7849 6.26219 16.5088 6.26219H7.50879C7.23267 6.26219 7.00879 6.03832 7.00879 5.76219V4.14ZM15.6846 9.76848H14.6108C14.8452 8.66362 14.3506 7.63487 13.675 7.3933C12.4624 6.95989 11.8694 8.05632 11.8694 8.05632C11.8694 8.05632 11.2771 6.95989 10.0637 7.3933C9.29712 7.66728 8.76416 8.95378 9.26172 10.2151H9.89526L10.4187 9.24632C10.4302 9.22508 10.4434 9.20561 10.458 9.18822C10.4824 9.15917 10.511 9.13573 10.5425 9.11882C10.5833 9.09691 10.6289 9.08586 10.6765 9.08745C10.7832 9.09105 10.8755 9.15642 10.9246 9.26311L11.5276 10.5772L12.3682 8.71819C12.4138 8.61626 12.5032 8.54973 12.6055 8.5407C12.6694 8.5341 12.731 8.55113 12.7832 8.58659C12.7991 8.59734 12.8142 8.60973 12.8281 8.6237C12.8435 8.63902 12.8574 8.65617 12.8699 8.67503L13.9214 10.2205H15.6838C15.8081 10.2205 15.9099 10.1186 15.9099 9.99388C15.9099 9.86919 15.8086 9.76848 15.6846 9.76848ZM17.6577 13.9693C17.8198 13.7619 17.783 13.4624 17.5757 13.3003C17.3684 13.1383 17.0688 13.175 16.9067 13.3824L15.3262 15.4047L14.6938 14.8351C14.4983 14.659 14.197 14.6747 14.0208 14.8703C13.8447 15.0658 13.8604 15.3672 14.0559 15.5433L14.8779 16.2839C15.186 16.5612 15.6643 16.5195 15.9197 16.1929L17.6577 13.9693ZM6.25879 14.1524C6.25879 13.8892 6.47217 13.6758 6.73535 13.6758H12.4539C12.717 13.6758 12.9304 13.8892 12.9304 14.1524C12.9304 14.4156 12.717 14.629 12.4539 14.629H6.73535C6.47217 14.629 6.25879 14.4156 6.25879 14.1524ZM6.25879 15.7405C6.25879 15.4773 6.47217 15.264 6.73535 15.264H10.5776C10.8408 15.264 11.0542 15.4773 11.0542 15.7405C11.0542 16.0036 10.8408 16.217 10.5776 16.217H6.73535C6.47217 16.217 6.25879 16.0036 6.25879 15.7405ZM6.25879 19.8108C6.25879 19.5476 6.47217 19.3343 6.73535 19.3343H10.5776C10.8408 19.3343 11.0542 19.5476 11.0542 19.8108C11.0542 20.074 10.8408 20.2873 10.5776 20.2873H6.73535C6.47217 20.2873 6.25879 20.074 6.25879 19.8108ZM6.73535 17.7461C6.47217 17.7461 6.25879 17.9595 6.25879 18.2227C6.25879 18.4859 6.47217 18.6993 6.73535 18.6993H12.4539C12.5298 18.6993 12.6013 18.6816 12.6648 18.6501C12.7302 18.6177 12.7871 18.5707 12.8313 18.5135C12.8477 18.4921 12.8623 18.4693 12.8752 18.4454C12.8835 18.4299 12.8909 18.4139 12.8975 18.3974L12.9031 18.3827C12.9209 18.3327 12.9304 18.2788 12.9304 18.2227C12.9304 17.9595 12.717 17.7461 12.4539 17.7461H6.73535ZM17.5757 17.3707C17.783 17.5328 17.8198 17.8323 17.6577 18.0396L15.9197 20.2632C15.6643 20.5898 15.186 20.6315 14.8779 20.3542L14.0559 19.6136C13.8894 19.4635 13.8533 19.2226 13.9551 19.0336C13.9727 19.0008 13.9946 18.9695 14.0208 18.9406C14.197 18.745 14.4983 18.7293 14.6938 18.9055L15.3262 19.475L16.9067 17.4527C17.0688 17.2453 17.3684 17.2086 17.5757 17.3707ZM12.6602 9.16899L13.5486 10.4747C13.6248 10.5885 13.7744 10.6676 13.9111 10.6665H14.2488C13.835 11.3439 13.0869 11.9776 11.8694 12.3972C10.9294 12.0729 10.2712 11.6197 9.82764 11.1191H8.3335C8.20825 11.1191 8.10767 11.0172 8.10767 10.8925C8.10767 10.7678 8.20825 10.6665 8.3335 10.6665H9.91797C9.94263 10.6665 9.96729 10.6639 9.99194 10.659C10.0142 10.6546 10.0361 10.6483 10.0576 10.6403C10.0703 10.6355 10.0828 10.6302 10.095 10.6243C10.1326 10.6061 10.1675 10.5827 10.1982 10.5551C10.2327 10.5243 10.2617 10.4882 10.2832 10.4483L10.6555 9.76006L11.2771 11.1137C11.2896 11.1415 11.3049 11.1664 11.3228 11.1882C11.3428 11.2128 11.3662 11.2332 11.3918 11.2491C11.4329 11.2745 11.48 11.2881 11.53 11.2881C11.6379 11.2881 11.7327 11.2228 11.7817 11.1125L12.6602 9.16899Z" fill="#368796"/>
+                             </svg> -->
+                           <p class="m-0 ms-2">Instructions & Notes</p>
+                           <!-- <div class="tooltip rounded-3">
+                                 <p class="m-0 clr-primary-600">Quick Orders</p>
+                             </div> -->
+                        </button>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div class="tab-content casesheet_tabcontent col overflow-auto" style="height: calc(100vh - 9rem);">
+
+
+            <div class="card card-style-1">
+               <div class="card-header justify-content-between">
+                  <div class="d-flex align-items-center gap-2">
+                     <h3 class="card-heading ms-2 fs-6 w-100 text-left"> Basic Information</h3>
+                     <div class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                        <button class="btn" [class.selected]="selectedClinicalTab === 'Medical'"
+                           (click)="selectTab('Medical')">Medical</button>
+                        <button class="btn" [class.selected]="selectedClinicalTab === 'Non-Medical'"
+                           (click)="selectTab('Non-Medical')">Non-Medical</button>  
+                        <button class="btn" [class.selected]="selectedClinicalTab === 'Pharmacy'"
+                           (click)="selectTab('Pharmacy')">Pharmacy</button>
+                     </div>
+                  </div>
+                  <div class="custom_check d-flex align-items-center gap-1" [class.active]="itemForm.get('BLOCKED').value" (click)="toggleBlocked()">
+                     <svg width="15" height="15" viewBox="0 0 20 21" fill="none"
+                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                        <path
+                           d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                           fill="white" stroke="white" stroke-width="0.25"></path>
+                     </svg>
+                     <label for="" class="form-label m-0">Blocked</label>
+                  </div>
+               </div>
+               <div class="p-3">
+                  <div class="row gx-2">
+                     <div class="col-12">
+                        <div class="row gx-3 border-primary-200 p-2 pb-3 mx-0 rounded-2">
+                           <div class="col-4">
+                              <label for="" class="form-label">GTNO:</label>
+                              <input type="text" class="form-control" formControlName="GTIN">
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Item Name</label>
+                              <div class="d-flex input-group w-100">
+                                 <input type="text" class="form-control" placeholder="DisplayName" formControlName="DisplayName"
+                                    aria-label="DisplayName" [matAutocomplete]="autoDisplayName"
+                                    (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchDisplay($event)">
+                                 <mat-autocomplete #autoDisplayName="matAutocomplete">
+                                    <mat-option *ngFor="let dis of listOfItems"
+                                       (onSelectionChange)="onViewItemDisplaySelected(dis)"
+                                       [value]="dis.Name.trim()">
+                                       {{dis.Name}}
+                                    </mat-option>
+                                 </mat-autocomplete>
+                                 <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon" (click)="openItemSearchModal()">
+                                    <img src="assets/images/icons/icon-search.svg" alt="">
+                                 </button>
+                              </div>
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Brand Name</label>
+                              <!-- <div class="d-flex input-group w-100">
+                                 <input type="text" class="form-control" placeholder="" formControlName="BrandName">
+                                 <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                    <img src="assets/images/icons/icon-search.svg" alt="">
+                                 </button>
+                               </div> -->
+                               <div class="d-flex input-group w-100">
+                                 <input type="text" class="form-control" placeholder="BrandName" aria-label="BrandName"
+                                    [matAutocomplete]="autoBrand" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchBrandName($event)" formControlName="BrandName">
+                                 <mat-autocomplete #autoBrand="matAutocomplete">
+                                    <mat-option *ngFor="let Brand of listOfBrandName"
+                                       (onSelectionChange)="onViewItemBrandSelected(Brand)" [value]="Brand.BrandName.trim()">
+                                       {{Brand.BrandName}}
+                                    </mat-option>
+                                 </mat-autocomplete>
+                                 <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                    <img src="assets/images/icons/icon-search.svg" alt="">
+                                 </button>
+                              </div>
+
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Manufacturer</label>
+                              <input type="text" class="form-control" formControlName="Manufacturer">
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Strength</label>
+                              <div class="d-flex align-items-center gap-2">
+                                 <input type="text" numbersOnly maxlength="5" formControlName="Strength" class="form-control">
+                                 <select name="" class="form-select pe-5" id="" formControlName="StrengthUoMID">
+                                    <option value="0">{{langData?.common?.Select}}</option>
+                                    <option value="{{item.id}}" *ngFor="let item of Strength">{{item.name}}</option>
+                                 </select>
+                                 <input type="text" class="form-control" formControlName="Quantity">
+                                 <select name="" class="form-select pe-5" id="" formControlName="IssueUOMID">
+                                    <option value="0">{{langData?.common?.Select}}</option>
+                                    <option value="{{item.id}}" *ngFor="let item of Strength">{{item.name}}</option>
+                                 </select>
+                              </div>
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Maximum Level</label>
+                              <input type="text" class="form-control" formControlName="MaximumLevel">
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Reorder Level</label>
+                              <input type="text" class="form-control" formControlName="ReorderLevel">
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Item Group</label>
+                              <select name="" class="form-select pe-5" id="" formControlName="GroupType">
+                                 <option value="0">{{langData?.common?.Select}}</option>
+                                 <option value="{{item.id}}" *ngFor="let item of ItemGroup">{{item.name}}</option>
+                              </select>
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Item Code</label>
+                              <div class="d-flex input-group w-100">
+                                 <input type="text" class="form-control" formControlName="ItemCode">
+                                 <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon" (click)="openItemSearchModal()">
+                                    <img src="assets/images/icons/icon-search.svg" alt="">
+                                 </button>
+                              </div>
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Category Name</label>
+                              <div class="d-flex input-group w-100">
+                                 <input type="text" class="form-control" placeholder="Category" aria-label="Category"
+                                    [matAutocomplete]="autoCat" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchCategory($event)" formControlName="CategoryName">
+                                 <mat-autocomplete #autoCat="matAutocomplete">
+                                    <mat-option *ngFor="let cat of listOfCategory"
+                                       (onSelectionChange)="onViewItemSelected(cat)" [value]="cat.CategoryName.trim()">
+                                       {{cat.CategoryName}}
+                                    </mat-option>
+                                 </mat-autocomplete>
+                                 <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                    <img src="assets/images/icons/icon-search.svg" alt="">
+                                 </button>
+                              </div>
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Dose Form</label>
+                              <input type="text" class="form-control">
+                           </div>
+                           <div class="col-4">
+                              <label fItemNotesor="" class="form-label">Catalogue No</label>
+                              <input type="text" class="form-control" formControlName="CatalogNumber">
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Minimum Level</label>
+                              <input type="text" class="form-control" formControlName="MinLevel">
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Reorder Qty</label>
+                              <input type="text" class="form-control" formControlName="ReorderQty">
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">MRP Margin</label>
+                              <div class="d-flex align-items-center gap-2">
+                                 <input type="text" class="form-control" formControlName="MRPMargin">
+                                 <div class="custom_check d-flex align-items-center w-100 gap-1" [class.active]="itemForm.get('IncludeMarkup').value" (click)="toggleMarkup()">
+                                    <svg width="15" height="15" viewBox="0 0 20 21" fill="none"
+                                       xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                       <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                       <path
+                                          d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                          fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <label for="" class="form-label m-0">Markup Applicable</label>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Scientific Name</label>
+                              <div class="d-flex input-group w-100">
+                                 <input type="text" class="form-control" placeholder="Scientific"
+                                    aria-label="Scientific" [matAutocomplete]="autoScientific" formControlName="Scientific"
+                                    (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchScientific($event)">
+                                 <mat-autocomplete #autoScientific="matAutocomplete">
+                                    <mat-option *ngFor="let sci of listOfScientific"
+                                       (onSelectionChange)="onViewItemScientificSelected(sci)"
+                                       [value]="sci.DisplayName.trim()">
+                                       {{sci.DisplayName}}
+                                    </mat-option>
+                                 </mat-autocomplete>
+                                 <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                    <img src="assets/images/icons/icon-search.svg" alt="">
+                                 </button>
+                              </div>
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Pharmacology Category</label>
+                              <select name="" class="form-select pe-5" id="" formControlName="PharmacalogyID">
+                                 <option value="0">{{langData?.common?.Select}}</option>
+                                 <option value="{{item.id}}" *ngFor="let item of PharmacologyCategory">{{item.name}}
+                                 </option>
+                              </select>
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">MSD Stock Number</label>
+                              <div class="d-flex align-items-center gap-2">
+                                 <input type="text" class="form-control" formControlName="MSDStockNumber">
+                                 <div class="custom_check d-flex align-items-center gap-1 w-100" [class.active]="itemForm.get('SFDADrug').value" (click)="toggleSDFADrug()">
+                                    <svg width="15" height="15" viewBox="0 0 20 21" fill="none"
+                                       xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                       <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                       <path
+                                          d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                          fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <label for="" class="form-label m-0">SFDA Drug</label>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <div class="col-4">
+                              <label for="" class="form-label">Base Solution</label>
+                              <select name="" class="form-select pe-5" id="" formControlName="BaseSolutionID">
+                                 <option value="0">{{langData?.common?.Select}}</option>
+                                 <option value="{{item.ItemID}}" *ngFor="let item of BaseSolutionData">{{item.DisplayName}}</option>
+                              </select>
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Storage Type</label>
+                              <select name="" class="form-select pe-5" id="" formControlName="StorageTypeID">
+                                 <option value="0">{{langData?.common?.Select}}</option>
+                                 <option value="{{item.ID}}" *ngFor="let item of StorageTypeData">{{item.Name}}</option>
+                              </select>
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">IV Expiry</label>
+                              <select name="" class="form-select pe-5" id="" formControlName="IVExpiryID">
+                                 <option value="0">{{langData?.common?.Select}}</option>
+                                 <option value="{{item.ID}}" *ngFor="let item of IVExpiryDate">{{item.Name}}</option>
+                              </select>
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Serial No:</label>
+                              <input type="text" class="form-control" formControlName="ItemSerialNo">
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label">Prescribing Limit:</label>
+                              <input type="text" [appTwoDigitNumberOnly]="3" class="form-control" formControlName="PrescribedQty">
+                           </div>
+
+                        </div>
+                     </div>
+                     <div class="col-12 mt-3">
+                        <div class="border-primary-200 rounded-2 overflow-hidden h-100">
+                           <div class="row align-items-start mx-0">
+                              <div class="col-12 p-0">
+                                 <div class="d-flex justify-content-start gap-3 p-3 pb-0">
+                                    <div *ngFor="let div of divControls1; let i = index" class="custom_check d-flex align-items-center gap-1 w-100"
+                                       [class.active]="div.value" (click)="toggleActive1(i)">
+                                       <svg width="15" height="15" viewBox="0 0 20 21" fill="none"
+                                          xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                          <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                          <path
+                                             d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                             fill="white" stroke="white" stroke-width="0.25"></path>
+                                       </svg>
+                                       <label for="" class="form-label m-0">{{ divLabels1[i] }}</label>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="col-12 my-3">
+                                 <div class="d-flex gap-3">
+                                    <div class="">
+                                       <label for="" class="form-label m-0">Size</label>
+                                       <input type="text" class="form-control" formControlName="Size">
+                                    </div>
+                                    <div class="">
+                                       <label for="" class="form-label m-0">Color</label>
+                                       <input type="text" class="form-control" formControlName="Color">
+                                    </div>
+                                 </div>
+                                 <!-- <div class="">
+                                 <label for="" class="form-label">Pharmacology Category</label>
+                                 <select name="" class="form-select pe-5" id="">
+                                    <option value="">Select</option>
+                                 </select>
+                              </div> -->
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <div class="mt-3" id="packageInfo">
+               <div class="mt-3">
+                  <div class="row gx-2">
+                     <div class="col-12">
+                        <div class="card card-style-1 h-100">
+                           <div class="card-header justify-content-between">
+                              <h2 class="card-heading">Package Information</h2>
+                              <button class="btn btn-danger-outline">Clear</button>
+                           </div>
+                           <div class="p-2">
+                              <div class="d-flex align-items-end justify-content-between gap-2 pt-3">
+                                 <div class="w-100 d-flex align-items-center gap-2">
+                                    <label for="" class="form-label text-nowrap">Pack Description</label>
+                                    <input type="text" class="form-control w-auto" formControlName="PackName">
+                                 </div>
+                              </div>
+                              <div class="mt-3">
+                                 <div class="">
+                                    <form [formGroup]="tableForm">
+                                       <div formArrayName="items">
+                                          <table class="table m-0">
+                                             <thead>
+                                                <tr>
+                                                   <th>SNo.</th>
+                                                   <th>Units</th>
+                                                   <th>Contains</th>
+                                                   <th>Mapping</th>
+                                                   <th></th>
+                                                </tr>
+                                             </thead>
+                                             <tbody>
+                                                <tr *ngFor="let item of items.controls; let i = index; let last = last"
+                                                   [formGroupName]="i">
+                                                   <td>{{ i + 1 }}</td>
+                                                   <td>
+                                                      <select name="" class="form-select pe-5" id="" [attr.disabled]="IsEdit ? '' : null"
+                                                         (change)="FetchChildUOMS($event, item)" formControlName="Units">
+                                                         <option value="0">{{langData?.common?.Select}}</option>
+                                                         <option value="{{u.UoMID}}"
+                                                            *ngFor="let u of Units">{{u.UOM}}
+                                                         </option>
+                                                      </select>
+                                                   </td>
+                                                   <td>
+                                                      <input type="text" class="form-control" [attr.disabled]="IsEdit ? '' : null" formControlName="Contains">
+                                                   </td>
+                                                   <td>
+                                                      <select name="" class="form-select" id="" [attr.disabled]="IsEdit ? '' : null" formControlName="MappingValue">
+                                                         <option value="0">{{langData?.common?.Select}}</option>
+                                                         <option value="{{m.UoMID}}"
+                                                            *ngFor="let m of item.get('Mapping')?.value">{{m.UOM}}
+                                                         </option>
+                                                      </select>
+                                                   </td>
+                                                   <td>
+                                                      <button (click)="addRow()" *ngIf="last && !IsEdit">
+                                                         <svg class="cursor-pointer add" width="20" height="20"
+                                                            viewBox="0 0 16 16" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <rect x="0.5" y="0.5" width="15" height="15" rx="7.5"
+                                                               fill="url(#paint0_radial_1479_2142)"></rect>
+                                                            <rect x="0.5" y="0.5" width="15" height="15" rx="7.5"
+                                                               stroke="#0AC285"></rect>
+                                                            <path
+                                                               d="M7.45935 5.36108C7.41333 5.36108 7.37602 5.39839 7.37602 5.44442V7.37598H5.44417C5.39815 7.37598 5.36084 7.41329 5.36084 7.45931V8.54102C5.36084 8.58704 5.39815 8.62435 5.44417 8.62435H7.37602V10.5559C7.37602 10.602 7.41333 10.6393 7.45935 10.6393H8.54106C8.58708 10.6393 8.62439 10.602 8.62439 10.5559V8.62435H10.5557C10.6017 8.62435 10.639 8.58704 10.639 8.54102V7.45931C10.639 7.41329 10.6017 7.37598 10.5557 7.37598H8.62439V5.44442C8.62439 5.39839 8.58708 5.36108 8.54106 5.36108H7.45935Z"
+                                                               fill="#43BC94"></path>
+                                                            <defs>
+                                                               <radialGradient id="paint0_radial_1479_2142" cx="0"
+                                                                  cy="0" r="1" gradientUnits="userSpaceOnUse"
+                                                                  gradientTransform="translate(8 8) rotate(90) scale(8)">
+                                                                  <stop stop-color="white"></stop>
+                                                                  <stop offset="1" stop-color="#E3F4F5"></stop>
+                                                               </radialGradient>
+                                                            </defs>
+                                                         </svg>
+                                                      </button>
+                                                   </td>
+                                                </tr>
+                                             </tbody>
+                                          </table>
+                                       </div>
+                                    </form>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="col-12 mt-3">
+                        <div class="card card-style-1">
+                           <div class="card-header justify-content-start">
+                              <h2 class="card-heading">Other Details</h2>
+                           </div>
+                           <div class="">
+                              <div class="d-flex align-items-center justify-content-between p-2 border-bottom">
+                                 <div class="d-flex align-items-center gap-3">
+                                    <div
+                                       class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start">
+                                       <button class="btn" [class.selected]="scheduled === 'Scheduled'"
+                                          (click)="selectScheduled('Scheduled')">Scheduled</button>
+                                       <button class="btn" [class.selected]="scheduled === 'Non-Scheduled'"
+                                          (click)="selectScheduled('Non-Scheduled')">Non-Scheduled</button>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                       <label for="" class="form-label">Production Type</label>
+                                       <div
+                                          class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start">
+                                          <button class="btn" [class.selected]="productionType === 'Generic'"
+                                             (click)="selectProductionType('Generic')">Generic</button>
+                                          <button class="btn" [class.selected]="productionType === 'Non-Generic'"
+                                             (click)="selectProductionType('Non-Generic')">Non-Generic</button>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div>
+                                    <div class="d-flex align-items-center gap-2">
+                                       <label for="" class="form-label text-nowrap">Max Allowed Days</label>
+                                       <input type="text" class="form-control w-auto" formControlName="MaxAllowedDays">
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="">
+                                 <form [formGroup]="form" class="p-2">
+                                    <div formArrayName="divs" class="row g-2">
+                                       <div *ngFor="let div of divControls; let i = index" 
+                                             class="custom_check d-flex align-items-center gap-1 col-3" 
+                                             [class.active]="div.value" 
+                                             (click)="toggleActive(i)">
+                                             <svg width="15" height="15" viewBox="0 0 20 21" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                <path
+                                                   d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                   fill="white" stroke="white" stroke-width="0.25"></path>
+                                             </svg>
+                                             <label for="" class="form-label m-0">{{ divLabels[i] }}</label>
+                                       </div>
+                                    </div>
+                                    </form>
+
+                                 <div class="row g-2 m-0 p-2 pb-3 border-top-primary-200">
+                                    <div class="col-12">
+                                       <div class="row gy-2">
+                                          <div class="col">
+                                             <div class="custom_check active gap-1 d-flex align-items-center" [class.active]="itemForm.get('IsReuseable').value" (click)="toggleReuseable()">
+                                                <svg width="15" height="15" viewBox="0 0 20 21" fill="none"
+                                                   xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                   <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                   <path
+                                                      d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                      fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <label for="" class="form-label m-0">Reusable Item</label>
+                                             </div>
+                                          </div>
+                                          <div class="col">
+                                             <div class="d-flex align-items-center gap-2">
+                                                <label for="" class="form-label m-0 text-nowrap">No. of Cycles</label>
+                                                <input type="text" class="form-control w-auto">
+                                             </div>
+                                          </div>
+                                          <div class="col">
+                                             <div class="custom_check active gap-1 d-flex align-items-center" [class.active]="itemForm.get('IsPatientSpecific').value" (click)="togglePatientSpecific()">
+                                                <svg width="15" height="15" viewBox="0 0 20 21" fill="none"
+                                                   xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                   <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                   <path
+                                                      d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                      fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <label for="" class="form-label m-0">Patient Specific</label>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-12">
+                                       <div class="d-flex gap-2">
+                                          <div class=" d-flex flex-column">
+                                             <label for="" class="form-label m-0">Sales Tax</label>
+                                             <div class="d-flex align-items-center gap-2">
+                                                <input type="text" class="form-control w-auto" formControlName="SalesTax">
+                                                <div class="custom_check d-flex align-items-center gap-1" [class.active]="itemForm.get('IsApplyResidents').value" (click)="toggleApplyResidents()">
+                                                   <svg width="15" height="15" viewBox="0 0 20 21" fill="none"
+                                                      xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                      <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                      <path
+                                                         d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                         fill="white" stroke="white" stroke-width="0.25"></path>
+                                                   </svg>
+                                                   <label for="" class="form-label m-0 text-nowrap">Apply Tax for
+                                                      Residents</label>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="custom_check active d-flex flex-column">
+                                             <label for="" class="form-label m-0">1Supp</label>
+                                             <div class="d-flex align-items-center afterlabel">
+                                                <input type="text" name="" class="form-control pe-6" id="">
+                                                <label for="" class="form-label label_sm">Supp</label>
+                                             </div>
+                                          </div>
+                                          <div class="custom_check active d-flex flex-column w-25">
+                                             <label for="" class="form-label m-0">Barcode</label>
+                                             <select name="" class="form-select pe-5" id="">
+                                                <option value="">Select</option>
+                                             </select>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="col-12 mt-3">
+                        <div class="card card-style-1 p-0">
+                           <div class="card-header justify-content-start">
+                              <h2 class="card-heading">Instructions & Notes</h2>
+                           </div>
+                           <div class="p-3">
+                              <div class="bg-white rounded-2">
+                                 <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <button (click)="openModal('compositeModal')"
+                                       class="btn btn-main-outline">Composition</button>
+                                    <button (click)="openModal('routeModal')"
+                                       class="btn btn-main-outline">Route of Admin</button>
+                                    <button (click)="openModal('mappingModal')"
+                                       class="btn btn-main-outline">Frequency Mapping</button>
+                                    <button (click)="openModal('speciaModal')"
+                                       class="btn btn-main-outline">Specialisation Mapping</button>
+                                    <button (click)="openModal('containModal')"
+                                       class="btn btn-main-outline">Domain Mapping</button>
+                                    <button (click)="openModal('mapDoctorModal')"
+                                       class="btn btn-main-outline">Doctor Mapping</button>
+                                    <button (click)="openModal('IndicationModal')" class="btn btn-main-outline">Indications</button>
+                                    <button (click)="openModal('MapLocation')" class="btn btn-main-outline">Location Mapping</button>
+                                    <button class="btn btn-main-outline" (click)="openModal('HoldingStore')">Holding Store</button>
+                                 </div>
+
+                                 <div class="mt-3 border-primary-200 p-2 rounded-2">
+                                    <div class="row">
+                                       <div class="col-9">
+                                          <div class="row">
+                                             <div class="col-4">
+                                                <label for="" class="form-label">Patient Instructions</label>
+                                                <textarea name="" class="form-control resize-none" id="" cols="30"
+                                                   rows="5" formControlName="PatientInstructions"></textarea>
+                                             </div>
+                                             <div class="col-4">
+                                                <label for="" class="form-label">Item Notes</label>
+                                                <textarea name="" class="form-control resize-none" id="" cols="30"
+                                                   rows="5" formControlName="ItemNotes"></textarea>
+                                             </div>
+                                             <div class="col-4">
+                                                <label for="" class="form-label">Remarks</label>
+                                                <textarea name="" class="form-control resize-none" id="" cols="30" formControlName="ItemRemarks"
+                                                   rows="5"></textarea>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <div class="col-3">
+                                          <div class="row">
+                                             <div class="col-12 mt-2">
+                                                <div class="d-flex flex-column gap-2">
+                                                   <div>
+                                                      <label for="" class="form-label">Default Issue Type(IP)</label>
+                                                      <select name="" class="form-select pe-5" id="" formControlName="IPDefaultUomID">
+                                                         <option value="0">{{langData?.common?.Select}}</option>
+                                                         <option value="{{item.UoMID}}" *ngFor="let item of FetchItemPackageInfoList">{{item.FullUoM}}</option>
+                                                      </select>
+                                                      <!-- <select name="" class="form-select pe-5" id="">
+                                                         <option value="">Box-1Supp</option>
+                                                      </select> -->
+                                                   </div>
+                                                   <div>
+                                                      <label for="" class="form-label">(OP)</label>
+                                                      <select name="" class="form-select pe-5" id="" formControlName="OPDefaultUomID">
+                                                         <option value="0">{{langData?.common?.Select}}</option>
+                                                         <option value="{{item.UoMID}}" *ngFor="let item of FetchItemPackageInfoList">{{item.FullUoM}}</option>
+                                                      </select>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+   </div>
+</form>
+
+
+<div class="modal fade" id="compositeModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" style="max-width: 55%;">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="">Composition</h5>
+            <div class="ms-auto d-flex align-items-center">
+               <button class="btn btn-main-outline" (click)="saveComposition('compositeModal')">Save</button>
+               <button type="button" class="btn-close ms-4" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+         </div>
+         <div class="modal-body">
+            <div class="p-2">
+               <table class="table m-0">
+                  <thead>
+                     <tr>
+                        <th>Sl.No</th>
+                        <th>Generic</th>
+                        <th>Strength</th>
+                        <th></th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr *ngFor="let gen of genericList;let i=index">
+                        <td>{{ i + 1 }}</td>
+                        <td>
+                           <div class="d-flex align-items-center input-group">
+                              <input type="text" class="form-control" [(ngModel)]="gen.GenericName" placeholder="Generic" autocomplete="off"
+                                 aria-label="Generic" [matAutocomplete]="autoGeneric" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchGenericSearch($event)">
+                                 <mat-autocomplete #autoGeneric="matAutocomplete">
+                                    <mat-option *ngFor="let item of listOfGeneric" (onSelectionChange)="selectGenericItem(item, i)"  >
+                                       {{item.name}} 
+                                    </mat-option>
+                                 </mat-autocomplete>
+                              <!-- <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                 <img src="assets/images/icons/icon-search.svg" alt="">
+                              </button> -->
+                              <div class="d-flex align-items-center gap-3 group_icons">
+                                 <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                     <g clip-path="url(#clip0_9239_2779)">
+                                     <path d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z" fill="#368796"/>
+                                     </g>
+                                     <defs>
+                                     <clipPath id="clip0_9239_2779">
+                                     <rect width="24" height="24" fill="white" transform="translate(0 0.519531)"/>
+                                     </clipPath>
+                                     </defs>
+                                 </svg>  
+                                 <svg class="clear cursor-pointer" width="16" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                     <path d="M0.564453 0.928909C0.173828 1.31941 0.173828 1.95259 0.564453 2.34309L6.22168 8.0002L0.564941 13.6568C0.174316 14.0474 0.174316 14.6805 0.564941 15.0711C0.955566 15.4616 1.58838 15.4616 1.979 15.0711L7.63574 9.41432L13.2925 15.0711C13.6831 15.4616 14.3159 15.4616 14.7065 15.0711C15.0972 14.6805 15.0972 14.0473 14.7065 13.6568L9.0498 8.0002L14.707 2.34309C15.0977 1.95259 15.0977 1.31941 14.707 0.928909C14.3164 0.538406 13.6831 0.538406 13.293 0.928909L7.63574 6.58607L1.97852 0.928909C1.58838 0.538345 0.955078 0.538345 0.564453 0.928909Z" fill="#368796"/>
+                                 </svg>                                
+                             </div> 
+                           </div>
+                        </td>
+                        <td>
+                           <div class="d-flex align-items-center gap-2">
+                              <input type="text" class="form-control" [(ngModel)]="gen.Qty">
+                              <select name="" class="form-select pe-5" id="" [(ngModel)]="gen.UoMID">
+                                 <option value="0" selected>{{langData?.common?.Select}}</option>
+                                 <option value="{{item.id}}" *ngFor="let item of Strength">{{item.name}}</option>
+                              </select>
+                           </div>
+                        </td>
+                        <td>
+                           <div class="d-flex align-items-center gap-2">
+                              <svg (click)="addGenericList(true)" class="cursor-pointer" width="20" height="20" viewBox="0 0 16 16" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                 <rect x="0.5" y="0.5" width="15" height="15" rx="7.5"
+                                    fill="url(#paint0_radial_922_4156)" />
+                                 <rect x="0.5" y="0.5" width="15" height="15" rx="7.5" stroke="#0AC285" />
+                                 <path
+                                    d="M7.45935 5.36108C7.41333 5.36108 7.37602 5.39839 7.37602 5.44442V7.37598H5.44417C5.39815 7.37598 5.36084 7.41329 5.36084 7.45931V8.54102C5.36084 8.58704 5.39815 8.62435 5.44417 8.62435H7.37602V10.5559C7.37602 10.602 7.41333 10.6393 7.45935 10.6393H8.54106C8.58708 10.6393 8.62439 10.602 8.62439 10.5559V8.62435H10.5557C10.6017 8.62435 10.639 8.58704 10.639 8.54102V7.45931C10.639 7.41329 10.6017 7.37598 10.5557 7.37598H8.62439V5.44442C8.62439 5.39839 8.58708 5.36108 8.54106 5.36108H7.45935Z"
+                                    fill="#43BC94" />
+                                 <defs>
+                                    <radialGradient id="paint0_radial_922_4156" cx="0" cy="0" r="1"
+                                       gradientUnits="userSpaceOnUse"
+                                       gradientTransform="translate(8 8) rotate(90) scale(8)">
+                                       <stop stop-color="white" />
+                                       <stop offset="1" stop-color="#E3F4F5" />
+                                    </radialGradient>
+                                 </defs>
+                              </svg>
+                              <div class="del_svg cursor-pointer custom_tooltip">
+                                 <svg (click)="deleteGeneric(gen)" width="23" height="22" viewBox="0 0 23 22" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                       d="M20.0995 6.16917H20.0261C15.177 5.68334 10.337 5.5 5.5428 5.98584L3.6728 6.16917C3.58184 6.17866 3.48989 6.17003 3.40228 6.14377C3.31467 6.11751 3.23314 6.07414 3.16239 6.01618C3.09164 5.95822 3.03308 5.8868 2.9901 5.80607C2.94712 5.72534 2.92056 5.63689 2.91197 5.54584C2.8753 5.16084 3.1503 4.83084 3.52614 4.79417L5.39614 4.61084C10.2728 4.11584 15.2136 4.30834 20.1636 4.79417C20.5395 4.83084 20.8145 5.17 20.7778 5.54584C20.764 5.71605 20.6864 5.87477 20.5607 5.99032C20.4349 6.10586 20.2702 6.16973 20.0995 6.16917Z"
+                                       fill="#EB6247"></path>
+                                    <path
+                                       d="M8.64147 5.24333C8.6048 5.24333 8.56813 5.24333 8.5223 5.23416C8.34445 5.20211 8.18627 5.10159 8.08172 4.95419C7.97717 4.80679 7.93459 4.62427 7.96313 4.44583L8.1648 3.24499C8.31147 2.36499 8.51313 1.14583 10.649 1.14583H13.0506C15.1956 1.14583 15.3973 2.41083 15.5348 3.25416L15.7365 4.44583C15.8006 4.82166 15.544 5.17916 15.1773 5.23416C14.8015 5.29833 14.444 5.04166 14.389 4.67499L14.1873 3.48333C14.059 2.68583 14.0315 2.52999 13.0598 2.52999H10.6581C9.68647 2.52999 9.66813 2.65833 9.53063 3.47416L9.3198 4.66583C9.29369 4.82694 9.2111 4.97351 9.08683 5.07931C8.96255 5.18512 8.80468 5.24325 8.64147 5.24333ZM14.7923 20.856H8.9073C5.70813 20.856 5.5798 19.0868 5.47897 17.6568L4.88313 8.42599C4.85563 8.05016 5.14897 7.72016 5.5248 7.69266C5.9098 7.67433 6.23063 7.95849 6.25813 8.33433L6.85397 17.5652C6.9548 18.9585 6.99147 19.481 8.9073 19.481H14.7923C16.7173 19.481 16.754 18.9585 16.8456 17.5652L17.4415 8.33433C17.469 7.95849 17.799 7.67433 18.1748 7.69266C18.5506 7.72016 18.844 8.041 18.8165 8.42599L18.2206 17.6568C18.1198 19.0868 17.9915 20.856 14.7923 20.856Z"
+                                       fill="#EB6247"></path>
+                                    <path
+                                       d="M13.3714 15.8125H10.3189C9.94311 15.8125 9.63144 15.5008 9.63144 15.125C9.63144 14.7492 9.94311 14.4375 10.3189 14.4375H13.3714C13.7473 14.4375 14.0589 14.7492 14.0589 15.125C14.0589 15.5008 13.7473 15.8125 13.3714 15.8125ZM14.1414 12.1458H9.55811C9.18227 12.1458 8.87061 11.8342 8.87061 11.4583C8.87061 11.0825 9.18227 10.7708 9.55811 10.7708H14.1414C14.5173 10.7708 14.8289 11.0825 14.8289 11.4583C14.8289 11.8342 14.5173 12.1458 14.1414 12.1458Z"
+                                       fill="#EB6247"></path>
+                                 </svg>
+                                 <div class="tooltip">
+                                    <p>Delete</p>
+                                 </div>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+               <!-- </div>
+                     </div> -->
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="routeModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" style="max-width: 40%;">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="">Route of Admin</h5>
+            <div class="ms-auto d-flex align-items-center gap-2">
+               <button class="btn btn-main-outline" (click)="saveRoute('routeModal')">Save</button>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+         </div>
+         <div class="modal-body">
+            <div class="p-0">
+               <div class="card card-style-1">
+                  <div class="card-header justify-content-start">
+                     <div class="d-flex align-items-center input-group">
+                        <input type="text" class="form-control" placeholder="Route of Admin" autocomplete="off"
+                        aria-label="Route" [matAutocomplete]="autoRoute" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchRouteSearch($event)">
+                        <mat-autocomplete #autoRoute="matAutocomplete">
+                           <mat-option *ngFor="let item of listOfRoutes" (onSelectionChange)="selectRouteItem(item)"  >
+                              {{item.name}} 
+                           </mat-option>
+                        </mat-autocomplete>
+                        <!-- <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                           <img src="assets/images/icons/icon-search.svg" alt="">
+                        </button> -->
+                        <div class="d-flex align-items-center gap-3 group_icons">
+                           <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <g clip-path="url(#clip0_9239_2779)">
+                               <path d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z" fill="#368796"/>
+                               </g>
+                               <defs>
+                               <clipPath id="clip0_9239_2779">
+                               <rect width="24" height="24" fill="white" transform="translate(0 0.519531)"/>
+                               </clipPath>
+                               </defs>
+                           </svg>   
+                           
+                           <svg class="clear cursor-pointer" width="16" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <path d="M0.564453 0.928909C0.173828 1.31941 0.173828 1.95259 0.564453 2.34309L6.22168 8.0002L0.564941 13.6568C0.174316 14.0474 0.174316 14.6805 0.564941 15.0711C0.955566 15.4616 1.58838 15.4616 1.979 15.0711L7.63574 9.41432L13.2925 15.0711C13.6831 15.4616 14.3159 15.4616 14.7065 15.0711C15.0972 14.6805 15.0972 14.0473 14.7065 13.6568L9.0498 8.0002L14.707 2.34309C15.0977 1.95259 15.0977 1.31941 14.707 0.928909C14.3164 0.538406 13.6831 0.538406 13.293 0.928909L7.63574 6.58607L1.97852 0.928909C1.58838 0.538345 0.955078 0.538345 0.564453 0.928909Z" fill="#368796"/>
+                           </svg>                                
+                       </div> 
+                     </div>
+                  </div>
+                  <div *ngIf="routesList.length > 0" class="p-2">
+                     <div *ngFor="let route of routesList;let i=index">
+                        <div class="card-3d mt-2 p-1" *ngIf="route.BLK != 1">
+                            <div class="row mx-0 align-items-start">
+                                <div class="col-md-3">
+                                    <p class="label text-break">S.No</p>
+                                    <p class="value text-break">{{ i + 1 }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="label text-break">{{langData?.common?.Name}}</p>
+                                    <p class="value text-break">{{route.name}}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="label text-break"> </p>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <svg (click)="deleteRoute(route)" class="cursor-pointer" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M21 5.98C17.67 5.65 14.32 5.48 10.98 5.48C9 5.48 7.02 5.58 5.04 5.78L3 5.98M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97M18.85 9.14L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5H13.66M9.5 12.5H14.5"
+                                                stroke="#EB6247" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="mappingModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" style="max-width: 40%;">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="">Frequency Mapping</h5>
+            <div class="ms-auto d-flex align-items-center gap-2">
+               <button class="btn btn-main-outline" (click)="saveFrequency('mappingModal')">Save</button>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+         </div>
+         <div class="modal-body">
+            <div class="p-0">
+               <div class="card card-style-1">
+                  <div class="card-header justify-content-start">
+                     <div class="d-flex align-items-center input-group">
+                        <input type="text" class="form-control" placeholder="Frequency" autocomplete="off"
+                        aria-label="Frequency" [matAutocomplete]="autoFrequency" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchFrequencySearch($event)">
+                        <mat-autocomplete #autoFrequency="matAutocomplete">
+                           <mat-option *ngFor="let item of listOfFrequency" (onSelectionChange)="selectFrequencyItem(item)"  >
+                              {{item.name}} 
+                           </mat-option>
+                        </mat-autocomplete>
+                        <div class="d-flex align-items-center gap-3 group_icons">
+                           <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <g clip-path="url(#clip0_9239_2779)">
+                               <path d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z" fill="#368796"/>
+                               </g>
+                               <defs>
+                               <clipPath id="clip0_9239_2779">
+                               <rect width="24" height="24" fill="white" transform="translate(0 0.519531)"/>
+                               </clipPath>
+                               </defs>
+                           </svg>   
+                           
+                           <svg class="clear cursor-pointer" width="16" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <path d="M0.564453 0.928909C0.173828 1.31941 0.173828 1.95259 0.564453 2.34309L6.22168 8.0002L0.564941 13.6568C0.174316 14.0474 0.174316 14.6805 0.564941 15.0711C0.955566 15.4616 1.58838 15.4616 1.979 15.0711L7.63574 9.41432L13.2925 15.0711C13.6831 15.4616 14.3159 15.4616 14.7065 15.0711C15.0972 14.6805 15.0972 14.0473 14.7065 13.6568L9.0498 8.0002L14.707 2.34309C15.0977 1.95259 15.0977 1.31941 14.707 0.928909C14.3164 0.538406 13.6831 0.538406 13.293 0.928909L7.63574 6.58607L1.97852 0.928909C1.58838 0.538345 0.955078 0.538345 0.564453 0.928909Z" fill="#368796"/>
+                           </svg>                                
+                       </div> 
+                     </div>
+                  </div>
+                  <div class="p-2">
+                     <div *ngIf="frequencyList.length > 0">
+                        <div class="card-3d mt-2 p-1" *ngFor="let fre of frequencyList;let i=index">
+                            <div class="row mx-0 align-items-start">
+                                <!-- <div class="col-md-3">
+                                    <p class="label text-break">ID</p>
+                                    <p class="value text-break">{{fre.id}}</p>
+                                </div> -->
+                                <div class="col-md-3">
+                                 <p class="label text-break">S.No</p>
+                                 <p class="value text-break">{{ i + 1 }}</p>
+                             </div>
+                                <div class="col-md-6">
+                                    <p class="label text-break">{{langData?.common?.Name}}</p>
+                                    <p class="value text-break">{{fre.name}}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="label text-break"> </p>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <svg (click)="deleteFrequency(fre)" class="cursor-pointer" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M21 5.98C17.67 5.65 14.32 5.48 10.98 5.48C9 5.48 7.02 5.58 5.04 5.78L3 5.98M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97M18.85 9.14L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5H13.66M9.5 12.5H14.5"
+                                                stroke="#EB6247" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="speciaModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" style="max-width: 40%;">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="">Specialisation Mapping</h5>
+            <div class="ms-auto d-flex align-items-center gap-2">
+               <button class="btn btn-main-outline" (click)="saveSpecialisation('speciaModal')">Save</button>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+         </div>
+         <div class="modal-body">
+            <div class="p-0">
+               <div class="card card-style-1">
+                  <div class="card-header justify-content-start">
+                     <div class="d-flex align-items-center input-group">
+                        <input type="text" class="form-control" placeholder="Specialisation" autocomplete="off"
+                        aria-label="Specialisation" [matAutocomplete]="autoSpecialisation" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchSpecialisationSearch($event)">
+                        <mat-autocomplete #autoSpecialisation="matAutocomplete">
+                           <mat-option *ngFor="let item of listOfSpecialisation" (onSelectionChange)="selectSpecialisationItem(item)"  >
+                              {{item.Specialisation}} 
+                           </mat-option>
+                        </mat-autocomplete>
+                        <!-- <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                           <img src="assets/images/icons/icon-search.svg" alt="">
+                        </button> -->
+                        <div class="d-flex align-items-center gap-3 group_icons">
+                           <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <g clip-path="url(#clip0_9239_2779)">
+                               <path d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z" fill="#368796"/>
+                               </g>
+                               <defs>
+                               <clipPath id="clip0_9239_2779">
+                               <rect width="24" height="24" fill="white" transform="translate(0 0.519531)"/>
+                               </clipPath>
+                               </defs>
+                           </svg>   
+                           
+                           <svg class="clear cursor-pointer" width="16" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <path d="M0.564453 0.928909C0.173828 1.31941 0.173828 1.95259 0.564453 2.34309L6.22168 8.0002L0.564941 13.6568C0.174316 14.0474 0.174316 14.6805 0.564941 15.0711C0.955566 15.4616 1.58838 15.4616 1.979 15.0711L7.63574 9.41432L13.2925 15.0711C13.6831 15.4616 14.3159 15.4616 14.7065 15.0711C15.0972 14.6805 15.0972 14.0473 14.7065 13.6568L9.0498 8.0002L14.707 2.34309C15.0977 1.95259 15.0977 1.31941 14.707 0.928909C14.3164 0.538406 13.6831 0.538406 13.293 0.928909L7.63574 6.58607L1.97852 0.928909C1.58838 0.538345 0.955078 0.538345 0.564453 0.928909Z" fill="#368796"/>
+                           </svg>                                
+                       </div> 
+                     </div>
+                  </div>
+                  <div class="p-2">
+                     <div *ngIf="specialisationList.length > 0">
+                        <div class="card-3d mt-2 p-1" *ngFor="let spe of specialisationList;let i=index">
+                            <div class="row mx-0 align-items-start">
+                                <!-- <div class="col-md-3">
+                                    <p class="label text-break">ID</p>
+                                    <p class="value text-break">{{spe.SpecialiseID}}</p>
+                                </div> -->
+                                <div class="col-md-3">
+                                 <p class="label text-break">S.No</p>
+                                 <p class="value text-break">{{ i + 1 }}</p>
+                             </div>
+                                <div class="col-md-6">
+                                    <p class="label text-break">{{langData?.common?.Name}}</p>
+                                    <p class="value text-break">{{spe.Specialisation}}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="label text-break"> </p>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <svg (click)="deleteSpecialisation(spe)" class="cursor-pointer" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M21 5.98C17.67 5.65 14.32 5.48 10.98 5.48C9 5.48 7.02 5.58 5.04 5.78L3 5.98M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97M18.85 9.14L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5H13.66M9.5 12.5H14.5"
+                                                stroke="#EB6247" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="mapDoctorModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" style="max-width: 40%;">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="">Doctor Mapping</h5>
+            <div class="ms-auto d-flex align-items-center gap-2">
+               <button class="btn btn-main-outline" (click)="savedoctor('mapDoctorModal')">Save</button>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+         </div>
+         <div class="modal-body">
+            <div class="p-0">
+               <div class="card card-style-1">
+                  <div class="card-header justify-content-start">
+                     <div class="d-flex align-items-center input-group">
+                        <input type="text" class="form-control" placeholder="Doctor" autocomplete="off"
+                        aria-label="DoctorName" [matAutocomplete]="autoDoctor" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchDoctorSearch($event)">
+                        <mat-autocomplete #autoDoctor="matAutocomplete">
+                           <mat-option *ngFor="let item of listOfDoctors" (onSelectionChange)="selectItem(item)"  >
+                              {{item.FullName}} 
+                           </mat-option>
+                        </mat-autocomplete>
+                        <!-- <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                           <img src="assets/images/icons/icon-search.svg" alt="">
+                        </button> -->
+                        <div class="d-flex align-items-center gap-3 group_icons">
+                           <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <g clip-path="url(#clip0_9239_2779)">
+                               <path d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z" fill="#368796"/>
+                               </g>
+                               <defs>
+                               <clipPath id="clip0_9239_2779">
+                               <rect width="24" height="24" fill="white" transform="translate(0 0.519531)"/>
+                               </clipPath>
+                               </defs>
+                           </svg>   
+                           
+                           <svg class="clear cursor-pointer" width="16" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <path d="M0.564453 0.928909C0.173828 1.31941 0.173828 1.95259 0.564453 2.34309L6.22168 8.0002L0.564941 13.6568C0.174316 14.0474 0.174316 14.6805 0.564941 15.0711C0.955566 15.4616 1.58838 15.4616 1.979 15.0711L7.63574 9.41432L13.2925 15.0711C13.6831 15.4616 14.3159 15.4616 14.7065 15.0711C15.0972 14.6805 15.0972 14.0473 14.7065 13.6568L9.0498 8.0002L14.707 2.34309C15.0977 1.95259 15.0977 1.31941 14.707 0.928909C14.3164 0.538406 13.6831 0.538406 13.293 0.928909L7.63574 6.58607L1.97852 0.928909C1.58838 0.538345 0.955078 0.538345 0.564453 0.928909Z" fill="#368796"/>
+                           </svg>                                
+                       </div>
+                     </div>
+                  </div>
+                  <div class="p-2">
+                     <div *ngIf="doctorList.length > 0">
+                        <div class="card-3d mt-2 p-1" *ngFor="let doctor of doctorList;let i=index">
+                            <div class="row mx-0 align-items-start">
+                                <!-- <div class="col-md-3">
+                                    <p class="label text-break">ID</p>
+                                    <p class="value text-break">{{doctor.EmpID}}</p>
+                                </div> -->
+                                <div class="col-md-3">
+                                 <p class="label text-break">S.No</p>
+                                 <p class="value text-break">{{ i + 1 }}</p>
+                             </div>
+                                <div class="col-md-6">
+                                    <p class="label text-break">{{langData?.common?.Name}}</p>
+                                    <p class="value text-break">{{doctor.FullName}}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="label text-break"> </p>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <svg (click)="deleteDoctor(doctor)" class="cursor-pointer" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M21 5.98C17.67 5.65 14.32 5.48 10.98 5.48C9 5.48 7.02 5.58 5.04 5.78L3 5.98M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97M18.85 9.14L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5H13.66M9.5 12.5H14.5"
+                                                stroke="#EB6247" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="containModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" style="max-width: 40%;">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="">Domain Mapping</h5>
+            <div class="ms-auto d-flex align-items-center gap-2">
+               <button class="btn btn-main-outline" (click)="saveMapping('containModal')">Save</button>
+              
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+         </div>
+         <div class="modal-body">
+            <div class="p-0">
+               <div class="card card-style-1">
+                  <div class="card-header justify-content-start">
+                     <div class="d-flex align-items-center input-group">
+                        <input type="text" class="form-control" placeholder="Domain Mapping" autocomplete="off"
+                        aria-label="Mapping" [matAutocomplete]="autoMapping" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchMappingSearch($event)">
+                        <mat-autocomplete #autoMapping="matAutocomplete">
+                           <mat-option *ngFor="let item of listOfMappings" (onSelectionChange)="selectMappingItem(item)"  >
+                              {{item.DomainName}} 
+                           </mat-option>
+                        </mat-autocomplete>
+                        <div class="d-flex align-items-center gap-3 group_icons">
+                           <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <g clip-path="url(#clip0_9239_2779)">
+                               <path d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z" fill="#368796"/>
+                               </g>
+                               <defs>
+                               <clipPath id="clip0_9239_2779">
+                               <rect width="24" height="24" fill="white" transform="translate(0 0.519531)"/>
+                               </clipPath>
+                               </defs>
+                           </svg>   
+                           
+                           <svg class="clear cursor-pointer" width="16" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <path d="M0.564453 0.928909C0.173828 1.31941 0.173828 1.95259 0.564453 2.34309L6.22168 8.0002L0.564941 13.6568C0.174316 14.0474 0.174316 14.6805 0.564941 15.0711C0.955566 15.4616 1.58838 15.4616 1.979 15.0711L7.63574 9.41432L13.2925 15.0711C13.6831 15.4616 14.3159 15.4616 14.7065 15.0711C15.0972 14.6805 15.0972 14.0473 14.7065 13.6568L9.0498 8.0002L14.707 2.34309C15.0977 1.95259 15.0977 1.31941 14.707 0.928909C14.3164 0.538406 13.6831 0.538406 13.293 0.928909L7.63574 6.58607L1.97852 0.928909C1.58838 0.538345 0.955078 0.538345 0.564453 0.928909Z" fill="#368796"/>
+                           </svg>                                
+                       </div> 
+                     </div>
+                  </div>
+                  <div class="p-2">
+                     <div *ngIf="mappingList.length > 0">
+                        <div class="card-3d mt-2 p-1" *ngFor="let mapping of mappingList;let i=index">
+                            <div class="row mx-0 align-items-start">
+                                <!-- <div class="col-md-3">
+                                    <p class="label text-break">ID</p>
+                                    <p class="value text-break">{{mapping.DomainID}}</p>
+                                </div> -->
+                                <div class="col-md-3">
+                                 <p class="label text-break">S.No</p>
+                                 <p class="value text-break">{{ i + 1 }}</p>
+                             </div>
+                                <div class="col-md-6">
+                                    <p class="label text-break">{{langData?.common?.Name}}</p>
+                                    <p class="value text-break">{{mapping.DomainName}}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="label text-break"> </p>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <svg (click)="deleteMapping(mapping)" class="cursor-pointer" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M21 5.98C17.67 5.65 14.32 5.48 10.98 5.48C9 5.48 7.02 5.58 5.04 5.78L3 5.98M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97M18.85 9.14L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5H13.66M9.5 12.5H14.5"
+                                                stroke="#EB6247" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="IndicationModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" style="max-width: 40%;">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="">Indication</h5>
+            <div class="ms-auto d-flex align-items-center gap-2">
+               <button class="btn btn-main-outline">Save</button>
+               <!-- <button class="btn btn-danger-outline">Close</button> -->
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+         </div>
+         <div class="modal-body">
+            <div class="p-0">
+               <div class="card card-style-1">
+                  <div class="card-header justify-content-start">
+                     <div class="d-flex align-items-center input-group">
+                        <input type="text" class="form-control" placeholder="Indication" autocomplete="off"
+                        aria-label="Indication" [matAutocomplete]="autoIndication" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchIndicationsSearch($event)">
+                        <mat-autocomplete #autoIndication="matAutocomplete">
+                           <mat-option *ngFor="let item of listOfIndications" (onSelectionChange)="selectIndicationItem(item)"  >
+                              {{item.name}} 
+                           </mat-option>
+                        </mat-autocomplete>
+                        <!-- <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                           <img src="assets/images/icons/icon-search.svg" alt="">
+                        </button> -->
+                        <div class="d-flex align-items-center gap-3 group_icons">
+                           <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <g clip-path="url(#clip0_9239_2779)">
+                               <path d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z" fill="#368796"/>
+                               </g>
+                               <defs>
+                               <clipPath id="clip0_9239_2779">
+                               <rect width="24" height="24" fill="white" transform="translate(0 0.519531)"/>
+                               </clipPath>
+                               </defs>
+                           </svg>   
+                           
+                           <svg class="clear cursor-pointer" width="16" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <path d="M0.564453 0.928909C0.173828 1.31941 0.173828 1.95259 0.564453 2.34309L6.22168 8.0002L0.564941 13.6568C0.174316 14.0474 0.174316 14.6805 0.564941 15.0711C0.955566 15.4616 1.58838 15.4616 1.979 15.0711L7.63574 9.41432L13.2925 15.0711C13.6831 15.4616 14.3159 15.4616 14.7065 15.0711C15.0972 14.6805 15.0972 14.0473 14.7065 13.6568L9.0498 8.0002L14.707 2.34309C15.0977 1.95259 15.0977 1.31941 14.707 0.928909C14.3164 0.538406 13.6831 0.538406 13.293 0.928909L7.63574 6.58607L1.97852 0.928909C1.58838 0.538345 0.955078 0.538345 0.564453 0.928909Z" fill="#368796"/>
+                           </svg>                                
+                       </div> 
+                     </div>
+                  </div>
+                  <div class="p-2">
+                     <div *ngIf="indicationMappingList.length > 0">
+                        <div class="card-3d mt-2 p-1" *ngFor="let ind of indicationMappingList;let i=index">
+                            <div class="row mx-0 align-items-start">
+                              <div class="col-md-3">
+                                 <p class="label text-break">S.No</p>
+                                 <p class="value text-break">{{ i + 1 }}</p>
+                             </div>
+                                <div class="col-md-6">
+                                    <p class="label text-break">{{langData?.common?.Name}}</p>
+                                    <p class="value text-break">{{ind.name}}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="label text-break"> </p>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <svg (click)="deleteIndication(ind)" class="cursor-pointer" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M21 5.98C17.67 5.65 14.32 5.48 10.98 5.48C9 5.48 7.02 5.58 5.04 5.78L3 5.98M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97M18.85 9.14L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5H13.66M9.5 12.5H14.5"
+                                                stroke="#EB6247" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="MapLocation" data-bs-backdrop="static" tabindex="-1" aria-labelledby="" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" style="max-width: 40%;">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="">Location Mapping</h5>
+            <div class="ms-auto d-flex align-items-center gap-2">
+               <button class="btn btn-main-outline" (click)="saveHospital('MapLocation')">Save</button>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+         </div>
+         <div class="modal-body">
+            <div class="p-2">
+               <div class="card card-style-1">
+                  <div class="card-header justify-content-start">
+                     <div class="p-1 w-100">
+                        <div *ngIf="mapList.length > 0">
+                           <div class="card-3d mt-2 p-1" *ngFor="let map of mapList;let i=index">
+                              <div class="row mx-0 align-items-start">
+                                 <!-- <div class="col-md-3">
+                                    <p class="label text-break">ID</p>
+                                    <p class="value text-break">{{map.HospitalID}}</p>
+                                 </div> -->
+                                 <div class="col-md-3">
+                                    <p class="label text-break">S.No</p>
+                                    <p class="value text-break">{{ i + 1 }}</p>
+                                </div>
+                                 <div class="col-md-6">
+                                    <p class="label text-break">{{langData?.common?.Name}}</p>
+                                    <p class="value text-break">{{map.Name}}</p>
+                                 </div>
+                                 <div class="col-md-3">
+                                    <p class="label text-break"> </p>
+                                    <div class="d-flex justify-content-center gap-2">
+                                       <svg (click)="deleteMap(map)" class="cursor-pointer" width="20" height="20"
+                                          viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <path
+                                             d="M21 5.98C17.67 5.65 14.32 5.48 10.98 5.48C9 5.48 7.02 5.58 5.04 5.78L3 5.98M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97M18.85 9.14L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5H13.66M9.5 12.5H14.5"
+                                             stroke="#EB6247" stroke-width="1.5" stroke-linecap="round"
+                                             stroke-linejoin="round" />
+                                       </svg>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="HoldingStore" data-bs-backdrop="static" tabindex="-1" aria-labelledby="" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" style="max-width: 40%;">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="">Holding Store</h5>
+            <div class="ms-auto d-flex align-items-center gap-2">
+               <button class="btn btn-main-outline" (click)="saveHoldingStore('HoldingStore')">Save</button>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+         </div>
+         <div class="modal-body">
+            <div class="p-0">
+               <!-- <div class="card card-style-1">
+                  <div class="card-header justify-content-start">
+                     <div class="d-flex align-items-center input-group">
+                        <input type="text" class="form-control" placeholder="Holding Store" autocomplete="off"
+                        aria-label="Route" [matAutocomplete]="autoHoldingStore" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchStoreSearch($event)">
+                        <mat-autocomplete #autoHoldingStore="matAutocomplete">
+                           <mat-option *ngFor="let item of listOfStores" (onSelectionChange)="selectStoreItem(item)"  >
+                              {{item.FacilityName}} 
+                           </mat-option>
+                        </mat-autocomplete>
+                        <div class="d-flex align-items-center gap-3 group_icons">
+                           <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <g clip-path="url(#clip0_9239_2779)">
+                               <path d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z" fill="#368796"/>
+                               </g>
+                               <defs>
+                               <clipPath id="clip0_9239_2779">
+                               <rect width="24" height="24" fill="white" transform="translate(0 0.519531)"/>
+                               </clipPath>
+                               </defs>
+                           </svg>   
+                           
+                           <svg class="clear cursor-pointer" width="16" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                               <path d="M0.564453 0.928909C0.173828 1.31941 0.173828 1.95259 0.564453 2.34309L6.22168 8.0002L0.564941 13.6568C0.174316 14.0474 0.174316 14.6805 0.564941 15.0711C0.955566 15.4616 1.58838 15.4616 1.979 15.0711L7.63574 9.41432L13.2925 15.0711C13.6831 15.4616 14.3159 15.4616 14.7065 15.0711C15.0972 14.6805 15.0972 14.0473 14.7065 13.6568L9.0498 8.0002L14.707 2.34309C15.0977 1.95259 15.0977 1.31941 14.707 0.928909C14.3164 0.538406 13.6831 0.538406 13.293 0.928909L7.63574 6.58607L1.97852 0.928909C1.58838 0.538345 0.955078 0.538345 0.564453 0.928909Z" fill="#368796"/>
+                           </svg>                                
+                       </div> 
+                     </div>
+                  </div>
+                  <div *ngIf="holdingStoreList.length > 0" class="p-2">
+                     <div *ngFor="let route of holdingStoreList;let i=index">
+                        <div class="card-3d mt-2 p-1" *ngIf="route.BLK != 1">
+                            <div class="row mx-0 align-items-start">
+                                <div class="col-md-3">
+                                    <p class="label text-break">S.No</p>
+                                    <p class="value text-break">{{ i + 1 }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="label text-break">{{langData?.common?.Name}}</p>
+                                    <p class="value text-break">{{route.Name}}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="label text-break"> </p>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <svg (click)="deleteHoldingStoreItem(route)" class="cursor-pointer" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M21 5.98C17.67 5.65 14.32 5.48 10.98 5.48C9 5.48 7.02 5.58 5.04 5.78L3 5.98M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97M18.85 9.14L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5H13.66M9.5 12.5H14.5"
+                                                stroke="#EB6247" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+               </div> -->
+               <div class="custom_check d-flex align-items-center gap-1 px-4" [class.active]="isAllStoresSelected()"
+                  (click)="onStoreSelectAllClick()">
+                  <svg width="15" height="15" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                     <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                     <path
+                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                        fill="white" stroke="white" stroke-width="0.25"></path>
+                  </svg>
+                  <label for="" class="form-label m-0">Select All</label>
+               </div>
+               <div *ngIf="listOfStores.length > 0" class="p-2">
+                  <div *ngFor="let store of listOfStores;let i=index">
+                     <div class="card-3d mt-2 p-1">
+                        <div class="row mx-0 align-items-start">
+                           <div class="col-md-3">
+                              <div class="custom_check d-flex align-items-center gap-1" [class.active]="store.isSelected"
+                                 (click)="store.isSelected = !store.isSelected">
+                                 <svg width="15" height="15" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                    class="check_svg">
+                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                    <path
+                                       d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                       fill="white" stroke="white" stroke-width="0.25"></path>
+                                 </svg>
+                              </div>
+                           </div>
+                           <div class="col-md-9">
+                              <p class="value text-break">{{store.FacilityName}}</p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal" id="saveMsg" tabindex="-1">
+   <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+       <div class="modal-content">
+           <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+           <div class="modal-body">
+               <p>Saved successfully</p>
+               <div class="modal-footer">
+                   <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                       data-bs-dismiss="modal">Ok</a>
+               </div>
+           </div>
+       </div>
+   </div>
+</div>
+
+<div class="modal" id="errorMessageModal" tabindex="-1">
+   <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+       <div class="modal-content">
+           <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+           <div class="modal-bodyV">
+                
+               <p class="my-1 fs-8 fw-bold">Following Fields are Mandatory</p>
+               <!-- <p *ngIf="errorMessages.length === 1">{{ errorMessages[0] }}</p> -->
+               <ul *ngIf="errorMessages.length === 1">
+                  <li *ngFor="let error of errorMessages; let i = index"> {{errorMessages[0]}}</li>
+              </ul>
+               <ul *ngIf="errorMessages.length > 1">
+                   <li *ngFor="let error of errorMessages; let i = index"> {{error}}</li>
+               </ul>
+               <div class="modal-footer">
+                   <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                       data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+               </div>
+           </div>
+       </div>
+   </div>
+</div>
+
+<div class="modal" id="itemSearchModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" style="max-width:50rem">
+      <div class="modal-content">
+         <div class="modal-header p-2 gap-3">
+            <h5 class="modal-title clr-primary-600 fs-6 text-nowrap" translate>Item Search</h5>
+            <div class="d-flex align-items-center gap-2">
+               <button class="btn btn-main-outline" (click)="onSelectBtnClick()">Select</button>
+               <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+            </div>
+         </div>
+         <div class="modal-body p-2">
+            <div class="d-flex gap-2">
+               <div class="d-flex flex-column">
+                  <label for="" class="form-label w-50">Item Code</label>
+                  <div class="d-flex align-items-center gap-2">
+                     <div class="input-group">
+                        <select name="" class="form-select pe-5" [(ngModel)]="itemCodeFilterType">
+                           <option *ngFor="let item of filterTypeList" [value]="item.id">
+                              {{item.label}}
+                           </option>
+                        </select>
+                     </div>
+                     <input type="text" class="form-control" placeholder="Code" [(ngModel)]="itemCodeSearchText" (keydown.enter)="fetchItems()">
+                  </div>
+               </div>
+               <div class="d-flex flex-column">
+                  <label for="" class="form-label w-50">Item Name</label>
+                  <div class="d-flex gap-2 align-items-center">
+                     <div class="input-group">
+                        <select name="" class="form-select pe-5" [(ngModel)]="itemNameFilterType">
+                           <option *ngFor="let item of filterTypeList" [value]="item.id">
+                              {{item.label}}
+                           </option>
+                        </select>
+                     </div>
+                     <input type="text" class="form-control" placeholder="Name" [(ngModel)]="itemNameSearchText" (keydown.enter)="fetchItems()">
+                  </div>
+               </div>
+            </div>
+            <div class="d-flex mt-2 gap-2 justify-content-end">
+               <button class="btn btn-danger-outline" (click)="clearSearch()">Clear</button>
+               <button class="btn btn-main-outline" (click)="fetchItems()">Search</button>               
+            </div>
+            
+            <div class="mt-3">
+               <div class="fixed_alter_list rounded border-primary-200">
+                  <div class="fixed_alter_header bg-primary-100">
+                     <div class="row gx-2 mx-0 p-2">
+                        <div class="col-1"></div>
+                        <div class="col-3">
+                           <p class="label m-0">Item Code</p>
+                        </div>
+                        <div class="col-8">
+                           <p class="label m-0">Item Name</p>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="fixed_alter_body" style="height: calc(100vh - 35rem);">
+                     <div class="row gx-2 mx-0 p-2 alter_div" *ngFor="let item of fetchedItemsList;let i=index">
+                        <div class="col-1">
+                           <div class="custom_check d-flex align-items-center justify-content-center"
+                              [class.active]="item.selected" (click)="onItemSelection(item)">
+                              <svg width="17" height="17" viewBox="0 0 20 21" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                 <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                 <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                              </svg>
+                           </div>
+                        </div>
+                        <div class="col-3">
+                           <p class="m-0">{{ item.ItemCode }}</p>
+                        </div>
+                        <div class="col-8">
+                           <p class="m-0">{{ item.DisplayName }}</p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <app-pagination *ngIf="totalItemsCount > 0" [currentPage]="currentPage" [totalCount]="totalItemsCount"
+                        (pageChange)="handlePageChange($event)"></app-pagination>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{errorMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

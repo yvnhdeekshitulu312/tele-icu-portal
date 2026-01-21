@@ -1,0 +1,47 @@
+<div class="page-header sticky-top justify-content-between">
+  <div class="d-flex align-items-center gap-3 w-100">
+    <h2 translate class="page-heading text-nowrap" translate>
+      MMS Stock Management
+    </h2>
+  </div>
+  <div class="d-flex align-items-center gap-2 justify-content-end">
+    <button class="btn btn-main-outline" translate (click)="fetchmmsstockmanagement()">
+      Refresh
+    </button>
+    <button class="btn btn-main-outline" (click)="printarCompanyStmnt('export')">
+      Export
+    </button>
+  </div>
+</div>
+
+<div class="p-2">
+  <div class="">
+    <ngx-datatable #myTable class="material striped" [rows]="arCompStatementData" [columnMode]="'force'"
+      [headerHeight]="50" [footerHeight]="50" [rowHeight]="50" [scrollbarH]="false"
+      [messages]="{ emptyMessage: 'No Record Found' }">
+      <ngx-datatable-column name="S.No">
+        <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+          {{ rowIndex + 1 }}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="Item Code" prop="ItemCode" [sortable]="false"></ngx-datatable-column>
+      <ngx-datatable-column name="Item Name" prop="ItemName"></ngx-datatable-column>
+      <ngx-datatable-column name="Catalog Number" prop="CatalogNumber"></ngx-datatable-column>
+      <ngx-datatable-column name="Packing Name" prop="Packing"></ngx-datatable-column>
+      <ngx-datatable-column name="QOH(Highest)" prop="HighestUnitQty"></ngx-datatable-column>
+      <ngx-datatable-column name="QOH(Lowest)" prop="LowestUnitQty"></ngx-datatable-column>
+
+      <ngx-datatable-column name="MRP(Highest)" prop="MRP_HighestUnit"></ngx-datatable-column>
+
+      <ngx-datatable-column name="MRP(Lowest)" prop="MRP_LowestUnit"></ngx-datatable-column>
+      <ngx-datatable-column name="RPU(Highest)" prop="UEPR_HighestUnit"></ngx-datatable-column>
+      <ngx-datatable-column name="RPU(Lowest)" prop="UEPR_LowestUnit"></ngx-datatable-column>
+
+      <ngx-datatable-column name="Rack" prop="Rack"></ngx-datatable-column>
+      <ngx-datatable-column name="Shelf" prop="Shelf"></ngx-datatable-column>
+
+        <ngx-datatable-column name="Expiry Date" prop="ExpiryDate | date: 'dd-MMM-yyyy'"></ngx-datatable-column> 
+    </ngx-datatable>
+  </div>
+</div>

@@ -1,0 +1,184 @@
+<app-generic-close *ngIf="readonly"></app-generic-close>
+<!-- <app-header [InputHome]="IsHome" [IsSwitchWard]="false"></app-header> -->
+<app-header [InputHome]="IsHome" *ngIf="!readonly" [IsSwitchWard]="false" [showAlert]="true"></app-header>
+<div class="page-header sticky-top justify-content-between rounded-3 shadow-sm">
+    <div class="d-flex align-items-center gap-2">
+        <h2 class="page-heading text-nowrap">Bed Transfer</h2>
+        <button class="date_range_calendar p-0 position-relative" style="width: 227px;">
+            <mat-date-range-input class="btn btn-main-outline" [formGroup]="tablePatientsForm" [rangePicker]="picker">
+                <input matStartDate formControlName="FromDate">
+                <input matEndDate formControlName="ToDate" (dateChange)="fetchWardBedTransferRequests()">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+        </button>
+    </div>
+    <div class="d-flex align-items-center gap-2 waiting_count ms-3">
+        <button class="btn btn-main-fill" (click)="navigatetoBedBoard()">{{langData?.common?.BedBoards}}</button>
+        <!-- <button class="btn btn-danger-outline" (click)="clear()">Clear</button>
+        <button class="btn btn-main-outline" (click)="save()">Save</button> -->
+    </div>
+</div>
+<div class="p-2 bedtransfer_cards" *ngIf=" FetchVaccantBedsFromWardDataList?.length > 0">
+    <div class="room_cards_row row g-2 shadow-none">
+        <!-- <div class="tagline">
+            <h6 class="clr-primary-600 m-0 bg-primary-100 p-2">{{ room }}</h6>
+        </div> -->
+        <div class="position-relative col-lg-6"
+            *ngFor="let item of FetchVaccantBedsFromWardDataList" (click)="selectBed(item)">
+            <div class="room_card_details_hover bed-board bed-board-occupied h-100">
+                 <div class="room_card primary bed-details rounded m-0 h-100" [class.active]="item.selected">   <!-- [class.active]="item.STATUS === '2'" -->
+                    <div class="d-flex gap-1 p-1 bg-primary-50 rounded">
+                        <div class="" style="width: 18rem;">
+                            <div class="d-flex align-items-center gap-1 pb-1">
+                                <div class="bed-info">
+                                    <div class="bed-icon">
+                                        <svg width="70" height="37" style="height: 1.2rem;" viewBox="0 0 70 37" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-blue" *ngIf="item.GenderID === '1'">
+                                            <path d="M13.5395 16.1175C16.7615 16.1175 19.3736 13.5054 19.3736 10.2834C19.3736 7.0615 16.7626 4.45281 13.5395 4.45281C10.3216 4.45281 7.70891 7.06221 7.70891 10.2834C7.70891 13.5048 10.3216 16.1175 13.5395 16.1175ZM69.7134 19.2525C69.7134 14.6345 65.967 10.8887 61.349 10.8887H37.7354V27.8352H65.7211V36.0118H69.7125L69.7103 19.2521L69.7134 19.2525ZM19.3728 18.0553H35.3414V10.8892H27.6407C23.4271 10.8898 19.9541 14.007 19.3733 18.0553H19.3728ZM4.27513 0.361816H0.283691V36.0139H4.27513V27.8368H35.3414V20.4509L4.27513 20.4514V0.361816Z" />
+                                        </svg> 
+                                        <svg width="70" height="37" style="height: 1.2rem;" viewBox="0 0 70 37" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-pink" *ngIf="item.GenderID === '2'">
+                                            <path d="M13.5395 16.1175C16.7615 16.1175 19.3736 13.5054 19.3736 10.2834C19.3736 7.0615 16.7626 4.45281 13.5395 4.45281C10.3216 4.45281 7.70891 7.06221 7.70891 10.2834C7.70891 13.5048 10.3216 16.1175 13.5395 16.1175ZM69.7134 19.2525C69.7134 14.6345 65.967 10.8887 61.349 10.8887H37.7354V27.8352H65.7211V36.0118H69.7125L69.7103 19.2521L69.7134 19.2525ZM19.3728 18.0553H35.3414V10.8892H27.6407C23.4271 10.8898 19.9541 14.007 19.3733 18.0553H19.3728ZM4.27513 0.361816H0.283691V36.0139H4.27513V27.8368H35.3414V20.4509L4.27513 20.4514V0.361816Z" />
+                                        </svg> 
+                                        
+                                    </div>
+                                    <div class="bed-info-label text-nowrap fs-7">
+                                        {{item.StatusText}}
+                                    </div>
+                                </div>
+                                <div class="text-start">
+                                    <p class="clr-primary-600 fw-bold">{{item.PatientName}}</p>
+                                    <!-- <p class="">{{item.FullAge}} | {{item.SSN}} | {{item.Gender}}</p> -->
+                                    <p>{{item.Gender}} | <span>{{item.FullAge}}</span> | <span>{{item.Nationality}}</span> </p>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="text-start">
+                                            <p><b>SSN</b></p>
+                                            <p>{{item.SSN}}</p>
+                                        </div>
+                                        <div class="text-start">
+                                            <p><b>Mobile</b></p>
+                                            <p>{{item.MobileNo}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- <div class="bed-info-label rounded-0 py-2"> {{item.BedStatus}} </div> -->
+                            <svg class="check_img" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                viewBox="0 0 20 20" fill="none">
+                                <g opacity="0.24">
+                                    <circle cx="10" cy="10" r="10" fill="#43BC94" />
+                                    <path
+                                        d="M13.4244 5.94153L8.52215 10.6858L6.63665 8.86533C6.53421 8.74984 6.40814 8.65603 6.26637 8.58981C6.1246 8.52358 5.97018 8.48637 5.81281 8.4805C5.65543 8.47463 5.4985 8.50023 5.35186 8.5557C5.20522 8.61117 5.07204 8.69531 4.96067 8.80283C4.84931 8.91035 4.76217 9.03895 4.70472 9.18053C4.64727 9.32211 4.62075 9.47363 4.62683 9.62558C4.63291 9.77753 4.67145 9.92663 4.74004 10.0635C4.80863 10.2004 4.90579 10.3221 5.02541 10.421L7.71081 13.0249C7.81759 13.1271 7.94422 13.208 8.08345 13.2629C8.22267 13.3178 8.37176 13.3457 8.52215 13.3448C8.82193 13.3436 9.10921 13.2287 9.32205 13.0249L15.0357 7.50825C15.1428 7.40568 15.2278 7.28365 15.2858 7.1492C15.3438 7.01476 15.3737 6.87054 15.3737 6.72489C15.3737 6.57924 15.3438 6.43503 15.2858 6.30058C15.2278 6.16613 15.1428 6.0441 15.0357 5.94153C14.8216 5.73604 14.5319 5.6207 14.2301 5.6207C13.9282 5.6207 13.6385 5.73604 13.4244 5.94153Z"
+                                        fill="white" />
+                                </g>
+                            </svg>
+                        </div>
+
+                        <div class="col bg-white rounded-2 d-flex align-items-center ps-2">
+                            <div class="d-flex gap-2 justify-content-between w-100">
+                                <div class=" text-start" style="width: 8rem;">
+                                    <label for="" class="form-label m-0 fw-bold">Admission Date:</label>
+                                    <p class="text-nowrap">{{item.AdmitDate}}</p>
+                                </div>
+                                <div class="col text-start">
+                                    <label for="" class="form-label m-0 fw-bold">Req From:</label>
+                                    <p class=""> {{item.Actualwardname}} | {{item.BedName}}</p>
+                                </div>
+                                <div class="col text-start">
+                                    <label for="" class="form-label m-0 fw-bold">Doctor Name:</label>
+                                    <div class="custom_tooltip custom_tooltip_right">
+                                        <p class="text-nowrap text-truncate" style="width: 90%;">{{item.DoctorName}}</p>
+                                        <div class="tooltip">
+                                            <p class="text-nowrap">{{item.DoctorName}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-none align-items-center gap-2 m-2 p-2 border rounded-2">
+                        <!-- Male -->
+                        <svg width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="20.5" cy="20.5" r="19.5" fill="#ECF6F8" stroke="#ECF6F8"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M14.1906 14.3589C14.1906 11.1282 17.0208 8.5 20.5001 8.5C23.9792 8.5 26.8097 11.1281 26.8097 14.3589C26.8097 14.7173 26.7661 15.0842 26.6729 15.5064C26.7629 15.7963 26.8098 16.1204 26.8098 16.4517C26.8098 17.6176 26.2545 18.5032 25.5109 18.5433C24.6925 21.0636 22.7203 22.7291 20.5002 22.7291C18.2801 22.7291 16.3079 21.0635 15.4893 18.5433C14.7457 18.5031 14.1905 17.6176 14.1905 16.4517C14.1905 16.1195 14.2377 15.7947 14.3277 15.5041C14.2341 15.0829 14.1906 14.7167 14.1906 14.3589ZM15.1391 15.9533C15.1079 16.1111 15.0919 16.2794 15.0919 16.4517C15.0919 17.2619 15.4299 17.7072 15.5426 17.7072C15.6651 17.6368 15.83 17.6143 15.9645 17.6653C16.0979 17.7154 16.2115 17.8125 16.2467 17.9423C16.8774 20.3052 18.5865 21.8921 20.5003 21.8921C22.414 21.8921 24.1229 20.3052 24.7538 17.9423C24.789 17.8125 24.8881 17.7055 25.0215 17.6552C25.1549 17.605 25.3073 17.6175 25.429 17.6878C25.5841 17.7063 25.9085 17.261 25.9085 16.4517C25.9085 16.2854 25.8936 16.1228 25.8645 15.9698L25.0441 16.0321C25.0314 16.033 25.0189 16.033 25.0071 16.033C24.8304 16.033 24.6682 15.9367 24.5962 15.7835C24.579 15.7484 24.2473 15.0488 24.14 14.3456C22.2505 14.2317 20.2964 13.373 19.3248 12.4824C18.9661 13.0625 18.1891 13.522 16.6306 13.522H16.5621C16.4367 13.7906 16.38 14.6352 16.4349 15.4705C16.452 15.5156 16.4619 15.5634 16.4619 15.6144C16.4619 15.8488 16.2484 16.0363 16.0023 16.033C15.9744 16.0338 15.9519 16.0321 15.9256 16.0287C15.911 16.0267 15.5402 15.9759 15.1391 15.9533Z" fill="#0885CA"/>
+                            <path d="M27.382 22.416L25.0637 21.6669C24.8943 21.6125 24.706 21.6568 24.5833 21.779C23.4467 22.9315 21.9964 23.5659 20.5 23.5659C19.0037 23.5659 17.5534 22.9315 16.4168 21.7798C16.2952 21.6576 16.1067 21.6132 15.9364 21.6677L13.6181 22.4168C11.2645 23.1758 9.68359 25.2409 9.68359 27.555V29.7146C9.68359 29.9456 9.8855 30.1331 10.1343 30.1331C16.957 31.691 24.0433 31.691 30.866 30.1331C31.1148 30.1331 31.3167 29.9456 31.3167 29.7146V27.555C31.3166 25.2408 29.7357 23.1761 27.382 22.416Z" fill="#0885CA"/>
+                        </svg>    
+                        <!-- Female -->
+                        <!-- <svg width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="20.5" cy="20" r="19.5" fill="#ECF6F8" stroke="#ECF6F8"/>
+                            <path d="M33.4838 30.582C33.1226 29.669 31.894 26.6482 31.2598 26.1096C30.18 25.1925 28.623 24.931 27.2492 24.6999C26.804 24.625 26.3692 24.5519 25.9837 24.4608C27.0955 24.3098 28.6441 24.1059 29.7663 23.9602C29.8936 23.9435 30.0075 23.8739 30.0775 23.7696C30.1475 23.6654 30.1668 23.5364 30.1302 23.4173C28.5868 18.3648 28.5923 17.7945 28.6185 15.0521C28.6226 14.6445 28.6271 14.1903 28.6271 13.668C28.6269 10.1219 25.0762 6 20.4984 6C18.6042 6 16.83 6.75094 15.3667 8.17143C13.7385 9.75235 12.6503 12.0791 12.6586 13.9608C12.6708 16.6808 12.516 20.2022 11.2015 23.3172C11.1504 23.4375 11.1596 23.574 11.2257 23.687C11.2916 23.8003 11.4077 23.8782 11.5404 23.8984C12.6002 24.0608 14.0786 24.2929 15.1301 24.4667C14.7201 24.5565 14.2486 24.622 13.7651 24.6891C12.3137 24.8904 10.6681 25.1181 9.59972 26.1239C9.02065 26.6688 7.85454 29.6782 7.51103 30.5877C7.46181 30.7183 7.48154 30.864 7.56371 30.9778C7.64588 31.0917 7.78094 31.1597 7.92474 31.1597L11.6849 32.0091C17.4876 33.3198 23.5096 33.3198 29.3123 32.009L33.0719 31.1597C33.2168 31.1597 33.3528 31.0907 33.435 30.975C33.5174 30.8594 33.5355 30.7132 33.4838 30.582ZM14.8615 15.2405C15.1001 15.0462 15.6744 14.4949 16.1273 13.3988C16.5141 12.4621 16.6815 11.6921 16.748 11.1262C17.2289 11.8889 18.1161 12.9665 19.7425 13.4586C22.8136 14.3877 24.9153 12.8701 26.2715 14.8136L26.2738 14.954C26.2738 19.64 23.6847 23.4521 20.5023 23.4521C17.5765 23.4521 14.9094 19.5526 14.8615 15.2405Z" fill="#EB47CF"/>
+                        </svg>                                                             -->
+                        <div class="text-start">
+                            <p class="clr-primary-600">{{item.PatientName}}</p>
+                            <p class="">SSN : {{item.SSN}} | {{item.Gender}}</p>
+                            <p class="">Req From : {{item.Actualwardname}}</p>
+                        </div>
+                    </div>
+                    <div class="row align-items-center gx-2 mx-0">
+                        <div class="d-flex align-items-center gap-2 col" (click)="$event.stopPropagation()">
+                            <p class="text-nowrap"> Bed Type</p>
+                            <select name="" (change)="changeBedType($event, item)" [disabled]="!item.selected"
+                                 class="form-select" id=""> <!--[disabled]="item.STATUS === '0'" -->
+                                <option value="0">Select</option>
+                                <option *ngFor="let btyp of billableBedTypesList" value="{{btyp.BedTypeID}}">
+                                    {{btyp.BedType}}</option>
+                            </select>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 col" (click)="$event.stopPropagation()">
+                            <p class="text-nowrap"> Bed </p>
+                            <select name="" (change)="changeBed($event, item)" [disabled]="!item.selected"
+                                class="form-select" id=""> <!-- [disabled]="item.STATUS === '0'" -->
+                                <option value="0">Select</option>
+                                <option *ngFor="let bed of bedsList" value="{{bed.BedID}}">
+                                    {{bed.BedName}}</option>
+                            </select>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 col justify-content-end">
+                            <div class="p-2" *ngIf="item.STATUS === '0'"  (click)="$event.stopPropagation()">
+                                <button class="btn btn-main-outline" (click)="Acknowledge(item)">Acknowledge</button>
+                            </div>
+                            <div class="p-2" *ngIf="item.STATUS === '2'" (click)="$event.stopPropagation()">
+                                <button class="btn btn-main-outline" (click)="Assign(item)">Assign</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="patientno_data" *ngIf="FetchVaccantBedsFromWardDataList === undefined || FetchVaccantBedsFromWardDataList?.length === 0">
+    <img class="" style="height:7rem;" src="assets/images/Doctor.svg" alt="">
+    <p class="fs-7 mt-2">No Transfers Available</p>
+</div>
+
+<div class="modal" id="validationMessage" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p *ngFor="let error of errorMessages; let i = index"> {{error}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>{{saveMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

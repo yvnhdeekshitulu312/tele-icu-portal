@@ -1,0 +1,1151 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+<div>
+    <div class="page-header sticky-top justify-content-between">
+        <div class="d-flex align-items-center gap-3 w-100">
+            <h2 class="page-heading text-nowrap">Blood Issues Worklist</h2>
+            <div class="d-flex gap-2 align-items-center w-100">
+                <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                    <button class="fs-7 btn" [class.selected]="selectedPatientType === '3'" (click)="FetchBloodRequestOrdersDisplay('3')">ED</button>
+                    <button class="fs-7 btn" [class.selected]="selectedPatientType === '2'"
+                        (click)="FetchBloodRequestOrdersDisplay('2')">IP</button>
+                    <button class="fs-7 btn" [class.selected]="selectedPatientType === '1'"
+                        (click)="FetchBloodRequestOrdersDisplay('1')">OP</button>
+                </div>
+                <div class="filter_Date position-relative">
+                    <div class="d-flex align-items-center gap-2 fs-8">
+                        Filter
+                        <svg class="cursor-pointer" width="18" height="18" viewBox="0 0 24 25" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2.75" y="3.27435" width="18.5" height="18.5" rx="3.25" stroke="#368796"
+                                stroke-width="1.5" />
+                            <circle cx="7.85547" cy="8.32605" r="1.375" fill="#368796" stroke="#368796"
+                                stroke-width="1.25" />
+                            <rect x="9.125" y="7.70105" width="7" height="1.25" rx="0.625" fill="#368796" />
+                            <circle cx="16.1445" cy="12.5243" r="1.375" fill="#4357BC" stroke="#4357BC"
+                                stroke-width="1.25" />
+                            <rect x="8.12988" y="11.8993" width="7" height="1.25" rx="0.625" fill="#4357BC" />
+                            <circle cx="7.875" cy="16.7227" r="1.375" fill="#368796" stroke="#368796"
+                                stroke-width="1.25" />
+                            <rect x="9.14453" y="16.0977" width="7" height="1.25" rx="0.625" fill="#368796" />
+                        </svg>
+                    </div>
+                    <div class="filter_dropdow">
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('T')">Today</p>
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('W')">This week
+                        </p>
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('M')">This
+                            Month</p>
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('3M')">Three
+                            Months</p>
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('6M')">Six
+                            Months</p>
+                        <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchPanicwithdates('1Y')">This
+                            Year</p>
+                        <p class="m-0 p-2 cursor-pointer">All</p>
+                    </div>
+                </div>
+                <div>
+                    <button class="date_range_calendar p-0 position-relative" style="width: 227px;">
+                        <mat-date-range-input class="btn btn-main-outline" [formGroup]="tablePatientsForm"
+                            [rangePicker]="picker">
+                            <input matStartDate formControlName="FromDate">
+                            <input matEndDate formControlName="ToDate" (dateChange)="onDateChange()">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </button>
+                </div>
+                <form action="" class="CommanSearch__form" style="width: 13rem;">
+                    <label for="" class="CommonSearch__label d-flex">
+                        <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_438_22896)">
+                                <path
+                                    d="M9.2959 1.6665C13.4359 1.6665 16.7959 5.0265 16.7959 9.1665C16.7959 13.3065 13.4359 16.6665 9.2959 16.6665C5.1559 16.6665 1.7959 13.3065 1.7959 9.1665C1.7959 5.0265 5.1559 1.6665 9.2959 1.6665ZM9.2959 14.9998C12.5184 14.9998 15.1292 12.389 15.1292 9.1665C15.1292 5.94317 12.5184 3.33317 9.2959 3.33317C6.07256 3.33317 3.46256 5.94317 3.46256 9.1665C3.46256 12.389 6.07256 14.9998 9.2959 14.9998ZM16.3667 15.059L18.7242 17.4157L17.5451 18.5948L15.1884 16.2373L16.3667 15.059Z"
+                                    fill="#368796" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_438_22896">
+                                    <rect width="20" height="20" fill="white" transform="translate(0.128906)" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                    </label>
+                    <input class="CommonSearch__input form-control px-0" type="text" id="NationalId" placeholder="SSN"
+                        (keydown.enter)="onSSNEnterPress($event)">
+                </form>
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <!-- <div class="d-flex align-items-center gap-2 bloodIssue_legends">
+                <div class="d-flex align-items-center gap-1 newRequest">
+                    <span class=""></span>
+                    <label for="" class="form-label text-nowrap m-0">New Request</label>
+                </div>
+                <div class="d-flex align-items-center gap-1 partiallyIssued">
+                    <span class=""></span>
+                    <label for="" class="form-label text-nowrap m-0">Partially Issued</label>
+                </div>
+            </div> -->
+            <button class="btn btn-danger-outline" (click)="clearSearchCriteria()">Clear</button>
+            <button class="btn btn-main-outline" (click)="FetchBloodRequests()">Ok</button>
+        </div>
+    </div>
+
+    <div class="row gx-2 pharmacist_token rad mx-0 mt-1">
+        <div class="col cursor-pointer" >
+            <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center" (click)="filterCrossMatchOrders(0)">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color: #13B9DD;">{{ getCrossMatchOrderCount(2) }}</h4>
+                    <p class="m-0 fs-7 fw-bold">New Order</p>
+                </div>
+            </div>
+        </div>
+        <div class="col cursor-pointer" >
+            <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center" (click)="filterCrossMatchOrders(4)">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color: #75A47F;">{{ getCrossMatchOrderCount(4) }}</h4>
+                    <p class="m-0 fs-7 fw-bold">Partially Issued</p>
+                </div>
+            </div>
+        </div>
+        <div class="col cursor-pointer" >
+            <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center" (click)="filterCrossMatchOrders(3)">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color: #61d668;">{{ getCrossMatchOrderCount(3) }}</h4>
+                    <p class="m-0 fs-7 fw-bold">Fully Issued</p>
+                </div>
+            </div>
+        </div>
+        <div class="col cursor-pointer" >
+            <div class="walkin_cards p-2 border shadow-sm green d-flex align-items-center" (click)="filterCrossMatchOrders(2)">
+                <div class="count total_token d-flex align-items-center gap-2">
+                    <h4 class="m-0 fw-bold" style="background-color: #9a89e2;">{{ getCrossMatchOrderCount(2) }}</h4>
+                    <p class="m-0 fs-7 fw-bold">Cross Matched</p>
+                </div>
+            </div>
+        </div>
+     </div>
+    <div class="nobulkprocess d-flex flex-column align-items-center justify-content-center"
+        *ngIf="bloodRequestOrders.length === 0">
+        <img src="assets/images/nolaboratory.svg" alt="" class="mb-2">
+        <p class="m-0 fs-6">No Results</p>
+    </div>
+
+    <div class="container-body p-2" *ngIf="bloodRequestOrders.length > 0">
+        <div class="d-flex flex-column gap-2 BloodIssuesworklistHeight">
+            <div *ngFor="let data of sortedGroupedByDate">
+                <div class="card card-style-1 flex-column gap-1 rounded group-date p-0 border-0 mt-1">
+                    <div class="card-header rounded-top justify-content-start p-0 min-height-unset p-0">
+                        <span class="d-block grp_date">{{ data.RequestDatetime }}</span>
+                    </div>
+                    <div class="doc_card rounded visited cursor-pointer" *ngFor="let wrk of data.items"
+                    [class.confirm]="wrk.STATUS=='4'"
+                    [class.Booked]="wrk.STATUS=='2'"
+                    [class.visited]="wrk.STATUS=='0' || wrk.STATUS=='-1'">
+                        <div class="rounded">
+                            <div class="row gx-1 mx-0 align-items-center">
+                                <div class="bg-primary-50 rounded-start cursor-pointer position-relative"
+                                    style="width: 22rem;">
+                                    <div class="p-2 doctor_profile d-flex">
+                                        <div class="text-center me-2">
+                                            <div class="profile_img position-relative">
+                                                <img *ngIf="wrk.GenderId == 1" src="assets/images/icons/male.svg"
+                                                    alt="" class="position-relative">
+                                                <img *ngIf="wrk.GenderId == 2" src="assets/images/icons/female.svg"
+                                                    alt="" class="position-relative">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex w-100 align-items-center justify-content-between">
+                                            <div class="w-100 position-relative">
+                                                <div class="custom_tooltip custom_tooltip_right">
+                                                    <p class="value fs-7 fw-bold w-75 text-truncate">
+                                                        {{wrk.PatientName}}
+                                                    </p>
+                                                    <div class="tooltip">
+                                                        <p class="value fs-7 fw-bold">{{wrk.PatientName}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div
+                                                        class="full_age_hover custom_tooltip custom_tooltip_right d-flex align-items-center gap-1">
+                                                        <p>{{wrk.Gender}} | {{wrk.FullAge}} </p>
+                                                    </div>
+                                                    <p><b>SSN</b> : <span>{{wrk.SSN}}</span></p>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <p><b>DOB</b> :</p>
+                                                    <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                            fill="#368796" />
+                                                    </svg>
+                                                    <p class="m-0 fw-bold text-nowrap">
+                                                        {{wrk.DOB?.split('
+                                                        ')[0]}}</p>
+
+                                                    
+
+                                                </div>
+                                                <div>
+                                                    <p>{{wrk.Nationality}} | Mobile : {{wrk.MobileNo}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col doc_details">
+                                    <div class="bg-white p-1 rounded">
+                                        <div class="row gx-2">
+                                            <div class="col-2 d-flex flex-column">
+                                                <label for="" class="form-label m-0 clr-grey fw-bold">Request
+                                                    Date</label>
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                            fill="#368796" />
+                                                    </svg>
+                                                    <p class="m-0 fw-bold text-nowrap">
+                                                        {{wrk.RequestDatetime?.split('
+                                                        ')[0]}}</p>
+
+                                                    <svg class="ms-3" width="10" height="11" viewBox="0 0 10 11"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                                            fill="#368796" />
+                                                        <path
+                                                            d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                                            fill="#368796" />
+                                                    </svg>
+                                                    <p class="m-0 fw-bold text-nowrap">
+                                                        {{wrk.RequestDatetime?.split('
+                                                        ')[1]}}</p>
+
+                                                </div>
+                                            </div>
+                                            <!-- <div class="col-2 d-flex flex-column">
+                                                <label for="" class="form-label m-0 clr-grey fw-bold">Doctor</label>
+                                                <p class="fw-bold">{{wrk.DoctorNAme || wrk.DoctorName}}</p>
+                                            </div> -->
+                                            <div class="col-2 d-flex flex-column" style="width: 14%;">
+                                                <label for="" class="form-label m-0 clr-grey fw-bold">RegCode</label>
+                                                <p class="fw-bold">{{wrk.RegCode}}</p>
+                                            </div>
+                                            <div class="col-2 d-flex flex-column">
+                                                <label for="" class="form-label m-0 clr-grey fw-bold">Requested
+                                                    Bed</label>
+                                                <p class="fw-bold">{{wrk.WardName}} | {{wrk.BedName}}</p>
+                                            </div>
+
+                                            <div class="col-2 d-flex flex-column">
+                                                <label for="" class="form-label m-0 clr-grey fw-bold">CrossMatch
+                                                    Date</label>
+                                                <div class="d-flex align-items-center gap-1" *ngIf="wrk.CrossmatchDatetime!=null">
+                                                    <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                            fill="#368796" />
+                                                    </svg>
+                                                    <p class="m-0 fw-bold text-nowrap">
+                                                        {{wrk.CrossmatchDatetime?.split('
+                                                        ')[0]}}</p>
+
+                                                    <svg class="ms-3" width="10" height="11" viewBox="0 0 10 11"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                                            fill="#368796" />
+                                                        <path
+                                                            d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                                            fill="#368796" />
+                                                    </svg>
+                                                    <p class="m-0 fw-bold text-nowrap">
+                                                        {{wrk.CrossmatchDatetime?.split('
+                                                        ')[1]}}</p>
+
+                                                </div>
+                                            </div>
+
+                                            <!-- <div class="col-2 d-flex flex-column inline_status" style="width: 13%;">
+                                                <label for="" class="form-label m-0 clr-grey fw-bold">Status</label>
+                                                <p class="fw-bold">{{wrk.STATUSNAME}}</p>
+                                            </div> -->
+
+                                            <div
+                                                class="col d-flex align-items-center justify-content-end pe-3 gap-2">
+                                                <button class="btn btn-main-outline fs-8"
+                                                    (click)="openCrossMatchModal(wrk)">Issue</button>
+                                               
+                                                <div class="custom_tooltip custom_tooltip_left">
+                                                    <svg (click)="openBloodDeatilsModal(wrk)" class="cursor-pointer"
+                                                        width="35" height="40" viewBox="0 0 32 32" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_16064_4543)">
+                                                            <circle cx="16" cy="16" r="16" fill="#DAEEF1" />
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M20.0024 20.0233V23C20.0024 23.0884 19.9673 23.1732 19.9048 23.2357C19.8423 23.2982 19.7575 23.3333 19.6691 23.3333H9.00244C8.91404 23.3333 8.82925 23.2982 8.76674 23.2357C8.70423 23.1732 8.66911 23.0884 8.66911 23V11.3333H11.3358C11.4242 11.3333 11.509 11.2982 11.5715 11.2357C11.634 11.1732 11.6691 11.0884 11.6691 11V8.66667H19.6691C19.7575 8.66667 19.8423 8.70179 19.9048 8.7643C19.9673 8.82681 20.0024 8.91159 20.0024 9V11.31C20.2338 11.4019 20.4568 11.5134 20.6691 11.6433V9C20.6691 8.73478 20.5638 8.48043 20.3762 8.29289C20.1887 8.10536 19.9343 8 19.6691 8H11.1391C10.9626 8.00074 10.7936 8.07147 10.6691 8.19667L8.19911 10.6667C8.07391 10.7911 8.00319 10.9601 8.00244 11.1367V23C8.00244 23.2652 8.1078 23.5196 8.29533 23.7071C8.48287 23.8946 8.73722 24 9.00244 24H19.6691C19.9343 24 20.1887 23.8946 20.3762 23.7071C20.5638 23.5196 20.6691 23.2652 20.6691 23V20.3967L20.2091 19.9367L20.0024 20.0233ZM12.9225 14.8334H10.5025V15.8334H12.9225V14.8334ZM10.5025 17.5H13.4691V18.5H10.5025V17.5ZM16.5025 20.1667H10.5025V21.1667H16.5025V20.1667ZM21.7922 17.6667L23.7089 19.5867C23.8947 19.7745 23.9986 20.0282 23.998 20.2924C23.9974 20.5565 23.8922 20.8097 23.7055 20.9967L23.6622 21.04C23.4748 21.2263 23.2214 21.3308 22.9572 21.3308C22.693 21.3308 22.4396 21.2263 22.2522 21.04L20.3355 19.1233C20.2279 19.1876 20.1166 19.2455 20.0022 19.2967C19.4804 19.5405 18.9115 19.6668 18.3355 19.6667C17.7379 19.6665 17.1479 19.5325 16.6089 19.2744C16.0699 19.0163 15.5955 18.6406 15.2208 18.1751C14.846 17.7096 14.5803 17.166 14.4432 16.5844C14.3061 16.0027 14.301 15.3977 14.4285 14.8138C14.5559 14.2299 14.8125 13.682 15.1795 13.2103C15.5465 12.7386 16.0146 12.3552 16.5492 12.0882C17.0839 11.8211 17.6716 11.6773 18.2691 11.6672C18.8667 11.6572 19.4589 11.7811 20.0022 12.03C20.2375 12.1362 20.461 12.2669 20.6689 12.42C21.4761 12.9974 22.0386 13.8554 22.2464 14.8258C22.4542 15.7963 22.2922 16.8094 21.7922 17.6667ZM16.6688 18.1611C17.1622 18.4907 17.7422 18.6667 18.3355 18.6667C19.1312 18.6667 19.8942 18.3506 20.4569 17.788C21.0195 17.2254 21.3355 16.4623 21.3355 15.6667C21.3355 15.0733 21.1596 14.4933 20.8299 14C20.5003 13.5066 20.0318 13.1221 19.4836 12.895C18.9354 12.668 18.3322 12.6086 17.7503 12.7243C17.1683 12.8401 16.6338 13.1258 16.2142 13.5454C15.7947 13.9649 15.5089 14.4995 15.3932 15.0814C15.2774 15.6633 15.3368 16.2665 15.5639 16.8147C15.791 17.3629 16.1755 17.8314 16.6688 18.1611Z"
+                                                                fill="#368796" />
+                                                        </g>
+                                                    </svg>
+                                                    <div class="tooltip">
+                                                        <p class="">Blood History Details</p>
+                                                    </div>
+                                                </div>
+                                                <div class="custom_tooltip custom_tooltip_left" (click)="openBloodRequest(wrk)">
+                                                     <svg class="cursor-pointer" width="35" height="40" viewBox="0 0 39 39" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="19.2642" cy="19.9221" r="19" fill="#DAEEF1"></circle>
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M22.5058 26.604C25.432 26.604 27.8061 23.9133 27.8061 20.5934C27.8061 17.9453 24.4321 13.0697 23.0696 11.2088C22.7879 10.8266 22.2241 10.8266 21.9463 11.2088C21.2976 12.0928 20.1935 13.6561 19.2207 15.3432C20.7224 17.706 22.3013 20.6398 22.3013 22.57C22.3013 24.0021 21.8998 25.3339 21.2204 26.4264C21.6334 26.5422 22.0619 26.604 22.5058 26.604ZM15.7262 12.655C16.0206 12.253 16.6186 12.253 16.913 12.655H16.9136C18.3539 14.6217 21.9176 19.771 21.9176 22.5702C21.9176 26.0781 19.4114 28.922 16.3199 28.922C13.2283 28.922 10.7222 26.0782 10.7222 22.5702C10.7222 19.7711 14.2858 14.622 15.7262 12.655ZM12.073 22.5698C12.073 25.3276 13.9781 27.5709 16.3196 27.5709L16.3194 27.5707C16.4262 27.5707 16.5125 27.4844 16.5123 27.3776C16.5123 27.271 16.4261 27.1847 16.3193 27.1847C14.1906 27.1847 12.4589 25.1144 12.4589 22.5698C12.4589 22.4632 12.3727 22.3768 12.2659 22.3768C12.1593 22.3768 12.073 22.463 12.073 22.5698Z"
+                                                            fill="#368796"></path>
+                                                    </svg>
+                                                    <div class="tooltip">
+                                                        <p class="">Blood Request</p>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-1 blood cursor-pointer"
+                                                    (click)="openPatientFolder(wrk)">
+                                                    <svg class="vital_icon" width="35" height="40"
+                                                        viewBox="0 0 38 38" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="19" cy="19" r="19" fill="#DAEEF1" />
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M12.5 9C11.6716 9 11 9.67157 11 10.5V27.5C11 28.3284 11.6716 29 12.5 29H25.5C26.3284 29 27 28.3284 27 27.5V14C27 13.1716 26.3284 12.5 25.5 12.5H13.75C13.3358 12.5 13 12.1642 13 11.75C13 11.3358 13.3358 11 13.75 11H26L26.0283 10.9996C26.5675 10.9846 27 10.5428 27 10C27 9.45719 26.5675 9.01499 26.0283 9H12.5ZM19.1622 17.9603H19.5344L19.7304 17.7753C19.7723 17.7357 19.8318 17.7158 19.8912 17.7224C19.9507 17.7291 20.0014 17.7621 20.0344 17.8128L20.1357 17.9691L20.6181 17.1916C20.6577 17.1299 20.726 17.0925 20.8009 17.0991C20.8736 17.1035 20.9397 17.1498 20.9683 17.2158L21.411 18.2181L21.4859 18.0683C21.519 18.0022 21.5872 17.9603 21.6621 17.9603H22.3185C22.3207 17.9075 22.3207 17.8546 22.3185 17.8018C22.3163 17.7401 22.3097 17.6806 22.3009 17.6211C22.2921 17.5617 22.2811 17.5022 22.2657 17.4427C22.1864 17.1167 22.0212 16.8084 21.7679 16.5551C21.6996 16.4868 21.6247 16.4229 21.5498 16.3678C21.5396 16.361 21.5296 16.3538 21.5198 16.3467C21.5043 16.3355 21.4889 16.3244 21.4727 16.315C21.4509 16.3 21.4282 16.2866 21.4057 16.2734L21.4056 16.2734C21.3918 16.2653 21.3782 16.2572 21.3648 16.2489C21.3295 16.2291 21.2921 16.2092 21.2569 16.1916C20.6071 15.8789 19.8119 15.9559 19.2348 16.4251C19.2226 16.435 19.2105 16.4455 19.1984 16.4559C19.1863 16.4664 19.1741 16.4769 19.162 16.4868C19.1378 16.5088 19.1136 16.5308 19.0916 16.5529L19.0453 16.5991L18.9969 16.6432L18.9066 16.5529C18.5409 16.1872 18.0629 16.0044 17.5806 16H17.5673C17.0828 16 16.596 16.185 16.2281 16.5529C16.2061 16.5749 16.1819 16.5991 16.1621 16.6233C16.14 16.6476 16.1202 16.6718 16.1004 16.696C16.0409 16.7709 15.9859 16.848 15.9396 16.9295C15.9088 16.9824 15.8801 17.0374 15.8537 17.0947C15.737 17.3458 15.6797 17.6189 15.6797 17.8921V17.8943C15.6797 18.0088 15.6907 18.1255 15.7105 18.2401L15.7171 18.2709C15.7876 18.6234 15.9594 18.9604 16.2303 19.2313L18.9968 22L21.7655 19.2314C21.8337 19.1631 21.8976 19.0882 21.9527 19.0133C21.9901 18.9627 22.0254 18.9098 22.0562 18.8569C22.087 18.8041 22.1157 18.749 22.1421 18.6917C22.1928 18.5838 22.2302 18.4715 22.2589 18.3591H21.7787L21.5694 18.771C21.5364 18.8371 21.4681 18.8789 21.3932 18.8789H21.3888C21.3117 18.8767 21.2434 18.8305 21.2126 18.76L20.7522 17.7204L20.3029 18.445C20.2677 18.5023 20.2038 18.5375 20.1355 18.5397H20.1333C20.065 18.5397 20.0034 18.5045 19.9659 18.4494L19.8249 18.2291L19.7456 18.304C19.7082 18.3393 19.6597 18.3591 19.6091 18.3591H19.1575C19.0474 18.3591 18.9593 18.271 18.9593 18.1609C18.9593 18.0507 19.052 17.9603 19.1622 17.9603ZM13.7734 24.2773C13.7734 24.0012 13.9973 23.7773 14.2734 23.7773H23.7275C24.0037 23.7773 24.2275 24.0012 24.2275 24.2773C24.2275 24.5535 24.0037 24.7773 23.7275 24.7773H14.2734C13.9973 24.7773 13.7734 24.5535 13.7734 24.2773ZM14.2734 25.7891C13.9973 25.7891 13.7734 26.0129 13.7734 26.2891C13.7734 26.5652 13.9973 26.7891 14.2734 26.7891H20.8477C21.1238 26.7891 21.3477 26.5652 21.3477 26.2891C21.3477 26.0129 21.1238 25.7891 20.8477 25.7891H14.2734Z"
+                                                            fill="#3D8496" />
+                                                    </svg>
+                                                    <div class="">
+                                                        <p class="m-0 fs-8 text-nowrap fw-bold">
+                                                            {{langData?.casesheet?.summary}}</p>
+                                                        <p class="m-0 fs-8 text-nowrap"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="doctor_worklist_ChiefComplaints p-1 d-flex align-items-center gap-2 justify-content-between rounded-bottom">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="d-flex align-items-center gap-1">
+                                    <label for="" class="form-label m-0 fw-bold text-nowrap">Doctor Name</label>
+                                    <div class="custom_tooltip custom_tooltip_left">
+                                        <p class=" fs-8">{{wrk.DoctorName}}</p>    
+                                        <p class=" fs-8">{{wrk.DoctorNAme}}</p>                                          
+                                    </div>
+                                </div>
+                             
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <button class="btn btn-main-fill lh-1 fs-8"
+                                (click)="openPanaceaResults(wrk)">Panacea Results</button>
+                                <div class="col-2 inline_status" style="width: 13%;">                                        
+                                    <p class="fw-bold">{{wrk.STATUSNAME}}</p>                                                  
+                                </div>
+                                </div>                               
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal ipCrossmatch_modal" id="ipCrossmatch_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered my-2" style="max-width: 98%;">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between border-bottom-primary-200">
+                <h5 class="modal-title">{{selectedPatient?.PatientType === '2' ? 'IP' : 'OP'}} Crossmatch</h5>
+                <div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-0" *ngIf="selectedPatient && crossMatchPopupData">
+                <div class="doctor_worklist worklist_patientcard m-0 rounded-0 border-0 d-flex">
+                    <div class="d-flex align-items-center w-100">
+                        <div class="row mx-0 gx-0 align-items-center w-100">
+                            <div class="w-max-content">
+                                <div class="d-flex align-items-center p-2 py-0">
+                                    <div class="patient-photo me-3">
+                                        <img *ngIf="selectedPatient.GenderId == 1" src="assets/images/icons/male.svg"
+                                            alt="" class="position-relative">
+                                        <img *ngIf="selectedPatient.GenderId == 2" src="assets/images/icons/female.svg"
+                                            alt="" class="position-relative">
+                                    </div>
+                                    <div>
+                                        <p class="value fs-7 fw-bold w-100">{{selectedPatient.PatientName}}</p>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p>{{selectedPatient.Gender}} | {{selectedPatient.FullAge}}</p>
+                                            <p>ID No. : <span class="fw-bold">{{selectedPatient.SSN}}</span></p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <p><b>DOB</b> :</p>
+                                            <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="m-0 fw-bold text-nowrap">
+                                                {{selectedPatient.DOB?.split('
+                                                ')[0]}}</p>
+
+                                           
+
+                                        </div>
+                                        <p class="m-0 fs-8">{{selectedPatient.Nationality}} | Mobile :
+                                            {{selectedPatient.MobileNo}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col pe-0" style="min-height: 100%;">
+                                <div class="bg-white h-100 p-1" style="border-top-right-radius: 0.8rem;">
+                                    <div class="row mx-0 py-1 position-relative w-100">
+                                        <div class="w-max-content" *ngIf="selectedPatient.PatientType === '2'">
+                                            <p class="label"> Ward. </p>
+                                            <p>{{selectedPatient.WardName}}</p>
+                                        </div>
+                                        <div class="w-max-content" *ngIf="selectedPatient.PatientType === '2'">
+                                            <p class="label m-0"> Bed No. </p>
+                                            <p class="alert_animate fw-bold m-0 token">{{selectedPatient.BedName}}</p>
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="label"> Doctor Name </p>
+                                            <p class="color-highlight">{{selectedPatient.DoctorName ||
+                                                selectedPatient.DoctorNAme}}</p>
+                                        </div>
+                                        <!-- <div class="col-2">
+                                            <p class="label">Order</p>
+                                            <p>-</p>
+                                        </div>
+                                        <div class="col-2">
+                                            <p class="label">Operator</p>
+                                            <p>-</p>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-2 ipCrossmatch_content">
+                    <div class="row g-2">
+                        <div class="col-3">
+                            <label for="" class="form-label">Blood Group</label>
+                            <select name="" class="form-select" id="" [(ngModel)]="crossMatchPopupData.PatBloodgroup">
+                                <option value="0">Select</option>
+                                <option [value]="grp.ID" *ngFor="let grp of bloodGroups;">{{grp.Names}}</option>
+                            </select>
+                        </div>
+                        <div class="col-9">
+                            <label for="" class="form-label">Indication for Transfusion</label>
+                            <span class="textarea_box textarea_box_single bg-transparent p-2 rounded-2 d-block w-100"
+                                contenteditable="false" [innerHTML]="crossMatchPopupData.TransfusionIndications"></span>
+                        </div>
+                        <div class="col-12">
+                            <label for="" class="form-label">Diagnosis</label>
+                            <span class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                                contenteditable="false" [innerHTML]="crossMatchPopupData.Diagnosis"></span>
+                        </div>
+                    </div>
+                    <div class="row g-2 d-none">
+                        <div class="col-6">
+                            <label for="" class="form-label">Drug Allergies</label>
+                            <span #DrugAllergies
+                                class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                                contenteditable="true" [innerHTML]="crossMatchPopupData.DrugAllergies"></span>
+                        </div>
+                        <div class="col-6">
+                            <label for="" class="form-label">Food Allergies</label>
+                            <span #FoodAllergies
+                                class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                                contenteditable="true" [innerHTML]="crossMatchPopupData.FoodAllergies"></span>
+                        </div>
+                        <div class="col-6">
+                            <label for="" class="form-label">Clinical Diagnosis</label>
+                            <span #ClinicalDiagnosis
+                                class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                                contenteditable="true" [innerHTML]="crossMatchPopupData.ClinicalDiagnosis"></span>
+                        </div>
+                        <div class="col-6">
+                            <label for="" class="form-label">Other Allergies</label>
+                            <span #OtherAllergies
+                                class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                                contenteditable="true" [innerHTML]="crossMatchPopupData.OtherAllergies"></span>
+                        </div>
+
+                    </div>
+                    <div class="d-flex align-items-center gap-3 mt-3">
+                        <div class="w-max-content">
+                            <label for="" class="form-label d-block">Type of Transfusion</label>
+                            <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                                <button class="btn" [class.selected]="crossMatchPopupData.TransfusionType === '0'"
+                                    (click)="crossMatchPopupData.TransfusionType = '0'">Surgery</button>
+                                <button class="btn" [class.selected]="crossMatchPopupData.TransfusionType === '1'"
+                                    (click)="crossMatchPopupData.TransfusionType = '1'">Therapeutic</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2 row g-2">
+                        <div class="col-6">
+                            <div class="card card-style-1 rounded h-100">
+                                <div class="card-header rounded-top py-2 justify-content-start min-height-unset">
+                                    <h5 class="card-heading">Billed Components</h5>
+                                </div>
+                                <div class="p-2">
+                                    <div class="fixed_alter_list rounded border-primary-200">
+                                        <div class="fixed_alter_header bg-primary-50 rounded-top">
+                                            <div class="row gx-2 p-2 mx-0">
+                                                <div class="col-4">
+                                                    <p class="label m-0">Component</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="label m-0">Quantity</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="label m-0">Volume</p>
+                                                </div>
+                                                <div class="col-3">
+                                                    <p class="label m-0">Requested Date</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="fixed_alter_body height-unset">
+                                            <div class="row gx-2 p-2 mx-0 alter_div newOrder rounded-0"
+                                                *ngFor="let item of bloodOrders;let i=index;">
+                                                <div class="col-4">
+                                                    <p class="m-0">{{item.Component}}</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="m-0">{{item.Quantity}}</p>
+                                                </div>
+                                                <div class="col-3">
+                                                    <p class="m-0">{{item.Volume}}</p>
+                                                </div>
+                                                <div class="col-3">
+                                                    <p class="m-0">{{item.RequiredDate | date: 'dd-MMM-yyyy'}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card card-style-1 rounded h-100">
+                                <div class="card-header rounded-top py-2 justify-content-between min-height-unset">
+                                    <div class="d-flex input-group w-auto">
+                                        <input id="textbox_bloodbag" type="text" class="form-control"
+                                            placeholder="Search" aria-label="Search"
+                                            [matAutocomplete]="autoBloodComponents"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchBloodBags($event)">
+                                        <mat-autocomplete #autoBloodComponents="matAutocomplete">
+                                            <mat-option *ngFor="let item of bloodBagsList" [value]="item.BagNumber"
+                                                (onSelectionChange)="onBloodBagSelection(item)">
+                                                {{item.BagNumber}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <button type="button" class="btn btn-secondary-fill btn-icon">
+                                            <img src="assets/images/icons/icon-search.svg" alt="">
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="p-2">
+                                    <div class="fixed_alter_list rounded border-primary-200">
+                                        <div class="fixed_alter_header bg-primary-50 rounded-top">
+                                            <div class="row gx-2 p-2 mx-0">
+                                                <div class="col-3">
+                                                    <p class="label m-0">Blood Unit No.</p>
+                                                </div>
+                                                <div class="col-1">
+                                                    <p class="label m-0">Blood Group</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="label m-0">Component</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="label m-0">Volume</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="label m-0">Issued Volume</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="label m-0">Expiry Date</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="fixed_alter_body height-unset">
+                                            <div class="row gx-2 p-2 mx-0 alter_div newOrder rounded-0"
+                                                *ngFor="let item of crossMatchPopupData.selectedBloodBags">
+                                                <div class="col-3">
+                                                    <p class="m-0">{{item.BagNumber}}</p>
+                                                </div>
+                                                <div class="col-1">
+                                                    <p class="m-0">{{item.BloodGroupName}}</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="m-0">{{item.ComponentName}}</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="label m-0">{{item.CurrentQuantity}}</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <input class="form-control pe-2" type="number"
+                                                        [(ngModel)]="item.Quantity">
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="label m-0">{{item.ExpiryDate}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="card card-style-1 rounded h-100">
+                                <div class="card-header rounded-top py-2 justify-content-between min-height-unset">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label m-0">Issued By</label>
+                                        <div class="d-flex input-group w-auto">
+                                            <input id="textbox_issuedby" type="text" placeholder="search"
+                                                class="form-control pe-2" aria-label="Search"
+                                                [matAutocomplete]="issuedby"
+                                                (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : onSearchDoctorsAll($event)">
+                                            <mat-autocomplete #issuedby="matAutocomplete">
+                                                <mat-option *ngFor="let item of doctorsList" [value]="item.Name"
+                                                    (onSelectionChange)="onIssuedBySelection(item)">
+                                                    {{item.Name}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                            <button type="button" id="button-addon2"
+                                                class="btn btn-secondary-fill btn-icon">
+                                                <img src="assets/images/icons/icon-search.svg" alt="">
+                                            </button>
+                                        </div>
+
+                                        <label for="" class="form-label m-0">Recieved By</label>
+                                        <div class="d-flex input-group w-auto">
+                                            <input id="textbox_recievedby" type="text" placeholder="search"
+                                                class="form-control pe-2" aria-label="Search"
+                                                [matAutocomplete]="recievedby"
+                                                (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : onSearchDoctorsAll($event)">
+                                            <mat-autocomplete #recievedby="matAutocomplete">
+                                                <mat-option *ngFor="let item of doctorsList" [value]="item.Name"
+                                                    (onSelectionChange)="onRecievedBySelection(item)">
+                                                    {{item.Name}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                            <button type="button" id="button-addon2"
+                                                class="btn btn-secondary-fill btn-icon">
+                                                <img src="assets/images/icons/icon-search.svg" alt="">
+                                            </button>
+                                        </div>
+                                        <div class="custom_check d-flex align-items-center gap-1 ms-auto">
+                                            <svg width="16" height="16" style="min-width:1rem" viewBox="0 0 20 21"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                <path
+                                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                                            </svg>
+                                            <p class="m-0 fs-7"> Order Completed </p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <button class="btn btn-main-outline" (click)="onSaveClick()">Save</button>
+                                    </div>
+                                </div>
+                                <div class="p-2">
+                                    <!-- <label for="" class="form-label">Reasons</label>
+                                    <span
+                                        class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                                        contenteditable="true"></span> -->
+
+                                    <div class="d-flex align-items-center gap-3 mt-3">
+                                        <div class="w-max-content">
+                                            <label for="" class="form-label d-block">Inspection Done</label>
+                                            <div
+                                                class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                                                <button class="btn"
+                                                    [class.selected]="crossMatchPopupData.IsInspectionDone === '1'"
+                                                    (click)="crossMatchPopupData.IsInspectionDone = '1'">Yes</button>
+                                                <button class="btn"
+                                                    [class.selected]="crossMatchPopupData.IsInspectionDone === '2'"
+                                                    (click)="crossMatchPopupData.IsInspectionDone = '2'">No</button>
+                                            </div>
+                                        </div>
+                                        <div class="w-max-content">
+                                            <label for="" class="form-label d-block">Review of Serology Results</label>
+                                            <div
+                                                class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                                                <button class="btn"
+                                                    [class.selected]="crossMatchPopupData.ReviewOfSerologyResults === '1'"
+                                                    (click)="crossMatchPopupData.ReviewOfSerologyResults = '1'">Yes</button>
+                                                <button class="btn"
+                                                    [class.selected]="crossMatchPopupData.ReviewOfSerologyResults === '2'"
+                                                    (click)="crossMatchPopupData.ReviewOfSerologyResults = '2'">No</button>
+                                            </div>
+                                        </div>
+                                        <div class="w-max-content">
+                                            <label for="" class="form-label d-block">Compatible test results</label>
+                                            <div
+                                                class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                                                <button class="btn"
+                                                    [class.selected]="crossMatchPopupData.IsCompatabilityOrNot === '1'"
+                                                    (click)="crossMatchPopupData.IsCompatabilityOrNot = '1'">Compatible</button>
+                                                <button class="btn"
+                                                    [class.selected]="crossMatchPopupData.IsCompatabilityOrNot === '2'"
+                                                    (click)="crossMatchPopupData.IsCompatabilityOrNot = '2'">Not
+                                                    Compatible</button>
+                                            </div>
+                                        </div>
+                                        <div class="w-max-content">
+                                            <label for="" class="form-label m-0">Technician</label>
+                                            <div class="d-flex input-group w-auto">
+                                                <input id="textbox_technician" type="text" placeholder="search"
+                                                    class="form-control pe-2" aria-label="Search"
+                                                    [matAutocomplete]="technician"
+                                                    (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : onSearchDoctorsAll($event)">
+                                                <mat-autocomplete #technician="matAutocomplete">
+                                                    <mat-option *ngFor="let item of doctorsList" [value]="item.Name"
+                                                        (onSelectionChange)="onTechnicianSelection(item)">
+                                                        {{item.Name}}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button type="button" id="button-addon2"
+                                                    class="btn btn-secondary-fill btn-icon">
+                                                    <img src="assets/images/icons/icon-search.svg" alt="">
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="w-max-content">
+                                            <label for="" class="form-label m-0">Nurse</label>
+                                            <div class="d-flex input-group w-auto">
+                                                <input id="textbox_nurse" type="text" placeholder="search"
+                                                    class="form-control pe-2" aria-label="Search"
+                                                    [matAutocomplete]="nurse"
+                                                    (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : onSearchDoctorsAll($event)">
+                                                <mat-autocomplete #nurse="matAutocomplete">
+                                                    <mat-option *ngFor="let item of doctorsList" [value]="item.Name"
+                                                        (onSelectionChange)="onNurseSelection(item)">
+                                                        {{item.Name}}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <button type="button" id="button-addon2"
+                                                    class="btn btn-secondary-fill btn-icon">
+                                                    <img src="assets/images/icons/icon-search.svg" alt="">
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="w-max-content">
+                                            <label for="" class="form-label m-0">Issued Date Time</label>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                <input matInput class="" (click)="issuedDate.open()"
+                                                    [(ngModel)]="crossMatchPopupData.IssuedDate"
+                                                    [matDatepicker]="issuedDate">
+                                                <mat-datepicker-toggle matSuffix [for]="issuedDate">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #issuedDate></mat-datepicker>
+                                            </mat-form-field>
+                                            <input type="time" class="form-control"
+                                                [(ngModel)]="crossMatchPopupData.IssuedTime">
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="" class="form-label">Special Processing</label>
+                                        <span #SpecialProcessing
+                                            class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                                            contenteditable="true"
+                                            [innerHTML]="crossMatchPopupData.SpecialProcessing"></span>
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="" class="form-label">Remarks</label>
+                                        <span #Remarks
+                                            class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                                            contenteditable="true" [innerHTML]="crossMatchPopupData.Remarks"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade viewVitals pateintFolderPopup" id="pateintFolderPopup" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered my-2" style="max-width: 99%;">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                    <h5 class="modal-title" id=""></h5>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn-close" (click)="closePatientSummaryPopup()"
+                        aria-label="Close"></button>
+                </div>
+
+            </div>
+            <div class="modal-body p-0">
+                <app-patientfolderml *ngIf="showPatientSummaryinPopUp"></app-patientfolderml>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal patientBloodDetails_modal" id="patientBloodDetails_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 88%;">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between border-bottom-primary-200">
+                <h5 class="modal-title">Patient Blood History Details</h5>
+                <div>
+                    <button class="btn btn-danger-outline" (click)="GetBloodBagHsitoryPrint()" 
+                >Print</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-0" *ngIf="selectedPatient">
+                <div class="doctor_worklist worklist_patientcard m-0 rounded-0 border-0 d-flex">
+                    <div class="d-flex align-items-center w-100">
+                        <div class="row mx-0 gx-0 align-items-center w-100">
+                            <div class="w-max-content">
+                                <div class="d-flex align-items-center p-2 py-0">
+                                    <div class="patient-photo me-3">
+                                        <img *ngIf="selectedPatient.GenderId == 1" src="assets/images/icons/male.svg"
+                                            alt="" class="position-relative">
+                                        <img *ngIf="selectedPatient.GenderId == 2" src="assets/images/icons/female.svg"
+                                            alt="" class="position-relative">
+                                    </div>
+                                    <div>
+                                        <p class="value fs-7 fw-bold w-100">{{selectedPatient.PatientName}}</p>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p>{{selectedPatient.Gender}} | {{selectedPatient.FullAge}}</p>
+                                            <p>ID No. : <span class="fw-bold">{{selectedPatient.SSN}}</span></p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <p><b>DOB</b> :</p>
+                                            <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            <p class="m-0 fw-bold text-nowrap">
+                                                {{selectedPatient.DOB?.split('
+                                                ')[0]}}</p>
+
+                                           
+
+                                        </div>
+                                        <p class="m-0 fs-8">{{selectedPatient.Nationality}} | Mobile :
+                                            {{selectedPatient.MobileNo}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col pe-0" style="min-height: 100%;">
+                                <div class="bg-white h-100 p-1" style="border-top-right-radius: 0.8rem;">
+                                    <div class="row mx-0 py-1 position-relative w-100">
+                                        <div class="w-max-content" *ngIf="selectedPatient.PatientType === '2'">
+                                            <p class="label"> Ward. </p>
+                                            <p>{{selectedPatient.WardName}}</p>
+                                        </div>
+                                        <div class="w-max-content" *ngIf="selectedPatient.PatientType === '2'">
+                                            <p class="label m-0"> Bed No. </p>
+                                            <p class="alert_animate fw-bold m-0 token">{{selectedPatient.BedName}}</p>
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="label"> Doctor Name </p>
+                                            <p class="color-highlight">{{selectedPatient.DoctorName ||
+                                                selectedPatient.DoctorNAme}}</p>
+                                        </div>
+                                        <div class="col-2">
+                                            <p class="label">Order</p>
+                                            <p></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-2">
+                    <div class="fixed_alter_list rounded border-primary-200">
+                        <div class="fixed_alter_header bg-primary-50 rounded-top">
+                            <div class="row gx-2 p-2 mx-0">
+                                <div class="col-2">
+                                    <p class="label m-0">Issue Date</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="label m-0">Component</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="label m-0">Bag Number</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="label m-0">Transfusion Date</p>
+                                </div>
+                                <div class="col-1">
+                                    <p class="label m-0">Reaction Observed</p>
+                                </div>
+                                <div class="col-1">
+                                    <p class="label m-0">Transfusion Feedback</p>
+                                </div>
+                                 <div class="col-2">
+                                    <p class="label m-0">Location</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fixed_alter_body">
+                            <div class="row gx-2 p-2 mx-0 alter_div newOrder rounded-0"
+                                *ngFor="let item of FetchBloodIssueDetailsDataList">
+                                <div class="col-2">
+                                    <p class="m-0">{{item.Issuedate}}</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="m-0">{{item.COMPONENT}}</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="m-0">{{item.BagNumber}}</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="m-0">{{item.TransfusionDate}}</p>
+                                </div>
+                                <div class="col-1">
+                                    <p class="m-0">{{item.ReactionObserved}}</p>
+                                </div>
+                                <div class="col-1">
+                                    <p class="m-0">{{item.FeedBackId}}</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="m-0">{{item.HospitalName}}</p>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column align-items-center justify-content-center h-100"
+                                *ngIf="FetchBloodIssueDetailsDataList.length==0">
+                                <img src="assets/images/icon-no-appointments.svg" alt="" style="height: 8rem;"
+                                    class="mb-2">
+                                <p class="m-0 fs-6">No Blood Bag History Found</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panaceaResultsModal modal" data-bs-backdrop="static" tabindex="-1" id="panaceaResultsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered my-2" style="max-width: 98%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Panacea Results</h5>
+                <div class="d-flex align-items-center gap-2 ms-auto">
+                    <button class="btn btn-main-outline" (click)="onRefreshClick()">Refresh</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-2">
+                <!-- <div class="tableVitals px-3">
+                    <table class="table m-0">
+                        <thead>
+                            <tr>
+                                <th>Sl.No.</th>
+                                <th>Order No</th>
+                                <th>Test Name</th>
+                                <th>Result</th>
+                                <th>DIN Number</th>
+                                <th>Product Code</th>
+                                <th>Action</th>
+                                <th>Product Name</th>
+                                <th>Service Code</th>
+                                <th>DonorRh</th>
+                                <th>DonorABO</th>
+                                <th>Expire Date</th>
+                                <th>Patient Type</th>
+                                <th>Order Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of panaceaResults; let i = index">
+                                <td>{{i + 1}}</td>
+                                <td>{{item.OrderNumber}}</td>
+                                <td>{{item.TestName}}</td>
+                                <td>{{item.Interpretation}}</td>
+                                <td>{{item.DINNumber}}</td>
+                                <td>{{item.PreparedProductCode}}</td>
+                                <td>{{item.Action}}</td>
+                                <td>{{item.ProductName}}</td>
+                                <td>{{item.ServiceCode}}</td>
+                                <td>{{item.DonorRh}}</td>
+                                <td>{{item.DonorABO}}</td>
+                                <td>{{item.ProductExpireDate}}</td>
+                                <td>{{item.PatientType}}</td>
+                                <td>{{item.OrderStatus}}</td>
+                                <td>
+                                    <button class="btn btn-main-outline" (click)="onAcknowledgeClick(item)">Acknowledge</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> -->
+
+                <div class="fixed_alter_list rounded border-primary-200">
+                    <div class="fixed_alter_header bg-primary-50 rounded-top">
+                        <div class="row gx-1 p-2 mx-0">
+                            <div class="" style="width: 3%;">
+                                <p class="label m-0">Sl.No.</p>
+                            </div>
+                            <div class="" style="width: 7%;">
+                                <p class="label m-0">Order No</p>
+                            </div>
+                            <div class="" style="width: 9%;">
+                                <p class="label m-0">Test Name</p>
+                            </div>
+                            <div class="" style="width: 7%;">
+                                <p class="label m-0">Result</p>
+                            </div>
+                            <div class="" style="width: 8%;">
+                                <p class="label m-0">DIN Number</p>
+                            </div>
+                            <div class="" style="width: 7%;">
+                                <p class="label m-0">Product Code</p>
+                            </div>
+                            <div class="" style="width: 5%;">
+                                <p class="label m-0">Action</p>
+                            </div>
+                            <div class="" style="width: 8%;">
+                                <p class="label m-0">Product Name</p>
+                            </div>
+                            <div class="" style="width: 7%;">
+                                <p class="label m-0">Service Code</p>
+                            </div>
+                            <div class="" style="width: 6%;">
+                                <p class="label m-0">DonorRh</p>
+                            </div>
+                            <div class="" style="width: 6%;">
+                                <p class="label m-0">DonorABO</p>
+                            </div>
+                            <div class="" style="width: 8%;">
+                                <p class="label m-0">Expire Date</p>
+                            </div>
+                            <div class="" style="width: 6%;">
+                                <p class="label m-0">Patient Type</p>
+                            </div>
+                            <div class="" style="width: 6%;">
+                                <p class="label m-0">Order Status</p>
+                            </div>
+                            <div class="" style="width: 7%;">
+                                <p class="label m-0"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fixed_alter_body">
+                        <div class="row gx-1 p-2 mx-0 alter_div rounded-0" *ngFor="let item of panaceaResults; let i = index">
+                            <div class="" style="width: 3%;">
+                                <p class="m-0 text-break">{{i + 1}}</p>
+                            </div>
+                            <div class="" style="width: 7%;">
+                                <p class="m-0 text-break">{{item.OrderNumber}}</p>
+                            </div>
+                            <div class="" style="width: 9%;">
+                                <p class="m-0 text-break">{{item.TestName}}</p>
+                            </div>
+                            <div class="" style="width: 7%;">
+                                <p class="m-0 text-break">{{item.Interpretation}}</p>
+                            </div>
+                            <div class="" style="width: 8%;">
+                                <p class="m-0 text-break">{{item.DINNumber}}</p>
+                            </div>
+                            <div class="" style="width: 7%;">
+                                <p class="m-0 text-break">{{item.PreparedProductCode}}</p>
+                            </div>
+                            <div class="" style="width: 5%;">
+                                <p class="m-0 text-break">{{item.Action}}</p>
+                            </div>
+                            <div class="" style="width: 8%;">
+                                <p class="m-0 text-break">{{item.ProductName}}</p>
+                            </div>
+                            <div class="" style="width: 7%;">
+                                <p class="m-0 text-break">{{item.ServiceCode}}</p>
+                            </div>
+                            <div class="" style="width: 6%;">
+                                <p class="m-0 text-break">{{item.DonorRh}}</p>
+                            </div>
+                            <div class="" style="width: 6%;">
+                                <p class="m-0 text-break">{{item.DonorABO}}</p>
+                            </div>
+                            <div class="" style="width: 8%;">
+                                <p class="m-0 text-break">{{item.ProductExpireDate}}</p>
+                            </div>
+                            <div class="" style="width: 6%;">
+                                <p class="m-0 text-break">{{item.PatientType}}</p>
+                            </div>
+                            <div class="" style="width: 6%;">
+                                <p class="m-0 text-break">{{item.OrderStatus}}</p>
+                            </div>
+                            <div class="" style="width: 7%;">
+                                <button class="btn btn-main-outline fs-9 p-1 px-2 lh-1" (click)="onAcknowledgeClick(item)">Acknowledge</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p *ngIf="errorMessages.length === 1">{{errorMessages[0]}}</p>
+                <ul *ngIf="errorMessages.length > 1">
+                    <li *ngFor="let error of errorMessages; let i = index"> {{error}}</li>
+                </ul>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="savemsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="reviewAndPayment">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Vitals Print</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="trustedUrl = ''"></button>
+            </div>
+            <div class="modal-body">
+                <iframe *ngIf="trustedUrl" height="600" width="100%" [src]="(trustedUrl ? trustedUrl :'')| safeUrl"
+                    frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+  </div>

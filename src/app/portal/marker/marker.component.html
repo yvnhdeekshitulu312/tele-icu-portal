@@ -1,0 +1,41 @@
+<div
+  class="flex-nowrap d-flex align-items-center justify-content-between border-primary-200 p-2 rounded-3">
+  <p class="m-0 fs-7"> {{ sname }} </p>
+  <div class="ms-auto d-flex align-items-center gap-2">
+    <button class="btn btn-danger-outline" (click)="clearMarker()">Clear</button>
+    <button class="btn btn-main-outline" (click)="onselectedMarker()"> Save </button>
+  </div>
+</div>
+
+<form [formGroup]="markerTableForm" class="human_body-container">
+    <div class="image-container border-primary-200 p-2 pt-1 rounded-3 mt-2 text-center" formArrayName="items">
+        <img class="body_img" [src]="imageUrl" (click)="addMarker($event)" alt="Please contact ADMIN" />
+        <!-- Female -->
+        <!-- <img class="body_img" src="assets/images/Human-body-female.png" alt="Please contact ADMIN" /> -->
+        <div *ngFor="let marker of items.controls; let i = index" [style.left.px]="marker.get('XX')?.value" [style.top.px]="marker.get('YX')?.value" class="marker">
+            <div *ngIf="marker.get('TYPE')?.value != 'Delete' && marker.get('PRID')?.value === sid" [formGroupName]="i" >
+                <!-- <input type="text" class="form-control m-2" formControlName="PDIS" style="width: 100px;" placeholder=""> -->
+                <p class="fs-8 count">{{marker.get('RowNumber')?.value}}</p>
+                <div class="input-with-delete">                                     
+                    <input type="textarea" class="form-control fs-8" style="width: 120px;" formControlName="PDIS" placeholder="" appDynamicWidth>
+                    <div (click)="deleteMarker(i)"><i class="fas fa-times delete-icon"></i></div>
+                  </div>
+            </div>
+        </div>
+        
+    </div>
+</form>
+
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{errorMessages}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

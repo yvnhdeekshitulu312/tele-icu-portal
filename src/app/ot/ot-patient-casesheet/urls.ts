@@ -1,0 +1,18 @@
+export const otPatientDetails = {
+    save: 'SavePatienClinicalTemplateDetails',
+    FetchPatienClinicalTemplateDetailsOT: 'FetchPatienClinicalTemplateDetailsOT?AdmissionID=${AdmissionID}&ClinicalTemplateID=${ClinicalTemplateID}&PatientTemplatedetailID=${PatientTemplatedetailID}&TBL=${TBL}&UserID=${UserID}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
+    FetchClinicalTemplates: 'FetchClinicalTemplates?UserID=${UserID}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
+    FetchTemplateDefaultData: 'FetchTemplateDefaultData?AdmissionID=${AdmissionID}&PatientID=${PatientId}&UserID=${UserID}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
+    FetchPatientSummary: 'FetchPatientSummary?Admissionid=${Admissionid}&PatientId=${PatientId}&TBL=${TBL}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
+    FetchPatientsTemplate: 'FetchPatientsTemplate?PatientID=${PatientId}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
+    FetchPatienClinicalTemplateDetailsPreg: 'FetchPatienClinicalTemplateDetailsPreg?AdmissionID=${AdmissionID}&PatientID=${PatientID}&ClinicalTemplateID=${ClinicalTemplateID}&PatientTemplatedetailID=${PatientTemplatedetailID}&TBL=${TBL}&UserID=${UserID}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
+    FetchAdviceDiagnosis: 'FetchAdviceDiagnosis?TBL=1&Admissionid=${Admissionid}&HospitalID=${HospitalID}',
+    FetchPatientDataEForms:'FetchPatientDataEForms?AdmissionID=${AdmissionID}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
+    FetchPrescriptionInfoAnesthesia:'FetchPrescriptionInfoAnesthesia?PatientType=${PatientType}&episodeId=${episodeId}&visitId=${visitId}&PatientID=${PatientID}&HospitalID=${HospitalID}&DoctorID=${DoctorID}&ChkDischargeCheck=${ChkDischargeCheck}&AnestheisiaID=${AnestheisiaID}',
+    FetchPatientDataEFormsDataList: 'FetchPatientDataEForms?AdmissionID=${AdmissionID}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
+    FetchSSEmployees: "FetchSSEmployees?name=${name}&UserId=${UserId}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}",
+    FetchRODNurses:'FetchRODNurses?Filter=${Filter}&HospitalID=${HospitalID}',
+    FetchPatienClinicalTemplateDetailsOTSaf: 'FetchPatienClinicalTemplateDetailsOTSaf?AdmissionID=${AdmissionID}&ClinicalTemplateID=${ClinicalTemplateID}&PatientTemplatedetailID=${PatientTemplatedetailID}&AssesmentOrderID=${AssesmentOrderID}&TBL=${TBL}&UserID=${UserID}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
+    FetchPatienClinicalTemplateDetailsOTRT: 'FetchPatienClinicalTemplateDetailsOTRT?AdmissionID=${AdmissionID}&ClinicalTemplateID=${ClinicalTemplateID}&PatientTemplatedetailID=${PatientTemplatedetailID}&TBL=${TBL}&UserID=${UserID}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
+    FetchPatientPrescribedMedicationHistory: 'FetchPatientPrescribedMedicationHistory?patientId=${patientId}&admissionId=${admissionId}&UserID=${UserID}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
+};

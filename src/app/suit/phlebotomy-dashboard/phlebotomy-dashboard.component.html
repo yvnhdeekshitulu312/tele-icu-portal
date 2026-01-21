@@ -1,0 +1,1191 @@
+<app-suit-header  [IsSwitchWard]="true"></app-suit-header>
+<div class="container__wrapper">
+    <div class="page-header sticky-top">
+        <h2 class="page-heading">Phlebotomy Dashboard</h2>
+        <div class="actions ms-auto d-flex gap-2">
+            <svg class="cursor-pointer ms-2" id="btnRefresh" (click)="refresh()"  width="26" height="26" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10.053 0.481079C4.53298 0.481079 0.0529785 4.96108 0.0529785 10.4811C0.0529785 16.0011 4.53298 20.4811 10.053 20.4811C15.573 20.4811 20.053 16.0011 20.053 10.4811C20.053 4.96108 15.573 0.481079 10.053 0.481079ZM4.65298 9.71108C4.82298 8.52108 5.35298 7.45108 6.18298 6.61108C8.18298 4.62108 11.333 4.51108 13.473 6.25108V5.30108C13.473 4.89108 13.813 4.55108 14.223 4.55108C14.633 4.55108 14.973 4.89108 14.973 5.30108V7.97108C14.973 8.38108 14.633 8.72108 14.223 8.72108H11.553C11.143 8.72108 10.803 8.38108 10.803 7.97108C10.803 7.56108 11.143 7.22108 11.553 7.22108H12.303C11.5394 6.68924 10.6131 6.44289 9.68624 6.52516C8.75936 6.60742 7.89093 7.01307 7.23298 7.67108C6.63298 8.27108 6.25298 9.05108 6.12298 9.92108C6.07298 10.2911 5.75298 10.5611 5.38298 10.5611C5.34298 10.5611 5.31298 10.5611 5.27298 10.5511C5.07946 10.5217 4.9055 10.4168 4.78926 10.2593C4.67303 10.1018 4.62401 9.90466 4.65298 9.71108ZM13.923 14.3511C13.4153 14.8598 12.812 15.263 12.1478 15.5376C11.4836 15.8122 10.7717 15.9527 10.053 15.9511C8.83298 15.9511 7.62298 15.5211 6.62298 14.7111V15.6511C6.62298 16.0611 6.28298 16.4011 5.87298 16.4011C5.46298 16.4011 5.12298 16.0611 5.12298 15.6511V12.9811C5.12298 12.5711 5.46298 12.2311 5.87298 12.2311H8.54298C8.95298 12.2311 9.29298 12.5711 9.29298 12.9811C9.29298 13.3911 8.95298 13.7311 8.54298 13.7311H7.79298C9.34298 14.8111 11.483 14.6611 12.863 13.2811C13.463 12.6811 13.843 11.9011 13.973 11.0311C14.033 10.6211 14.403 10.3311 14.823 10.3911C15.233 10.4511 15.513 10.8311 15.463 11.2411C15.283 12.4511 14.753 13.5211 13.923 14.3511Z" fill="#368796"/>
+            </svg>
+         
+        </div>
+    </div>
+    <div class="container-body p-0">
+        <div class="samples_container mt-2">
+            <div class="row mx-0">
+                <!-- <div [class]="isClassPresent ? 'col-md-4' : 'col-md-8'"> -->
+                <div class="col-12">
+                    <div class="sample_box green d-flex align-items-end gap-2 bg-clr-white p-2 border-bottom" style="border-bottom-width: 3px !important;">
+                        <div class="d-flex align-items-center justify-content-between count_head">
+                            <div class="d-flex align-items-end w-100">
+                                <h6 class="m-0 clr-primary-600">Today <br> Samples</h6>
+                                <span class="count d-block ms-2 rounded-2 p-1 px-3 fs-5 fw-bold">{{FetchLabPhlebtomyTCountOutputLists?.TodaySamples}}</span>
+                            </div>
+                            <!-- <button class='btn btn-icon-3d toggle_btn col-md-4' (click)="toggleclick()">
+                                <img src="assets/images/icons/arrow-right.svg" alt="">
+                            </button> -->
+                        </div>
+                        <div class="sample_cards gap-2">
+                            <div class="card_block tobecollected rounded-2 p-0" [class.active]="activeTab === 1">
+                                <div class="head rounded-top">
+                                    <p class="m-0 p-1 fw-500 fs-7">To be Collected</p>
+                                </div>
+                                <div class="blocks_row">
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 1" (click)="dataclick('0', '1', '2', '0', 'tobecollectedlegend', 1, 1)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.ToBeCollectedIP}}</h5>
+                                        <p class="m-0 fs-8">IP</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 2" (click)="dataclick('0', '1', '1,4', '0', 'tobecollectedlegend', 1, 2)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.ToBeCollectedOP}}</h5>
+                                        <p class="m-0 fs-8">OP</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 3" (click)="dataclick('0', '1', '3', '0', 'tobecollectedlegend', 1, 3)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.ToBeCollectedED}}</h5>
+                                        <p class="m-0 fs-8">ED</p>
+                                    </div>
+
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 4" (click)="dataclick('0', '1', '', '1', 'tobecollectedlegend', 1, 4)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.StatToBeCollected}}</h5>
+                                        <p class="m-0 fs-8">STAT</p>
+                                    </div>
+                                    <div class="block text-center p-1 lastsample h-100 rounded-bottom cursor-pointer" [class.active]="selectedBox === 5" (click)="dataclick('0', '1', '', '0', 'tobecollectedlegend', 1, 5)">
+                                        <h4 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.ToBeCollected}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card_block toberecollected rounded-2 p-0" [class.active]="activeTab === 2">
+                                <div class="head rounded-top">
+                                    <p class="m-0 p-1 fw-500 fs-7">To be ReCollected</p>
+                                </div>
+                                <div class="blocks_row">
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 6" (click)="dataclick('0', '-1', '2', '0', 'tobecollectedlegend', 2, 6)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.ToBeRecollectedIP}}</h5>
+                                        <p class="m-0 fs-8">IP</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 7" (click)="dataclick('0', '-1', '1,4', '0', 'tobecollectedlegend', 2, 7)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.ToBeRecollectedOP}}</h5>
+                                        <p class="m-0 fs-8">OP</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 8" (click)="dataclick('0', '-1', '3', '0', 'tobecollectedlegend', 2, 8)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.ToBeRecollectedED}}</h5>
+                                        <p class="m-0 fs-8">ED</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 9" (click)="dataclick('0', '-1', '', '1', 'tobecollectedlegend', 2, 9)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.StatToBeReCollected}}</h5>
+                                        <p class="m-0 fs-8">STAT</p>
+                                    </div>
+                                    <div class="block text-center p-1 lastsample h-100 rounded-bottom cursor-pointer" [class.active]="selectedBox === 10" (click)="dataclick('0', '-1', '', '0', 'tobecollectedlegend', 2, 10)">
+                                        <h4 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.ToBeRecollected}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card_block transrec rounded-2 p-0" [class.active]="activeTab === 3">
+                                <div class="head rounded-top">
+                                    <p class="m-0 p-1 fw-500 fs-7">Transfer / Received</p>
+                                </div>
+                                <div class="blocks_row">
+                                    <div class="block text-center p-1">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.TransferCurrentDaySamp}}</h5>
+                                        <p class="m-0 fs-8 text-nowrap">To be Transfer</p>
+                                    </div>
+                                    <div class="block text-center p-1">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.ReceivedCurrentDaySamp}}</h5>
+                                        <p class="m-0 fs-8 text-nowrap">To Be Received</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card_block tobeack rounded-2 p-0" [class.active]="activeTab === 4">
+                                <div class="head rounded-top">
+                                    <p class="m-0 p-1 fw-500 fs-7">To be Acknowledged</p>
+                                </div>
+                                <div class="blocks_row">
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 11" (click)="dataclick('0', '3', '2', '0', 'tobeacklegend', 4, 11)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.ToBeAcknowledgedIP}}</h5>
+                                        <p class="m-0 fs-8">IP</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 12" (click)="dataclick('0', '3', '1,4', '0', 'tobeacklegend', 4, 12)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.ToBeAcknowledgedOP}}</h5>
+                                        <p class="m-0 fs-8">OP</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 13" (click)="dataclick('0', '3', '3', '0', 'tobeacklegend', 4, 13)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.ToBeAcknowledgedED}}</h5>
+                                        <p class="m-0 fs-8">ED</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 14" (click)="dataclick('0', '3', '', '1', 'tobeacklegend', 4, 14)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.StatTobeAcknowledged}}</h5>
+                                        <p class="m-0 fs-8">STAT</p>
+                                    </div>
+                                    <div class="block text-center p-1 lastsample h-100 rounded-bottom cursor-pointer" [class.active]="selectedBox === 15" (click)="dataclick('0', '3', '', '0', 'tobeacklegend', 4, 15)">
+                                        <h4 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.ToBeAcknowledged}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div [class]="isClassPresent ? 'col-md-8' : 'col-md-4'"> -->
+                <div class="col-12">
+                    <div class="sample_box secondary d-flex align-items-end gap-2 bg-clr-white p-2 pt-0">
+                        <div class="d-flex align-items-center justify-content-between count_head">
+                            <div class="d-flex align-items-end w-100">
+                                <h6 class="m-0 clr-secondary">Previous <br> Samples</h6>
+                                <span class="count d-block ms-2 rounded-2 p-1 px-3 fs-5 fw-bold">{{FetchLabPhlebtomyTCountOutputLists?.PreviousSamples}}</span>
+                            </div>
+                            <!-- <button id="toggle_btn" class="btn btn-icon-3d toggle_btn" (click)="toggleclick()">
+                                <img src="assets/images/icons/arrow-right.svg" alt="">
+                            </button> -->
+                        </div>
+                        <div class="sample_cards gap-2">
+                            <div class="card_block tobecollected rounded-2 p-0" [class.active]="activeTab === 5">
+                                <div class="head rounded-top">
+                                    <p class="m-0 p-1 fw-500 fs-7">To be Collected</p>
+                                </div>
+                                <div class="blocks_row">
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 16" (click)="dataclick('1', '1', '2', '0', 'tobecollectedlegend', 5, 16)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.PrevToBeCollectedIP}}</h5>
+                                        <p class="m-0 fs-8">IP</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 17" (click)="dataclick('1', '1', '1,4', '0', 'tobecollectedlegend', 5, 17)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.PrevToBeCollectedOP}}</h5>
+                                        <p class="m-0 fs-8">OP</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 18" (click)="dataclick('1', '1', '3', '0', 'tobecollectedlegend', 5, 18)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.PrevToBeCollectedED}}</h5>
+                                        <p class="m-0 fs-8">ED</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 19" (click)="dataclick('1', '1', '', '1', 'tobecollectedlegend', 5, 19)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.StatPrevToBeCollected}}</h5>
+                                        <p class="m-0 fs-8">STAT</p>
+                                    </div>
+                                    <div class="block text-center p-1 lastsample h-100 rounded-bottom cursor-pointer" [class.active]="selectedBox === 20" (click)="dataclick('1', '1', '', '0', 'tobecollectedlegend', 5, 20)">
+                                        <h4 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.PrevToBeCollected}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card_block toberecollected rounded-2 p-0" [class.active]="activeTab === 6">
+                                <div class="head rounded-top">
+                                    <p class="m-0 p-1 fw-500 fs-7">To be ReCollected</p>
+                                </div>
+                                <div class="blocks_row">
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 21" (click)="dataclick('1', '-1', '2', '0', 'tobecollectedlegend', 6, 21)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.PrevToBeReCollectedIP}}</h5>
+                                        <p class="m-0 fs-8">IP</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 22" (click)="dataclick('1', '-1', '1,4', '0', 'tobecollectedlegend', 6, 22)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.PrevToBeReCollectedOP}}</h5>
+                                        <p class="m-0 fs-8">OP</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 23" (click)="dataclick('1', '-1', '3', '0', 'tobecollectedlegend', 6, 23)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.PrevToBeReCollectedED}}</h5>
+                                        <p class="m-0 fs-8">ED</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 24" (click)="dataclick('1', '-1', '', '1', 'tobecollectedlegend', 6, 24)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.StatPrevToBeReCollected}}</h5>
+                                        <p class="m-0 fs-8">STAT</p>
+                                    </div>
+                                    <div class="block text-center p-1 lastsample h-100 rounded-bottom cursor-pointer" [class.active]="selectedBox === 25" (click)="dataclick('1', '-1', '', '0', 'tobecollectedlegend', 6, 25)">
+                                        <h4 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.PrevToBeReCollected}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card_block transrec rounded-2 p-0" [class.active]="activeTab === 7">
+                                <div class="head rounded-top">
+                                    <p class="m-0 p-1 fw-500 fs-7">Transfer / Received</p>
+                                </div>
+                                <div class="blocks_row">
+                                    <div class="block text-center p-1">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.TransferPrevDaySamp}}</h5>
+                                        <p class="m-0 fs-8 text-nowrap">To be Transfer</p>
+                                    </div>
+                                    <div class="block text-center p-1">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.ReceivedPrevDaySamp}}</h5>
+                                        <p class="m-0 fs-8 text-nowrap">To Be Received</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card_block tobeack rounded-2 p-0" [class.active]="activeTab === 8">
+                                <div class="head rounded-top">
+                                    <p class="m-0 p-1 fw-500 fs-7">To be Acknowledged</p>
+                                </div>
+                                <div class="blocks_row">
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 26" (click)="dataclick('1', '3', '2', '0', 'tobeacklegend', 8, 26)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.PrevToBeAcknowledgeIP}}</h5>
+                                        <p class="m-0 fs-8">IP</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 27" (click)="dataclick('1', '3', '1,4', '0', 'tobeacklegend', 8, 27)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.PrevToBeAcknowledgeOP}}</h5>
+                                        <p class="m-0 fs-8">OP</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 28" (click)="dataclick('1', '3', '3', '0', 'tobeacklegend', 8, 28)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.PrevToBeAcknowledgeOP}}</h5>
+                                        <p class="m-0 fs-8">ED</p>
+                                    </div>
+                                    <div class="block text-center p-1 cursor-pointer" [class.active]="selectedBox === 29" (click)="dataclick('1', '3', '', '1', 'tobeacklegend', 8, 29)">
+                                        <h5 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.StatPrevToBeAcknowledged}}</h5>
+                                        <p class="m-0 fs-8">STAT</p>
+                                    </div>
+                                    <div class="block text-center p-1 lastsample h-100 rounded-bottom cursor-pointer" [class.active]="selectedBox === 30" (click)="dataclick('1', '3', '', '0', 'tobeacklegend', 8, 30)">
+                                        <h4 class="m-0">{{FetchLabPhlebtomyCountOutputLists?.PrevToBeAcknowledge}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-3 py-2 selected_samples">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center side_title">
+                    <h5 class="m-0 clr-primary-600 fs-6 pe-3">Today Samples</h5>
+                    <h5 class="m-0 ps-3 fs-6">To be Collected</h5>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <form action="" class="CommanSearch__form">
+                        <label for="" class="CommonSearch__label">
+                            <img src="./images/icons/icon-search.svg" alt="">
+                        </label>
+                        <input class="CommonSearch__input form-control px-0" type="text" [(ngModel)]="SSNNumber" [ngModelOptions]="{standalone: true}" placeholder="Search  SSN Number" (keydown.enter)="onSSNEnterPress($event)" (change)="onchangeSSN()">
+                        <button type="reset" class="reset-btn" (click)="SSNNumber = '';onchangeSSN()">
+                            <svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z" stroke="currentColor" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                        </button>
+                    </form>
+                    <div class="barcode d-flex flex-nowrap">
+                        <div class="code d-flex align-items-center">
+                            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0.233276 0.225952V5.66254H1.5962V1.58887H5.66987V0.225952H0.233276Z" fill="#ECF6F8"/>
+                                <path d="M0.233276 16.576V11.1394H1.5962V15.2131H5.66987V16.576H0.233276Z" fill="#ECF6F8"/>
+                                <path d="M15.2203 15.2131V11.1394H16.5833V16.576H11.1467V15.2131H15.2203Z" fill="#ECF6F8"/>
+                                <path d="M11.1467 1.58887V0.225952H16.5833V5.66254H15.2203V1.58887H11.1467Z" fill="#ECF6F8"/>
+                                <path d="M2.95789 2.95081H5.68304V13.8515H2.95789V2.95081Z" fill="#ECF6F8"/>
+                                <path d="M8.40812 2.95081H7.04553V13.8515H8.40812V2.95081Z" fill="#ECF6F8"/>
+                                <path d="M9.77075 2.95081H11.1333V13.8515H9.77075V2.95081Z" fill="#ECF6F8"/>
+                                <path d="M13.8585 2.95081H12.4959V13.8515H13.8585V2.95081Z" fill="#ECF6F8"/>
+                            </svg>                                    
+                        </div>
+                        <input autofocus  type="text" [(ngModel)]="BarCode" [ngModelOptions]="{standalone: true}" class="CommonSearch__input form-control rounded-0" placeholder="Scan Token" (keydown.enter)="onBarCodePress($event)" (change)="ScannedBarcode()">
+                    </div>
+                    <select #roomSelect name="" class="form-select select-sample pe-5 rounded-1" id="" (change)="roomchange($event)">
+                        <option value="">Select</option>
+                        <option value="172161717">01</option>
+                        <option value="172161718">02</option>
+                        <option value="172161719">03</option>
+                        <option value="172161720">04</option>
+                        <option value="172161721">05</option>
+                        <option value="172161722">06</option>
+                        <option value="172161723">07</option>
+                        <option value="172161724">08</option>
+                        <option value="172161725">09</option>
+                        <option value="172161726">10</option>
+                        
+                    </select>
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn btn-danger-outline" (click)="clear()">Clear</button>
+                        <button class="btn btn-main-outline" (click)="onchangeSSN()">Find</button>
+                        <button class="btn btn-main-outline" *ngIf="savevisible" (click)="openRemarksModal()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sample_table mx-3 p-2">
+            <div class="d-flex justify-content-end gap-2">
+                <button class="btn btn-main-outline mb-1"  [disabled]="!SSNNumber && !BarCode" *ngIf="enableBCPrint" (click)="printBarcodes()">Bc Print</button>
+                <button class="btn btn-main-outline mb-1" [disabled]="!SSNNumber && !BarCode" (click)="selectallsamples()">Select All</button>
+            </div>
+
+            <div class="worklistRight d-none">
+                <div class="nodata_block d-none flex-column align-items-center justify-content-center gap-2">
+                    <img src="/images/Isolation_Mode.svg" alt="">
+                    <p class="fs-6">No Data selected</p>
+                </div>
+                <div *ngFor="let group of groupedDataArray" class="">
+                    <div class="worklist_patientcard p-2">
+                        <div class="row mx-0 gx-2">
+                            <div class="col-md-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="patient-photo">
+                                        <img *ngIf="group.GenderID == 1" src="assets/images/icons/male.svg" alt=""
+                                                    class="position-relative">
+                                                <img *ngIf="group.GenderID == 2" src="assets/images/icons/female.svg" alt=""
+                                                    class="position-relative">
+                                        <p class="vip_label m-0 fw-bold d-flex align-items-center">
+                                            <svg class="me-1" xmlns="http://www.w3.org/2000/svg" width="7"
+                                                height="7" viewBox="0 0 7 7" fill="none">
+                                                <path
+                                                    d="M4.1362 0.995956L4.66853 2.06062C4.74026 2.20786 4.93281 2.34755 5.09515 2.37775L6.05788 2.53632C6.67327 2.63825 6.81673 3.08375 6.37501 3.52925L5.62371 4.28055C5.49912 4.40514 5.42739 4.65054 5.46891 4.82798L5.68411 5.75673C5.85401 6.48916 5.46136 6.77609 4.81577 6.391L3.91345 5.85489C3.75111 5.75673 3.47928 5.75673 3.31694 5.85489L2.41462 6.391C1.76903 6.77231 1.37638 6.48916 1.54628 5.75673L1.76148 4.82798C1.79545 4.64676 1.72372 4.40136 1.59913 4.27678L0.847829 3.52547C0.406108 3.08375 0.549573 2.63825 1.16496 2.53254L2.12769 2.37398C2.29003 2.34755 2.48258 2.20408 2.55431 2.05684L3.08664 0.99218C3.37735 0.41832 3.84549 0.41832 4.1362 0.995956Z"
+                                                    fill="#286571" />
+                                            </svg>
+                                            VIP
+                                            <svg class="ms-1" xmlns="http://www.w3.org/2000/svg" width="7"
+                                                height="7" viewBox="0 0 7 7" fill="none">
+                                                <path
+                                                    d="M4.1362 0.995956L4.66853 2.06062C4.74026 2.20786 4.93281 2.34755 5.09515 2.37775L6.05788 2.53632C6.67327 2.63825 6.81673 3.08375 6.37501 3.52925L5.62371 4.28055C5.49912 4.40514 5.42739 4.65054 5.46891 4.82798L5.68411 5.75673C5.85401 6.48916 5.46136 6.77609 4.81577 6.391L3.91345 5.85489C3.75111 5.75673 3.47928 5.75673 3.31694 5.85489L2.41462 6.391C1.76903 6.77231 1.37638 6.48916 1.54628 5.75673L1.76148 4.82798C1.79545 4.64676 1.72372 4.40136 1.59913 4.27678L0.847829 3.52547C0.406108 3.08375 0.549573 2.63825 1.16496 2.53254L2.12769 2.37398C2.29003 2.34755 2.48258 2.20408 2.55431 2.05684L3.08664 0.99218C3.37735 0.41832 3.84549 0.41832 4.1362 0.995956Z"
+                                                    fill="#286571" />
+                                            </svg>
+                                        </p>
+                                    </div>
+                                    <p class="value fs-8 fw-bold ms-2">{{group.PatientName}}</p>
+                                </div>
+                                <p class="mt-3">{{group.Gender}} | {{group.Age}}</p>
+                                <p class="mt-1"><b>SSN</b> : <span>{{group.SSN}}</span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="rounded-2 bg-white h-100 p-1">
+                                    <div class="row mx-0 pb-2 border-bottom">
+                                        <div class="col-3">
+                                            <label for="" class="form-label m-0">Doctor</label>
+                                            <p class=" text-truncate">{{group.Doctor}}</p>
+                                        </div>
+                                        <div class="col">
+                                            <label for="" class="form-label m-0">Mobile No.</label>
+                                            <p class=" text-truncate">{{group.MobileNo}}</p>
+                                        </div>
+                                        <div class="col">
+                                            <label for="" class="form-label m-0">Req. No.</label>
+                                            <p class=" text-truncate">OP2300045541</p>
+                                        </div>
+                                        <div class="col">
+                                            <label for="" class="form-label m-0">Bill No.</label>
+                                            <p class=" text-truncate">CR230622541</p>
+                                        </div>
+                                        <div class="col">
+                                            <label for="" class="form-label m-0">Priority</label>
+                                            <p class=" text-truncate">STAT</p>
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-main-outline">Save</button>
+                                        </div>
+                                    </div>
+                                    <div class="pt-2 row mx-0">
+                                        <div class="col-3">
+                                            <div class="d-flex align-items-center gap-2 border-end">
+                                                <img src="/images/icons/height.svg" alt="">
+                                                <div class="">
+                                                    <p class="fs-7">172cm</p>
+                                                    <p class="fs-8">Height</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="d-flex align-items-center gap-2 border-end">
+                                                <img src="/images/icons/weight-bmi.svg" alt="">
+                                                <div class="">
+                                                    <p class="fs-7">78kg</p>
+                                                    <p class="fs-8">Weight</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="d-flex align-items-center gap-2 border-end">
+                                                <img src="/images/icons/blood_type.svg" alt="">
+                                                <div class="">
+                                                    <p class="fs-7">B+ve</p>
+                                                    <p class="fs-8">Blood</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <img src="/images/icons/noallergy.svg" alt="">
+                                                <div class="">
+                                                    <p class="fs-7">No</p>
+                                                    <p class="fs-8">Allergy</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-2 sample_Table_height">
+                        <div *ngFor="let sample of group.Samples">
+                            <div
+                                class="sample_Table_head rounded-top p-2 d-flex align-items-start justify-content-between">
+                                <div class="row mx-0 gx-2 w-100">
+                                    <div class="col-2">
+                                        <label for="" class="form-label clr-primary-600 m-0">Sample No.</label>
+                                        <p>{{sample.SampleNumber}}</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <label for=""
+                                            class="form-label clr-primary-600 m-0">Specialisation</label>
+                                        <p>{{sample.Specialisation}}</p>
+                                    </div>
+                                    <div class="col-1">
+                                        <label for="" class="form-label clr-primary-600 m-0">Specimen</label>
+                                        <p>{{sample.Specimen}}</p>
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="form-label clr-primary-600 m-0">Container
+                                            Name</label>
+                                        <p>{{sample.ContainerName ? sample.ContainerName : 'No Container Mapped'}}</p>
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="form-label clr-primary-600 m-0">Remarks</label>
+                                        <p>{{sample.SampleRemarks}}</p>
+                                    </div>
+                                </div>
+                                <div class="ms-auto selectall">
+                                    <label for="" class="form-label clr-primary-600 m-0">Select</label>
+                                    <div class="d-flex active">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="15"
+                                            viewBox="0 0 16 15" fill="none">
+                                            <circle cx="7.62891" cy="7.5" r="7.5" fill="#E2F0F2" />
+                                            <path
+                                                d="M10.1975 4.74922L6.52076 8.43451L5.10664 7.02039C5.02981 6.93067 4.93526 6.8578 4.82893 6.80636C4.7226 6.75492 4.60679 6.72601 4.48876 6.72145C4.37073 6.71689 4.25302 6.73678 4.14304 6.77987C4.03306 6.82296 3.93318 6.88831 3.84966 6.97184C3.76613 7.05536 3.70078 7.15525 3.65769 7.26523C3.6146 7.37521 3.59471 7.49291 3.59927 7.61094C3.60383 7.72897 3.63274 7.84478 3.68418 7.95111C3.73562 8.05744 3.80849 8.15199 3.89821 8.22882L5.91226 10.2514C5.99234 10.3309 6.08732 10.3937 6.19174 10.4364C6.29616 10.479 6.40797 10.5006 6.52076 10.5C6.7456 10.499 6.96106 10.4098 7.12069 10.2514L11.4059 5.96622C11.4862 5.88655 11.55 5.79176 11.5935 5.68732C11.637 5.58288 11.6594 5.47086 11.6594 5.35772C11.6594 5.24458 11.637 5.13256 11.5935 5.02812C11.55 4.92369 11.4862 4.82889 11.4059 4.74922C11.2453 4.5896 11.0281 4.5 10.8017 4.5C10.5753 4.5 10.3581 4.5896 10.1975 4.74922Z"
+                                                fill="#B4DDE4" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sample_Table_body rounded-bottom bg-white p-2">
+                                <div *ngFor="let test of sample.Tests" class="row gx-2 test_block py-1 mx-0">
+                                    <div class="col-md-3">
+                                        <label for="" class="form-label clr-primary-600 m-0">Test Name</label>
+                                        <p>{{test.Test}}</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <label for="" class="form-label clr-primary-600 m-0">Status</label>
+                                        <div class="status_track d-flex align-items-center">
+                                            <span class="d-flex active align-items-center">
+                                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="8" cy="8.5" r="7.25" fill="#CEF5FD"
+                                                        stroke="#13B9DD" stroke-width="1.5" />
+                                                    <path d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455"
+                                                        stroke="#13B9DD" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                            </span>
+                                            <span class="d-flex align-items-center">
+                                                <svg width="15" height="4" viewBox="0 0 15 4" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect y="0.645447" width="30" height="3.70911"
+                                                        fill="#F2CD4A" />
+                                                </svg>
+                                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="8" cy="8.5" r="7.25" fill="#FCF2CF"
+                                                        stroke="#F2CD4A" stroke-width="1.5" />
+                                                    <path d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455"
+                                                        stroke="#EEBD11" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                            </span>
+                                            <span class="d-flex align-items-center">
+                                                <svg width="15" height="4" viewBox="0 0 31 4" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="0.128906" y="0.145508" width="30" height="3.70911"
+                                                        fill="#6280EC" />
+                                                </svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16"
+                                                    viewBox="0 0 17 16" fill="none">
+                                                    <circle cx="8.12891" cy="8" r="7.25" fill="#D2DAF9"
+                                                        stroke="#6280EC" stroke-width="1.5" />
+                                                    <path d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455"
+                                                        stroke="#6280EC" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                            </span>
+                                            <span class="d-flex align-items-center">
+                                                <svg width="15" height="4" viewBox="0 0 15 4" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect y="0.645447" width="30" height="3.70911"
+                                                        fill="#FA7238" />
+                                                </svg>
+                                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="8" cy="8.5" r="7.25" fill="#FEDCCD"
+                                                        stroke="#FA7238" stroke-width="1.5" />
+                                                    <path d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455"
+                                                        stroke="#EB6247" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                            </span>
+                                            <span class="d-flex align-items-center">
+                                                <svg width="15" height="4" viewBox="0 0 31 4" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="0.128906" y="0.145508" width="30" height="3.70911"
+                                                        fill="#4C9CE5" />
+                                                </svg>
+                                                <svg width="17" height="17" viewBox="0 0 17 17" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="8.12891" cy="8.5" r="7.25" fill="#D2E6F9"
+                                                        stroke="#4C9BE5" stroke-width="1.5" />
+                                                    <path d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455"
+                                                        stroke="#4C9BE5" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                            </span>
+                                            <span class="d-flex align-items-center">
+                                                <svg width="15" height="4" viewBox="0 0 15 4" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect y="0.645447" width="30" height="3.70911"
+                                                        fill="#85E54C" />
+                                                </svg>
+                                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="8" cy="8.5" r="7.25" fill="#DDF4D7"
+                                                        stroke="#85E64C" stroke-width="1.5" />
+                                                    <path d="M4.83203 8.3444L6.84218 10.3546L11.1671 6.35455"
+                                                        stroke="#85E54C" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <label for="" class="form-label mb-0">Partially Approved</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <label for="" class="form-label clr-primary-600 m-0">Collection
+                                            Date</label>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    viewBox="0 0 16 16" fill="none">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M13.8552 1.56632H13.131V1.39789C13.131 0.623158 12.5079 0 11.7331 0C10.9584 0 10.3352 0.623158 10.3352 1.39789V1.56632H9.24049V1.39789C9.24049 0.623158 8.61733 0 7.84259 0C7.06785 0 6.4447 0.623158 6.4447 1.39789V1.56632H5.34996V1.39789C5.34996 0.623158 4.7268 0 3.95206 0C3.17733 0 2.55417 0.623158 2.55417 1.39789V1.56632H1.82996C0.886801 1.56632 0.128906 2.32421 0.128906 3.26737V14.2989C0.128906 15.2421 0.886801 16 1.82996 16H13.8215C14.7647 16 15.5226 15.2421 15.5226 14.2989V3.28421C15.5563 2.34105 14.7984 1.56632 13.8552 1.56632ZM11.2279 1.41474C11.2279 1.12842 11.4636 0.909474 11.7331 0.909474C12.0194 0.909474 12.2384 1.14526 12.2384 1.41474V2.62737C12.2384 2.91368 12.0026 3.13263 11.7331 3.13263C11.4468 3.13263 11.2279 2.89684 11.2279 2.62737V1.41474ZM7.35417 1.41474C7.35417 1.12842 7.58996 0.909474 7.85943 0.909474C8.14575 0.909474 8.3647 1.14526 8.3647 1.41474V2.62737C8.3647 2.91368 8.12891 3.13263 7.85943 3.13263C7.57312 3.13263 7.35417 2.89684 7.35417 2.62737V1.41474ZM3.46364 1.41474C3.46364 1.12842 3.69943 0.909474 3.96891 0.909474C4.25522 0.909474 4.47417 1.14526 4.47417 1.41474V2.62737C4.47417 2.91368 4.23838 3.13263 3.96891 3.13263C3.68259 3.13263 3.46364 2.89684 3.46364 2.62737V1.41474ZM14.6805 14.3158C14.6805 14.7705 14.31 15.1411 13.8552 15.1411H1.86364C1.40891 15.1411 1.03838 14.7705 1.03838 14.3158V5.38947H14.6636V14.3158H14.6805ZM10.9753 13.3221C11.0932 13.44 11.2279 13.4905 11.3795 13.4905C11.5311 13.4905 11.6658 13.44 11.7837 13.3221L13.3332 11.7726C13.5521 11.5537 13.5521 11.1832 13.3332 10.9642C13.1142 10.7453 12.7437 10.7453 12.5248 10.9642L11.3795 12.1095L10.9584 11.6884C10.7395 11.4695 10.369 11.4695 10.15 11.6884C9.93107 11.9074 9.93107 12.2779 10.15 12.4968L10.9753 13.3221ZM4.92888 9.7179H3.19414C2.95835 9.7179 2.75625 9.51579 2.75625 9.28V7.52842C2.75625 7.29263 2.95835 7.09053 3.19414 7.09053H4.92888C5.16467 7.09053 5.36678 7.29263 5.36678 7.52842V9.28C5.36678 9.51579 5.16467 9.7179 4.92888 9.7179ZM7.0006 9.7179H8.73533C8.97112 9.7179 9.17323 9.51579 9.17323 9.28V7.52842C9.17323 7.29263 8.97112 7.09053 8.73533 7.09053H7.0006C6.76481 7.09053 6.5627 7.29263 6.5627 7.52842V9.28C6.54586 9.51579 6.74796 9.7179 7.0006 9.7179ZM12.5247 9.7179H10.79C10.5542 9.7179 10.3521 9.51579 10.3521 9.28V7.52842C10.3521 7.29263 10.5542 7.09053 10.79 7.09053H12.5247C12.7605 7.09053 12.9626 7.29263 12.9626 7.52842V9.28C12.9626 9.51579 12.7605 9.7179 12.5247 9.7179ZM3.19414 13.4569H4.92888C5.16467 13.4569 5.36678 13.2548 5.36678 13.019V11.2674C5.36678 11.0316 5.16467 10.8295 4.92888 10.8295H3.19414C2.95835 10.8295 2.75625 11.0316 2.75625 11.2674V13.019C2.75625 13.2548 2.95835 13.4569 3.19414 13.4569ZM8.73533 13.4569H7.0006C6.74796 13.4569 6.54586 13.2548 6.5627 13.019V11.2674C6.5627 11.0316 6.76481 10.8295 7.0006 10.8295H8.73533C8.97112 10.8295 9.17323 11.0316 9.17323 11.2674V13.019C9.17323 13.2548 8.97112 13.4569 8.73533 13.4569Z"
+                                                        fill="#7C8283" />
+                                                </svg>
+                                                <p>{{test.SampleCollectedAt | date: 'dd-MMM-yyyy'}}</p>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16"
+                                                    viewBox="0 0 17 16" fill="none">
+                                                    <path
+                                                        d="M11.1608 9.78246H8.17179C7.67948 9.78246 7.29267 9.39565 7.29267 8.90334V4.33191C7.29267 3.83961 7.67948 3.45279 8.17179 3.45279C8.6641 3.45279 9.05091 3.83961 9.05091 4.33191V8.02422H11.1608C11.6531 8.02422 12.0399 8.41104 12.0399 8.90334C12.0399 9.39565 11.6531 9.78246 11.1608 9.78246Z"
+                                                        fill="#7C8283" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M16.5234 8C16.5234 12.4132 12.9366 16 8.52344 16C4.11025 16 0.523438 12.4132 0.523438 8C0.523438 3.58681 4.11025 0 8.52344 0C12.9366 0 16.5234 3.58681 16.5234 8ZM14.7652 8C14.7652 4.55385 11.9696 1.75824 8.52344 1.75824C5.07728 1.75824 2.28168 4.55385 2.28168 8C2.28168 11.4462 5.07728 14.2418 8.52344 14.2418C11.9696 14.2418 14.7652 11.4462 14.7652 8Z"
+                                                        fill="#7C8283" />
+                                                </svg>
+                                                <p>{{test.SampleCollectedAt | date: 'HH:mm:ss'}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="d-flex align-items-center justify-content-end gap-3">
+                                            <div>
+                                                <svg width="41" height="40" viewBox="0 0 41 40" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="0.523438" width="40" height="40" rx="20"
+                                                        fill="#E2F0F2" />
+                                                    <path
+                                                        d="M13.7698 17.7509H21.2572C21.4652 17.7509 21.6311 17.582 21.6311 17.3765C21.6311 17.1709 21.4624 17.0021 21.2572 17.0021H13.7698C13.5619 17.0021 13.3959 17.1709 13.3959 17.3765C13.3959 17.5819 13.5646 17.7509 13.7698 17.7509Z"
+                                                        fill="#286571" />
+                                                    <path
+                                                        d="M21.2572 19.6255H13.7699C13.5647 19.6255 13.396 19.4537 13.396 19.2483C13.396 19.0428 13.5619 18.8739 13.7699 18.8739H21.2599C21.4652 18.8739 21.6311 19.0456 21.6311 19.251C21.6311 19.4566 21.4652 19.6255 21.2572 19.6255Z"
+                                                        fill="#286571" />
+                                                    <path
+                                                        d="M13.7698 21.5004H17.5126C17.7206 21.5004 17.8865 21.3315 17.8865 21.1259C17.8865 20.9204 17.7179 20.7515 17.5126 20.7515L13.7698 20.7517C13.5619 20.7517 13.3959 20.9205 13.3959 21.1261C13.3959 21.3315 13.5646 21.5004 13.7698 21.5004Z"
+                                                        fill="#286571" />
+                                                    <path
+                                                        d="M17.5126 23.6039H13.7698C13.5646 23.6039 13.3959 23.435 13.3959 23.2296C13.3959 23.024 13.5619 22.8552 13.7698 22.8552L17.5126 22.855C17.7179 22.855 17.8865 23.0239 17.8865 23.2295C17.8865 23.435 17.7206 23.6039 17.5126 23.6039Z"
+                                                        fill="#286571" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M28.9558 16.9851C28.1941 16.2223 26.9542 16.2223 26.1924 16.9851L25.009 18.1702L25.0089 12.875C25.0089 11.8418 24.1683 11.0001 23.1367 11.0001L16.0186 11C15.9202 11 15.8246 11.0394 15.7543 11.1098L11.6331 15.2338C11.5628 15.3042 11.5234 15.4 11.5234 15.4985V27.1252C11.5234 28.1584 12.364 29 13.3957 29H23.1334C24.1652 29 25.0057 28.1582 25.0057 27.1252L25.0058 23.7048L28.9528 19.7523C29.321 19.3836 29.5234 18.8908 29.5234 18.3701C29.5261 17.8438 29.3241 17.3538 28.9558 16.9851ZM24.2584 27.1251C24.2584 27.7445 23.7552 28.2511 23.134 28.2511L13.3959 28.2512C12.7773 28.2512 12.2714 27.7473 12.2714 27.1252V15.8758H14.5175C15.5493 15.8758 16.3897 15.034 16.3897 14.0009V11.7488H23.1308C23.7493 11.7488 24.2552 12.2527 24.2552 12.8748V18.9216L19.6562 23.53L19.6519 23.5357L19.6477 23.5413C19.6225 23.5694 19.6027 23.6004 19.5859 23.6342C19.5845 23.6385 19.5823 23.6427 19.5802 23.6469C19.5781 23.6511 19.576 23.6553 19.5746 23.6595C19.5732 23.6622 19.5705 23.6664 19.5705 23.6664C19.5705 23.6664 19.5677 23.6707 19.5662 23.6736L18.4502 27.0263C18.4052 27.1615 18.4389 27.3107 18.5401 27.4092C18.6104 27.4795 18.7061 27.5189 18.8044 27.5189C18.8438 27.5189 18.8831 27.5134 18.9224 27.4992L22.2704 26.3817L22.2741 26.3796C22.2776 26.3776 22.2802 26.3761 22.2845 26.3761C22.2887 26.3747 22.2923 26.3726 22.2958 26.3704C22.2993 26.3683 22.3028 26.3662 22.307 26.3648C22.3435 26.348 22.3773 26.3254 22.4054 26.3L22.4071 26.2986L22.411 26.2958L22.4167 26.2916L24.2552 24.4505L24.2551 27.1248L24.2584 27.1251ZM21.4612 25.8668L19.3979 26.5565L20.0866 24.4903L21.4612 25.8668ZM22.1528 25.5008L20.4493 23.7948L25.3409 18.8964L27.0444 20.6023L22.1528 25.5008ZM28.4247 19.2201L27.5728 20.0732L25.8693 18.3672L26.7211 17.5142C27.1905 17.0441 27.9553 17.0441 28.4247 17.5142C28.6524 17.7421 28.7761 18.0462 28.7761 18.3672C28.7788 18.6881 28.6523 18.9922 28.4247 19.2201Z"
+                                                        fill="#286571" />
+                                                    <path
+                                                        d="M13.7698 17.7509H21.2572C21.4652 17.7509 21.6311 17.582 21.6311 17.3765C21.6311 17.1709 21.4624 17.0021 21.2572 17.0021H13.7698C13.5619 17.0021 13.3959 17.1709 13.3959 17.3765C13.3959 17.5819 13.5646 17.7509 13.7698 17.7509Z"
+                                                        stroke="#286571" stroke-width="0.25" />
+                                                    <path
+                                                        d="M21.2572 19.6255H13.7699C13.5647 19.6255 13.396 19.4537 13.396 19.2483C13.396 19.0428 13.5619 18.8739 13.7699 18.8739H21.2599C21.4652 18.8739 21.6311 19.0456 21.6311 19.251C21.6311 19.4566 21.4652 19.6255 21.2572 19.6255Z"
+                                                        stroke="#286571" stroke-width="0.25" />
+                                                    <path
+                                                        d="M13.7698 21.5004H17.5126C17.7206 21.5004 17.8865 21.3315 17.8865 21.1259C17.8865 20.9204 17.7179 20.7515 17.5126 20.7515L13.7698 20.7517C13.5619 20.7517 13.3959 20.9205 13.3959 21.1261C13.3959 21.3315 13.5646 21.5004 13.7698 21.5004Z"
+                                                        stroke="#286571" stroke-width="0.25" />
+                                                    <path
+                                                        d="M17.5126 23.6039H13.7698C13.5646 23.6039 13.3959 23.435 13.3959 23.2296C13.3959 23.024 13.5619 22.8552 13.7698 22.8552L17.5126 22.855C17.7179 22.855 17.8865 23.0239 17.8865 23.2295C17.8865 23.435 17.7206 23.6039 17.5126 23.6039Z"
+                                                        stroke="#286571" stroke-width="0.25" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M28.9558 16.9851C28.1941 16.2223 26.9542 16.2223 26.1924 16.9851L25.009 18.1702L25.0089 12.875C25.0089 11.8418 24.1683 11.0001 23.1367 11.0001L16.0186 11C15.9202 11 15.8246 11.0394 15.7543 11.1098L11.6331 15.2338C11.5628 15.3042 11.5234 15.4 11.5234 15.4985V27.1252C11.5234 28.1584 12.364 29 13.3957 29H23.1334C24.1652 29 25.0057 28.1582 25.0057 27.1252L25.0058 23.7048L28.9528 19.7523C29.321 19.3836 29.5234 18.8908 29.5234 18.3701C29.5261 17.8438 29.3241 17.3538 28.9558 16.9851ZM24.2584 27.1251C24.2584 27.7445 23.7552 28.2511 23.134 28.2511L13.3959 28.2512C12.7773 28.2512 12.2714 27.7473 12.2714 27.1252V15.8758H14.5175C15.5493 15.8758 16.3897 15.034 16.3897 14.0009V11.7488H23.1308C23.7493 11.7488 24.2552 12.2527 24.2552 12.8748V18.9216L19.6562 23.53L19.6519 23.5357L19.6477 23.5413C19.6225 23.5694 19.6027 23.6004 19.5859 23.6342C19.5845 23.6385 19.5823 23.6427 19.5802 23.6469C19.5781 23.6511 19.576 23.6553 19.5746 23.6595C19.5732 23.6622 19.5705 23.6664 19.5705 23.6664C19.5705 23.6664 19.5677 23.6707 19.5662 23.6736L18.4502 27.0263C18.4052 27.1615 18.4389 27.3107 18.5401 27.4092C18.6104 27.4795 18.7061 27.5189 18.8044 27.5189C18.8438 27.5189 18.8831 27.5134 18.9224 27.4992L22.2704 26.3817L22.2741 26.3796C22.2776 26.3776 22.2802 26.3761 22.2845 26.3761C22.2887 26.3747 22.2923 26.3726 22.2958 26.3704C22.2993 26.3683 22.3028 26.3662 22.307 26.3648C22.3435 26.348 22.3773 26.3254 22.4054 26.3L22.4071 26.2986L22.411 26.2958L22.4167 26.2916L24.2552 24.4505L24.2551 27.1248L24.2584 27.1251ZM21.4612 25.8668L19.3979 26.5565L20.0866 24.4903L21.4612 25.8668ZM22.1528 25.5008L20.4493 23.7948L25.3409 18.8964L27.0444 20.6023L22.1528 25.5008ZM28.4247 19.2201L27.5728 20.0732L25.8693 18.3672L26.7211 17.5142C27.1905 17.0441 27.9553 17.0441 28.4247 17.5142C28.6524 17.7421 28.7761 18.0462 28.7761 18.3672C28.7788 18.6881 28.6523 18.9922 28.4247 19.2201Z"
+                                                        stroke="#286571" stroke-width="0.25" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <svg width="41" height="40" viewBox="0 0 41 40" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="0.523438" width="40" height="40" rx="20"
+                                                        fill="#E2F0F2" />
+                                                    <path
+                                                        d="M24.8616 11.6245C24.8616 11.7211 24.8385 11.8162 24.7944 11.9021C24.7503 11.9879 24.6864 12.0621 24.608 12.1184L21.7906 14.1388C21.6998 14.2034 21.5929 14.2417 21.4817 14.2497C21.3705 14.2577 21.2592 14.2349 21.1601 14.184C21.0609 14.133 20.9777 14.0558 20.9194 13.9607C20.8612 13.8656 20.8302 13.7564 20.8298 13.6449V12.4259C20.7494 12.4483 20.6664 12.4604 20.5829 12.4618C19.017 12.4621 17.4832 12.9065 16.1597 13.7434C14.8361 14.5803 13.7771 15.7754 13.1054 17.1899C12.4338 18.6045 12.1771 20.1806 12.3651 21.7352C12.5532 23.2898 13.1783 24.7592 14.1679 25.9728C15.1575 27.1865 16.4709 28.0946 17.9559 28.5917C19.4408 29.0889 21.0363 29.1547 22.5571 28.7815C24.0779 28.4084 25.4617 27.6116 26.5479 26.4836C27.6341 25.3556 28.3781 23.9427 28.6936 22.4089C28.7101 22.273 28.7545 22.142 28.8241 22.0241C28.8937 21.9063 28.987 21.8042 29.0981 21.7242C29.2092 21.6442 29.3357 21.5882 29.4695 21.5596C29.6034 21.531 29.7417 21.5304 29.8758 21.558C30.0099 21.5856 30.1368 21.6406 30.2485 21.7197C30.3602 21.7988 30.4543 21.9002 30.5249 22.0175C30.5954 22.1348 30.6408 22.2654 30.6583 22.4012C30.6758 22.537 30.665 22.6749 30.6265 22.8062C30.2358 24.7072 29.3139 26.4584 27.9678 27.8564C26.6218 29.2545 24.9068 30.2421 23.022 30.7045C21.1372 31.1669 19.1598 31.0853 17.3196 30.469C15.4793 29.8527 13.8516 28.727 12.6254 27.2228C11.3993 25.7185 10.6249 23.8972 10.3923 21.9705C10.1597 20.0438 10.4784 18.0906 11.3114 16.3377C12.1443 14.5848 13.4574 13.1042 15.0981 12.0677C16.7389 11.0311 18.6399 10.4813 20.5807 10.4819C20.6642 10.4833 20.7472 10.4953 20.8276 10.5178V9.60637C20.828 9.49488 20.859 9.38563 20.9172 9.29057C20.9754 9.1955 21.0587 9.11826 21.1578 9.06729C21.257 9.01633 21.3682 8.99359 21.4795 9.00156C21.5907 9.00953 21.6975 9.04791 21.7884 9.1125L24.6057 11.1329C24.6843 11.1887 24.7484 11.2624 24.7929 11.3479C24.8374 11.4333 24.861 11.5281 24.8616 11.6245ZM28.7565 19.4344C28.7941 19.6657 28.9123 19.8761 29.0902 20.0285C29.2681 20.181 29.4942 20.2655 29.7285 20.2673C29.7804 20.2684 29.8322 20.2646 29.8834 20.256C30.0776 20.2273 30.2589 20.1414 30.4042 20.0093C30.5495 19.8773 30.6522 19.705 30.6994 19.5144C30.7465 19.3238 30.7359 19.1235 30.6689 18.9389C30.6019 18.7543 30.4815 18.5939 30.3231 18.4779C30.1646 18.3619 29.9753 18.2957 29.7791 18.2876C29.5829 18.2795 29.3888 18.3299 29.2213 18.4325C29.0539 18.535 28.9207 18.685 28.8387 18.8634C28.7568 19.0418 28.7297 19.2406 28.761 19.4344H28.7565ZM26.4892 14.5877C26.7223 14.587 26.9476 14.5041 27.1256 14.3535C27.3035 14.203 27.4226 13.9944 27.4619 13.7647C27.5012 13.5349 27.4582 13.2986 27.3404 13.0975C27.2226 12.8964 27.0376 12.7432 26.818 12.6651C26.5984 12.5869 26.3583 12.5888 26.1399 12.6703C25.9215 12.7518 25.7389 12.9078 25.6242 13.1107C25.5096 13.3136 25.4702 13.5505 25.513 13.7796C25.5558 14.0088 25.6781 14.2154 25.8584 14.3633C26.0362 14.5091 26.2592 14.5884 26.4892 14.5877ZM28.1391 15.2836C27.9686 15.3804 27.8307 15.5255 27.7427 15.7007C27.6548 15.8759 27.6209 16.0733 27.6452 16.2678C27.6696 16.4623 27.7511 16.6452 27.8795 16.7933C28.0079 16.9414 28.1774 17.0481 28.3665 17.0997C28.5556 17.1514 28.7558 17.1458 28.9417 17.0836C29.1276 17.0214 29.2908 16.9054 29.4107 16.7503C29.5306 16.5953 29.6018 16.4081 29.6152 16.2125C29.6286 16.0169 29.5837 15.8218 29.4861 15.6518C29.3558 15.4249 29.141 15.2588 28.8886 15.1898C28.6362 15.1208 28.3667 15.1546 28.1391 15.2836ZM25.8359 20.7342C25.8359 21.7705 25.5286 22.7835 24.9529 23.6451C24.3772 24.5068 23.5589 25.1783 22.6015 25.5749C21.6441 25.9715 20.5906 26.0752 19.5742 25.8731C18.5578 25.6709 17.6242 25.1719 16.8915 24.4391C16.1587 23.7063 15.6597 22.7728 15.4575 21.7564C15.2553 20.74 15.3591 19.6865 15.7557 18.7291C16.1522 17.7717 16.8238 16.9534 17.6854 16.3777C18.5471 15.802 19.5601 15.4947 20.5964 15.4947C21.986 15.4947 23.3187 16.0467 24.3013 17.0293C25.2839 18.0119 25.8359 19.3446 25.8359 20.7342ZM22.6774 21.9128L21.2339 20.4693V18.2379C21.2339 18.0688 21.1667 17.9067 21.0472 17.7871C20.9276 17.6675 20.7655 17.6004 20.5964 17.6004C20.4273 17.6004 20.2651 17.6675 20.1456 17.7871C20.026 17.9067 19.9588 18.0688 19.9588 18.2379V20.9991L21.7749 22.8152C21.8317 22.8832 21.9019 22.9387 21.9813 22.978C22.0606 23.0174 22.1473 23.0398 22.2358 23.0438C22.3243 23.0478 22.4126 23.0333 22.4952 23.0012C22.5778 22.9692 22.6527 22.9203 22.7154 22.8577C22.778 22.7951 22.8269 22.7201 22.8589 22.6375C22.891 22.5549 22.9055 22.4666 22.9015 22.3781C22.8975 22.2896 22.8751 22.2029 22.8357 22.1236C22.7964 22.0442 22.7409 21.974 22.6729 21.9172L22.6774 21.9128Z"
+                                                        fill="#286571" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <svg width="41" height="40" viewBox="0 0 41 40" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="0.523438" width="40" height="40" rx="20"
+                                                        fill="#E2F0F2" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M29.3356 22.7725C29.3356 22.3493 29.6788 22.0059 30.1022 22.0059C30.5254 22.0059 30.8688 22.349 30.8688 22.7725V25.8327C30.8688 26.3418 30.6615 26.8034 30.3273 27.1377C29.993 27.472 29.5314 27.6792 29.0223 27.6792H25.9618C25.5386 27.6792 25.1952 27.336 25.1952 26.9126C25.1952 26.4894 25.5384 26.146 25.9618 26.146L29.0219 26.1462C29.1077 26.1462 29.1861 26.1106 29.2431 26.0539C29.3001 25.9968 29.3353 25.9186 29.3353 25.8327L29.3352 22.7726L29.3356 22.7725ZM13.6847 24.5622H14.1247L14.1249 20.7662H15.6578V24.5626H17.8208V20.7662H19.3537V24.5626H21.5168V20.7662H23.0497V24.5626H25.2128V20.7662H26.7456V24.5626H27.2051C27.469 24.5626 27.6842 24.3473 27.6842 24.0835V20.7663H31.2538C31.677 20.7663 32.0204 20.4232 32.0204 19.9997C32.0204 19.5765 31.6772 19.2331 31.2538 19.2331H9.79296C9.36975 19.2331 9.02637 19.5763 9.02637 19.9997C9.02637 20.4229 9.36959 20.7663 9.79296 20.7663H13.205V24.0835C13.2055 24.3472 13.4205 24.5622 13.6846 24.5622H13.6847ZM14.1249 17.7003V15.4371H13.6848C13.4209 15.4371 13.2057 15.6523 13.2057 15.9162V17.7005L14.1249 17.7007V17.7003ZM17.8208 17.7003V15.4371H15.6578V17.7003H17.8208ZM21.5169 17.7003V15.4371H19.3539V17.7003H21.5169ZM25.2129 17.7003V15.4371H23.0498V17.7003H25.2129ZM27.6843 17.7003V15.916C27.6843 15.6521 27.4691 15.4369 27.2052 15.4369H26.7458V17.7002H27.6844L27.6843 17.7003ZM15.0862 26.1466C15.5094 26.1466 15.8528 26.4899 15.8528 26.9132C15.8528 27.3364 15.5096 27.6798 15.0862 27.6798L12.0261 27.6797C11.5169 27.6797 11.0553 27.4723 10.721 27.1382C10.3867 26.8039 10.1796 26.3423 10.1796 25.8332V22.7726C10.1796 22.3494 10.5228 22.0061 10.9462 22.0061C11.3694 22.0061 11.7127 22.3491 11.7127 22.7726V25.8328C11.7127 25.9185 11.7483 25.997 11.805 26.0539C11.8621 26.111 11.9403 26.1462 12.0263 26.1462H15.0862L15.0862 26.1466ZM11.8073 17.227C11.8073 17.6502 11.464 17.9936 11.0407 17.9936C10.6174 17.9936 10.2741 17.6505 10.2741 17.227L10.2742 14.1668C10.2742 13.6577 10.4815 13.1961 10.8157 12.8618C11.15 12.5275 11.6116 12.3203 12.1207 12.3203H15.1809C15.6041 12.3203 15.9475 12.6635 15.9475 13.0869C15.9475 13.5101 15.6043 13.8535 15.1809 13.8535L12.1209 13.8533C12.0351 13.8533 11.9567 13.8889 11.8996 13.9456C11.8425 14.0027 11.8073 14.0808 11.8073 14.1669L11.8073 17.227ZM26.0561 13.853C25.6329 13.853 25.2895 13.5098 25.2895 13.0864C25.2895 12.6632 25.6328 12.3198 26.0561 12.3198H29.1163C29.6254 12.3198 30.087 12.5271 30.4213 12.8613C30.7556 13.1956 30.9628 13.6572 30.9628 14.1663V17.2265C30.9628 17.6497 30.6196 17.9931 30.1962 17.9931C29.773 17.9931 29.4296 17.65 29.4296 17.2265L29.4298 14.1668C29.4298 14.0811 29.3942 14.0026 29.3375 13.9457C29.2804 13.8886 29.2023 13.8534 29.1164 13.8534H26.0562L26.0561 13.853Z"
+                                                        fill="#286571" />
+                                                </svg>
+                                            </div>
+                                             <div class="custom_tooltip custom_tooltip_left">
+                                                <svg class="cursor-pointer" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="6.12885" cy="5.11517" r="2.19232" fill="#8ECBD7"/>
+                                                    <circle cx="6.12885" cy="12.4999" r="2.19232" fill="#8ECBD7"/>
+                                                    <circle cx="6.12885" cy="19.8847" r="2.19232" fill="#8ECBD7"/>
+                                                </svg>  
+                                                <div class="tooltip">
+                                                    <p>Result Entry
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
+                                                            <path d="M2.872 6.62574H9.11146C9.28478 6.62574 9.42304 6.48501 9.42304 6.31372C9.42304 6.14244 9.28251 6.00171 9.11146 6.00171H2.872C2.69869 6.00171 2.56043 6.14244 2.56043 6.31372C2.56043 6.48491 2.70096 6.62574 2.872 6.62574Z" fill="#368796"/>
+                                                            <path d="M9.11147 8.18789H2.87206C2.70102 8.18789 2.56049 8.04479 2.56049 7.87361C2.56049 7.70232 2.69875 7.56159 2.87206 7.56159H9.11373C9.28478 7.56159 9.42304 7.70469 9.42304 7.87587C9.42304 8.04716 9.28478 8.18789 9.11147 8.18789Z" fill="#368796"/>
+                                                            <path d="M2.872 9.7503H5.99099C6.16431 9.7503 6.30257 9.60958 6.30257 9.43829C6.30257 9.267 6.16204 9.12628 5.99099 9.12628L2.872 9.12638C2.69869 9.12638 2.56043 9.26711 2.56043 9.4384C2.56043 9.60958 2.70096 9.7503 2.872 9.7503Z" fill="#368796"/>
+                                                            <path d="M5.99099 11.5032H2.872C2.70096 11.5032 2.56043 11.3625 2.56043 11.1913C2.56043 11.02 2.69869 10.8793 2.872 10.8793L5.99099 10.8792C6.16204 10.8792 6.30257 11.0199 6.30257 11.1912C6.30257 11.3625 6.16431 11.5032 5.99099 11.5032Z" fill="#368796"/>
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.527 5.98761C14.8922 5.35191 13.859 5.35191 13.2242 5.98761L12.238 6.97519L12.2379 2.56247C12.2379 1.70147 11.5374 1.00011 10.6777 1.00011L4.74598 1C4.66401 1 4.58431 1.03283 4.52574 1.09148L1.09135 4.5282C1.03279 4.58684 1 4.66666 1 4.74874V14.4376C1 15.2986 1.70049 16 2.56018 16H10.675C11.5348 16 12.2352 15.2985 12.2352 14.4376L12.2353 11.5873L15.5245 8.29357C15.8313 7.98631 16 7.57567 16 7.14173C16.0022 6.70314 15.8338 6.29487 15.527 5.98761ZM11.6125 14.4376C11.6125 14.9537 11.1931 15.3759 10.6754 15.3759L2.56035 15.376C2.04493 15.376 1.62332 14.9561 1.62332 14.4377V5.06315H3.49508C4.35488 5.06315 5.05526 4.36168 5.05526 3.50078V1.62402H10.6728C11.1882 1.62402 11.6098 2.04395 11.6098 2.56236V7.60132L7.77726 11.4417L7.77376 11.4464L7.77025 11.4511C7.74922 11.4745 7.73272 11.5003 7.7187 11.5285C7.71751 11.5321 7.71576 11.5356 7.71401 11.5391C7.71226 11.5426 7.7105 11.5461 7.70932 11.5496C7.70816 11.5519 7.7059 11.5553 7.7059 11.5553C7.7059 11.5553 7.70352 11.5589 7.70231 11.5614L6.77229 14.3553C6.73476 14.4679 6.76291 14.5922 6.84725 14.6743C6.90581 14.7329 6.98551 14.7658 7.06748 14.7658C7.10027 14.7658 7.13306 14.7611 7.16584 14.7494L9.95582 13.818L9.95892 13.8163C9.96178 13.8147 9.96401 13.8134 9.96758 13.8134C9.97108 13.8122 9.97402 13.8105 9.97696 13.8087C9.9799 13.8069 9.98284 13.8052 9.98634 13.804C10.0168 13.79 10.0449 13.7712 10.0683 13.75L10.0697 13.7488L10.073 13.7465L10.0777 13.743L11.6098 12.2087L11.6097 14.4373L11.6125 14.4376ZM9.28148 13.389L7.56202 13.9638L8.136 12.2419L9.28148 13.389ZM9.85783 13.084L8.43819 11.6623L12.5145 7.58031L13.9342 9.00194L9.85783 13.084ZM15.0844 7.8501L14.3745 8.56098L12.9549 7.13934L13.6647 6.42847C14.0559 6.03674 14.6932 6.03674 15.0844 6.42847C15.2741 6.61844 15.3772 6.87181 15.3772 7.13934C15.3795 7.40675 15.2741 7.66013 15.0844 7.8501Z" fill="#368796"/>
+                                                            <path d="M2.872 6.62574H9.11146C9.28478 6.62574 9.42304 6.48501 9.42304 6.31372C9.42304 6.14244 9.28251 6.00171 9.11146 6.00171H2.872C2.69869 6.00171 2.56043 6.14244 2.56043 6.31372C2.56043 6.48491 2.70096 6.62574 2.872 6.62574Z" stroke="#368796" stroke-width="0.25"/>
+                                                            <path d="M9.11147 8.18789H2.87206C2.70102 8.18789 2.56049 8.04479 2.56049 7.87361C2.56049 7.70232 2.69875 7.56159 2.87206 7.56159H9.11373C9.28478 7.56159 9.42304 7.70469 9.42304 7.87587C9.42304 8.04716 9.28478 8.18789 9.11147 8.18789Z" stroke="#368796" stroke-width="0.25"/>
+                                                            <path d="M2.872 9.7503H5.99099C6.16431 9.7503 6.30257 9.60958 6.30257 9.43829C6.30257 9.267 6.16204 9.12628 5.99099 9.12628L2.872 9.12638C2.69869 9.12638 2.56043 9.26711 2.56043 9.4384C2.56043 9.60958 2.70096 9.7503 2.872 9.7503Z" stroke="#368796" stroke-width="0.25"/>
+                                                            <path d="M5.99099 11.5032H2.872C2.70096 11.5032 2.56043 11.3625 2.56043 11.1913C2.56043 11.02 2.69869 10.8793 2.872 10.8793L5.99099 10.8792C6.16204 10.8792 6.30257 11.0199 6.30257 11.1912C6.30257 11.3625 6.16431 11.5032 5.99099 11.5032Z" stroke="#368796" stroke-width="0.25"/>
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.527 5.98761C14.8922 5.35191 13.859 5.35191 13.2242 5.98761L12.238 6.97519L12.2379 2.56247C12.2379 1.70147 11.5374 1.00011 10.6777 1.00011L4.74598 1C4.66401 1 4.58431 1.03283 4.52574 1.09148L1.09135 4.5282C1.03279 4.58684 1 4.66666 1 4.74874V14.4376C1 15.2986 1.70049 16 2.56018 16H10.675C11.5348 16 12.2352 15.2985 12.2352 14.4376L12.2353 11.5873L15.5245 8.29357C15.8313 7.98631 16 7.57567 16 7.14173C16.0022 6.70314 15.8338 6.29487 15.527 5.98761ZM11.6125 14.4376C11.6125 14.9537 11.1931 15.3759 10.6754 15.3759L2.56035 15.376C2.04493 15.376 1.62332 14.9561 1.62332 14.4377V5.06315H3.49508C4.35488 5.06315 5.05526 4.36168 5.05526 3.50078V1.62402H10.6728C11.1882 1.62402 11.6098 2.04395 11.6098 2.56236V7.60132L7.77726 11.4417L7.77376 11.4464L7.77025 11.4511C7.74922 11.4745 7.73272 11.5003 7.7187 11.5285C7.71751 11.5321 7.71576 11.5356 7.71401 11.5391C7.71226 11.5426 7.7105 11.5461 7.70932 11.5496C7.70816 11.5519 7.7059 11.5553 7.7059 11.5553C7.7059 11.5553 7.70352 11.5589 7.70231 11.5614L6.77229 14.3553C6.73476 14.4679 6.76291 14.5922 6.84725 14.6743C6.90581 14.7329 6.98551 14.7658 7.06748 14.7658C7.10027 14.7658 7.13306 14.7611 7.16584 14.7494L9.95582 13.818L9.95892 13.8163C9.96178 13.8147 9.96401 13.8134 9.96758 13.8134C9.97108 13.8122 9.97402 13.8105 9.97696 13.8087C9.9799 13.8069 9.98284 13.8052 9.98634 13.804C10.0168 13.79 10.0449 13.7712 10.0683 13.75L10.0697 13.7488L10.073 13.7465L10.0777 13.743L11.6098 12.2087L11.6097 14.4373L11.6125 14.4376ZM9.28148 13.389L7.56202 13.9638L8.136 12.2419L9.28148 13.389ZM9.85783 13.084L8.43819 11.6623L12.5145 7.58031L13.9342 9.00194L9.85783 13.084ZM15.0844 7.8501L14.3745 8.56098L12.9549 7.13934L13.6647 6.42847C14.0559 6.03674 14.6932 6.03674 15.0844 6.42847C15.2741 6.61844 15.3772 6.87181 15.3772 7.13934C15.3795 7.40675 15.2741 7.66013 15.0844 7.8501Z" stroke="#368796" stroke-width="0.25"/>
+                                                        </svg>
+                                                    </p>
+                                                    <p>Visit Summary
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                                            <path d="M15.2954 6.40918H14.909V1.3864C14.909 1.28395 14.8684 1.18563 14.796 1.11319C14.7234 1.04075 14.6252 1 14.5228 1H4.47723C4.26391 1 4.09096 1.17309 4.09096 1.3864V6.40918H3.70455C2.98725 6.40918 2.29942 6.69403 1.79221 7.20125C1.285 7.70847 1 8.39643 1 9.1136V14.1364C1 14.2388 1.04075 14.3371 1.11319 14.4096C1.18563 14.482 1.28395 14.5228 1.3864 14.5228H4.09096V17.6136C4.09096 17.7161 4.13158 17.8144 4.20402 17.8868C4.27659 17.9593 4.37477 18 4.47723 18H14.5228C14.6252 18 14.7234 17.9593 14.796 17.8868C14.8684 17.8144 14.909 17.7161 14.909 17.6136V14.5228H17.6136C17.7161 14.5228 17.8144 14.482 17.8868 14.4096C17.9593 14.3371 18 14.2388 18 14.1364V9.1136C18 8.39643 17.715 7.70847 17.2078 7.20125C16.7006 6.69404 16.0127 6.40918 15.2954 6.40918ZM4.86376 1.77287H14.1364V6.40918H4.86376V1.77287ZM14.1364 17.227H4.86376V11.4316H14.1364V17.227ZM15.2954 9.11346C15.1392 9.11346 14.9983 9.01942 14.9385 8.87505C14.8787 8.73068 14.9118 8.56446 15.0222 8.45398C15.1327 8.3435 15.2989 8.31039 15.4433 8.37015C15.5877 8.43005 15.6819 8.57092 15.6819 8.72718C15.6819 8.82964 15.6411 8.92782 15.5687 9.00039C15.4962 9.07283 15.3979 9.11346 15.2954 9.11346Z" fill="#368796" stroke="#368796" stroke-width="0.25"/>
+                                                        </svg>
+                                                    </p>
+                                                    <p>History
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="13" viewBox="0 0 20 13" fill="none">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M17.7279 8.84668C17.7279 8.48849 18.0183 8.19787 18.3767 8.19787C18.7349 8.19787 19.0255 8.48821 19.0255 8.84668V11.4367C19.0255 11.8676 18.85 12.2583 18.5672 12.5412C18.2843 12.8241 17.8936 12.9995 17.4627 12.9995H14.8724C14.5142 12.9995 14.2236 12.709 14.2236 12.3506C14.2236 11.9925 14.5141 11.7018 14.8724 11.7018L17.4624 11.702C17.5349 11.702 17.6014 11.6719 17.6495 11.6239C17.6979 11.5755 17.7277 11.5094 17.7277 11.4367L17.7275 8.84673L17.7279 8.84668ZM4.48163 10.3614H4.85407L4.85421 7.14866H6.15158V10.3617H7.9823V7.14866H9.27967V10.3617H11.1104V7.14866H12.4078V10.3617H14.2385V7.14866H15.5358V10.3617H15.9247C16.148 10.3617 16.3302 10.1795 16.3302 9.9562V7.1487H19.3514C19.7095 7.1487 20.0002 6.85836 20.0002 6.49989C20.0002 6.1417 19.7097 5.85108 19.3514 5.85108H1.18787C0.829683 5.85108 0.539062 6.14156 0.539062 6.49989C0.539062 6.85808 0.829547 7.1487 1.18787 7.1487H4.07565V9.9562C4.07607 10.1794 4.25809 10.3614 4.48159 10.3614H4.48163ZM4.85422 4.55382V2.6383H4.48177C4.25842 2.6383 4.07627 2.82046 4.07627 3.0438V4.55397L4.85422 4.55411V4.55382ZM7.98231 4.55382V2.6383H6.15158V4.55382H7.98231ZM11.1105 4.55382V2.6383H9.27978V4.55382H11.1105ZM14.2386 4.55382V2.6383H12.4079V4.55382H14.2386ZM16.3303 4.55382V3.04365C16.3303 2.8203 16.1481 2.63815 15.9248 2.63815H15.536V4.55368H16.3303L16.3303 4.55382ZM5.66785 11.7024C6.02604 11.7024 6.31666 11.9929 6.31666 12.3512C6.31666 12.7094 6.02617 13 5.66785 13L3.07786 12.9999C2.64696 12.9999 2.25627 12.8244 1.97334 12.5416C1.69041 12.2587 1.51507 11.868 1.51507 11.4371V8.84679C1.51507 8.4886 1.80556 8.19798 2.16388 8.19798C2.52207 8.19798 2.81269 8.48832 2.81269 8.84679V11.4368C2.81269 11.5093 2.84277 11.5758 2.8908 11.6239C2.93912 11.6722 3.00526 11.702 3.07809 11.702H5.66782L5.66785 11.7024ZM2.89268 4.15317C2.89268 4.51137 2.60219 4.80199 2.24387 4.80199C1.88568 4.80199 1.59506 4.51164 1.59506 4.15317L1.5952 1.56319C1.5952 1.13229 1.77066 0.741602 2.05346 0.458666C2.3364 0.175735 2.72709 0.000401437 3.15799 0.000401437H5.74797C6.10616 0.000401437 6.39678 0.290886 6.39678 0.649212C6.39678 1.0074 6.1063 1.29802 5.74797 1.29802L3.1581 1.29788C3.08554 1.29788 3.01912 1.32795 2.9708 1.37599C2.92249 1.42431 2.8927 1.49044 2.8927 1.56328L2.89268 4.15317ZM14.9523 1.29762C14.5941 1.29762 14.3035 1.00714 14.3035 0.64881C14.3035 0.29062 14.594 0 14.9523 0H17.5423C17.9732 0 18.3639 0.175461 18.6468 0.458265C18.9297 0.741197 19.1051 1.13189 19.1051 1.56279V4.15277C19.1051 4.51096 18.8146 4.80158 18.4562 4.80158C18.0981 4.80158 17.8074 4.51124 17.8074 4.15277L17.8076 1.56319C17.8076 1.49064 17.7775 1.42422 17.7295 1.37604C17.6812 1.32772 17.615 1.29793 17.5423 1.29793H14.9523L14.9523 1.29762Z" fill="#368796"/>
+                                                        </svg>
+                                                    </p>
+                                                </div>                                                          
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <table class="table m-0 border-0 d-none">
+                <tbody>
+                    <tr *ngFor="let p of FetchLabPhlebtomyDisplayOutputLists">
+                        <td [class]="tdcss">
+                            <label for="" class="clr-primary-600">SSN No.</label>
+                            <p>{{p.SSN}}</p>
+                        </td>
+                        <td>
+                            <label for="" class="clr-primary-600">Patient Name</label>
+                            <p> {{p.PatientName}} </p>
+                        </td>
+                        <td>
+                            <label for="" class="clr-primary-600">Age</label>
+                            <p> {{p.Age}} </p>
+                        </td>
+                        <td>
+                            <label for="" class="clr-primary-600"> Gender</label>
+                            <p> {{p.Gender}}</p>
+
+                        </td>
+                        <td>
+                            <label for="" class="clr-primary-600">Ward / Bed</label>
+                            <p>{{p.Ward ? p.Ward : p.BedName}}</p>
+                        </td>
+                        <td>
+                            <label for="" class="clr-primary-600">Doctor Name</label>
+                            <p>{{p.Doctor}}</p>
+                        </td>
+                        <td>
+                            <label for="" class="clr-primary-600">Req. Date</label>
+                            <p>{{p.ReqDate}}</p>
+                        </td>
+                        <td>
+                            <label for="" class="clr-primary-600">Test Name</label>
+                            <p>{{p.Test}}</p>
+                        </td>
+                        <td>
+                            <label for="" class="clr-primary-600">Speciality</label>
+                            <p [class]="p?.SampleNumber ? 'active' : ''">
+                                <svg  width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="7.23328" cy="7.401" r="7" fill="#E2F0F2"/>
+                                    <path d="M9.63027 4.83368L6.19866 8.27328L4.87882 6.95344C4.80711 6.8697 4.71886 6.80169 4.61962 6.75368C4.52038 6.70567 4.41229 6.67869 4.30213 6.67443C4.19196 6.67018 4.08211 6.68874 3.97946 6.72895C3.87681 6.76917 3.78359 6.83017 3.70563 6.90812C3.62768 6.98607 3.56668 7.0793 3.52646 7.18195C3.48625 7.2846 3.46768 7.39445 3.47194 7.50462C3.4762 7.61478 3.50318 7.72287 3.55119 7.82211C3.5992 7.92135 3.66721 8.0096 3.75095 8.08131L5.63073 9.96909C5.70547 10.0432 5.79412 10.1019 5.89157 10.1417C5.98903 10.1815 6.09339 10.2017 6.19866 10.2011C6.40851 10.2002 6.60961 10.1169 6.7586 9.96909L10.7581 5.96955C10.8331 5.89519 10.8926 5.80672 10.9332 5.70924C10.9738 5.61177 10.9947 5.50721 10.9947 5.40162C10.9947 5.29602 10.9738 5.19147 10.9332 5.09399C10.8926 4.99651 10.8331 4.90804 10.7581 4.83368C10.6083 4.6847 10.4055 4.60107 10.1942 4.60107C9.98288 4.60107 9.78014 4.6847 9.63027 4.83368Z" fill="#B4DDE4"/>
+                                </svg>                                        
+                                {{p.Specialisation}}
+                            </p>
+                        </td>
+                        <td>
+                            <label for="" class="clr-primary-600">Specimen</label>
+                            <p>
+                                <svg  width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="7.23328" cy="7.401" r="7" fill="#E2F0F2"/>
+                                    <path d="M9.63027 4.83368L6.19866 8.27328L4.87882 6.95344C4.80711 6.8697 4.71886 6.80169 4.61962 6.75368C4.52038 6.70567 4.41229 6.67869 4.30213 6.67443C4.19196 6.67018 4.08211 6.68874 3.97946 6.72895C3.87681 6.76917 3.78359 6.83017 3.70563 6.90812C3.62768 6.98607 3.56668 7.0793 3.52646 7.18195C3.48625 7.2846 3.46768 7.39445 3.47194 7.50462C3.4762 7.61478 3.50318 7.72287 3.55119 7.82211C3.5992 7.92135 3.66721 8.0096 3.75095 8.08131L5.63073 9.96909C5.70547 10.0432 5.79412 10.1019 5.89157 10.1417C5.98903 10.1815 6.09339 10.2017 6.19866 10.2011C6.40851 10.2002 6.60961 10.1169 6.7586 9.96909L10.7581 5.96955C10.8331 5.89519 10.8926 5.80672 10.9332 5.70924C10.9738 5.61177 10.9947 5.50721 10.9947 5.40162C10.9947 5.29602 10.9738 5.19147 10.9332 5.09399C10.8926 4.99651 10.8331 4.90804 10.7581 4.83368C10.6083 4.6847 10.4055 4.60107 10.1942 4.60107C9.98288 4.60107 9.78014 4.6847 9.63027 4.83368Z" fill="#B4DDE4"/>
+                                </svg>                                        
+                                {{p.Specimen}}
+                            </p>
+                           
+                        </td>
+                        <td>
+                            <label for="" class="clr-primary-600">SC</label>
+                            <p (click)="groupelement(p)" [class.disabled] ="p?.SampleNumber" class="custom_check d-flex align-items-center" [class.active]="p.groupclick">
+                                
+                                    <img class="me-1 check_img" src="assets/images/icons/toast-success.svg" alt="">
+                                
+                            </p>
+                        </td>
+                        <td>
+                            <label for="" class="clr-primary-600">Sample No</label>
+                            <p>{{p.SampleNumber}}</p>
+                        </td>
+                        <td>
+                            <svg (click)="groupData();selectedpatient(p)" data-bs-target="#quick_info" data-bs-toggle="modal" class="cursor-pointer" width="30" height="16" viewBox="0 0 30 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="29.2333" y="0.129578" width="15.5428" height="28.6284" rx="4" transform="rotate(90 29.2333 0.129578)" fill="#B4DDE4"/>
+                                <circle cx="21.4619" cy="7.90097" r="1.77139" transform="rotate(90 21.4619 7.90097)" fill="#368796"/>
+                                <circle cx="14.9191" cy="7.90097" r="1.77139" transform="rotate(90 14.9191 7.90097)" fill="#368796"/>
+                                <circle cx="8.37631" cy="7.90097" r="1.77139" transform="rotate(90 8.37631 7.90097)" fill="#368796"/>
+                            </svg>                                    
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="LabPhlebtomyLists">
+                <div class="d-flex flex-column gap-1">
+                    <div [class]="tdcss" class="doctor_worklist issued rounded shadow-0 worklist_patientcard" *ngFor="let p of FetchLabPhlebtomyDisplayOutputLists">
+                        <div class="row mx-0">
+                        <div class="position-relative" style="width: 22rem;">
+                            <div class="d-flex align-items-center h-100">
+                                <div class="patient-photo me-2">
+                                    <img src="assets/images/icons/male.svg" alt="" *ngIf="p.GenderID == '1'"
+                                        class="position-relative">
+                                 <img src="assets/images/icons/female.svg" alt="" *ngIf="p.GenderID == '2'"
+                                        class="position-relative">
+                                </div>
+                                <div class="py-1">
+                                    <p class="value fs-7 fw-bold w-100">{{p.PatientName}}</p>
+                                    <div class="d-flex align-items-center gap-2">
+                                    <p>{{p.Gender}} | {{p.Age}}</p>
+                                    <p>SSN : <span class="fw-bold">{{p.SSN}}</span></p>
+                                    </div>
+                                    <p>{{p.Nationality}} | Mobile : {{p.MobileNo}}</p>
+                                </div>
+                                <div *ngIf="p.OrderType=='STAT'"
+                                                class="custom_tooltip custom_tooltip_left legend_row">
+                                                <span class="legend stat"></span>
+                                                <div class="tooltip">
+                                                    <p>STAT</p>
+                                                </div>
+                                            </div>
+                            </div>
+                        </div>
+                        <div class="col pe-0">
+                            <div class="bg-white h-100 rounded">
+                                <div class="row mx-0 gx-2 p-2 pt-1">
+                                    <div class="" style="width: 10%;">
+                                        <label for="" class="form-label m-0 fw-bold">Ward / Bed</label>
+                                        <p>{{p.Ward ? p.Ward : p.BedName}}</p>
+                                    </div>
+                                    <div class="" style="width: 18%;">
+                                        <label for="" class="form-label m-0 fw-bold">Doctor Name</label>
+                                        <p>{{p.Doctor}}</p>
+                                    </div>
+                                    <div class="" style="width: 15%;">
+                                        <label for="" class="form-label m-0 fw-bold">Bill Date</label>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <svg width="14" height="14" viewBox="0 0 10 11" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                           d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                           fill="#368796" />
+                                     </svg>
+                                     <p class="m-0 clr-dark-600 text-nowrap">
+                                        {{p.ReqDate?.split('
+                                        ')[0]}}</p>
+                                     <svg class="ms-1" width="14" height="14" viewBox="0 0 10 11"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                           d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                           fill="#368796" />
+                                        <path
+                                           d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                           fill="#368796" />
+                                     </svg>
+                                     <p class="m-0 clr-dark-600  text-nowrap">
+                                        {{p.ReqDate?.split('
+                                        ')[1]}}</p>
+                                            </div>
+                                        <!-- <p>{{p.ReqDate}}</p> -->
+                                        
+                                    </div>
+                                    
+                                    <div class="" style="width: 11%;">
+                                        <label for="" class="form-label m-0 fw-bold w-100">Token No.</label>
+                                        <!-- <p>{{p.TokenNo}}</p> -->
+                                        <button class="btn btn-main-fill lh-1 fs-8 cursor-pointer" (click)="ScannedBarcodeItemlevel(p);">{{p.TokenNo}}</button>
+                                    </div>
+                                    <div class="" style="width: 10%;">
+                                        <label for="" class="form-label m-0 fw-bold">Sample No</label>
+                                        <p>{{p.SampleNumber}}</p>
+                                    </div>
+                                    <div class="" style="width: 4%;">
+                                        <label for="" class="form-label m-0 fw-bold">SC</label>
+                                        <p (click)="groupelement(p)" [class.disabled] ="p?.SampleNumber" class="custom_check d-flex align-items-center" [class.active]="p.groupclick">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg> 
+                                        </p>
+                                    </div>
+                                    <div class="" style="width: 13%;">
+                                        <label for="" class="form-label m-0 fw-bold text-nowrap">Speciality:</label>
+                                        <p [class]="p?.SampleNumber ? 'active' : 'custom_check'">
+                                            <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                                      
+                                            {{p.Specialisation}}
+                                        </p>
+                                    </div>
+                                    <div class="col text-end" style="width: 13%;">
+                                       <div class="d-flex align-items-center justify-content-end gap-2 h-100 align-self-center">
+                                            <svg (click)="groupData();selectedpatient(p)" data-bs-target="#quick_info" data-bs-toggle="modal" class="cursor-pointer" width="30" height="16" viewBox="0 0 30 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <rect x="29.2333" y="0.129578" width="15.5428" height="28.6284" rx="4" transform="rotate(90 29.2333 0.129578)" fill="#B4DDE4"/>
+                                                <circle cx="21.4619" cy="7.90097" r="1.77139" transform="rotate(90 21.4619 7.90097)" fill="#368796"/>
+                                                <circle cx="14.9191" cy="7.90097" r="1.77139" transform="rotate(90 14.9191 7.90097)" fill="#368796"/>
+                                                <circle cx="8.37631" cy="7.90097" r="1.77139" transform="rotate(90 8.37631 7.90097)" fill="#368796"/>
+                                            </svg> 
+                                            <div class="collected text-center custom_tooltip custom_tooltip_left" 
+                                                (click)="viewselectItemForPatient(p)" *ngIf="p.SampleNumber!=''">
+                                                <svg class="cursor-pointer" width="30" height="30" viewBox="0 0 41 40" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg" [class.active]="p.ItemSelected" [class.icon_disabled]="!p.ItemSelected">
+                                                    <rect x="0.523438" width="40" height="40" rx="20" fill="#badfe3" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M29.3356 22.7725C29.3356 22.3493 29.6788 22.0059 30.1022 22.0059C30.5254 22.0059 30.8688 22.349 30.8688 22.7725V25.8327C30.8688 26.3418 30.6615 26.8034 30.3273 27.1377C29.993 27.472 29.5314 27.6792 29.0223 27.6792H25.9618C25.5386 27.6792 25.1952 27.336 25.1952 26.9126C25.1952 26.4894 25.5384 26.146 25.9618 26.146L29.0219 26.1462C29.1077 26.1462 29.1861 26.1106 29.2431 26.0539C29.3001 25.9968 29.3353 25.9186 29.3353 25.8327L29.3352 22.7726L29.3356 22.7725ZM13.6847 24.5622H14.1247L14.1249 20.7662H15.6578V24.5626H17.8208V20.7662H19.3537V24.5626H21.5168V20.7662H23.0497V24.5626H25.2128V20.7662H26.7456V24.5626H27.2051C27.469 24.5626 27.6842 24.3473 27.6842 24.0835V20.7663H31.2538C31.677 20.7663 32.0204 20.4232 32.0204 19.9997C32.0204 19.5765 31.6772 19.2331 31.2538 19.2331H9.79296C9.36975 19.2331 9.02637 19.5763 9.02637 19.9997C9.02637 20.4229 9.36959 20.7663 9.79296 20.7663H13.205V24.0835C13.2055 24.3472 13.4205 24.5622 13.6846 24.5622H13.6847ZM14.1249 17.7003V15.4371H13.6848C13.4209 15.4371 13.2057 15.6523 13.2057 15.9162V17.7005L14.1249 17.7007V17.7003ZM17.8208 17.7003V15.4371H15.6578V17.7003H17.8208ZM21.5169 17.7003V15.4371H19.3539V17.7003H21.5169ZM25.2129 17.7003V15.4371H23.0498V17.7003H25.2129ZM27.6843 17.7003V15.916C27.6843 15.6521 27.4691 15.4369 27.2052 15.4369H26.7458V17.7002H27.6844L27.6843 17.7003ZM15.0862 26.1466C15.5094 26.1466 15.8528 26.4899 15.8528 26.9132C15.8528 27.3364 15.5096 27.6798 15.0862 27.6798L12.0261 27.6797C11.5169 27.6797 11.0553 27.4723 10.721 27.1382C10.3867 26.8039 10.1796 26.3423 10.1796 25.8332V22.7726C10.1796 22.3494 10.5228 22.0061 10.9462 22.0061C11.3694 22.0061 11.7127 22.3491 11.7127 22.7726V25.8328C11.7127 25.9185 11.7483 25.997 11.805 26.0539C11.8621 26.111 11.9403 26.1462 12.0263 26.1462H15.0862L15.0862 26.1466ZM11.8073 17.227C11.8073 17.6502 11.464 17.9936 11.0407 17.9936C10.6174 17.9936 10.2741 17.6505 10.2741 17.227L10.2742 14.1668C10.2742 13.6577 10.4815 13.1961 10.8157 12.8618C11.15 12.5275 11.6116 12.3203 12.1207 12.3203H15.1809C15.6041 12.3203 15.9475 12.6635 15.9475 13.0869C15.9475 13.5101 15.6043 13.8535 15.1809 13.8535L12.1209 13.8533C12.0351 13.8533 11.9567 13.8889 11.8996 13.9456C11.8425 14.0027 11.8073 14.0808 11.8073 14.1669L11.8073 17.227ZM26.0561 13.853C25.6329 13.853 25.2895 13.5098 25.2895 13.0864C25.2895 12.6632 25.6328 12.3198 26.0561 12.3198H29.1163C29.6254 12.3198 30.087 12.5271 30.4213 12.8613C30.7556 13.1956 30.9628 13.6572 30.9628 14.1663V17.2265C30.9628 17.6497 30.6196 17.9931 30.1962 17.9931C29.773 17.9931 29.4296 17.65 29.4296 17.2265L29.4298 14.1668C29.4298 14.0811 29.3942 14.0026 29.3375 13.9457C29.2804 13.8886 29.2023 13.8534 29.1164 13.8534H26.0562L26.0561 13.853Z"
+                                                        fill="#286571" />
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p>BarCode Print</p>
+                                                </div>
+                                             </div>
+                                            <div [class]="p.IsSpecimenRejForm" (click)="openSpecimenRejection(p)">
+                                                <svg class="cursor-pointer"  width="26" height="26" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="0.5" y="1.21777" width="27" height="27" rx="13.5" fill="#FCEBE8"/>
+                                                    <rect x="0.5" y="1.21777" width="27" height="27" rx="13.5" stroke="#E63C1A"/>
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.8281 13.9191V10.4852C13.2906 10.4022 13.6394 10.0482 13.6394 9.62496V7.59669C13.6394 7.11207 13.1821 6.71777 12.6199 6.71777H7.62764C7.0654 6.71777 6.60809 7.11207 6.60809 7.59669V9.62496C6.60809 10.0482 6.95696 10.4022 7.4194 10.4852V19.3278L10.4298 16.3174C10.4071 16.2778 10.3942 16.232 10.3942 16.183C10.3942 16.0335 10.5151 15.9126 10.6646 15.9126H10.8346L11.216 15.5312C10.4631 15.4828 9.70539 15.2968 9.70539 15.2968C8.94601 15.0932 8.30427 15.3833 7.96027 15.5991V10.5039H12.2872V11.0447H10.6646C10.5151 11.0447 10.3942 11.1659 10.3942 11.3152C10.3942 11.4645 10.5151 11.5856 10.6646 11.5856H12.2872V12.6674H10.6646C10.5151 12.6674 10.3942 12.7885 10.3942 12.9378C10.3942 13.0871 10.5151 13.2082 10.6646 13.2082H12.2872V14.29H10.6646C10.5151 14.29 10.3942 14.4109 10.3942 14.5604C10.3942 14.71 10.5151 14.8308 10.6646 14.8308H11.9164L12.8281 13.9191ZM7.62764 7.25864C7.36829 7.25864 7.14897 7.41333 7.14897 7.59669V9.62496C7.14897 9.80831 7.36829 9.963 7.62764 9.963H12.6199C12.8792 9.963 13.0985 9.80831 13.0985 9.62496V7.59669C13.0985 7.41333 12.8792 7.25864 12.6199 7.25864H7.62764Z" fill="#EB6247"/>
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M6.20232 21.915C6.03604 22.1053 6.04356 22.3946 6.22489 22.5759C6.41406 22.7651 6.72077 22.7651 6.90994 22.5759L8.17959 21.3062C8.67166 21.8155 9.36137 22.1326 10.1238 22.1326C11.6149 22.1326 12.8281 20.9194 12.8281 19.4282V16.6577L21.776 7.7098C21.9652 7.52063 21.9652 7.21392 21.776 7.02475C21.5869 6.83558 21.2802 6.83558 21.091 7.02475L21.089 7.02671C21.0818 7.03494 21.0743 7.04299 21.0665 7.05084L6.20232 21.915ZM12.2872 18.0761H11.4098L11.9506 17.5352H12.2872V18.0761ZM10.6646 19.6987H12.2686C12.2797 19.61 12.2872 19.5199 12.2872 19.4282V19.1578H10.6646C10.5151 19.1578 10.3942 19.2787 10.3942 19.4282C10.3942 19.5778 10.5151 19.6987 10.6646 19.6987Z" fill="#EB6247"/>
+                                                    <path d="M20.448 19.0849C20.448 20.813 19.0423 22.2188 17.3142 22.2188C15.5864 22.2188 14.1807 20.813 14.1807 19.0852C14.1807 18.4037 14.3957 17.756 14.8027 17.2114L17.086 13.6046C17.1852 13.448 17.4435 13.448 17.5427 13.6046L19.8379 17.2284C20.233 17.7558 20.448 18.4034 20.448 19.0849Z" fill="#EB6247"/>
+                                                </svg>                                                    
+                                                <div class="tooltip">
+                                                    <p>Specimen Rejection Form
+                                                    </p>
+                                                </div>
+                                            </div> 
+                                            <div *ngIf="p.CurrentStatus === '3'"
+                                                class="form-check form-switch gap-2 m-0 d-flex align-items-center">
+                                                <input class="form-check-input mt-0" type="checkbox" role="switch" [(ngModel)]="p.isSelected" (ngModelChange)="onCheckboxChange(p)">
+                                                <p class="label mb-0 text-start">Sample discollection</p>
+                                            </div>
+                                       </div>  
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="doctor_worklist_ChiefComplaints p-1 d-flex align-items-center gap-2 justify-content-between rounded-bottom">
+                            <div class="d-flex align-items-center gap-4">
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0 fw-bold text-nowrap">Test Name:</label>
+                                    <p>{{p.Test}}</p>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0 fw-bold">Specimen</label>
+                                    <p class="custom_check">
+                                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                                       
+                                        {{p.Specimen}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal quick_info phlebotomyquick_info" data-bs-backdrop="static" id="quick_info" tab-index="-1">
+    <div class="modal-dialog modal-dialog-scrollabel">
+        <div class="modal-content h-100 overflow-auto">
+            <div class="modal-body p-0">
+                <div class="profile_bg">
+                    <div class="modal-header ps-0 py-2">                           
+                        <label for="" class="ssn_label bg-primary clr-light" id="">SSN: {{selecteddata?.SSN}}</label>
+                        <div class="actions ms-auto d-flex align-items-center gap-2">
+                            <button type="button" class="btn-close"  data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    </div>
+                    <div class="patient-info text-center pb-2">
+                        <div class="patient-photo mx-auto">
+                            <svg class="position-relative" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 19 20" fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M4.24204 5.40194C4.24204 2.70966 6.60054 0.519531 9.49993 0.519531C12.3993 0.519531 14.758 2.70961 14.758 5.40195C14.758 5.70065 14.7216 6.00638 14.6439 6.35817C14.719 6.59977 14.7581 6.8699 14.7581 7.14592C14.7581 8.11756 14.2953 8.85552 13.6756 8.88894C12.9937 10.9892 11.3501 12.3771 9.50002 12.3771C7.64999 12.3771 6.00646 10.9891 5.32431 8.88894C4.70462 8.85543 4.24199 8.11756 4.24199 7.14592C4.24199 6.86916 4.28127 6.59844 4.35627 6.3563C4.27831 6.00529 4.24204 5.70009 4.24204 5.40194ZM5.03243 6.73058C5.00643 6.8621 4.99309 7.00236 4.99309 7.14592C4.99309 7.82108 5.27477 8.19217 5.3687 8.19217C5.47081 8.13355 5.60825 8.11475 5.7203 8.15726C5.83146 8.19906 5.92615 8.27998 5.95545 8.38811C6.48108 10.3572 7.90531 11.6796 9.50009 11.6796C11.0949 11.6796 12.5189 10.3572 13.0447 8.38811C13.074 8.27998 13.1567 8.19077 13.2678 8.14885C13.379 8.10705 13.506 8.11744 13.6073 8.17606C13.7366 8.19147 14.007 7.82039 14.007 7.14592C14.007 7.00736 13.9945 6.87187 13.9703 6.74435L13.2866 6.7963C13.276 6.797 13.2656 6.797 13.2558 6.797C13.1085 6.797 12.9734 6.71678 12.9134 6.58916C12.899 6.55983 12.6226 5.97683 12.5332 5.39087C10.9587 5.29596 9.3302 4.58038 8.52052 3.8382C8.22161 4.3216 7.57414 4.7045 6.27539 4.7045H6.21831C6.11381 4.92834 6.06652 5.63222 6.1123 6.32828C6.12651 6.36588 6.13481 6.4057 6.13481 6.4482C6.13481 6.64356 5.95689 6.79979 5.75179 6.79699C5.72852 6.79769 5.70979 6.79629 5.68791 6.79349C5.67573 6.79182 5.36674 6.74943 5.03243 6.73058Z" fill="#0885CA"/>
+                                <path d="M15.2349 12.1162L13.303 11.4919C13.1618 11.4466 13.0048 11.4835 12.9026 11.5853C11.9554 12.5458 10.7469 13.0745 9.49991 13.0745C8.25296 13.0745 7.04442 12.5457 6.09724 11.586C5.99589 11.4842 5.83883 11.4472 5.69684 11.4926L3.76494 12.1169C1.80362 12.7494 0.486206 14.4702 0.486206 16.3987V18.1984C0.486206 18.3909 0.65446 18.5471 0.86182 18.5471C6.54738 19.8454 12.4526 19.8453 18.1382 18.5471C18.3456 18.5471 18.5138 18.3909 18.5138 18.1984V16.3987C18.5137 14.4702 17.1963 12.7496 15.2349 12.1162Z" fill="#0885CA"/>
+                            </svg>
+                            <p class="vip_label m-0 fw-bold d-flex align-items-center">
+                                <svg class="me-1" xmlns="http://www.w3.org/2000/svg" width="7" height="7" viewBox="0 0 7 7" fill="none">
+                                    <path d="M4.1362 0.995956L4.66853 2.06062C4.74026 2.20786 4.93281 2.34755 5.09515 2.37775L6.05788 2.53632C6.67327 2.63825 6.81673 3.08375 6.37501 3.52925L5.62371 4.28055C5.49912 4.40514 5.42739 4.65054 5.46891 4.82798L5.68411 5.75673C5.85401 6.48916 5.46136 6.77609 4.81577 6.391L3.91345 5.85489C3.75111 5.75673 3.47928 5.75673 3.31694 5.85489L2.41462 6.391C1.76903 6.77231 1.37638 6.48916 1.54628 5.75673L1.76148 4.82798C1.79545 4.64676 1.72372 4.40136 1.59913 4.27678L0.847829 3.52547C0.406108 3.08375 0.549573 2.63825 1.16496 2.53254L2.12769 2.37398C2.29003 2.34755 2.48258 2.20408 2.55431 2.05684L3.08664 0.99218C3.37735 0.41832 3.84549 0.41832 4.1362 0.995956Z" fill="#286571"/>
+                                </svg>
+                                    vip
+                                <svg class="ms-1" xmlns="http://www.w3.org/2000/svg" width="7" height="7" viewBox="0 0 7 7" fill="none">
+                                    <path d="M4.1362 0.995956L4.66853 2.06062C4.74026 2.20786 4.93281 2.34755 5.09515 2.37775L6.05788 2.53632C6.67327 2.63825 6.81673 3.08375 6.37501 3.52925L5.62371 4.28055C5.49912 4.40514 5.42739 4.65054 5.46891 4.82798L5.68411 5.75673C5.85401 6.48916 5.46136 6.77609 4.81577 6.391L3.91345 5.85489C3.75111 5.75673 3.47928 5.75673 3.31694 5.85489L2.41462 6.391C1.76903 6.77231 1.37638 6.48916 1.54628 5.75673L1.76148 4.82798C1.79545 4.64676 1.72372 4.40136 1.59913 4.27678L0.847829 3.52547C0.406108 3.08375 0.549573 2.63825 1.16496 2.53254L2.12769 2.37398C2.29003 2.34755 2.48258 2.20408 2.55431 2.05684L3.08664 0.99218C3.37735 0.41832 3.84549 0.41832 4.1362 0.995956Z" fill="#286571"/>
+                                </svg>
+                            </p>
+                        </div>
+                        <p class="mt-2 text-center fs-6 clr-primary-600">{{selecteddata?.PatientName}}</p>
+                        <p class="my-1">{{selecteddata?.Gender}} | {{selecteddata?.Age}}</p>
+                        <p class="clr-primary-600 fs-6">{{selecteddata?.MobileNo}}</p>
+                        <!-- <div class="vt_score mt-1">
+                            <p class="m-0 clr-primary-600 fs-8 px-2">{{langData?.common?.vt_score}}</p>
+                            <span class="clr-light fs-7 d-flex align-items-center justify-content-center">{{selectedPatientVTScore}}</span>
+                        </div> -->
+                    </div>
+                    
+                </div>
+                <div class="p-2 content pb-0">
+                    <div class="p-2 rounded-3 align-items-center acute">
+                        <div class="d-flex align-items-center w-80">
+                            <span></span>
+                            <p class="m-1 fs-7 ms-2">Doctor Name : {{selecteddata?.Doctor}}</p>                            
+                        </div>  
+                        <div class="d-flex align-items-center w-80" *ngIf="groupedData">
+                            <span></span>
+                            <p class="m-1 fs-7 ms-2">Test Name : {{groupedData[0]?.Tests}}</p>                         
+                        </div>
+                       
+                    </div>
+
+                    <div class="mt-2 sample_details">
+                        <div class="d-flex align-items-center justify-content-between p-2 bg-primary-100 border-bottom-primary-200">
+                            <div class="d-flex align-items-center gap-2">
+                                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="14" height="15" viewBox="0 0 14 15" fill="none">
+                                    <circle cx="7" cy="7.401" r="7" fill="#368796"/>
+                                </svg> -->
+                                <h6 class="clr-primary-600 m-0">Order Details</h6>
+                               
+                            </div>
+                            <p class="mt-2 fs-7 clr-primary-600">{{selecteddata?.ReqDate}}</p>
+                        </div>
+                        <div class="p-2 sample_details_body">
+                            <!--<div class="mb-2">
+                                    <label for="" class="m-0 form-label">Doctor Name</label>
+                                    <p class="mt-2 fs-7 clr-primary-600">{{selecteddata?.Doctor}}</p>
+                            </div>
+                             <div class="mb-2">
+                                    <label for="" class="m-0 form-label">Req. Date</label>
+                                    <p class="mt-2 fs-7 clr-primary-600">{{selecteddata?.ReqDate}}</p>
+                            </div>
+                            <div class="mb-2">
+                                    <label for="" class="m-0 form-label">Test Name</label>
+                                    <p class="mt-2 fs-7 clr-primary-600">{{selecteddata?.Test}}</p>
+                            </div> -->
+
+                            <div class="measures border-primary-200 rounded-3 p-2 row mx-0">
+                                <div class="col-4 text-center">
+                                    <p class="fs-7 m-1" style="color: #964536;">Speciality</p>
+                                    <p class="fs-8 m-0"> {{selecteddata?.Specialisation}}</p>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <p class="fs-7 m-1" style="color: #964536;">Specimen</p>
+                                    <p class="fs-8 m-0"> {{selecteddata?.Specimen}}</p>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <p class="fs-7 m-1" style="color: #964536;">Sample No.</p>
+                                    <p class="fs-8 m-0">{{selecteddata?.SampleNumber}}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-2 sample_grid mt-3">
+                                <div [class]="samplecollected ? 'active' : ''" class="cursor-pointer ind_block d-flex flex-column gap-2 align-items-center"
+                                 (click)="samplecollectionchange()">
+                                    <svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="10.1667" cy="10.901" r="10" fill="#E2F0F2"/>
+                                        <path d="M13.5911 7.2333L8.68883 12.147L6.80334 10.2615C6.7009 10.1419 6.57483 10.0447 6.43306 9.97615C6.29129 9.90756 6.13687 9.86902 5.97949 9.86294C5.82212 9.85686 5.66519 9.88338 5.51855 9.94083C5.37191 9.99828 5.23872 10.0854 5.12736 10.1968C5.016 10.3081 4.92885 10.4413 4.8714 10.588C4.81395 10.7346 4.78744 10.8915 4.79352 11.0489C4.79959 11.2063 4.83814 11.3607 4.90673 11.5025C4.97532 11.6443 5.07247 11.7703 5.1921 11.8728L7.8775 14.5696C7.98428 14.6755 8.11091 14.7593 8.25013 14.8162C8.38936 14.873 8.53845 14.9019 8.68883 14.901C8.98862 14.8997 9.2759 14.7807 9.48874 14.5696L15.2024 8.85597C15.3095 8.74974 15.3945 8.62335 15.4525 8.4841C15.5105 8.34485 15.5404 8.19549 15.5404 8.04463C15.5404 7.89378 15.5105 7.74442 15.4525 7.60517C15.3945 7.46592 15.3095 7.33953 15.2024 7.2333C14.9883 7.02046 14.6986 6.901 14.3967 6.901C14.0949 6.901 13.8052 7.02046 13.5911 7.2333Z" fill="#B4DDE4"/>
+                                    </svg>
+                                    <p class="m-0 fs-8">Sample Collected</p>      
+                                    <p *ngIf="selecteddata?.SampleCollectedAt" class="m-0 fs-8">{{selecteddata?.SampleCollectedAt | date: 'dd-MMM-yyyy HH:mm'}}</p>                                      
+                                </div>
+                                <div [class]="porter ? 'active' : ''" class="cursor-pointer ind_block d-flex flex-column gap-2 align-items-center"
+                                (click)="porterchange()" [class.disabled]="!selecteddata?.SampleCollectedBy">
+                                    <svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="10.1667" cy="10.901" r="10" fill="#E2F0F2"/>
+                                        <path d="M13.5911 7.2333L8.68883 12.147L6.80334 10.2615C6.7009 10.1419 6.57483 10.0447 6.43306 9.97615C6.29129 9.90756 6.13687 9.86902 5.97949 9.86294C5.82212 9.85686 5.66519 9.88338 5.51855 9.94083C5.37191 9.99828 5.23872 10.0854 5.12736 10.1968C5.016 10.3081 4.92885 10.4413 4.8714 10.588C4.81395 10.7346 4.78744 10.8915 4.79352 11.0489C4.79959 11.2063 4.83814 11.3607 4.90673 11.5025C4.97532 11.6443 5.07247 11.7703 5.1921 11.8728L7.8775 14.5696C7.98428 14.6755 8.11091 14.7593 8.25013 14.8162C8.38936 14.873 8.53845 14.9019 8.68883 14.901C8.98862 14.8997 9.2759 14.7807 9.48874 14.5696L15.2024 8.85597C15.3095 8.74974 15.3945 8.62335 15.4525 8.4841C15.5105 8.34485 15.5404 8.19549 15.5404 8.04463C15.5404 7.89378 15.5105 7.74442 15.4525 7.60517C15.3945 7.46592 15.3095 7.33953 15.2024 7.2333C14.9883 7.02046 14.6986 6.901 14.3967 6.901C14.0949 6.901 13.8052 7.02046 13.5911 7.2333Z" fill="#B4DDE4"/>
+                                    </svg>
+                                    <p class="m-0 fs-8">Porter</p>   
+                                    <p *ngIf="selecteddata?.PorterReceivedDatetime" class="m-0 fs-8">{{selecteddata?.PorterReceivedDatetime | date: 'dd-MMM-yyyy HH:mm'}}</p> 
+                                </div>
+                                <div [class.disabled]="!selecteddata?.SampleCollectedBy" (click)="samplerecievedchange()" [class]="samplerecieved ? 'active' : ''"  class="cursor-pointer ind_block d-flex flex-column gap-2 align-items-center">
+                                    <svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="10.1667" cy="10.901" r="10" fill="#E2F0F2"/>
+                                        <path d="M13.5911 7.2333L8.68883 12.147L6.80334 10.2615C6.7009 10.1419 6.57483 10.0447 6.43306 9.97615C6.29129 9.90756 6.13687 9.86902 5.97949 9.86294C5.82212 9.85686 5.66519 9.88338 5.51855 9.94083C5.37191 9.99828 5.23872 10.0854 5.12736 10.1968C5.016 10.3081 4.92885 10.4413 4.8714 10.588C4.81395 10.7346 4.78744 10.8915 4.79352 11.0489C4.79959 11.2063 4.83814 11.3607 4.90673 11.5025C4.97532 11.6443 5.07247 11.7703 5.1921 11.8728L7.8775 14.5696C7.98428 14.6755 8.11091 14.7593 8.25013 14.8162C8.38936 14.873 8.53845 14.9019 8.68883 14.901C8.98862 14.8997 9.2759 14.7807 9.48874 14.5696L15.2024 8.85597C15.3095 8.74974 15.3945 8.62335 15.4525 8.4841C15.5105 8.34485 15.5404 8.19549 15.5404 8.04463C15.5404 7.89378 15.5105 7.74442 15.4525 7.60517C15.3945 7.46592 15.3095 7.33953 15.2024 7.2333C14.9883 7.02046 14.6986 6.901 14.3967 6.901C14.0949 6.901 13.8052 7.02046 13.5911 7.2333Z" fill="#B4DDE4"/>
+                                    </svg>
+                                    <p class="m-0 fs-8">Sample Recieved</p>  
+                                    <p *ngIf="selecteddata?.SampleReceivedDatetime" class="m-0 fs-8">{{selecteddata?.SampleReceivedDatetime | date: 'dd-MMM-yyyy HH:mm'}}</p> 
+                                </div>
+                                <div [class.disabled]="!selecteddata?.SampleCollectedBy" (click)="sampleacknowledgechange()" [class]="sampleacknowledge ? 'active' : ''"  class="cursor-pointer ind_block d-flex flex-column gap-2 align-items-center">
+                                    <svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="10.1667" cy="10.901" r="10" fill="#E2F0F2"/>
+                                        <path d="M13.5911 7.2333L8.68883 12.147L6.80334 10.2615C6.7009 10.1419 6.57483 10.0447 6.43306 9.97615C6.29129 9.90756 6.13687 9.86902 5.97949 9.86294C5.82212 9.85686 5.66519 9.88338 5.51855 9.94083C5.37191 9.99828 5.23872 10.0854 5.12736 10.1968C5.016 10.3081 4.92885 10.4413 4.8714 10.588C4.81395 10.7346 4.78744 10.8915 4.79352 11.0489C4.79959 11.2063 4.83814 11.3607 4.90673 11.5025C4.97532 11.6443 5.07247 11.7703 5.1921 11.8728L7.8775 14.5696C7.98428 14.6755 8.11091 14.7593 8.25013 14.8162C8.38936 14.873 8.53845 14.9019 8.68883 14.901C8.98862 14.8997 9.2759 14.7807 9.48874 14.5696L15.2024 8.85597C15.3095 8.74974 15.3945 8.62335 15.4525 8.4841C15.5105 8.34485 15.5404 8.19549 15.5404 8.04463C15.5404 7.89378 15.5105 7.74442 15.4525 7.60517C15.3945 7.46592 15.3095 7.33953 15.2024 7.2333C14.9883 7.02046 14.6986 6.901 14.3967 6.901C14.0949 6.901 13.8052 7.02046 13.5911 7.2333Z" fill="#B4DDE4"/>
+                                    </svg>
+                                    <p class="m-0 fs-8">Sample Acknowledge</p>   
+                                </div>
+                                <div [class.disabled]="!selecteddata?.SampleCollectedBy" (click)="samplerecollectchange()" [class]="samplerecollect ? 'active' : ''" class="cursor-pointer ind_block d-flex flex-column gap-2 align-items-center">
+                                    <svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="10.1667" cy="10.901" r="10" fill="#E2F0F2"/>
+                                        <path d="M13.5911 7.2333L8.68883 12.147L6.80334 10.2615C6.7009 10.1419 6.57483 10.0447 6.43306 9.97615C6.29129 9.90756 6.13687 9.86902 5.97949 9.86294C5.82212 9.85686 5.66519 9.88338 5.51855 9.94083C5.37191 9.99828 5.23872 10.0854 5.12736 10.1968C5.016 10.3081 4.92885 10.4413 4.8714 10.588C4.81395 10.7346 4.78744 10.8915 4.79352 11.0489C4.79959 11.2063 4.83814 11.3607 4.90673 11.5025C4.97532 11.6443 5.07247 11.7703 5.1921 11.8728L7.8775 14.5696C7.98428 14.6755 8.11091 14.7593 8.25013 14.8162C8.38936 14.873 8.53845 14.9019 8.68883 14.901C8.98862 14.8997 9.2759 14.7807 9.48874 14.5696L15.2024 8.85597C15.3095 8.74974 15.3945 8.62335 15.4525 8.4841C15.5105 8.34485 15.5404 8.19549 15.5404 8.04463C15.5404 7.89378 15.5105 7.74442 15.4525 7.60517C15.3945 7.46592 15.3095 7.33953 15.2024 7.2333C14.9883 7.02046 14.6986 6.901 14.3967 6.901C14.0949 6.901 13.8052 7.02046 13.5911 7.2333Z" fill="#B4DDE4"/>
+                                    </svg>
+                                    <p class="m-0 fs-8">Sample Recollect</p>   
+                                </div>
+                                <div [class.disabled]="!selecteddata?.SampleCollectedBy" (click)="barcodeprintchange(selecteddata)" [class]="barcodeprint ? 'active' : ''" class="cursor-pointer ind_block d-flex flex-column gap-2 align-items-center">
+                                    <svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="10.1667" cy="10.901" r="10" fill="#E2F0F2"/>
+                                        <path d="M13.5911 7.2333L8.68883 12.147L6.80334 10.2615C6.7009 10.1419 6.57483 10.0447 6.43306 9.97615C6.29129 9.90756 6.13687 9.86902 5.97949 9.86294C5.82212 9.85686 5.66519 9.88338 5.51855 9.94083C5.37191 9.99828 5.23872 10.0854 5.12736 10.1968C5.016 10.3081 4.92885 10.4413 4.8714 10.588C4.81395 10.7346 4.78744 10.8915 4.79352 11.0489C4.79959 11.2063 4.83814 11.3607 4.90673 11.5025C4.97532 11.6443 5.07247 11.7703 5.1921 11.8728L7.8775 14.5696C7.98428 14.6755 8.11091 14.7593 8.25013 14.8162C8.38936 14.873 8.53845 14.9019 8.68883 14.901C8.98862 14.8997 9.2759 14.7807 9.48874 14.5696L15.2024 8.85597C15.3095 8.74974 15.3945 8.62335 15.4525 8.4841C15.5105 8.34485 15.5404 8.19549 15.5404 8.04463C15.5404 7.89378 15.5105 7.74442 15.4525 7.60517C15.3945 7.46592 15.3095 7.33953 15.2024 7.2333C14.9883 7.02046 14.6986 6.901 14.3967 6.901C14.0949 6.901 13.8052 7.02046 13.5911 7.2333Z" fill="#B4DDE4"/>
+                                    </svg>
+                                    <p class="m-0 fs-8">Barcode Print</p>   
+                                </div>
+                            </div>
+                            
+                            
+                            <!-- <div class="mb-2">
+                                <label for="" class="m-0 form-label">Reject</label>
+                                <p class="fs-6 clr-primary-600 m-0">Reject</p>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button (click)="SaveInfo(selecteddata)" class="btn btn-main-outline" [disabled]="!saveenable">Save</button>
+                    </div>
+                </div>
+               
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="savemsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Data Saved Successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                     data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="showLabReportsModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Report</h5>
+                <div class="ms-auto">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="trustedUrl = ''"></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <iframe *ngIf="trustedUrl" height="600" width="100%" [src]="(trustedUrl ? trustedUrl : '') | safeUrl"
+                    frameborder="0"></iframe>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{langData?.messages?.nodataFound}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                     data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="ValidMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{ValidationMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                     data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="remarksModal" data-bs-abackdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" style="width: 55%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Remarks</h5>
+                <div class="d-flex gap-2 align-items-center justify-content-end">
+                    <button class="btn btn-danger-outline" (click)="clearRemarks()">Clear</button>
+                    <button class="btn btn-main-outline" (click)="SaveSample()">Save</button>
+                    <button type="button" class="btn-close ms-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control resize-none mb-2" id="remarks_text" cols="30" rows="3"></textarea>
+                <div class="validation_err" *ngIf="showRemarksValidation">
+                    <p class="m-0 mb-3 text-center fs-7">
+                        Please Enter Remarks
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="confirmationPopup" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{confirmationMessage}}</p>
+                <div class="modal-footer">
+                    <a (click)="onConfirmation()" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Yes</a>
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">No</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="discollectionRemarksModal">
+    <div class="modal-dialog modal-dialog-centered" style="width: 35%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Remarks
+                </h5>
+                <div class="d-flex gap-2 align-items-center justify-content-end">
+                    <button class="btn btn-main-outline" (click)="saveDisollectionRemarks()"
+                        [disabled]="!remarksForm?.valid">Save</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body" [formGroup]="remarksForm">
+                <textarea name="" placeholder="Enter Remarks" class="form-control resize-none mb-2"
+                    formControlName="remarks" id="" cols="30" rows="3"></textarea>
+            </div>
+        </div>
+    </div>
+</div>

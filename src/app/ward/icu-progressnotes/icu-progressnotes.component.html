@@ -1,0 +1,1408 @@
+<app-header [InputHome]="IsHome" [IsSwitchWard]="false"></app-header>
+
+<!--Container-->
+<form [formGroup]="progressNotes">
+    <div class="container__wrapper bg-white">
+        <div class="page-header sticky-top shadow-sm justify-content-start">
+            <h2 class="page-heading">ICU Progress Notes</h2>
+            <div class="actions ms-auto d-flex align-items-center gap-2">
+                <button  class="btn btn-main-outline" *ngIf="IsDoctor == 'true'" (click)="openNurseInstructions()">Doctor Instructions</button>
+                <button class="btn btn-main-fill" (click)="navigatetoBedBoard()">Beds Board</button>
+                <button class="btn btn-main-outline" (click)="viewWorklist()" *ngIf="FetchPatientICUProgressNoteWorkListDData.length > 0">View</button>
+                
+                <button class="btn btn-danger-outline" (click)="clear()">Clear</button>
+                <button class="btn btn-main-fill" (click)="saveProgressNotes()" appButtonVisibility>Save</button>
+                <button class="btn btn-main-outline" (click)="openQuickActions()">Quick Actions</button>
+            </div>
+        </div>
+        <div class="bg-white rounded-2">
+            <!-- Patient Card -->
+            <div class="m-2">
+                <app-wardheader-summary></app-wardheader-summary>
+            </div>
+        </div>
+
+        <div class="p-2 pt-0 iccu_progress_notes">
+            <div class="card card-style-1">
+                <div class="card-header justify-content-start">
+                    <h5 class="card-heading">Situation</h5>
+                </div>
+                <div class="p-2">
+                    <table class="table table-bordered m-0">
+                        <tbody>
+                            <tr>
+                                <td>Date of admission to hospital:</td>
+                                <td>
+                                    <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" [disabled]="true" formControlName="DateOfAdmissionToHospital" (click)="DOA.open()"
+                                            [matDatepicker]="DOA" [max]="minDate">
+                                        <mat-datepicker-toggle matSuffix [for]="DOA">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #DOA></mat-datepicker>
+                                    </mat-form-field>
+                                </td>
+                                <td>Date of admission to ICU:</td>
+                                <td>
+                                    <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" formControlName="DateOfAdmissionToICU" (click)="DOAI.open()"
+                                            [matDatepicker]="DOAI" [max]="minDate">
+                                        <mat-datepicker-toggle matSuffix [for]="DOAI">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #DOAI></mat-datepicker>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Reason for admission to hospital:</td>
+                                <td colspan="3">
+                                    <input type="text" formControlName="ReasonForAdmissionToHospital" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Reason for admission to ICU:</td>
+                                <td colspan="3">
+                                    <input type="text" class="form-control" formControlName="ReasonForAdmissionToICU">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="card card-style-1">
+                    <div class="card-header justify-content-start">
+                        <h5 class="card-heading">Background (Past Medical & Surgical History)</h5>
+                    </div>
+                    <div class="p-2">
+                        <!-- <input type="text" class="form-control" formControlName="PastMedicalSurgicalHistory"> -->
+                        <textarea class="form-control" rows="3" formControlName="PastMedicalSurgicalHistory"></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-3 d-none">
+                    <h5 class="clr-primary-600">Allergies</h5>
+                    <input type="text" class="form-control" >
+                </div>
+            </div>
+            <div class="card card-style-1 mt-3">
+                <div class="card-header justify-content-start">
+                    <h5 class="card-heading">Event Summary</h5>
+                </div>
+                <div class="p-2">
+                    <form [formGroup]="formEvent">
+                        <table class="table m-0">
+                            <thead>
+                                <tr>
+                                    <th class="col-1">Date</th>
+                                    <th>Type</th>
+                                    <th>Details</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody formArrayName="rows">
+                                <tr *ngFor="let row of rows.controls; let i = index" [formGroupName]="i">
+                                    <td> 
+                                        <mat-form-field appearance="fill">
+                                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                                            <input matInput class="" formControlName="date" (click)="edate.open()"
+                                                [matDatepicker]="edate" [max]="minDate">
+                                            <mat-datepicker-toggle matSuffix [for]="edate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #edate></mat-datepicker>
+                                        </mat-form-field>
+                                </td>
+                                    <td>{{ row?.get('type')?.value }}</td>
+                                    <td><input type="text" class="form-control" formControlName="details"></td>
+                                    <td><input type="text" class="form-control" formControlName="action"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card card-style-1 mt-3">
+                <div class="card-header justify-content-start">
+                    <h5 class="card-heading">Endorsement</h5>
+                </div>
+                <div class="p-2">
+                    <table class="table m-0">
+                        <thead>
+                            <tr>
+                                <th class="col-2">Time</th>
+                                <th>From</th>
+                                <th>TO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div [class.active]="progressNotes.get('slot1')?.value" (click)="progressNotes.get('slot1')?.setValue(!progressNotes.get('slot1')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                            <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                <path
+                                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                                            </svg>
+                                            <p class="m-0 fs-7">07:00 AM</p>
+                                        </div>
+                                        <div [class.active]="progressNotes.get('slot2')?.value" (click)="progressNotes.get('slot2')?.setValue(!progressNotes.get('slot2')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                            <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                <path
+                                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                                            </svg>
+                                            <p class="m-0 fs-7">07:00 PM</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="padded">{{ progressNotes.get('EndorsemenFrom')?.value }}</td>
+                                <td>
+                                    <div class="d-flex input-group w-100">
+                                        <input type="text" class="form-control" [matAutocomplete]="endTo" formControlName="EndorsemenTo"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : search($event)">
+                                        <mat-autocomplete #endTo="matAutocomplete">
+                                            <mat-option *ngFor="let item of list" (onSelectionChange)="onSelected(item)">
+                                                {{item.EmpNo}} - {{item.FullName}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                            <img src="assets/images/icons/icon-search.svg" alt="">
+                                        </button>
+                                    </div>
+                                    <!-- <input type="text" formControlName="EndorsemenTo" class="form-control input-no-border"> -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- System Review-->
+            <div class="card card-style-1 mt-3">
+                <div class="card-header justify-content-start">
+                    <h5 class="card-heading">System Review</h5>
+                </div>
+                <div class="p-2">
+                    <table class="table table-bordered m-0">
+                        <tbody>
+                            <tr>
+                                <td>Vital Signs</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <label for="" class="form-label">Temp:</label>
+                                            <input type="text" formControlName="VitalSignsTemp"
+                                                class="form-control w-auto border-0 border-bottom rounded-0"
+                                                placeholder="">
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <label for="" class="form-label">T-Max:</label>
+                                            <input type="text" formControlName="VitalSignsTmax"
+                                                class="form-control w-auto border-0 border-bottom rounded-0"
+                                                placeholder="">
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <label for="" class="form-label">HR:</label>
+                                            <input type="text" formControlName="VitalSignsHR"
+                                                class="form-control w-auto border-0 border-bottom rounded-0"
+                                                placeholder="">
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <label for="" class="form-label">BP:</label>
+                                            <input type="text" formControlName="VitalSignsBP"
+                                                class="form-control w-auto border-0 border-bottom rounded-0"
+                                                placeholder="">
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <label for="" class="form-label">RR:</label>
+                                            <input type="text" formControlName="VitalSignsRR"
+                                                class="form-control w-auto border-0 border-bottom rounded-0"
+                                                placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-3 mt-2">
+                                        <div [class.active]="progressNotes.get('VitalSignsVasopressorsInotropes')?.value" (click)="progressNotes.get('VitalSignsVasopressorsInotropes')?.setValue(!progressNotes.get('VitalSignsVasopressorsInotropes')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                            <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                <path
+                                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                                            </svg>
+                                            <p class="m-0 fs-7">Vasopressors/Inotropes,</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <label for="" class="form-label">Name/Dose:</label>
+                                            <input type="text" formControlName="VitalSignsNameDose"
+                                                class="form-control w-auto border-0 border-bottom rounded-0"
+                                                placeholder="">
+                                        </div>
+                                    </div>
+                                    <div [class.active]="progressNotes.get('VitalHighO2requirement')?.value" (click)="progressNotes.get('VitalHighO2requirement')?.setValue(!progressNotes.get('VitalHighO2requirement')?.value)" class="custom_check d-flex align-items-center gap-2 mt-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">High O2 requirement</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Central Nervous System</td>
+                                <td><input type="text" formControlName="CentralNervousSystem" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td>Cardiovascular System</td>
+                                <td><input type="text" formControlName="CardiovascularSystem" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td>Respiratory System</td>
+                                <td><input type="text" formControlName="RespiratorySystem" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td>Gastrointestinal System</td>
+                                <td><input type="text" formControlName="GastrointestinalSystem" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td>Genitourinary System</td>
+                                <td><input type="text" formControlName="GenitourinarySystem" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td>Infectious Disease</td>
+                                <td><input type="text" formControlName="InfectiousDiseaseSkin" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td>Skin</td>
+                                <td><input type="text"  formControlName="InfectiousDiseaseSkin" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td>Musculoskeletal System</td>
+                                <td><input type="text" formControlName="MusculoskeletalSystem" class="form-control"></td>
+                            </tr>
+                            <tr>
+                                <td>Others</td>
+                                <td><input type="text" formControlName="SystemOthers" class="form-control"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ICU Bundles-->
+            <div class="card card-style-1 mt-3">
+                <div class="card-header justify-content-start">
+                    <h5 class="card-heading">ICU Bundles</h5>
+                </div>
+                <div class="p-2">
+                    <table class="table table-bordered m-0">
+                        <tbody>
+                            <tr>
+                                <td>DVT Prophylaxis</td>
+                                <td>
+                                    <div class="row g-2">
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('DVT_Cleanex')?.value" (click)="progressNotes.get('DVT_Cleanex')?.setValue(!progressNotes.get('DVT_Cleanex')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Cleanex</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('DVT_SCheparin')?.value" (click)="progressNotes.get('DVT_SCheparin')?.setValue(!progressNotes.get('DVT_SCheparin')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">S/C heparin; </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('DVT_FullAnticoagulation')?.value" (click)="progressNotes.get('DVT_FullAnticoagulation')?.setValue(!progressNotes.get('DVT_FullAnticoagulation')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Full Anticoagulation; </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-2 mt-2">
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('DVT_DVTPump')?.value" (click)="progressNotes.get('DVT_DVTPump')?.setValue(!progressNotes.get('DVT_DVTPump')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">DVT Pump;</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('DVT_Others')?.value" (click)="progressNotes.get('DVT_Others')?.setValue(!progressNotes.get('DVT_Others')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Others</p>
+                                                <input type="text" formControlName="DVT_OthersValue"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-2 mt-2">
+                                        <div class="col">
+                                            <div [class.active]="progressNotes.get('DVT_NoneReason')?.value" (click)="progressNotes.get('DVT_NoneReason')?.setValue(!progressNotes.get('DVT_NoneReason')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">None,</p>
+                                                <p class="m-0 fs-7">Reason:</p>
+                                                <input type="text" formControlName="DVT_NoneReasonValue"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>GI Prophylaxis</td>
+                                <td>
+                                    <div class="row g-2">
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('GI_PPIOnce')?.value" (click)="progressNotes.get('GI_PPIOnce')?.setValue(!progressNotes.get('GI_PPIOnce')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">PPI Once Daily;</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('GI_PPITwice')?.value" (click)="progressNotes.get('GI_PPITwice')?.setValue(!progressNotes.get('GI_PPITwice')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">PPI Twice daily; </p>
+                                            </div>
+                                        </div>
+                                        <div class="row g-2 mt-2">
+                                            <div class="col">
+                                                <div [class.active]="progressNotes.get('GI_NoneReason')?.value" (click)="progressNotes.get('GI_NoneReason')?.setValue(!progressNotes.get('GI_NoneReason')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                    <svg style="min-width:1rem;" width="16" height="16"
+                                                        viewBox="0 0 20 21" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                        <path
+                                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                                    </svg>
+                                                    <p class="m-0 fs-7">None,</p>
+                                                    <p class="m-0 fs-7">Reason:</p>
+                                                    <input type="text" formControlName="GI_NoneReasonValue"
+                                                        class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                        placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Feeding</td>
+                                <td>
+                                    <div class="row g-2">
+                                        <div class="col-3">
+                                            <div [class.active]="progressNotes.get('Feeding_Tube')?.value" (click)="progressNotes.get('Feeding_Tube')?.setValue(!progressNotes.get('Feeding_Tube')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Tube feeding</p>
+                                                <div class="d-flex align-items-center afterlabel">
+                                                    <input type="text" name="" formControlName="Feeding_TubeValue"
+                                                        class="form-control pe-6 border-0 border-bottom rounded-0 pt-0"
+                                                        id="">
+                                                    <label for="" class="form-label label_sm">ml/hr;</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div [class.active]="progressNotes.get('Feeding_Oral')?.value" (click)="progressNotes.get('Feeding_Oral')?.setValue(!progressNotes.get('Feeding_Oral')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Oral feeding: </p>
+                                                <input type="text" formControlName="Feeding_OralValue"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="row g-2 mt-2">
+                                            <div class="col">
+                                                <div [class.active]="progressNotes.get('Feeding_NPOReason')?.value" (click)="progressNotes.get('Feeding_NPOReason')?.setValue(!progressNotes.get('Feeding_NPOReason')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                    <svg style="min-width:1rem;" width="16" height="16"
+                                                        viewBox="0 0 20 21" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                        <path
+                                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                                    </svg>
+                                                    <p class="m-0 fs-7">NPO,</p>
+                                                    <p class="m-0 fs-7">Reason:</p>
+                                                    <input type="text" formControlName="Feeding_NPOReasonValue"
+                                                        class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                        placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Bowel Motions</td>
+                                <td>
+                                    <div class="row g-2">
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('Bowel_Regular')?.value" (click)="progressNotes.get('Bowel_Regular')?.setValue(!progressNotes.get('Bowel_Regular')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Regular</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('Bowel_Constipation')?.value" (click)="progressNotes.get('Bowel_Constipation')?.setValue(!progressNotes.get('Bowel_Constipation')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Constipation</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('Bowel_Diarrhea')?.value" (click)="progressNotes.get('Bowel_Diarrhea')?.setValue(!progressNotes.get('Bowel_Diarrhea')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Diarrhea</p>
+                                            </div>
+                                        </div>
+                                        <div class="row g-2 mt-2">
+                                            <div class="col">
+                                                <div [class.active]="progressNotes.get('Bowel_Action')?.value" (click)="progressNotes.get('Bowel_Action')?.setValue(!progressNotes.get('Bowel_Action')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                    <svg style="min-width:1rem;" width="16" height="16"
+                                                        viewBox="0 0 20 21" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                        <path
+                                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                                    </svg>
+                                                    <p class="m-0 fs-7">Action</p>
+                                                    <input type="text" formControlName="Bowel_ActionValue"
+                                                        class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                        placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Maintenance IV
+                                    Fluids
+                                </td>
+                                <td>
+                                    <div class="row g-2">
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('Maintenance_IVFluids_Yes')?.value" (click)="progressNotes.get('Maintenance_IVFluids_Yes')?.setValue(!progressNotes.get('Maintenance_IVFluids_Yes')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Yes,</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <p class="m-0 fs-7">Type</p>
+                                                <input type="text" formControlName="Maintenance_IVFluids_Type"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">,
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <p class="m-0 fs-7">Rate</p>
+                                                <input type="text" formControlName="Maintenance_IVFluids_Rate"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">.
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <p class="m-0 fs-7">Reason</p>
+                                                <input type="text" formControlName="Maintenance_IVFluids_Reason"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">.
+                                            </div>
+                                        </div>
+                                        <div class="row g-2 mt-2">
+                                            <div class="col">
+                                                <div [class.active]="progressNotes.get('Maintenance_IVFluids_No')?.value" (click)="progressNotes.get('Maintenance_IVFluids_No')?.setValue(!progressNotes.get('Maintenance_IVFluids_No')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                    <svg style="min-width:1rem;" width="16" height="16"
+                                                        viewBox="0 0 20 21" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                        <path
+                                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                                    </svg>
+                                                    <p class="m-0 fs-7">No</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Bed Sores</td>
+                                <td>
+                                    <div class="row g-2">
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('Bed_Sores_No')?.value" (click)="progressNotes.get('Bed_Sores_No')?.setValue(!progressNotes.get('Bed_Sores_No')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">No;</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('Bed_Sores_Yes')?.value" (click)="progressNotes.get('Bed_Sores_Yes')?.setValue(!progressNotes.get('Bed_Sores_Yes')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Yes</p>
+                                                <input type="text" formControlName="Bed_Sores_YesValue"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">,
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <p class="m-0 fs-7 text-nowrap">Maximum Stage</p>
+                                                <input type="text" formControlName="Bed_Sores_MaximumStage"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-2 mt-2">
+                                        <div class="col">
+                                            <div [class.active]="progressNotes.get('Bed_Sores_Turningappliedevery')?.value" (click)="progressNotes.get('Bed_Sores_Turningappliedevery')?.setValue(!progressNotes.get('Bed_Sores_Turningappliedevery')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7"> Turning applied, every</p>
+                                                <input type="text" formControlName="Bed_Sores_Turningappliedeveryvalue"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-2 mt-2">
+                                        <div class="col">
+                                            <div [class.active]="progressNotes.get('Bed_Sores_NoTurningReason')?.value" (click)="progressNotes.get('Bed_Sores_NoTurningReason')?.setValue(!progressNotes.get('Bed_Sores_NoTurningReason')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">No Turning, Reason</p>
+                                                <input type="text" formControlName="Bed_Sores_NoTurningReasonValue"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Central Lines</td>
+                                <td>
+                                    <div class="row g-2">
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_RightIJ')?.value" (click)="progressNotes.get('CentralLines_RightIJ')?.setValue(!progressNotes.get('CentralLines_RightIJ')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Right IJ </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_RightIJ_Central')?.value" (click)="progressNotes.get('CentralLines_RightIJ_Central')?.setValue(!progressNotes.get('CentralLines_RightIJ_Central')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Central</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_RightIJ_QuintonLine')?.value" (click)="progressNotes.get('CentralLines_RightIJ_QuintonLine')?.setValue(!progressNotes.get('CentralLines_RightIJ_QuintonLine')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Quinton Line,</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_RightIJ_Day')?.value" (click)="progressNotes.get('CentralLines_RightIJ_Day')?.setValue(!progressNotes.get('CentralLines_RightIJ_Day')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Day</p>
+                                                <input type="text" formControlName="CentralLines_RightIJ_DayValue"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_RightIJ_Clean')?.value" (click)="progressNotes.get('CentralLines_RightIJ_Clean')?.setValue(!progressNotes.get('CentralLines_RightIJ_Clean')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Clean;</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_RightIJ_Infected')?.value" (click)="progressNotes.get('CentralLines_RightIJ_Infected')?.setValue(!progressNotes.get('CentralLines_RightIJ_Infected')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Infected</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-2">
+                                        <div class="col-2">
+                                            <div  [class.active]="progressNotes.get('CentralLines_LeftIJ')?.value" (click)="progressNotes.get('CentralLines_LeftIJ')?.setValue(!progressNotes.get('CentralLines_LeftIJ')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Left IJ </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_LeftIJ_Central')?.value" (click)="progressNotes.get('CentralLines_LeftIJ_Central')?.setValue(!progressNotes.get('CentralLines_LeftIJ_Central')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Central</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_LeftIJ_QuintonLine')?.value" (click)="progressNotes.get('CentralLines_LeftIJ_QuintonLine')?.setValue(!progressNotes.get('CentralLines_LeftIJ_QuintonLine')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Quinton Line,</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_LeftIJ_Day')?.value" (click)="progressNotes.get('CentralLines_LeftIJ_Day')?.setValue(!progressNotes.get('CentralLines_LeftIJ_Day')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Day</p>
+                                                <input type="text" formControlName="CentralLines_LeftIJ_DayValue"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_LeftIJ_Clean')?.value" (click)="progressNotes.get('CentralLines_LeftIJ_Clean')?.setValue(!progressNotes.get('CentralLines_LeftIJ_Clean')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Clean;</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_LeftIJ_Infected')?.value" (click)="progressNotes.get('CentralLines_LeftIJ_Infected')?.setValue(!progressNotes.get('CentralLines_LeftIJ_Infected')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Infected</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-2">
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_RightSubclavian')?.value" (click)="progressNotes.get('CentralLines_RightSubclavian')?.setValue(!progressNotes.get('CentralLines_RightSubclavian')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Right Subclavian</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_RightSubclavian_Central')?.value" (click)="progressNotes.get('CentralLines_RightSubclavian_Central')?.setValue(!progressNotes.get('CentralLines_RightSubclavian_Central')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Central</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_RightSubclavian_QuintonLine')?.value" (click)="progressNotes.get('CentralLines_RightSubclavian_QuintonLine')?.setValue(!progressNotes.get('CentralLines_RightSubclavian_QuintonLine')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Quinton Line,</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_RightSubclavian_Day')?.value" (click)="progressNotes.get('CentralLines_RightSubclavian_Day')?.setValue(!progressNotes.get('CentralLines_RightSubclavian_Day')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Day</p>
+                                                <input type="text" formControlName="CentralLines_RightSubclavian_DayValue"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_RightSubclavian_Clean')?.value" (click)="progressNotes.get('CentralLines_RightSubclavian_Clean')?.setValue(!progressNotes.get('CentralLines_RightSubclavian_Clean')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Clean;</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('CentralLines_RightSubclavian_Infected')?.value" (click)="progressNotes.get('CentralLines_RightSubclavian_Infected')?.setValue(!progressNotes.get('CentralLines_RightSubclavian_Infected')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7 text-nowrap">Infected</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-2 mt-2">
+                                        <div class="col">
+                                            <div [class.active]="progressNotes.get('CentralLines_Others')?.value" (click)="progressNotes.get('CentralLines_Others')?.setValue(!progressNotes.get('CentralLines_Others')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Others</p>
+                                                <input type="text" formControlName="CentralLines_OthersValue"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-2 mt-2">
+                                        <div class="col">
+                                            <div [class.active]="progressNotes.get('CentralLines_Comments')?.value" (click)="progressNotes.get('CentralLines_Comments')?.setValue(!progressNotes.get('CentralLines_Comments')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <p class="m-0 fs-7">Comments</p>
+                                                <input type="text" formControlName="CentralLines_CommentsValue"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Foley Catheter</td>
+                                <td>
+                                    <div class="row g-2 mt-2">
+                                        <div class="col">
+                                            <div [class.active]="progressNotes.get('FoleyCatheter_PresentReason')?.value" (click)="progressNotes.get('FoleyCatheter_PresentReason')?.setValue(!progressNotes.get('FoleyCatheter_PresentReason')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Present, Reason</p>
+                                                <input type="text" formControlName="FoleyCatheter_PresentReasonValue"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-2 mt-2">
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('FoleyCatheter_VoidingFreely')?.value" (click)="progressNotes.get('FoleyCatheter_VoidingFreely')?.setValue(!progressNotes.get('FoleyCatheter_VoidingFreely')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Voiding Freely; </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('FoleyCatheter_Condom')?.value" (click)="progressNotes.get('FoleyCatheter_Condom')?.setValue(!progressNotes.get('FoleyCatheter_Condom')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Condom;</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div [class.active]="progressNotes.get('FoleyCatheter_Diaper')?.value" (click)="progressNotes.get('FoleyCatheter_Diaper')?.setValue(!progressNotes.get('FoleyCatheter_Diaper')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Diaper</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Physiotherapy</td>
+                                <td>
+                                    <div class="row g-2 mt-2">
+                                        <div class="col-3">
+                                            <div [class.active]="progressNotes.get('Physiotherapy_BodyPhysiotherapyApplied')?.value" (click)="progressNotes.get('Physiotherapy_BodyPhysiotherapyApplied')?.setValue(!progressNotes.get('Physiotherapy_BodyPhysiotherapyApplied')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Body Physiotherapy Applied;</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div [class.active]="progressNotes.get('Physiotherapy_NotAppliedReason')?.value" (click)="progressNotes.get('Physiotherapy_NotAppliedReason')?.setValue(!progressNotes.get('Physiotherapy_NotAppliedReason')?.value)" class="custom_check d-flex align-items-center gap-2">
+                                                <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-7">Not Applied, Reason:</p>
+                                                <input type="text" formControlName="Physiotherapy_NotAppliedReasonValue"
+                                                    class="form-control w-auto border-0 border-bottom rounded-0 pt-0"
+                                                    placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Relevant Lab Results-->
+            <div class="card card-style-1 mt-3">
+                <div class="card-header justify-content-start">
+                    <h5 class="card-heading">Relevant Lab Results</h5>
+                    <div class="actions ms-auto d-flex align-items-center gap-2">
+                        <button class="btn btn-danger-outline" (click)="openRelLabClear()">Clear</button>
+                        <button class="btn btn-main-fill" (click)="openRelLab()">Add</button>
+                    </div>
+                </div>
+                <div class="p-2">
+                    <table class="table table-bordered m-0">
+                        <thead>
+                            <tr>
+                                <th>Test Code</th>
+                                <th>Test Name</th>                              
+                                <th>Order Date</th>
+                                <th>Component Name</th>
+                                <th>Result</th>
+                                <th>Result Entered Date </th>                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of selectedFetchPatientAdmissionLabTestResultsDataList; let i = index">
+                                <td>{{item.TestCode}}</td>
+                                <td>{{item.TestName}}</td>                                
+                                <td>{{item.OrderDate}}</td>
+                                <td>{{item.ComponentName}}</td>
+                                <td>{{item.ResultValue}}</td>
+                                <td>{{item.TestResultCreateDate}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Assessment-->
+            <div class="card card-style-1 mt-3">
+                <div class="card-header justify-content-start">
+                    <h5 class="card-heading">Assessment</h5>
+                </div>
+                <div class="p-2">
+                    <textarea class="form-control" rows="3" formControlName="Assessment"></textarea>
+                </div>
+            </div>
+
+            <!-- ICU Bundles-->
+            <div class="card card-style-1 mt-3">
+                <div class="card-header justify-content-start">
+                    <h5 class="card-heading">Issues & Plan</h5>
+                </div>
+                <div class="p-2">
+                    <table class="table table-bordered m-0">
+                        <tbody>
+                            <tr>
+                                <td>Issues</td>
+                                <td>Plan</td>
+                            </tr>
+                            <tr>
+                                <td><textarea class="form-control" rows="1" formControlName="Issue1"></textarea></td>
+                                <td><textarea class="form-control" rows="1" formControlName="Plan1"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td><textarea class="form-control" rows="1" formControlName="Issue2"></textarea></td>
+                                <td><textarea class="form-control" rows="1" formControlName="Plan2"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td><textarea class="form-control" rows="1" formControlName="Issue3"></textarea></td>
+                                <td><textarea class="form-control" rows="1" formControlName="Plan3"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td><textarea class="form-control" rows="1" formControlName="Issue4"></textarea></td>
+                                <td><textarea class="form-control" rows="1" formControlName="Plan4"></textarea></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="modal" id="savemsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+       <div class="modal-content">
+          <div class="modal-header p-2">
+             <h5 class="modal-title clr-primary-600 fs-6" translate>Notes</h5>
+             <div class="d-flex align-items-center gap-2">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+          </div>
+          <div class="modal-body p-3">
+             <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                *ngFor="let note of FetchPatientICUProgressNoteWorkListDData;let i=index">
+                <div class="row mx-0 g-2 w-100">
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Note ID</p>
+                      <p><a href="#" (click)="$event.preventDefault();selectedNotes(note)">
+                        {{ note.ICUProgressNoteID }}</a></p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Name</p>
+                      <p>{{ note.PatientName }}</p>
+                   </div>
+ 
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Doctor Name</p>
+                      <p>{{ note.PrimaryDoctor }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Admit Date</p>
+                      <p>{{ note.AdmitDate | date: 'dd-MMM-yyyy' }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">ICU Progress Note Date</p>
+                      <p>{{ note.ICUProgressNoteDate | date: 'dd-MMM-yyyy' }}</p>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <div class="modal quick_info walkthrough_info_card walkthrough_info" data-bs-backdrop="static" id="quickaction_info"
+        tab-index="-1">
+        <div class="modal-dialog modal-dialog-scrollabel">
+            <div class="modal-content h-100 overflow-auto">
+                <div class="modal-header ps-0 d-none" style="background-color: #fcfaf7 !important;">
+                    <label for="" class="ssn_label bg-primary clr-light" id="lblSSN">SSN:
+                        {{patinfo?.SSN}}</label>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="clearPatientInfo()"
+                        aria-label="Close"></button>
+                </div>
+                <div class="">
+                    <app-patient-quick-actions *ngIf="patinfo" [patientInfo]="patinfo"
+                        (closeModal)="closeModal()"></app-patient-quick-actions>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal" id="labResults" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" style="max-width:80%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 translate="" class="modal-title">Lab Results</h5>
+                        <div class="ms-auto d-flex align-items-center">
+                            <div class="d-flex align-items-center justify-content-end gap-2">
+                                <button class="btn btn-danger-outline" (click)="clearLab()">{{langData?.common?.Clear}}</button>
+                                <button class="btn btn-main-outline"  (click)="selectLab()" >{{langData?.common?.Select}}</button>
+                            </div>
+                        <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                    </div>
+                </div>
+                <div class="modal-body px-0">
+                    <!-- <div class="previousDiagnosis_table w-100 px-3" *ngIf="isClear">
+                        <div class="validation_err position-relative" *ngIf="showPreValidation">
+                            <p class="m-0 fs-7">{{errorMessage}}</p>
+                        </div>
+                        <div *ngFor="let item of FetchPatientAdmissionLabTestResultsDataList; let i = index">
+                            <div   class="table-cards_div mt-3 p-2 d-flex" [class.active]="item.active">
+                                <div class="me-3">
+                                    <div class="custom_check d-flex align-items-center" [class.active]="item.active">
+                                        <svg  (click)="selectedLabTestResult(item)" width="18" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg me-1">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>  
+                                    </div>
+                                </div>
+                                <div class="row mx-0 g-2 gy-3 w-100" >
+                                    <div class="col-lg-3 col-md-4">
+                                        <p class="label">Test Code</p>
+                                        <p class="text-break">{{item.TestCode}}</p>
+                                    </div>
+                                    <div class="col-lg-1 col-md-3">
+                                        <p class="label">Test Name</p>
+                                        <p class="text-break">{{item.TestName}}</p>
+                                    </div>
+                                    <div class="col-lg-2 col-md-4">
+                                        <p class="label text-nowrap">Status Name</p>
+                                        <p class="text-break">{{item.StatusName}}</p>
+                                    </div>
+                                    <div class="col-lg-2 col-md-4">
+                                        <p class="label text-nowrap">Order Date</p>
+                                        <p class="text-break">{{item.OrderDate}}</p>
+                                    </div>
+                                    <div class="col-lg-2 col-md-3">
+                                        <p class="label text-nowrap">Parameter Name</p>
+                                        <p class="text-break">{{item.ComponentName}}</p>
+                                    </div>
+                                    <div class="col-lg-1 col-md-4">
+                                        <p class="label text-nowrap">Result Value</p>
+                                        <p class="text-nowrap">{{item.ResultValue}}</p>
+                                    </div>
+                                    <div class="col-lg-1 col-md-4">
+                                        <p class="label text-nowrap">Test Result Create Date</p>
+                                        <p class="text-nowrap">{{item.TestResultCreateDate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <div class="validation_err position-relative" *ngIf="showPreValidation">
+                        <p class="m-0 fs-7">{{errorMessage}}</p>
+                    </div>
+                    <div class="fixed_alter_list labResults_list">
+                        <div class="fixed_alter_header bg-primary-100">
+                            <div class="row gx-2 mx-0 p-2">
+                                <div class="" style="width: 3%;"> </div>
+                                <div class="" style="width: 10%;">
+                                    <p class="label m-0">Test Code</p>
+                                </div>
+                                <div class="" style="width: 22%;">
+                                    <p class="label m-0">Test Name</p>
+                                </div>
+                                <div class="" style="width: 12%;">
+                                    <p class="label m-0">Parameter Name</p>
+                                </div>
+                                <div class="" style="width: 12%;">
+                                    <p class="label m-0">Result Value</p>
+                                </div>
+                                <div class="" style="width: 11%;">
+                                    <p class="label m-0">Status Name</p>
+                                </div>
+                                <div class="" style="width: 15%;">
+                                    <p class="label m-0">Order Date</p>
+                                </div>
+                               
+                                <div class="" style="width: 15%;">
+                                    <p class="label m-0">Test Result Create Date</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="row gx-2 mx-0 p-2 alter_div" [class.active]="item.active" *ngFor="let item of FetchPatientAdmissionLabTestResultsDataList; let i = index">
+                                <div class="" style="width: 3%;">
+                                    <div class="custom_check d-flex align-items-center" [class.active]="item.active">
+                                        <svg (click)="selectedLabTestResult(item)" width="18" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg me-1">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>  
+                                    </div>
+                                </div>
+                                <div class="" style="width: 10%;">
+                                    <p class="m-0">{{item.TestCode}}</p>
+                                </div>
+                                <div class="" style="width: 22%;">
+                                    <p class="m-0">{{item.TestName}}</p>
+                                </div>
+                                <div class="" style="width: 11%;">
+                                    <p class="m-0">{{item.StatusName}}</p>
+                                </div>
+                                <div class="" style="width: 15%;">
+                                    <!-- <p class="m-0">{{item.OrderDate}}</p> -->
+                                    <div class="d-flex align-items-center gap-1">
+                                        <!-- Date -->
+                                        <svg width="10" height="11" viewBox="0 0 10 11" fill="none" 
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                fill="#368796" />
+                                        </svg>
+                                        <p class="m-0 clr-dark-600 text-nowrap">
+                                            {{item.OrderDate?.split('
+                                            ')[0]}}</p>
+                
+                                        <!-- Time -->
+                                        <svg class="ms-3" width="10" height="11" viewBox="0 0 10 11" 
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                                fill="#368796" />
+                                            <path
+                                                d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                                fill="#368796" />
+                                        </svg>
+                                        <p class="m-0 clr-dark-600  text-nowrap">
+                                            {{item.OrderDate?.split('
+                                            ')[1]}}</p>
+                                       
+                                    </div>
+                                </div>
+                                <div class="" style="width: 12%;">
+                                    <p class="m-0">{{item.ComponentName}}</p>
+                                </div>
+                                <div class="" style="width: 12%;">
+                                    <p class="m-0">{{item.ResultValue}}</p>
+                                </div>
+                                <div class="" style="width: 15%;">
+                                    <!-- <p class="m-0">{{item.TestResultCreateDate}}</p> -->
+                                    <div class="d-flex align-items-center gap-1">
+                                        <!-- Date -->
+                                        <svg width="10" height="11" viewBox="0 0 10 11" fill="none" 
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                fill="#368796" />
+                                        </svg>
+                                        <p class="m-0 clr-dark-600 text-nowrap">
+                                            {{item.TestResultCreateDate?.split('
+                                            ')[0]}}</p>
+                
+                                        <!-- Time -->
+                                        <svg class="ms-3" width="10" height="11" viewBox="0 0 10 11" 
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                                fill="#368796" />
+                                            <path
+                                                d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                                fill="#368796" />
+                                        </svg>
+                                        <p class="m-0 clr-dark-600  text-nowrap">
+                                            {{item.TestResultCreateDate?.split('
+                                            ')[1]}}</p>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

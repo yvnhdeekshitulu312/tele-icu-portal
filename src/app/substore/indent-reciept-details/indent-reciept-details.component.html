@@ -1,0 +1,145 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+<div class="page-header sticky-top shadow-sm justify-content-start">
+    <h2 class="page-heading">Indent Receipt</h2>
+   
+    <div class="actions ms-auto d-flex align-items-center gap-2">
+        <button class="btn btn-main-fill" (click)="onBackClick()">Back</button>
+        <button class="btn btn-main-outline" (click)="PatientPrintCard()">Print</button>
+        <button class="btn btn-main-outline" (click)="onSaveClick()" [disabled]="saveDisabled">Save</button>
+    </div>
+</div>
+<div class="p-2">
+    <div class="row g-2 align-items-end">
+        <div class="col-2">
+            <label for="" class="form-label">Indent No.</label>
+            <input type="text" class="form-control" disabled [ngModel]="indentRecieptData?.IndentNo">
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Indent Date</label>
+            <input type="text" class="form-control" disabled [ngModel]="indentRecieptData?.IndentDate">
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Date</label>
+            <input type="text" class="form-control" disabled [ngModel]="indentRecieptData?.Date">
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Issue No</label>
+            <input type="text" class="form-control" disabled [ngModel]="indentRecieptData?.IssueNo">
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Issued Date</label>
+            <input type="text" class="form-control" disabled [ngModel]="indentRecieptData?.IssueDate">
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Issued By</label>
+            <input type="text" class="form-control" disabled [ngModel]="indentRecieptData?.IssuedBy">
+        </div>
+    </div>
+    <div class="mt-2">
+        <div class="fixed_alter_list indentReceipt_table rounded rounded-bottom-0 border-primary-200">
+            <div class="fixed_alter_header bg-primary-50 rounded-top">
+                <div class="row gx-2 p-2 mx-0">
+                    <div class="" style="width: 5%;">
+                        <p class="label m-0">SL.No</p>
+                    </div>
+                    <div class="" style="width: 15%;">
+                        <p class="label m-0">Item</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Batch</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Expiry</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">App Qty</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Qty Ord</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Ord Unit</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Qty Iss</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Iss Unit</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Qty Rec</p>
+                    </div>
+                    <div class="" style="width: 16%;">
+                        <p class="label m-0">Order Item</p>
+                    </div>
+                </div>
+            </div>
+            <div class="fixed_alter_body">
+                <div class="row gx-2 p-2 mx-0 alter_div rounded-0" *ngFor="let item of indentRecieptDetails; let i = index;">
+                    <div class="" style="width: 5%;">
+                        <p class="m-0">{{i + 1}}</p>
+                    </div>
+                    <div class="" style="width: 15%;">
+                        <p class="m-0">{{item.Item}}</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.Batch}}</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.Expiry}}</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.ActQty}}</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.QtyOrd}}</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.OrdUnit}}</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.QtyIss}}</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.IssUnit}}</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.QtyRec}}</p>
+                    </div>
+                    <div class="" style="width: 16%;">
+                        <p class="m-0">{{item.OrderedItem}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="successMsgModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="caseRecordModal">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Print Label</h5>                    
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="trustedUrl = ''"></button>
+            </div>
+            <div class="modal-body">
+                <iframe *ngIf="trustedUrl" height="600" width="100%" [src]="(trustedUrl ? trustedUrl :'')| safeUrl"
+                    frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>

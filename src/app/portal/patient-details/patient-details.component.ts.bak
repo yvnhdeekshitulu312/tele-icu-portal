@@ -1,0 +1,500 @@
+import { DatePipe } from '@angular/common';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { ConfigService } from 'src/app/services/config.service';
+import { Router } from '@angular/router';
+import * as moment from 'moment';
+import { FormControl } from '@angular/forms';
+declare var $: any;
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'dd-MMM-yyyy HH:mm:ss',
+  },
+  display: {
+    dateInput: 'DD-MMM-yyyy',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'dd-MMM-yyyy',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+
+@Component({
+  selector: 'app-patient-details',
+  templateUrl: './patient-details.component.html',
+  styleUrls: ['./patient-details.component.scss'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    DatePipe,
+  ],
+})
+export class PatientDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('myToday') myTodayVisit!: ElementRef<HTMLElement>;
+  @ViewChild('myVisited') myVisited!: ElementRef<HTMLElement>;
+  @ViewChild('myMonth') myMonth!: ElementRef<HTMLElement>;
+  @ViewChild('myWeek') myWeek!: ElementRef<HTMLElement>;
+
+  isFilter: any = false;
+  groupedData: { [key: string]: PatientDetails[] } = {};
+  groupedDataArray: { date: string, values: PatientDetails[] }[] = [];
+  patientDetails: PatientDetails[] = [];
+  tablePatientsForm!: FormGroup;
+  patientType: any = 1;
+  PatientsList: any;
+  PatientsListToFilter: any;
+  doctorDetails: any;
+  hospitalId: any;
+  location: any;
+  currentdate: any;
+  selectedPatientAdmissionId: any;
+  dateString: any;
+  previousClick: any = false;
+  previousFilter: any = "D";
+  walkinCount: any = 0;
+  videoCount: any = 0;
+  appointmentCount: any = 0;
+  inPatient: any = 0;
+  patientInfoList: any = [];
+  selectedPatientSSN:any;
+  selectedPatientName:any;
+  selectedPatientGender:any;
+  selectedPatientAge:any;
+  selectedPatientMobile:any;
+  selectedPatientVTScore:any;
+  selectedPatientHeight:any;
+  selectedPatientWeight:any;
+  selectedPatientBloodGrp:any;
+  selectedPatientVitalsDate:any;
+  selectedPatientBPSystolic:any;
+  selectedPatientBPDiastolic:any;
+  selectedPatientTemperature:any;
+  selectedPatientPulse:any;
+  selectedPatientSPO2:any;
+  selectedPatientRespiration:any;
+  selectedPatientConsciousness:any;
+  selectedPatientO2FlowRate:any;
+  selectedPatientAllergies:any;
+  selectedPatientMedications:any = [];
+  selectedPatientIsVip: boolean = false;
+  selectedPatientClinicalInfo:any;
+  selectedPatientIsPregnancy:boolean = false;
+  selectedPatientPregnancyTrisemister:any;
+  interval: any;
+  constructor(private fb: FormBuilder, private config: ConfigService, public datepipe: DatePipe, private router: Router) { }
+  
+  ngOnDestroy(): void {
+    clearInterval(this.interval);
+  }
+  
+  ngAfterViewInit(): void {
+    if(sessionStorage.getItem("IsTodayOrVisited") == "1") {
+      setTimeout(() => {
+        let el: HTMLElement = this.myTodayVisit.nativeElement;
+        el.click();
+      }, 0);
+    }
+    else {
+      setTimeout(() => {
+        let el: HTMLElement = this.myVisited.nativeElement;
+        el.click();
+      }, 0);
+    }
+
+    if(sessionStorage.getItem("IsWeekOrMonth") == "W") {
+      setTimeout(() => {
+        let el: HTMLElement = this.myWeek.nativeElement;
+        el.click();
+     }, 500);
+    
+    }
+    else if(sessionStorage.getItem("IsWeekOrMonth") == "M") {
+      setTimeout(() => {
+        let el: HTMLElement = this.myMonth.nativeElement;
+        el.click();
+     }, 500);
+    
+    }
+  }
+
+  ngOnInit(): void {
+    this.doctorDetails = JSON.parse(sessionStorage.getItem("doctorDetails") || '{}');
+    this.hospitalId = sessionStorage.getItem("hospitalId");
+    this.location = sessionStorage.getItem("locationName");
+    this.currentdate = moment(new Date()).format('DD-MMM-YYYY, H:mm');
+
+    console.log(this.doctorDetails);
+    this.initializetablePatientsForm();
+    if(!sessionStorage.getItem("IsTodayOrVisited")) {
+      this.getPatientData(1);
+      this.fetchPatients();
+    }
+
+    // this.interval = setInterval(() => {
+    //   this.fetchPatients();
+    // },60000)
+  }
+
+  onLogout() {
+    // sessionStorage.removeItem("patientInfo");
+    // sessionStorage.removeItem("PatientDetails");
+    // sessionStorage.removeItem("appointment");
+    // sessionStorage.removeItem("selectedRegCode");
+    // this.router.navigate(['/login']);
+    this.config.onLogout();
+  }
+  
+  range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+  initializetablePatientsForm() {
+    this.tablePatientsForm = this.fb.group({
+      FromDate: [''],
+      ToDate: [''],
+    });
+  }
+
+  fetchPatientswithdates(filter: any) {
+    sessionStorage.setItem("IsWeekOrMonth", filter);
+    var FromDate;
+    var ToDate;
+
+    if(filter == "D") {
+      var wm = new Date();
+      var d = new Date();
+      wm.setMonth(wm.getMonth() - 1);
+      this.tablePatientsForm.patchValue({
+        FromDate: d,
+        ToDate: d
+      })
+      this.previousFilter = "D";
+    }
+    else if(filter == "M") {
+      $("#prevMonth").addClass("btn-main-fill");
+      $("#prevMonth").removeClass("btn-main-outline");
+      $("#prevWeek").removeClass("btn-main-fill");
+      $("#PrevWeek").addClass("btn-main-outline");
+      this.previousFilter = "M";
+      var d = new Date();
+      d.setDate(d.getDate() - 1);
+      var wm = d;
+      wm.setMonth(wm.getMonth() - 1);
+      var pd = new Date();
+      pd.setDate(pd.getDate() - 1);
+      this.tablePatientsForm.patchValue({
+        FromDate: wm,
+        ToDate: pd
+      })
+    }
+    else if(filter == "W") {
+      $("#prevMonth").removeClass("btn-main-fill");
+      $("#prevMonth").addClass("btn-main-outline");
+      $("#prevWeek").addClass("btn-main-fill");
+      $("#PrevWeek").removeClass("btn-main-outline");
+      this.previousFilter = "W";
+      var d = new Date();
+      d.setDate(d.getDate() - 1);
+      var wm = d;
+      wm.setDate(wm.getDate() - 7);
+      var pd = new Date();
+      pd.setDate(pd.getDate() - 1);
+      this.tablePatientsForm.patchValue({
+        FromDate: wm,
+        ToDate: pd
+      })
+    }
+
+    this.fetchPatients();
+  }
+
+  getPatientData(type: any) {
+    this.previousFilter = "D";
+    sessionStorage.setItem("IsTodayOrVisited", type);
+    this.patientType = type;
+    var d = new Date();
+    this.tablePatientsForm.patchValue({
+      FromDate: d,
+      ToDate: d
+    });
+    
+    if(type == 1) {
+      $("#btnNewVistit").addClass("selected");
+      $("#btnVisited").removeClass("selected");
+    }
+    else {
+      $("#btnNewVistit").removeClass("selected");
+      $("#btnVisited").addClass("selected");
+    }
+    this.previousClick = true;
+    this.fetchPatients();
+  }
+
+  fetchPrevious() {
+    this.previousClick = false;
+  }
+
+  refreshPatients() {
+    this.fetchPatients();
+  }
+
+  fetchPatients() {
+    this.PatientsList = [];
+    this.patientDetails = [];
+    this.PatientsListToFilter = [];
+    this.groupedData= {};
+    var FromDate = this.datepipe.transform(this.tablePatientsForm.value['FromDate'], "dd-MMM-yyyy")?.toString();
+    var ToDate = this.datepipe.transform(this.tablePatientsForm.value['ToDate'], "dd-MMM-yyyy")?.toString();
+    if(FromDate === ToDate) {
+      this.dateString = FromDate;
+    }
+    else{
+      this.dateString = FromDate + " to " + ToDate;
+    }
+    this.config.fetchPatients(this.doctorDetails[0].EmpId
+      , this.hospitalId, FromDate, ToDate).subscribe((response: any) => {
+      if (response.length > 0) {
+      //  this.PatientsList = response;
+      if(this.patientType == 1) {
+        let filteredresponse = response.filter((x: any) => x?.Status === "1" && this.datepipe.transform(x?.Orderdate, "dd-MMM-yyyy")?.toString() === this.datepipe.transform(new Date(), "dd-MMM-yyyy")?.toString());
+        this.PatientsList = filteredresponse;
+        this.PatientsListToFilter = filteredresponse;
+      }
+      else if (this.patientType == 2 && this.previousFilter == "D") {
+        let filteredresponse = response.filter((x: any) => x?.Status === "2" && this.datepipe.transform(x?.Orderdate, "dd-MMM-yyyy")?.toString() === this.datepipe.transform(new Date(), "dd-MMM-yyyy")?.toString());
+        this.PatientsList = filteredresponse;
+        this.PatientsListToFilter = filteredresponse;
+      }
+      else if (this.patientType == 2 && (this.previousFilter == "M" || this.previousFilter == "W")) {
+        this.PatientsList = response;
+        this.PatientsListToFilter = response;
+      }
+      this.walkinCount = this.PatientsList.filter((x: any) => (x?.ScheduleID === null || x?.ScheduleID === ""))?.length;
+      this.appointmentCount = this.PatientsList.filter((x: any) => (x?.ScheduleID > 0))?.length;
+      this.videoCount = this.PatientsList.filter((x: any) => (x?.IsVirtual === 1))?.length;
+
+      this.PatientsList.forEach((element: any, index: any) => {
+        this.patientDetails.push({SSN: element.SSN, EpisodeID: element.EpisodeID, AdmissionID: element.AdmissionID, hospitalId: element.hospitalId, PatientID: element.PatientID, RegCode: element.RegCode, ScheduleID: element.ScheduleID, IsVirtual:  element.IsVirtual,IsAllergy:  element.IsAllergy,Status:  element.Status,
+          GenderID: element.GenderID,IsPregnancy: element.IsPregnancy ,PregnancyContent: element.PregnancyContent ,OrderType: element.OrderType ,PatientName : element.PatientName,
+          FullAge_Gender: element.FullAge_Gender, Orderdate: element.Orderdate ,Nationality: element.Nationality, TokenNumber: element.TokenNumber,Timeslot: element.Timeslot, Score: element.Score,InsuranceName:   element.InsuranceName,AllergyData : element.AllergyData, Age_Gender: element.Age_Gender, MobileNo: element.MobileNo, Height: element.Height, Weight: element.Weight, BloodGroup: element.BloodGroup, ISVIP: element.ISVIP, MonitorID: element.MonitorID, SpecialiseID: element.SpecialiseID, BillType: element.BillType})
+      });
+
+      this.patientDetails.forEach((data) => {
+        var date = this.datepipe.transform(data.Orderdate, "dd-MMM-yyyy")?.toString();
+        if (!this.groupedData[date!]) {
+          this.groupedData[date!] = [];
+        }
+        this.groupedData[date!].push(data);
+      });
+
+      this.convertToArray();
+      } 
+    },
+      (err) => {
+
+      })
+  }
+
+  private convertToArray(): void {
+    this.groupedDataArray = Object.keys(this.groupedData).map((date) => ({
+      date,
+      values: this.groupedData[date],
+    }));
+
+    this.groupedDataArray.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }
+
+  // get sortData() {
+  //   return this.patientDetails.sort((a, b) => {
+  //     return <any>new Date(b.Orderdate) - <any>new Date(a.Orderdate);
+  //   });
+  // }
+
+  getSSNSearch(key: any) {
+    this.isFilter = true;
+    if(key.target.value.length === 0) {    
+      this.PatientsList = this.PatientsListToFilter;    
+      this.isFilter = false;
+      }    
+      else if(key.target.value.length > 2) {    
+      let filteredresponse = this.PatientsListToFilter.filter((x: any) => (x?.SSN.includes(key.target.value) || x?.PatientName.toLowerCase().includes(key.target.value.toLowerCase())));
+      this.PatientsList = filteredresponse;
+      }    
+    }
+    fetchPatientDates(){
+      var FromDate = this.datepipe.transform(this.tablePatientsForm.value['FromDate'], "dd-MMM-yyyy")?.toString();
+      var ToDate = this.datepipe.transform(this.tablePatientsForm.value['ToDate'], "dd-MMM-yyyy")?.toString();
+      this.config.fetchPatients(this.doctorDetails[0].EmpId
+        , this.hospitalId, FromDate, ToDate).subscribe((response: any) => {
+          this.PatientsList = response;
+        })
+    }
+  fetchPatientSummary(pl: any) {
+    sessionStorage.setItem("selectedRegCode", JSON.stringify(pl.RegCode));
+    this.getPatientDetails(pl.RegCode);
+  }
+
+  getPatientDetails(RegCode: any) {
+    let payload = {
+      "RegCode": RegCode
+    }
+    this.config.getPatientDetails(payload).subscribe((response) => {
+      if (response.Status === "Success") {
+        sessionStorage.setItem("PatientDetails", JSON.stringify(response));
+        sessionStorage.setItem("selectedPatientAdmissionId", this.selectedPatientAdmissionId);
+        this.router.navigate(['/home/casesheet']);
+      }
+    },
+      (err) => {
+
+      })
+  }
+
+  closeAllergiesTooltip() {
+    $('#divAllergyTooltip').removeClass('hoverAllergy');
+  }
+
+  GetDetails(pl: any) {
+    this.selectedPatientAdmissionId = pl.AdmissionID;
+    this.getPatientDetails(pl.RegCode);
+    sessionStorage.setItem("selectedView", JSON.stringify(pl));
+  }
+  clearSelectedPatientData() {
+    // this.selectedPatientSSN="";
+    // this.selectedPatientName="";
+    // this.selectedPatientGender="";
+    // this.selectedPatientAge="";
+    // this.selectedPatientMobile="";
+    // this.selectedPatientHeight="";
+    // this.selectedPatientWeight="";
+    // this.selectedPatientBloodGrp="";
+    // this.selectedPatientIsPregnancy = false;
+    // this.selectedPatientPregnancyTrisemister = "";
+    
+    // this.selectedPatientMedications = [];
+    // this.selectedPatientAllergies = [];
+    // this.selectedPatientBPSystolic="";
+    // this.selectedPatientBPDiastolic= "";
+    // this.selectedPatientTemperature=""
+    // this.selectedPatientPulse="";
+    // this.selectedPatientSPO2="";
+    // this.selectedPatientRespiration="";
+    // this.selectedPatientConsciousness="";
+    // this.selectedPatientO2FlowRate="";
+    // this.selectedPatientAllergies="";
+    // this.selectedPatientClinicalInfo = "";
+    // this.selectedPatientVTScore="";
+
+  }
+  showPatientInfo(pinfo: any) {
+    $("#quick_info").modal('show');
+    console.log(pinfo);
+    this.selectedPatientSSN=pinfo.SSN;
+    this.selectedPatientName = pinfo.PatientName;
+    this.selectedPatientGender=pinfo.FullAge_Gender.split('/')[1];
+    this.selectedPatientAge=pinfo.FullAge_Gender.split('/')[0];
+    this.selectedPatientMobile=pinfo.MobileNo;    
+    this.selectedPatientHeight=pinfo.Height;
+    this.selectedPatientWeight=pinfo.Weight;
+    this.selectedPatientBloodGrp=pinfo.BloodGroup;
+  this.selectedPatientIsVip = pinfo.ISVIP == "Non-VIP" ? false : true;
+  if(pinfo.IsPregnancy) {
+    this.selectedPatientIsPregnancy = true;
+    this.selectedPatientPregnancyTrisemister = pinfo.PregnancyContent;
+  }
+  else {
+    this.selectedPatientIsPregnancy = false;
+    this.selectedPatientPregnancyTrisemister ="";
+  }
+    this.config.FetchPatientFileInfo(pinfo.EpisodeID, pinfo.AdmissionID, this.hospitalId,pinfo.PatientID, pinfo.RegCode).subscribe((response: any) => {
+        if(response.objPatientMedicationsList.length > 0) {
+        this.selectedPatientMedications = response.objPatientMedicationsList;
+        }
+        else {
+          this.selectedPatientMedications = [];
+        }
+        if(response.objPatientVitalsList.length > 0) {
+          this.selectedPatientVitalsDate = response.objPatientVitalsList[0].CreateDate;
+          this.selectedPatientBPSystolic=response.objPatientVitalsList[0].Value;
+          this.selectedPatientBPDiastolic= response.objPatientVitalsList[1].Value;
+          this.selectedPatientTemperature=response.objPatientVitalsList[2].Value;
+          this.selectedPatientPulse=response.objPatientVitalsList[3].Value;
+          this.selectedPatientSPO2=response.objPatientVitalsList[4].Value;
+          this.selectedPatientRespiration=response.objPatientVitalsList[5].Value;
+        if(response.objPatientVitalsList.length>6 && response.objPatientVitalsList[6].Value != undefined)
+          this.selectedPatientConsciousness=response.objPatientVitalsList[6].Value;
+          else 
+          this.selectedPatientConsciousness= "";
+        if(response.objPatientVitalsList.length>7 && response.objPatientVitalsList[7].Value != undefined)
+          this.selectedPatientO2FlowRate=response.objPatientVitalsList[7].Value;
+        else 
+        this.selectedPatientO2FlowRate="";
+        }
+        else {
+          this.selectedPatientVitalsDate = "";
+          this.selectedPatientBPSystolic="";
+          this.selectedPatientBPDiastolic= "";
+          this.selectedPatientTemperature="";
+          this.selectedPatientPulse="";
+          this.selectedPatientSPO2="";
+          this.selectedPatientRespiration="";
+        }
+        if(response.objPatientAllergyList.length > 0) {
+          this.selectedPatientAllergies=response.objPatientAllergyList;
+        }
+        else {
+          this.selectedPatientAllergies= [];
+        }
+        if(response.objobjPatientClinicalInfoList.length > 0) {
+          this.selectedPatientClinicalInfo = response.objobjPatientClinicalInfoList[0].ClinicalCondtion;
+          this.selectedPatientVTScore=response.objobjPatientClinicalInfoList[0].VTScore;
+        }
+        else {
+          this.selectedPatientClinicalInfo = ""
+          this.selectedPatientVTScore="";
+        }
+      })
+  } 
+  
+}
+
+interface PatientDetails {
+  SSN: string
+  EpisodeID: string
+  AdmissionID: string
+  hospitalId: string
+  PatientID: string
+  RegCode: string
+  ScheduleID: string
+  IsVirtual: number
+  IsAllergy: number
+  Status: string
+  GenderID: number
+  IsPregnancy: number
+  PregnancyContent: string
+  OrderType: string
+  PatientName: string
+  FullAge_Gender: string
+  Orderdate: Date
+  Nationality: string
+  TokenNumber: string
+  Timeslot: string
+  Score: string
+  InsuranceName: string
+  AllergyData: string
+  Age_Gender: string
+  MobileNo: string
+  Height: string
+  Weight: string
+  BloodGroup: string
+  ISVIP: string
+  MonitorID: string
+  SpecialiseID:string
+  BillType:string
+}

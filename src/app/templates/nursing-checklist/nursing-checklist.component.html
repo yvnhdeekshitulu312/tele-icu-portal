@@ -1,0 +1,1206 @@
+<div class="card card-style-1 rounded main-container" #divnuct>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading"> Nursing Checklist </h2>
+        <div class="actions generalConsent_popup position-relative d-flex align-items-center gap-2" *ngIf="IsView">
+            <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+        </div>
+    </div>
+
+    
+        <!-- <app-wardheader-summary></app-wardheader-summary> -->
+
+         <div class="p-2 template_scroll" *ngIf="showContent" id="divscroll">
+               <div class="d-flex align-items-start gap-5 border-dashed-primary-300 p-2 pt-2 rounded">
+                  <div class="w-max-content">
+                     <label for="" class="form-label clr-primary-600 m-0">CTAS</label>
+                     <div class="ctascore">
+                        <span class="bg-primary-400 py-0 px-3 fs-8 rounded-4 clr-light d-block">{{ctasScore}}</span>
+                     </div>
+                  </div>
+                  <div class="w-max-content">
+                     <label for="" class="form-label clr-primary-600 m-0">Patient Type</label>
+                     <p>{{patientType === 'Self' ? 'Self' : 'Company Patient' }}</p>
+                  </div>
+                  <div class="w-max-content">
+                     <label for="" class="form-label clr-primary-600 m-0">Approval</label>
+                     <p>-</p>
+                  </div>
+                  <div class="w-max-content">
+                     <label for="" class="form-label clr-primary-600 m-0">Arrival Type</label>
+                     <p>With Referral</p>
+                  </div>
+                  <div class="w-max-content">
+                     <label for="" class="form-label clr-primary-600 m-0">Mode of Arrival</label>
+                     <p>{{modeOfArrival}}</p>
+                  </div>
+                  <div class="w-max-content">
+                     <label for="" class="form-label clr-primary-600 m-0">Level of Conciousness</label>
+                     <p>{{Consciousness}}</p>
+                  </div>
+               </div>
+            <!-- <div class="d-flex align-items-center gap-2">
+                  <label for="" class="form-label m-0">CTAS #:</label>
+                  <div class="d-flex align-items-center cta_circles casesheet_cta_circles gap-2">
+                  <div class="custom_tooltip custom_tooltip_left">
+                        <div [class]="ctasScore1Class">1
+                        </div>
+                        <div class="tooltip">
+                           <p>Resuscitation(L1)</p>
+                        </div>
+                  </div>
+                  <div class="custom_tooltip custom_tooltip_left">
+                        <div [class]="ctasScore2Class">2</div>
+                        <div class="tooltip">
+                           <p>Emergent(L2)</p>
+                        </div>
+                  </div>
+                  <div class="custom_tooltip custom_tooltip_left">
+                        <div [class]="ctasScore3Class">3</div>
+                        <div class="tooltip">
+                           <p>Urgent(L3)</p>
+                        </div>
+                  </div>
+                  <div class="custom_tooltip custom_tooltip_left">
+                        <div [class]="ctasScore4Class">4
+                        </div>
+                        <div class="tooltip">
+                           <p>Less Urgent(L4)</p>
+                        </div>
+                  </div>
+                  <div class="custom_tooltip custom_tooltip_left">
+                        <div [class]="ctasScore5Class">5
+                        </div>
+                        <div class="tooltip">
+                           <p>Non Urgent(L5)</p>
+                        </div>
+                  </div>
+
+               </div>
+                  <div class="col">
+                     <div id="toggle_PatientType" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                        <button [class]="patientType === 'Self' ? 'btn selected' : 'btn'" (click)="toggleSelection($event)">Cash Patient</button>
+                        <button [class]="patientType !== 'Self' ? 'btn selected' : 'btn'" (click)="toggleSelection($event)">Company Patient</button>
+                     </div>
+                  </div>
+                  <div class="col">
+                     <div class="d-flex align-items-center gap-2">
+                        <div (click)="toggleCheckboxSelection($event)" id="checkbox_Approval" class="custom_check active d-flex align-items-center gap-2">
+                           <p class="m-0 fs-7">Approval</p>
+                        </div>
+                        <div id="toggle_Approval" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                           <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                           <button class="btn" (click)="toggleSelection($event)">No With Promissory Note</button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="border rounded-2">
+                  <div class="border-bottom">
+                        <div class="p-2">
+                           <div class="row align-items-center g-4">
+                              <div class="col-2">
+                                 <label for="" class="form-label m-0">Arrival Type </label>
+                                 <div class="d-flex align-items-center gap-2">
+                                 <select name="" class="form-select" id="arrivalType">
+                                    <option value="">With Referral</option>
+                                    <option value="">Without Refferal</option>
+                                    <option value="">By Ambulance</option>
+                                 </select>
+                              </div>
+                              </div>
+                              <div class="col-2">
+                                 <label for="" class="form-label m-0">Mode Of Arrival </label>
+                                 <div class="d-flex align-items-center gap-2">
+                                 <select name="" class="form-select" id="modeOfArrival">
+                                    <option value="3">Walk-in</option>
+                                    <option value="4">Ambulance</option>
+                                    <option value="5">Family or Friend Transport</option>
+                                    <option value="6">Community Clinics or Outpatient Facilities</option>
+                                    <option value="7">Transfer from Another Healthcare Facility</option>
+                                    <option value="8">Police or Law Enforcement Referred</option>
+                                    <option value="9">Wheelchair</option>
+                                    <option value="10">Stretcher</option>
+                                    <option value="11">Crutches</option>
+                                 </select>
+                              </div>
+                              </div>
+                              <div class="col-2">
+                                 <label for="" class="form-label m-0">Level of Conciousness </label>
+                                 <div class="d-flex align-items-center gap-2">
+                                 <select name="" class="form-select" id="levelOfConciousness">
+                                    <option value="">Awake & Alert</option>
+                                    <option value="">Lathergic</option>
+                                    <option value="">Stuporous</option>
+                                    <option value="">Comatose</option>
+                                    <option value="">GCS (from 3-15)
+                                    </option>
+                                 </select>
+                              </div>
+                              </div>
+                              
+                           </div>
+                        </div>
+                     </div>
+               </div> -->
+            <div class="mt-2">
+               <div class="bg-primary-20 rounded-2">
+                  <div class="row g-2 mx-0">
+                     <div class="col-6 m-0 p-2 border-end">
+                        <div class="row g-2 border-bottom pb-3">
+                           <div class="col-4">
+                              <label for="" class="form-label text-nowrap m-0">Time Taken by Nurse:</label>
+                               <!-- <input id="textbox_TimeTakenbyNurse" type="time" class="form-control"> -->
+                               <app-time-selector [hours]="getHours('textbox_generic_time1')" [minutes]="getMinutes('textbox_generic_time1')" (timeSelected)="onTimeChange($event, 'textbox_generic_time1')" [disabled]="isTimeSelectorDisable('textbox_generic_time1')"></app-time-selector>
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label text-nowrap m-0">Time Seen by Doctor:</label>
+                              <!-- <input type="time" id="textbox_TimeSeenbyDoctor" class="form-control" value=""> -->
+                              <app-time-selector [hours]="getHours('textbox_generic_time2')" [minutes]="getMinutes('textbox_generic_time2')" (timeSelected)="onTimeChange($event, 'textbox_generic_time2')" [disabled]="isTimeSelectorDisable('textbox_generic_time2')"></app-time-selector>
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label text-nowrap m-0">Time Discharge</label>
+                              <!-- <input type="time" id="textbox_TimeDischarge" class="form-control" value=""> -->
+                              <app-time-selector [hours]="getHours('textbox_generic_time3')" [minutes]="getMinutes('textbox_generic_time3')" (timeSelected)="onTimeChange($event, 'textbox_generic_time3')" [disabled]="isTimeSelectorDisable('textbox_generic_time3')"></app-time-selector>
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label text-nowrap m-0">Time Admitted:</label>
+                              <!-- <input type="time" id="textbox_TimeAdmitted" class="form-control" value=""> -->
+                              <app-time-selector [hours]="getHours('textbox_generic_time4')" [minutes]="getMinutes('textbox_generic_time4')" (timeSelected)="onTimeChange($event, 'textbox_generic_time4')" [disabled]="isTimeSelectorDisable('textbox_generic_time4')"></app-time-selector>
+                           </div>
+                           <div class="col-4">
+                              <label for="" class="form-label text-nowrap m-0">Admitting Unit Room :</label>
+                               <input type="text" id="textbox_AdmittingUnitRoom" class="form-control" value="">
+                           </div>
+                        </div>
+
+                        <div class="row g-2 pt-3">
+                           <div class="col">
+                              <label for="" class="form-label w-100">Consent Signed</label>
+                              <div id="toggle_ConsentSigned" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                 <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                 <button class="btn" (click)="toggleSelection($event)">No</button>
+                              </div>
+                           </div>
+                           <div class="col">
+                              <label for="" class="form-label w-100">OR Request Forwarded</label>
+                              <div id="toggle_ORRequestForwarded" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                 <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                 <button class="btn" (click)="toggleSelection($event)">No</button>
+                              </div>
+                           </div>
+                           <div class="col">
+                                 <label for="" class="form-label w-100">Pre-Anesthetic Done</label>
+                                 <div id="toggle_PreAnestheticDone" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                    <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                    <button class="btn" (click)="toggleSelection($event)">No</button>
+                                 </div>
+                           </div>
+                          
+                        </div>
+                     </div>
+                     <div class="col-6 m-0 p-2">
+                        <div class="col-12">
+                           <label for="" class="form-label m-0">Diet</label>
+                           <!-- <textarea name="" class="form-control" id="textbox_Diet" cols="30" rows="8"></textarea> -->
+                           <span name="" class="form-control " id="textbox_Diet" cols="30" rows="3" resize-none contenteditable="true">
+                           </span>                           
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <!-- <div class="border p-2 bg-primary-10 rounded-2">
+                  <div class="row">
+                     <div class="col-4">
+                        <div class="d-flex align-items-center gap-2">
+                           <label for="" class="form-label text-nowrap m-0">Time Taken by Nurse:</label>
+                           <input id="textbox_TimeTakenbyNurse" type="time" class="form-control">
+                        </div>
+                     </div>
+                     <div class="col-md-9">
+                        
+                     </div>
+                  </div>
+                  <div class="row mt-2">
+                     <div class="col-4">
+                        <div class="d-flex align-items-center gap-2">
+                           <label for="" class="form-label text-nowrap m-0">Time Seen by Doctor:</label>
+                           <input type="time" id="textbox_TimeSeenbyDoctor" class="form-control" value="">
+                        </div>
+                     </div>
+                     <div class="col-4">
+                        <div class="d-flex align-items-center gap-2">
+                           <label for="" class="form-label text-nowrap m-0">Time Discharge</label>
+                           <input type="time" id="textbox_TimeDischarge" class="form-control" value="">
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row mt-2">
+                     <div class="col-4">
+                        <div class="d-flex align-items-center gap-2">
+                           <label for="" class="form-label text-nowrap m-0">Time Admitted:</label>
+                           <input type="time" id="textbox_TimeAdmitted" class="form-control" value="">
+                        </div>
+                     </div>
+                     <div class="col-4">
+                        <div class="d-flex align-items-center gap-2">
+                           <label for="" class="form-label text-nowrap m-0">Admitting Unit Room :</label>
+                           <input type="text" id="textbox_AdmittingUnitRoom" class="form-control" value="">
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row mt-2">
+                     
+                     <div class="col">
+                        <div class="d-flex align-items-center gap-2">
+                           <label for="" class="form-label m-0">Consent Signed</label>
+                           <div id="toggle_ConsentSigned" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                              <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                              <button class="btn" (click)="toggleSelection($event)">No</button>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="d-flex align-items-center gap-2">
+                           <label for="" class="form-label m-0">OR Request Forwarded </label>
+                           <div id="toggle_ORRequestForwarded" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                              <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                              <button class="btn" (click)="toggleSelection($event)">No</button>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="d-flex align-items-center gap-2">
+                           <label for="" class="form-label m-0">Pre-Anesthetic Done </label>
+                           <div id="toggle_PreAnestheticDone" class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                              <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                              <button class="btn" (click)="toggleSelection($event)">No</button>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="mt-2">
+                        <label for="" class="form-label m-0">Diet</label>
+                        <textarea name="" class="form-control" id="textbox_Diet" cols="30" rows="3"></textarea>
+                     </div>
+                  </div>
+               </div> -->
+            </div>
+            <div class="mt-2">
+               <div class="border p-2 bg-primary-10 rounded-2">
+                  
+                  <div class="d-flex align-items-center gap-3">
+                     <div class="col">
+                        <label for="" class="form-label text-nowrap m-0">Vital Signs TEMP</label>
+                        <div class="d-inline-flex align-items-center afterlabel">
+                           <input id="textbox_temp" type="text" class="form-control" value="39.6">
+                           <label for="" class="form-label label_sm" id="">C</label>
+                        </div>
+                     </div>
+                     <div class="col">
+                        <label for="" class="form-label m-0">PR</label>
+                        <input id="textbox_PR" type="text" class="form-control" value="179">
+                     </div>
+                     <div class="col">
+                        <label for="" class="form-label m-0">RR</label>
+                        <input id="textbox_RR" type="text" class="form-control" value="24">
+                     </div>
+                     <div class="col">
+                        <label for="" class="form-label m-0">BP</label>
+                        <input id="textbox_bp" type="text" class="form-control">
+                     </div>
+                     <div class="col">
+                        <label for="" class="form-label m-0">SpO2</label>
+                        <input id="textbox_SpO2" type="text" class="form-control" value="97">
+                     </div>
+                     <div class="col">
+                        <label for="" class="form-label text-nowrap m-0">Weight</label>
+                        <div class="d-inline-flex align-items-center afterlabel">
+                           <input id="text_Weight1" type="text" class="form-control" value="">
+                           <label for="" class="form-label label_sm" id="">Kg</label>
+                        </div>
+                     </div>
+                     <div class="col">
+                        <label for="" class="form-label text-nowrap m-0">Height</label>
+                        <div class="d-inline-flex align-items-center afterlabel">
+                           <input id="text_Height1" type="text" class="form-control" value="">
+                           <label for="" class="form-label label_sm" id="">Cm</label>
+                        </div>
+                     </div>
+                     <div class="col">
+                        <label for="" class="form-label text-nowrap m-0">Pain Score</label>
+                        <input id="textbox_PainScale" type="text" class="form-control" value="">
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="mt-2">
+               <div class="border bg-primary-10 rounded-2">
+                  <div class="bg-primary-20 p-2 rounded-top">
+                     <div class="align-items-center gap-4">
+                        <h6 class="clr-primary-600 m-0">Medications Given</h6>
+                        
+                     </div>
+                  </div>
+                  <div class="p-2">
+                     <div class="row align-items-center g-4">
+                     <div class="col-2">
+                           <div class="d-flex align-items-center gap-2">
+                              <select name="" class="form-select" id="ddl_1" >
+                                 <option value="0">Oral</option>
+                                 <option value="1">Nasal</option>
+                                 <option value="2">Rectal</option>
+                                 <option value="3">Otic</option>
+                                 <option value="4">Opthalmic</option>
+                              </select>
+                              <input id="textbox_Opthalmic" type="text" class="form-control">
+                           </div>
+                     </div>
+                        <!-- <div class="col-2">
+                           <div (click)="toggleCheckboxSelection($event)" id="checkbox_Oral" class="custom_check active d-flex align-items-center gap-2">
+                              <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                              <p class="m-0 fs-7">Oral</p>
+                           </div>
+                           
+                        </div>
+                        <div class="col-2">
+                           <div (click)="toggleCheckboxSelection($event)" id="checkbox_Nasal" class="custom_check d-flex align-items-center gap-2">
+                              <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                              <p class="m-0 fs-7">Nasal</p>
+                           </div>
+                        </div>
+                        <div class="col-2">
+                           <div (click)="toggleCheckboxSelection($event)" id="checkbox_Rectal" class="custom_check d-flex align-items-center gap-2">
+                              <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                              <p class="m-0 fs-7">Rectal</p>
+                           </div>
+                        </div>
+                        <div class="col-2">
+                           <div (click)="toggleCheckboxSelection($event)" id="checkbox_Otic" class="custom_check d-flex align-items-center gap-2">
+                              <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                              <p class="m-0 fs-7">Otic</p>
+                           </div>
+                        </div>
+                        <div class="col-3">
+                           <div (click)="toggleCheckboxSelection($event)" id="checkbox_Opthalmic" class="custom_check d-flex align-items-center gap-2">
+                              <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                              <p class="m-0 fs-7">Opthalmic</p>
+                              <input id="textbox_Opthalmic" type="text" class="form-control">
+                           </div>
+                        </div> -->
+                        
+                        
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="mt-2">
+               <div class="border bg-primary-10 rounded-2">
+                  <div class="bg-primary-20 p-2 rounded-top">
+                     <div class="align-items-center gap-4">
+                        <h6 class="clr-primary-600 m-0">Injection Given</h6>
+                        
+                     </div>
+                  </div>
+                  <div class="p-2">
+                     <div class="row align-items-center justify-content-between gx-4">
+                           <div class="col m-0">
+                              <label for="" class="form-label text-nowrap">IM</label>
+                              <input id="textbox_InjectionGivenIM" type="text" class="form-control w-100">
+                           </div>
+                           <div class="col m-0">
+                              <label for="" class="form-label text-nowrap">IV</label>
+                              <input id="textbox_InjectionGivenIV" type="text" class="form-control">
+                           </div>
+                           <div class="col m-0">
+                              <label for="" class="form-label text-nowrap">IV Infusion</label>
+                              <input id="textbox_InjectionGivenIVInfusion" type="text" class="form-control w-100">
+                           </div>
+                           <div class="col m-0">
+                              <label for="" class="form-label text-nowrap">SC</label>
+                              <input id="textbox_InjectionGivenSC" type="text" class="form-control">
+                           </div>
+                           <div class="col m-0">
+                              <label for="" class="form-label text-nowrap">ID</label>
+                              <input id="textbox_InjectionGivenID" type="text" class="form-control">
+                           </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="mt-2">
+               <div class="border bg-primary-10 rounded-2">
+                  <div class="bg-primary-20 p-2 rounded-top">
+                     <div class="align-items-center gap-4">
+                        <h6 class="clr-primary-600 m-0">Nebulization Given</h6>
+                     </div>
+                  </div>
+                  <div class="p-2">
+                     <div class="d-flex align-items-center gap-3">
+                        <div class="">
+                           <label for="" class="form-label text-nowrap m-0">Ventolin:</label>
+                           <input id="textbox_Ventolin" type="text" class="form-control" value="">
+                        </div>
+                        <div class="">
+                           <label for="" class="form-label m-0">Pulimcort:</label>
+                           <input id="textbox_Pulimcort" type="text" class="form-control" value="">
+                        </div>
+                        <div class="">
+                           <label for="" class="form-label m-0">Bisolvon:</label>
+                           <input id="textbox_Bisolvon" type="text" class="form-control" value="">
+                        </div>
+                        <div class="">
+                           <label for="" class="form-label m-0">Atrovent</label>
+                           <input id="textbox_Atrovent" type="text" class="form-control">
+                        </div>
+                        <div class="">
+                           <label for="" class="form-label m-0">NSS</label>
+                           <input id="textbox_NSS" type="text" class="form-control" value="">
+                        </div>
+                        <div class="">
+                           <label for="" class="form-label m-0">Adrenaline</label>
+                           <input id="textbox_Adrenaline" type="text" class="form-control">
+                        </div>
+                        <div class="">
+                           <label for="" class="form-label m-0">Flixotide</label>
+                           <input id="textbox_Flixotide" type="text" class="form-control" value="">
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="mt-2">
+               <div class="border p-2 bg-primary-10 rounded-2">
+                  
+                  <div class="row">
+                     <div class="col-md-4">
+                        <label for="" class="form-label text-nowrap m-0">Laboratory Investigation done:</label>
+                        <input id="txt_generic_Investigations" type="text" class="form-control" value="">
+                     </div>
+                     <div class="col-md-4">
+                        <label for="" class="form-label m-0">Radiology Investigation done:</label>
+                        <input id="textbox_RadiologyInvestigationdone" type="text" class="form-control" value="">
+                     </div>
+                     <div class="col-md-4">
+                        <label for="" class="form-label m-0">Other Procedures Done:</label>
+                        <input id="txt_generic_Procedures" type="text" class="form-control" value="">
+                        <!-- <div class="d-flex align-items-center justify-content-between gap-2 mt-2">
+                           <div (click)="toggleCheckboxSelection($event)" id="checkbox_ECG" class="custom_check active d-flex align-items-center gap-2">
+                              <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                              <p class="m-0 fs-7">ECG</p>
+                           </div>
+                           <div (click)="toggleCheckboxSelection($event)" id="checkbox_Dressing" class="custom_check d-flex align-items-center gap-2">
+                              <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                              <p class="m-0 fs-7">Dressing</p>
+                           </div>
+                           <div (click)="toggleCheckboxSelection($event)" id="checkbox_Suturing" class="custom_check d-flex align-items-center gap-2">
+                              <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                              <p class="m-0 fs-7">Suturing</p>
+                           </div>
+                           <div (click)="toggleCheckboxSelection($event)" id="checkbox_ROS" class="custom_check d-flex align-items-center gap-2">
+                              <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                              <p class="m-0 fs-7">ROS</p>
+                           </div>
+                           
+                           <div (click)="toggleCheckboxSelection($event)" id="checkbox_Circumcision" class="custom_check d-flex align-items-center gap-2">
+                              <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                              <p class="m-0 fs-7">Circumcision</p>
+                           </div>
+                        </div> -->
+                     </div>
+                     
+                  </div>
+               </div>
+            </div>
+
+            <div class="mt-2">
+               <div class="border p-2 bg-primary-10 rounded-2">
+                  
+                  <div class="row">
+                     <div class="col-md-12">
+                        <div class="">
+                           <label for="" class="form-label text-nowrap m-0">Cheif Complaint:</label>
+                           <!-- <input id="textbox_CheifComplaint" type="textarea" class="form-control" value=""> -->
+                           <!-- <textarea name="" class="form-control" id="txt_generic_ChiefComplaint" cols="30" rows="3"></textarea> -->
+                           <span name="" class="form-control " [innerHTML]="chiefcomplaints" id="txt_static_ChiefComplaint" cols="30" rows="3" resize-none contenteditable="true">
+                           </span>                           
+                        </div>
+                     </div>
+                     <!-- <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-2">
+                           <label for="" class="form-label m-0">Nursing Management:</label>
+                           <input type="text" class="form-control" value="">
+                        </div>
+                     </div>
+                     <div class="col-md-4">
+                        <div class="d-flex align-items-center  gap-2">
+                           <label for="" class="form-label m-0">Other Procedures Done:</label>
+                           <input type="text" class="form-control" value="">
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between gap-2">
+                           <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="check1" name="procedures" value="something" checked>
+                              <label class="form-check-label">ECG</label>
+                           </div>
+                           <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="check1" name="procedures" value="something" checked>
+                              <label class="form-check-label">Dressing</label>
+                           </div>
+                           <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="check1" name="procedures" value="something" checked>
+                              <label class="form-check-label">Suturing</label>
+                           </div>
+                           <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="check1" name="procedures" value="something" checked>
+                              <label class="form-check-label">ROS</label>
+                           </div>
+                           <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="check1" name="procedures" value="something" checked>
+                              <label class="form-check-label">Circumcision</label>
+                           </div>
+                        </div>
+                     </div> -->
+                     
+                  </div>
+               </div>
+            </div>
+            <div class="mt-2">
+               <div class="border p-2 bg-primary-10 rounded-2">
+                  <div class="row">
+                     <h6 class="clr-primary-600">Nursing Management:</h6>
+                  </div>
+                  <div class="d-flex align-items-center gap-5 mt-2">
+                     <div (click)="toggleCheckboxSelection($event)" id="checkbox_VitalSignsTaken" class="custom_check  d-flex align-items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                        <p class="m-0 fs-7">Vital Signs Taken</p>
+                     </div>
+                     <div (click)="toggleCheckboxSelection($event)" id="checkbox_ComfortProvided" class="custom_check d-flex align-items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                        <p class="m-0 fs-7">Comfort Provided</p>
+                     </div>
+                     <div (click)="toggleCheckboxSelection($event)" id="checkbox_PainMeasuresProvided" class="custom_check d-flex align-items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                        <p class="m-0 fs-7">Pain Measures Provided</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="mt-2">
+               <div class="border p-2 bg-primary-10 rounded-2">
+                  
+                  <div class="row align-items-center justify-content-between p-2 g-4">
+                        <div class="col-3">
+                           <label for="" class="form-label text-nowrap">Health Teaching</label>
+                           <input id="textbox_HealthTeaching" type="text" class="form-control w-100">
+                        </div>
+                        <div class="col-3">
+                           <label for="" class="form-label text-nowrap">Diagnosis</label>
+                           <input id="textbox_Diagnosis" type="text" class="form-control">
+                        </div>
+                        <div class="col-3">
+                           <label for="" class="form-label text-nowrap">Approved Case</label>
+                           <input id="textbox_ApprovedCase" type="text" class="form-control w-100">
+                        </div>
+                        <div class="col-3">
+                           <label for="" class="form-label m-0">Attending Doctor</label>
+                           <div class="d-flex align-items-center gap-2">
+                              
+                              <input id="textbox_AttendingDoctor1" type="text" class="form-control">/
+                              <input id="textbox_AttendingDoctor2" type="text" class="form-control">
+                           </div>
+                           
+                        </div>
+                        <!-- <div class="col-3">
+                           <label for="" class="form-label text-nowrap">ID</label>
+                           <input type="text" class="form-control">
+                        </div> -->
+                  </div>
+               </div>
+            </div>
+            <div class="mt-2">
+               <div class="border p-2 bg-primary-10 rounded-2">
+                  <div class="row">
+                     <h6 class="clr-primary-600">Disposition:</h6>
+                  </div>
+                  <div class="d-flex align-items-center gap-5 mt-2">
+                     <div (click)="toggleCheckboxSelection($event)" id="checkbox_Discharge" class="custom_check d-flex align-items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                        <p class="m-0 fs-7">Discharge</p>
+                     </div>
+                        <div class="row align-items-center g-4 w-100">
+                           <div class="w-max-content">
+                              <div (click)="toggleCheckboxSelection($event)" id="checkbox_GoodCondition1" class="custom_check d-flex align-items-center gap-2">
+                                 <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                 <p class="m-0 fs-7">Good Condition</p>
+                              </div>
+                           </div>
+                           <div class="w-max-content">
+                              <div (click)="toggleCheckboxSelection($event)" id="checkbox_FairCondition" class="custom_check d-flex align-items-center gap-2">
+                                 <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                 <p class="m-0 fs-7">Fair Condition</p>
+                              </div>
+                           </div>
+                           <div class="w-max-content">
+                              <div (click)="toggleCheckboxSelection($event)" id="checkbox_GoodCondition2" class="custom_check d-flex align-items-center gap-2">
+                                 <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                 <p class="m-0 fs-7">Good Condition</p>
+                              </div>
+                           </div>
+                           <div class="w-max-content">
+                              <div (click)="toggleCheckboxSelection($event)" id="checkbox_GoodCondition3" class="custom_check d-flex align-items-center gap-2">
+                                 <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                 <p class="m-0 fs-7">Good Condition</p>
+                              </div>
+                           </div>
+                           
+                        </div>
+                  </div>
+
+                  <div class="d-flex align-items-center gap-3 mt-2">
+                     <div class="form-check">
+                        <input class="form-check-input" type="checkbox" (click)="toggleCheckboxSelection($event)" id="checkbox_opd" name="opd" value="something">
+                        <label class="form-check-label">OPD</label>
+                     </div>
+                     <div class="d-flex align-items-center gap-2">
+                        <label for="" class="form-label text-nowrap m-0">Follow-up:</label>
+                        <input type="text" id="textbox_Followup" class="form-control" value="">
+                     </div>
+                     <div class="d-flex align-items-center gap-2">
+                        <label for="" class="form-label text-nowrap m-0">Date</label>
+                        <mat-form-field appearance="fill">
+                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                        <input matInput class="" #DisDate id="textbox_DisDate" [matDatepicker]="dDate" (click)="dDate.open()">
+                        <mat-datepicker-toggle matSuffix [for]="dDate">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #dDate></mat-datepicker>
+                     </mat-form-field>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="mt-2">
+               <div class="border p-2 bg-primary-10 rounded-2">
+                  <table class="table m-0">
+                     <thead>
+                     <tr>
+                        <th scope="col">Triage Nurse</th>
+                        <!-- <th scope="col">Signature</th> -->
+                        <th scope="col">ID Number</th>
+                        <th scope="col">Date</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+                     <tr>
+                        <td>
+                        <!-- <input type="text" id="textbox_TriageNurse" class="form-control"> -->
+                        <input type="text" class="form-control" id="textbox_TriageNurse"
+                        placeholder=""  aria-label="Nurse's and Signature" [matAutocomplete]="autoEndoNurse3"
+                        (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchEndoNurse($event)">
+                        <mat-autocomplete #autoEndoNurse3="matAutocomplete">
+                              <mat-option *ngFor="let item of endoNurseList"
+                                 (onSelectionChange)="onNurseSelected(item, 'textbox_TriageNurse')"
+                                 [value]="item.EmpNo + '-' + item.Fullname">
+                                 {{item.EmpNo + '-' + item.Fullname}}
+                              </mat-option>
+                        </mat-autocomplete>
+                     </td>
+                        <!-- <td><input type="text" id="textbox_Signature1" class="form-control"></td> -->
+                        <td><input type="text" id="textbox_IDNumber1" class="form-control"></td>
+                        <td>
+                        <mat-form-field appearance="fill">
+                              <mat-label translate>dd-MMM-yyyy</mat-label>
+                              <input matInput class="" #TriageDate id="textbox_TriageDate" [matDatepicker]="tDate" (click)="tDate.open()">
+                              <mat-datepicker-toggle matSuffix [for]="tDate">
+                              </mat-datepicker-toggle>
+                              <mat-datepicker #tDate></mat-datepicker>
+                           </mat-form-field>
+                        </td>
+                     </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+            <div class="mt-2">
+               <div class="border p-2 bg-primary-10 rounded-2">
+                  <table class="table m-0">
+                     <thead>
+                     <tr>
+                        <th scope="col">Attending AED/OPD Nurse</th>
+                        <!-- <th scope="col">Signature</th> -->
+                        <th scope="col">ID Number</th>
+                        <th scope="col">Date</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+                     <tr>
+                        <td>
+                        <!-- <input id="textbox_AttendingAEDOPDNurse" type="text" class="form-control"> -->
+                        <input type="text" class="form-control" id="textbox_AttendingAEDOPDNurse"
+                        placeholder=""  aria-label="Nurse's and Signature" [matAutocomplete]="autoEndoNurse4"
+                        (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchEndoNurse($event)">
+                        <mat-autocomplete #autoEndoNurse4="matAutocomplete">
+                              <mat-option *ngFor="let item of endoNurseList"
+                                 (onSelectionChange)="onNurseSelected(item, 'textbox_AttendingAEDOPDNurse')"
+                                 [value]="item.EmpNo + '-' + item.Fullname">
+                                 {{item.EmpNo + '-' + item.Fullname}}
+                              </mat-option>
+                        </mat-autocomplete>
+                     </td>
+                        <!-- <td><input id="textbox_Signature2" type="text" class="form-control"></td> -->
+                        <td><input id="textbox_IDNumber2" type="text" class="form-control"></td>
+                        <td>
+                        <mat-form-field appearance="fill">
+                              <mat-label translate>dd-MMM-yyyy</mat-label>
+                              <input matInput class="" #NurseDate id="textbox_NurseDate" [matDatepicker]="nDate" (click)="nDate.open()">
+                              <mat-datepicker-toggle matSuffix [for]="nDate">
+                              </mat-datepicker-toggle>
+                              <mat-datepicker #nDate></mat-datepicker>
+                        </mat-form-field>
+                        </td>
+                     </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+            <div class="mt-2">
+               <div class="border bg-primary-10 rounded-2">
+                  <div class="border-bottom">
+                     <div class="bg-primary-20 p-2 rounded-top">
+                        <div class="align-items-center gap-4">
+                           <h6 class="clr-primary-600 m-0">Patient's Response to Medications :</h6>
+                           
+                        </div>
+                     </div>
+                     <div class="p-2">
+                        <table class="table m-0">
+                           <thead>
+                           <tr>
+                              <th scope="col">Medication's Given</th>
+                              <th scope="col">Time Given</th>
+                              <th scope="col" class="text-center">Responded Well</th>
+                              <th scope="col">Adverse Reaction Noted (if any)</th>
+                              <th>Action Taken</th>
+                           </tr>
+                           </thead>
+                           <tbody>
+                           <tr>
+                              <td><input id="textbox_MedicationsGiven" type="text" class="form-control"></td>
+                              <td>
+                                 <!-- <input id="textbox_TimeGiven" type="text" class="form-control"> -->
+                                 <app-time-selector [hours]="getHours('textbox_generic_time5')" [minutes]="getMinutes('textbox_generic_time5')" (timeSelected)="onTimeChange($event, 'textbox_generic_time5')" [disabled]="isTimeSelectorDisable('textbox_generic_time5')"></app-time-selector>
+                              </td>
+                              <td class="text-center">
+                                 <div id="toggle_RespondedWell" class="clinical_toggle toggle__switch switch-sm custom-inline-flex">
+                                    <button class="btn selected" (click)="toggleSelection($event)">Yes</button>
+                                    <button class="btn" (click)="toggleSelection($event)">No</button>
+                                 </div>
+                              </td>
+                              <td><input id="textbox_AdverseReactionNoted" type="text" class="form-control"></td>
+                              <td><input id="textbox_ActionTaken" type="text" class="form-control"></td>
+                           </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <div class="mt-2">
+               <div class="border bg-primary-10 rounded-2">
+                  <div class="border-bottom">
+                     <div class="bg-primary-20 p-2 rounded-top">
+                        <div class="d-flex justify-content-between align-items-center gap-4">
+                           <h6 class="clr-primary-600 m-0">Vital Signs Before Medication was given :</h6>
+                           <div class="d-flex align-items-center gap-2">
+                              <label for="" class="form-label m-0">Time</label>
+                              <!-- <input id="textbox_VitalSignsBeforeMedicationTime" type="time" class="form-control" value=""> -->
+                              <app-time-selector [hours]="getHours('textbox_generic_time6')" [minutes]="getMinutes('textbox_generic_time6')" (timeSelected)="onTimeChange($event, 'textbox_generic_time6')" [disabled]="isTimeSelectorDisable('textbox_generic_time6')"></app-time-selector>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="p-2">
+                        <table class="table m-0">
+                           <thead>
+                           <tr>
+                              <th scope="col">Temp</th>
+                              <th scope="col">Pulse Rate</th>
+                              <th scope="col">Respiratory Rate</th>
+                              <th scope="col">Blood Pressure</th>
+                           </tr>
+                           </thead>
+                           <tbody>
+                           <tr>
+                              <td><input id="textbox_VitalSignsBeforeMedicationwasgivenTemp" type="text" class="form-control"></td>
+                              <td><input id="textbox_VitalSignsBeforeMedicationwasgivenPulseRate" type="text" class="form-control"></td>
+                              
+                              <td><input id="textbox_VitalSignsBeforeMedicationwasgivenRespiratoryRate" type="text" class="form-control"></td>
+                              <td><input id="textbox_VitalSignsBeforeMedicationwasgivenBloodPressure" type="text" class="form-control"></td>
+                           </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <div class="mt-2">
+               <div class="border bg-primary-10 rounded-2">
+                  <div class="border-bottom">
+                     <div class="bg-primary-20 p-2 rounded-top">
+                        <div class="d-flex justify-content-between align-items-center gap-4">
+                           <h6 class="clr-primary-600 m-0">Vital Signs During Medication (nebulization) was given :</h6>
+                           <div class="d-flex align-items-center gap-2">
+                              <label for="" class="form-label m-0">Time</label>
+                              <!-- <input id="textbox_VitalSignsDuringMedicationTime" type="time" class="form-control" value=""> -->
+                              <app-time-selector [hours]="getHours('textbox_generic_time7')" [minutes]="getMinutes('textbox_generic_time7')" (timeSelected)="onTimeChange($event, 'textbox_generic_time7')" [disabled]="isTimeSelectorDisable('textbox_generic_time7')"></app-time-selector>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="p-2">
+                        <table class="table m-0">
+                           <thead>
+                           <tr>
+                              <th scope="col">Temp</th>
+                              <th scope="col">Pulse Rate</th>
+                              <th scope="col">Respiratory Rate</th>
+                              <th scope="col">Blood Pressure</th>
+                           </tr>
+                           </thead>
+                           <tbody>
+                           <tr>
+                              <td><input id="textbox_VitalSignsDuringMedicationwasgivenTemp" type="text" class="form-control"></td>
+                              <td><input id="textbox_VitalSignsDuringMedicationwasgivenPulseRate" type="text" class="form-control"></td>
+                              
+                              <td><input id="textbox_VitalSignsDuringMedicationwasgivenRespiratoryRate" type="text" class="form-control"></td>
+                              <td><input id="textbox_VitalSignsDuringMedicationwasgivenBloodPressure" type="text" class="form-control"></td>
+                           </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <div class="mt-2">
+               <div class="border bg-primary-10 rounded-2">
+                  <div class="border-bottom">
+                     <div class="bg-primary-20 p-2 rounded-top">
+                        <div class="d-flex justify-content-between align-items-center gap-4">
+                           <h6 class="clr-primary-600 m-0">Vital Signs After Medication was given :</h6>
+                           <div class="d-flex align-items-center gap-2">
+                              <label for="" class="form-label m-0">Time</label>
+                              <!-- <input id="textbox_VitalSignsAfterMedicationTime" type="time" class="form-control" value=""> -->
+                              <app-time-selector [hours]="getHours('textbox_generic_time8')" [minutes]="getMinutes('textbox_generic_time8')" (timeSelected)="onTimeChange($event, 'textbox_generic_time8')" [disabled]="isTimeSelectorDisable('textbox_generic_time8')"></app-time-selector>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="p-2">
+                        <table class="table m-0">
+                           <thead>
+                           <tr>
+                              <th scope="col">Temp</th>
+                              <th scope="col">Pulse Rate</th>
+                              <th scope="col">Respiratory Rate</th>
+                              <th scope="col">Blood Pressure</th>
+                           </tr>
+                           </thead>
+                           <tbody>
+                           <tr>
+                              <td><input id="textbox_VitalSignsAfterMedicationwasgivenTemp" type="text" class="form-control"></td>
+                              <td><input id="textbox_VitalSignsAfterMedicationwasgivenPulseRate" type="text" class="form-control"></td>
+                              
+                              <td><input id="textbox_VitalSignsAfterMedicationwasgivenRespiratoryRate" type="text" class="form-control"></td>
+                              <td><input id="textbox_VitalSignsAfterMedicationwasgivenBloodPressure" type="text" class="form-control"></td>
+                           </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <div class="mt-2">
+               <div class="border bg-primary-10 rounded-2">
+                  <div class="border-bottom">
+                     <div class="bg-primary-20 p-2 rounded-top">
+                        <div class="align-items-center gap-4">
+                           <h6 class="clr-primary-600 m-0">Vital Signs Monitoring: (For specific patient cases / procedure done / medication given)</h6>
+                           
+                        </div>
+                     </div>
+                     <div class="p-2">
+                        <table class="table table-bordered">
+                           <!-- <thead>
+                              <tr>
+                                 <th></th>
+                                 <th>Column 1</th>
+                                 <th>Column 2</th>
+                                 <th>Column 3</th>
+                              </tr>
+                           </thead> -->
+                           <tbody>
+                              <tr>
+                                 <th scope="row">Time</th>
+                                 <td>
+                                    <!-- <input type="text" id="textbox_casesTime" class="form-control"> -->
+                                    <app-time-selector [hours]="getHours('textbox_generic_time9')" [minutes]="getMinutes('textbox_generic_time9')" (timeSelected)="onTimeChange($event, 'textbox_generic_time9')" [disabled]="isTimeSelectorDisable('textbox_generic_time9')"></app-time-selector>
+                                 </td>
+                                 <td>
+                                    <!-- <input type="text" id="textbox_proceduredoneTime" class="form-control"> -->
+                                     <app-time-selector [hours]="getHours('textbox_generic_time10')" [minutes]="getMinutes('textbox_generic_time10')" (timeSelected)="onTimeChange($event, 'textbox_generic_time10')" [disabled]="isTimeSelectorDisable('textbox_generic_time10')"></app-time-selector>
+                                 </td>
+                                 <td>
+                                    <!-- <input type="text" id="textbox_medicationgivenTime" class="form-control"> -->
+                                     <app-time-selector [hours]="getHours('textbox_generic_time11')" [minutes]="getMinutes('textbox_generic_time11')" (timeSelected)="onTimeChange($event, 'textbox_generic_time11')" [disabled]="isTimeSelectorDisable('textbox_generic_time11')"></app-time-selector>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <th scope="row">PR</th>
+                                 <td><input type="text" id="textbox_casesPR" class="form-control"></td>
+                                 <td><input type="text" id="textbox_proceduredonePR" class="form-control"></td>
+                                 <td><input type="text" id="textbox_medicationgivenPR" class="form-control"></td>
+                              </tr>
+                              <tr>
+                                 <th scope="row">RR</th>
+                                 <td><input type="text" id="textbox_casesRR" class="form-control"></td>
+                                 <td><input type="text" id="textbox_proceduredoneRR" class="form-control"></td>
+                                 <td><input type="text" id="textbox_medicationgivenRR" class="form-control"></td>
+                              </tr>
+                              <tr>
+                                 <th scope="row">BP</th>
+                                 <td><input type="text" id="textbox_casesBP" class="form-control"></td>
+                                 <td><input type="text" id="textbox_proceduredoneBP" class="form-control"></td>
+                                 <td><input type="text" id="textbox_medicationgivenBP" class="form-control"></td>
+                              </tr>
+                           </tbody>
+                     </table>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="mt-2">
+               <div class="border bg-primary-10 rounded-2">
+                  <div class="border-bottom">
+                     <div class="bg-primary-20 p-2 rounded-top">
+                        <div class="align-items-center gap-4">
+                           <h6 class="clr-primary-600 m-0">Patient Identification</h6>
+                           
+                        </div>
+                     </div>
+                     <div class="p-1">
+                        <div class="row align-items-center justify-content-between p-2 g-3">
+                              <div class="col-3">
+                                 <label for="" class="form-label text-nowrap">ID Band Location</label>
+                                 <input type="text" id="textbox_IDBandLocation" class="form-control w-100">
+                              </div>
+                              <div class="col-3">
+                                 <label for="" class="form-label text-nowrap">Checked by ER Nurse</label>
+                                 <!-- <input type="text" id="textbox_CheckedbyERNurse" class="form-control"> -->
+                                 <!-- <div class="CommanSearch__form grey bg-white ps-2">
+                                    <svg class="search cursor-pointer" width="20" height="20"
+                                        viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <g clip-path="url(#clip0_9239_2779)"><path d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z" fill="#368796" /></g>
+                                    </svg>
+                                    <input type="text" class="form-control ps-0" [matAutocomplete]="employeeauto" placeholder="" id="textbox_CheckedbyERNurse"
+                                    (keyup)="fetchEndoNurse($event)">
+                                    <mat-autocomplete #employeeauto="matAutocomplete">
+                                       <mat-option *ngFor="let item of endoNurseList"
+                                             (onSelectionChange)="onNurseSelected(item, 'textbox_CheckedbyERNurse')" [value]="item.Name">
+                                             {{item.Name}}
+                                       </mat-option>
+                                    </mat-autocomplete>
+                                 </div> -->
+
+                                 <div class="d-flex align-items-center input-group w-100">
+                                    <input type="text" class="form-control ps-0" [matAutocomplete]="employeeauto" placeholder="" id="textbox_CheckedbyERNurse"
+                                    (keyup)="fetchEndoNurse($event)">
+                                    <mat-autocomplete #employeeauto="matAutocomplete">
+                                       <mat-option *ngFor="let item of endoNurseList"
+                                             (onSelectionChange)="onNurseSelected(item, 'textbox_CheckedbyERNurse')" [value]="item.Name">
+                                             {{item.Name}}
+                                       </mat-option>
+                                    </mat-autocomplete>
+                                    <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                        <img src="assets/images/icons/icon-search.svg" alt="">
+                                    </button>
+                                </div>
+                              </div>
+                              <div class="col-3">
+                                 <label for="" class="form-label text-nowrap">Checked by ER Doctor</label>
+                                 <!-- <input type="text" id="textbox_CheckedbyERDoctor" class="form-control w-100"> -->
+                                 <!-- <div class="CommanSearch__form grey bg-white ps-2">
+                                    <svg class="search cursor-pointer" width="20" height="20"
+                                        viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <g clip-path="url(#clip0_9239_2779)"><path d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z" fill="#368796" /></g>
+                                    </svg>
+                                    <input type="text" class="form-control ps-0" [matAutocomplete]="employeeauto1" placeholder="" id="textbox_CheckedbyERDoctor"
+                                    (keyup)="searchEmployee($event)">
+                                    <mat-autocomplete #employeeauto1="matAutocomplete">
+                                       <mat-option *ngFor="let item of employeeList"
+                                          (onSelectionChange)="onNurseSelected(item, 'textbox_CheckedbyERDoctor')" [value]="item.Name">
+                                          {{item.Name}}
+                                       </mat-option>
+                                    </mat-autocomplete>
+                                 </div> -->
+
+                                 <div class="d-flex align-items-center input-group w-100">
+                                    <input type="text" class="form-control ps-0" [matAutocomplete]="employeeauto1" placeholder="" id="textbox_CheckedbyERDoctor"
+                                    (keyup)="searchEmployee($event)">
+                                    <mat-autocomplete #employeeauto1="matAutocomplete">
+                                       <mat-option *ngFor="let item of employeeList"
+                                          (onSelectionChange)="onNurseSelected(item, 'textbox_CheckedbyERDoctor')" [value]="item.Name">
+                                          {{item.Name}}
+                                       </mat-option>
+                                    </mat-autocomplete>
+                                    <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                        <img src="assets/images/icons/icon-search.svg" alt="">
+                                    </button>
+                                </div>
+                              </div>
+                              <div class="col-3">
+                                 <label for="" class="form-label text-nowrap">Checked by Ward nurse</label>
+                                 <!-- <input type="text" id="textbox_CheckedbyWardnurse" class="form-control w-100"> -->
+                                 <!-- <div class="CommanSearch__form grey bg-white ps-2">
+                                    <svg class="search cursor-pointer" width="20" height="20"
+                                        viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <g clip-path="url(#clip0_9239_2779)"><path d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z" fill="#368796" /></g>
+                                    </svg>
+                                    <input type="text" class="form-control ps-0" [matAutocomplete]="employeeauto2" placeholder="" id="textbox_CheckedbyWardnurse"
+                                    (keyup)="fetchEndoNurse($event)">
+                                    <mat-autocomplete #employeeauto2="matAutocomplete">
+                                          <mat-option *ngFor="let item of endoNurseList"
+                                             (onSelectionChange)="onNurseSelected(item, 'textbox_CheckedbyWardnurse')" [value]="item.Name">
+                                             {{item.Name}}
+                                          </mat-option>
+                                    </mat-autocomplete>
+                                 </div> -->
+
+                                 <div class="d-flex align-items-center input-group w-100">
+                                    <input type="text" class="form-control ps-0" [matAutocomplete]="employeeauto2" placeholder="" id="textbox_CheckedbyWardnurse"
+                                    (keyup)="fetchEndoNurse($event)">
+                                    <mat-autocomplete #employeeauto2="matAutocomplete">
+                                          <mat-option *ngFor="let item of endoNurseList"
+                                             (onSelectionChange)="onNurseSelected(item, 'textbox_CheckedbyWardnurse')" [value]="item.Name">
+                                             {{item.Name}}
+                                          </mat-option>
+                                    </mat-autocomplete>
+                                    <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                        <img src="assets/images/icons/icon-search.svg" alt="">
+                                    </button>
+                                </div>
+                              </div>
+                              <div class="col-3">
+                                 <label for="" class="form-label m-0">Checked by Other Staff</label>
+                                    
+                                 <!-- <input type="text" id="textbox_CheckedbyOtherStaff1" class="form-control"> -->
+                                 <!-- <div class="CommanSearch__form grey bg-white ps-2">
+                                    <svg class="search cursor-pointer" width="20" height="20"
+                                          viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <g clip-path="url(#clip0_9239_2779)"><path d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z" fill="#368796" /></g>
+                                    </svg>
+                                    <input type="text" class="form-control ps-0" [matAutocomplete]="employeeauto3" placeholder="" id="textbox_CheckedbyOtherStaff1"
+                                    (keyup)="searchEmployee($event)">
+                                    <mat-autocomplete #employeeauto3="matAutocomplete">
+                                          <mat-option *ngFor="let item of employeeList"
+                                             (onSelectionChange)="onNurseSelected(item, 'textbox_CheckedbyOtherStaff1')" [value]="item.Name">
+                                             {{item.Name}}
+                                          </mat-option>
+                                    </mat-autocomplete>
+                                 </div> -->
+
+                                 <div class="d-flex align-items-center input-group w-100">
+                                    <input type="text" class="form-control ps-0" [matAutocomplete]="employeeauto3" placeholder="" id="textbox_CheckedbyOtherStaff1"
+                                    (keyup)="searchEmployee($event)">
+                                    <mat-autocomplete #employeeauto3="matAutocomplete">
+                                          <mat-option *ngFor="let item of employeeList"
+                                             (onSelectionChange)="onNurseSelected(item, 'textbox_CheckedbyOtherStaff1')" [value]="item.Name">
+                                             {{item.Name}}
+                                          </mat-option>
+                                    </mat-autocomplete>
+                                    <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                        <img src="assets/images/icons/icon-search.svg" alt="">
+                                    </button>
+                                </div>
+
+                                 <!-- <input type="text" id="textbox_CheckedbyOtherStaff2" class="form-control"> -->
+                              </div>
+                              <div class="col-12">
+                                 <label class="form-label m-0" for="">Remarks</label>
+                                 <!-- <textarea name="" class="form-control" id="textarea_Remarks" cols="30" rows="3"></textarea> -->
+                                 <span name="" class="form-control  textarea_box_double" id="textarea_Remarks" cols="30" rows="3" resize-none contenteditable="true">
+                                 </span>                                 
+                              </div>
+                              <!-- <div class="col-3">
+                                 <label for="" class="form-label text-nowrap">ID</label>
+                                 <input type="text" class="form-control">
+                              </div> -->
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+      </div>
+
+    
+</div>
+
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+      [selectedTemplateFn]="selectedTemplate.bind(this)">
+</app-sharedtemplateview>
+
+<!-- <div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+       <div class="modal-content">
+          <div class="modal-header p-2">
+             <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+             <div class="d-flex align-items-center gap-2">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+          </div>
+          <div class="modal-body p-2">
+             <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                <div class="row mx-0 g-2 w-100">
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Template ID</p>
+                      <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                            tem.PatientTemplatedetailID }}</a></p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Name</p>
+                      <p>{{ tem.PatientName }}</p>
+                   </div>
+ 
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">DoctorName</p>
+                      <p>{{ tem.Consultant }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Created By</p>
+                      <p>{{ tem.CreatedBy }}</p>
+                   </div>
+                   <div class="col-lg col-md-4 col-12">
+                      <p class="label">Date</p>
+                      <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+
+ <div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div> -->
+ 

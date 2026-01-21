@@ -1,0 +1,162 @@
+<div class="main-content col">
+    <div class="content-wrapper">
+        <div class="row ">
+            <div class="col-lg-12">
+                <div class="sub-heading justify-content-between align-items-center border-bottom">
+                    <h4> Appointments
+                    </h4>
+                    <div class="actions d-flex align-items-center flex-wrap">
+                        <form [formGroup]="tableAppointmentsForm" (keydown.enter)="$event.preventDefault()">
+                            <div
+                                class="d-flex w-100 align-items-center justify-content-between">
+                                <div class="d-flex g-2 flex-md-nowrap flex-wrap">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <label for=""
+                                            class="form-label mb-0 px-2 text-nowrap"
+                                            translate>From Date</label>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label translate>dd-MMM-yyyy
+                                            </mat-label>
+                                            <input matInput class=""
+                                                formControlName="wmFromDate"
+                                                [matDatepicker]="wmFromDate"
+                                                (click)="wmFromDate.open()">
+                                            <mat-datepicker-toggle matSuffix
+                                                [for]="wmFromDate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #wmFromDate>
+                                            </mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+            
+                                    <div class="d-flex align-items-center mb-1">
+                                        <label for=""
+                                            class="form-label mb-0 px-2 text-nowrap"
+                                            translate>To Date</label>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label translate>dd-MMM-yyyy
+                                            </mat-label>
+                                            <input matInput class=""
+                                                formControlName="wmToDate"
+                                                [matDatepicker]="wmToDate"
+                                                (click)="wmToDate.open()">
+                                            <mat-datepicker-toggle matSuffix
+                                                [for]="wmToDate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #wmToDate>
+                                            </mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="d-flex">
+                                    <div class="">
+                                        <button type="button"
+                                            class="btn btn-main-fill mx-2" (click)="fetchDoctorAppointments()"
+                                            translate >Search</button>
+                                    </div>
+                                    <!-- <div class="">
+                                    <button type="button" class="btn btn-main-outline" translate>Clear</button>
+                                </div> -->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="p-3" *ngFor="let al of appointmentList;let i=index">
+            <!-- <h2 class="clr-main fw-bold mb-2">{{al.ScheduleDate}}</h2> -->
+
+            <div class="card border rounded-2 p-3 mt-1">
+                <div class="d-flex align-items-center justify-content-start gap-2 mb-3">
+                    <span class="d-flex align-items-center justify-content-center">
+                        <i  *ngIf = "al.IsVideoConsultation == true" class="fa fa-video-camera menu-icon" style="color: #69BAC9;  font-size: 1.5rem;"></i>
+                        <i *ngIf = "al.IsVideoConsultation == false" class="fa fa-clinic-medical menu-icon" style="color: #69BAC9;    font-size: 1.5rem;"></i>
+                    </span>
+                    
+                    <h2 class="mb-0 clr-main">{{al.ScheduleDate}} {{tConvert(al.ScheduleStartTime)}}</h2>
+                </div>
+                <div class="row gx-3">
+                    <div class="col-4">
+                        <div class="p-3 d-flex align-items-start">
+                           <span class="border rounded-pill me-2 p-1">
+                            <svg width="40" height="40" viewBox="0 0 51 51" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M25.5364 27.8142C20.8732 27.8142 17.0961 23.584 17.0961 18.3421C17.0961 13.1463 20.8732 8.91608 25.5364 8.91608C30.1997 8.91608 33.9768 13.1923 33.9768 18.3881C33.9768 23.584 30.1997 27.8142 25.5364 27.8142Z" fill="#41A5B4"/>
+                                <path d="M33.3471 27.3111C33.6028 27.2543 33.8695 27.2694 34.1167 27.3544H34.117C40.2725 29.4695 43.5366 34.2977 43.5366 41.2866C43.5366 41.6525 43.3893 42.0034 43.1268 42.2619C42.8646 42.5208 42.5087 42.6661 42.1376 42.6661H8.93565C8.56451 42.6661 8.20865 42.5208 7.94647 42.2619C7.68397 42.0034 7.53662 41.6525 7.53662 41.2866C7.53662 34.2977 10.8007 29.4697 16.9563 27.3544C17.2035 27.2694 17.4702 27.2543 17.7259 27.3111C17.9812 27.3682 18.2154 27.4946 18.4018 27.6764C19.9872 29.2397 22.6454 30.1592 25.5365 30.1592C28.4276 30.1592 31.0858 29.2397 32.6712 27.6764C32.8576 27.4946 33.0918 27.3682 33.3471 27.3111Z" fill="#41A5B4"/>
+                                </svg>
+                           </span> 
+                            <div class="d-flex gap-2 flex-column">
+                               <h2 class="me-3 my-0">{{al.PatientName}}</h2>
+                               <p class="m-0">{{al.Age}} Years</p>
+                               <p  class="m-0" *ngIf = "al.IsVideoConsultation == true">Video Consultation (20 min)</p>
+                               <p class="m-0" *ngIf = "al.IsVideoConsultation == false">Appointment (20 min)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="p-3  clr-main-2 ">
+                            <h2 class="d-flex align-items-center justify-content-start gap-2">
+                                <span>
+                                    <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M24.7295 12C24.7295 18.6274 19.3569 24 12.7295 24C6.10208 24 0.729492 18.6274 0.729492 12C0.729492 5.37258 6.10208 0 12.7295 0C19.3569 0 24.7295 5.37258 24.7295 12ZM20.2438 19.9085C18.2874 21.768 15.6417 22.9091 12.7295 22.9091C6.70457 22.9091 1.8204 18.0249 1.8204 12C1.8204 9.15759 2.90748 6.56909 4.68855 4.62755C4.71328 4.71321 4.75939 4.794 4.82689 4.8615L9.66127 9.69589L7.60769 11.7645C7.46672 11.9067 7.38724 12.0985 7.3864 12.2987V16.2591L5.31847 18.327C5.24695 18.3979 5.19018 18.4823 5.15144 18.5753C5.1127 18.6683 5.09275 18.768 5.09275 18.8688C5.09275 18.9695 5.1127 19.0692 5.15144 19.1622C5.19018 19.2552 5.24695 19.3396 5.31847 19.4106C5.38941 19.4821 5.4738 19.5388 5.56679 19.5776C5.65978 19.6163 5.75952 19.6363 5.86025 19.6363C5.96099 19.6363 6.06073 19.6163 6.15371 19.5776C6.2467 19.5388 6.3311 19.4821 6.40204 19.4106L8.46997 17.3426H12.4303C12.6305 17.3418 12.8223 17.2623 12.9645 17.1213L15.0331 15.0677L19.7294 19.7641C19.8689 19.9035 20.0651 19.9517 20.2438 19.9085ZM20.6454 19.5065C20.6884 19.328 20.6402 19.132 20.5008 18.9927L15.8073 14.2992L19.2446 10.887C19.5999 10.5326 19.8818 10.1116 20.0741 9.64804C20.2665 9.18451 20.3655 8.68758 20.3655 8.18573C20.3655 7.68388 20.2665 7.18695 20.0741 6.72342C19.8818 6.25989 19.5999 5.83886 19.2446 5.48445C18.8902 5.12914 18.4691 4.84724 18.0056 4.65489C17.5421 4.46255 17.0451 4.36354 16.5433 4.36354C16.0414 4.36354 15.5445 4.46255 15.081 4.65489C14.6175 4.84724 14.1964 5.12914 13.842 5.48445L10.4298 8.92168L5.59828 4.09011C5.53091 4.02274 5.4503 3.97668 5.36483 3.95193C7.3055 2.17508 9.89088 1.09091 12.7295 1.09091C18.7544 1.09091 23.6386 5.97508 23.6386 12C23.6386 14.9083 22.5005 17.5508 20.6454 19.5065ZM8.91255 12.6116L10.7401 10.7747L11.8054 11.84L10.66 12.9855C10.5885 13.0564 10.5317 13.1408 10.493 13.2338C10.4542 13.3268 10.4343 13.4265 10.4343 13.5273C10.4343 13.628 10.4542 13.7277 10.493 13.8207C10.5317 13.9137 10.5885 13.9981 10.66 14.069C10.7309 14.1406 10.8153 14.1973 10.9083 14.2361C11.0013 14.2748 11.101 14.2947 11.2018 14.2947C11.3025 14.2947 11.4022 14.2748 11.4952 14.2361C11.5882 14.1973 11.6726 14.1406 11.7436 14.069L12.889 12.9236L13.9543 13.9889L12.1175 15.8165H8.91255V12.6116ZM11.5095 10.0014L12.5768 11.0686L16.0015 7.64395C16.1452 7.50026 16.3401 7.41953 16.5433 7.41953C16.7465 7.41953 16.9414 7.50026 17.0851 7.64395C17.2288 7.78764 17.3095 7.98252 17.3095 8.18573C17.3095 8.38894 17.2288 8.58382 17.0851 8.72751L13.6604 12.1522L14.7276 13.2195L18.161 9.80345C18.5654 9.36949 18.7855 8.79551 18.7751 8.20245C18.7646 7.60939 18.5243 7.04353 18.1049 6.62411C17.6855 6.20468 17.1196 5.96443 16.5266 5.95397C15.9335 5.9435 15.3595 6.16365 14.9256 6.56801L11.5095 10.0014Z" fill="url(#paint0_linear_2924_2059)"/>
+                                        <defs>
+                                        <linearGradient id="paint0_linear_2924_2059" x1="12.7295" y1="0" x2="12.7295" y2="24" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#55C4B9"/>
+                                        <stop offset="1" stop-color="#3CA2AA"/>
+                                        </linearGradient>
+                                        </defs>
+                                        </svg>
+                                </span>
+                                Allergies
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="p-3  clr-main-2 ">
+                            <h2 class="d-flex align-items-center justify-content-start gap-2">
+                                <svg width="17" height="21" viewBox="0 0 17 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.0664 3.88957C11.0664 4.26859 10.7715 4.56332 10.3925 4.56332H4.74996C4.37089 4.56332 4.07613 4.26859 4.07613 3.88957V2.56324C4.07613 2.18421 4.37105 1.88949 4.74996 1.88949H5.80269C5.99215 1.08946 6.70797 0.5 7.57125 0.5C8.41336 0.5 9.15035 1.08946 9.33981 1.88949H10.3925C10.7716 1.88949 11.0664 2.18437 11.0664 2.56324V3.88957ZM8.32914 2.33178C8.32914 1.91076 7.99223 1.57389 7.57117 1.57389C7.15011 1.57389 6.8132 1.91076 6.8132 2.33178C6.8132 2.75279 7.15011 3.08966 7.57117 3.08966C7.99223 3.08966 8.32914 2.75279 8.32914 2.33178Z" fill="url(#paint0_linear_2924_2090)"/>
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4137 8.90002V10.1001C10.4137 10.6264 10.7507 11.0895 11.1928 11.2789V18.7314H1.5287C1.1708 18.7314 0.876038 18.4367 0.876038 18.0788V3.658C0.876038 3.30014 1.17078 3.00541 1.5287 3.00541H3.19194V3.91059C3.19194 4.77377 3.88675 5.46849 4.75003 5.46849H10.3716C11.2349 5.46849 11.9297 4.77377 11.9297 3.91059V3.00541H13.593C13.9509 3.00541 14.2456 3.30013 14.2456 3.658L14.2458 7.61583H11.6981C10.9822 7.61583 10.4137 8.18428 10.4137 8.90002ZM8.58197 7.61598H3.86572C3.61311 7.61598 3.4235 7.80542 3.4235 8.058C3.4235 8.31074 3.61311 8.50018 3.86572 8.50018L8.58197 8.50032C8.83474 8.50032 9.0242 8.31073 9.0242 8.05815C9.0242 7.80541 8.83459 7.61598 8.58197 7.61598ZM8.64514 10.1632H3.86572C3.61311 10.1632 3.4235 10.3527 3.4235 10.6053C3.4235 10.858 3.61311 11.0474 3.86572 11.0474L8.64514 11.0476C8.89791 11.0476 9.08736 10.858 9.08736 10.6054C9.08736 10.3527 8.89775 10.1632 8.64514 10.1632ZM3.86572 16.1421H9.29783C9.55045 16.1421 9.73991 15.9526 9.74006 15.6999C9.74006 15.4472 9.55045 15.2577 9.29783 15.2577H3.86572C3.61296 15.2577 3.4235 15.4473 3.4235 15.6999C3.4235 15.9526 3.61311 16.1421 3.86572 16.1421ZM3.86572 13.5948H9.29783C9.55045 13.5948 9.73991 13.4054 9.74006 13.1527C9.74006 12.8999 9.55045 12.7105 9.29783 12.7105H3.86572C3.61296 12.7105 3.4235 12.9001 3.4235 13.1527C3.4235 13.4054 3.61311 13.5948 3.86572 13.5948Z" fill="url(#paint1_linear_2924_2090)"/>
+                                    <path d="M16.1829 8.47904H11.7193C11.4877 8.47904 11.3192 8.66847 11.3192 8.87907V10.0791C11.3192 10.3107 11.5087 10.4792 11.7193 10.4792H16.1829C16.4145 10.4792 16.5829 10.2897 16.5829 10.0791V8.87907C16.5829 8.66863 16.3935 8.47904 16.1829 8.47904Z" fill="url(#paint2_linear_2924_2090)"/>
+                                    <path d="M12.0981 13.0263V11.3843L15.8036 11.3843L15.8038 18.6474C15.8038 19.679 14.9827 20.5 13.9509 20.5C12.9402 20.5 12.1402 19.6999 12.0981 18.7105L13.4877 18.7106C13.7405 18.7106 13.93 18.521 13.93 18.2685C13.93 18.0157 13.7403 17.8263 13.4877 17.8263H12.0981V16.3105L13.4877 16.3107C13.7405 16.3107 13.93 16.1211 13.93 15.8685C13.93 15.6158 13.7403 15.4263 13.4877 15.4263H12.0981V13.9105L13.4877 13.9107C13.7405 13.9107 13.93 13.7211 13.93 13.4685C13.93 13.2158 13.7403 13.0263 13.4877 13.0263H12.0981Z" fill="url(#paint3_linear_2924_2090)"/>
+                                    <defs>
+                                    <linearGradient id="paint0_linear_2924_2090" x1="8.72949" y1="0.5" x2="8.72949" y2="20.5" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#61BEC5"/>
+                                    <stop offset="1" stop-color="#357D83"/>
+                                    </linearGradient>
+                                    <linearGradient id="paint1_linear_2924_2090" x1="8.72949" y1="0.5" x2="8.72949" y2="20.5" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#61BEC5"/>
+                                    <stop offset="1" stop-color="#357D83"/>
+                                    </linearGradient>
+                                    <linearGradient id="paint2_linear_2924_2090" x1="8.72949" y1="0.5" x2="8.72949" y2="20.5" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#61BEC5"/>
+                                    <stop offset="1" stop-color="#357D83"/>
+                                    </linearGradient>
+                                    <linearGradient id="paint3_linear_2924_2090" x1="8.72949" y1="0.5" x2="8.72949" y2="20.5" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#61BEC5"/>
+                                    <stop offset="1" stop-color="#357D83"/>
+                                    </linearGradient>
+                                    </defs>
+                                    </svg>
+                                Vitals
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-end mt-4 gap-2">
+                    <!-- <button class="btn btn-main-outline me-2">Cancel</button>
+                    <button class="btn btn-main-fill me-2">Reschedule</button> -->
+                    <button class="btn btn-sm btn-danger-outline mx-1">
+                                    Cancel
+                                </button>
+                                <button class="btn btn-sm btn-main-outline mx-1">
+                                   Reschedule
+                                </button>
+                    <button class="btn btn-main-fill" *ngIf = "al.IsVideoConsultation == true" (click)="startConsultation(al)">Start Consultation</button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>

@@ -1,0 +1,330 @@
+<div class="card card-style-1 rounded main-container" #divebl>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading">Estimated Blood Loss</h2>
+        <div class="actions generalConsent_popup position-relative ms-auto d-flex align-items-center gap-2"
+            *ngIf="IsView">
+             <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+            <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+        </div>
+    </div>
+    <div class="p-2 template_scroll" *ngIf="showContent" id="divscroll">
+        <!-- <app-wardheader-summary></app-wardheader-summary> -->
+        <div class="">
+            <div class="row g-2">
+                <div class="col-6">
+                    <div class="card card-style-1 rounded h-100">
+                        <div class="card-header justify-content-start py-2 min-height-unset rounded-top">
+                            <h5 class="card-heading">Input (Blood Products)</h5>
+                        </div>
+                        <div class="p-2">
+                            <table class="table m-0">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th class="col-4">Time</th>
+                                        <th>Type (in ml)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="align-top">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                <input matInput class="" #Date1 [matDatepicker]="date1" id="text_Date1"
+                                                    (click)="date1.open()">
+                                                <mat-datepicker-toggle matSuffix [for]="date1">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #date1></mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                        <td class="align-top">
+                                            <app-time-selector [hours]="getHours('textbox_generic_time1')"
+                                                [minutes]="getMinutes('textbox_generic_time1')"
+                                                (timeSelected)="onTimeChange($event, 'textbox_generic_time1')" [disabled]="isTimeSelectorDisable('textbox_generic_time1')"></app-time-selector>
+                                        </td>
+                                        <td class="align-top"><input type="text" numbersOnly class="form-control" id="text_Type1"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="align-top">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                <input matInput class="" #Date2 [matDatepicker]="date2" id="text_Date2"
+                                                    (click)="date2.open()">
+                                                <mat-datepicker-toggle matSuffix [for]="date2">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #date2></mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                        <td class="align-top">
+                                            <app-time-selector [hours]="getHours('textbox_generic_time2')"
+                                                [minutes]="getMinutes('textbox_generic_time2')"
+                                                (timeSelected)="onTimeChange($event, 'textbox_generic_time2')" [disabled]="isTimeSelectorDisable('textbox_generic_time2')"></app-time-selector>
+                                        </td>
+                                        <td class="align-top"><input type="text" numbersOnly class="form-control" id="text_Type2"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="align-top">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                <input matInput class="" #Date3 [matDatepicker]="date3" id="text_Date3"
+                                                    (click)="date3.open()">
+                                                <mat-datepicker-toggle matSuffix [for]="date3">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #date3></mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                        <td class="align-top">
+                                            <app-time-selector [hours]="getHours('textbox_generic_time3')"
+                                                [minutes]="getMinutes('textbox_generic_time3')"
+                                                (timeSelected)="onTimeChange($event, 'textbox_generic_time3')" [disabled]="isTimeSelectorDisable('textbox_generic_time3')"></app-time-selector>
+                                        </td>
+                                        <td class="align-top"><input type="text" numbersOnly class="form-control" id="text_Type3"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="align-top">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                <input matInput class="" #Date4 [matDatepicker]="date4" id="text_Date4"
+                                                    (click)="date4.open()">
+                                                <mat-datepicker-toggle matSuffix [for]="date4">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #date4></mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                        <td class="align-top">
+                                            <app-time-selector [hours]="getHours('textbox_generic_time4')"
+                                                [minutes]="getMinutes('textbox_generic_time4')"
+                                                (timeSelected)="onTimeChange($event, 'textbox_generic_time4')" [disabled]="isTimeSelectorDisable('textbox_generic_time4')"></app-time-selector>
+                                        </td>
+                                        <td class="align-top"><input type="text" numbersOnly class="form-control" id="text_Type4"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="align-top">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                <input matInput class="" #Date5 [matDatepicker]="date5" id="text_Date5"
+                                                    (click)="date5.open()">
+                                                <mat-datepicker-toggle matSuffix [for]="date5">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #date5></mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                        <td class="align-top">
+                                            <app-time-selector [hours]="getHours('textbox_generic_time5')"
+                                                [minutes]="getMinutes('textbox_generic_time5')"
+                                                (timeSelected)="onTimeChange($event, 'textbox_generic_time5')" [disabled]="isTimeSelectorDisable('textbox_generic_time5')"></app-time-selector>
+                                        </td>
+                                        <td class="align-top"><input type="text" numbersOnly class="form-control" id="text_Type5"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="align-top">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                <input matInput class="" #Date6 [matDatepicker]="date6" id="text_Date6"
+                                                    (click)="date6.open()">
+                                                <mat-datepicker-toggle matSuffix [for]="date6">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #date6></mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                        <td class="align-top">
+                                            <app-time-selector [hours]="getHours('textbox_generic_time6')"
+                                                [minutes]="getMinutes('textbox_generic_time6')"
+                                                (timeSelected)="onTimeChange($event, 'textbox_generic_time6')" [disabled]="isTimeSelectorDisable('textbox_generic_time6')"></app-time-selector>
+                                        </td>
+                                        <td class="align-top"><input type="text" numbersOnly class="form-control" id="text_Type6"></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td class="align-top"></td>
+                                        <td colspan="2">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <p class="fs-7 fw-bold m-0">Total</p>
+                                                <input type="text" class="form-control" id="text_InputTotal"
+                                                    [value]="getTotalInputValue()">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card card-style-1 rounded h-100">
+                        <div class="card-header justify-content-start py-2 min-height-unset rounded-top">
+                            <h5 class="card-heading">Output (Weight)</h5>
+                        </div>
+                        <div class="p-2">
+                            <table class="table m-0">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Dry</th>
+                                        <th>Wet</th>
+                                        <th>Difference</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1. No. of Visceral Pack </td>
+                                        <td><input type="text" numbersOnly class="form-control" id="text_Dry1"></td>
+                                        <td><input type="text" numbersOnly class="form-control" id="text_Wet1"></td>
+                                        <td><input type="text" class="form-control" id="text_Difference1"
+                                                [value]="getDifferenceValue('text_Dry1', 'text_Wet1')"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2. No. of 4x4 gauze</td>
+                                        <td><input type="text" numbersOnly class="form-control" id="text_Dry2"></td>
+                                        <td><input type="text" numbersOnly class="form-control" id="text_text_Wet2">
+                                        </td>
+                                        <td><input type="text" class="form-control" id="text_Difference2"
+                                                [value]="getDifferenceValue('text_Dry2', 'text_text_Wet2')"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3. Blood clots in Kidney basin</td>
+                                        <td><input type="text" numbersOnly class="form-control" id="text_Dry3"></td>
+                                        <td><input type="text" numbersOnly class="form-control" id="text_text_Wet3">
+                                        </td>
+                                        <td><input type="text" class="form-control" id="text_Difference3"
+                                                [value]="getDifferenceValue('text_Dry3', 'text_text_Wet3')"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>4. Drapes</td>
+                                        <td><input type="text" numbersOnly class="form-control" id="text_Dry4"></td>
+                                        <td><input type="text" numbersOnly class="form-control" id="text_text_Wet4">
+                                        </td>
+                                        <td><input type="text" class="form-control" id="text_Difference4"
+                                                [value]="getDifferenceValue('text_Dry4', 'text_text_Wet4')"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>5. NSS used in Suction Canister</td>
+                                        <td><input type="text" numbersOnly class="form-control" id="text_Dry5"></td>
+                                        <td><input type="text" numbersOnly class="form-control" id="text_text_Wet5">
+                                        </td>
+                                        <td><input type="text" class="form-control" id="text_Difference5"
+                                                [value]="getDifferenceValue('text_Dry5', 'text_text_Wet5')"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>6. Suction Canister Volume (Output)</td>
+                                        <td><input type="text" numbersOnly class="form-control" id="text_Dry6"></td>
+                                        <td><input type="text" numbersOnly class="form-control" id="text_text_Wet6">
+                                        </td>
+                                        <td><input type="text" class="form-control" id="text_Difference6"
+                                                [value]="getDifferenceValue('text_Dry6', 'text_text_Wet6')"></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td colspan="3">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <p class="fs-7 fw-bold m-0  text-nowrap">Total Output</p>
+                                                <input type="text" class="form-control" id="text_OutputTotal"
+                                                    [value]="getTotalOutputValue()">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mt-3">
+                    <h6 class="clr-primary-600">Prepared by:</h6>
+                    <div class="row g-2">
+                        <div class="col-2">
+                            <label for="" class="form-label">ID</label>
+                            <input type="text" class="form-control" id="text_id">
+                        </div>
+                        <div class="col-3">
+                            <label for="" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="text_name">
+                        </div>
+                        <div class="col-2">
+                            <label for="" class="form-label">Date</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                <input matInput class="" #Date7 [matDatepicker]="date7" id="text_Date7"
+                                    (click)="date7.open()">
+                                <mat-datepicker-toggle matSuffix [for]="date7">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #date7></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-2">
+                            <label for="" class="form-label">Time</label>
+                            <app-time-selector [hours]="getHours('textbox_generic_time7')"
+                                [minutes]="getMinutes('textbox_generic_time7')"
+                                (timeSelected)="onTimeChange($event, 'textbox_generic_time7')" [disabled]="isTimeSelectorDisable('textbox_generic_time7')"></app-time-selector>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+      [selectedTemplateFn]="selectedTemplate.bind(this)">
+   </app-sharedtemplateview>
+
+   
+<!-- <div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+        <div class="modal-content">
+            <div class="modal-header p-2">
+                <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-3">
+                <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                    *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                    <div class="row mx-0 g-2 w-100">
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Template ID</p>
+                            <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                                    tem.PatientTemplatedetailID }}</a></p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Name</p>
+                            <p>{{ tem.PatientName }}</p>
+                        </div>
+
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">DoctorName</p>
+                            <p>{{ tem.Consultant }}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Created By</p>
+                            <p>{{ tem.CreatedBy }}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Date</p>
+                            <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

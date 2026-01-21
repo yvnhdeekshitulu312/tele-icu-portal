@@ -1,0 +1,1443 @@
+
+<div class="card card-style-1 rounded main-container" #divpsa>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading">Psychosocial Assessment Form / <span class="arb"> نموذج التقييم النفسي </span></h2>
+        <div class="actions generalConsent_popup position-relative ms-auto d-flex align-items-center gap-2"
+            *ngIf="IsView">
+            <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID" [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+            <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+        </div>
+    </div>
+    <div class="p-2 template_scroll" *ngIf="showContent" id="divscroll">
+        <!-- <app-wardheader-summary></app-wardheader-summary> -->
+
+        <div class="card card-style-1 rounded">
+            <div id="pd_header" class="card-header justify-content-between rounded-top py-2 min-height-unset">
+                <h5 class="card-heading">Patient Demographic / <span class="arb"> معلومات المريض الشخصية </span></h5>
+                <img id="pd_btn" class="cursor-pointer" onclick="toggleHeader('pd_btn', 'pd_header', 'pd_toggle')" src="assets/images/icons/arrow-down.svg" alt="">
+            </div>
+            <div class="p-2 row g-2 d-flex" id="pd_toggle">
+                <div class="col-3">
+                    <label for="" class="form-label">Nationality / <span class="arb"> الجنسية </span></label>
+                    <input type="text" id="textbox_Nationality" class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">Religion / <span class="arb"> الدیانة </span></label>
+                    <input type="text" id="txt_generic_Religion" class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">Level of Education / <span class="arb"> المستوى التعلیمي </span></label>
+                    <input type="text" id="textbox_levelofeducation" class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">Language / <span class="arb"> اللغة </span></label>
+                    <!-- <div class="d-flex align-items-center gap-2">
+                    <div class="custom_check active d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                        <p class="m-0 fs-7">Arabic(العربیة)</p>
+                    </div>
+                    <div class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                        <p class="m-0 fs-7">English(الإنجلیزي)</p>
+                    </div>
+                    <div class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                        <p class="m-0 fs-7">Others(أخـــرى)</p>
+                    </div>
+                </div> -->
+                    <select name="" class="form-select" id="select_language">
+                        <option value="Arabic">Arabic</option>
+                        <option value="English">English</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">ID / <span class="arb"> رقم الهوية </span></label>
+                    <input type="text" id="textbox_SSN" class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">Place of Issue / <span class="arb"> مكان الإصدار </span></label>
+                    <input type="text" id="textbox_placeofissue" class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">City / <span class="arb"> المدینة </span></label>
+                    <input type="text" id="txt_generic_City" class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">MainAddress / <span class="arb"> العـــنوان </span></label>
+                    <input type="text" id="textbox_generic_Address01" class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">Home Tel. No / <span class="arb"> ھاتف المنزل </span></label>
+                    <input type="text" id="txt_generic_PhoneNo" class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">Mobile No / <span class="arb"> رقم الجوال </span></label>
+                    <input type="text" id="txt_generic_MobileNo" class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">Neighborhood / <span class="arb"> الحـــي </span></label>
+                    <input type="text" id="textbox_neighborhood" class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">Family Status / <span class="arb"> الحالة الإجتماعية </span></label>
+                    <input type="text" id="textbox_familystatus" class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">Number of Family Members / <span class="arb"> عدد أفراد الأسرة </span></label>
+                    <input type="text" id="textbox_numberoffamilymembers" class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">Male / <span class="arb"> ذكور </span></label>
+                    <input type="text" id="textbox_male" class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">Female / <span class="arb"> اناث </span></label>
+                    <input type="text" id="textbox_female" class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label">No of wife/s / <span class="arb"> عدد الزوجات </span></label>
+                    <input type="text" id="textbox_noofwifes" class="form-control">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card card-style-1 rounded mt-2">
+            <div id="nk_header" class="card-header justify-content-between rounded-top py-2 min-height-unset">
+                <h5 class="card-heading">Next of Kin Address and Communication /  <span class="arb"> العنوان ووسائل الاتصال </span></h5>
+                <img id="nk_btn" class="cursor-pointer" onclick="toggleHeader('nk_btn', 'nk_header', 'nk_toggle')" src="assets/images/icons/arrow-down.svg" alt="">
+            </div>
+            <div class="p-2" id="nk_toggle">
+                <div class="row d-flex g-2">
+                    <div class="col-3">
+                        <label for="" class="form-label">Name / <span class="arb"> الإسم </span></label>
+                        <input type="text" id="txt_generic_ContactNameKin" class="form-control">
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Relationship to Patient? / <span class="arb"> صلة القرابة بالمریض؟ </span></label>
+                        <select name="" class="form-select" id="txt_generic_ContRelation">
+                            <option value="">Select</option>
+                            <option *ngFor="let item of relations; let i = index" value="{{item.Names}}">{{item.Names}}</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Gender / <span class="arb"> الجنس</span>   </label>                      
+                        <select class="form-select" id="textbox_Gender">
+                            <option value=""  translate>Select</option>
+                            <option value="Male" translate>Male</option>
+                            <option value="Female" translate>Female</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Mobile Number / <span class="arb"> رقم الجوال </span></label>
+                        <input type="text" id="txt_generic_ContPhoneNoKin" class="form-control">
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Address / <span class="arb"> العنوان </span></label>
+                        <input type="text" id="txt_generic_ContAddress" class="form-control">
+                    </div>
+                    <div class="col-3">
+                        <label for="" class="form-label">Place of Issue / <span class="arb"> مكان الإصدار </span></label>
+                        <input type="text" id="textbox_placeofissue1" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-style-1 rounded mt-2">
+            <div id="md_header" class="card-header justify-content-between rounded-top py-2 min-height-unset">
+                <h5 class="card-heading">Medical Diagnosis / <span class="arb"> التشخيص الطبي </span></h5>
+                <img id="md_btn" class="cursor-pointer" onclick="toggleHeader('md_btn', 'md_header', 'md_toggle')" src="assets/images/icons/arrow-down.svg" alt="">
+            </div>
+            <div class="p-2" id="md_toggle">
+                <!-- <textarea name="" class="form-control resize-none" id="textarea_diagnosis" cols="30"
+                    rows="3"></textarea> -->
+                    <span name="" class="form-control  textarea_box_double" id="textarea_diagnosis" cols="30" rows="3" resize-none contenteditable="true">
+                    </span>
+            </div>
+        </div>
+
+        <div class="card card-style-1 rounded mt-2">
+            <div id="fs_header" class="card-header justify-content-between rounded-top py-2 min-height-unset">
+               <div class="d-flex align-items-center gap-3">
+                    <h5 class="card-heading">Financial Status Assessment / <span class="arb"> الحالة الاقتصادية </span></h5>
+                    <div class="custom_check ms-3 d-flex align-items-center gap-2"
+                        (click)="toggleCheckboxSelection($event); financialStatus = !financialStatus;">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">N/A</p>
+                    </div>
+               </div>
+               <img id="fs_btn" class="cursor-pointer" onclick="toggleHeader('fs_btn', 'fs_header', 'fs_toggle')" src="assets/images/icons/arrow-down.svg" alt="">
+            </div>
+            <div class="p-2" id="fs_toggle">
+                <div class="row g-2 d-flex" [ngClass]="financialStatus ? 'disabled' : ''">
+                    <div class="col">
+                        <label for="" class="form-label">General Revenue / <span class="arb">  الدخل العام </span></label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="text" id="textbox_generalrevenue" class="form-control w-auto">
+                            <div class="d-flex align-items-center gap-3">
+                                <div id="checkbox_excellent" (click)="onCheckboxSelection($event, ['checkbox_excellent', 'checkbox_medium', 'checkbox_weak'])"
+                                    class="custom_check d-flex align-items-center gap-2">
+                                    <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                        <path
+                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <p class="m-0 fs-7">Excellent /  <span class="arb">  ممتاز </span></p>
+                                </div>
+                                <div id="checkbox_medium" (click)="onCheckboxSelection($event, ['checkbox_excellent', 'checkbox_medium', 'checkbox_weak'])"
+                                    class="custom_check d-flex align-items-center gap-2">
+                                    <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                        <path
+                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <p class="m-0 fs-7">Medium /  <span class="arb">  متوسطة </span></p>
+                                </div>
+                                <div id="checkbox_weak" (click)="onCheckboxSelection($event, ['checkbox_excellent', 'checkbox_medium', 'checkbox_weak'])"
+                                    class="custom_check d-flex align-items-center gap-2">
+                                    <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                        <path
+                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <p class="m-0 fs-7">Weak /  <span class="arb">  ضعيف </span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="" class="form-label">Source of Income /  <span class="arb">  مصدر الدخل </span></label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="text" id="textbox_sourceofincome" class="form-control w-auto">
+                            <div class="d-flex align-items-center gap-3">
+                                <div id="checkbox_job" (click)="onCheckboxSelection($event, ['checkbox_job', 'checkbox_retirement', 'checkbox_insurance'])"
+                                    class="custom_check d-flex align-items-center gap-2">
+                                    <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                        <path
+                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <p class="m-0 fs-7">Job /  <span class="arb">  الوظيفة </span></p>
+                                </div>
+                                <div id="checkbox_retirement" (click)="onCheckboxSelection($event, ['checkbox_job', 'checkbox_retirement', 'checkbox_insurance'])"
+                                    class="custom_check d-flex align-items-center gap-2">
+                                    <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                        <path
+                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <p class="m-0 fs-7">Retirement /  <span class="arb">  تقاعد </span></p>
+                                </div>
+                                <div id="checkbox_insurance" (click)="onCheckboxSelection($event, ['checkbox_job', 'checkbox_retirement', 'checkbox_insurance'])"
+                                    class="custom_check d-flex align-items-center gap-2">
+                                    <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                        <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                        <path
+                                            d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                            fill="white" stroke="white" stroke-width="0.25"></path>
+                                    </svg>
+                                    <p class="m-0 fs-7">Insurance /  <span class="arb">  ضمان </span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-style-1 rounded mt-2">
+            <div id="pm_header" class="card-header justify-content-between rounded-top py-2 min-height-unset">
+                <h5 class="card-heading">Physical and Mental Status Assesment /  <span class="arb">  الحالة الجسدية ة الذهنية </span></h5>
+                <img id="pm_btn" class="cursor-pointer" onclick="toggleHeader('pm_btn', 'pm_header', 'pm_toggle')" src="assets/images/icons/arrow-down.svg" alt="">
+            </div>
+            <div class="p-2" id="pm_toggle">
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                    <div id="checkbox_uncontrolurine" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Uncontrol urine /  <span class="arb">  لا يتحكم في البول </span></p>
+                    </div>
+                    <div id="checkbox_uncontrolledbowel" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Uncontrolled bowel /  <span class="arb">  لا يتحكم في البراز </span></p>
+                    </div>
+                    <div id="checkbox_supervised" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Supervised /  <span class="arb">  يمشي بإشراف </span></p>
+                    </div>
+                    <div id="checkbox_hemodialysis" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Hemodialysis /  <span class="arb">  غسيل كلوي </span></p>
+                    </div>
+                    <div id="checkbox_catheter" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Catheter /  <span class="arb">  قسطرة </span></p>
+                    </div>
+                    <div id="checkbox_physicalandmentalstatusother1" (click)="toggleCheckboxSelection($event); others1 = !others1;"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Other /  <span class="arb">  أخرى </span></p>
+                    </div>
+                    <div class="col-12" *ngIf="others1">
+                        <!-- <textarea name="" class="form-control" id="" cols="30" rows="2"></textarea> -->
+                        <span name="" class="form-control  textarea_box_double" id="textarea_others1" cols="30" rows="3" resize-none contenteditable="true">
+                        </span>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center flex-wrap gap-2 mt-4">
+                    <div id="checkbox_canwalk" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Can walk /  <span class="arb">  يستطيع المشي </span></p>
+                    </div>
+                    <div id="checkbox_walkwithassistance" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Walk with assistance /  <span class="arb">  يمشي بمساعدة </span></p>
+                    </div>
+                    <div id="checkbox_bedridden" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Bedridden / <span class="arb">  ملازم السرير </span></p>
+                    </div>
+                    <div id="checkbox_alert" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Alert /  <span class="arb">  يقظ </span></p>
+                    </div>
+                    <div id="checkbox_mentallydisturbed" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Mentally disturbed /  <span class="arb">  مضطرب ذهنيا </span></p>
+                    </div>
+                    <div id="checkbox_coma" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Coma /  <span class="arb">  غيبوبة </span></p>
+                    </div>
+                    <div id="checkbox_physicalandmentalstatusother2" (click)="toggleCheckboxSelection($event); others2 = !others2;"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Other /  <span class="arb">  أخرى </span></p>
+                    </div>
+                    <div class="col-12" *ngIf="others2">
+                        <!-- <textarea name="" class="form-control" id="" cols="30" rows="2"></textarea> -->
+                        <span name="" class="form-control  textarea_box_double" id="ta_others2" cols="30" rows="3" resize-none contenteditable="true">
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-style-1 rounded mt-2">
+            <div id="pps_header" class="card-header justify-content-between rounded-top py-2 min-height-unset">
+                <h5 class="card-heading">Primary Psychology Status Assesment /  <span class="arb">  الحالة الجسدية ة الذهنية </span></h5>
+                <img id="pps_btn" class="cursor-pointer" onclick="toggleHeader('pps_btn', 'pps_header', 'pps_toggle')" src="assets/images/icons/arrow-down.svg" alt="">
+            </div>
+            <div class="p-2" id="pps_toggle">
+                <div class="row g-2 d-flex">
+                    <div class="col-lg-2 col-md-3">
+                        <div id="checkbox_impetuous" (click)="toggleCheckboxSelection($event)"
+                            class="custom_check d-flex align-items-center gap-2">
+                            <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                            </svg>
+                            <p class="m-0 fs-7">Impetuous /  <span class="arb">  اندفاعية </span></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <div id="checkbox_primarypsychologystatusassesmentretirement"
+                            (click)="toggleCheckboxSelection($event)"
+                            class="custom_check d-flex align-items-center gap-2">
+                            <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                            </svg>
+                            <p class="m-0 fs-7">Retirement /  <span class="arb">  انطواء </span></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <div id="checkbox_phobias" (click)="toggleCheckboxSelection($event)"
+                            class="custom_check d-flex align-items-center gap-2">
+                            <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                            </svg>
+                            <p class="m-0 fs-7">Phobias /  <span class="arb">  مخاوف مرضية </span></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <div id="checkbox_withdrawal" (click)="toggleCheckboxSelection($event)"
+                            class="custom_check d-flex align-items-center gap-2">
+                            <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                            </svg>
+                            <p class="m-0 fs-7">Withdrawal /  <span class="arb">  انسحاب </span></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <div id="checkbox_nocooperative" (click)="toggleCheckboxSelection($event)"
+                            class="custom_check d-flex align-items-center gap-2">
+                            <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                            </svg>
+                            <p class="m-0 fs-7">No Cooperative /  <span class="arb">  غير متعاون </span></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <div id="checkbox_cooperative" (click)="toggleCheckboxSelection($event)"
+                            class="custom_check d-flex align-items-center gap-2">
+                            <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                            </svg>
+                            <p class="m-0 fs-7">Cooperative /  <span class="arb">  متعاون </span></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <div id="checkbox_aggressive" (click)="toggleCheckboxSelection($event)"
+                            class="custom_check d-flex align-items-center gap-2">
+                            <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                            </svg>
+                            <p class="m-0 fs-7">Aggressive /  <span class="arb">  عدواني </span></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <div id="checkbox_lackofsleep" (click)="toggleCheckboxSelection($event)"
+                            class="custom_check d-flex align-items-center gap-2">
+                            <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                            </svg>
+                            <p class="m-0 fs-7">Lack of Sleep / <span class="arb">  قلة نوم </span></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <div id="checkbox_irritable" (click)="toggleCheckboxSelection($event)"
+                            class="custom_check d-flex align-items-center gap-2">
+                            <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                            </svg>
+                            <p class="m-0 fs-7">Irritable / <span class="arb">  سريع الانفعال </span></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <div id="checkbox_lossofappetite" (click)="toggleCheckboxSelection($event)"
+                            class="custom_check d-flex align-items-center gap-2">
+                            <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                            </svg>
+                            <p class="m-0 fs-7">Loss of Appetite /  <span class="arb">  فقدان الشهية </span></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3">
+                        <div id="checkbox_lowmoral" (click)="toggleCheckboxSelection($event)"
+                            class="custom_check d-flex align-items-center gap-2">
+                            <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                            </svg>
+                            <p class="m-0 fs-7">Low Moral /  <span class="arb">  معنويات منخفضة </span></p>
+                        </div>
+                    </div>
+                    <div class="col-4 d-flex gap-2">
+                        <div id="checkbox_primarypsychologystatusassesmentother"
+                            (click)="toggleCheckboxSelection($event); others3 = !others3;"
+                            class="custom_check d-flex align-items-center gap-2">
+                            <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                            </svg>
+                            <p class="m-0 fs-7 text-nowrap">Other /  <span class="arb">  أخرى </span></p>                            
+                        </div>
+                        <div *ngIf="others3">
+                            <input type="text" id="textbox_primarypsychologystatusassesmentother" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2 mt-2">
+                    <label for="" class="form-label">Is there any need to psychiatrist ? (ھل ھناك حاجة لتدخل الطبیب
+                        النفسي؟)</label>
+                    <div id="toggle_isthereanyneedtopsychiatrist"
+                        class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                        <button class="btn " (click)="toggleSelection($event)">Yes</button>
+                        <button class="btn selected" (click)="toggleSelection($event)">No</button>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <label for="" class="form-label">Reason /  <span class="arb">  السبب </span></label>
+                    <!-- <textarea name="" class="form-control" id="textarea_reason" cols="30" rows="3"></textarea> -->
+                    <span name="" class="form-control  textarea_box_double" id="textarea_reason" cols="30" rows="3" resize-none contenteditable="true">
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-style-1 rounded mt-2">
+            <div id="rp_header" class="card-header justify-content-between rounded-top py-2 min-height-unset">
+                <h5 class="card-heading">Relationship with people around the patient /  <span class="arb">  ین المریض ع </span></h5>
+                <img id="rp_btn" class="cursor-pointer" onclick="toggleHeader('rp_btn', 'rp_header', 'rp_toggle')" src="assets/images/icons/arrow-down.svg" alt="">
+            </div>
+            <div class="p-2" id="rp_toggle">
+                <div class="row g-2 d-flex">
+                    <div class="col-lg-6 col-12">
+                        <div class="border rounded-2 p-2">
+                            <h6 class="clr-primary-600 m-0">After Disease /  <span class="arb">  بعد المرض  </span></h6>
+                            <div class="mt-2">
+                                <label for="" class="form-label">Family /  <span class="arb">  العائلة </span></label>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div id="checkbox_afterdiseasefamilynotapplicable"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Not Applicable /  <span class="arb"> لا ينطبق </span></p>
+                                    </div>
+                                    <div id="checkbox_afterdiseasefamilyno" (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">No /  <span class="arb"> غیر جیدة </span></p>
+                                    </div>
+                                    <div id="checkbox_afterdiseasefamilymedium"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Medium /  <span class="arb"> متوسطة </span></p>
+                                    </div>
+                                    <div id="checkbox_afterdiseasefamilygood" (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Good /  <span class="arb"> جیدة </span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <label for="" class="form-label">Work /  <span class="arb">  العمل </span></label>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div id="checkbox_afterdiseaseworknotapplicable"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Not Applicable /  <span class="arb">  لا ينطبق </span></p>
+                                    </div>
+                                    <div id="checkbox_afterdiseaseworkno" (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">No / <span class="arb">  غیر جیدة </span></p>
+                                    </div>
+                                    <div id="checkbox_afterdiseaseworkmedium" (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Medium / <span class="arb">  متوسطة </span></p>
+                                    </div>
+                                    <div id="checkbox_afterdiseaseworkgood" (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Good / <span class="arb">  جیدة </span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <label for="" class="form-label">School /  <span class="arb">  المدرسة </span></label>
+                                <div id="checkbox_afterdiseaseschoolnotapplicable"
+                                    class="d-flex align-items-center gap-3">
+                                    <div (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Not Applicable /  <span class="arb">  لا ينطبق </span></p>
+                                    </div>
+                                    <div id="checkbox_afterdiseaseschoolno" (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">No /  <span class="arb">  غیر جیدة </span></p>
+                                    </div>
+                                    <div id="checkbox_afterdiseaseschoolmedium"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Medium /  <span class="arb">  متوسطة </span></p>
+                                    </div>
+                                    <div id="checkbox_afterdiseaseschoolgood" (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Good /  <span class="arb">  جیدة </span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <label for="" class="form-label">Friends /  <span class="arb"> الاصدقاء </span></label>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div id="checkbox_afterdiseasefriendsnotapplicable"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Not Applicable /  <span class="arb">  لا ينطبق </span></p>
+                                    </div>
+                                    <div id="checkbox_afterdiseasefriendsno" (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">No /  <span class="arb">  غیر جیدة </span></p>
+                                    </div>
+                                    <div id="checkbox_afterdiseasefriendsmedium"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Medium /  <span class="arb">  متوسطة </span></p>
+                                    </div>
+                                    <div id="checkbox_afterdiseasefriendsgood" (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Good /  <span class="arb">  جیدة </span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-12">
+                        <div class="border rounded-2 p-2">
+                            <h6 class="clr-primary-600 m-0">Prior to Disease / <span class="arb">  قبل المرض </span></h6>
+                            <div class="mt-2">
+                                <label for="" class="form-label">Family / <span class="arb">  العائلة </span></label>
+                                <div class="d-flex align-items-center gap-3"> 
+                                    <div id="checkbox_priortodiseasefamilynotapplicable"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Not Applicable / <span class="arb">  لا ينطبق </span></p>
+                                    </div>
+                                    <div id="checkbox_priortodiseasefamilyno" (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">No / <span class="arb">  غیر جیدة </span></p>
+                                    </div>
+                                    <div id="checkbox_priortodiseasefamilymedium"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Medium / <span class="arb">  متوسطة </span></p>
+                                    </div>
+                                    <div id="checkbox_priortodiseasefamilygood"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Good / <span class="arb">  جیدة </span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <label for="" class="form-label">Work / <span class="arb">  العمل </span></label>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div id="checkbox_priortodiseaseworknotapplicable"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Not Applicable /  <span class="arb">  لا ينطبق </span></p>
+                                    </div>
+                                    <div id="checkbox_priortodiseaseworkno" (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">No /  <span class="arb">  غیر جیدة </span></p>
+                                    </div>
+                                    <div id="checkbox_priortodiseaseworkmedium"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Medium /  <span class="arb">  متوسطة </span></p>
+                                    </div>
+                                    <div id="checkbox_priortodiseaseworkgood" (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Good /  <span class="arb">  جیدة </span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <label for="" class="form-label">School /  <span class="arb">  المدرسة </span></label>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div id="checkbox_priortodiseaseschoolnotapplicable"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Not Applicable /  <span class="arb">  لا ينطبق </span></p>
+                                    </div>
+                                    <div id="checkbox_priortodiseaseschoolno" (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">No / <span class="arb">  غیر جیدة </span></p>
+                                    </div>
+                                    <div id="checkbox_priortodiseaseschoolmedium"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Medium / <span class="arb">  متوسطة </span></p>
+                                    </div>
+                                    <div id="checkbox_priortodiseaseschoolgood"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Good / <span class="arb">  جیدة </span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <label for="" class="form-label">Friends / <span class="arb">  الاصدقاء </span></label>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div id="checkbox_priortodiseasefriendsnotapplicable"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Not Applicable /  <span class="arb">  لا ينطبق </span></p>
+                                    </div>
+                                    <div id="checkbox_priortodiseasefriendsno" (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">No /  <span class="arb">  غیر جیدة </span></p>
+                                    </div>
+                                    <div id="checkbox_priortodiseasefriendsmedium"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Medium /  <span class="arb">  متوسة </span></p>
+                                    </div>
+                                    <div id="checkbox_priortodiseasefriendsgood"
+                                        (click)="toggleCheckboxSelection($event)"
+                                        class="custom_check d-flex align-items-center gap-2">
+                                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Good /  <span class="arb">  جیدة </span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-style-1 rounded mt-2">
+            <div id="ss_header" class="card-header justify-content-between rounded-top py-2 min-height-unset">
+                <h5 class="card-heading">Social Diagnosis, Strength and Weakness Areas / <span class="arb">  التشخيص الاجتماعي ، مناطق القوة
+                    والضعف</span></h5>
+                <img id="ss_btn" class="cursor-pointer" onclick="toggleHeader('ss_btn', 'ss_header', 'ss_toggle')" src="assets/images/icons/arrow-down.svg" alt="">
+            </div>
+            <div class="p-2" id="ss_toggle">
+                <!-- <textarea name="" class="form-control resize-none" id="textarea_socialdiagnosisstrengthandweaknessareas"
+                    cols="30" rows="3"></textarea> -->
+                    <span name="" class="form-control  textarea_box_double" id="textarea_socialdiagnosisstrengthandweaknessareas" cols="30" rows="3" resize-none contenteditable="true">
+                    </span>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <div class="row gx-2">
+                <div class="col-6">
+                    <div class="card card-style-1 rounded h-100">
+                        <div class="card-header justify-content-start">
+                            <h5 class="card-heading">Management Plan / <span class="arb">  الخطة العلاجية </span></h5>
+                        </div>
+                        <div class="p-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <p class="text-nowrap">Under the procedure /  <span class="arb">  تحت الإجراء </span></p>
+                                <div id="toggle_undertheprocedure"
+                                    class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                    <button class="btn  " (click)="toggleSelection($event)">Yes / <span class="arb">  نعم </span></button>
+                                    <button class="btn selected" (click)="toggleSelection($event)">No / <span class="arb">  لا  </span></button>
+                                </div>
+                            </div>
+                            <p class="mt-2">If YES: Is a case study prepared for the patient? <span class="arb">(في حال الإجابة بنعم : ھل
+                                تم
+                                إعداد دراسة حالة للمریض ؟)</span></p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card card-style-1 rounded h-100">
+                        <div class="card-header justify-content-start">
+                            <h5 class="card-heading">Social Intervention / <span class="arb">  التدخل الإجتماعي </span></h5>
+                        </div>
+                        <div class="p-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <p class="">Does the patient need to intervene? / <span class="arb">  ل المریض بحاجة للتدخل ؟ </span></p>
+                                <div id="toggle_needtointervene"
+                                    class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                                    <button class="btn " (click)="toggleSelection($event)">Yes /  <span class="arb">  نعم </span></button>
+                                    <button class="btn selected" (click)="toggleSelection($event)">No /  <span class="arb">  لا </span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-style-1 rounded mt-2">
+            <div id="at_header" class="card-header justify-content-between rounded-top py-2 min-height-unset">
+                <h5 class="card-heading">Action Taken / <span class="arb">  الإجراء المتخذ </span></h5>
+                <img id="at_btn" class="cursor-pointer" onclick="toggleHeader('at_btn', 'at_header', 'at_toggle')" src="assets/images/icons/arrow-down.svg" alt="">
+            </div>
+            <div class="p-2" id="at_toggle">
+                <div class="d-flex align-items-center gap-3">
+                    <div id="checkbox_socialsupport" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Social Support / <span class="arb">  دعم اجتماعي</span></p>
+                    </div>
+                    <div id="checkbox_financialsupport" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Financial Support / <span class="arb">  دعم مادي</span></p>
+                    </div>
+                    <div id="checkbox_moralsupport" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Moral Support / <span class="arb">  دعم معنوي</span></p>
+                    </div>
+                    <div id="checkbox_psychologicalsupport" (click)="toggleCheckboxSelection($event)"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Psychological Support / <span class="arb">  دعم نفسي</span></p>
+                    </div>
+                    <div id="checkbox_actiontakenother" (click)="toggleCheckboxSelection($event); actionTakenOthers = !actionTakenOthers;"
+                        class="custom_check d-flex align-items-center gap-2">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7 text-nowrap">Other / <span class="arb">  اخرى</span></p>
+                    </div>
+                    <div *ngIf="actionTakenOthers">
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <div class="row gx-2">
+                <div class="col-6">
+                    <div class="card card-style-1 rounded h-100">
+                        <div class="card-header justify-content-start">
+                            <h5 class="card-heading">Patient and Family Education / <span class="arb">  تثقیف المریض وعائلتھ </span></h5>
+                        </div>
+                        <div class="p-2">
+                            <!-- <textarea name="" class="form-control" id="textarea_patientandfamilyeducation" cols="30"
+                                rows="3"></textarea> -->
+                                <span name="" class="form-control  textarea_box_double" id="textarea_patientandfamilyeducation" cols="30" rows="3" resize-none contenteditable="true">
+                                </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card card-style-1 rounded h-100">
+                        <div class="card-header justify-content-start">
+                            <h5 class="card-heading">Dimensions of required education / <span class="arb">  النواحي المطلوبة التثقیف علیھ
+                            </span></h5>
+                        </div>
+                        <div class="p-2">
+                            <!-- <textarea name="" class="form-control" id="textarea_dimensionsofrequirededucation" cols="30"
+                                rows="3"></textarea> -->
+                                <span name="" class="form-control  textarea_box_double" id="textarea_dimensionsofrequirededucation" cols="30" rows="3" resize-none contenteditable="true">
+                                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-2 border p-2 rounded-2">
+            <div class="d-flex align-items-center gap-3">
+                <label for="" class="form-label">Required / <span class="arb">  مطلوب </span></label>
+                <label for="" class="form-label">Needs more post discharge training / <span class="arb">  بحاجة للتدریب بعد الخروج </span></label>
+                <label for="" class="form-label">Done / <span class="arb">  تم </span></label>
+            </div>
+            <!-- <textarea name="" class="form-control" id="textarea_required" cols="30" rows="3"></textarea> -->
+            <span name="" class="form-control  textarea_box_double" id="textarea_required" cols="30" rows="3" resize-none contenteditable="true">
+            </span>
+        </div>
+
+        <div class="mt-2">
+            <div class="card card-style-1 rounded">
+                <div id="dr_header" class="card-header justify-content-between rounded-top py-2 min-height-unset">
+                    <h5 class="card-heading">Discharge Recommendation / <span class="arb">  توصیات الخروج </span></h5>
+                    <img id="dr_btn" class="cursor-pointer" onclick="toggleHeader('dr_btn', 'dr_header', 'dr_toggle')" src="assets/images/icons/arrow-down.svg" alt="">
+                </div>
+                <div class="p-2" id="dr_toggle">
+                    <div class="row g-2 d-flex">
+                        <div class="col-3">
+                            <label for="" class="form-label">Medical Device / <span class="arb">  جھاز طبي </span></label>
+                            <input type="text" id="textbox_medicaldevice" class="form-control">
+                        </div>
+                        <div class="col-3">
+                            <label for="" class="form-label">Home Care / <span class="arb">  رعایة منزلیة </span></label>
+                            <input type="text" id="textbox_homecare" class="form-control">
+                        </div>
+                        <div class="col-3">
+                            <label for="" class="form-label">Insured Treatment / <span class="arb">   تأمین علاج </span></label>
+                            <input type="text" id="textbox_insuredtreatment" class="form-control">
+                        </div>
+                        <div class="col-3">
+                            <label for="" class="form-label">Referral to / <span class="arb">  تحویل إلى </span></label>
+                            <input type="text" id="textbox_referralto" class="form-control">
+                        </div>
+                        <div class="col-4">
+                            <label for="" class="form-label">Patient to follow the recommendation / <span class="arb">  اتباع المریض للخطة
+                                العلاجیة</span></label>
+                            <input type="text" id="textbox_patienttofollowtherecommendation" class="form-control">
+                        </div>
+                        <div class="col-8">
+                            <label for="" class="form-label">Patient Social and Health condition is stable and be
+                                discharge
+                                home / <span class="arb">  وضع المریض الصحي والاجتماعي مستقر ویمكنھ الخروج </span></label>
+                            <input type="text" id="textbox_patientsocialandhealthconditionisstableandbedischargehome"
+                                class="form-control">
+                        </div>
+                        <div class="col-3">
+                            <label for="" class="form-label">Other / <span class="arb">  أخرى </span></label>
+                            <input type="text" id="textbox_dischargerecommendationother" class="form-control">
+                        </div>
+                        <div class="col-12">
+                            <label for="" class="form-label">Notes / <span class="arb">  ملاحظات </span></label>
+                            <!-- <textarea name="" class="form-control" id="textarea_notes" cols="30" rows="3"></textarea> -->
+                            <span name="" class="form-control  textarea_box_double" id="textarea_notes" cols="30" rows="3" resize-none contenteditable="true">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="border rounded-2 mt-2">
+        <!-- <div class="col-6">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row g-2 align-items-center justify-content-between p-2">
+                        <div class="col-6">
+                            <label class="form-label text-nowrap">Employee Name / </label>
+                            <input type="text" id="textbox_employeename" class="form-control w-100">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label text-nowrap">Date / التاریخ</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                <input matInput class="" #employeedate [matDatepicker]="edate"
+                                    (click)="edate.open()">
+                                <mat-datepicker-toggle matSuffix [for]="edate">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #edate></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <img style="display:none" src="" alt="" />
+                    <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                        <div class="d-inline-flex align-items-center justify-content-end gap-2 label_line">
+                            <p class="m-0">Add Signature</p>
+                            <svg width="15" height="15" viewBox="0 0 10 10" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="cursor-pointer">
+                                <rect x="0.747803" y="0.0947266" width="9" height="9" rx="4.5" fill="#DAEEF1">
+                                </rect>
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M5.24789 2.09473C5.05065 2.09473 4.89075 2.25463 4.89075 2.45187V4.23747H3.10495C2.9077 4.23747 2.7478 4.39737 2.7478 4.59461C2.7478 4.79185 2.9077 4.95175 3.10495 4.95175H4.89075V6.73758C4.89075 6.93483 5.05065 7.09473 5.24789 7.09473C5.44513 7.09473 5.60503 6.93483 5.60503 6.73758V4.95175H7.39066C7.5879 4.95175 7.7478 4.79185 7.7478 4.59461C7.7478 4.39737 7.5879 4.23747 7.39066 4.23747H5.60503V2.45187C5.60503 2.25462 5.44513 2.09473 5.24789 2.09473Z"
+                                    fill="#368796"></path>
+                            </svg>
+                        </div>
+                        <div class="position-relative">
+                            <app-signature  #Signature1 class="" (base64Signature)="base64Signature('Signature1', $event)" [imageToDisplay]="getSignature('Signature1')">
+                                <canvas style="border: 1px solid #000;"></canvas>
+                            </app-signature>
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" (click)="clearSignature('Signature1'); clearbase64Signature(Signature1)"
+                                xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                <path
+                                    d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                    fill="#EB6247"></path>
+                                <path
+                                    d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                    fill="#EB6247"></path>
+                                <path
+                                    d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                    fill="#EB6247"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+            <div class="row g-2">
+                <div class="col-8">
+                    <div class="row g-2 align-items-start justify-content-between p-2">
+                        <div class="col-7">
+                            <label class="form-label text-nowrap">Social Worker / <span class="arb">  الأخصائي الاجتماعي </span></label>
+                            <input type="text" id="textbox_socialworker" class="form-control w-100">
+                        </div>
+                        <div class="col-5">
+                            <label class="form-label text-nowrap">Date / <span class="arb">  التاریخ </span></label>
+                            <mat-form-field appearance="fill">
+                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                <input matInput class="" #socialdate id="textbox_socialdate" [matDatepicker]="sdate"
+                                    (click)="sdate.open()">
+                                <mat-datepicker-toggle matSuffix [for]="sdate">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #sdate></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <!-- <div class="col-12">
+                            <textarea class="form-control" id="taBase64socialworker" cols="" rows="3"
+                                title="Base64 format of the signature image"></textarea>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-4">
+                    <img id="imgFinal" style="display:none" src="" alt="" />
+                    <div class="signature_box active text-end ms-auto mt-2 pb-2">
+                        
+                        <div class="position-relative">
+                            <app-signature #Signature2 class="" (base64Signature)="base64Signature('Signature2', $event)" [imageToDisplay]="getSignature('Signature2')">
+                                <canvas style="border: 1px solid #000;"></canvas>
+                            </app-signature>
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" (click)="clearSignature('Signature2'); clearbase64Signature(Signature2)"
+                                xmlns="http://www.w3.org/2000/svg" class="delicon cursor-pointer">
+                                <path
+                                    d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                                    fill="#EB6247"></path>
+                                <path
+                                    d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                                    fill="#EB6247"></path>
+                                <path
+                                    d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                                    fill="#EB6247"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+      [selectedTemplateFn]="selectedTemplate.bind(this)">
+</app-sharedtemplateview>
+
+
+<!-- <div class="modal" id="savedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+        <div class="modal-content">
+            <div class="modal-header p-2">
+                <h5 class="modal-title clr-primary-600 fs-6" translate>Templates</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn-close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-2">
+                <div class="table-cards_div text-start d-flex mx-0 mt-0 g-2 p-2 position-relative"
+                    *ngFor="let tem of FetchPatienClinicalTemplateDetailsNList;let i=index">
+                    <div class="row mx-0 g-2 w-100">
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Template ID</p>
+                            <p><a href="#" (click)="$event.preventDefault();selectedTemplate(tem)">{{
+                                    tem.PatientTemplatedetailID }}</a></p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Name</p>
+                            <p>{{ tem.PatientName }}</p>
+                        </div>
+
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">DoctorName</p>
+                            <p>{{ tem.Consultant }}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Created By</p>
+                            <p>{{ tem.CreatedBy }}</p>
+                        </div>
+                        <div class="col-lg col-md-4 col-12">
+                            <p class="label">Date</p>
+                            <p>{{ tem.Createdate | date: 'dd-MMM-yyyy' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="saveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

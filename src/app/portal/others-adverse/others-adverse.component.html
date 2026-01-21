@@ -1,0 +1,413 @@
+<div class="allergies rounded-3">
+    <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center p-2 header">
+            <div class="d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9ZM14.6357 14.9314C13.1684 16.326 11.1841 17.1818 9 17.1818C4.48131 17.1818 0.818182 13.5187 0.818182 9C0.818182 6.8682 1.63349 4.92682 2.9693 3.47066C2.98784 3.53491 3.02242 3.5955 3.07305 3.64613L6.69884 7.27191L5.15865 8.82341C5.05292 8.93001 4.99331 9.07389 4.99268 9.22403V12.1943L3.44173 13.7452C3.38809 13.7984 3.34552 13.8617 3.31646 13.9315C3.28741 14.0012 3.27245 14.076 3.27245 14.1516C3.27245 14.2271 3.28741 14.3019 3.31646 14.3717C3.34552 14.4414 3.38809 14.5047 3.44173 14.5579C3.49494 14.6116 3.55823 14.6541 3.62797 14.6832C3.69772 14.7122 3.77252 14.7272 3.84807 14.7272C3.92362 14.7272 3.99842 14.7122 4.06817 14.6832C4.13791 14.6541 4.2012 14.6116 4.25441 14.5579L5.80536 13.007H8.77562C8.92576 13.0063 9.06964 12.9467 9.17624 12.841L10.7277 11.3008L14.25 14.823C14.3546 14.9276 14.5017 14.9637 14.6357 14.9314ZM14.9369 14.6299C14.9691 14.496 14.933 14.349 14.8285 14.2445L11.3084 10.7244L13.8863 8.16526C14.1528 7.89945 14.3642 7.58368 14.5085 7.23603C14.6527 6.88838 14.727 6.51569 14.727 6.1393C14.727 5.76291 14.6527 5.39022 14.5085 5.04257C14.3642 4.69492 14.1528 4.37915 13.8863 4.11334C13.6205 3.84685 13.3047 3.63543 12.9571 3.49117C12.6094 3.34691 12.2367 3.27266 11.8603 3.27266C11.484 3.27266 11.1113 3.34691 10.7636 3.49117C10.416 3.63543 10.1002 3.84685 9.83439 4.11334L7.27526 6.69126L3.65159 3.06758C3.60106 3.01706 3.54061 2.98251 3.47651 2.96394C4.93201 1.63131 6.87104 0.818182 9 0.818182C13.5187 0.818182 17.1818 4.48131 17.1818 9C17.1818 11.1812 16.3283 13.1631 14.9369 14.6299ZM6.13729 9.45867L7.50796 8.08104L8.30695 8.88003L7.44787 9.7391C7.39423 9.7923 7.35166 9.8556 7.3226 9.92534C7.29355 9.99508 7.27859 10.0699 7.27859 10.1454C7.27859 10.221 7.29355 10.2958 7.3226 10.3655C7.35166 10.4353 7.39423 10.4986 7.44787 10.5518C7.50108 10.6054 7.56437 10.648 7.63411 10.677C7.70386 10.7061 7.77866 10.7211 7.85421 10.7211C7.92976 10.7211 8.00456 10.7061 8.07431 10.677C8.14405 10.648 8.20734 10.6054 8.26055 10.5518L9.11962 9.6927L9.9186 10.4917L8.54098 11.8624H6.13729V9.45867ZM8.08504 7.50104L8.88549 8.30149L11.454 5.73296C11.5618 5.62519 11.7079 5.56465 11.8603 5.56465C12.0128 5.56465 12.1589 5.62519 12.2667 5.73296C12.3745 5.84073 12.435 5.98689 12.435 6.1393C12.435 6.2917 12.3745 6.43787 12.2667 6.54564L9.69816 9.11416L10.4986 9.91461L13.0736 7.35259C13.3769 7.02712 13.542 6.59664 13.5342 6.15184C13.5263 5.70704 13.3461 5.28265 13.0316 4.96808C12.717 4.65351 12.2926 4.47332 11.8478 4.46548C11.403 4.45763 10.9725 4.62273 10.6471 4.92601L8.08504 7.50104Z" fill="#4155BE"></path></svg>
+                <p class="m-0 ms-2 fw-semibold fs-6">{{langData?.common?.Allergies}}</p>
+            </div>
+            <div class="d-flex align-items-center gap-2 ms-auto">
+                <button class="btn btn-danger-outline">{{langData?.common?.Clear}}</button>
+                <button class="btn btn-main-outline" (click)="saveAdverseEvents()" *ngIf="!endofEpisode">{{langData?.common?.Save}}</button>
+            </div>
+        </div>
+    </div>
+    <div class="p-2">
+        <div class="row gx-2">
+            <div class="col-md-2" *ngFor="let item of FetchAdvPatientAllergiesFDataList;let i=index">
+                <div class="p-2 border-danger-200 text-center rounded-3">
+                    <p class="clr-danger-200">{{item.AllergiesType}}</p>
+                    <label for="" class="form-label clr-dark-600 m-0 fs-6">{{item.AllergiesName}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<form [formGroup]="adverseEventForm">
+<div class="mt-2 card card-style-1 adverse_event rounded">
+    <div class="card-header d-flex gap-2 align-items-center rounded-top justify-content-between py-1 min-height-unset">
+        <div class="d-flex align-items-center">
+            <label for="" class="form-label me-2 mb-0 text-nowrap">{{langData?.home?.DateofAdverseEvent}} </label>
+            <mat-form-field appearance="fill">
+                <mat-label translate>dd-MMM-yyyy</mat-label>
+                <input matInput class="" formControlName="AdverseEventDate"
+                    [matDatepicker]="AdverseDate"
+                    (click)="AdverseDate.open()">
+                <mat-datepicker-toggle matSuffix [for]="AdverseDate">
+                </mat-datepicker-toggle>
+                <mat-datepicker #AdverseDate></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="">
+            <label for="" class="form-label me-2 mb-0 text-nowrap">{{langData?.home?.DateofAdverseEvent}}</label>
+            <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start">
+                <button class="fs-7 btn" [ngClass]="{ 'selected': eventType === 'drug' }" (click)="toggleEventType('drug')">{{langData?.home?.DrugAdverseEvent}}</button>
+                <button class="fs-7 btn" [ngClass]="{ 'selected': eventType === 'vaccine' }" (click)="toggleEventType('vaccine')">{{langData?.home?.VaccineAdverseEvent}} </button>
+            </div>
+        </div>
+    </div>
+    <div class="p-2">
+        <div [style.display]="eventType === 'drug' ? 'flex' : 'none'" class="drugadverse_event row g-2">
+            <div class="col-lg-5">
+                <div class="d-flex flex-column gap-3 p-2 pt-3 border-primary-200 rounded-2 h-100">
+                    <div class="d-flex align-items-center">
+                        <label for="" class="form-label text-nowrap me-2 mb-0">{{langData?.home?.Dateandtimeoftheincident}} </label>
+                        <mat-form-field appearance="fill">
+                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                            <input matInput class=""
+                                [matDatepicker]="IncidentDate" formControlName="IncidentDate"
+                                (click)="IncidentDate.open()">
+                            <mat-datepicker-toggle matSuffix [for]="IncidentDate">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #IncidentDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <label for="" class="form-label text-nowrap me-2 mb-0">{{langData?.home?.DateandtimenotifiedtoROD}} </label>
+                        <mat-form-field appearance="fill">
+                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                            <input matInput class="" formControlName="NotifiedRODDate"
+                                [matDatepicker]="RODDate"
+                                (click)="RODDate.open()">
+                            <mat-datepicker-toggle matSuffix [for]="RODDate">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #RODDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <label for="" class="form-label text-nowrap me-2 mb-0">{{langData?.home?.DateandtimenotifiedtoMRP}} </label>
+                        <mat-form-field appearance="fill">
+                            <mat-label translate>dd-MMM-yyyy</mat-label>
+                            <input matInput class="" formControlName="NotifiedMRPDate"
+                                [matDatepicker]="MRPDate"
+                                (click)="MRPDate.open()">
+                            <mat-datepicker-toggle matSuffix [for]="MRPDate">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #MRPDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="p-2 pt-3 border-primary-200 rounded-2 h-100">
+                    <h6 class="clr-primary-600 mb-2">{{langData?.home?.ADRManifestations}} </h6>
+                    <div class="row mx-0 g-2">
+                        <div class="col-md-3" *ngFor="let item of ManifestationDataList;let i=index">
+                            <div class="d-flex align-items-center">
+                                <input type="checkbox" [id]="'manifestationCheckbox_' + i" class="form-check-input mt-0 me-2" [checked]="item.isSelected" 
+                                (click)="selectedADRManifestation(item)">
+                                <label [for]="'manifestationCheckbox_' + i" class="form-label m-0">{{item.Manifestation}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12" *ngIf="showTextArea()">
+                            <textarea name="" class="form-control resize-none" id="" cols="30" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <label for="" class="form-label">{{langData?.home?.DescriptionofADR}} </label>
+                <textarea name="" class="form-control resize-none" id="" cols="30" rows="2" formControlName="ADRDescription"></textarea>
+            </div>
+        </div>
+        <div [style.display]="eventType === 'vaccine' ? 'flex' : 'none'" class="vaccineadverse_event row g-2">
+            <div class="col-md-8">
+                <div class="p-2 pt-3 border-primary-200 rounded-2 h-100">
+                    <h6 class="clr-primary-600 mb-2">Vaccine Adverse Event:</h6>
+                    <div class="row mx-0 g-2">
+                        <div class="col-md-3" *ngFor="let item of VaccineAdverseEventNameNDataList;let i=index">
+                            <div class="d-flex align-items-center">
+                                <input type="checkbox" name="" class="form-check-input mt-0 me-2" id="" (click)="selectedVaccineAdverseEvent(item)">
+                                <label for="" class="form-label">{{item.VaccineAdverseEventName}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-2 pt-3 border-primary-200 rounded-2 h-100">
+                    <h6 class="clr-primary-600 mb-2">{{langData?.home?.VaccineDetails}} </h6>
+                    <table class="table m-0" *ngIf="FetchAdvPatientVaccinationList.length > 0">
+                        <thead class="">
+                            <tr>
+                                <th></th>
+                                <th>{{langData?.home?.Drugcode}} </th>
+                                <th>{{langData?.common?.Time}} </th>
+                                <th>{{langData?.common?.Time}} </th>
+                                <th>{{langData?.prescriptions?.Route}} </th>
+                                <th>{{langData?.common?.Frequency}} </th>
+                                <th>{{langData?.common?.StartDate}} </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of FetchAdvPatientVaccinationList;let i=index">
+                                <td><input type="checkbox" class="" [checked]="item.isSelected" (click)="selectedVaccineDetails(item)"></td>
+                                <td>{{ item.ItemCode }}</td>
+                                <td>{{ item.DisplayName }}</td>
+                                <td>{{ item.Dose }}</td>
+                                <td>{{ item.AdmRoute }}</td>
+                                <td>{{ item.Frequency }}</td>
+                                <td>{{ item.startFrom }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="h-100 d-flex align-items-center justify-content-center" *ngIf="FetchAdvPatientVaccinationList.length === 0">No Records Found</p>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="d-flex gap-2">
+                    <div class="d-flex align-items-center w-50">
+                        <div class="col-4">
+                            <label for="" class="form-label text-nowrap me-2">{{langData?.home?.NamesignatureofRODNurse}} </label>
+                        </div>
+                        <div class="col">
+                            <div class="d-flex align-items-center input-group">
+                                <!-- <input type="text" placeholder="" aria-label="" class="form-control" formControlName="DoctorName"> -->
+                                <input type="text" class="form-control" placeholder="ROD/Nurse Name" aria-label="ROD Name"
+                                    formControlName="NurseName" [matAutocomplete]="autoNurse" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchRODNurse($event)">
+                                    <mat-autocomplete #autoNurse="matAutocomplete">
+                                        <mat-option *ngFor="let item of rodNurseSearch"
+                                        (onSelectionChange)="onItemSelected(item)" [value]="item.Fullname.trim()">
+                                            {{item.Fullname}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                                    <img src="assets/images/icons/icon-search.svg" alt="">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="col">
+                            <label for="" class="form-label text-nowrap me-2 mb-0">{{langData?.common?.Date}} & {{langData?.common?.Time}} </label>
+                        </div>
+                        <div class="col">
+                            <mat-form-field appearance="fill">
+                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                <input matInput class="" formControlNmae="VaccineGivenDate"
+                                    [matDatepicker]="RODSignatureDate"
+                                    (click)="RODSignatureDate.open()">
+                                <mat-datepicker-toggle matSuffix [for]="RODSignatureDate">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #RODSignatureDate></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div [style.display]="eventType === 'drug' ? 'block' : 'none'" class="card card-style-1 mt-2 rounded">
+    <div class="card-header justify-content-start rounded-top py-2 min-height-unset">
+        <h2 class="card-heading">{{langData?.home?.Currentrecentmedication}} </h2>
+    </div>
+    <div class="p-2">
+        <table class="table m-0">
+            <thead class="">
+                <tr>
+                    <th>{{langData?.home?.Drugcode}} </th>
+                    <th>{{langData?.common?.Time}} </th>
+                    <th>{{langData?.common?.Time}} </th>
+                    <th>{{langData?.prescriptions?.Route}} </th>
+                    <th>{{langData?.common?.Frequency}} </th>
+                    <th>{{langData?.common?.StartDate}} </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of FetchAdvPatientActiveMedicationFDataList;let i=index">
+                    
+                    <td>{{ item.ItemCode }}</td>
+                    <td>{{ item.DisplayName }}</td>
+                    <td>{{ item.Dose }}</td>
+                    <td>{{ item.AdmRoute }}</td>
+                    <td>{{ item.Frequency }}</td>
+                    <td>{{ item.startFrom }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="mt-2">
+            <div class="d-flex align-items-center w-100">
+                <div class="d-flex align-items-center w-50">
+                    <label for="" class="form-label text-nowrap me-2">{{langData?.home?.NamesignatureofRODNurse}} </label>
+                    <div class="d-flex align-items-center input-group">
+                        <!-- <input type="text" placeholder="" aria-label="" class="form-control" formControlName="DoctorName"> -->
+                        <input type="text" class="form-control" placeholder="ROD/Nurse Name" aria-label="ROD Name"
+                                    formControlName="NurseName" [matAutocomplete]="autoNurse" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchRODNurse($event)">
+                                    <mat-autocomplete #autoNurse="matAutocomplete">
+                                        <mat-option *ngFor="let item of rodNurseSearch"
+                                        (onSelectionChange)="onItemSelected(item)" [value]="item.Fullname.trim()">
+                                            {{item.Fullname}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                        <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                            <img src="assets/images/icons/icon-search.svg" alt="">
+                        </button>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center ms-3">
+                    <label for="" class="form-label text-nowrap me-2">{{langData?.common?.Date}} & {{langData?.common?.Time}} </label>
+                    <mat-form-field appearance="fill">
+                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                        <input matInput class="" formControlName="RODNurseDate"
+                            [matDatepicker]="RODNurseSignatureDate"
+                            (click)="RODNurseSignatureDate.open()">
+                        <mat-datepicker-toggle matSuffix [for]="RODNurseSignatureDate">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #RODNurseSignatureDate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div [style.display]="eventType === 'drug' ? 'block' : 'none'" class="mt-2">
+    <label for="" class="form-label">{{langData?.home?.Part}} </label>
+    <textarea name="" class="form-control resize-none" id="" cols="30" rows="2" formControlName="ClinicalConditionalSummary"></textarea>
+</div>
+
+<div [style.display]="eventType === 'drug' ? 'block' : 'none'" class="mt-2 card card-style-1 rounded">
+    <div class="card-header justify-content-start py-1 min-height-unset rounded-top">
+        <h2 class="card-heading">{{langData?.home?.Specifyimplicatedsuspecteddrug}} </h2>
+    </div>
+    <div class="p-2">
+        <table class="table m-0">
+            <thead class="">
+                <tr>
+                    <th></th>
+                    <th>{{langData?.home?.Drugcode}} </th>
+                    <th>{{langData?.common?.Time}} </th>
+                    <th>{{langData?.common?.Time}} </th>
+                    <th>{{langData?.prescriptions?.Route}} </th>
+                    <th>{{langData?.common?.Frequency}} </th>
+                    <th>{{langData?.common?.StartDate}} </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of FetchAdvPatientActiveMedicationFDataList;let i=index">
+                    <td><input type="checkbox" class="" [checked]="item.isSelected" (click)="selectedSuspectedDrugs(item)"></td>
+                    <td>{{ item.ItemCode }}</td>
+                    <td>{{ item.DisplayName }}</td>
+                    <td>{{ item.Dose }}</td>
+                    <td>{{ item.AdmRoute }}</td>
+                    <td>{{ item.Frequency }}</td>
+                    <td>{{ item.startFrom }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="mt-2">
+            <div class="row g-2">
+                <div class="col-lg-5 col-md-12">
+                    <div class="card card-style-1 h-100 rounded">
+                        <div class="card-header justify-content-start py-2 rounded-top min-height-unset">
+                            <h2 class="card-heading fs-7"> {{langData?.home?.Seriousnessoftheadverseeffect}}</h2>
+                        </div>
+                        <div class="row mx-0 g-2 p-2">
+                            <div class="col-md-6" *ngFor="let item of SeriousnessAdverseNameDataList;let i=index">
+                                <div class="d-flex align-items-start">
+                                    <input type="checkbox" name="" class="form-check-input me-2 mt-0" id="" [checked]="item.isSelected" (click)="selectedSeriousEffects(item)">
+                                    <label for="" class="form-label m-0">{{item.SeriousnessAdverse}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-style-1 h-100 rounded">
+                        <div class="card-header justify-content-start py-2 rounded-top min-height-unset">
+                            <h2 class="card-heading fs-7">{{langData?.home?.Actiontaken}} </h2>
+                        </div>
+                        <div class="row mx-0 g-2 p-2">
+                            <div class="col-md-12" *ngFor="let item of ActiontakenNameNDataList;let i=index">
+                                <div class="d-flex align-items-start">
+                                    <input type="checkbox" name="" class="form-check-input me-2 mt-0" id="" [checked]="item.isSelected" (click)="selectedActionTaken(item)">
+                                    <label for="" class="form-label m-0">{{item.ActiontakenName}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card card-style-1 h-100 rounded">
+                        <div class="card-header justify-content-start py-2 rounded-top min-height-unset">
+                            <h2 class="card-heading fs-7">{{langData?.home?.Outcomeofcase}} </h2>
+                        </div>
+                        <div class="row mx-0 g-2 p-2">
+                            <div class="col-md-12" *ngFor="let item of OutcomeOfCaseNameNDataList;let i=index">
+                                <div class="d-flex align-items-start">
+                                    <input type="checkbox" name="" class="form-check-input me-2 mt-0" id="" [checked]="item.isSelected" (click)="selectedOutcome(item)">
+                                    <label for="" class="form-label m-0">{{item.OutcomeOfCaseName}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <div class="d-flex align-items-center w-100">
+                <div class="d-flex align-items-center w-50">
+                    <label for="" class="form-label text-nowrap me-2">{{langData?.home?.PhysiciannameSignature}} </label>
+                    <div class="d-flex align-items-center input-group w-100">
+                        <!-- <input type="text" placeholder="" aria-label="" class="form-control" formControlName="DoctorName"> -->
+                        <input type="text" class="form-control" placeholder="Physician Name" aria-label="Physician Name"
+                                    formControlName="DoctorName" [matAutocomplete]="autoDoctor" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchDoctor($event)">
+                                    <mat-autocomplete #autoDoctor="matAutocomplete">
+                                        <mat-option *ngFor="let item of doctorSearch"
+                                        (onSelectionChange)="onDoctorItemSelected(item)" [value]="item.Fullname.trim()">
+                                            {{item.Fullname}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                        <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                            <img src="assets/images/icons/icon-search.svg" alt="">
+                        </button>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center ms-3">
+                    <label for="" class="form-label text-nowrap me-2 mb-0">{{langData?.common?.Date}} & {{langData?.common?.Time}} </label>
+                    <mat-form-field appearance="fill">
+                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                        <input matInput class="" formControlName="PhysicianSignatureDate"
+                            [matDatepicker]="PhysicianSignatureDate"
+                            (click)="PhysicianSignatureDate.open()">
+                        <mat-datepicker-toggle matSuffix [for]="PhysicianSignatureDate">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #PhysicianSignatureDate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+<div class="modal" id="saveAdverseEvent" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Adverse Events Saved Successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                     data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="saveAdverseEventValidation" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p >Please select ADR Manifestation & Suspected Drugs</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                     data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

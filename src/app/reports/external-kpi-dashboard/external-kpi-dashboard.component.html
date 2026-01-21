@@ -1,0 +1,1269 @@
+<div class="page-header justify-content-start sticky-top shadow-sm">
+    <h2 class="page-heading">External-MOH KPI Dashboard</h2>
+</div>
+<div class="container-fluid p-0 analytics_graphs populationHealth_graph IP_graph">
+    <div class="p-2">
+        <div class="row g-2 mx-0">
+            <div class="col-2" style="width: 13%;">
+                <div class="left_nav">
+                    <div class="sidebar-container rounded mt-2">
+                        <form [formGroup]="datesForm" class="d-flex flex-column gap-2">
+                            <label class="form-label m-0">From Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="fromPicker" placeholder="From Date"
+                                    formControlName="fromdate" />
+                                <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #fromPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <label class="form-label m-0">To Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="toPicker" placeholder="To Date"
+                                    formControlName="todate" />
+                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #toPicker></mat-datepicker>
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn btn-main-outline w-100 mt-2" (click)="fetchData()">
+                            Fetch
+                        </button>
+                        <button type="button" class="btn btn-outline-danger w-100 mt-2" (click)="clearFilters()">
+                            Clear
+                        </button>
+                    </div>
+                    <div class="sidebar-container rounded mt-2">
+                        <label class="form-label">Location</label>
+                        <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                            <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_9239_2779)">
+                                    <path
+                                        d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                        fill="#368796" />
+                                </g>
+                            </svg>
+                            <input type="text" class="form-control" [matAutocomplete]="roleAuto2" placeholder="Search">
+                            <mat-autocomplete #roleAuto2="matAutocomplete">
+                                <mat-option *ngFor="let item of locations">
+                                    <div (click)="locationOptionClicked($event, item);">
+                                        <mat-checkbox [checked]="item.selected" (change)="toggleLocationSelection(item)"
+                                            (click)="$event.stopPropagation()">
+                                            {{ item.label }}
+                                        </mat-checkbox>
+                                    </div>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col dashboardHeight">
+                <div class="row g-2 mx-0">
+                    <div class="col-3">
+                        <div class="bg-white p-2 card shadow-sm rounded text-center populationCard">
+                            <img class="mb-3" style="height: 3rem"
+                                src="assets/images/populationDashboard/activePatients.svg" alt="">
+                            <div class="rounded p-2 text-center populationFooter min-height-unset py-1">
+                                <h6 class="mb-1 fw-bold fs-5">{{externalStatistics?.ActivePatients || 0 |
+                                    number}}</h6>
+                                <p class="m-0 fw-semibold">ACTIVE PATIENTS</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="bg-white p-2 card shadow-sm rounded text-center populationCard">
+                            <img class="mb-3" style="height: 3rem"
+                                src="assets/images/populationDashboard/outpatientVisits.svg" alt="">
+                            <div class="rounded p-2 text-center populationFooter min-height-unset py-1">
+                                <h6 class="mb-1 fw-bold fs-5">{{externalStatistics?.TotalOutPatient || 0 |
+                                    number}}</h6>
+                                <p class="m-0 fw-semibold">OUTPATIENT VISITS</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="bg-white p-2 card shadow-sm rounded text-center populationCard">
+                            <img class="mb-3" style="height: 3rem"
+                                src="assets/images/populationDashboard/emergencyPatients.svg" alt="">
+                            <div class="rounded p-2 text-center populationFooter min-height-unset py-1">
+                                <h6 class="mb-1 fw-bold fs-5">{{externalStatistics?.TotalERPatient || 0 |
+                                    number}}</h6>
+                                <p class="m-0 fw-semibold">EMERGENCY PATIENTS</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="bg-white p-2 card shadow-sm rounded text-center populationCard">
+                            <img class="mb-3" style="height: 3rem"
+                                src="assets/images/populationDashboard/admission.svg" alt="">
+                            <div class="rounded p-2 text-center populationFooter min-height-unset py-1">
+                                <h6 class="mb-1 fw-bold fs-5">{{externalStatistics?.TotalAdmissions || 0 |
+                                    number}}</h6>
+                                <p class="m-0 fw-semibold">ADMISSION</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="bg-white p-2 card shadow-sm rounded text-center populationCard">
+                            <img class="mb-3" style="height: 3rem"
+                                src="assets/images/populationDashboard/discharge.svg" alt="">
+                            <div class="rounded p-2 text-center populationFooter min-height-unset py-1">
+                                <h6 class="mb-1 fw-bold fs-5">{{externalStatistics?.TotalDischarges || 0 |
+                                    number}}</h6>
+                                <p class="m-0 fw-semibold">DISCHARGE</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="bg-white p-2 card shadow-sm rounded text-center populationCard">
+                            <!-- <img class="mb-3" style="height: 3rem"
+                                src="assets/images/populationDashboard/admittingDoctors.svg" alt=""> -->
+                                <img class="mb-3" style="height: 3rem" src="assets/images/populationDashboard/activeDoctors.svg" alt="">
+                            <div class="rounded p-2 text-center populationFooter min-height-unset py-1">
+                                <h6 class="mb-1 fw-bold fs-5">{{externalStatistics?.TotalAdmittedDoctors || 0 |
+                                    number}}</h6>
+                                <p class="m-0 fw-semibold">ACTIVE DOCTORS</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="bg-white p-2 card shadow-sm rounded text-center populationCard">
+                            <img class="mb-3" style="height: 3rem"
+                                src="assets/images/populationDashboard/activeNurses.svg" alt="">
+                            <div class="rounded p-2 text-center populationFooter min-height-unset py-1">
+                                <h6 class="mb-1 fw-bold fs-5">{{externalStatistics?.TotalNurse || 0 | number}}
+                                </h6>
+                                <p class="m-0 fw-semibold">ACTIVE NURSES</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="bg-white p-2 card shadow-sm rounded text-center populationCard">
+                            <img class="mb-3" style="height: 3rem"
+                                src="assets/images/populationDashboard/activeBeds.svg" alt="">
+                            <div class="rounded p-2 text-center populationFooter min-height-unset py-1">
+                                <h6 class="mb-1 fw-bold fs-5">{{externalStatistics?.ActiveBeds || 0 | number}}
+                                </h6>
+                                <p class="m-0 fw-semibold">ACTIVE BEDS</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class=" row mx-0 gx-2 mt-2">
+                        <div class="col-4">
+                            <div class="readmissionCard border rounded">
+                                <div class="rounded-top text-center text-white py-2 fw-bold readmissionCard_header">
+                                    Waiting Time &lt;30 Min
+                                </div>
+                                <div class="rounded-bottom text-center p-2 border-bottom">
+                                    <p class="fs-3 fw-bold">
+                                        {{waitingTimeStatistics?.WaitingTimeLessthan30Min || 0 | number}}
+                                    </p>
+                                    <p class="fs-5 mt-2">
+                                        {{waitingTimeStatistics?.WaitingTimeLessthan30MinPer || 0 | number:'1.2-2'}}%
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="readmissionCard border rounded">
+                                <div class="rounded-top text-center text-white py-2 fw-bold readmissionCard_header">
+                                    Waiting Time 30-60 Min
+                                </div>
+                                <div class="rounded-bottom text-center p-2 border-bottom">
+                                    <p class="fs-3 fw-bold">
+                                        {{waitingTimeStatistics?.WaitingTime30to60Min || 0 | number}}
+                                    </p>
+                                    <p class="fs-5 mt-2">
+                                        {{waitingTimeStatistics?.WaitingTime30to60MinPer || 0 | number:'1.2-2'}}%
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="readmissionCard border rounded  h-100 d-flex flex-column">
+                                <div class="rounded-top text-center text-white py-2 fw-bold readmissionCard_header">
+                                    Waiting Time 60-120 Min
+                                </div>
+                                <div class="rounded-bottom text-center p-2 border-bottom">
+                                    <p class="fs-3 fw-bold">
+                                        {{waitingTimeStatistics?.WaitingTime60to120Min || 0 | number}}
+                                    </p>
+                                <p class="fs-5 mt-2">
+                                        {{waitingTimeStatistics?.WaitingTime60to120MinPer || 0 | number:'1.2-2'}}%
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mx-0 mt-2 gx-2">
+                   
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded text-center h-100">
+                            <apx-chart *ngIf="waitingTimeMonthlyChartData" [series]="waitingTimeMonthlyChartData.series"
+                                [chart]="waitingTimeMonthlyChartData.chart" [xaxis]="waitingTimeMonthlyChartData.xaxis"
+                                [yaxis]="waitingTimeMonthlyChartData.yaxis"
+                                [dataLabels]="waitingTimeMonthlyChartData.dataLabels"
+                                [title]="waitingTimeMonthlyChartData.title"
+                                [tooltip]="waitingTimeMonthlyChartData.tooltip"
+                                [stroke]="waitingTimeMonthlyChartData.stroke"
+                                [colors]="waitingTimeMonthlyChartData.colors"
+                                [legend]="waitingTimeMonthlyChartData.legend"
+                                [markers]="waitingTimeMonthlyChartData.markers"
+                                [plotOptions]="waitingTimeMonthlyChartData.plotOptions">
+                            </apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="col-5">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="fw-semibold"> &lt;30 Min </p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="fw-semibold"> 30-60 Min </p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class="fw-semibold"> 60-120 Min </p>
+                                    </div>
+                                    <div class="col-1">
+                                        <div class="custom_tooltip custom_tooltip_left d-inline-flex"
+                                            (click)="exportGridData('csv', waitingTimeMonthlyData, 'Emergency Waiting Time')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body" style="height: 390px;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of waitingTimeMonthlyData">
+                                    <div class="col-5">
+                                        <p class="">{{item.MonthName}}</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class=""> {{item.WaitingTimeLessthan30Min || 0 | number}} </p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class=""> {{item.WaitingTime30to60Min || 0 | number}} </p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p class=""> {{item.WaitingTime60to120Min || 0 | number}} </p>
+                                    </div>
+                                    <div class="col-1">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded h-100">
+                            <apx-chart *ngIf="initialAssessmentsChartData" [series]="initialAssessmentsChartData.series"
+                                [chart]="initialAssessmentsChartData.chart" [xaxis]="initialAssessmentsChartData.xaxis"
+                                [yaxis]="initialAssessmentsChartData.yaxis"
+                                [dataLabels]="initialAssessmentsChartData.dataLabels"
+                                [title]="initialAssessmentsChartData.title"
+                                [tooltip]="initialAssessmentsChartData.tooltip"
+                                [stroke]="initialAssessmentsChartData.stroke"
+                                [colors]="initialAssessmentsChartData.colors"
+                                [markers]="initialAssessmentsChartData.markers"
+                                [plotOptions]="initialAssessmentsChartData.plotOptions">
+                            </apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="" style="width: 25%;">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Admission</p>
+                                    </div>
+                                    <div class="" style="width: 25%;">
+                                        <p class="fw-semibold">Assessment</p>
+                                    </div>
+                                    <div class="" style="width: 25%;">
+                                        <p class="fw-semibold">Compliance Rate</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                        <div class="custom_tooltip custom_tooltip_left d-inline-flex"
+                                            (click)="exportGridData('csv', initialAssessmentsData, 'Assessment')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body" style="height: 300px;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of initialAssessmentsData">
+                                    <div class="" style="width: 25%;">
+                                        <p class="">{{ item.MonthName }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{ item.TotalIPAdmission | number }}</p>
+                                    </div>
+                                    <div class="" style="width: 25%;">
+                                        <p class="">{{ item.TotalInitialAssessment | number }}</p>
+                                    </div>
+                                    <div class="" style="width: 25%;">
+                                        <p class="">{{ item.ComplianceRate | number: '1.2-2' }}%</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded h-100">
+                            <apx-chart *ngIf="newbornVitalsChartData" [series]="newbornVitalsChartData.series"
+                                [chart]="newbornVitalsChartData.chart" [xaxis]="newbornVitalsChartData.xaxis"
+                                [yaxis]="newbornVitalsChartData.yaxis" [dataLabels]="newbornVitalsChartData.dataLabels"
+                                [title]="newbornVitalsChartData.title" [tooltip]="newbornVitalsChartData.tooltip"
+                                [stroke]="newbornVitalsChartData.stroke" [colors]="newbornVitalsChartData.colors"
+                                [markers]="newbornVitalsChartData.markers"
+                                [plotOptions]="newbornVitalsChartData.plotOptions">
+                            </apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm" *ngIf="newbornVitalsData?.length">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="" style="width: 35%;">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Discharge Patients</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Readmission w/in 90 days (VTE)</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">VTE Incidence Rate</p>
+                                    </div>
+                                    <div class="d-flex" style="width: 5%;">
+                                        <div class="custom_tooltip custom_tooltip_left d-inline-flex"
+                                            (click)="exportGridData('csv', newbornVitalsData, 'VTE')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="fixed_alter_body" style="height: 300px; overflow-y: auto;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of newbornVitalsData">
+                                    <div class="" style="width: 35%;">
+                                        <p class="">{{ item.MonthName }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{ item.DischargePatients }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{ item.ReAdmissionWithIn90DaysOfVTE }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <!-- <p class="">{{ (item.VTEIncidenceRate * 100) | number:'1.2-2' }}%</p> -->
+                                         <p class="">{{ (item.VTEIncidenceRate) | number:'1.2-2' }}%</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row mt-2 mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded h-100">
+                            <apx-chart *ngIf="newbornScreeningChartData" [series]="newbornScreeningChartData.series"
+                                [chart]="newbornScreeningChartData.chart" [xaxis]="newbornScreeningChartData.xaxis"
+                                [yaxis]="newbornScreeningChartData.yaxis"
+                                [dataLabels]="newbornScreeningChartData.dataLabels"
+                                [title]="newbornScreeningChartData.title" [tooltip]="newbornScreeningChartData.tooltip"
+                                [stroke]="newbornScreeningChartData.stroke" [colors]="newbornScreeningChartData.colors"
+                                [markers]="newbornScreeningChartData.markers"
+                                [plotOptions]="newbornScreeningChartData.plotOptions">
+                            </apx-chart>
+
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm"
+                            *ngIf="newbornScreeningData?.length">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="" style="width: 35%;">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Newborn</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Newboarn Screening</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Screening Rate</p>
+                                    </div>
+                                     <div class="" style="width: 5%;">
+                                        <div class="custom_tooltip custom_tooltip_left d-inline-flex"
+                                            (click)="exportGridData('csv', newbornScreeningData, 'Newborn Screening')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="fixed_alter_body" style="height: 300px; overflow-y: auto;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of newbornScreeningData">
+                                    <div class="" style="width: 35%;">
+                                        <p class="">{{ item.MonthName }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{ item.Newboarn }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{ item.NewboarnScreening }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <!-- <p class="">{{ (item.ScreeeningRate * 100) | number:'1.2-2' }}%</p> -->
+                                          <p class="">{{ item.ScreeeningRate | number:'1.2-2' }}%</p>
+                                    </div>
+                                     <div class="" style="width: 5%;">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row mt-2 mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded h-100">
+                            <apx-chart *ngIf="preMaritalLOSChartData" [series]="preMaritalLOSChartData.series"
+                                [chart]="preMaritalLOSChartData.chart" [xaxis]="preMaritalLOSChartData.xaxis"
+                                [yaxis]="preMaritalLOSChartData.yaxis" [dataLabels]="preMaritalLOSChartData.dataLabels"
+                                [title]="preMaritalLOSChartData.title" [tooltip]="preMaritalLOSChartData.tooltip"
+                                [stroke]="preMaritalLOSChartData.stroke" [colors]="preMaritalLOSChartData.colors"
+                                [markers]="preMaritalLOSChartData.markers"
+                                [plotOptions]="preMaritalLOSChartData.plotOptions">
+                            </apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm"
+                            *ngIf="preMaritalLOSData?.length > 0">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="" style="width: 35%;">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Ob-Gyne Single Patients</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Pre-marital Screening</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Screening Rate</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                        <div class="custom_tooltip custom_tooltip_left d-inline-flex"
+                                            (click)="exportGridData('csv', preMaritalLOSData, 'Premarital Screening')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body" style="height: 300px; overflow-y: auto;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of preMaritalLOSData">
+                                    <div class="" style="width: 35%;">
+                                        <p class="">{{ item.MonthName }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{ item.TotalPatients }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{ item.PreMaritalScreening }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <!-- <p class="">{{ (+item.ScreeeningRate * 100) | number: '1.0-2' }}%</p> -->
+                                         <p class="">{{ (+item.ScreeeningRate) | number: '1.0-2' }}%</p>
+                                    </div>
+                                     <div class="" style="width: 5%;">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row mt-2 mx-0 gx-2">
+                    <div class="col-12">
+                        <div class="bg-white p-2 border shadow-sm rounded h-100">
+                            <apx-chart *ngIf="preMaritalLOSChartData2" [series]="preMaritalLOSChartData2.series"
+                                [chart]="preMaritalLOSChartData2.chart" [xaxis]="preMaritalLOSChartData2.xaxis"
+                                [yaxis]="preMaritalLOSChartData2.yaxis"
+                                [dataLabels]="preMaritalLOSChartData2.dataLabels"
+                                [title]="preMaritalLOSChartData2.title" [tooltip]="preMaritalLOSChartData2.tooltip"
+                                [stroke]="preMaritalLOSChartData2.stroke" [colors]="preMaritalLOSChartData2.colors"
+                                [markers]="preMaritalLOSChartData2.markers"
+                                [plotOptions]="preMaritalLOSChartData2.plotOptions">
+                            </apx-chart>
+
+                        </div>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <div class="bg-white p-2 border shadow-sm rounded">
+                            <h6 class="mb-2 title_clr fw-bold">AVERAGE LENGTH OF STAY - WARD WISE</h6>
+                            <!-- <apx-chart *ngIf="preMaritalLOSChartData3" [series]="preMaritalLOSChartData3.series"
+                                [chart]="preMaritalLOSChartData3.chart" [xaxis]="preMaritalLOSChartData3.xaxis"
+                                [yaxis]="preMaritalLOSChartData3.yaxis"
+                                [dataLabels]="preMaritalLOSChartData3.dataLabels"
+                                [title]="preMaritalLOSChartData3.title" [tooltip]="preMaritalLOSChartData3.tooltip"
+                                [stroke]="preMaritalLOSChartData3.stroke" [colors]="preMaritalLOSChartData3.colors"
+                                [markers]="preMaritalLOSChartData3.markers"
+                                [plotOptions]="preMaritalLOSChartData3.plotOptions">
+                            </apx-chart> -->
+                             <apx-chart *ngIf="preMaritalLOSData3" [series]="preMaritalLOSData3.series"
+                                [chart]="preMaritalLOSData3.chart" [plotOptions]="preMaritalLOSData3.plotOptions"
+                                [dataLabels]="preMaritalLOSData3.dataLabels"></apx-chart>
+                        </div>
+                        
+                    </div>
+                    <div class="col-12 mt-2">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm"
+                            *ngIf="preMaritalLOSData2?.length > 0">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div style="width: 15%;">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p class="fw-semibold">Admission Days</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p class="fw-semibold">Discharge Patients</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p class="fw-semibold">Avg. Length of Stay</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p class="fw-semibold">Bed Turnover Rate</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                        <div class="custom_tooltip custom_tooltip_left d-inline-flex"
+                                            (click)="exportGridData('csv', preMaritalLOSData2, 'Average LOS')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body" style="height: auto; overflow-y: auto;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of preMaritalLOSData2">
+                                    <div style="width: 15%;">
+                                        <p>{{ item.MonthName }}</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p>{{ item.AdmissionDays }}</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p>{{ item.TotalDischargePatients }}</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p>{{ +item.AverageLenthofStay | number: '1.0-2' }}</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p>{{ +item.BedTurnoverRate | number: '1.0-2' }}</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row mt-2 mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded h-100">
+                            <apx-chart *ngIf="surgicalReadmissionChartData"
+                                [series]="surgicalReadmissionChartData.series"
+                                [chart]="surgicalReadmissionChartData.chart"
+                                [xaxis]="surgicalReadmissionChartData.xaxis"
+                                [yaxis]="surgicalReadmissionChartData.yaxis"
+                                [dataLabels]="surgicalReadmissionChartData.dataLabels"
+                                [title]="surgicalReadmissionChartData.title"
+                                [tooltip]="surgicalReadmissionChartData.tooltip"
+                                [stroke]="surgicalReadmissionChartData.stroke"
+                                [colors]="surgicalReadmissionChartData.colors"
+                                [markers]="surgicalReadmissionChartData.markers"
+                                [plotOptions]="surgicalReadmissionChartData.plotOptions">
+                            </apx-chart>
+
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm"
+                            *ngIf="surgicalReadmissionData?.length">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="" style="width: 30%;">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Surgeries</p>
+                                    </div>
+                                    <div class="" style="width: 25%;">
+                                        <p class="fw-semibold">Readmissions</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Readmission Rate</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                        <div class="custom_tooltip custom_tooltip_left d-inline-flex"
+                                            (click)="exportGridData('csv', surgicalReadmissionData, 'Surgery')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="fixed_alter_body" style="height: 300px; overflow-y: auto;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of surgicalReadmissionData">
+                                    <div class="" style="width: 30%;">
+                                        <p>{{ item.MonthName }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p>{{ item.TotalSurgeries }}</p>
+                                    </div>
+                                    <div class="" style="width: 25%;">
+                                        <p>{{ item.TotalReAdmissionWithIn30Days }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <!-- <p>{{ (item.ReadmissionRate * 100) | number: '1.2-2' }}%</p> -->
+                                          <p>{{ (item.ReadmissionRate ) | number: '1.2-2' }}%</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row mt-2 mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded h-100">
+                            <apx-chart *ngIf="hapuChartData" [series]="hapuChartData.series"
+                                [chart]="hapuChartData.chart" [xaxis]="hapuChartData.xaxis"
+                                [yaxis]="hapuChartData.yaxis" [dataLabels]="hapuChartData.dataLabels"
+                                [title]="hapuChartData.title" [tooltip]="hapuChartData.tooltip"
+                                [stroke]="hapuChartData.stroke" [colors]="hapuChartData.colors"
+                                [markers]="hapuChartData.markers" [plotOptions]="hapuChartData.plotOptions">
+                            </apx-chart>
+
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm" *ngIf="hapuData?.length">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="" style="width: 35%;">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Admissions</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">HAPU (≥ Stage II)</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">HAPU Rate</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                        <div class="custom_tooltip custom_tooltip_left d-inline-flex"
+                                            (click)="exportGridData('csv', hapuData, 'HAPU')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="fixed_alter_body" style="height: 300px; overflow-y: auto;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of hapuData">
+                                    <div class="" style="width: 35%;">
+                                        <p>{{ item.MonthName }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p>{{ item.TotalAdmissions }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p>{{ item.HAPUgEStageII }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <!-- <p>{{ (item.HAPURate * 100) | number: '1.2-2' }}%</p> -->
+                                         <p>{{ (item.HAPURate) | number: '1.2-2' }}%</p>
+                                    </div>
+                                     <div class="" style="width: 5%;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row mt-2 mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded h-100">
+                            <apx-chart *ngIf="clabsiChartData" [series]="clabsiChartData.series"
+                                [chart]="clabsiChartData.chart" [xaxis]="clabsiChartData.xaxis"
+                                [yaxis]="clabsiChartData.yaxis" [dataLabels]="clabsiChartData.dataLabels"
+                                [title]="clabsiChartData.title" [tooltip]="clabsiChartData.tooltip"
+                                [stroke]="clabsiChartData.stroke" [colors]="clabsiChartData.colors"
+                                [markers]="clabsiChartData.markers" [plotOptions]="clabsiChartData.plotOptions">
+                            </apx-chart>
+
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm" *ngIf="clabsiData?.length > 0">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div style="width: 35%;">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p class="fw-semibold">Total Central Line Days</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p class="fw-semibold">CLABSI in Critical Care</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p class="fw-semibold">CLABSI Rate</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                        <div class="custom_tooltip custom_tooltip_left d-inline-flex"
+                                            (click)="exportGridData('csv', clabsiData, 'CLABSI')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body" style="height: 300px; overflow-y: auto;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of clabsiData">
+                                    <div style="width: 35%;">
+                                        <p>{{ item.MonthName }}</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p>{{ item.TotalCentrallinedays }}</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p>{{ item.CLABSIInCriticalCare }}</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <!-- <p>{{ (item.CLABSIRate * 100) | number:'1.2-2' }}%</p> -->
+                                         <p>{{ (item.CLABSIRate) | number:'1.2-2' }}%</p>
+                                    </div>
+                                     <div class="" style="width: 5%;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row mt-2 mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded h-100">
+                            <apx-chart *ngIf="acuteMIChartData" [series]="acuteMIChartData.series"
+                                [chart]="acuteMIChartData.chart" [xaxis]="acuteMIChartData.xaxis"
+                                [yaxis]="acuteMIChartData.yaxis" [dataLabels]="acuteMIChartData.dataLabels"
+                                [title]="acuteMIChartData.title" [tooltip]="acuteMIChartData.tooltip"
+                                [stroke]="acuteMIChartData.stroke" [colors]="acuteMIChartData.colors"
+                                [markers]="acuteMIChartData.markers" [plotOptions]="acuteMIChartData.plotOptions">
+                            </apx-chart>
+
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="" style="width: 35%;">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Acute MI Admission</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Acute MI Deaths</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Mortality Rate Rate</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                        <div class="custom_tooltip custom_tooltip_left d-inline-flex"
+                                            (click)="exportGridData('csv', getMortalityDataForGrid('1'), 'Acute')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body" style="height: 300px;">
+                                <div class="row gx-2 p-2 mx-0 alter_div"
+                                    *ngFor="let item of getMortalityDataForGrid('1')">
+                                    <div class="" style="width: 35%;">
+                                        <p class="">{{item.MonthName}}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{item.TotalMortality || 0 | number}}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{item.TotalMortalityDeaths || 0 | number}}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{item.MortalityDeathsRate || 0 | number:'1.2-2'}}%</p>
+                                    </div>
+                                     <div class="" style="width: 5%;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded h-100">
+                            <apx-chart *ngIf="strokeChartData" [series]="strokeChartData.series"
+                                [chart]="strokeChartData.chart" [xaxis]="strokeChartData.xaxis"
+                                [yaxis]="strokeChartData.yaxis" [dataLabels]="strokeChartData.dataLabels"
+                                [title]="strokeChartData.title" [tooltip]="strokeChartData.tooltip"
+                                [stroke]="strokeChartData.stroke" [colors]="strokeChartData.colors"
+                                [markers]="strokeChartData.markers" [plotOptions]="strokeChartData.plotOptions"
+                                [legend]="strokeChartData.legend">
+                            </apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="" style="width: 35%;">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Stroke Patients</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Stroke Deaths</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Mortality Rate</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                        <div class="custom_tooltip custom_tooltip_left d-inline-flex"
+                                            (click)="exportGridData('csv', getMortalityDataForGrid('4'), 'Stroke')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body" style="height: 300px;">
+                                <div class="row gx-2 p-2 mx-0 alter_div"
+                                    *ngFor="let item of getMortalityDataForGrid('4')">
+                                    <div class="" style="width: 35%;">
+                                        <p class="">{{item.MonthName}}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{item.TotalMortality || 0 | number}}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{item.TotalMortalityDeaths || 0 | number}}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{item.MortalityDeathsRate || 0 | number:'1.2-2'}}%</p>
+                                    </div>
+                                     <div class="" style="width: 5%;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded h-100">
+                            <apx-chart [series]="communityPneumoniaChartData?.series"
+                                [chart]="communityPneumoniaChartData?.chart"
+                                [xaxis]="communityPneumoniaChartData?.xaxis"
+                                [yaxis]="communityPneumoniaChartData?.yaxis"
+                                [stroke]="communityPneumoniaChartData?.stroke"
+                                [colors]="communityPneumoniaChartData?.colors"
+                                [dataLabels]="communityPneumoniaChartData?.dataLabels"
+                                [plotOptions]="communityPneumoniaChartData?.plotOptions"
+                                [title]="communityPneumoniaChartData?.title"
+                                [tooltip]="communityPneumoniaChartData?.tooltip"
+                                [legend]="communityPneumoniaChartData?.legend"
+                                [markers]="communityPneumoniaChartData?.markers" height="300">
+                            </apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="" style="width: 35%;">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Community Acquired Pneumonia</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Community Acquired Pneumonia Deaths</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="fw-semibold">Mortality Rate</p>
+                                    </div>
+                                     <div class="" style="width: 5%;">
+                                        <div class="custom_tooltip custom_tooltip_left d-inline-flex"
+                                            (click)="exportGridData('csv', mortalityData['2']?.data, 'Community')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="fixed_alter_body" style="height: 300px; overflow-y: auto;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of mortalityData['2']?.data">
+
+                                    <div class="" style="width: 35%;">
+                                        <p class="">{{ item.MonthName }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{ item.TotalMortality }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{ item.TotalMortalityDeaths }}</p>
+                                    </div>
+                                    <div class="" style="width: 20%;">
+                                        <p class="">{{ item.MortalityDeathsRate || 0 | number:'1.2-2'}}%</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded h-100">
+                            <apx-chart *ngIf="maternalDeathChartData" [series]="maternalDeathChartData.series"
+                                [chart]="maternalDeathChartData.chart" [xaxis]="maternalDeathChartData.xaxis"
+                                [yaxis]="maternalDeathChartData.yaxis" [dataLabels]="maternalDeathChartData.dataLabels"
+                                [title]="maternalDeathChartData.title" [tooltip]="maternalDeathChartData.tooltip"
+                                [stroke]="maternalDeathChartData.stroke" [colors]="maternalDeathChartData.colors"
+                                [markers]="maternalDeathChartData.markers"
+                                [plotOptions]="maternalDeathChartData.plotOptions"
+                                [legend]="maternalDeathChartData.legend">
+                            </apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div style="width: 35%;">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p class="fw-semibold">Delivery</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p class="fw-semibold">Maternal Deaths</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p class="fw-semibold">Mortality Rate</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                        <div class="custom_tooltip custom_tooltip_left d-inline-flex"
+                                            (click)="exportGridData('csv', mortalityData['6']?.data, 'Maternal Deaths')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body" style="height: 300px; overflow-y: auto;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of mortalityData['6']?.data">
+                                    <div style="width: 35%;">
+                                        <p>{{ item.MonthName }}</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p>{{ item.TotalMortality || 0 }}</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p>{{ item.TotalMortalityDeaths || 0 }}</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p>{{ item.MortalityDeathsRate ? (item.MortalityDeathsRate | number:'1.0-2') +
+                                            '%' : '0.00%' }}</p>
+                                    </div>
+                                     <div class="" style="width: 5%;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row mt-2 mx-0 gx-2">
+                    <div class="col-8">
+                        <div class="bg-white p-2 border shadow-sm rounded h-100">
+                            <apx-chart *ngIf="infantDeathChartData" [series]="infantDeathChartData.series"
+                                [chart]="infantDeathChartData.chart" [xaxis]="infantDeathChartData.xaxis"
+                                [yaxis]="infantDeathChartData.yaxis" [dataLabels]="infantDeathChartData.dataLabels"
+                                [title]="infantDeathChartData.title" [tooltip]="infantDeathChartData.tooltip"
+                                [stroke]="infantDeathChartData.stroke" [colors]="infantDeathChartData.colors"
+                                [markers]="infantDeathChartData.markers"
+                                [plotOptions]="infantDeathChartData.plotOptions" [legend]="infantDeathChartData.legend">
+                            </apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div style="width: 35%;">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p class="fw-semibold">Live Births</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p class="fw-semibold">Infant Deaths</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p class="fw-semibold">Mortality Rate</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                        <div class="custom_tooltip custom_tooltip_left d-inline-flex"
+                                            (click)="exportGridData('csv', mortalityData['5']?.data, 'InFANT Deaths')">
+                                            <svg width="15" height="15"
+                                                class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 576 512">
+                                                <path fill="#8967B3"
+                                                    d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                </path>
+                                            </svg>
+                                            <div class="tooltip">
+                                                <p class="m-0">Export</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body" style="height: 300px; overflow-y: auto;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of mortalityData['5']?.data">
+                                    <div style="width: 35%;">
+                                        <p>{{ item.MonthName }}</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p>{{ item.TotalMortality || 0 }}</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p>{{ item.TotalMortalityDeaths || 0 }}</p>
+                                    </div>
+                                    <div style="width: 20%;">
+                                        <p>{{ item.MortalityDeathsRate ? (item.MortalityDeathsRate | number:'1.0-2') +
+                                            '%' : '0.00%' }}</p>
+                                    </div>
+                                    <div class="" style="width: 5%;">
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="errorMsg" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+                    <div class="modal-content">
+                        <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+                        <div class="modal-body">
+                            <p>{{ errorMsg }}</p>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-main-outline" data-bs-dismiss="modal">Ok</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>

@@ -1,0 +1,586 @@
+<header class="header sticky-top">
+  <div class="header__wrapper">
+    <div class="header__hospital-logo">
+      <img src="assets/images/AHH-Logo.png" alt="Al Hammadi Hospital" />
+    </div>
+    <div class="header__container justify-content-between">
+      <div class="d-flex align-items-center gap-3">
+        <div
+          class="header__details-card cursor-pointer"
+          (click)="getEmployeeInfo(0)"
+        >
+          <div class="__photo user-photo">
+            <img src="assets/images/user-photo.png" class="w-100" alt="" />
+          </div>
+          <div class="user-details">
+            <p class="label-heading">{{ doctorDetails[0].EmployeeName }}</p>
+            <p>{{ doctorDetails[0].EmpSpecialisation }}</p>
+          </div>
+        </div>
+
+        <div class="header__details-card ms-2 d-none d-lg-flex">
+          <div class="__photo">
+            <img src="assets/images/icons/icon-loaction.svg" alt="" />
+          </div>
+          <div class="user-details">
+            <p class="label-heading">{{ langData?.common?.location }}:</p>
+            <p>{{ location }}</p>
+          </div>
+        </div>
+        <div
+          *ngIf="ward?.FacilityName"
+          class="header__details-card ms-2 d-none d-xl-flex"
+        >
+          <div class="__photo">
+            <img src="assets/images/icons/icon-facility.svg" alt="" />
+          </div>
+          <div class="user-details">
+            <p class="label-heading">{{ langData?.common?.Facility }}</p>
+            <p>{{ ward?.FacilityName }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="header__actions">
+        <!-- Date & Timer -->
+        <div class="date-time">
+          <!-- <span>
+                       <svg width="25" height="28" viewBox="0 0 25 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                           <path d="M20.3123 2.28119H18.7497V1.50013C18.7497 1.06853 18.3999 0.718805 17.9686 0.718805C17.537 0.718805 17.1873 1.06853 17.1873 1.50013V2.28119H7.81245V1.50013C7.81245 1.06853 7.46272 0.718805 7.03112 0.718805C6.59979 0.718805 6.25007 1.06853 6.25007 1.50013V2.28119H4.68742C3.44445 2.28119 2.25217 2.77504 1.37301 3.6542C0.493853 4.53336 0 5.72564 0 6.96861V22.5938C0 23.8367 0.493853 25.029 1.37301 25.9082C2.25217 26.7873 3.44445 27.2812 4.68742 27.2812H20.3126C21.5556 27.2812 22.7478 26.7873 23.627 25.9082C24.5061 25.029 25 23.8367 25 22.5938V6.96861C25 5.72564 24.5061 4.53336 23.627 3.6542C22.7478 2.77504 21.5556 2.28119 20.3126 2.28119H20.3123ZM12.4997 22.5938C10.4278 22.5938 8.44063 21.7706 6.97554 20.3055C5.51046 18.8404 4.68728 16.8532 4.68728 14.7813C4.68728 12.7094 5.51046 10.7222 6.97554 9.25714C8.44063 7.79205 10.4278 6.96887 12.4997 6.96887C14.5716 6.96887 16.5588 7.79205 18.0239 9.25714C19.489 10.7222 20.3122 12.7094 20.3122 14.7813C20.3122 16.8532 19.489 18.8404 18.0239 20.3055C16.5588 21.7706 14.5716 22.5938 12.4997 22.5938V22.5938ZM16.4058 14.7812C16.4058 14.9884 16.3234 15.1869 16.1769 15.3336C16.0305 15.4801 15.8317 15.5623 15.6245 15.5623H12.5005L12.4997 15.5625C12.0684 15.5625 11.7184 15.2125 11.7184 14.7812V10.8748C11.7184 10.4435 12.0684 10.0938 12.4997 10.0938C12.9313 10.0938 13.2811 10.4435 13.2811 10.8751V13.9999H15.6248C16.0561 13.9999 16.4058 14.3496 16.4058 14.7812H16.4058Z" fill="#368796"></path>
+                       </svg>
+                   </span> -->
+          <div class="details">
+            <!-- <p class="label-heading">{{langData?.insurancestatus?.date}} |
+                        {{langData?.common?.Time}}</p>
+                    <p>{{currentdate}}</p> -->
+
+            <div
+              class="d-flex align-items-center justify-content-end gap-2 m-0"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 16 17"
+                fill="none"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M14.0289 2.30655H13.3047V2.13813C13.3047 1.36339 12.6816 0.740234 11.9068 0.740234C11.1321 0.740234 10.5089 1.36339 10.5089 2.13813V2.30655H9.41419V2.13813C9.41419 1.36339 8.79103 0.740234 8.0163 0.740234C7.24156 0.740234 6.6184 1.36339 6.6184 2.13813V2.30655H5.52366V2.13813C5.52366 1.36339 4.90051 0.740234 4.12577 0.740234C3.35103 0.740234 2.72788 1.36339 2.72788 2.13813V2.30655H2.00366C1.06051 2.30655 0.302612 3.06445 0.302612 4.0076V15.0392C0.302612 15.9823 1.06051 16.7402 2.00366 16.7402H13.9952C14.9384 16.7402 15.6963 15.9823 15.6963 15.0392V4.02445C15.73 3.08129 14.9721 2.30655 14.0289 2.30655ZM11.4016 2.15497C11.4016 1.86866 11.6373 1.64971 11.9068 1.64971C12.1931 1.64971 12.4121 1.8855 12.4121 2.15497V3.3676C12.4121 3.65392 12.1763 3.87287 11.9068 3.87287C11.6205 3.87287 11.4016 3.63708 11.4016 3.3676V2.15497ZM7.52788 2.15497C7.52788 1.86866 7.76366 1.64971 8.03314 1.64971C8.31945 1.64971 8.5384 1.8855 8.5384 2.15497V3.3676C8.5384 3.65392 8.30261 3.87287 8.03314 3.87287C7.74682 3.87287 7.52788 3.63708 7.52788 3.3676V2.15497ZM3.63735 2.15497C3.63735 1.86866 3.87314 1.64971 4.14261 1.64971C4.42893 1.64971 4.64788 1.8855 4.64788 2.15497V3.3676C4.64788 3.65392 4.41209 3.87287 4.14261 3.87287C3.8563 3.87287 3.63735 3.63708 3.63735 3.3676V2.15497ZM14.8542 15.056C14.8542 15.5108 14.4837 15.8813 14.0289 15.8813H2.03735C1.58261 15.8813 1.21209 15.5108 1.21209 15.056V6.12971H14.8373V15.056H14.8542ZM11.149 14.0623C11.2669 14.1802 11.4016 14.2308 11.5532 14.2308C11.7048 14.2308 11.8395 14.1802 11.9574 14.0623L13.5069 12.5129C13.7258 12.2939 13.7258 11.9234 13.5069 11.7044C13.2879 11.4855 12.9174 11.4855 12.6985 11.7044L11.5532 12.8497L11.1321 12.4287C10.9132 12.2097 10.5427 12.2097 10.3237 12.4287C10.1048 12.6476 10.1048 13.0181 10.3237 13.2371L11.149 14.0623ZM5.10259 10.4581H3.36785C3.13206 10.4581 2.92996 10.256 2.92996 10.0202V8.26866C2.92996 8.03287 3.13206 7.83076 3.36785 7.83076H5.10259C5.33838 7.83076 5.54048 8.03287 5.54048 8.26866V10.0202C5.54048 10.256 5.33838 10.4581 5.10259 10.4581ZM7.1743 10.4581H8.90904C9.14483 10.4581 9.34693 10.256 9.34693 10.0202V8.26866C9.34693 8.03287 9.14483 7.83076 8.90904 7.83076H7.1743C6.93851 7.83076 6.73641 8.03287 6.73641 8.26866V10.0202C6.71956 10.256 6.92167 10.4581 7.1743 10.4581ZM12.6984 10.4581H10.9637C10.7279 10.4581 10.5258 10.256 10.5258 10.0202V8.26866C10.5258 8.03287 10.7279 7.83076 10.9637 7.83076H12.6984C12.9342 7.83076 13.1363 8.03287 13.1363 8.26866V10.0202C13.1363 10.256 12.9342 10.4581 12.6984 10.4581ZM3.36785 14.1971H5.10259C5.33838 14.1971 5.54048 13.995 5.54048 13.7592V12.0076C5.54048 11.7718 5.33838 11.5697 5.10259 11.5697H3.36785C3.13206 11.5697 2.92996 11.7718 2.92996 12.0076V13.7592C2.92996 13.995 3.13206 14.1971 3.36785 14.1971ZM8.90904 14.1971H7.1743C6.92167 14.1971 6.71956 13.995 6.73641 13.7592V12.0076C6.73641 11.7718 6.93851 11.5697 7.1743 11.5697H8.90904C9.14483 11.5697 9.34693 11.7718 9.34693 12.0076V13.7592C9.34693 13.995 9.14483 14.1971 8.90904 14.1971Z"
+                  fill="#368796"
+                />
+              </svg>
+              <p class="m-0 fs-7 mt-1 me-2 text-nowrap">{{ currentdateN }}</p>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 16 17"
+                fill="none"
+              >
+                <path
+                  d="M10.6374 10.7638H7.64835C7.15604 10.7638 6.76923 10.377 6.76923 9.88467V5.31324C6.76923 4.82093 7.15604 4.43412 7.64835 4.43412C8.14066 4.43412 8.52747 4.82093 8.52747 5.31324V9.00555H10.6374C11.1297 9.00555 11.5165 9.39236 11.5165 9.88467C11.5165 10.377 11.1297 10.7638 10.6374 10.7638Z"
+                  fill="#368796"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M16 8.98132C16 13.3945 12.4132 16.9813 8 16.9813C3.58681 16.9813 0 13.3945 0 8.98132C0 4.56814 3.58681 0.981323 8 0.981323C12.4132 0.981323 16 4.56814 16 8.98132ZM14.2418 8.98132C14.2418 5.53517 11.4462 2.73956 8 2.73956C4.55385 2.73956 1.75824 5.53517 1.75824 8.98132C1.75824 12.4275 4.55385 15.2231 8 15.2231C11.4462 15.2231 14.2418 12.4275 14.2418 8.98132Z"
+                  fill="#368796"
+                />
+              </svg>
+              <p class="m-0 fs-7 mt-1" style="width: 3rem">
+                {{ currentTimeN | date : "HH:mm:ss" }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <button class="custom_tooltip" (click)="GoBackToHome()">
+          <img src="assets/images/icons/icon-home.svg" alt="" />
+          <div class="tooltip">
+            <p>{{ langData?.common?.Home }}</p>
+          </div>
+        </button>
+        <app-alert [PatientID]="patientID" *ngIf="patientID"></app-alert>
+        <button class="custom_tooltip" (click)="onLogout()">
+          <img src="assets/images/icons/icon-log-out.svg" alt="" />
+          <div class="tooltip">
+            <p>{{ langData?.common?.Logout }}</p>
+          </div>
+        </button>
+      </div>
+    </div>
+    <div
+      class="header__menu ms-auto"
+      *ngIf="IsSwitch"
+      (click)="openFacilityMenu()"
+    >
+      <button class="">
+        <img src="assets/images/icons/icon-menu.svg" alt="" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Main Menu-->
+<div
+  class="modal fade facilityMenu"
+  id="facilityMenu"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollabel">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          {{ langData?.common?.Facility }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body m-4">
+        <div class="d-flex align-items-center">
+          <label for="" class="form-label mb-0 px-2">{{
+            langData?.common?.Facility
+          }}</label>
+          <select
+            name=""
+            id=""
+            class="form-select"
+            [(ngModel)]="wardID"
+            (change)="onFacilitySelectChange($event)"
+          >
+            <option
+              value="{{ item.FacilityID }}"
+              [selected]="item.FacilityID == selectedFacilityId"
+              *ngFor="let item of FetchUserFacilityDataList; let i = index"
+            >
+              {{ item.FacilityName }}
+            </option>
+          </select>
+          <button
+            type="button"
+            class="btn btn-main-outline m-2"
+            (click)="selectFacility()"
+            translate
+          >
+            {{ langData?.common?.Switch }}
+          </button>
+        </div>
+        <div
+          class="accordion accordion-menu mt-4 facilityList_height"
+          id="facilityList"
+        >
+          <div class="accordion-item">
+            <h2 class="accordion-header mb-0" id="facilityName2">
+              <button
+                class="accordion-button collapsed rounded-0 rounded-top"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#ficility2"
+                aria-expanded="false"
+                aria-controls="ficility2"
+              >
+                Quick Links
+              </button>
+            </h2>
+            <div class="border">
+              <div
+                class="block p-3 cursor-pointer"
+                data-bs-dismiss="modal"
+                (click)="redirecttourl(fav.URL, fav.KPIAccessID)"
+                *ngFor="let fav of favouritesList"
+              >
+                <div class="d-flex align-items-center">
+                  <p class="clr-primary-600 m-0">{{ fav.FeatureName }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal quick_info"
+  data-bs-backdrop="static"
+  id="doctorlist_modal"
+  tab-index="-1"
+>
+  <div class="modal-dialog modal-dialog-scrollabel">
+    <div class="modal-content h-100 overflow-auto">
+      <div class="modal-header">
+        <h5 class="modal-title">Profile</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          (click)="clearEmployeeInfo()"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body d-flex flex-column justify-content-between p-0">
+        <div class="">
+          <div class="profile_bg">
+            <div class="patient-info text-center pb-2">
+              <div class="patient-photo mx-auto">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="40"
+                  height="40"
+                  viewBox="0 0 19 20"
+                  fill="none"
+                  class="position-relative"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M4.24204 5.40194C4.24204 2.70966 6.60054 0.519531 9.49993 0.519531C12.3993 0.519531 14.758 2.70961 14.758 5.40195C14.758 5.70065 14.7216 6.00638 14.6439 6.35817C14.719 6.59977 14.7581 6.8699 14.7581 7.14592C14.7581 8.11756 14.2953 8.85552 13.6756 8.88894C12.9937 10.9892 11.3501 12.3771 9.50002 12.3771C7.64999 12.3771 6.00646 10.9891 5.32431 8.88894C4.70462 8.85543 4.24199 8.11756 4.24199 7.14592C4.24199 6.86916 4.28127 6.59844 4.35627 6.3563C4.27831 6.00529 4.24204 5.70009 4.24204 5.40194ZM5.03243 6.73058C5.00643 6.8621 4.99309 7.00236 4.99309 7.14592C4.99309 7.82108 5.27477 8.19217 5.3687 8.19217C5.47081 8.13355 5.60825 8.11475 5.7203 8.15726C5.83146 8.19906 5.92615 8.27998 5.95545 8.38811C6.48108 10.3572 7.90531 11.6796 9.50009 11.6796C11.0949 11.6796 12.5189 10.3572 13.0447 8.38811C13.074 8.27998 13.1567 8.19077 13.2678 8.14885C13.379 8.10705 13.506 8.11744 13.6073 8.17606C13.7366 8.19147 14.007 7.82039 14.007 7.14592C14.007 7.00736 13.9945 6.87187 13.9703 6.74435L13.2866 6.7963C13.276 6.797 13.2656 6.797 13.2558 6.797C13.1085 6.797 12.9734 6.71678 12.9134 6.58916C12.899 6.55983 12.6226 5.97683 12.5332 5.39087C10.9587 5.29596 9.3302 4.58038 8.52052 3.8382C8.22161 4.3216 7.57414 4.7045 6.27539 4.7045H6.21831C6.11381 4.92834 6.06652 5.63222 6.1123 6.32828C6.12651 6.36588 6.13481 6.4057 6.13481 6.4482C6.13481 6.64356 5.95689 6.79979 5.75179 6.79699C5.72852 6.79769 5.70979 6.79629 5.68791 6.79349C5.67573 6.79182 5.36674 6.74943 5.03243 6.73058Z"
+                    fill="#0885CA"
+                  ></path>
+                  <path
+                    d="M15.2349 12.1162L13.303 11.4919C13.1618 11.4466 13.0048 11.4835 12.9026 11.5853C11.9554 12.5458 10.7469 13.0745 9.49991 13.0745C8.25296 13.0745 7.04442 12.5457 6.09724 11.586C5.99589 11.4842 5.83883 11.4472 5.69684 11.4926L3.76494 12.1169C1.80362 12.7494 0.486206 14.4702 0.486206 16.3987V18.1984C0.486206 18.3909 0.65446 18.5471 0.86182 18.5471C6.54738 19.8454 12.4526 19.8453 18.1382 18.5471C18.3456 18.5471 18.5138 18.3909 18.5138 18.1984V16.3987C18.5137 14.4702 17.1963 12.7496 15.2349 12.1162Z"
+                    fill="#0885CA"
+                  ></path>
+                </svg>
+              </div>
+              <p class="mt-2 text-center fs-6 clr-primary-600">
+                {{ employeeInfo?.Title }} {{ employeeInfo?.FullName }}
+              </p>
+              <p class="my-1">{{ employeeInfo?.Department }}</p>
+            </div>
+          </div>
+
+          <div class="m-2 p-2">
+            <div
+              class="custom_check d-flex align-items-center justify-content-end gap-1 mb-1"
+              [class.active]="isChangePassword"
+              (click)="isChangePassword = !isChangePassword"
+            >
+              <svg
+                width="16"
+                height="16"
+                style="min-width: 1rem"
+                viewBox="0 0 20 21"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="check_svg"
+              >
+                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                <path
+                  d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                  fill="white"
+                  stroke="white"
+                  stroke-width="0.25"
+                ></path>
+              </svg>
+              <p class="m-0 fs-7">Change Password</p>
+            </div>
+
+            <div
+              class="d-flex align-items-center justify-content-center gap-2 w-100"
+            >
+              <div
+                class="border-primary-200 p-2 rounded-2 d-flex align-items-center justify-content-center w-100 my-1"
+              >
+                <div
+                  class="d-flex align-items-center justify-content-center w-100 gap-1 border-end-primary-200"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 39 40"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      opacity="0.5"
+                      d="M19.2563 22.2738C19.911 22.2738 20.5592 22.1455 21.164 21.8962C21.7688 21.6468 22.3184 21.2814 22.7813 20.8207C23.2442 20.36 23.6114 19.8131 23.8619 19.2112C24.1124 18.6092 24.2413 17.9641 24.2413 17.3126C24.2413 16.6611 24.1124 16.0159 23.8619 15.414C23.6114 14.8121 23.2442 14.2651 22.7813 13.8044C22.3184 13.3437 21.7688 12.9783 21.164 12.729C20.5592 12.4796 19.911 12.3513 19.2563 12.3513C17.9342 12.3513 16.6663 12.874 15.7314 13.8044C14.7966 14.7349 14.2714 15.9968 14.2714 17.3126C14.2714 18.6284 14.7966 19.8903 15.7314 20.8207C16.6663 21.7511 17.9342 22.2738 19.2563 22.2738Z"
+                      fill="#368796"
+                      stroke="#368796"
+                      stroke-width="3.58637"
+                      stroke-miterlimit="10"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M5.86723 14.4186C9.0148 0.647898 29.514 0.6638 32.6456 14.4345C34.483 22.5124 29.4341 29.35 25.0083 33.5798C23.4618 35.0643 21.397 35.8938 19.2484 35.8938C17.0998 35.8938 15.035 35.0643 13.4885 33.5798C9.07872 29.35 4.02982 22.4965 5.86723 14.4186Z"
+                      stroke="#368796"
+                      stroke-width="3.58637"
+                      stroke-miterlimit="10"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <p>{{ employeeInfo?.Hospital }}</p>
+                </div>
+                <div
+                  class="d-flex align-items-center justify-content-center w-100 gap-1"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 39 38"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M16.5042 2.35381C17.5928 0.158591 20.7381 0.158592 21.8267 2.35382L25.4524 9.66538C25.8847 10.5371 26.7203 11.1413 27.6869 11.2811L35.7943 12.4536C38.2285 12.8056 39.2004 15.7827 37.439 17.4914L31.5725 23.1827C30.873 23.8612 30.5539 24.8389 30.719 25.797L32.1039 33.8332C32.5197 36.2459 29.9751 38.0859 27.7979 36.9467L20.5464 33.1526C19.6819 32.7002 18.649 32.7002 17.7845 33.1526L10.533 36.9467C8.35582 38.0859 5.81123 36.2459 6.22703 33.8332L7.61194 25.797C7.77705 24.8389 7.45788 23.8612 6.75844 23.1827L0.891882 17.4914C-0.869493 15.7827 0.102457 12.8056 2.53662 12.4536L10.644 11.2811C11.6106 11.1413 12.4462 10.5371 12.8785 9.66538L16.5042 2.35381Z"
+                      fill="#F7BF08"
+                    />
+                  </svg>
+                  <p>{{ employeeInfo?.Rating }}</p>
+                </div>
+              </div>
+            </div>
+            <div
+              class="border-primary-200 p-2 rounded-2 d-flex align-items-center ustify-content-between w-100 my-1"
+            >
+              <div class="d-flex align-items-center w-100 gap-1">
+                <span class="fs-7 fw-bold clr-primary-600">Nationality :</span>
+                <p>{{ employeeInfo?.Nationality }}</p>
+              </div>
+              <div class="d-flex align-items-center w-100 gap-1">
+                <span class="fs-7 fw-bold clr-primary-600">Mobile No :</span>
+                <p>{{ employeeInfo?.PermMobile }}</p>
+              </div>
+            </div>
+            <div
+              class="border-primary-200 p-2 rounded-2 d-flex align-items-center w-100 my-1"
+            >
+              <div class="d-flex align-items-center gap-1">
+                <span class="fs-7 fw-bold clr-primary-600">Address :</span>
+                <p>
+                  {{ employeeInfo?.PermCountry }} | {{ employeeInfo?.PermCity }}
+                </p>
+              </div>
+              <div class="d-flex align-items-center gap-1 px-3">
+                <span class="fs-7 fw-bold clr-primary-600">Emp No :</span>
+                <p>{{ employeeInfo?.EmpNo }}</p>
+              </div>
+            </div>
+            <!-- <div class="mt-3">
+                            <label for="" class="form-label"></label>
+                        </div> -->
+            <form [formGroup]="changePwdForm">
+              <div
+                class="border-primary-200 p-3 rounded"
+                *ngIf="isChangePassword"
+              >
+                <div class="text-danger" *ngIf="showPasswordValidationMsg">
+                  {{ changePwdValidationMSg }}
+                </div>
+                <div class="left align-items-start">
+                  <div class="align-items-end w-100">
+                    <div class="row g-2 gx-5">
+                      <div class="col-md-12">
+                        <div class="d-flex align-items-center afterlabel">
+                          <label for="" class="form-label w-50 me-2"
+                            >UserName</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            formControlName="UserName"
+                            readonly
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="d-flex align-items-center afterlabel">
+                          <label for="" class="form-label w-50 me-2"
+                            >Old Password</label
+                          >
+                          <input
+                            type="password"
+                            class="form-control"
+                            formControlName="OldPassword"
+                            autofocus
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="d-flex align-items-center">
+                          <label for="" class="form-label w-50 me-2"
+                            >New Password</label
+                          >
+                          <input
+                            type="password"
+                            class="form-control"
+                            formControlName="NewPassword"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="d-flex align-items-center">
+                          <label for="" class="form-label w-50 me-2"
+                            >Confirm Password</label
+                          >
+                          <input
+                            type="password"
+                            class="form-control"
+                            formControlName="ConfirmPassword"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center mt-2">
+                  <div class="actions ms-auto d-flex gap-2">
+                    <button
+                      class="btn btn-main-outline"
+                      (click)="updatePassword()"
+                    >
+                      Update
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <form [formGroup]="employeeSignInfoForm">
+          <div class="border-top p-3 px-4">
+            <img id="imgFinal" style="display: none" src="" alt="" />
+            <div class="signature_box left active align-items-start">
+              <!-- <div class="d-inline-flex align-items-center justify-content-end gap-2 label_line">
+                                <p class="m-0">Add Signature</p>
+                                <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 10 10" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="0.747803" y="0.0947266" width="9" height="9" rx="4.5" fill="#DAEEF1" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M5.24789 2.09473C5.05065 2.09473 4.89075 2.25463 4.89075 2.45187V4.23747H3.10495C2.9077 4.23747 2.7478 4.39737 2.7478 4.59461C2.7478 4.79185 2.9077 4.95175 3.10495 4.95175H4.89075V6.73758C4.89075 6.93483 5.05065 7.09473 5.24789 7.09473C5.44513 7.09473 5.60503 6.93483 5.60503 6.73758V4.95175H7.39066C7.5879 4.95175 7.7478 4.79185 7.7478 4.59461C7.7478 4.39737 7.5879 4.23747 7.39066 4.23747H5.60503V2.45187C5.60503 2.25462 5.44513 2.09473 5.24789 2.09473Z"
+                                        fill="#368796" />
+                                </svg>
+                            </div> -->
+              <div class="d-flex align-items-end w-100">
+                <div class="position-relative me-auto">
+                  <!-- <canvas width="200" height="90"></canvas> -->
+                  <app-signature
+                    *ngIf="showSignature"
+                    (base64Signature)="base64Relative1Signature($event)"
+                    [imageToDisplay]="base64StringSig1"
+                  ></app-signature>
+                  <svg
+                    (click)="clearSignature()"
+                    class="delicon cursor-pointer"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 22 22"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M19.2499 6.16919H19.1765C14.3274 5.68335 9.48736 5.50002 4.6932 5.98585L2.82319 6.16919C2.73223 6.17868 2.64028 6.17004 2.55267 6.14378C2.46506 6.11752 2.38353 6.07416 2.31278 6.01619C2.24203 5.95823 2.18347 5.88682 2.14049 5.80609C2.09751 5.72536 2.07095 5.63691 2.06236 5.54585C2.02569 5.16085 2.3007 4.83085 2.67653 4.79419L4.54653 4.61085C9.4232 4.11585 14.364 4.30835 19.314 4.79419C19.6899 4.83085 19.9649 5.17002 19.9282 5.54585C19.9144 5.71606 19.8368 5.87478 19.7111 5.99033C19.5853 6.10588 19.4206 6.16975 19.2499 6.16919Z"
+                      fill="#EB6247"
+                    />
+                    <path
+                      d="M7.79186 5.24331C7.75519 5.24331 7.71852 5.24331 7.67269 5.23415C7.49484 5.2021 7.33666 5.10158 7.23211 4.95418C7.12756 4.80678 7.08498 4.62426 7.11353 4.44581L7.31519 3.24498C7.46186 2.36498 7.66352 1.14581 9.79936 1.14581H12.201C14.346 1.14581 14.5477 2.41081 14.6852 3.25415L14.8869 4.44581C14.951 4.82165 14.6944 5.17915 14.3277 5.23415C13.9519 5.29831 13.5944 5.04165 13.5394 4.67498L13.3377 3.48331C13.2094 2.68581 13.1819 2.52998 12.2102 2.52998H9.80852C8.83686 2.52998 8.81853 2.65831 8.68103 3.47415L8.47019 4.66581C8.44408 4.82693 8.3615 4.97349 8.23722 5.0793C8.11294 5.1851 7.95507 5.24324 7.79186 5.24331ZM13.9427 20.856H8.05769C4.85852 20.856 4.73019 19.0868 4.62936 17.6568L4.03353 8.42598C4.00603 8.05015 4.29936 7.72015 4.67519 7.69265C5.06019 7.67431 5.38103 7.95848 5.40853 8.33431L6.00436 17.5651C6.10519 18.9585 6.14186 19.481 8.05769 19.481H13.9427C15.8677 19.481 15.9044 18.9585 15.996 17.5651L16.5919 8.33431C16.6194 7.95848 16.9494 7.67431 17.3252 7.69265C17.701 7.72015 17.9944 8.04098 17.9669 8.42598L17.371 17.6568C17.2702 19.0868 17.1419 20.856 13.9427 20.856Z"
+                      fill="#EB6247"
+                    />
+                    <path
+                      d="M12.5218 15.8125H9.46933C9.0935 15.8125 8.78183 15.5008 8.78183 15.125C8.78183 14.7491 9.0935 14.4375 9.46933 14.4375H12.5218C12.8977 14.4375 13.2093 14.7491 13.2093 15.125C13.2093 15.5008 12.8977 15.8125 12.5218 15.8125ZM13.2918 12.1458H8.7085C8.33266 12.1458 8.021 11.8341 8.021 11.4583C8.021 11.0825 8.33266 10.7708 8.7085 10.7708H13.2918C13.6677 10.7708 13.9793 11.0825 13.9793 11.4583C13.9793 11.8341 13.6677 12.1458 13.2918 12.1458Z"
+                      fill="#EB6247"
+                    />
+                  </svg>
+                </div>
+                <button
+                  class="btn btn-main-outline"
+                  (click)="updateDoctorSignature()"
+                >
+                  Update
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="doctorSignatureSavedMsg" tabindex="-1">
+  <div
+    class="modal-dialog modal-dialog-centered modal-toast modal-toast-success"
+  >
+    <div class="modal-content">
+      <img
+        class="modal-header-icon"
+        src="assets/images/icons/toast-success.svg"
+        alt=""
+      />
+      <div class="modal-body">
+        <p>Dcotor Signature Saved Succesfully</p>
+        <div class="modal-footer">
+          <a
+            href="javascript:void(0)"
+            type="button"
+            class="btn btn-main-outline"
+            data-bs-dismiss="modal"
+            >{{ langData?.common?.ok }}</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="changePwdSaveMsg" tabindex="-1">
+  <div
+    class="modal-dialog modal-dialog-centered modal-toast modal-toast-success"
+  >
+    <div class="modal-content">
+      <img
+        class="modal-header-icon"
+        src="assets/images/icons/toast-success.svg"
+        alt=""
+      />
+      <div class="modal-body">
+        <p>Password Changed Succesfully</p>
+        <div class="modal-footer">
+          <a
+            href="javascript:void(0)"
+            type="button"
+            class="btn btn-main-outline"
+            (click)="closeChangePwdModal()"
+            data-bs-dismiss="modal"
+            >{{ langData?.common?.ok }}</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="paswordNoMatchMsg" tabindex="-1">
+  <div
+    class="modal-dialog modal-dialog-centered modal-toast modal-toast-success"
+  >
+    <div class="modal-content">
+      <img
+        class="modal-header-icon"
+        src="assets/images/icons/toast-success.svg"
+        alt=""
+      />
+      <div class="modal-body">
+        <p>{{ ValidationMSG }}</p>
+        <div class="modal-footer">
+          <a
+            href="javascript:void(0)"
+            type="button"
+            class="btn btn-main-outline"
+            data-bs-dismiss="modal"
+            >{{ langData?.common?.Ok }}</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

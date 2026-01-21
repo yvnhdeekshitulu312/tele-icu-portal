@@ -1,0 +1,151 @@
+<div class="page-header sticky-top shadow-sm justify-content-start">
+    <h2 class="page-heading">Beds</h2>
+    <div class="d-flex align-items-center justify-content-end gap-2 w-100">
+        <div class="d-flex align-items-center gap-2">
+            <div [class.active]="bedData.IsAllowMultiAdmissions" class="custom_check d-flex align-items-center gap-1" (click)="onAllowMultipleAdmissionsToggle()">
+                <svg style="width: 1rem;min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                    <path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C19.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path>
+                </svg>
+                <p class="m-0">Allow Multiple Admissions</p>
+            </div>
+            <div [class.active]="bedData.Blocked" class="custom_check d-flex align-items-center gap-1" (click)="onBlockedToggle()">
+                <svg style="width: 1rem;min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                    <path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path>
+                </svg>
+                <p class="m-0">Blocked</p>
+            </div>
+        </div>
+        <button class="btn btn-danger-outline" (click)="clear()">Clear</button>
+        <button class="btn btn-main-outline" (click)="save()">Save</button>
+    </div>
+</div>
+
+<div class="p-2">
+    <div class="row g-2 align-items-end">
+        <div class="col-2">
+            <label for="" class="form-label">Bed Name</label>
+            <div class="d-flex input-group">
+                <input type="text" class="form-control" [(ngModel)]="bedData.BedName" 
+                       [matAutocomplete]="bedAuto" (keyup)="searchBeds($event)">
+                <mat-autocomplete #bedAuto="matAutocomplete">
+                    <mat-option *ngFor="let bed of bedsList" (onSelectionChange)="onBedSelected(bed)" [value]="bed.BedName">
+                        {{bed.BedName}} - {{bed.Ward}}
+                    </mat-option>
+                </mat-autocomplete>
+                <button type="button" class="btn btn-secondary-fill btn-icon">
+                    <img src="assets/images/icons/icon-search.svg" alt="">
+                </button>
+            </div>
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Code</label>
+            <input type="text" class="form-control" [(ngModel)]="bedData.CODE">
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Extension No</label>
+            <input type="text" class="form-control" [(ngModel)]="bedData.Extension">
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Ward Name</label>
+            <select class="form-select pe-4" [(ngModel)]="bedData.WardID" (change)="onWardSelected($event)">
+                <option value="">Select</option>
+                <option *ngFor="let ward of wardsList" [value]="ward.WardID">{{ward.WardName}}</option>
+            </select>
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Location</label>
+            <input type="text" class="form-control" [(ngModel)]="bedData.Location">
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Model No</label>
+            <input type="text" class="form-control" [(ngModel)]="bedData.ModelNo">
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Room No</label>
+            <select class="form-select pe-4" [(ngModel)]="bedData.RoomID" (change)="onRoomSelected($event)">
+                <option value="">Select</option>
+                <option *ngFor="let room of roomsList" [value]="room.RoomID">{{room.Room}}</option>
+            </select>
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Serial No</label>
+            <input type="text" class="form-control" [(ngModel)]="bedData.SerialNo">
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Direction</label>
+            <input type="text" class="form-control" [(ngModel)]="bedData.Direction">
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Status</label>
+            <select class="form-select pe-4" [(ngModel)]="bedData.Status">
+                <option value="1">Vacant</option>
+                <option value="2">Occupied</option>
+                <option value="3">Maintenance</option>
+            </select>
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Manufacturer</label>
+            <input type="text" class="form-control" [(ngModel)]="bedData.Manufacturer">
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label d-block">Patient Type</label>
+            <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                <button class="btn" [class.selected]="bedData.PatientType === 2" (click)="onPatientTypeChange(2)">IP</button>
+                <button class="btn" [class.selected]="bedData.PatientType === 3" (click)="onPatientTypeChange(3)">DC</button>
+                <button class="btn" [class.selected]="bedData.PatientType === 4" (click)="onPatientTypeChange(4)">EMR</button>
+            </div>
+        </div>
+        <div class="col-2">
+            <label for="" class="form-label">Bed Type</label>
+            <select class="form-select pe-4" [(ngModel)]="bedData.BedTypeID" (change)="onBedTypeSelected($event)">
+                <option value="">Select</option>
+                <option *ngFor="let bedType of bedTypesList" [value]="bedType.BedTypeID">{{bedType.BedType}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row gx-2 mt-3">
+        <div class="col-6">
+            <label for="" class="form-label">Remarks</label>
+            <span #remarks class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100" 
+                  contenteditable="true"></span>
+        </div>
+        <div class="col-6">
+            <label for="" class="form-label">Amenities</label>
+            <span #amenities class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100" 
+                  contenteditable="true"></span>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal" id="savemsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Modal -->
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{errorMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

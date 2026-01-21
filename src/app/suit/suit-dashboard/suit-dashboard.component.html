@@ -1,0 +1,232 @@
+<app-suit-header  [IsSwitchWard]="true" (selectedWard)="navigateToFacility()"></app-suit-header>
+
+<div class="container-fluid p-0">
+    <div class="row mx-0 dashboard_section">
+        <div class="left_bg">
+            <div class="row h-100">
+                <div class="col-md-3 p-4 quicklinks_row">
+                    <div class="d-flex flex-column gap-3">
+                        <div class="d-flex align-items-center justify-content-between gap-2">
+                            <h6 class="clr-primary-600 text-nowrap m-0">Quick Links</h6>
+                            <div class="CommanSearch__form bg-white ps-2 grey height-unset">
+                                <svg id="button-addon2" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M10.8609 2.49805C15.7521 2.49805 19.7218 6.46772 19.7218 11.3589C19.7218 16.2501 15.7521 20.2198 10.8609 20.2198C5.96968 20.2198 2 16.2501 2 11.3589C2 6.46772 5.96968 2.49805 10.8609 2.49805ZM10.8609 18.2507C14.6681 18.2507 17.7527 15.1662 17.7527 11.3589C17.7527 7.55072 14.6681 4.46713 10.8609 4.46713C7.05267 4.46713 3.96909 7.55072 3.96909 11.3589C3.96909 15.1662 7.05267 18.2507 10.8609 18.2507ZM19.2147 18.3206L22 21.1049L20.6069 22.498L17.8226 19.7128L19.2147 18.3206Z"
+                                        fill="#368796"></path>
+                                </svg>
+                                <input type="text" aria-label="Search" class="CommonSearch__input form-control ps-0"
+                                    placeholder="Search" (keyup)="filterLinks($event)">
+                            </div>
+                        </div>                        
+                        <div class="favouritesList_scroll d-flex flex-column gap-3">
+                            <div class="block"  *ngFor="let fav of filteredFavouritesList">
+                                <div class="d-flex align-items-center">  
+                                    <div (click)="redirecttourlFav(fav.URL,fav.WorkStationId, fav)">
+                                        <p class="clr-primary-600 m-0">{{fav.FeatureName}}</p>
+                                    </div>                              
+                                  
+                                    <div class="ms-auto ellipsis_tooltip position-relative" >
+                                        <svg width="16" height="25" viewBox="0 0 16 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="7.99994" cy="5.11536" r="2.19232" fill="#8ECBD7"/>
+                                            <circle cx="7.99994" cy="12.5" r="2.19232" fill="#8ECBD7"/>
+                                            <circle cx="7.99994" cy="19.8846" r="2.19232" fill="#8ECBD7"/>
+                                        </svg>      
+                                        <div class="tooltip rounded-3" (click)="favouriteclick(fav)">
+                                            <p class="m-0 d-flex align-items-center clr-primary-600">
+                                                <svg class="me-2" width="20" height="19" viewBox="0 0 23 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.0995 6.16917H20.0261C15.177 5.68334 10.337 5.5 5.5428 5.98584L3.6728 6.16917C3.58184 6.17866 3.48989 6.17003 3.40228 6.14377C3.31467 6.11751 3.23314 6.07414 3.16239 6.01618C3.09164 5.95822 3.03308 5.8868 2.9901 5.80607C2.94712 5.72534 2.92056 5.63689 2.91197 5.54584C2.8753 5.16084 3.1503 4.83084 3.52614 4.79417L5.39614 4.61084C10.2728 4.11584 15.2136 4.30834 20.1636 4.79417C20.5395 4.83084 20.8145 5.17 20.7778 5.54584C20.764 5.71605 20.6864 5.87477 20.5607 5.99032C20.4349 6.10586 20.2702 6.16973 20.0995 6.16917Z" fill="#EB6247"></path><path d="M8.64147 5.24333C8.6048 5.24333 8.56813 5.24333 8.5223 5.23416C8.34445 5.20211 8.18627 5.10159 8.08172 4.95419C7.97717 4.80679 7.93459 4.62427 7.96313 4.44583L8.1648 3.24499C8.31147 2.36499 8.51313 1.14583 10.649 1.14583H13.0506C15.1956 1.14583 15.3973 2.41083 15.5348 3.25416L15.7365 4.44583C15.8006 4.82166 15.544 5.17916 15.1773 5.23416C14.8015 5.29833 14.444 5.04166 14.389 4.67499L14.1873 3.48333C14.059 2.68583 14.0315 2.52999 13.0598 2.52999H10.6581C9.68647 2.52999 9.66813 2.65833 9.53063 3.47416L9.3198 4.66583C9.29369 4.82694 9.2111 4.97351 9.08683 5.07931C8.96255 5.18512 8.80468 5.24325 8.64147 5.24333ZM14.7923 20.856H8.9073C5.70813 20.856 5.5798 19.0868 5.47897 17.6568L4.88313 8.42599C4.85563 8.05016 5.14897 7.72016 5.5248 7.69266C5.9098 7.67433 6.23063 7.95849 6.25813 8.33433L6.85397 17.5652C6.9548 18.9585 6.99147 19.481 8.9073 19.481H14.7923C16.7173 19.481 16.754 18.9585 16.8456 17.5652L17.4415 8.33433C17.469 7.95849 17.799 7.67433 18.1748 7.69266C18.5506 7.72016 18.844 8.041 18.8165 8.42599L18.2206 17.6568C18.1198 19.0868 17.9915 20.856 14.7923 20.856Z" fill="#EB6247"></path><path d="M13.3714 15.8125H10.3189C9.94311 15.8125 9.63144 15.5008 9.63144 15.125C9.63144 14.7492 9.94311 14.4375 10.3189 14.4375H13.3714C13.7473 14.4375 14.0589 14.7492 14.0589 15.125C14.0589 15.5008 13.7473 15.8125 13.3714 15.8125ZM14.1414 12.1458H9.55811C9.18227 12.1458 8.87061 11.8342 8.87061 11.4583C8.87061 11.0825 9.18227 10.7708 9.55811 10.7708H14.1414C14.5173 10.7708 14.8289 11.0825 14.8289 11.4583C14.8289 11.8342 14.5173 12.1458 14.1414 12.1458Z" fill="#EB6247"></path></svg>
+                                                Remove
+                                            </p>
+                                        </div>                      
+                                    </div> 
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9 px-4 pt-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="greeting">
+                            <h2 class="m-0 d-flex align-items-center">{{ currentGreeting }} ,
+                                <span class="fw-bold clr-primary-600 ms-1">{{doctorDetails[0].EmployeeName}}</span></h2>                                
+                        </div>   
+                        <div class="d-flex align-items-center gap-3" *ngIf="(IsSocialWorker||'')=='true' || (IsPhysiotherapy||'')=='true'">
+                            <div class="d-flex align-items-center gap-2 newReferral_blink" (click)="navigateToReferralWorklist()">
+                               <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="34" height="34" rx="17" fill="#8891C4"/>
+                                    <path d="M9.875 17C9.875 13.6412 9.875 11.9619 10.9184 10.9184C11.9619 9.875 13.6412 9.875 17 9.875C20.3588 9.875 22.0382 9.875 23.0816 10.9184C24.125 11.9619 24.125 13.6412 24.125 17C24.125 20.3588 24.125 22.0381 23.0816 23.0816C22.0382 24.125 20.3588 24.125 17 24.125C13.6412 24.125 11.9619 24.125 10.9184 23.0816C9.875 22.0381 9.875 20.3588 9.875 17Z" stroke="white" stroke-width="1.125"/>
+                                    <path d="M9.875 14H24.125" stroke="white" stroke-width="1.125" stroke-linejoin="round"/>
+                                    <path d="M16.25 20.75H20.75M13.25 20.75H14" stroke="white" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M16.25 17.75H20.75M13.25 17.75H14" stroke="white" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <div>
+                                    <p class="fs-7">New Referral</p>
+                                    <p class="fw-bold fs-6 m-0 text-center count">{{ReferalDataCount[0]?.NewRequest}}</p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="34" height="34" rx="17" fill="#08CB00"/>
+                                <path d="M24.0858 14.15C24.125 14.9376 24.125 15.8746 24.125 17C24.125 20.3587 24.125 22.0381 23.0816 23.0816C22.0381 24.125 20.3587 24.125 17 24.125C13.6412 24.125 11.9619 24.125 10.9184 23.0816C9.875 22.0381 9.875 20.3587 9.875 17C9.875 13.6412 9.875 11.9619 10.9184 10.9184C11.9619 9.875 13.6412 9.875 17 9.875C17.8039 9.875 18.5117 9.875 19.1375 9.88931" stroke="white" stroke-width="1.125" stroke-linecap="round"/>
+                                <path d="M14 16.625C14 16.625 15.125 16.625 16.625 19.25C16.625 19.25 20.4191 12.375 24.125 11" stroke="white" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+
+                                <div>
+                                    <p class="fs-7">Accepted Referral</p>
+                                    <p class="fw-bold fs-6 m-0 text-center">{{ReferalDataCount[0]?.Accepted}}</p>
+                                </div>
+                            </div>
+                            <!-- <div class="d-flex align-items-center gap-2">
+                                <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="34" height="34" rx="17" fill="#D4919E"/>
+                                <path d="M17 24.125C20.3587 24.125 22.0381 24.125 23.0816 23.0816C24.125 22.0381 24.125 20.3587 24.125 17C24.125 13.6412 24.125 11.9619 23.0816 10.9184C22.0381 9.875 20.3587 9.875 17 9.875C13.6412 9.875 11.9619 9.875 10.9184 10.9184C9.875 11.9619 9.875 13.6412 9.875 17C9.875 20.3587 9.875 22.0381 10.9184 23.0816C11.9619 24.125 13.6412 24.125 17 24.125Z" stroke="white" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M19.25 14.75L14.75 19.2497M19.25 19.25L14.75 14.7503" stroke="white" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+
+                                <div>
+                                    <p class="fs-7">Rejected Referral</p>
+                                    <p class="fw-bold fs-6 m-0">999</p>
+                                </div>
+                            </div> -->
+                        </div>                   
+                    </div>
+                    <div class="dash_tabs my-3">
+                        <div class="nav nav-pills rounded-top bg-white  " role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button type="button"  role="tab" data-bs-toggle="pill" data-bs-target="#masters_tab" class="nav-link active" (click)="suittype('4')"> Masters </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" role="tab" data-bs-toggle="pill" data-bs-target="#Configuration_tab" class="nav-link" (click)="suittype('1')"> Configuration </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" role="tab" data-bs-toggle="pill" data-bs-target="#transactions_tab" class="nav-link" (click)="suittype('7')"> Transactions </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" role="tab" data-bs-toggle="pill" data-bs-target="#reports_tab" aria-controls="" class="nav-link" (click)="suittype('9')">Reports</button>
+                            </li>
+                        </div>
+                    </div>
+                    <div class="mt-3 dash_tabs_content">
+                        <div class="row g-4 mx-0">
+                            <div class="col-md-4" *ngFor="let module of hospitalModules">
+                                <div (click)="getFeaturesByModuleId(module)" class="block">
+                                    <div class="d-flex align-items-center">                                   
+                                        <p class="clr-primary-600 m-0" style="font-size: 0.80rem;font-weight: 600;">{{module.ModuleName}}</p>
+                                    </div>  
+                                </div>                            
+                            </div>
+                            <div class="modal fade acc_receivable m-0" id="acc_receivable" tabindex="-1" aria-labelledby="" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" style="max-width: 90%;">
+                                    <div class="modal-content">
+                                        <div class="modal-header gap-3">
+                                            <div class="d-flex align-items-center gap-2 justify-content-start w-100">
+                                                <h5 class="modal-title" >{{moduleName}} </h5>
+                                                <div class="CommanSearch__form bg-white ps-2 col-3 rounded" style="height: 2rem;">
+                                                    <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <g clip-path="url(#clip0_9239_2779)">
+                                                            <path
+                                                                d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                                                fill="#368796" />
+                                                        </g>
+                                                    </svg>
+                                                    <input type="text" id="userName" class="form-control" [matAutocomplete]="userAuto"
+                                                        placeholder="Search" [(ngModel)]="userSearchText"
+                                                        (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : fetchUsers($event)">
+                                                    <mat-autocomplete #userAuto="matAutocomplete">
+                                                        <mat-option *ngFor="let item of usersList" (onSelectionChange)="onUserSelected(item)" [value]="item.EmpNoFullName">
+                                                            {{item.EmpNoFullName}}
+                                                        </mat-option>
+                                                    </mat-autocomplete>
+                                                </div>
+                                                <div class="d-flex align-items-center input-group" style="width: 30%;">
+                                                    <input type="text" placeholder="Search Feature" class="form-control"
+                                                        autocomplete="off" role="combobox" [(ngModel)]="searchTerm"
+                                                        (keyup)="filterGroupedData(searchTerm)" aria-autocomplete="list" aria-expanded="false"
+                                                        aria-haspopup="listbox">                                               
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <label for="" class="form-label mb-0 pe-2">Facility</label>
+                                                    <select name="" id="" class="form-select" [(ngModel)]="wardID" (change)="onFacilitySelectChange($event)">
+                                                        <option value="0">Select</option>
+                                                        <option value="{{item.FacilityID}}" *ngFor="let item of FetchUserFacilityDataList;let i=index">{{item.FacilityName}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex gap-2 align-items-center justify-content-end">
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="onModalClose()"></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="modal-body">
+
+                                            <div class="dash_tabs mb-3">
+                                                <div class="nav nav-pills rounded-top bg-white  " role="tablist">
+                                                    <li class="nav-item" role="presentation">
+                                                        <button type="button"  role="tab" data-bs-toggle="pill" data-bs-target="#masters_tab" [class]="suitType == '4' ? 'nav-link active' : 'nav-link'" (click)="suittype('4')"> Masters </button>
+                                                    </li>
+                                                    <li class="nav-item" role="presentation">
+                                                        <button type="button" role="tab" data-bs-toggle="pill" data-bs-target="#Configuration_tab" [class]="suitType == '1' ? 'nav-link active' : 'nav-link'" (click)="suittype('1')"> Configuration </button>
+                                                    </li>
+                                                    <li class="nav-item" role="presentation">
+                                                        <button type="button" role="tab" data-bs-toggle="pill" data-bs-target="#transactions_tab" [class]="suitType == '7' ? 'nav-link active' : 'nav-link'" (click)="suittype('7')"> Transactions </button>
+                                                    </li>
+                                                    <li class="nav-item" role="presentation">
+                                                        <button type="button" role="tab" data-bs-toggle="pill" data-bs-target="#reports_tab" aria-controls="" [class]="suitType == '9' ? 'nav-link active' : 'nav-link'" (click)="suittype('9')">Reports</button>
+                                                    </li>
+                                                </div>
+                                            </div>                                           
+
+                                            <div class="block p-0">
+                                                <div class="blockdropdown">
+                                                    <div class="d-flex align-items-center justify-content-between list block" [ngClass]="{ active: feature.IsFavourite === 1 }" 
+                                                        *ngFor="let feature of filteredmoduleFeatures">
+                                                        <div (click)="redirecttourl(feature.URL,feature.WorkStationId, feature)" >
+                                                            <p class="m-0">{{ feature.FeatureName }}</p>
+                                                        </div>                                       
+                                                        <svg (click)="favouriteclick(feature)" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M7.34552 1.01273C7.60313 0.454252 8.39687 0.454252 8.65447 1.01273L10.2842 4.546C10.462 4.93152 10.8274 5.19696 11.249 5.24695L15.1129 5.70508C15.7237 5.7775 15.969 6.53239 15.5174 6.94997L12.6607 9.59178C12.349 9.88003 12.2095 10.3095 12.2922 10.7259L13.0505 14.5423C13.1704 15.1456 12.5282 15.6121 11.9916 15.3117L8.59626 13.4112C8.2258 13.2038 7.7742 13.2038 7.40374 13.4112L4.00845 15.3117C3.47178 15.6121 2.82962 15.1456 2.94949 14.5423L3.7078 10.7259C3.79054 10.3095 3.65099 9.88003 3.33929 9.59178L0.482574 6.94997C0.0310297 6.53239 0.27631 5.7775 0.887061 5.70508L4.75101 5.24695C5.17261 5.19696 5.53796 4.93152 5.71579 4.546L7.34552 1.01273Z" fill="#DAEEF1" stroke="#B4DDE4" stroke-width="0.5"/>
+                                                        </svg>                                            
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" data-bs-abackdrop="static" data-bs-keyboard="false" id="facilityValidation" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>Please select facility</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-abackdrop="static" data-bs-keyboard="false" id="KPIValidation" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>No Access to View Report</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

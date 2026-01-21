@@ -1,0 +1,145 @@
+<div class="card card-style-1 rounded main-container" #divpnd>
+    <div class="card-header rounded-top justify-content-between" style="height: 3rem;">
+        <h2 class="card-heading">Procedure Note Documentation</h2>
+        <div class="actions generalConsent_popup position-relative d-flex align-items-center gap-2" *ngIf="IsView">
+            <app-template-block [patientTemplatedetailID]="PatientTemplatedetailID"
+                [viewTemplatesList]="FetchPatienClinicalTemplateDetailsNList"></app-template-block>
+            <button class="btn btn-main-outline" (click)="viewWorklist()">View</button>
+        </div>
+    </div>
+
+    <div class="p-2 template_scroll" id="divscroll" style="height:calc(100vh - 21.8rem)">
+        <div *ngIf="showContent">
+            <div class="row g-2 mx-0">
+                <div class="col-3">
+                    <label for="" class="form-label fs-7 clr-primary-600 fw-semibold">Procedure Order</label>
+                </div>
+                <div class="col-9">
+                    <select class="form-select pe-4 w-50" id="ProcedureOrderID">
+                        <option dir="ltr" value="0" translate>Select</option>
+                        <option dir="ltr" *ngFor="let proc of patientPlannedProcs" [value]="proc.TestID">
+                            {{proc.TestName}}-{{proc.OrderDate}}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label fs-7 clr-primary-600 fw-semibold">Procedure Name</label>
+                </div>
+                <div class="col-9">
+                    <span id="ProcedureName_textarea" 
+                        class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                        contenteditable="true"></span>
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label fs-7 clr-primary-600 fw-semibold">Indication for Procedure</label>
+                </div>
+                <div class="col-9">
+                    <span id="IndicationProcedure_textarea"
+                        class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                        contenteditable="true"></span>
+                </div>
+                 <div class="col-3">
+                    <label for="" class="form-label fs-7 clr-primary-600 fw-semibold">Consent</label>
+                </div>
+                 <div class="col-9">
+                     <select name="" class="form-select pe-4 w-50" id="Consent">
+                        <option value="0">Select</option>
+                        <option value="1">Written informed consent taken</option>
+                        <option value="2">Emergency procedure, consent deferred.</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <span id="Consent_textarea" *ngIf="getSelectedValue('Consent') === 'other'"
+                        class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100 mt-2"
+                        contenteditable="true"></span>
+                </div>
+                 <div class="col-3">
+                    <label for="" class="form-label fs-7 clr-primary-600 fw-semibold">Pre-procedure investigation, including coagulation
+                        profile</label>
+                </div>
+                 <div class="col-9">
+                    <select name="" class="form-select pe-4 w-50" id="PreProcedure">
+                        <option value="0">Select</option>
+                        <option value="1">Yes reviewed</option>
+                        <option value="2">Emergency encounter</option>
+                    </select>
+                </div>
+                 <div class="col-3">
+                    <label for="" class="form-label fs-7 clr-primary-600 fw-semibold">Anesthesia/Sedation</label>
+                </div>
+                 <div class="col-9">
+                   <span id="AnesthesiaSedation_textarea"
+                        class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                        contenteditable="true"></span>
+                </div>
+                 <div class="col-3">
+                    <label for="" class="form-label fs-7 clr-primary-600 fw-semibold">Procedure Description (The Narrative):</label>
+                </div>
+                 <div class="col-9">
+                    <span id="ProcedureDescription_textarea"
+                        class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                        contenteditable="true"></span>
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label fs-7 clr-primary-600 fw-semibold">Confirmation of Placement/procedure</label>
+                </div>
+                <div class="col-9">
+                    <span id="PlacementConfirmation_textarea"
+                        class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                        contenteditable="true"></span>
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label fs-7 clr-primary-600 fw-semibold">Post-Procedure Patient's Condition</label>
+                </div>
+                <div class="col-9">
+                     <select name="" class="form-select pe-4 w-50" id="PatientCondition">
+                        <option value="0">Select</option>
+                        <option value="1">Well tolerated</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <span id="PatientCondition_textarea" *ngIf="getSelectedValue('PatientCondition') === 'other'"
+                        class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100 mt-2"
+                        contenteditable="true"></span>
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label fs-7 clr-primary-600 fw-semibold">Complications</label>
+                </div>
+                <div class="col-9">
+                    <select name="" class="form-select pe-4 w-50" id="Complications">
+                        <option value="0">Select</option>
+                        <option value="1">There were no immediate complications</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <span id="Complications_textarea" *ngIf="getSelectedValue('Complications') === 'other'"
+                        class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100 mt-2"
+                        contenteditable="true"></span>
+                </div>
+                <div class="col-3">
+                    <label for="" class="form-label fs-7 clr-primary-600 fw-semibold">Post-procedure instructions (Plan):</label>
+                </div>
+                 <div class="col-9">
+                    <span id="procedureInstructions_textarea"
+                        class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                        contenteditable="true"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-sharedtemplateview [FetchPatienClinicalTemplateDetailsNList]="FetchPatienClinicalTemplateDetailsNList"
+    [selectedTemplateFn]="selectedTemplate.bind(this)">
+</app-sharedtemplateview>
+
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{errorMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

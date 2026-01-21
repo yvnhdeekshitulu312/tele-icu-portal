@@ -1,0 +1,480 @@
+<div class="page-header justify-content-start sticky-top shadow-sm">
+    <h2 class="page-heading">Pharmacy KPI Dashboard</h2>
+</div>
+<div class="container-fluid p-0 analytics_graphs IP_graph">
+   <div class="p-2">
+        <div class="row g-2">
+            <div class="col-2" style="width: 13%;">
+                <div class="left_nav">
+                    <div class="sidebar-container rounded">
+                        <form [formGroup]="datesForm" class="d-flex flex-column gap-2">
+                            <label class="form-label m-0">From Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="fromPicker" placeholder="From Date"
+                                    formControlName="fromdate" />
+                                <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #fromPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <label class="form-label m-0">To Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="toPicker" placeholder="To Date" formControlName="todate" />
+                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #toPicker></mat-datepicker>
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn btn-main-outline w-100 mt-2" (click)="fetchData()">
+                            Fetch
+                        </button>
+                        <button type="button" class="btn btn-outline-danger w-100 mt-2" (click)="clearFilters()">
+                            Clear
+                        </button>
+                    </div>
+                    <div class="sidebar-container rounded mt-2">
+                        <label class="form-label">Location</label>
+                        <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                            <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_9239_2779)">
+                                    <path
+                                        d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                        fill="#368796" />
+                                </g>
+                            </svg>
+                            <input type="text" class="form-control" [matAutocomplete]="roleAuto2" placeholder="Search">
+                            <mat-autocomplete #roleAuto2="matAutocomplete">
+                                <mat-option *ngFor="let item of locations">
+                                    <div (click)="locationOptionClicked($event, item);">
+                                        <mat-checkbox [checked]="item.selected" (change)="toggleLocationSelection(item)"
+                                            (click)="$event.stopPropagation()">
+                                            {{ item.label }}
+                                        </mat-checkbox>
+                                    </div>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col dashboardHeight">
+                <div class="row text-center gx-2 mx-0">
+                    <!-- Readmission Rate Card -->
+                    <div class="col-3">
+                        <div class="readmissionCard border rounded">
+                            <div class="rounded-top text-white py-2 fw-bold readmissionCard_header"
+                                style="font-size: 1.1rem;">
+                                Total Patients
+                            </div>
+                            <h4 class="rounded-bottom py-3" style="font-size: 1.5rem; font-weight: 700;">
+                                {{ pharmacyStatistics?.TotalVisits || 0 | number }}
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="readmissionCard border rounded">
+                            <div class="rounded-top text-white py-2 fw-bold readmissionCard_header"
+                                style="font-size: 1.1rem;">
+                                Prescriptions
+                            </div>
+                            <h4 class="rounded-bottom py-3" style="font-size: 1.5rem; font-weight: 700;">
+                                {{ pharmacyStatistics?.TotalPrescriptionItems || 0 | number }}
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="readmissionCard border rounded">
+                            <div class="rounded-top text-white py-2 fw-bold readmissionCard_header"
+                                style="font-size: 1.1rem;">
+                                Dispensed
+                            </div>
+                            <h4 class="rounded-bottom py-3" style="font-size: 1.5rem; font-weight: 700;">
+                                {{ pharmacyStatistics?.TotalDISPENSEDItems || 0 | number }}
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="readmissionCard border rounded">
+                            <div class="rounded-top text-white py-2 fw-bold readmissionCard_header"
+                                style="font-size: 1.1rem;">
+                                Pharmacy Sales
+                            </div>
+                            <h4 class="rounded-bottom py-3" style="font-size: 1.5rem; font-weight: 700;">
+                                {{pharmacySalesData?.total || 0 | number:'1.2-2'}}
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row text-center gx-2 mx-0 mt-2">
+                    <div class="col-3">
+                        <div class="bg-white h-100 border shadow-sm rounded p-2 pb-3 d-flex flex-column justify-content-between">
+                            <apx-chart *ngIf="patientsChartData" [series]="patientsChartData.series"
+                                [chart]="patientsChartData.chart" [labels]="patientsChartData.labels"
+                                [colors]="patientsChartData.colors" [fill]="patientsChartData.fill"
+                                [stroke]="patientsChartData.stroke" [legend]="patientsChartData.legend"
+                                [tooltip]="patientsChartData.tooltip" [dataLabels]="patientsChartData.dataLabels"
+                                [title]="patientsChartData.title" [responsive]="patientsChartData.responsive"
+                                [plotOptions]="patientsChartData.plotOptions || {}">
+                            </apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="bg-white h-100 border shadow-sm rounded p-2 pb-3 d-flex flex-column justify-content-between">
+                            <apx-chart *ngIf="prescriptionChartData" [series]="prescriptionChartData.series"
+                                [chart]="prescriptionChartData.chart" [labels]="prescriptionChartData.labels"
+                                [colors]="prescriptionChartData.colors" [fill]="prescriptionChartData.fill"
+                                [stroke]="prescriptionChartData.stroke" [legend]="prescriptionChartData.legend"
+                                [tooltip]="prescriptionChartData.tooltip" [dataLabels]="prescriptionChartData.dataLabels"
+                                [title]="prescriptionChartData.title" [responsive]="prescriptionChartData.responsive"
+                                [plotOptions]="prescriptionChartData.plotOptions || {}">
+                            </apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="bg-white h-100 border shadow-sm rounded p-2 pb-3 d-flex flex-column justify-content-between">
+                            <apx-chart *ngIf="dispensedChartData" [series]="dispensedChartData.series"
+                                [chart]="dispensedChartData.chart" [labels]="dispensedChartData.labels"
+                                [colors]="dispensedChartData.colors" [fill]="dispensedChartData.fill"
+                                [stroke]="dispensedChartData.stroke" [legend]="dispensedChartData.legend"
+                                [tooltip]="dispensedChartData.tooltip" [dataLabels]="dispensedChartData.dataLabels"
+                                [title]="dispensedChartData.title" [responsive]="dispensedChartData.responsive"
+                                [plotOptions]="dispensedChartData.plotOptions || {}">
+                            </apx-chart>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="bg-white h-100 border shadow-sm rounded p-2 pb-3 d-flex flex-column justify-content-between">
+                            <apx-chart *ngIf="pharmacySalesChartData" [series]="pharmacySalesChartData.series"
+                                [chart]="pharmacySalesChartData.chart" [labels]="pharmacySalesChartData.labels"
+                                [colors]="pharmacySalesChartData.colors" [fill]="pharmacySalesChartData.fill"
+                                [stroke]="pharmacySalesChartData.stroke" [legend]="pharmacySalesChartData.legend"
+                                [tooltip]="pharmacySalesChartData.tooltip" [dataLabels]="pharmacySalesChartData.dataLabels"
+                                [title]="pharmacySalesChartData.title" [responsive]="pharmacySalesChartData.responsive"
+                                [plotOptions]="pharmacySalesChartData.plotOptions || {}">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="row mx-0 gx-2">
+                        <div class="col-6">
+                            <div class="bg-white border shadow-sm p-2 rounded">
+                                <apx-chart *ngIf="pharmacyStatisticsChartData" [series]="pharmacyStatisticsChartData.series"
+                                    [chart]="pharmacyStatisticsChartData.chart" [xaxis]="pharmacyStatisticsChartData.xaxis"
+                                    [yaxis]="pharmacyStatisticsChartData.yaxis"
+                                    [dataLabels]="pharmacyStatisticsChartData.dataLabels"
+                                    [plotOptions]="pharmacyStatisticsChartData.plotOptions"
+                                    [fill]="pharmacyStatisticsChartData.fill" [title]="pharmacyStatisticsChartData.title"
+                                    [tooltip]="pharmacyStatisticsChartData.tooltip"
+                                    [stroke]="pharmacyStatisticsChartData.stroke"
+                                    [colors]="pharmacyStatisticsChartData.colors">
+                                </apx-chart>
+                            </div>
+                            <div class="bg-white border shadow-sm p-2 rounded mt-2">
+                                <div class="mt-2">
+                                    <apx-chart *ngIf="approvedChartData" [series]="approvedChartData.series"
+                                        [chart]="approvedChartData.chart" [xaxis]="approvedChartData.xaxis"
+                                        [yaxis]="approvedChartData.yaxis" [dataLabels]="approvedChartData.dataLabels"
+                                        [plotOptions]="approvedChartData.plotOptions" [fill]="approvedChartData.fill"
+                                        [title]="approvedChartData.title" [tooltip]="approvedChartData.tooltip"
+                                        [stroke]="approvedChartData.stroke" [colors]="approvedChartData.colors">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                
+                                <div class="mt-2">
+                                    <div class="d-flex gap-4 justify-content-end" *ngIf="salesDataPerDoctor?.length">
+                                        <h6 class="m-0 title_clr fw-bold text-center">Pharmacy Sales Per Doctor</h6>
+                                        <select class="form-select w-auto mb-2" [(ngModel)]="selectedDoctor"
+                                            (change)="loadSelectedDoctorSalesChart()">
+                                            <option *ngFor="let item of salesDataPerDoctor" [value]="item.DoctorName">{{
+                                                item.DoctorName }}</option>
+                                        </select>
+                                    </div>
+                                    <apx-chart *ngIf="selectedDoctorSalesChartData"
+                                        [series]="selectedDoctorSalesChartData.series"
+                                        [chart]="selectedDoctorSalesChartData.chart"
+                                        [xaxis]="selectedDoctorSalesChartData.xaxis"
+                                        [yaxis]="selectedDoctorSalesChartData.yaxis"
+                                        [dataLabels]="selectedDoctorSalesChartData.dataLabels"
+                                        [plotOptions]="selectedDoctorSalesChartData.plotOptions"
+                                        [tooltip]="selectedDoctorSalesChartData.tooltip"
+                                        [colors]="selectedDoctorSalesChartData.colors"
+                                        [title]="selectedDoctorSalesChartData.title">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="bg-white border shadow-sm p-2 rounded mt-2">
+                                
+                                <div class="mt-2">
+                                   <div class="d-flex justify-content-end">
+ <h6 class="mx-4 title_clr fw-bold text-center gap-2">Top Prescribed Medications</h6>
+                                   
+                                    <div class="d-flex justify-content-end gap-2" *ngIf="patientTypes?.length">
+                                        
+                                        <label class="form-label m-0">Location</label>
+                                        <select class="form-select w-auto mb-2" [(ngModel)]="selectedPatientType"
+                                            (change)="getTopMedicationsData()">
+                                            <option value="0">All</option>
+                                            <option *ngFor="let item of patientTypes" [value]="item.PatientTypeID">{{
+                                                item.PatientType }}</option>
+                                        </select>
+                                         <label class="form-label m-0">Department</label>
+                                        <select class="form-select w-auto mb-2 ms-2" [(ngModel)]="selectedDepartment"
+                                            (change)="getTopMedicationsData()">
+                                            <option value="0">All Departments</option>
+                                            <option *ngFor="let item of departments" [value]="item.DepartmentID">{{
+                                                item.Department }}</option>
+                                        </select>
+                                          <label class="form-label m-0">Top</label>
+                                        <select class="form-select w-auto mb-2 ms-2" [(ngModel)]="topMedicationsCount"
+                                            (change)="getTopMedicationsData()">
+                                            <option *ngFor="let count of [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+                                                [value]="count">{{ count }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    </div>
+                                    <apx-chart *ngIf="topMedicationsChartData" [series]="topMedicationsChartData.series"
+                                        [chart]="topMedicationsChartData.chart" [xaxis]="topMedicationsChartData.xaxis"
+                                        [yaxis]="topMedicationsChartData.yaxis"
+                                        [dataLabels]="topMedicationsChartData.dataLabels"
+                                        [plotOptions]="topMedicationsChartData.plotOptions"
+                                        [fill]="topMedicationsChartData.fill" [title]="topMedicationsChartData.title"
+                                        [tooltip]="topMedicationsChartData.tooltip"
+                                        [stroke]="topMedicationsChartData.stroke" [colors]="topMedicationsChartData.colors">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="bg-white border shadow-sm p-2 rounded mt-2">
+                                <div class="mt-2">
+                                    <apx-chart *ngIf="pharmacySalesPerDepartmentChartData"
+                                        [series]="pharmacySalesPerDepartmentChartData.series"
+                                        [chart]="pharmacySalesPerDepartmentChartData.chart"
+                                        [xaxis]="pharmacySalesPerDepartmentChartData.xaxis"
+                                        [yaxis]="pharmacySalesPerDepartmentChartData.yaxis"
+                                        [dataLabels]="pharmacySalesPerDepartmentChartData.dataLabels"
+                                        [plotOptions]="pharmacySalesPerDepartmentChartData.plotOptions"
+                                        [tooltip]="pharmacySalesPerDepartmentChartData.tooltip"
+                                        [colors]="pharmacySalesPerDepartmentChartData.colors"
+                                        [title]="pharmacySalesPerDepartmentChartData.title">
+                                    </apx-chart>
+                                </div>
+                                <div>
+                                   <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm">
+                                        <div class="fixed_alter_header rounded-top">
+                                            <div class="row gx-2 p-2 mx-0">
+                                                <div class="col-2">
+                                                    <p class="fw-semibold">Department</p>
+                                                </div>
+                                                 <div class="col-1">
+                                                    <p class="fw-semibold">Q1</p>
+                                                </div>
+                                                 <div class="col-1">
+                                                    <p class="fw-semibold">Q2</p>
+                                                </div>
+                                                 <div class="col-1">
+                                                    <p class="fw-semibold">Q3</p>
+                                                </div>
+                                                 <div class="col-1">
+                                                    <p class="fw-semibold">Q4</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="fixed_alter_body" style="height: 400px;">
+                                            <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of pharmacySalesPerDepartmentData">
+                                                <div class="col-2">
+                                                    <p class="">{{ item.Department  }}</p>
+                                                </div>
+                                                 <div class="col-1">
+                                                    <p class="">{{ item.Q1 | number }}</p>
+                                                </div>
+                                                 <div class="col-1">
+                                                    <p class="">{{ item.Q2 | number }}</p>
+                                                </div>
+                                                 <div class="col-1">
+                                                    <p class="">{{ item.Q3 | number }}</p>
+                                                </div>
+                                                 <div class="col-1">
+                                                    <p class="">{{ item.Q4 | number }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                   </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="row mx-0 gx-2">
+                        <div class="col-2 d-none">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100 d-flex flex-column justify-content-between">
+                                <canvas id="procedureChart"></canvas>
+                                <div class="mt-2">
+                                    <div class="drugGraph_block p-2 py-3 rounded text-center">
+                                        <h5 class="m-0 fw-semibold fs-3">18</h5>
+                                        <p>ADVERSE DRUG REACTIONS</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                <apx-chart *ngIf="detectionRateChartData" [series]="detectionRateChartData.series"
+                                    [chart]="detectionRateChartData.chart" [xaxis]="detectionRateChartData.xaxis"
+                                    [yaxis]="detectionRateChartData.yaxis" [dataLabels]="detectionRateChartData.dataLabels"
+                                    [plotOptions]="detectionRateChartData.plotOptions" [fill]="detectionRateChartData.fill"
+                                    [title]="detectionRateChartData.title" [tooltip]="detectionRateChartData.tooltip"
+                                    [stroke]="detectionRateChartData.stroke" [colors]="detectionRateChartData.colors"
+                                    [legend]="detectionRateChartData.legend">
+                                </apx-chart>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm">
+                                <div class="fixed_alter_header rounded-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-8">
+                                            <p class="fw-semibold">Month</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <p class="fw-semibold">ADR</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body" style="height: 250px;">
+                                    <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of detectionRateData">
+                                        <div class="col-8">
+                                            <p class="">{{ item.MonthName }}</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <p class="">{{ item.TotalAdmissionAdverseEvent | number }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 d-none">
+                    <div class="row mx-0 gx-2">
+                        <div class="col-2">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100 d-flex flex-column justify-content-between">
+                                <canvas id="procedureChart"></canvas>
+                                <div class="mt-2">
+                                    <div class="drugGraph_block p-2 py-3 rounded text-center">
+                                        <h5 class="m-0 fw-semibold fs-3">762</h5>
+                                        <p>MEDICATION ERROR</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <div class="bg-white border shadow-sm p-2 rounded h-100">
+                                <h6 class="m-0 title_clr fw-semibold">Medication Error - Incident Rate VS Reporting Rate
+                                </h6>
+                                <canvas id="procedureChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="surgery_records graph_fixed_alter_list rounded border shadow-sm">
+                                <div class="fixed_alter_header rounded-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-8">
+                                            <p class="fw-semibold">Month</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <p class="fw-semibold">Medication</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body" style="height: 400px;">
+                                    <div class="row gx-2 p-2 mx-0 alter_div">
+                                        <div class="col-8">
+                                            <p class="">Jan-24</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <p class="">2</p>
+                                        </div>
+                                    </div>
+                                    <div class="row gx-2 p-2 mx-0 alter_div">
+                                        <div class="col-8">
+                                            <p class="">Feb-24</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <p class="">2</p>
+                                        </div>
+                                    </div>
+                                    <div class="row gx-2 p-2 mx-0 alter_div">
+                                        <div class="col-8">
+                                            <p class="">Mar-24</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <p class="">2</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 d-none">
+                    <div class="bg-white border shadow-sm p-2 rounded">
+                        <h6 class="m-0 title_clr fw-bold">Quarterly Pharmacy Sales Per Department</h6>
+                        <div class="mt-2">
+                            <canvas id="procedureChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 d-none">
+                    <div class="bg-white border shadow-sm p-2 rounded">
+                        <h6 class="m-0 title_clr fw-bold">Pharmacy Intervention Rate</h6>
+                        <div class="mt-2">
+                            <canvas id="procedureChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="bg-white border shadow-sm p-2 rounded">
+                        <div class="mt-2">
+                            <apx-chart *ngIf="admissionReconChartData" [series]="admissionReconChartData.series"
+                                [chart]="admissionReconChartData.chart" [xaxis]="admissionReconChartData.xaxis"
+                                [yaxis]="admissionReconChartData.yaxis" [dataLabels]="admissionReconChartData.dataLabels"
+                                [plotOptions]="admissionReconChartData.plotOptions" [fill]="admissionReconChartData.fill"
+                                [title]="admissionReconChartData.title" [tooltip]="admissionReconChartData.tooltip"
+                                [stroke]="admissionReconChartData.stroke" [colors]="admissionReconChartData.colors"
+                                [legend]="admissionReconChartData.legend">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{ errorMsg }}</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-main-outline" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

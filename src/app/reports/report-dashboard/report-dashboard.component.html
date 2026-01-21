@@ -1,0 +1,271 @@
+<div class="page-header justify-content-start sticky-top shadow-sm">
+    <h2 class="page-heading">Report Dashboard</h2>
+</div>
+<div class="container-fluid p-0 analytics_graphs">
+    <!-- <header class="bg-white">
+        <div class="d-flex align-items-center gap-2">
+            <div class="logo_img">
+                <img src="./assets/images/AHH-Logo.svg" alt="ALH Logo" />
+            </div>
+            <div class="vertical_line"></div>
+            <div class="d-flex align-items-center gap-2">
+                <h6 class="pageTitle m-0 px-2">Dashboard</h6>
+                <div class="vertical_line"></div>
+                <p class="page_head">Top Surgeries</p>
+            </div>
+        </div>
+    </header> -->
+
+
+    <div class="p-2">
+        <div class="row g-2">
+            <!-- <div class="col-2" [ngClass]="{ 'col-2': showSidebar, 'd-none': !showSidebar }"> -->
+            <div  [ngClass]="{ 'd-none': !showSidebar }" 
+                [ngStyle]="showSidebar ? { width: '13%' } : {}">
+                <div class="left_nav">
+                    <div class="position-absolute top-0 end-0">
+                        <button class="btn btn-sm" (click)="toggleSidebar()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24">
+                                <rect x="0" fill="none" width="24" height="24" />
+                                <g>
+                                    <path
+                                        d="M18.36 19.78L12 13.41l-6.36 6.37-1.42-1.42L10.59 12 4.22 5.64l1.42-1.42L12 10.59l6.36-6.36 1.41 1.41L13.41 12l6.36 6.36z" />
+                                </g>
+                            </svg>
+                        </button>
+                    </div>
+                    <h5>Filters</h5>
+                    <div class="d-flex flex-column gap-2">
+                        <form [formGroup]="datesForm" class="d-flex flex-column gap-2">
+                            <label class="form-label m-0">From Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="fromPicker" placeholder="From Date"
+                                    formControlName="fromdate" (dateChange)="fetchReportData()" />
+                                <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #fromPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <label class="form-label m-0">To Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="toPicker" placeholder="To Date"
+                                    formControlName="todate" (dateChange)="fetchReportData()" />
+                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #toPicker></mat-datepicker>
+                            </mat-form-field>
+                        </form>
+
+                        <div class="dropdown custom_outline_dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                Location: <span class="fw-semibold ms-auto">{{ selectedLocation.label }}</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li *ngFor="let loc of locations">
+                                    <a class="dropdown-item" (click)="fetchReportsByLocation(loc)">
+                                        {{ loc.label }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="dropdown custom_outline_dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                {{ selectedCategory.label }}
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li *ngFor="let category of topCategories">
+                                    <a class="dropdown-item" (click)="onSelectCategory(category)">
+                                        {{ category.label }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="dropdown custom_outline_dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                Top-N: <span class="ms-auto">{{ selectedTopN }}</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li *ngFor="let n of topNOptions">
+                                    <a class="dropdown-item" (click)="onSelectTopN(n)">
+                                        {{ n }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- <div [ngClass]="showSidebar ? 'col-10' : 'col-12'" class="dashboardHeight"> -->
+            <div 
+                class="col dashboardHeight">
+                <div class="row mx-0 g-2">
+                    <div class="col-8">
+                        <div class="graph_section h-100 border shadow-sm rounded" *ngIf="currentReportData.length > 0">
+                            <div *ngIf="!showSidebar" class="m-2 position-absolute" style="z-index: 1;"
+                                (click)="toggleSidebar()">
+                                <svg class="cursor-pointer" width="32" height="33" viewBox="0 0 32 33" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M5.3187 6.68174C5.52777 6.47264 5.81113 6.35522 6.10681 6.35522L6.10685 6.35564C6.39984 6.35564 6.68078 6.47092 6.88934 6.6768C7.09817 6.88242 7.21719 7.16202 7.22121 7.45475V25.2408C7.22121 25.6389 7.00889 26.0067 6.66415 26.2058C6.31917 26.405 5.89426 26.405 5.54951 26.2058C5.20477 26.0067 4.99219 25.6389 4.99219 25.2408V7.46985C4.99219 7.17419 5.10963 6.89084 5.3187 6.68174Z"
+                                        fill="#43A9BC" />
+                                    <path
+                                        d="M13.4472 15.2328H25.8988L25.8986 15.2329C26.2969 15.2329 26.6647 15.4452 26.8639 15.7899C27.0628 16.1349 27.0628 16.5596 26.8639 16.9046C26.6648 17.2493 26.297 17.4616 25.8986 17.4616H13.4472L16.8099 20.8321C17.0919 21.1136 17.2026 21.5243 17.0997 21.9092C16.997 22.2945 16.6968 22.5955 16.3121 22.699C15.9271 22.8027 15.5162 22.6931 15.2342 22.4116L9.94987 17.1351C9.79144 16.9783 9.68421 16.7775 9.64239 16.5585C9.63462 16.4882 9.63462 16.4175 9.64239 16.3472C9.64668 16.0583 9.76383 15.7824 9.9689 15.5787L15.2417 10.2866C15.5255 10.0164 15.9301 9.91509 16.3075 10.0196C16.6852 10.1239 16.9801 10.419 17.0846 10.7965C17.1889 11.1739 17.0876 11.5787 16.8174 11.8623H16.8176L13.4472 15.2328Z"
+                                        fill="#43A9BC" />
+                                </svg>
+                            </div>
+
+                            <div class="mt-2">
+                                <apx-chart [series]="series" [chart]="chart" [xaxis]="xaxis" [yaxis]="yaxis"
+                                    [dataLabels]="dataLabels" [plotOptions]="plotOptions" [fill]="fill" [colors]="Colors1" [title]="title"  [tooltip]="tooltip">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="surgery_records graph_fixed_alter_list border shadow-sm rounded" *ngIf="currentReportData.length > 0">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="col-9">
+                                        <p class="fw-semibold">Name</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p class="fw-semibold">Count</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body" style="height: 450px;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of currentReportData">
+                                    <div class="col-9">
+                                        <p>{{ item.Name }}</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p>{{ item.Count | number }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-8" *ngIf="selectedCategory.value != 'surgery' && currentDeptData.length > 0">
+                        <div class="graph_section h-100 border shadow-sm">
+                            <!-- <h6>
+                                    Top Surgery Count by Doctor
+                                    <span *ngIf="procedurename"> - {{ procedurename }}</span> 
+                                </h6> -->
+                            <div class="mt-2">
+                                <apx-chart [series]="deptSeries" [chart]="deptChart" [xaxis]="deptXAxis"
+                                    [plotOptions]="deptPlotOptions" [fill]="deptFill" [colors]="deptColors1"
+                                    [title]="deptTitle" [legend]="{ show: false }">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4" *ngIf="selectedCategory.value != 'surgery' && currentDeptData.length > 0">
+                        <div class="surgery_records graph_fixed_alter_list border shadow-sm rounded">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="col-9">
+                                        <p class="fw-semibold">Doctor</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p class="fw-semibold">Count</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body" style="height: 500px;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of currentDeptData">
+                                    <div class="col-9">
+                                        <p>{{ item.Name }}</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p>{{ item.Count | number }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-8" *ngIf="currentDoctorData.length > 0">
+                        <div class="graph_section h-100 border shadow-sm">
+                            <!-- <h6>
+                                    Top Surgery Count by Doctor
+                                    <span *ngIf="procedurename"> - {{ procedurename }}</span> 
+                                </h6> -->
+                            <div class="mt-2">
+                                <apx-chart [series]="doctorSeries" [chart]="doctorChart" [xaxis]="doctorXAxis"
+                                    [plotOptions]="doctorPlotOptions" [fill]="doctorFill" [colors]="doctorColors1"
+                                    [title]="doctorTitle" [legend]="{ show: false }">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4" *ngIf="currentDoctorData.length > 0">
+                        <div class="surgery_records graph_fixed_alter_list border shadow-sm rounded">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="col-9">
+                                        <p class="fw-semibold">Doctor</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p class="fw-semibold">Count</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body" style="height: 500px;">
+                                <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of currentDoctorData">
+                                    <div class="col-9">
+                                        <p>{{ item.Name }}</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p>{{ item.Count | number }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-8">
+                        <div class="graph_section h-100 border shadow-sm mt-2" *ngIf="currentMonthlyData.length > 0">
+                            <!-- <h6>Monthly Surgery count by {{ monthlySubtitle.text || 'Doctor' }}</h6> -->
+                            <div class="mt-2">
+                                <apx-chart [series]="monthlySeries" [chart]="monthlyChart" [xaxis]="monthlyXAxis"
+                                    [yaxis]="monthlyYAxis" [stroke]="monthlyStroke" [fill]="monthlyFill"
+                                    [grid]="monthlyGrid" [title]="monthlyTitle" [dataLabels]="monthlyDataLabels"
+                                    [markers]="monthlyMarkers">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="surgery_records graph_fixed_alter_list border shadow-sm rounded" *ngIf="currentMonthlyData.length > 0">
+                            <div class="fixed_alter_header rounded-top">
+                                <div class="row gx-2 p-2 mx-0">
+                                    <div class="col-9">
+                                        <p class="fw-semibold">Month</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p class="fw-semibold">Count</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fixed_alter_body" style="height: 500px;">
+                                <div class="row gx-2 p-2 mx-0 alter_div"
+                                    *ngFor="let item of monthlyChartData; let i = index">
+                                    <div class="col-9">
+                                        <p>{{ monthlyXAxis.categories[i] }}</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p>{{ item | number }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>

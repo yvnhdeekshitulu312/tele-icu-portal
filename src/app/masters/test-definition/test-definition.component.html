@@ -1,0 +1,705 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+<div class="container__wrapper p-0">
+    <div class="page-header sticky-top shadow-sm justify-content-between">
+        <h2 class="page-heading">Test Definition</h2>
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-danger-outline" (click)="onClearClick()">Clear</button>
+            <button class="btn btn-main-outline" (click)="onSaveClick()">{{testDefinitionForm.get('TestId').value ?
+                'Modify' : 'Save'}}</button>
+        </div>
+    </div>
+
+    <div class="p-2">
+        <form [formGroup]="testDefinitionForm">
+            <div class="row g-2">
+                <div class="col">
+                    <label for="" class="form-label">Code</label>
+                    <input type="text" class="form-control" formControlName="Code">
+                </div>
+                <div class="col-2">
+                    <label for="" class="form-label">Name</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control pe-5" autocomplete="off" [matAutocomplete]="testname"
+                            formControlName="TestName"
+                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchTests($event)">
+                        <mat-autocomplete #testname="matAutocomplete" (optionSelected)="onSelectTest($event)">
+                            <mat-option *ngFor="let item of testsCollection" [value]="item.Name">
+                                {{item.Name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button class="btn btn-secondary-fill btn-icon" type="button" id="button-addon2">
+                            <img src="assets/images/icons/icon-search.svg" alt="">
+                        </button>
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="" class="form-label">Synonym</label>
+                    <input type="text" class="form-control" formControlName="Synonym">
+                </div>
+                <div class="col">
+                    <label for="" class="form-label">Abbrevation</label>
+                    <input type="text" class="form-control" formControlName="Abbreviation">
+                </div>
+                <div class="col-2">
+                    <label for="" class="form-label">Specialization</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" [matAutocomplete]="specialisation"
+                            formControlName="Specialisation"
+                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchSpecialisation($event)">
+                        <mat-autocomplete #specialisation="matAutocomplete">
+                            <mat-option *ngFor="let item of SpecialisationList"
+                                (onSelectionChange)="onSpecialisationSelected(item)">
+                                {{item.Name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button type="button" id="button-addon2" class="btn btn-secondary-fill btn-icon">
+                            <img src="assets/images/icons/icon-search.svg" alt="">
+                        </button>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <label for="" class="form-label">Performed To</label>
+                    <select name="" class="form-select">
+                        <option value="">Both</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <div class="card card-style-1 rounded h-100">
+                            <div class="border-bottom p-2">
+                                <h6 class="clr-primary-600">After Specimen Collection</h6>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label text-nowrap">Approx. Time to Perform Test</label>
+                                    <div class="d-flex align-items-center gap-2 w-100">
+                                        <input type="number" class="form-control w-auto" formControlName="TotTestTime">
+                                        <select name="" class="form-select pe-5 w-25" formControlName="TimeUnit">
+                                            <option value="0">Select</option>
+                                            <option *ngFor="let option of ageCollection" value="{{option.id}}">
+                                                {{option.value}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                <h6 class="clr-primary-600">Patient Should Not Undergo Investigation</h6>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="" class="form-label text-nowrap">No. of times</label>
+                                        <input type="number" class="form-control" formControlName="MaxCount">
+                                    </div>
+                                    <div class="">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input type="number" class="form-control" placeholder="Within"
+                                                formControlName="Maxperiod">
+                                            <select name="" class="form-select pe-5" formControlName="MaxUoMID">
+                                                <option value="0">Select</option>
+                                                <option *ngFor="let option of ageCollection" value="{{option.id}}">
+                                                    {{option.value}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card card-style-1 rounded h-100 d-flex justify-content-center">
+                            <div class="p-2 py-3 row g-3 w-100 mx-0">
+                                <div class="col-4">
+                                    <div class="custom_check d-flex align-items-center gap-2"
+                                        [class.active]="testDefinitionForm.get('IsStatTest').value"
+                                        (click)="changeCheckboxSelection('IsStatTest')">
+                                        <svg style="min-width: 1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Stat</p>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="custom_check d-flex align-items-center gap-2"
+                                        [class.active]="testDefinitionForm.get('NeedClinicalHstry').value"
+                                        (click)="changeCheckboxSelection('NeedClinicalHstry')">
+                                        <svg style="min-width: 1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Requires Clinical History</p>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="custom_check d-flex align-items-center gap-2"
+                                        [class.active]="testDefinitionForm.get('IsNONSTAT').value"
+                                        (click)="changeCheckboxSelection('IsNONSTAT')">
+                                        <svg style="min-width: 1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Non Stat</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-2 py-3 row g-3 w-100 mx-0">
+                                <div class="col-4">
+                                    <div class="custom_check d-flex align-items-center gap-2"
+                                        [class.active]="testDefinitionForm.get('IsMultiObservation').value"
+                                        (click)="changeCheckboxSelection('IsMultiObservation')">
+                                        <svg style="min-width: 1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Has multiple observations</p>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="custom_check d-flex align-items-center gap-2"
+                                        [class.active]="testDefinitionForm.get('HasZoneDiameter').value"
+                                        (click)="changeCheckboxSelection('HasZoneDiameter')">
+                                        <svg style="min-width: 1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Has zone diameter</p>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="custom_check d-flex align-items-center gap-2"
+                                        [class.active]="testDefinitionForm.get('IsPreventive').value"
+                                        (click)="changeCheckboxSelection('IsPreventive')">
+                                        <svg style="min-width: 1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Is preventive test</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-2 py-3 row g-3 w-100 mx-0">
+                                <div class="col-4">
+                                    <div class="custom_check d-flex align-items-center gap-2"
+                                        [class.active]="testDefinitionForm.get('IsExternal').value"
+                                        (click)="changeCheckboxSelection('IsExternal')">
+                                        <svg style="min-width: 1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Out sourcing</p>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="custom_check d-flex align-items-center gap-2"
+                                        [class.active]="testDefinitionForm.get('IsBedside').value"
+                                        (click)="changeCheckboxSelection('IsBedside')">
+                                        <svg style="min-width: 1rem;" width="16" height="16" viewBox="0 0 20 21"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                        <p class="m-0 fs-7">Bed side test</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row g-2 align-items-center mt-3">
+            <div class="col">
+                <div class="" [formGroup]="addForm">
+                    <div class="row g-2">
+                        <div class="col-2">
+                            <label for="" class="form-label clr-primary-600">Gender</label>
+                            <select name="" class="form-select pe-5" formControlName="gender">
+                                <option value="0">Select</option>
+                                <option *ngFor="let option of genderCollection" value="{{option.id}}">
+                                    {{option.value}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <div class="d-flex align-items-center gap-1">
+                                <div class="w-50">
+                                    <label for="" class="form-label clr-primary-600">Age-From</label>
+                                    <input type="number" class="form-control" formControlName="ageFrom">
+                                </div>
+                                <div class="w-50">
+                                    <label for="" class="form-label clr-primary-600">Age-Form</label>
+                                    <select name="" class="form-select pe-5" formControlName="ageFromUoMID">
+                                        <option value="0">Select</option>
+                                        <option *ngFor="let option of ageCollection" value="{{option.id}}">
+                                            {{option.value}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="d-flex align-items-center gap-1">
+                                <div class="w-50">
+                                    <label for="" class="form-label clr-primary-600">Age-To</label>
+                                    <input type="number" class="form-control" formControlName="ageTo">
+                                </div>
+                                <div class="w-50">
+                                    <label for="" class="form-label clr-primary-600">Age-To</label>
+                                    <select name="" class="form-select pe-5" id="" formControlName="ageToUoMID">
+                                        <option value="0">Select</option>
+                                        <option *ngFor="let option of ageCollection" value="{{option.id}}">
+                                            {{option.value}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <div class="d-flex align-items-center justify-content-end gap-2">
+                        <button class="btn btn-danger-outline" (click)="initializaAddForm()">Clear</button>
+                        <button class="btn btn-main-outline" [disabled]="!addForm.valid"
+                            (click)="onAddClick()">Add</button>
+                    </div>
+                    <div class="clinical_toggle toggle__switch switch-sm d-inline-flex">
+                        <button class="btn" [class.selected]="testDefinitionForm.get('Isresult').value === '4'"
+                            (click)="onResultTypeSelection()">Results</button>
+                        <button class="btn" [class.selected]="testDefinitionForm.get('Isresult').value === '7'"
+                            (click)="onResultTypeSelection()">Report Type</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fixed_alter_list rounded border-primary-200 mt-3">
+            <div class="fixed_alter_header bg-primary-50 rounded-top">
+                <div class="row gx-2 align-items-center p-2 mx-0">
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Sl.no</p>
+                    </div>
+                    <div class="" style="width: 15%;">
+                        <p class="label m-0">Gender</p>
+                    </div>
+                    <div class="" style="width: 15%;">
+                        <p class="label m-0">Age-Form</p>
+                    </div>
+                    <div class="" style="width: 15%;">
+                        <p class="label m-0">Age-To</p>
+                    </div>
+                </div>
+            </div>
+            <div class="fixed_alter_body height-unset">
+                <div class="row gx-2 align-items-center p-2 py-1 mx-0 alter_div"
+                    *ngFor="let item of testAgesCollection; let i = index;">
+                    <div class="" style="width: 10%;">
+                        <p class="m-0">{{ i + 1}}</p>
+                    </div>
+                    <div class="" style="width: 15%;">
+                        <p class="m-0">{{item.GenderName}}</p>
+                    </div>
+                    <div class="" style="width: 15%;">
+                        <p class="m-0">{{item.Frmage}} {{item.FromAgeUoM}}</p>
+                    </div>
+                    <div class="" style="width: 15%;">
+                        <p class="m-0">{{item.TOAGE}} {{item.ToAgeUoM}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-main-outline" data-bs-target="#addLocationModal" data-bs-toggle="modal">Add
+                    Location</button>
+            </div>
+        </div>
+
+        <div class="fixed_alter_list rounded border-primary-200 mt-3">
+            <div class="fixed_alter_header bg-primary-50 rounded-top">
+                <div class="row gx-2 align-items-center p-2 mx-0">
+                    <div class="" style="width: 6%;">
+                        <p class="label m-0">Location</p>
+                    </div>
+                    <div class="" style="width: 9%;">
+                        <p class="label m-0">Will be Performed on</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Default Reagent</p>
+                    </div>
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">Default Method</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Default Equipment</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Default Doctor</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Result Availability Time</p>
+                    </div>
+                    <div class="" style="width: 4%;">
+                        <p class="label m-0">Units</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">CutOff Start Time</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">CutOff End Time</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Default Provider</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Perfomed Type</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="label m-0">Perfomed Hospital </p>
+                    </div>
+                </div>
+            </div>
+            <div class="fixed_alter_body height-unset">
+                <div class="row gx-2 align-items-center p-2 py-1 mx-0 alter_div"
+                    *ngFor="let item of testHospitalsCollection">
+                    <div class="" style="width: 6%;">
+                        <p class="m-0">{{item.Hospital}}</p>
+                    </div>
+                    <div class="" style="width: 9%;">
+                        <p class="m-0">{{item.Avail}}</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.ReagentProfile}}</p>
+                    </div>
+                    <div class="" style="width: 7%;">
+                        <p class="m-0">{{item.MethodName}}</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.Equipment}}</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.DocFullName}}</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="m-0">{{item.ResultAvailabilityTime}}</p>
+                    </div>
+                    <div class="" style="width: 4%;">
+                        <p class="m-0">-</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.CutOffStartTime}}</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.CutOffEndTime}}</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.ProviderName}}</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.PerformedType}}</p>
+                    </div>
+                    <div class="" style="width: 8%;">
+                        <p class="m-0">{{item.PerformHospitalName}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <div class="row g-2 align-items-end">
+                <div class="col-12">
+                    <div class="custom_check d-flex align-items-center gap-2 mb-1">
+                        <svg style="min-width: 1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0">Print Notes</p>
+                    </div>
+                    <span class="textarea_box textarea_box_double bg-transparent p-2 rounded-2 d-block w-100"
+                        contenteditable="true"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addLocationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 70%;">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <h5 class="modal-title">Add Location</h5>
+                <div class="d-flex align-items-center gap-2 justify-content-end">
+                    <button class="btn btn-main-outline">Save</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-row align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3 w-100">
+                        <div class="d-flex align-items-center gap-2 col-2">
+                            <label for="" class="form-label m-0">Location</label>
+                            <select name="" class="form-select pe-5" id="">
+                                <option value="">Select</option>
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="custom_check d-flex align-items-center gap-2">
+                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                    <path
+                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                </svg>
+                                <p class="m-0 fs-7">Performed Locally</p>
+                            </div>
+                            <div class="custom_check d-flex align-items-center gap-2">
+                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                    <path
+                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                </svg>
+                                <p class="m-0 fs-7">Performed at Other Location</p>
+                            </div>
+                            <div class="custom_check d-flex align-items-center gap-2">
+                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                    <path
+                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                </svg>
+                                <p class="m-0 fs-7">Out Sourced</p>
+                            </div>
+                            <div class="custom_check d-flex align-items-center gap-2">
+                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                    <path
+                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                </svg>
+                                <p class="m-0 fs-7">Not Perfomed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 row g-2">
+                    <div class="col-12">
+                        <div class="card card-style-1 rounded">
+                            <div
+                                class="card-header align-items-start justify-content-between py-2 min-height-unset rounded-top">
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="" class="form-label m-0 text-nowrap">Criteria</label>
+                                    <select name="" class="form-select pe-5" id="">
+                                        <option value="">Days</option>
+                                        <option value="">Days</option>
+                                    </select>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 alldays">
+                                    <div class="alldays_btn height-unset">
+                                        All Days
+                                    </div>
+                                    <div class="week_circles d-flex align-items-center gap-2  me-4">
+                                        <div class="week_letter">F</div>
+                                        <div class="week_letter active">S</div>
+                                        <div class="week_letter">S</div>
+                                        <div class="week_letter">M</div>
+                                        <div class="week_letter">T</div>
+                                        <div class="week_letter">W</div>
+                                        <div class="week_letter">T</div>
+                                    </div>
+                                </div>
+                                <!-- <div class="mt-2 row g-2 w-100">
+                                        <div class="col">
+                                            <div class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Mon</p>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Tue</p>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Wed</p>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Thu</p>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Fri</p>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Sat</p>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Sun</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="custom_check d-flex align-items-center gap-2">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg" class="check_svg"><circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle><path d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z" fill="white" stroke="white" stroke-width="0.25"></path></svg>                          
+                                                <p class="m-0 fs-7">Select All Days</p>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                            </div>
+                            <div class="p-3">
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <label for="" class="form-label">Result Availability Time</label>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input type="text" class="form-control">
+                                            <select name="" class="form-select" id="">
+                                                <option value="">Contains</option>
+                                                <option value="">Contains</option>
+                                                <option value="">Contains</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <label for="" class="form-label">CutOff Start Time</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-3">
+                                        <label for="" class="form-label">CutOff End Time</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card card-style-1 rounded">
+                            <div class="card-header justify-content-start py-2 rounded-top min-height-unset">
+                                <h5 class="card-heading">Default</h5>
+                            </div>
+                            <div class="p-3">
+                                <div class="row g-2">
+                                    <div class="col-3">
+                                        <label for="" class="form-label">Reagent</label>
+                                        <select name="" class="form-select" id="">
+                                            <option value="">Select</option>
+                                            <option value="">Select</option>
+                                            <option value="">Select</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <label for="" class="form-label">Method</label>
+                                        <select name="" class="form-select" id="">
+                                            <option value="">Select</option>
+                                            <option value="">Select</option>
+                                            <option value="">Select</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <label for="" class="form-label">Equipment</label>
+                                        <select name="" class="form-select" id="">
+                                            <option value="">Select</option>
+                                            <option value="">Select</option>
+                                            <option value="">Select</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <label for="" class="form-label">Doctor</label>
+                                        <div class="d-flex input-group w-auto">
+                                            <input type="text" class="form-control" placeholder="">
+                                            <button type="button" class="btn btn-secondary-fill btn-icon">
+                                                <img src="assets/images/icons/icon-search.svg" alt="">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="card card-style-1 mt-3 rounded">
+                                <div class="card-header justify-content-start py-2 rounded-top">
+                                    <div class="d-flex input-group w-auto">
+                                        <input type="text" class="form-control" placeholder="Procedure Name">
+                                        <button type="button" class="btn btn-secondary-fill btn-icon">
+                                            <img src="assets/images/icons/icon-search.svg" alt="">
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="p-3">
+                                    <table class="table m-0">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Procedure Name</th>
+                                                <th>Default</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="savemsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

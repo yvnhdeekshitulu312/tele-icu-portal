@@ -1,0 +1,733 @@
+<div class="page-header justify-content-start sticky-top shadow-sm">
+    <h2 class="page-heading">Laboratory KPI Dashboard</h2>
+</div>
+<div class="container-fluid p-0 analytics_graphs IP_graph">
+    <div class="p-2">
+        <div class="row g-2">
+            <div class="col-2" style="width: 13%;">
+                <div class="left_nav">
+                    <div class="sidebar-container rounded">
+                        <form [formGroup]="datesForm" class="d-flex flex-column gap-1">
+                            <label class="form-label m-0">From Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="fromPicker" placeholder="From Date"
+                                    formControlName="fromdate" />
+                                <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #fromPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <label class="form-label m-0">To Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="toPicker" placeholder="To Date"
+                                    formControlName="todate" />
+                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #toPicker></mat-datepicker>
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 my-2">
+                        <button type="button" class="btn btn-main-outline w-100" (click)="fetchLabData()">
+                            Fetch
+                        </button>
+                        <button type="button" class="btn btn-outline-danger w-100" (click)="clearFilters()">
+                            Clear
+                        </button>
+                    </div>
+                    <h5 class="fs-6">Filters</h5>
+                    <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                        <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_9239_2779)">
+                                <path
+                                    d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                    fill="#368796" />
+                            </g>
+                        </svg>
+                        <input type="text" class="form-control" [matAutocomplete]="roleAuto2" placeholder="Search">
+                        <mat-autocomplete #roleAuto2="matAutocomplete">
+                            <mat-option *ngFor="let item of locations">
+                                <div (click)="locationOptionClicked($event, item);">
+                                    <mat-checkbox [checked]="item.selected" (change)="toggleLocationSelection(item)"
+                                        (click)="$event.stopPropagation()">
+                                        {{ item.label }}
+                                    </mat-checkbox>
+                                </div>
+                            </mat-option>
+                        </mat-autocomplete>
+                    </div>
+
+                    <div class="readmissionCard border rounded mt-2">
+                        <div class="readmissionCard_header rounded-top d-flex gap-2">
+                            <div class="col text-white text-center py-2 fw-bold" style="font-size: 0.9rem;">
+                                Total Patients
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <div class="col">
+                                <h4 class="rounded-bottom text-center my-3"
+                                    style="font-size: 1.5rem; font-weight: 600;">
+                                    {{patientsAndTests.TotalPatients | number}}
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="readmissionCard border rounded mt-2">
+                        <div class="readmissionCard_header rounded-top d-flex gap-2">
+                            <div class="col text-white text-center py-2 fw-bold" style="font-size: 0.9rem;">
+                                Total Tests
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <div class="col">
+                                <h4 class="rounded-bottom text-center my-3"
+                                    style="font-size: 1.5rem; font-weight: 600;">
+                                    {{patientsAndTests.TotalTests | number}}
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mx-auto">
+                        <div class="mt-2 bg-white p-2 py-3 rounded text-center">
+                            <p class="fs-7 fw-semibold mb-2">Blood Culture Contamination</p>
+
+                            <div class="mb-3">
+                                <select class="form-select form-select-sm"
+                                    style="font-size: 0.8rem; max-width: 200px; margin: 0 auto;"
+                                    [(ngModel)]="selectedBloodCultureStatus"
+                                    (ngModelChange)="onBloodCultureStatusChange($event)">
+                                    <option *ngFor="let status of bloodCultureStatuses" [ngValue]="status">
+                                        {{status.statusName}}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="mx-auto">
+                                <apx-chart *ngIf="bloodCultureChart && selectedBloodCultureStatus"
+                                    [series]="bloodCultureChart.series" [chart]="bloodCultureChart.chart"
+                                    [colors]="bloodCultureChart.colors" [fill]="bloodCultureChart.fill"
+                                    [stroke]="bloodCultureChart.stroke" [legend]="bloodCultureChart.legend"
+                                    [tooltip]="bloodCultureChart.tooltip" [dataLabels]="bloodCultureChart.dataLabels"
+                                    [plotOptions]="bloodCultureChart.plotOptions">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col dashboardHeight">
+                <div class="row gx-2 mx-0">
+                    <div class="col-8">
+                        <div class="bg-white p-2 rounded border shadow-sm h-100">
+                            <h6 class="fs-6 title_clr fw-semibold">Tests by Specialization</h6>
+                            <div id="chart" *ngIf="chartOptions?.series">
+                                <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart"
+                                    [plotOptions]="chartOptions.plotOptions"
+                                    [dataLabels]="chartOptions.dataLabels || {}"></apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 d-flex flex-column gap-2">
+                        <div class="bg-white p-2 rounded border shadow-sm h-100">
+                            <div>
+                                <apx-chart *ngIf="locationChart" [series]="locationChart.series"
+                                    [chart]="locationChart.chart" [labels]="locationChart.labels"
+                                    [colors]="locationChart.colors" [fill]="locationChart.fill"
+                                    [stroke]="locationChart.stroke" [legend]="locationChart.legend"
+                                    [tooltip]="locationChart.tooltip" [dataLabels]="locationChart.dataLabels"
+                                    [title]="locationChart.title" [responsive]="locationChart.responsive"
+                                    [plotOptions]="locationChart.plotOptions || {}">
+                                </apx-chart>
+                            </div>
+                        </div>
+                        <div class="bg-white p-2 rounded border shadow-sm h-100">
+                            <div class="mt-2 bg-white p-2 py-3 rounded text-center">
+                                <!-- <p class="fs-7 fw-semibold">Gender</p> -->
+                                <div class="mx-auto">
+                                    <apx-chart *ngIf="genderChart" [series]="genderChart.series"
+                                        [chart]="genderChart.chart" [labels]="genderChart.labels"
+                                        [colors]="genderChart.colors" [fill]="genderChart.fill"
+                                        [stroke]="genderChart.stroke" [legend]="genderChart.legend"
+                                        [tooltip]="genderChart.tooltip" [dataLabels]="genderChart.dataLabels"
+                                        [title]="genderChart.title" [responsive]="genderChart.responsive"
+                                        [plotOptions]="genderChart.plotOptions || {}">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 d-flex flex-column gap-2">
+                        <div class="bg-white p-2 rounded border shadow-sm h-100">
+                            <div>
+                                <apx-chart *ngIf="patientChart" [series]="patientChart.series"
+                                    [chart]="patientChart.chart" [labels]="patientChart.labels"
+                                    [colors]="patientChart.colors" [fill]="patientChart.fill"
+                                    [stroke]="patientChart.stroke" [legend]="patientChart.legend"
+                                    [tooltip]="patientChart.tooltip" [dataLabels]="patientChart.dataLabels"
+                                    [title]="patientChart.title" [responsive]="patientChart.responsive"
+                                    [plotOptions]="patientChart.plotOptions || {}">
+                                </apx-chart>
+                            </div>
+                        </div>
+                        <div class="bg-white p-2 rounded border shadow-sm h-100">
+                            <div class="mt-2 bg-white p-2 py-3 rounded text-center">
+                                <!-- <p class="fs-7 fw-semibold">Location</p> -->
+                                <div class="mx-auto">
+                                    <apx-chart *ngIf="nationalityChart" [series]="nationalityChart.series"
+                                        [chart]="nationalityChart.chart" [labels]="nationalityChart.labels"
+                                        [colors]="nationalityChart.colors" [fill]="nationalityChart.fill"
+                                        [stroke]="nationalityChart.stroke" [legend]="nationalityChart.legend"
+                                        [tooltip]="nationalityChart.tooltip"
+                                        [dataLabels]="nationalityChart.dataLabels" [title]="nationalityChart.title"
+                                        [responsive]="nationalityChart.responsive"
+                                        [plotOptions]="nationalityChart.plotOptions || {}">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-2 mx-2 bg-white p-2 rounded border shadow-sm">
+                    <div class="row mx-0 gx-3">
+                        <!-- <div class="col-12">
+                            <div class="bg-white p-2 rounded border shadow-sm" *ngIf="labTestSeries">
+                                <apx-chart [series]="labTestSeries" [chart]="labTestChart" [xaxis]="labTestXAxis"
+                                    [plotOptions]="labTestPlotOptions" [fill]="labTestFill" [colors]="labTestColors"
+                                    [title]="labTestTitle" [legend]="{ show: false }" [dataLabels]="labTestDataLabels"
+                                    [tooltip]="labTestTooltip">
+                                </apx-chart>
+                            </div>
+                        </div> -->
+                        <h6 class="fs-6 title_clr fw-semibold">AVERAGE TIME (in minutes)</h6>
+                        <div class="col-3">
+                            <div class="avgtime_circle d-flex align-items-center">
+                                <div class="circle sampleCollection">
+                                    <p class="m-0 fs-5 text-light fw-bold">
+                                        {{LABTestOrdersWaitingAvgTime.SampleCollection}}</p>
+                                </div>
+                                <p class="extender p-2 fs-7 rounded-end">Sample Collection</p>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="avgtime_circle d-flex align-items-center">
+                                <div class="circle acknowledgement">
+                                    <p class="m-0 fs-5 text-light fw-bold">
+                                        {{LABTestOrdersWaitingAvgTime.Acknowledgement}}</p>
+                                </div>
+                                <p class="extender p-2 fs-7 rounded-end">Acknowledgement</p>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="avgtime_circle d-flex align-items-center">
+                                <div class="circle ResultEntry">
+                                    <p class="m-0 fs-5 text-light fw-bold">{{LABTestOrdersWaitingAvgTime.ResultEntered}}
+                                    </p>
+                                </div>
+                                <p class="extender p-2 fs-7 rounded-end">Result Entry</p>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="avgtime_circle d-flex align-items-center">
+                                <div class="circle ResultVerification">
+                                    <p class="m-0 fs-5 text-light fw-bold">
+                                        {{LABTestOrdersWaitingAvgTime.Resultverified}}</p>
+                                </div>
+                                <p class="extender p-2 fs-7 rounded-end">Result Verification</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="row mx-0 g-2">
+                        <div class="col-6">
+                            <div class="bg-white p-2 rounded border shadow-sm h-100">
+                                <div>
+                                    <apx-chart [series]="seriesCriticalFailure" [chart]="chartCriticalFailure"
+                                        [xaxis]="xaxisCriticalFailure" [yaxis]="yaxisCriticalFailure"
+                                        [dataLabels]="dataLabelsCriticalFailure"
+                                        [plotOptions]="plotOptionsCriticalFailure" [fill]="fillCriticalFailure"
+                                        [title]="titleCriticalFailure" [tooltip]="tooltipCriticalFailure"
+                                        [colors]="colorsCriticalFailure" [legend]="legendCriticalFailure">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-white p-2 rounded border shadow-sm h-100">
+                                <div >
+                                    <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                                        <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <g clip-path="url(#clip0_9239_2779)">
+                                                <path
+                                                    d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                                    fill="#368796" />
+                                            </g>
+                                        </svg>
+
+                                        <input type="text" class="form-control" [matAutocomplete]="testAuto"
+                                            placeholder="Search Test">
+
+                                        <mat-autocomplete #testAuto="matAutocomplete">
+                                            <mat-option *ngFor="let test of turnaroundTests">
+                                                <div (click)="testOptionClicked($event, test)">
+                                                    <mat-checkbox [checked]="test.selected"
+                                                        (change)="toggleTestSelection(test)"
+                                                        (click)="$event.stopPropagation()">
+                                                        {{ test.TestName }}
+                                                    </mat-checkbox>
+                                                </div>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </div>
+                                    <apx-chart *ngIf="turnaroundSeries.length > 0" [series]="turnaroundSeries" [chart]="turnaroundChartOptions.chart"
+                                        [xaxis]="turnaroundXAxis" [plotOptions]="turnaroundChartOptions.plotOptions"
+                                        [colors]="turnaroundColors" [title]="turnaroundTitle"
+                                        [dataLabels]="turnaroundChartOptions.dataLabels"
+                                        [tooltip]="turnaroundChartOptions.tooltip"
+                                        [legend]="turnaroundChartOptions.legend">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="row mx-0 gx-2">
+                        <div class="col-4">
+                            <div class="surgery_records graph_fixed_alter_list border rounded shadow-sm">
+                                <div class="fixed_alter_header rounded-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-5 m-0">
+                                            <p class="fw-semibold fs-9">Specialisation</p>
+                                        </div>
+                                        <div class="col-3 m-0">
+                                            <p class="fw-semibold fs-9">Total Tests</p>
+                                        </div>
+                                        <div class="col-3 m-0">
+                                            <p class="fw-semibold fs-9">Percentage (%)</p>
+                                        </div>
+                                        <div class="col-1">
+                                            <div class="custom_tooltip custom_tooltip_left ms-auto d-flex"
+                                                (click)="exportGridData('csv', labData, 'LabData')">
+                                                <svg width="15" height="15"
+                                                    class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                    aria-hidden="true" focusable="false" data-prefix="fas"
+                                                    data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 576 512">
+                                                    <path fill="#8967B3"
+                                                        d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                    </path>
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p class="m-0">Export</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="fixed_alter_body" style="height: 320px;">
+                                    <div class="row gx-2 p-2 alter_div mx-0" *ngFor="let item of labData">
+                                        <div class="col-5 m-0">
+                                            <p class="fs-9 fw-semibold">{{ item.Specialisation }}</p>
+                                        </div>
+                                        <div class="col-3 m-0">
+                                            <p class="fs-9">{{ item.TestCount }}</p>
+                                        </div>
+                                        <div class="col-3 m-0">
+                                            <!-- <p class="fs-9">{{ item.Per | number }}</p> -->
+                                             <p class="fs-9">{{item.Per || 0 | number:'1.2-2'}}%</p>
+                                            
+                                        </div>
+                                        <div class="col-1"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="surgery_records graph_fixed_alter_list border rounded shadow-sm">
+                                <div class="fixed_alter_header rounded-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-3 m-0">
+                                            <p class="fw-semibold fs-9">Month</p>
+                                        </div>
+                                          <div class="col-3 m-0">
+                                            <p class="fw-semibold fs-9">Test Count</p>
+                                        </div>
+                                        <div class="col-5 m-0">
+                                            <p class="fw-semibold fs-9">Critical Value Reporting Failures (%)</p>
+                                        </div>
+                                        <div class="col-1">
+                                            <div class="custom_tooltip custom_tooltip_left ms-auto d-flex"
+                                                (click)="exportGridData('csv', criticalValueData, 'Critical Value')">
+                                                <svg width="15" height="15"
+                                                    class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                    aria-hidden="true" focusable="false" data-prefix="fas"
+                                                    data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 576 512">
+                                                    <path fill="#8967B3"
+                                                        d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                    </path>
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p class="m-0">Export</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="fixed_alter_body" style="height: 307px;">
+                                    <div class="row gx-2 p-2 alter_div mx-0" *ngFor="let item of criticalValueData">
+                                        <div class="col-3 m-0">
+                                            <p class="fs-9 fw-semibold">{{ item.MonthName }}-{{ item.YearID }}</p>
+                                        </div>
+                                        <div class="col-3 m-0">
+                                            <p class="fs-9 fw-semibold">{{ item.TestCount }}</p>
+                                        </div>
+                                        <div class="col-5 m-0">
+                                            <p class="fs-9">{{ item.Per || 0 | number:'1.2-2'}}%</p>
+                                        </div>
+                                        <div class="col-1"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="surgery_records graph_fixed_alter_list border rounded shadow-sm">
+                                <div class="fixed_alter_header rounded-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-5 m-0">
+                                            <p class="fw-semibold fs-9">Test Name</p>
+                                        </div>
+                                        <div class="col-2 m-0">
+                                            <p class="fw-semibold fs-9">Test Count</p>
+                                        </div>
+                                        <div class="col-4 m-0">
+                                            <p class="fw-semibold fs-9">TAT (within 60 min)</p>
+                                        </div>
+                                        <div class="col-1">
+                                            <div class="custom_tooltip custom_tooltip_left ms-auto d-flex"
+                                                (click)="exportGridData('csv', turnaroundData, 'TAT')">
+                                                <svg width="15" height="15"
+                                                    class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                    aria-hidden="true" focusable="false" data-prefix="fas"
+                                                    data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 576 512">
+                                                    <path fill="#8967B3"
+                                                        d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                    </path>
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p class="m-0">Export</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="fixed_alter_body" style="height: 320px;">
+                                    <div class="row gx-2 p-2 alter_div mx-0" *ngFor="let item of turnaroundData">
+                                        <div class="col-5 m-0">
+                                            <p class="fs-9 fw-semibold">{{ item.TestName || 'Unknown Test' }}</p>
+                                        </div>
+                                        <div class="col-2 m-0">
+                                            <p class="fs-9">{{ item.TotalTests }}</p>
+                                        </div>
+
+                                        <div class="col-4 m-0">
+                                            <p class="fs-9">{{ calculateTurnaroundPercentage(item) }}%</p>
+                                        </div>
+                                        <div class="col-1"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="row mx-0 gx-2">
+                        <div class="col-2">
+                            <div class="surgery_records graph_fixed_alter_list border rounded shadow-sm">
+                                <div class="fixed_alter_header rounded-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-6 m-0">
+                                            <p class="fw-semibold fs-9">Total Patients</p>
+                                        </div>
+                                        <div class="col-5 m-0">
+                                            <p class="fw-semibold fs-9">Total Tests</p>
+                                        </div>
+                                        <div class="col-1">
+                                            <div class="custom_tooltip custom_tooltip_left ms-auto d-flex"
+                                                (click)="exportGridData('csv', patientsAndTests, 'PatientsAndTests')">
+                                                <svg width="15" height="15"
+                                                    class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                    aria-hidden="true" focusable="false" data-prefix="fas"
+                                                    data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 576 512">
+                                                    <path fill="#8967B3"
+                                                        d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                    </path>
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p class="m-0">Export</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body" style="height: 150px;">
+                                    <div class="row gx-2 p-2 alter_div mx-0">
+                                        <div class="col-4 m-0">
+                                            <p class="fs-9">{{patientsAndTests.TotalPatients | number}}</p>
+                                        </div>
+                                        <div class="col-4 m-0">
+                                            <p class="fs-9"> {{patientsAndTests.TotalTests | number}}</p>
+                                        </div>
+                                        <div class="col-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-2">
+                            <div class="surgery_records graph_fixed_alter_list border rounded shadow-sm">
+                                <div class="fixed_alter_header rounded-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-10 m-0">
+                                            <p class="fw-semibold fs-9"> Test Count by Patient Type</p>
+                                        </div>
+                                        <div class="col-1">
+                                            <div class="custom_tooltip custom_tooltip_left ms-auto d-flex"
+                                                (click)="exportGridData('csv', locationData, 'Patient Type')">
+                                                <svg width="15" height="15"
+                                                    class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                    aria-hidden="true" focusable="false" data-prefix="fas"
+                                                    data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 576 512">
+                                                    <path fill="#8967B3"
+                                                        d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                    </path>
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p class="m-0">Export</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="fixed_alter_body" style="height: 150px;">
+                                    <div class="row gx-2 p-2 alter_div mx-0" *ngFor="let item of locationData">
+                                        <div class="col-6 m-0">
+                                            <p class="fs-9 fw-semibold">{{ item.Patienttype }}</p>
+                                        </div>
+                                        <div class="col-6 m-0">
+                                            <p class="fs-9">{{ item.TestCount | number }}</p>
+                                        </div>
+                                        <div class="col-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="surgery_records graph_fixed_alter_list border rounded shadow-sm">
+                                <div class="fixed_alter_header rounded-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-10 m-0">
+                                            <p class="fw-semibold fs-9">Test Count by Bill Type</p>
+                                        </div>
+                                        <div class="col-1">
+                                            <div class="custom_tooltip custom_tooltip_left ms-auto d-flex"
+                                                (click)="exportGridData('csv', patientData, 'Bill Type')">
+                                                <svg width="15" height="15"
+                                                    class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                    aria-hidden="true" focusable="false" data-prefix="fas"
+                                                    data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 576 512">
+                                                    <path fill="#8967B3"
+                                                        d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                    </path>
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p class="m-0">Export</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="fixed_alter_body" style="height: 150px;">
+                                    <div class="row gx-2 p-2 alter_div mx-0" *ngFor="let item of patientData">
+                                        <div class="col-6 m-0">
+                                            <p class="fs-9 fw-semibold">{{ item.CompanyType }}</p>
+                                        </div>
+                                        <div class="col-6 m-0">
+                                            <p class="fs-9">{{ item.TestCount | number }}</p>
+                                        </div>
+                                        <div class="col-1"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="surgery_records graph_fixed_alter_list border rounded shadow-sm">
+                                <div class="fixed_alter_header rounded-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-10 m-0">
+                                            <p class="fw-semibold fs-9">Test Count by Patient Gender</p>
+                                        </div>
+                                        <div class="col-1">
+                                            <div class="custom_tooltip custom_tooltip_left ms-auto d-flex"
+                                                (click)="exportGridData('csv', genderData, 'Gender')">
+                                                <svg width="15" height="15"
+                                                    class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                    aria-hidden="true" focusable="false" data-prefix="fas"
+                                                    data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 576 512">
+                                                    <path fill="#8967B3"
+                                                        d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                    </path>
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p class="m-0">Export</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fixed_alter_body" style="height: 150px;">
+                                    <div class="row gx-2 p-2 alter_div mx-0" *ngFor="let item of genderData">
+                                        <div class="col-6 m-0">
+                                            <p class="fs-9 fw-semibold">{{ item.Gender }}</p>
+                                        </div>
+                                        <div class="col-6 m-0">
+                                            <p class="fs-9">{{ item.TestCount | number }}</p>
+                                        </div>
+                                        <div class="col-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="surgery_records graph_fixed_alter_list border rounded shadow-sm">
+                                <div class="fixed_alter_header rounded-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-10 m-0">
+                                            <p class="fw-semibold fs-9">Test Count by Nationality</p>
+                                        </div>
+                                        <div class="col-1">
+                                            <div class="custom_tooltip custom_tooltip_left ms-auto d-flex"
+                                                (click)="exportGridData('csv', nationalityData, 'Nationality')">
+                                                <svg width="15" height="15"
+                                                    class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                    aria-hidden="true" focusable="false" data-prefix="fas"
+                                                    data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 576 512">
+                                                    <path fill="#8967B3"
+                                                        d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                    </path>
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p class="m-0">Export</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="fixed_alter_body" style="height: 150px;">
+                                    <div class="row gx-2 p-2 alter_div mx-0" *ngFor="let item of nationalityData">
+                                        <div class="col-6 m-0">
+                                            <p class="fs-9 fw-semibold">{{ item.Nationality }}</p>
+                                        </div>
+                                        <div class="col-6 m-0">
+                                            <p class="fs-9">{{ item.TestCount | number }}</p>
+                                        </div>
+                                        <div class="col-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-2">
+                            <div class="surgery_records graph_fixed_alter_list border rounded shadow-sm">
+                                <div class="fixed_alter_header rounded-top">
+                                    <div class="row gx-2 p-2 mx-0">
+                                        <div class="col-10 m-0">
+                                            <p class="fw-semibold fs-9">Average Time (in minutes)</p>
+                                        </div>
+                                        <div class="col-1">
+                                            <div class="custom_tooltip custom_tooltip_left ms-auto d-flex"
+                                                (click)="exportGridData('csv', averageTimeData, 'Average Time')">
+                                                <svg width="15" height="15"
+                                                    class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                                    aria-hidden="true" focusable="false" data-prefix="fas"
+                                                    data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 576 512">
+                                                    <path fill="#8967B3"
+                                                        d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                                    </path>
+                                                </svg>
+                                                <div class="tooltip">
+                                                    <p class="m-0">Export</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="fixed_alter_body" style="height: 150px;">
+                                    <div class="row gx-2 p-2 alter_div mx-0" *ngFor="let item of averageTimeData">
+                                        <div class="col-9 m-0">
+                                            <p class="fs-9 fw-semibold">{{ item.Result }}</p>
+                                        </div>
+                                        <div class="col-3 m-0">
+                                            <p class="fs-9">{{ item.TestCount | number }}</p>
+                                        </div>
+                                        <div class="col-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="row mx-0 gx-2">
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{ errorMsg }}</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-main-outline" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

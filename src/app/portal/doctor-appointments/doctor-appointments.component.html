@@ -1,0 +1,505 @@
+<div class="main-content col">
+    <div class="content-wrapper">
+        <div class="row ">
+            <div class="col-lg-12">
+                <div class="sub-heading justify-content-between align-items-center border-bottom">
+                    <h4> Appointments
+                    </h4>
+                    <div class="actions d-flex align-items-center flex-wrap">
+                        <form [formGroup]="tableAppointmentsForm" (keydown.enter)="$event.preventDefault()">
+                            <div class="d-flex w-100 align-items-center justify-content-between">
+                                <div class="d-flex g-2 flex-md-nowrap flex-wrap">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <label for="" class="form-label mb-0 px-2 text-nowrap" translate>From
+                                            Date</label>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label translate>dd-MMM-yyyy
+                                            </mat-label>
+                                            <input matInput class="" formControlName="wmFromDate"
+                                                [matDatepicker]="wmFromDate" (click)="wmFromDate.open()">
+                                            <mat-datepicker-toggle matSuffix [for]="wmFromDate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #wmFromDate>
+                                            </mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="d-flex align-items-center mb-1">
+                                        <label for="" class="form-label mb-0 px-2 text-nowrap" translate>To Date</label>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label translate>dd-MMM-yyyy
+                                            </mat-label>
+                                            <input matInput class="" formControlName="wmToDate"
+                                                [matDatepicker]="wmToDate" (click)="wmToDate.open()">
+                                            <mat-datepicker-toggle matSuffix [for]="wmToDate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #wmToDate>
+                                            </mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="d-flex">
+                                    <div class="">
+                                        <button type="button" class="btn btn-main-fill mx-2"
+                                            (click)="fetchDoctorAppointments()" translate>Search</button>
+                                    </div>
+                                    <!-- <div class="">
+                                    <button type="button" class="btn btn-main-outline" translate>Clear</button>
+                                </div> -->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-1 appointmentList" *ngFor="let al of appointmentList;let i=index">
+            <!-- <h2 class="clr-main fw-bold mb-2">{{al.ScheduleDate}}</h2> -->
+
+            <div class="card border rounded-2 p-3 ps-0 pt-0 mt-1">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                    <div>
+                        <h6 class="mb-0 clr-main appointment_date d-flex">{{al.ScheduleDate}} {{al.ScheduleStartTime}} | 
+                            <span class="d-flex align-items-center ms-1">
+                                <svg width="15" height="18" viewBox="0 0 15 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6.53873 6.38479C6.53873 6.02386 6.83164 5.73094 7.19257 5.73094C7.55351 5.73094 7.84642 6.02386 7.84642 6.38479V10.3079C7.84642 10.6688 7.55351 10.9617 7.19257 10.9617C6.83164 10.9617 6.53873 10.6688 6.53873 10.3079V6.38479Z" fill="#44A7B5"/>
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M13.5395 4.88531L12.7167 5.70815L12.7164 5.70793C13.7572 6.95566 14.3847 8.55964 14.3847 10.3077C14.3847 14.2735 11.1582 17.5 7.19234 17.5C3.22646 17.5 0 14.2733 0 10.3077C0 8.55968 0.627433 6.95573 1.66817 5.7083L0.845333 4.88546C0.590071 4.63005 0.590071 4.21614 0.845333 3.96088C1.1003 3.70562 1.51494 3.70562 1.76991 3.96088L2.59275 4.78372C3.6833 3.8742 5.04588 3.28178 6.53864 3.14648V1.8077H5.88479C5.52386 1.8077 5.23094 1.51478 5.23094 1.15385C5.23094 0.792917 5.52386 0.5 5.88479 0.5H8.50018C8.86112 0.5 9.15403 0.792917 9.15403 1.15385C9.15403 1.51478 8.86112 1.8077 8.50018 1.8077H7.84634L7.84619 3.14633C9.33913 3.28162 10.7018 3.87401 11.7921 4.78357L12.6149 3.96073C12.8703 3.70547 13.2842 3.70547 13.5395 3.96073C13.7948 4.21614 13.7948 4.63005 13.5395 4.88531ZM1.30793 10.3079C1.30793 13.5526 3.94783 16.1925 7.19256 16.1925C10.4373 16.1925 13.0772 13.5526 13.0772 10.3079C13.0772 7.06315 10.4373 4.42324 7.19256 4.42324C3.94783 4.42324 1.30793 7.06315 1.30793 10.3079Z" fill="#44A7B5"/>
+                                    </svg>
+                                 (20 min)
+                            </span>
+                            <span class="d-flex align-items-center justify-content-center ms-2">
+                                <i *ngIf="al.IsVideoConsultation == true" class="fa fa-video-camera menu-icon"
+                                    style="color: #69BAC9;  font-size: 1.5rem;"></i>
+                                <!-- <i *ngIf="al.IsVideoConsultation == false" class="fa fa-clinic-medical menu-icon"
+                                    style="color: #69BAC9;    font-size: 1.5rem;"></i> -->
+                            </span>
+                        </h6>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-end pt-2 gap-1">
+                        <!-- <button class="btn btn-main-outline me-2">Cancel</button>
+                        <button class="btn btn-main-fill me-2">Reschedule</button> -->
+                        <!-- <button class="btn btn-sm btn-danger-outline mx-1" *ngIf="al.IsCancelStartConsDisable" (click)="confirmCancelAppointment(al)">
+                            Cancel
+                        </button>
+                        <button class="btn btn-main-fill" *ngIf="al.IsVideoConsultation == true && al.IsCancelStartConsDisable"
+                            (click)="startConsultation(al)">Start Consultation</button> -->
+                    </div>
+                </div>
+                <div class="row gx-3">
+                    <div class="col-4">
+                        <div class="p-3 pb-0 d-flex align-items-start">
+                            <div class="d-flex flex-column align-items-center justify-content-center me-3">
+                                <span class="border rounded-pill p-1">
+                                    <svg width="26" height="28" viewBox="0 0 26 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7745 0.325348C15.8758 0.325348 18.4444 2.72375 18.8985 5.85444L18.8985 5.8545C18.9454 6.17787 18.9697 6.50908 18.9695 6.84618C18.9695 7.18347 18.9453 7.51484 18.8983 7.83821C18.5599 12.3419 15.9476 15.8459 12.7744 15.8459C9.64177 15.8459 7.05578 12.4308 6.66507 8.01061C6.65973 7.95261 6.65477 7.89442 6.65038 7.83605C6.62291 7.64448 6.60402 7.4497 6.59257 7.2532C6.58475 7.11851 6.5796 6.98325 6.5796 6.84646C6.5796 6.51011 6.60402 6.17949 6.65057 5.85688C7.10331 2.72516 9.67264 0.325348 12.7745 0.325348ZM12.7746 14.8987C15.5602 14.8987 17.8539 11.8222 18.1508 7.86828L18.1505 7.86868C18.1876 7.61359 18.2076 7.35243 18.2114 7.08705L17.3418 8.08596C17.8218 7.02337 16.1128 4.32002 16.1128 4.32002C13.2344 6.40218 8.953 4.32002 8.953 4.32002C7.66105 4.82995 8.27306 8.46276 8.27306 8.46276C7.95101 8.23783 7.65512 8.12088 7.41398 8.06021C7.76953 11.9212 10.0339 14.8987 12.7746 14.8987ZM12.9994 20.2737C12.9994 20.2737 17.8813 16.6296 17.9136 15.1539C22.0355 15.5305 25.2649 18.9955 25.2649 23.2153C25.2649 27.6756 21.658 27.6756 17.2024 27.6755H17.1688H8.83095H8.79728C4.34148 27.6756 0.734863 27.6756 0.734863 23.2153C0.734863 18.9954 3.96358 15.5303 8.08517 15.1539C8.11775 16.6295 12.9994 20.2737 12.9994 20.2737Z" fill="#5BA5B2"/>
+                                    </svg>
+                                </span>
+                                <p class="clr-main user_ssn rounded-pill mt-2" *ngIf="al.SSN">{{al.SSN}}</p>
+                            </div>
+                            <div class="d-flex gap-1 flex-column">
+                                <h6 class="me-3 my-0">{{al.PatientName}}</h6>
+                                <div class="patient_details">
+                                    <p class="mb-2">{{al.Gender}}, {{al.Age}}</p>
+                                    <p class=" mb-2"> {{al.Nationality}} </p>
+                                    <p class="d-flex align-items-center" *ngIf="al.Height">
+                                        <span class="height_circle me-1">H</span> {{al.Height}} Cm(s) 
+                                        <span class="weight_circle me-1 ms-2">W</span> {{al.Weight}} kg(s)
+                                    </p>
+                                    <!-- <p class="mx-2 mb-0" *ngIf="al.IsVideoConsultation == true">Video Consultation (20 min)</p> | -->
+                                    <!-- <p class="mx-2 mb-0" *ngIf="al.IsVideoConsultation == false">Appointment (20 min)</p> -->
+                                    <!-- <p class="mx-2 mb-0">{{al.DOB}}</p> | -->
+                                    <!-- <p class="mx-2 mb-0">{{al.Gender}}</p> | -->
+                                    <!-- <p class="mx-2 mb-0">{{al.VisitType}}</p> | -->
+                                    <!-- <p class="mx-2 mb-0">{{al.Nationality}}</p> | -->
+                                    <!-- <p class="mx-2 mb-0">{{al.SSN}}</p> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="p-3 pb-0 clr-main-2 " *ngIf="al.PatientID" style="cursor: pointer;" (click)="FetchVitalParams(al)">
+                            <h6 class="d-flex align-items-center justify-content-start gap-2">
+                                <span>
+                                <svg width="17" height="21" viewBox="0 0 17 21" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M11.0664 3.88957C11.0664 4.26859 10.7715 4.56332 10.3925 4.56332H4.74996C4.37089 4.56332 4.07613 4.26859 4.07613 3.88957V2.56324C4.07613 2.18421 4.37105 1.88949 4.74996 1.88949H5.80269C5.99215 1.08946 6.70797 0.5 7.57125 0.5C8.41336 0.5 9.15035 1.08946 9.33981 1.88949H10.3925C10.7716 1.88949 11.0664 2.18437 11.0664 2.56324V3.88957ZM8.32914 2.33178C8.32914 1.91076 7.99223 1.57389 7.57117 1.57389C7.15011 1.57389 6.8132 1.91076 6.8132 2.33178C6.8132 2.75279 7.15011 3.08966 7.57117 3.08966C7.99223 3.08966 8.32914 2.75279 8.32914 2.33178Z"
+                                        fill="url(#paint0_linear_2924_2090)" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M10.4137 8.90002V10.1001C10.4137 10.6264 10.7507 11.0895 11.1928 11.2789V18.7314H1.5287C1.1708 18.7314 0.876038 18.4367 0.876038 18.0788V3.658C0.876038 3.30014 1.17078 3.00541 1.5287 3.00541H3.19194V3.91059C3.19194 4.77377 3.88675 5.46849 4.75003 5.46849H10.3716C11.2349 5.46849 11.9297 4.77377 11.9297 3.91059V3.00541H13.593C13.9509 3.00541 14.2456 3.30013 14.2456 3.658L14.2458 7.61583H11.6981C10.9822 7.61583 10.4137 8.18428 10.4137 8.90002ZM8.58197 7.61598H3.86572C3.61311 7.61598 3.4235 7.80542 3.4235 8.058C3.4235 8.31074 3.61311 8.50018 3.86572 8.50018L8.58197 8.50032C8.83474 8.50032 9.0242 8.31073 9.0242 8.05815C9.0242 7.80541 8.83459 7.61598 8.58197 7.61598ZM8.64514 10.1632H3.86572C3.61311 10.1632 3.4235 10.3527 3.4235 10.6053C3.4235 10.858 3.61311 11.0474 3.86572 11.0474L8.64514 11.0476C8.89791 11.0476 9.08736 10.858 9.08736 10.6054C9.08736 10.3527 8.89775 10.1632 8.64514 10.1632ZM3.86572 16.1421H9.29783C9.55045 16.1421 9.73991 15.9526 9.74006 15.6999C9.74006 15.4472 9.55045 15.2577 9.29783 15.2577H3.86572C3.61296 15.2577 3.4235 15.4473 3.4235 15.6999C3.4235 15.9526 3.61311 16.1421 3.86572 16.1421ZM3.86572 13.5948H9.29783C9.55045 13.5948 9.73991 13.4054 9.74006 13.1527C9.74006 12.8999 9.55045 12.7105 9.29783 12.7105H3.86572C3.61296 12.7105 3.4235 12.9001 3.4235 13.1527C3.4235 13.4054 3.61311 13.5948 3.86572 13.5948Z"
+                                        fill="url(#paint1_linear_2924_2090)" />
+                                    <path
+                                        d="M16.1829 8.47904H11.7193C11.4877 8.47904 11.3192 8.66847 11.3192 8.87907V10.0791C11.3192 10.3107 11.5087 10.4792 11.7193 10.4792H16.1829C16.4145 10.4792 16.5829 10.2897 16.5829 10.0791V8.87907C16.5829 8.66863 16.3935 8.47904 16.1829 8.47904Z"
+                                        fill="url(#paint2_linear_2924_2090)" />
+                                    <path
+                                        d="M12.0981 13.0263V11.3843L15.8036 11.3843L15.8038 18.6474C15.8038 19.679 14.9827 20.5 13.9509 20.5C12.9402 20.5 12.1402 19.6999 12.0981 18.7105L13.4877 18.7106C13.7405 18.7106 13.93 18.521 13.93 18.2685C13.93 18.0157 13.7403 17.8263 13.4877 17.8263H12.0981V16.3105L13.4877 16.3107C13.7405 16.3107 13.93 16.1211 13.93 15.8685C13.93 15.6158 13.7403 15.4263 13.4877 15.4263H12.0981V13.9105L13.4877 13.9107C13.7405 13.9107 13.93 13.7211 13.93 13.4685C13.93 13.2158 13.7403 13.0263 13.4877 13.0263H12.0981Z"
+                                        fill="url(#paint3_linear_2924_2090)" />
+                                    <defs>
+                                        <linearGradient id="paint0_linear_2924_2090" x1="8.72949" y1="0.5" x2="8.72949"
+                                            y2="20.5" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#61BEC5" />
+                                            <stop offset="1" stop-color="#357D83" />
+                                        </linearGradient>
+                                        <linearGradient id="paint1_linear_2924_2090" x1="8.72949" y1="0.5" x2="8.72949"
+                                            y2="20.5" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#61BEC5" />
+                                            <stop offset="1" stop-color="#357D83" />
+                                        </linearGradient>
+                                        <linearGradient id="paint2_linear_2924_2090" x1="8.72949" y1="0.5" x2="8.72949"
+                                            y2="20.5" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#61BEC5" />
+                                            <stop offset="1" stop-color="#357D83" />
+                                        </linearGradient>
+                                        <linearGradient id="paint3_linear_2924_2090" x1="8.72949" y1="0.5" x2="8.72949"
+                                            y2="20.5" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#61BEC5" />
+                                            <stop offset="1" stop-color="#357D83" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                                </span>
+                                Vitals
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="p-3 pb-0 clr-main-2">
+                            <h6 class="d-flex align-items-center justify-content-center gap-2">{{al.ClinicalCondition}}</h6>
+                            </div>
+                    </div>
+                    <div class="col-4 text-end">
+                        <div class="p-3 pb-0 clr-main-2 hoverAllergy d-inline-block" id="divAllergyTooltip" *ngIf="al.IsAllergic">
+                            <h6 class="d-flex align-items-center justify-content-end gap-2">
+                                <span>
+                                    <svg width="25" height="24" viewBox="0 0 25 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M24.7295 12C24.7295 18.6274 19.3569 24 12.7295 24C6.10208 24 0.729492 18.6274 0.729492 12C0.729492 5.37258 6.10208 0 12.7295 0C19.3569 0 24.7295 5.37258 24.7295 12ZM20.2438 19.9085C18.2874 21.768 15.6417 22.9091 12.7295 22.9091C6.70457 22.9091 1.8204 18.0249 1.8204 12C1.8204 9.15759 2.90748 6.56909 4.68855 4.62755C4.71328 4.71321 4.75939 4.794 4.82689 4.8615L9.66127 9.69589L7.60769 11.7645C7.46672 11.9067 7.38724 12.0985 7.3864 12.2987V16.2591L5.31847 18.327C5.24695 18.3979 5.19018 18.4823 5.15144 18.5753C5.1127 18.6683 5.09275 18.768 5.09275 18.8688C5.09275 18.9695 5.1127 19.0692 5.15144 19.1622C5.19018 19.2552 5.24695 19.3396 5.31847 19.4106C5.38941 19.4821 5.4738 19.5388 5.56679 19.5776C5.65978 19.6163 5.75952 19.6363 5.86025 19.6363C5.96099 19.6363 6.06073 19.6163 6.15371 19.5776C6.2467 19.5388 6.3311 19.4821 6.40204 19.4106L8.46997 17.3426H12.4303C12.6305 17.3418 12.8223 17.2623 12.9645 17.1213L15.0331 15.0677L19.7294 19.7641C19.8689 19.9035 20.0651 19.9517 20.2438 19.9085ZM20.6454 19.5065C20.6884 19.328 20.6402 19.132 20.5008 18.9927L15.8073 14.2992L19.2446 10.887C19.5999 10.5326 19.8818 10.1116 20.0741 9.64804C20.2665 9.18451 20.3655 8.68758 20.3655 8.18573C20.3655 7.68388 20.2665 7.18695 20.0741 6.72342C19.8818 6.25989 19.5999 5.83886 19.2446 5.48445C18.8902 5.12914 18.4691 4.84724 18.0056 4.65489C17.5421 4.46255 17.0451 4.36354 16.5433 4.36354C16.0414 4.36354 15.5445 4.46255 15.081 4.65489C14.6175 4.84724 14.1964 5.12914 13.842 5.48445L10.4298 8.92168L5.59828 4.09011C5.53091 4.02274 5.4503 3.97668 5.36483 3.95193C7.3055 2.17508 9.89088 1.09091 12.7295 1.09091C18.7544 1.09091 23.6386 5.97508 23.6386 12C23.6386 14.9083 22.5005 17.5508 20.6454 19.5065ZM8.91255 12.6116L10.7401 10.7747L11.8054 11.84L10.66 12.9855C10.5885 13.0564 10.5317 13.1408 10.493 13.2338C10.4542 13.3268 10.4343 13.4265 10.4343 13.5273C10.4343 13.628 10.4542 13.7277 10.493 13.8207C10.5317 13.9137 10.5885 13.9981 10.66 14.069C10.7309 14.1406 10.8153 14.1973 10.9083 14.2361C11.0013 14.2748 11.101 14.2947 11.2018 14.2947C11.3025 14.2947 11.4022 14.2748 11.4952 14.2361C11.5882 14.1973 11.6726 14.1406 11.7436 14.069L12.889 12.9236L13.9543 13.9889L12.1175 15.8165H8.91255V12.6116ZM11.5095 10.0014L12.5768 11.0686L16.0015 7.64395C16.1452 7.50026 16.3401 7.41953 16.5433 7.41953C16.7465 7.41953 16.9414 7.50026 17.0851 7.64395C17.2288 7.78764 17.3095 7.98252 17.3095 8.18573C17.3095 8.38894 17.2288 8.58382 17.0851 8.72751L13.6604 12.1522L14.7276 13.2195L18.161 9.80345C18.5654 9.36949 18.7855 8.79551 18.7751 8.20245C18.7646 7.60939 18.5243 7.04353 18.1049 6.62411C17.6855 6.20468 17.1196 5.96443 16.5266 5.95397C15.9335 5.9435 15.3595 6.16365 14.9256 6.56801L11.5095 10.0014Z"
+                                            fill="url(#paint0_linear_2924_2059)" />
+                                        <defs>
+                                            <linearGradient id="paint0_linear_2924_2059" x1="12.7295" y1="0"
+                                                x2="12.7295" y2="24" gradientUnits="userSpaceOnUse">
+                                                <stop stop-color="#55C4B9" />
+                                                <stop offset="1" stop-color="#3CA2AA" />
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
+                                </span>
+                                Allergies
+                            </h6>
+                            <!-- Allergies tooltip -->
+                            <div class="viewAllergiesModal" data-bs-backdrop="static" tabindex="-1" id="viewAllergies" tabindex="-1" >
+                                <div class="modal-dialog modal-dialog-scrollable modal-l ">
+                                    <div class="modal-content p-3">
+                                        <div class="modal-header">
+                                            <h6 class="modal-title" translate>Allergies</h6>                                            
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="d-flex w-100 align-items-center justify-content-between mb-3">
+                                                <div class="d-flex w-100 mt-2">
+                                                    <div [innerHtml]="al.AllergyData"></div>
+                                                    <!-- <table class="table border mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th translate>Category</th>
+                                                                <th translate>Allergy</th>
+                                                                <th translate>Capture DateTime</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let view of allergiesList;let i=index">
+                                                                <td>Other Allergy</td>
+                                                                <td>{{view.Allergy}}</td>
+                                                                <td>{{view.CaptureDateTime}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                        <tbody>
+                                                            <tr *ngFor="let view of foodallergiesList;let i=index">
+                                                                <td>Food Allergy</td>
+                                                                <td>{{view.FdIngrName}}</td>
+                                                                <td>{{view.CaptureDateTime}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                        <tbody>
+                                                            <tr *ngFor="let view of drugallergiesList;let i=index">
+                                                                <td>Drug Allergy</td>
+                                                                <td>{{view.GenericName}}</td>
+                                                                <td>{{view.CaptureDateTime}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-end mt-1 gap-2">
+                    <!-- <button class="btn btn-main-outline me-2">Cancel</button>
+                    <button class="btn btn-main-fill me-2">Reschedule</button> -->
+                    <button class="btn btn-sm btn-danger-outline mx-1" *ngIf="al.IsCancelStartConsDisable" (click)="confirmCancelAppointment(al)">
+                        Cancel
+                    </button>
+                    <button class="btn btn-sm btn-main-outline mx-1 d-none">
+                        No-Show
+                    </button>
+                    <button class="btn btn-main-fill" *ngIf="al.IsVideoConsultation == true && al.IsCancelStartConsDisable"
+                        (click)="startConsultation(al)">Start Consultation</button>
+                    <button class="btn btn-main-fill" 
+                    (click)="fetchPatientSummary(al)">Summary</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal" data-bs-backdrop="static" tabindex="-1" id="viewVitals" >
+    <div class="modal-dialog modal-dialog-scrollable modal-xl my-2">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" translate>Vitals</h5>
+                <div class="d-flex align-items-center">
+                    <div class="toggle__swithcer">
+                        <button [class]="btnDoctor" (click)="changeVitalsData('doctor')">Doctor</button>
+                        <button [class]="btnPatient" (click)="changeVitalsData('patient')">Patient</button>
+                    </div>
+                    <button type="button" #closebutton class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex w-100 align-items-center justify-content-between mb-3" id="divDoctorVitals" >
+                    <!-- Doctor Vitals -->
+                    <div class="d-flex w-100" >
+                        <div class="tab-pane fade show active w-100" id="vitals" role="tabpanel" aria-labelledby="vitals-tab">                            
+                            <div class="row g-2">   
+                                <div class="col-lg-12">
+                                    <div class="card  bg-white p-2">
+                                        <div class="sub-heading justify-content-center ">
+                                            <h4> Vital Graph </h4>
+                                        </div>
+                                        <div id="chart-line"></div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="vitaldata_table border rounded-2  bg-white p-2 h-100">
+                                            <form [formGroup]="tableVitalsForm" (keydown.enter)="$event.preventDefault()">
+                                                <div class="d-flex w-100 align-items-center justify-content-between my-3">
+                                                    <div class="d-flex g-2 flex-md-nowrap flex-wrap">
+                                                        <div class="d-flex align-items-center mb-1">
+                                                            <label for="" class="form-label mb-0 px-2 text-nowrap"
+                                                                translate>From Date</label>
+                                                            <mat-form-field appearance="fill">
+                                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                                <input matInput class="" formControlName="vitalFromDate"
+                                                                    [matDatepicker]="vitalFromDate"
+                                                                    (click)="vitalFromDate.open()">
+                                                                <mat-datepicker-toggle matSuffix [for]="vitalFromDate">
+                                                                </mat-datepicker-toggle>
+                                                                <mat-datepicker #vitalFromDate></mat-datepicker>
+                                                            </mat-form-field>
+                                                        </div>
+
+                                                        <div class="d-flex align-items-center mb-1">
+                                                            <label for="" class="form-label mb-0 px-2 text-nowrap"
+                                                                translate>To Date</label>
+                                                            <mat-form-field appearance="fill">
+                                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                                <input matInput class="" formControlName="vitalToDate"
+                                                                    [matDatepicker]="vitalToDate"
+                                                                    (click)="vitalToDate.open()">
+                                                                <mat-datepicker-toggle matSuffix [for]="vitalToDate">
+                                                                </mat-datepicker-toggle>
+                                                                <mat-datepicker #vitalToDate></mat-datepicker>
+                                                            </mat-form-field>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex">
+                                                        <div class="">
+                                                            <button type="button" class="btn btn-main-fill mx-2" (click)="SearchVitalParams('doctor')"
+                                                                translate >Search</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <table class="table mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Vital Date</th>
+                                                        <th>BP-Systolic</th>
+                                                        <th>BP-Diastolic</th>
+                                                        <th>O2 Flow Rate</th>
+                                                        <th>Pulse</th>
+                                                        <th>Respiration</th>
+                                                        <th>SPO2</th>
+                                                        <th>Temparature</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let vital of tableVitalsList;let i=index">
+                                                        <td> {{ vital.VisitDate }} </td>
+                                                        <td> {{ vital.BPSystolic == 'NaN' ? '' : vital.BPSystolic }}
+                                                        </td>
+                                                        <td> {{ vital.BPDiastolic == 'NaN' ? '' : vital.BPDiastolic }}
+                                                        </td>
+                                                        <td> {{ vital.O2FlowRate == 'NaN' ? '' : vital.O2FlowRate }}
+                                                        </td>
+                                                        <td> {{ vital.Pulse == 'NaN' ? '' : vital.Pulse }} </td>
+                                                        <td> {{ vital.Respiration == 'NaN' ? '' : vital.Respiration }}
+                                                        </td>
+                                                        <td> {{ vital.SPO2 == 'NaN' ? '' : vital.SPO2 }} </td>
+                                                        <td> {{ vital.Temparature == 'NaN' ? '' : vital.Temparature }}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+                <div class="d-flex w-100 align-items-center justify-content-between mb-3" id="divPatientVitals">
+                    <!-- Patient Vitals -->
+                    <div class="d-flex w-100">
+                        <div class="tab-pane fade show active w-100" id="vitals" role="tabpanel" aria-labelledby="vitals-tab">                            
+                            <div class="row g-2">   
+                                <div class="col-lg-12">
+                                    <div class="card  bg-white p-2">
+                                        <div class="sub-heading justify-content-center ">
+                                            <h4> Vital Graph </h4>
+                                        </div>
+                                        <div id="pchart-line"></div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="vitaldata_table border rounded-2  bg-white p-2 h-100">
+                                            <form [formGroup]="tablePatientVitalsForm" (keydown.enter)="$event.preventDefault()">
+                                                <div class="d-flex w-100 align-items-center justify-content-between my-3">
+                                                    <div class="d-flex g-2 flex-md-nowrap flex-wrap">
+                                                        <div class="d-flex align-items-center mb-1">
+                                                            <label for="" class="form-label mb-0 px-2 text-nowrap"
+                                                                translate>From Date</label>
+                                                            <mat-form-field appearance="fill">
+                                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                                <input matInput class="" formControlName="vitalPFromDate"
+                                                                    [matDatepicker]="vitalPFromDate"
+                                                                    (click)="vitalPFromDate.open()">
+                                                                <mat-datepicker-toggle matSuffix [for]="vitalPFromDate">
+                                                                </mat-datepicker-toggle>
+                                                                <mat-datepicker #vitalPFromDate></mat-datepicker>
+                                                            </mat-form-field>
+                                                        </div>
+
+                                                        <div class="d-flex align-items-center mb-1">
+                                                            <label for="" class="form-label mb-0 px-2 text-nowrap"
+                                                                translate>To Date</label>
+                                                            <mat-form-field appearance="fill">
+                                                                <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                                <input matInput class="" formControlName="vitalPToDate"
+                                                                    [matDatepicker]="vitalPToDate"
+                                                                    (click)="vitalPToDate.open()">
+                                                                <mat-datepicker-toggle matSuffix [for]="vitalPToDate">
+                                                                </mat-datepicker-toggle>
+                                                                <mat-datepicker #vitalPToDate></mat-datepicker>
+                                                            </mat-form-field>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex">
+                                                        <div class="">
+                                                            <button type="button" class="btn btn-main-fill mx-2" (click)="SearchVitalParams('patient')"
+                                                                translate >Search</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <table class="table mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Vital Date</th>
+                                                        <th>BP-Systolic</th>
+                                                        <th>BP-Diastolic</th>
+                                                        <th>O2 Flow Rate</th>
+                                                        <th>Pulse</th>
+                                                        <th>Respiration</th>
+                                                        <th>SPO2</th>
+                                                        <th>Temparature</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let vital of tablePatientVitalsList;let i=index">
+                                                        <td> {{ vital.VisitDate }} </td>
+                                                        <td> {{ vital.BPSystolic == 'NaN' ? '' : vital.BPSystolic }}
+                                                        </td>
+                                                        <td> {{ vital.BPDiastolic == 'NaN' ? '' : vital.BPDiastolic }}
+                                                        </td>
+                                                        <td> {{ vital.O2FlowRate == 'NaN' ? '' : vital.O2FlowRate }}
+                                                        </td>
+                                                        <td> {{ vital.Pulse == 'NaN' ? '' : vital.Pulse }} </td>
+                                                        <td> {{ vital.Respiration == 'NaN' ? '' : vital.Respiration }}
+                                                        </td>
+                                                        <td> {{ vital.SPO2 == 'NaN' ? '' : vital.SPO2 }} </td>
+                                                        <td> {{ vital.Temparature == 'NaN' ? '' : vital.Temparature }}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="confirm" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p> Cancel Appointment </p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        (click)="confirmCancelApp('Yes')">Yes</a>
+                    <button type="button" class="btn btn-danger-outline" data-bs-dismiss="modal"
+                        (click)="confirmCancelApp('No')">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="saveMessage" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" *ngIf="apiResponse?.Status == 'Success' || apiResponse?.Status == 'True'"
+                src="assets/images/icons/toast-success.svg" alt="">
+            <img class="modal-header-icon" *ngIf="apiResponse?.Status == 'Fail'"
+                src="assets/images/icons/toast-error.svg" alt="">
+            <div class="modal-body">
+                <p>
+                    {{apiResponse?.Message}}
+                </p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,428 @@
+ 
+    <div class="row g-0">
+        <div class="main-content col">
+            <!--Container-->
+            <div class="container-fluid mt-4" >
+                <div class="container__wrapper handoverPage">
+                    <div class="page-header sticky-top">
+                        <h2 class="page-heading"> {{langData?.common?.PatientSummary}}</h2>
+                        <div class="actions ms-auto">
+                            <label for="" class="form-label mb-0 px-2">{{langData?.common?.Visits}} </label>
+                             
+                            <select class="form-select" style="width:450px;"
+                                        (change)="onVisitsChange($event)">
+                                        <option value="" selected translate>{{langData?.common?.SelectVisit}} </option>
+                                        <option *ngFor="let visit of PatientVisitsList" [value]="visit.EpisodeID">
+                                            {{visit.VisitDate}} - {{visit.DoctorName}}
+                                        </option>
+                                    </select>
+                        </div>
+                        <div class="actions ms-auto pe-2">
+                            <button type="button" class="btn btn-main-outline" (click)="BackToPatients()" translate>{{langData?.common?.Back}} </button>
+                            <!-- <input type="submit" name="ctl00$NewBDcphmain$btnbedBoard" value="Beds Board" onclick="return OpenBedsBoard();" id="ctl00_NewBDcphmain_btnbedBoard" tabindex="9" class="btn btn-main-fill"> -->
+                        </div>
+                    </div>
+
+                    <div class="row px-3 pt-3 pb-3 gx-2 gy-4 mx-0 ">
+                        <!-- Card Patient demographic-->
+                        <div class="col-xl-12 col-lg-12 col-md-12 mb-2">
+                            <div class="card-3d p-2">
+                                <div class="row g-0">
+                                    <div class="col-xl-2 col-md-3">
+                                        <div class="patient-info h-100 d-flex flex-column align-items-center justify-content-center">
+                                            <div class="patient-photo mb-2">
+                                                <svg style="z-index:1; margin-top:-0.5rem;" width="36" height="33.75" viewBox="0 0 48 46" fill="none" xmlns="http://www.w3.org/2000/svg" >
+                                                    <path d="M23.9998 25.6975C17.7821 25.6975 12.7459 20.0572 12.7459 13.0681C12.7459 6.14031 17.7821 0.5 23.9998 0.5C30.2175 0.5 35.2536 6.20162 35.2536 13.1294C35.2536 20.0572 30.2175 25.6975 23.9998 25.6975Z" fill="#41A5B4"/>
+                                                    <path d="M34.414 25.0267C34.7549 24.951 35.1105 24.9711 35.4401 25.0844H35.4405C43.6478 27.9046 48 34.3422 48 43.6607C48 44.1486 47.8035 44.6165 47.4535 44.9612C47.104 45.3063 46.6295 45.5 46.1346 45.5H1.86538C1.37051 45.5 0.896033 45.3063 0.546471 44.9612C0.196465 44.6165 0 44.1486 0 43.6607C0 34.3421 4.35209 27.9048 12.5595 25.0844C12.8892 24.9711 13.2448 24.951 13.5857 25.0267C13.9261 25.1028 14.2384 25.2713 14.4869 25.5138C16.6008 27.5981 20.145 28.8242 23.9998 28.8242C27.8546 28.8242 31.3989 27.5981 33.5127 25.5138C33.7613 25.2713 34.0735 25.1028 34.414 25.0267Z" fill="#41A5B4"/>
+                                                </svg>                                                                             
+                                            </div>
+                                            <p class="fw-bold mb-2 text-center">{{patientName}}</p>
+                                            <p class="text-center">{{age}} / {{gender}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-10 col-md-9">
+                                        <div class="card-3d-wrapper h-100 p-3">
+                                            <div class="row gx-2 gy-3">
+                                                <div class="col-md-4 col-lg-4">
+                                                    <p class="label">{{langData?.common?.UHID}}</p>
+                                                    <p>{{uhid}}</p>
+                                                </div>
+                                                <div class="col-md-8 col-lg-4">
+                                                    <p class="label"> {{langData?.common?.PatientName}} </p>
+                                                    <p>{{patientName}}</p>
+                                                </div>
+                                                <div class="col-md-4 col-lg-4">
+                                                    <p class="label">{{langData?.common?.Age}} </p>
+                                                    <p>{{age}} / {{gender}}</p>
+                                                </div>
+                                                <div class="col-md-4 col-lg-4">
+                                                    <p class="label">{{langData?.common?.Nationality}}</p>
+                                                    <p>{{nationality}}</p>
+                                                </div>
+                                                <div class="col-md-4 col-lg-4">
+                                                    <p class="label">{{langData?.common?.MobileNo}} </p>
+                                                    <p>{{mobileNo}}</p>
+                                                </div>                                                
+                                                <div class="col-md-3 col-lg-4">
+                                                    <p class="label">{{langData?.common?.Payer}} </p>
+                                                    <p>{{payer}}</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Diagnosis-->
+
+                        <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-2 position-relative h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9" style="height:260px">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items" *ngFor="let diag of PatientDiagnosisList;let i=index">
+                                                <p class="col-1">{{diag.Code}}</p>
+                                                <p class="col-8">{{diag.DiseaseName}}</p>
+                                                <p class="col-3">{{diag.CreateDate}}</p>
+                                            </div>
+                                            <!-- <div class="row-items">
+                                                <p class="col-1 text-bold">E10.8</p>
+                                                <p class="col-8">Insulin-dependent diabetes mellitus with unspecified complications</p>
+                                                <p class="col-3">13-Sep-2021 3:35:42 PM</p>
+                                            </div>
+                                            <div class="row-items">
+                                                <p class="col-1 text-bold">121.4</p>
+                                                <p class="col-8">Acute subendocardial myocardial infarction</p>
+                                                <p class="col-3">13-Sep-2021 3:35:42 PM</p>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>{{langData?.common?.Diagnosis}} </h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details  overflow-auto" style="height:160px;">
+                                                <!-- <h4>08</h4>
+                                                <p>Diagnosis</p> -->
+                                                
+                                            <button class="btn btn-select btn-tab">
+                                                <h4>{{diagnosisCount}}</h4>
+                                                <p>{{langData?.common?.Diagnosis}} </p>
+                                            </button>
+                                            <!-- <button class="btn btn-tab">
+                                                <h4>0</h4>
+                                                <p>Fall Risk Score</p>
+                                            </button> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Assessments-->
+
+                        <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class="card-3d-3 h-100">
+                                <div class="row gx-2 h-100">
+                                    <div class="col-md-9">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items border-left" *ngFor="let asmt of PatientsAssessmentsList;let i=index">
+                                                <p class="col-3 text-bold">{{asmt.CSTName}}</p>
+                                                <p class="col-9">{{asmt.Assessmentdate}} {{asmt.Assessmentmoddate}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4> {{langData?.common?.Assessments}} </h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details ">                                                 
+                                                <button class="btn btn-tab">
+                                                    <h4>{{assessmentsCount}}</h4>
+                                                    <p>{{langData?.common?.Assessments}}</p>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-2 position-relative h-100">
+                                <div class="row gx-2">                                    
+                                    <div class="col-md-9" style="height:260px">
+                                        <div class="page-heading">
+                                            <h4>
+                                              {{langData?.common?.VitalDate}}  : {{vitalDate}}
+                                            </h4>
+                                        </div>
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items" *ngFor="let vit of PatientsVitalsList;let i=index">
+                                                <p class="col-8 ">{{vit.Vital}}</p>
+                                                <p class="col-2">{{vit.Value}}</p>
+                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>  {{langData?.common?.Vitals}} </h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details  overflow-auto" style="height:160px;">
+                                                <!-- <h4>08</h4>
+                                                <p>Diagnosis</p> -->
+                                                
+                                                <!-- <button class="btn btn-select btn-tab">
+                                                    <h4>08</h4>
+                                                    <p>Diagnosis</p>
+                                                </button> -->
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex justify-content-right ViewMore">
+                                                <button type="button" class="btn text-end ">
+                                                  {{langData?.common?.Viewmore}}
+                                                    <img alt="" src=" assets/images/viewmore-2.svg" style="width: 1.5rem;">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-2 position-relative h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9" style="height:260px">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items" *ngFor="let med of PatientMedicationsList;let i=index">
+                                                <p class="col-8">{{med.ItemName}}</p>
+                                                <p class="col-2">{{med.DoseUoM}} {{med.AdmRoute}}</p>
+                                                <p class="col-3">{{med.StartFrom}} {{med.EndDateTime}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>{{langData?.common?.Medications}} </h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details  overflow-auto" style="height:160px;">
+                                                <button class="btn btn-select btn-tab">
+                                                    <h4>{{medicationsCount}}</h4>
+                                                    <p> {{langData?.common?.Medications}} </p>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex justify-content-right ViewMore">
+                                                <button type="button" class="btn text-end ">
+                                                    {{langData?.common?.Viewmore}}
+                                                    <img alt="" src=" assets/images/viewmore-2.svg" style="width: 1.5rem;">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Assessments-->
+                        <!-- <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class="card-3d-3 h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items border-left">
+                                                <p class="col-3 text-bold">Cheif Complaint</p>
+                                                <p class="col-9">13-Sep-2021 3:35:42 PM</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>Nursing Instructions </h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2 position-relative">
+                                            <div class="display-details overflow-auto" style="height:160px;">
+                                            
+                                            </div>
+                                            <div class="d-flex justify-content-right ViewMore">
+                                                <button type="button" class="btn text-end ">
+                                                    View more
+                                                    <img alt="" src=" assets/images/viewmore-2.svg" style="width: 1.5rem;">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <!-- <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-2 position-relative h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9" style="height:260px">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items">
+                                                <p class="col-1 text-bold">b97.2</p>
+                                                <p class="col-8">Coronavirus as the cause of diseases classified to other chapters</p>
+                                                <p class="col-3">13-Sep-2021 3:35:42 PM</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>  Latest Vitals Date Time </h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details  overflow-auto" style="height:160px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        
+
+                        <!-- <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-2 position-relative h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9" style="height:260px">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items">
+                                                <p class="col-1 text-bold">b97.2</p>
+                                                <p class="col-8">Coronavirus as the cause of diseases classified to other chapters</p>
+                                                <p class="col-3">13-Sep-2021 3:35:42 PM</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>Care Plan</h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details  overflow-auto" style="height:160px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <!-- <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-2 position-relative h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9" style="height:260px">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items">
+                                                <p class="col-1 text-bold">b97.2</p>
+                                                <p class="col-8">Coronavirus as the cause of diseases classified to other chapters</p>
+                                                <p class="col-3">13-Sep-2021 3:35:42 PM</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>Eforms</h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details  overflow-auto" style="height:160px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-2 position-relative h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9" style="height:260px">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items" *ngFor="let inv of PatientInvestigationsList;let i=index">
+                                                <p class="col-1">{{inv.ItemCode}}</p>
+                                                <p class="col-8">{{inv.ItemName}}</p>
+                                                <p class="col-3">{{inv.CreateDate}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>{{langData?.common?.Investigations}} </h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details  overflow-auto">
+                                                <button class="btn btn-select btn-tab">
+                                                    <h4>{{investigationsCount}}</h4>
+                                                    <p>{{langData?.common?.Investigations}}</p>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div class="d-flex justify-content-right ViewMore">
+                                                <button type="button" class="btn text-end ">
+                                                    {{langData?.common?.Viewmore}}
+                                                    <img alt="" src=" assets/images/viewmore-2.svg" style="width: 1.5rem;">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-2 position-relative h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9" style="height:260px">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items" *ngFor="let inv of PatientProceduresList;let i=index">
+                                                <p class="col-1">{{inv.ItemCode}}</p>
+                                                <p class="col-8">{{inv.ItemName}}</p>
+                                                <p class="col-3">{{inv.CreateDate}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>{{langData?.common?.Procedures}} </h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details  overflow-auto">
+                                                <button class="btn btn-select btn-tab">
+                                                    <h4>{{proceduresCount}}</h4>
+                                                    <p>{{langData?.common?.Procedures}} </p>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div class="d-flex justify-content-right ViewMore">
+                                                <button type="button" class="btn text-end ">
+                                                    {{langData?.common?.Viewmore}}
+                                                    <img alt="" src=" assets/images/viewmore-2.svg" style="width: 1.5rem;">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                
+            </div>
+        </div>
+    </div> 
+

@@ -1,0 +1,280 @@
+<app-suit-header [IsSwitchWard]="true" *ngIf="refreshHeader"></app-suit-header>
+
+<div class="page-header sticky-top shadow-sm justify-content-start">
+    <h2 class="page-heading">Stores Consumption</h2>
+    <div class="d-flex align-items-center gap-2 ms-auto">
+        <button class="btn btn-main-outline" (click)="viewStoreConsumption()">View</button>
+        <button class="btn btn-danger-outline" (click)="clearForm()">Clear</button>
+        <button class="btn btn-main-outline" (click)="onSaveClick()" *ngIf="!ConsumptionID">Save</button>
+    </div>
+</div>
+
+<div class="p-2">
+    <form [formGroup]="storeConsumptionForm">
+        <div class="row g-2 align-items-end">
+            <div class="col-3">
+                <label for="" class="form-label">Store Name</label>
+                <select name="" id="" class="form-select w-100" [(ngModel)]="wardID"
+                    (change)="selectFacility()" style="width: 22rem;" [ngModelOptions]="{standalone: true}">
+                    <option value="{{item.FacilityID}}" *ngFor="let item of FetchUserFacilityDataList;let i=index">
+                        {{item.FacilityName}}</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Ref. No.</label>
+                <input type="text" class="form-control" formControlName="refNo">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Date</label>
+                <input type="text" class="form-control" formControlName="dateTime">
+            </div>
+            <!-- <div class="col-3">
+                <label for="" class="form-label">Consume No.</label>
+                <input type="text" class="form-control" formControlName="consumeNo">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Operator</label>
+                <input type="text" class="form-control" formControlName="operator">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Surgery Order</label>
+                <input type="text" class="form-control" formControlName="surgeryOrder">
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Surgery</label>
+                <select name="" class="form-select" formControlName="surgery">
+                    <option value="">Select</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <label for="" class="form-label">Barcode No.</label>
+                <input type="text" class="form-control" formControlName="barcodeNo">
+            </div> -->
+        </div>
+    </form>
+    <div class="mt-2">
+        <div class="p-2 border-bottom">
+            <form class="m-0">
+                <div class="row gx-2">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="d-flex align-items-center">
+                            <label for="" class="form-label text-nowrap m-0 me-3">Department Item</label>
+                            <div class="d-flex input-group">
+                                <input id="itemText" type="text" class="form-control pe-5" autocomplete="off"
+                                    placeholder="Department Item" [matAutocomplete]="items"
+                                    (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchItems($event)">
+                                <mat-autocomplete #items="matAutocomplete">
+                                    <mat-option *ngFor="let item of itemsList" [value]="item.DisplayName"
+                                        (onSelectionChange)="selectItem(item)">
+                                        {{item.DisplayName}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <button class="btn btn-secondary-fill btn-icon" type="button" id="">
+                                    <img src="assets/images/icons/icon-search.svg" alt="">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="fixed_alter_list rounded border-primary-200 storesConsumeTable">
+            <div class="fixed_alter_header bg-primary-50 rounded-top">
+                <div class="row gx-2 align-items-center p-2 mx-0">
+                    <div class="" style="width: 5%;">
+                        <p class="label m-0">Sl.no</p>
+                    </div>
+                    <div class="" style="width: 30%;">
+                        <p class="label m-0">Item</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Batch No</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Expiry Date</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">QOH</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">QOH Unit</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Qty</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Units</p>
+                    </div>
+                    <div class="" style="width: 5%;">
+                        <p class="label m-0"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="fixed_alter_body">
+                <div class="row gx-2 align-items-center p-2 py-1 mx-0 alter_div"
+                    *ngFor="let item of selectedItems;let i = index">
+                    <div class="" style="width: 5%;">
+                        <p class="m-0">{{i+1}}</p>
+                    </div>
+                    <div class="" style="width: 30%;">
+                        <p class="m-0">{{item.ItemName}}</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="m-0">{{item.Batchno}}</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="m-0">{{item.ExpiryDate}}</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="m-0">{{item.QOH}}</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="m-0">{{item.QOHUnit}}</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <input type="number" class="form-control" [(ngModel)]="item.IssQty"
+                            [ngModelOptions]="{standalone: true}" [disabled]="ConsumptionID" 
+                            (input)="onQuantityChange($event, item)">
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <select name="" class="form-select pe-5" [(ngModel)]="item.UID"
+                            (change)="onUnitChange(item)"
+                            [ngModelOptions]="{standalone: true}" [disabled]="ConsumptionID">
+                            <option value="{{unit.UoMID}}" *ngFor="let unit of item.unitsList">
+                                {{unit.FullUoM}}</option>
+                        </select>
+                    </div>
+                    <div class="" style="width: 5%;" *ngIf="!ConsumptionID">
+                        <div class="del_svg cursor-pointer custom_tooltip custom_tooltip_left w-max-content m-auto">
+                            <svg width="23" height="22" viewBox="0 0 23 22" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" (click)="deleteItem(i)">
+                                <path
+                                    d="M20.0995 6.16917H20.0261C15.177 5.68334 10.337 5.5 5.5428 5.98584L3.6728 6.16917C3.58184 6.17866 3.48989 6.17003 3.40228 6.14377C3.31467 6.11751 3.23314 6.07414 3.16239 6.01618C3.09164 5.95822 3.03308 5.8868 2.9901 5.80607C2.94712 5.72534 2.92056 5.63689 2.91197 5.54584C2.8753 5.16084 3.1503 4.83084 3.52614 4.79417L5.39614 4.61084C10.2728 4.11584 15.2136 4.30834 20.1636 4.79417C20.5395 4.83084 20.8145 5.17 20.7778 5.54584C20.764 5.71605 20.6864 5.87477 20.5607 5.99032C20.4349 6.10586 20.2702 6.16973 20.0995 6.16917Z"
+                                    fill="#EB6247"></path>
+                                <path
+                                    d="M8.64147 5.24333C8.6048 5.24333 8.56813 5.24333 8.5223 5.23416C8.34445 5.20211 8.18627 5.10159 8.08172 4.95419C7.97717 4.80679 7.93459 4.62427 7.96313 4.44583L8.1648 3.24499C8.31147 2.36499 8.51313 1.14583 10.649 1.14583H13.0506C15.1956 1.14583 15.3973 2.41083 15.5348 3.25416L15.7365 4.44583C15.8006 4.82166 15.544 5.17916 15.1773 5.23416C14.8015 5.29833 14.444 5.04166 14.389 4.67499L14.1873 3.48333C14.059 2.68583 14.0315 2.52999 13.0598 2.52999H10.6581C9.68647 2.52999 9.66813 2.65833 9.53063 3.47416L9.3198 4.66583C9.29369 4.82694 9.2111 4.97351 9.08683 5.07931C8.96255 5.18512 8.80468 5.24325 8.64147 5.24333ZM14.7923 20.856H8.9073C5.70813 20.856 5.5798 19.0868 5.47897 17.6568L4.88313 8.42599C4.85563 8.05016 5.14897 7.72016 5.5248 7.69266C5.9098 7.67433 6.23063 7.95849 6.25813 8.33433L6.85397 17.5652C6.9548 18.9585 6.99147 19.481 8.9073 19.481H14.7923C16.7173 19.481 16.754 18.9585 16.8456 17.5652L17.4415 8.33433C17.469 7.95849 17.799 7.67433 18.1748 7.69266C18.5506 7.72016 18.844 8.041 18.8165 8.42599L18.2206 17.6568C18.1198 19.0868 17.9915 20.856 14.7923 20.856Z"
+                                    fill="#EB6247"></path>
+                                <path
+                                    d="M13.3714 15.8125H10.3189C9.94311 15.8125 9.63144 15.5008 9.63144 15.125C9.63144 14.7492 9.94311 14.4375 10.3189 14.4375H13.3714C13.7473 14.4375 14.0589 14.7492 14.0589 15.125C14.0589 15.5008 13.7473 15.8125 13.3714 15.8125ZM14.1414 12.1458H9.55811C9.18227 12.1458 8.87061 11.8342 8.87061 11.4583C8.87061 11.0825 9.18227 10.7708 9.55811 10.7708H14.1414C14.5173 10.7708 14.8289 11.0825 14.8289 11.4583C14.8289 11.8342 14.5173 12.1458 14.1414 12.1458Z"
+                                    fill="#EB6247"></path>
+                            </svg>
+                            <div class="tooltip">
+                                <p>Delete</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorMessagesModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p *ngIf="errorMessages.length === 1">{{errorMessages[0]}}</p>
+                <ul *ngIf="errorMessages.length > 1">
+                    <li *ngFor="let error of errorMessages; let i = index"> {{error}}</li>
+                </ul>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="successMsgModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="storeConsumptionViewModal" tabindex="-1" aria-labelledby="requestLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:80rem">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" translate>Store Consumption View</h5>
+                <div class="ms-auto d-flex align-items-center">
+                    <button class="btn btn-main-outline" (click)="FetchStoresConsumption()">Search</button>
+                    <button type="button" class="btn-close ms-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body px-0">
+                <div class="tableVitals px-3">
+                    <div class="mb-2" style="width: 227px;">
+                        <button class="date_range_calendar p-0 position-relative">
+                            <mat-date-range-input class="btn btn-main-outline" [rangePicker]="picker"
+                                [formGroup]="viewStoreConsumptionForm">
+                                <input matStartDate formControlName="fromDate">
+                                <input matEndDate formControlName="toDate" (dateChange)="onDateChange()">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                        </button>
+                    </div>
+                    <table class="table m-0">
+                        <thead>
+                            <tr>
+                                <th>Sl.No.</th>
+                                <th>IssueNo</th>
+                                <th>Department </th>
+                                <th>Issue Date</th>
+                                <th>Issue By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of consumptionDataList; let i = index">
+                                <td>{{i + 1}}</td>
+                                <td>
+                                    <span class="d-flex rounded-2" (click)="onConsumptionItemSelect(item)">
+                                        <a class="nav_link cursor-pointer">{{ item.IssueNo }}</a>
+                                    </span>
+                                </td>
+                                <td>{{item.DeptName}}</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 16 16" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M13.8552 1.56632H13.131V1.39789C13.131 0.623158 12.5079 0 11.7331 0C10.9584 0 10.3352 0.623158 10.3352 1.39789V1.56632H9.24049V1.39789C9.24049 0.623158 8.61733 0 7.84259 0C7.06785 0 6.4447 0.623158 6.4447 1.39789V1.56632H5.34996V1.39789C5.34996 0.623158 4.7268 0 3.95206 0C3.17733 0 2.55417 0.623158 2.55417 1.39789V1.56632H1.82996C0.886801 1.56632 0.128906 2.32421 0.128906 3.26737V14.2989C0.128906 15.2421 0.886801 16 1.82996 16H13.8215C14.7647 16 15.5226 15.2421 15.5226 14.2989V3.28421C15.5563 2.34105 14.7984 1.56632 13.8552 1.56632ZM11.2279 1.41474C11.2279 1.12842 11.4636 0.909474 11.7331 0.909474C12.0194 0.909474 12.2384 1.14526 12.2384 1.41474V2.62737C12.2384 2.91368 12.0026 3.13263 11.7331 3.13263C11.4468 3.13263 11.2279 2.89684 11.2279 2.62737V1.41474ZM7.35417 1.41474C7.35417 1.12842 7.58996 0.909474 7.85943 0.909474C8.14575 0.909474 8.3647 1.14526 8.3647 1.41474V2.62737C8.3647 2.91368 8.12891 3.13263 7.85943 3.13263C7.57312 3.13263 7.35417 2.89684 7.35417 2.62737V1.41474ZM3.46364 1.41474C3.46364 1.12842 3.69943 0.909474 3.96891 0.909474C4.25522 0.909474 4.47417 1.14526 4.47417 1.41474V2.62737C4.47417 2.91368 4.23838 3.13263 3.96891 3.13263C3.68259 3.13263 3.46364 2.89684 3.46364 2.62737V1.41474ZM14.6805 14.3158C14.6805 14.7705 14.31 15.1411 13.8552 15.1411H1.86364C1.40891 15.1411 1.03838 14.7705 1.03838 14.3158V5.38947H14.6636V14.3158H14.6805ZM10.9753 13.3221C11.0932 13.44 11.2279 13.4905 11.3795 13.4905C11.5311 13.4905 11.6658 13.44 11.7837 13.3221L13.3332 11.7726C13.5521 11.5537 13.5521 11.1832 13.3332 10.9642C13.1142 10.7453 12.7437 10.7453 12.5248 10.9642L11.3795 12.1095L10.9584 11.6884C10.7395 11.4695 10.369 11.4695 10.15 11.6884C9.93107 11.9074 9.93107 12.2779 10.15 12.4968L10.9753 13.3221ZM4.92888 9.7179H3.19414C2.95835 9.7179 2.75625 9.51579 2.75625 9.28V7.52842C2.75625 7.29263 2.95835 7.09053 3.19414 7.09053H4.92888C5.16467 7.09053 5.36678 7.29263 5.36678 7.52842V9.28C5.36678 9.51579 5.16467 9.7179 4.92888 9.7179ZM7.0006 9.7179H8.73533C8.97112 9.7179 9.17323 9.51579 9.17323 9.28V7.52842C9.17323 7.29263 8.97112 7.09053 8.73533 7.09053H7.0006C6.76481 7.09053 6.5627 7.29263 6.5627 7.52842V9.28C6.54586 9.51579 6.74796 9.7179 7.0006 9.7179ZM12.5247 9.7179H10.79C10.5542 9.7179 10.3521 9.51579 10.3521 9.28V7.52842C10.3521 7.29263 10.5542 7.09053 10.79 7.09053H12.5247C12.7605 7.09053 12.9626 7.29263 12.9626 7.52842V9.28C12.9626 9.51579 12.7605 9.7179 12.5247 9.7179ZM3.19414 13.4569H4.92888C5.16467 13.4569 5.36678 13.2548 5.36678 13.019V11.2674C5.36678 11.0316 5.16467 10.8295 4.92888 10.8295H3.19414C2.95835 10.8295 2.75625 11.0316 2.75625 11.2674V13.019C2.75625 13.2548 2.95835 13.4569 3.19414 13.4569ZM8.73533 13.4569H7.0006C6.74796 13.4569 6.54586 13.2548 6.5627 13.019V11.2674C6.5627 11.0316 6.76481 10.8295 7.0006 10.8295H8.73533C8.97112 10.8295 9.17323 11.0316 9.17323 11.2674V13.019C9.17323 13.2548 8.97112 13.4569 8.73533 13.4569Z"
+                                                    fill="#7C8283" />
+                                            </svg>
+                                            <p>{{item.IssueDate?.split(' ')[0]}}</p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16"
+                                                viewBox="0 0 17 16" fill="none">
+                                                <path
+                                                    d="M11.1608 9.78246H8.17179C7.67948 9.78246 7.29267 9.39565 7.29267 8.90334V4.33191C7.29267 3.83961 7.67948 3.45279 8.17179 3.45279C8.6641 3.45279 9.05091 3.83961 9.05091 4.33191V8.02422H11.1608C11.6531 8.02422 12.0399 8.41104 12.0399 8.90334C12.0399 9.39565 11.6531 9.78246 11.1608 9.78246Z"
+                                                    fill="#7C8283" />
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M16.5234 8C16.5234 12.4132 12.9366 16 8.52344 16C4.11025 16 0.523438 12.4132 0.523438 8C0.523438 3.58681 4.11025 0 8.52344 0C12.9366 0 16.5234 3.58681 16.5234 8ZM14.7652 8C14.7652 4.55385 11.9696 1.75824 8.52344 1.75824C5.07728 1.75824 2.28168 4.55385 2.28168 8C2.28168 11.4462 5.07728 14.2418 8.52344 14.2418C11.9696 14.2418 14.7652 11.4462 14.7652 8Z"
+                                                    fill="#7C8283" />
+                                            </svg>
+                                            <p>{{item.IssueDate?.split(' ')[1]}}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{item.IssuedBY}}-{{item.IssuedName}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

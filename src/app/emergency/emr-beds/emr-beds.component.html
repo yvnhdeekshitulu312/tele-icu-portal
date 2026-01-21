@@ -1,0 +1,1415 @@
+<app-emergency-header [InputHome]="true" (selectedWard)="onSelectWard()"  (filteredDataChange)="filterChangeData($event)" [IsSwitchWard]="true"></app-emergency-header>
+<!--Container-->
+<div class="col-xl-12 container-fluid p-0">
+    <div class="container__wrapper">
+        <div class="page-header sticky-top">
+            <h2 class="page-heading">Emergency Beds Board</h2>
+            <div class="actions ms-auto">
+                <div class="d-flex align-items-center gap-2">
+                    <!-- <div class="custom_check d-flex align-items-center gap-2">
+                    <button class="btn btn-secondary-outline fs-8 px-2" [class.active]="selectall" (click)="ShowAllBeds('no', [])">                   
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.4" d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z" fill="#B4DDE4"></path>
+                            <path d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z" fill="#8ECBD7"></path>
+                        </svg>                                            
+                        {{langData?.Ward?.ShowAllBeds}}
+                    </button>
+                </div> -->
+                    <div class="custom_check d-flex align-items-center gap-2">
+                        <!-- <button class="btn btn-main-fill" data-bs-target="#transferdoctor" data-bs-toggle="modal">Transfer Doctor</button> -->
+                        <button class="btn btn-main-fill fs-8 px-2" (click)="assignNurse()">Assign Nurse</button>
+                        <button class="btn btn-secondary-outline fs-8 px-2" (click)="navigateToUpdateBedStatus()">Bed Allocation Request</button>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 bed_status">
+                        <p class="clr-primaryAllegery fs-7">{{langData?.Ward?.BedStatus}}</p>
+                        <li class="nav-item bedstatus_li position-relative lab_navlink" onmouseover="dropdownlab()"
+                            onmouseout="hideDropdown()">
+                            <ul class="dropdown-menu" id="dropdownlab">
+                                <li *ngFor="let d of FetchBedStatusList;let i=index"
+                                    class="dropdown-item cursor-pointer" (click)="fetchBedStatusByValue(d.TaskStatus)">
+                                    {{d.StatusName}}</li>
+                            </ul>
+                        </li>
+                    </div>
+                    <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start">
+                        <button class="fs-7 btn" [class.selected]="selectedOption === 'Doctor'"
+                            (click)="selectOption('Doctor')">{{langData?.common?.Doctor}}</button>
+                        <button class="fs-7 btn" [class.selected]="selectedOption === 'Admission Date'"
+                            (click)="selectOption('Admission Date')">{{langData?.Ward?.AdmissionDate}}</button>
+                        <button class="fs-7 btn" [class.selected]="selectedOption === 'Bed'"
+                            (click)="selectOption('Bed')">{{langData?.Ward?.Bed}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-body">
+            <div class="row mx-0 p-3 gx-2 gy-3">
+                <div class="no_consult d-flex flex-column align-items-center justify-content-center"
+                    *ngIf="FetchBedsFromWardDataList?.length == 0">
+                    <img class="mb-2" src="assets/images/Doctor.svg" alt="">
+                    <p class="m-0 fs-6">{{langData?.Ward?.NoPatientarenotavailablefor}}
+                        {{this.doctorDetails[0].EmployeeName}}</p>
+                </div>
+
+                <div class="col-xl-6 col-lg-12 col-md-12" *ngFor="let item of FetchBedsFromWardDataList; let i = index">
+                    <div class="bed-board bed-board-occupied">
+                        <div class="row g-0">
+                            <div class="col-3 d-flex flex-column">
+                                <div class="bed-details">
+                                    <span class="bed-board-strip" *ngIf="item.METCALL === '1'">
+                                        <p class="fw-bold METCALLtxt">{{langData?.Ward?.METCALL}}</p>
+                                    </span>
+                                    <div class="alergy-icon hoverAllergy" *ngIf="item.IsAllergy === 1">
+                                        <p class="fw-bold clr-primaryAllegery">{{langData?.common?.allergy}}</p>
+
+                                        <div class="viewPatientsAllergiesModal" data-bs-backdrop="static" tabindex="-1"
+                                            id="viewAllergies" tabindex="-1">
+                                            <div class="modal-dialog modal-dialog-scrollable modal-l ">
+                                                <div class="modal-content p-3">
+                                                    <div class="modal-header">
+                                                        <h6 class="modal-title" translate>
+                                                            {{langData?.common?.Allergies}}</h6>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div
+                                                            class="d-flex w-100 align-items-center justify-content-between">
+                                                            <div class="d-flex w-100 mt-2">
+                                                                <div [innerHtml]="item.AllergyData"></div>
+                                                            </div>
+                                                            <div class="modal-footer">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="bed-info mt-5">
+                                        <div class="bed-icon">
+                                            <svg *ngIf="item.GenderID === '1'" width="70" height="37"
+                                                viewBox="0 0 70 37" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                class="fill-blue">
+                                                <path
+                                                    d="M13.5395 16.1175C16.7615 16.1175 19.3736 13.5054 19.3736 10.2834C19.3736 7.0615 16.7626 4.45281 13.5395 4.45281C10.3216 4.45281 7.70891 7.06221 7.70891 10.2834C7.70891 13.5048 10.3216 16.1175 13.5395 16.1175ZM69.7134 19.2525C69.7134 14.6345 65.967 10.8887 61.349 10.8887H37.7354V27.8352H65.7211V36.0118H69.7125L69.7103 19.2521L69.7134 19.2525ZM19.3728 18.0553H35.3414V10.8892H27.6407C23.4271 10.8898 19.9541 14.007 19.3733 18.0553H19.3728ZM4.27513 0.361816H0.283691V36.0139H4.27513V27.8368H35.3414V20.4509L4.27513 20.4514V0.361816Z" />
+                                            </svg>
+                                            <svg *ngIf="item.GenderID === '2'" width="70" height="37"
+                                                viewBox="0 0 70 37" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                class="fill-pink">
+                                                <path
+                                                    d="M13.5395 16.1175C16.7615 16.1175 19.3736 13.5054 19.3736 10.2834C19.3736 7.0615 16.7626 4.45281 13.5395 4.45281C10.3216 4.45281 7.70891 7.06221 7.70891 10.2834C7.70891 13.5048 10.3216 16.1175 13.5395 16.1175ZM69.7134 19.2525C69.7134 14.6345 65.967 10.8887 61.349 10.8887H37.7354V27.8352H65.7211V36.0118H69.7125L69.7103 19.2521L69.7134 19.2525ZM19.3728 18.0553H35.3414V10.8892H27.6407C23.4271 10.8898 19.9541 14.007 19.3733 18.0553H19.3728ZM4.27513 0.361816H0.283691V36.0139H4.27513V27.8368H35.3414V20.4509L4.27513 20.4514V0.361816Z" />
+                                            </svg>
+                                        </div>
+                                        <div class="bed-info-label fs-7">
+                                            {{item.BedStatusName}}
+                                        </div>
+                                    </div>
+                                    <!-- <p class="iso-color" *ngIf="item.Bed.includes('ISO')"> -->
+                                    <p [class]="item.Bed.includes('ISO') ? 'iso-color' : 'bed-number'">
+                                        {{item.Shortname}} ({{item.Bed}})
+                                    </p>
+                                    <div class="bed-tasks-info">
+                                        <div class="task-info" (click)="redirectToNursingDashboard(item)">
+                                            P:{{item.PatientPendingCountW ? item.PatientPendingCountW: 0}}
+                                        </div>
+                                        <div class="task-info" (click)="redirectToNursingDashboard(item)">
+                                            S:{{item.PatientSchedCountW ? item.PatientSchedCountW: 0}}
+                                        </div>
+                                    </div>
+                                    <div class="position-absolute bottom-0 w-100 text-center"
+                                        (click)="navigatetoPatientSummary(item)">
+                                        <a class="btn btn-primary-3d py-2">{{langData?.casesheet?.summary}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="patient-details">
+                                    <div class="patient-details-wrapper">
+                                        <div class="row gx-1 gy-2">
+                                            <div class="col-4">
+                                                <p class="label">{{langData?.common?.SSN}}:</p>
+                                                <p class="ssn_number">{{item.SSN}}</p>
+                                            </div>
+                                            <div class="col-3">
+                                                <p class="label">{{langData?.common?.Age}}:</p>
+                                                <p>{{item.Age}}</p>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="d-flex align-items-center">
+                                                    <p class="label me-2 mb-0">{{langData?.Ward?.Approval}}</p>
+                                                    <span class="cursor-pointer viewApproval"
+                                                        (click)="getViewApproval(item)" data-bs-toggle="modal">
+                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <rect x="0.5" y="0.5" width="23" height="23" rx="11.5"
+                                                                fill="#DAEEF1" />
+                                                            <path
+                                                                d="M15.438 18.5H8.12549C7.45343 18.5 6.90674 17.9533 6.90674 17.2812V6.71875C6.90674 6.04669 7.45343 5.5 8.12549 5.5H15.438C16.11 5.5 16.6567 6.04669 16.6567 6.71875V12.4388C16.6567 12.6631 16.475 12.845 16.2505 12.845C16.026 12.845 15.8442 12.6631 15.8442 12.4388V6.71875C15.8442 6.49478 15.6622 6.3125 15.438 6.3125H8.12549C7.90132 6.3125 7.71924 6.49478 7.71924 6.71875V17.2812C7.71924 17.5052 7.90132 17.6875 8.12549 17.6875H15.438C15.4586 17.6875 15.4789 17.6857 15.4995 17.6819C15.7229 17.6395 15.9319 17.7885 15.972 18.009C16.0121 18.2298 15.8653 18.4413 15.6447 18.4814C15.5757 18.4939 15.507 18.5 15.438 18.5Z"
+                                                                fill="#43A9BC" />
+                                                            <path
+                                                                d="M10.1552 9.9687C9.37723 9.9687 8.74405 9.33573 8.74405 8.55755C8.74405 7.77938 9.37723 7.14661 10.1552 7.14661C10.9332 7.14661 11.566 7.77958 11.566 8.55755C11.566 9.33552 10.9332 9.9687 10.1552 9.9687ZM10.1552 7.95907C9.82512 7.95907 9.55655 8.22743 9.55655 8.55751C9.55655 8.88759 9.82512 9.15616 10.1552 9.15616C10.4853 9.15616 10.7535 8.88759 10.7535 8.55751C10.7535 8.22743 10.4853 7.95907 10.1552 7.95907Z"
+                                                                fill="#43A9BC" />
+                                                            <path
+                                                                d="M11.12 11.9783H9.18995C8.75949 11.9783 8.40918 11.628 8.40918 11.1974V10.9022C8.40918 9.93953 9.19231 9.15616 10.1552 9.15616C11.1181 9.15616 11.9012 9.93949 11.9012 10.9022V11.1974C11.9012 11.628 11.5509 11.9783 11.12 11.9783ZM9.22168 11.1658H11.0887V10.9022C11.0887 10.3875 10.6698 9.9687 10.1552 9.9687C9.6406 9.9687 9.22164 10.3875 9.22164 10.9022L9.22168 11.1658Z"
+                                                                fill="#43A9BC" />
+                                                            <path
+                                                                d="M15.5536 16.3525C15.4461 16.3525 15.3425 16.3096 15.2664 16.2335L14.5388 15.5057C14.3801 15.347 14.3801 15.0897 14.5388 14.9312C14.6974 14.7725 14.9545 14.7725 15.1132 14.9312L15.5449 15.3628L16.5677 14.2754C16.722 14.1115 16.9787 14.1042 17.1421 14.2577C17.3056 14.4114 17.3131 14.6685 17.1596 14.832L15.8496 16.2245C15.7743 16.3046 15.6699 16.3506 15.56 16.3524L15.5536 16.3525Z"
+                                                                fill="#368796" />
+                                                            <path
+                                                                d="M15.8448 18.4984C15.0125 18.4984 14.1801 18.1816 13.5465 17.548C12.2794 16.2809 12.2794 14.2191 13.5465 12.9519C14.8137 11.6847 16.8759 11.6848 18.1431 12.9519C19.4102 14.219 19.4102 16.2808 18.1431 17.548C17.5095 18.1816 16.6771 18.4984 15.8448 18.4984ZM15.8448 12.8136C15.2203 12.8136 14.5963 13.0513 14.121 13.5264C13.1708 14.4768 13.1708 16.0232 14.121 16.9736C15.0719 17.9237 16.6184 17.9233 17.5685 16.9736C18.5187 16.0232 18.5187 14.4768 17.5685 13.5264C17.0933 13.0513 16.4692 12.8136 15.8448 12.8136Z"
+                                                                fill="#368796" />
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M14.6274 8.34375H13.0024C12.7779 8.34375 12.5962 8.16183 12.5962 7.9375C12.5962 7.71317 12.7779 7.53125 13.0024 7.53125H14.6274C14.852 7.53125 15.0337 7.71317 15.0337 7.9375C15.0337 8.16183 14.852 8.34375 14.6274 8.34375ZM14.6275 9.96876H13.0025C12.778 9.96876 12.5963 9.78684 12.5963 9.56251C12.5963 9.33818 12.778 9.15626 13.0025 9.15626H14.6275C14.8521 9.15626 15.0338 9.33818 15.0338 9.56251C15.0338 9.78684 14.8521 9.96876 14.6275 9.96876ZM13.0025 11.5938H14.6275C14.8521 11.5938 15.0338 11.4119 15.0338 11.1876C15.0338 10.9632 14.8521 10.7813 14.6275 10.7813H13.0025C12.778 10.7813 12.5963 10.9632 12.5963 11.1876C12.5963 11.4119 12.778 11.5938 13.0025 11.5938Z"
+                                                                fill="#43A9BC" />
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M11.7808 13.6251H8.93701C8.71248 13.6251 8.53076 13.4431 8.53076 13.2188C8.53076 12.9945 8.71248 12.8126 8.93701 12.8126H11.7808C12.0053 12.8126 12.187 12.9945 12.187 13.2188C12.187 13.4431 12.0053 13.6251 11.7808 13.6251ZM11.3745 15.25H8.93701C8.71248 15.25 8.53076 15.0681 8.53076 14.8438C8.53076 14.6195 8.71248 14.4375 8.93701 14.4375H11.3745C11.599 14.4375 11.7808 14.6195 11.7808 14.8438C11.7808 15.0681 11.599 15.25 11.3745 15.25ZM8.93701 16.8751H11.7808C12.0053 16.8751 12.187 16.6932 12.187 16.4688C12.187 16.2445 12.0053 16.0626 11.7808 16.0626H8.93701C8.71248 16.0626 8.53076 16.2445 8.53076 16.4688C8.53076 16.6932 8.71248 16.8751 8.93701 16.8751Z"
+                                                                fill="#43A9BC" />
+                                                            <rect x="0.5" y="0.5" width="23" height="23" rx="11.5"
+                                                                stroke="#8ECBD7" />
+                                                        </svg>
+                                                    </span>
+                                                </div>
+
+                                                <p class="d-flex">
+                                                    <span style="min-width: 4rem;">{{item.ApprovalDays}}</span>
+                                                </p>
+                                            </div>
+                                            <div class="col-8">
+                                                <p class="label">{{langData?.common?.PatientName}}:</p>
+                                                <p>{{item.PatientName}}</p>
+                                            </div>
+                                            <div class="col-4" *ngIf="item.CTASScore!=''">
+                                                <p class="label">CTAS:</p>
+                                                <div
+                                                [class]="(item.CTASScore == '2'||item.CTASScore == '1') ? 'w-max-content ctascore' : 'w-max-content ctascoreG'">                                             
+                                                <p class=" text-truncate fs-7 fw-500 text-center">
+                                                    <span>{{item.CTASScore}}</span>
+                                                </p>
+                                            </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <p class="label">{{langData?.Ward?.AdmissionDate}}:</p>
+                                                <p>{{item.AdmitDate | date: 'dd-MMM-yyyy'}}</p>
+                                            </div>
+                                            <div class="col-6">
+                                                <p class="label">{{langData?.Ward?.LengthofStay}}:</p>
+                                                <p>{{item.LengthOfStay}}</p>
+                                            </div>
+                                            <div class="col-12">
+                                                <p class="label">{{langData?.Ward?.DoctorName}}:</p>
+                                                <p class="ssn_number">{{item.DoctorName}}</p>
+                                            </div>
+                                            <div class="col-12">
+                                                <p class="label">{{langData?.Ward?.Specialization}}:</p>
+                                                <p class="ssn_number">{{item.Specialisation}}</p>
+                                            </div>
+                                            <div class="col-12">
+                                                <p class="label">{{langData?.Ward?.Insurance}}:</p>
+                                                <p>{{item.PayerName}}</p>
+                                            </div>
+                                            <div class="col-6">
+                                                <p class="label">Traige LOS:</p>
+                                                <p>{{item.TriageLOS}}</p>
+                                            </div>
+                                            <div class="col-6">
+                                                <p class="label">Admission LOS:</p>
+                                                <p>{{item.AdmissionReqDate}}</p>
+                                            </div>
+                                            <div class="col-6 d-flex align-items-center" style="cursor:pointer;" *ngIf="item.PendingInstrCount!=0 && IsDoctor == 'false'" (click)="showNursingInstructions(item)">
+                                                <span class="cursor-pointer viewApproval"  data-bs-toggle="modal">
+                                                    <svg _ngcontent-aqb-c181="" width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path _ngcontent-aqb-c181="" d="M10.0069 0.500837C8.37902 0.500837 6.74854 0.733786 5.34825 1.19967L6.10402 4.2429C5.30137 5.28256 4.78322 6.76429 4.65054 8.61832C4.72289 9.33372 4.80188 10.3588 5.22462 10.8461C5.39203 11.0252 5.70705 11.0357 5.886 10.868C6.06477 10.7003 6.07531 10.3846 5.90774 10.2055C5.70334 9.71318 5.61201 9.20787 5.5807 8.68386C5.68971 7.23947 6.15479 5.60866 6.91056 4.72344C9.22721 4.03889 10.9482 4.05882 13.2843 4.78168C14.275 5.92304 14.3796 7.8335 14.4181 8.91697C14.3613 9.31587 14.2505 9.83807 14.0837 10.1983C13.9181 10.3745 13.9254 10.6845 14.0988 10.8527C14.2724 11.021 14.5821 11.0179 14.7522 10.8462C15.1662 10.2947 15.2953 9.53179 15.3482 8.88777C15.4573 7.23947 14.9922 5.14275 13.9238 4.12656L14.6505 1.19977C13.1317 0.716177 11.5038 0.483246 10.0068 0.500937L10.0069 0.500837ZM9.76697 1.43265H10.232V2.13148H10.9298V2.59739H10.232V3.29623H9.76697V2.59739H9.06925V2.13148H9.76697V1.43265ZM12.2888 5.60416C10.0108 8.18248 5.22822 6.7804 6.16967 10.0522C6.46653 11.0539 6.99487 12.0547 7.64487 12.826L7.22344 14.0346C7.33943 15.146 8.08092 16.3647 8.56792 17.1943C8.98142 17.8988 9.50376 18.5949 9.99969 19.3858C10.4955 18.5949 11.0173 17.899 11.4315 17.1943C11.9189 16.3647 12.6599 15.146 12.7759 14.0346L12.3616 12.8407C13.0046 12.0729 13.5361 11.0746 13.8368 10.0742C14.3392 8.42259 13.1196 6.78061 12.2889 5.60407L12.2888 5.60416ZM8.37905 13.5398C8.89898 13.9581 9.45538 14.2209 10.0142 14.2242C10.5661 14.2273 11.1154 13.9784 11.6277 13.569L12.1364 15.0541C11.0802 16.6769 8.86946 16.6762 7.84861 15.0541L8.37905 13.5398ZM13.6697 14.3188C13.4741 15.5419 12.7271 16.823 12.2309 17.6678C11.6613 18.6371 10.9769 19.5048 10.4213 20.4998H19.0696C19.0345 19.3693 19.0362 18.8981 18.8006 17.0343C18.5651 16.1024 18.1235 15.6075 17.6524 15.3745C17.2605 15.1806 15.4634 14.8493 13.67 14.3188H13.6697ZM6.33711 14.348C4.76032 14.7976 2.91705 14.999 2.34733 15.3745C1.92669 15.7028 1.74712 16.0952 1.51157 17.0272C1.27895 18.8909 1.04259 19.5912 0.930176 20.5H9.57843C9.02282 19.5048 8.33777 18.6373 7.76888 17.668C7.27702 16.8299 6.54006 15.5624 6.33711 14.3482V14.348Z" fill="url(#paint0_linear_1357_3299)"></path><defs _ngcontent-aqb-c181=""><linearGradient _ngcontent-aqb-c181="" id="paint0_linear_1357_3299" x1="9.99988" y1="0.5" x2="9.99988" y2="20.5" gradientUnits="userSpaceOnUse"><stop _ngcontent-aqb-c181="" stop-color="#61BEC5"></stop><stop _ngcontent-aqb-c181="" offset="1" stop-color="#357D83"></stop></linearGradient></defs></svg>                                                                                                             
+                                                </span>
+                                                <p class="label me-2 mb-0">Instructions : </p>                                          
+                                                <p class="ssn_number me-2 mb-0">{{item.PendingInstrCount}}    </p> 
+                                            </div>
+                                            <div class="col-6 d-flex align-items-center" style="cursor:pointer;" *ngIf="item.PendingInstrCount!=0 && IsDoctor == 'true'" (click)="showDoctorInstructions(item)">
+                                                <span class="cursor-pointer viewApproval"  data-bs-toggle="modal">
+                                                    <svg _ngcontent-aqb-c181="" width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path _ngcontent-aqb-c181="" d="M10.0069 0.500837C8.37902 0.500837 6.74854 0.733786 5.34825 1.19967L6.10402 4.2429C5.30137 5.28256 4.78322 6.76429 4.65054 8.61832C4.72289 9.33372 4.80188 10.3588 5.22462 10.8461C5.39203 11.0252 5.70705 11.0357 5.886 10.868C6.06477 10.7003 6.07531 10.3846 5.90774 10.2055C5.70334 9.71318 5.61201 9.20787 5.5807 8.68386C5.68971 7.23947 6.15479 5.60866 6.91056 4.72344C9.22721 4.03889 10.9482 4.05882 13.2843 4.78168C14.275 5.92304 14.3796 7.8335 14.4181 8.91697C14.3613 9.31587 14.2505 9.83807 14.0837 10.1983C13.9181 10.3745 13.9254 10.6845 14.0988 10.8527C14.2724 11.021 14.5821 11.0179 14.7522 10.8462C15.1662 10.2947 15.2953 9.53179 15.3482 8.88777C15.4573 7.23947 14.9922 5.14275 13.9238 4.12656L14.6505 1.19977C13.1317 0.716177 11.5038 0.483246 10.0068 0.500937L10.0069 0.500837ZM9.76697 1.43265H10.232V2.13148H10.9298V2.59739H10.232V3.29623H9.76697V2.59739H9.06925V2.13148H9.76697V1.43265ZM12.2888 5.60416C10.0108 8.18248 5.22822 6.7804 6.16967 10.0522C6.46653 11.0539 6.99487 12.0547 7.64487 12.826L7.22344 14.0346C7.33943 15.146 8.08092 16.3647 8.56792 17.1943C8.98142 17.8988 9.50376 18.5949 9.99969 19.3858C10.4955 18.5949 11.0173 17.899 11.4315 17.1943C11.9189 16.3647 12.6599 15.146 12.7759 14.0346L12.3616 12.8407C13.0046 12.0729 13.5361 11.0746 13.8368 10.0742C14.3392 8.42259 13.1196 6.78061 12.2889 5.60407L12.2888 5.60416ZM8.37905 13.5398C8.89898 13.9581 9.45538 14.2209 10.0142 14.2242C10.5661 14.2273 11.1154 13.9784 11.6277 13.569L12.1364 15.0541C11.0802 16.6769 8.86946 16.6762 7.84861 15.0541L8.37905 13.5398ZM13.6697 14.3188C13.4741 15.5419 12.7271 16.823 12.2309 17.6678C11.6613 18.6371 10.9769 19.5048 10.4213 20.4998H19.0696C19.0345 19.3693 19.0362 18.8981 18.8006 17.0343C18.5651 16.1024 18.1235 15.6075 17.6524 15.3745C17.2605 15.1806 15.4634 14.8493 13.67 14.3188H13.6697ZM6.33711 14.348C4.76032 14.7976 2.91705 14.999 2.34733 15.3745C1.92669 15.7028 1.74712 16.0952 1.51157 17.0272C1.27895 18.8909 1.04259 19.5912 0.930176 20.5H9.57843C9.02282 19.5048 8.33777 18.6373 7.76888 17.668C7.27702 16.8299 6.54006 15.5624 6.33711 14.3482V14.348Z" fill="url(#paint0_linear_1357_3299)"></path><defs _ngcontent-aqb-c181=""><linearGradient _ngcontent-aqb-c181="" id="paint0_linear_1357_3299" x1="9.99988" y1="0.5" x2="9.99988" y2="20.5" gradientUnits="userSpaceOnUse"><stop _ngcontent-aqb-c181="" stop-color="#61BEC5"></stop><stop _ngcontent-aqb-c181="" offset="1" stop-color="#357D83"></stop></linearGradient></defs></svg>                                                                                                             
+                                                </span>
+                                                <p class="label me-2 mb-0">Instructions </p>    
+                                                <p class="ssn_number me-2 mb-0">{{item.PendingInstrCount}}    </p>                                       
+                                            </div>
+                                            <div class="col-6 d-flex align-items-center" style="cursor:pointer;" *ngIf="item.DischargeStatusID==1">
+                                                
+                                                <svg _ngcontent-pbr-c255="" width="30" height="23" viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg"><circle _ngcontent-pbr-c255="" cx="19.2642" cy="19.9221" r="19" fill="#DAEEF1"></circle><path _ngcontent-pbr-c255="" d="M12.1554 18.5362C13.2228 18.5362 14.0881 17.6709 14.0881 16.6035C14.0881 15.5362 13.2231 14.672 12.1554 14.672C11.0894 14.672 10.2239 15.5364 10.2239 16.6035C10.2239 17.6707 11.0894 18.5362 12.1554 18.5362ZM30.7642 19.5747C30.7642 18.0449 29.5231 16.804 27.9933 16.804H20.1708V22.4179H29.4416V25.1266H30.7639L30.7631 19.5746L30.7642 19.5747ZM14.0878 19.1781H19.3777V16.8042H16.8267C15.4309 16.8044 14.2802 17.837 14.0878 19.1781ZM9.08641 13.3168H7.76416V25.1273H9.08641V22.4184H19.3777V19.9717L9.08641 19.9719V13.3168Z" fill="#368796"></path></svg>
+                                                
+                                                                                   
+                                                    <p class="ssn_number me-2 mb-0">{{item.DischargeIntimationDate}}    </p> 
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="info_sec">
+                                        <img class="cursor-pointer" src="assets/images/icons/bb_info_icon.svg"
+                                            data-bs-toggle="modal" data-bs-target="#quick_info" alt=""
+                                            (click)="showPatientInfo(item)">
+                                        <!-- <img class="cursor-pointer" src="assets/images/icons/bb_info_icon.svg" data-bs-toggle="modal" data-bs-target="#quick_info" 
+                                            alt="" (click)="showPatientInfo(item)"> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 position-relative">
+                                <div
+                                    class="action_overlay disabled top gap-4 d-flex align-items-center justify-content-center">
+                                    <svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="44"
+                                        height="30" viewBox="0 0 44 30" fill="none">
+                                        <g clip-path="url(#clip0_8579_22771)">
+                                            <g filter="url(#filter0_d_8579_22771)">
+                                                <mask id="path-1-inside-1_8579_22771" fill="white">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M40.7452 30C40.9128 28.9851 41 27.943 41 26.8805C41 16.3871 32.4934 7.88055 22 7.88055C11.5066 7.88055 3 16.3871 3 26.8805C3 27.943 3.0872 28.9851 3.25484 30L40.7452 30Z" />
+                                                </mask>
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M40.7452 30C40.9128 28.9851 41 27.943 41 26.8805C41 16.3871 32.4934 7.88055 22 7.88055C11.5066 7.88055 3 16.3871 3 26.8805C3 27.943 3.0872 28.9851 3.25484 30L40.7452 30Z"
+                                                    fill="url(#paint0_radial_8579_22771)" />
+                                                <path
+                                                    d="M40.7452 30L40.7452 31L41.5935 31L41.7318 30.163L40.7452 30ZM3.25484 30L2.26821 30.163L2.40646 31L3.25484 31L3.25484 30ZM40 26.8805C40 27.8882 39.9173 28.8758 39.7585 29.837L41.7318 30.163C41.9083 29.0944 42 27.9978 42 26.8805L40 26.8805ZM22 8.88055C31.9411 8.88055 40 16.9394 40 26.8805L42 26.8805C42 15.8349 33.0457 6.88055 22 6.88055L22 8.88055ZM4 26.8805C4 16.9394 12.0589 8.88055 22 8.88055L22 6.88055C10.9543 6.88055 2 15.8349 2 26.8805L4 26.8805ZM4.24147 29.837C4.08269 28.8757 4 27.8882 4 26.8805L2 26.8805C2 27.9978 2.09171 29.0944 2.26821 30.163L4.24147 29.837ZM3.25484 31L40.7452 31L40.7452 29L3.25484 29L3.25484 31Z"
+                                                    fill="#368796" mask="url(#path-1-inside-1_8579_22771)" />
+                                            </g>
+                                            <path
+                                                d="M27.6569 19.3175L22.3536 24.6208C22.1583 24.8161 21.8417 24.8161 21.6464 24.6208L16.3431 19.3175"
+                                                stroke="#ECF6F8" stroke-width="2.5" stroke-linecap="round" />
+                                        </g>
+                                        <defs>
+                                            <filter id="filter0_d_8579_22771" x="-2" y="1.88055" width="48"
+                                                height="32.1194" filterUnits="userSpaceOnUse"
+                                                color-interpolation-filters="sRGB">
+                                                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                                <feColorMatrix in="SourceAlpha" type="matrix"
+                                                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                                    result="hardAlpha" />
+                                                <feMorphology radius="1" operator="dilate" in="SourceAlpha"
+                                                    result="effect1_dropShadow_8579_22771" />
+                                                <feOffset dy="-1" />
+                                                <feGaussianBlur stdDeviation="2" />
+                                                <feComposite in2="hardAlpha" operator="out" />
+                                                <feColorMatrix type="matrix"
+                                                    values="0 0 0 0 0.182413 0 0 0 0 0.43006 0 0 0 0 0.47592 0 0 0 0.3 0" />
+                                                <feBlend mode="normal" in2="BackgroundImageFix"
+                                                    result="effect1_dropShadow_8579_22771" />
+                                                <feBlend mode="normal" in="SourceGraphic"
+                                                    in2="effect1_dropShadow_8579_22771" result="shape" />
+                                            </filter>
+                                            <radialGradient id="paint0_radial_8579_22771" cx="0" cy="0" r="1"
+                                                gradientUnits="userSpaceOnUse"
+                                                gradientTransform="translate(22 31.4978) rotate(-90) scale(23.6172 19)">
+                                                <stop stop-color="#64B8C7" />
+                                                <stop offset="1" stop-color="#35818F" />
+                                            </radialGradient>
+                                            <clipPath id="clip0_8579_22771">
+                                                <rect width="44" height="30" fill="white"
+                                                    transform="translate(44 30) rotate(-180)" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                </div>
+                                <div class="actions">
+                                    <!-- <button class="btn btn-style-2" (click)="navigatetoCaseSheet(item)">
+                                    <svg width="16" height="21" viewBox="0 0 16 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M10.3368 3.88957C10.3368 4.26859 10.0419 4.56332 9.66299 4.56332H4.0204C3.64134 4.56332 3.34658 4.26859 3.34658 3.88957V2.56324C3.34658 2.18421 3.64149 1.88949 4.0204 1.88949H5.07314C5.26259 1.08946 5.97842 0.5 6.8417 0.5C7.68381 0.5 8.42079 1.08946 8.61025 1.88949H9.66299C10.0421 1.88949 10.3368 2.18437 10.3368 2.56324V3.88957ZM7.59959 2.33178C7.59959 1.91076 7.26268 1.57389 6.84162 1.57389C6.42056 1.57389 6.08365 1.91076 6.08365 2.33178C6.08365 2.75279 6.42056 3.08966 6.84162 3.08966C7.26268 3.08966 7.59959 2.75279 7.59959 2.33178Z" fill="url(#paint0_linear_1357_2714)"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M9.68418 8.90002V10.1001C9.68418 10.6264 10.0212 11.0895 10.4632 11.2789V18.7314H0.799142C0.441242 18.7314 0.146484 18.4367 0.146484 18.0788V3.658C0.146484 3.30014 0.441231 3.00541 0.799142 3.00541H2.46239V3.91059C2.46239 4.77377 3.15719 5.46849 4.02047 5.46849H9.64207C10.5054 5.46849 11.2002 4.77377 11.2002 3.91059V3.00541H12.8634C13.2213 3.00541 13.5161 3.30013 13.5161 3.658L13.5162 7.61583H10.9685C10.2527 7.61583 9.68418 8.18428 9.68418 8.90002ZM7.85242 7.61598H3.13617C2.88355 7.61598 2.69395 7.80542 2.69395 8.058C2.69395 8.31074 2.88356 8.50018 3.13617 8.50018L7.85242 8.50032C8.10519 8.50032 8.29465 8.31073 8.29465 8.05815C8.29465 7.80541 8.10503 7.61598 7.85242 7.61598ZM7.91559 10.1632H3.13617C2.88355 10.1632 2.69395 10.3527 2.69395 10.6053C2.69395 10.858 2.88356 11.0474 3.13617 11.0474L7.91559 11.0476C8.16835 11.0476 8.35781 10.858 8.35781 10.6054C8.35781 10.3527 8.1682 10.1632 7.91559 10.1632ZM3.13617 16.1421H8.56828C8.8209 16.1421 9.01036 15.9526 9.01051 15.6999C9.01051 15.4472 8.82089 15.2577 8.56828 15.2577H3.13617C2.88341 15.2577 2.69395 15.4473 2.69395 15.6999C2.69395 15.9526 2.88356 16.1421 3.13617 16.1421ZM3.13617 13.5948H8.56828C8.8209 13.5948 9.01036 13.4054 9.01051 13.1527C9.01051 12.8999 8.82089 12.7105 8.56828 12.7105H3.13617C2.88341 12.7105 2.69395 12.9001 2.69395 13.1527C2.69395 13.4054 2.88356 13.5948 3.13617 13.5948Z" fill="url(#paint1_linear_1357_2714)"></path><path d="M15.4533 8.47904H10.9897C10.7581 8.47904 10.5896 8.66847 10.5896 8.87907V10.0791C10.5896 10.3107 10.7791 10.4792 10.9897 10.4792H15.4533C15.6849 10.4792 15.8534 10.2897 15.8534 10.0791V8.87907C15.8534 8.66863 15.6639 8.47904 15.4533 8.47904Z" fill="url(#paint2_linear_1357_2714)"></path><path d="M11.3685 13.0263V11.3843L15.0741 11.3843L15.0742 18.6474C15.0742 19.679 14.2531 20.5 13.2214 20.5C12.2106 20.5 11.4107 19.6999 11.3685 18.7105L12.7582 18.7106C13.0109 18.7106 13.2004 18.521 13.2004 18.2685C13.2004 18.0157 13.0108 17.8263 12.7582 17.8263H11.3685V16.3105L12.7582 16.3107C13.0109 16.3107 13.2004 16.1211 13.2004 15.8685C13.2004 15.6158 13.0108 15.4263 12.7582 15.4263H11.3685V13.9105L12.7582 13.9107C13.0109 13.9107 13.2004 13.7211 13.2004 13.4685C13.2004 13.2158 13.0108 13.0263 12.7582 13.0263H11.3685Z" fill="url(#paint3_linear_1357_2714)"></path><defs><linearGradient id="paint0_linear_1357_2714" x1="7.99994" y1="0.5" x2="7.99994" y2="20.5" gradientUnits="userSpaceOnUse"><stop stop-color="#61BEC5"></stop><stop offset="1" stop-color="#357D83"></stop> </linearGradient><linearGradient id="paint1_linear_1357_2714" x1="7.99994" y1="0.5" x2="7.99994" y2="20.5" gradientUnits="userSpaceOnUse"><stop stop-color="#61BEC5"></stop><stop offset="1" stop-color="#357D83"></stop> </linearGradient><linearGradient id="paint2_linear_1357_2714" x1="7.99994" y1="0.5" x2="7.99994" y2="20.5" gradientUnits="userSpaceOnUse"><stop stop-color="#61BEC5"></stop><stop offset="1" stop-color="#357D83"></stop> </linearGradient><linearGradient id="paint3_linear_1357_2714" x1="7.99994" y1="0.5" x2="7.99994" y2="20.5" gradientUnits="userSpaceOnUse"><stop stop-color="#61BEC5"></stop><stop offset="1" stop-color="#357D83"></stop> </linearGradient></defs>
+                                     </svg>
+                                     <p> {{langData?.Ward?.CaseSheet}}</p>
+                                 </button> -->
+
+                                    <button class="btn btn-style-2" (click)="redirecttoVitalScreen(item)"
+                                        *ngIf="IsDoctor == 'false'">
+                                        <svg width="20" height="21" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M2.35298 0.479004H17.647C18.9466 0.479004 20 1.53244 20 2.83199V18.126C20 19.4256 18.9466 20.479 17.647 20.479H2.35298C1.05344 20.479 0 19.4256 0 18.126V2.83199C0 1.53244 1.05344 0.479004 2.35298 0.479004V0.479004ZM2.35298 1.65548C1.70316 1.65548 1.17651 2.18212 1.17651 2.83195V18.126C1.17651 18.7758 1.70316 19.3025 2.35298 19.3025H17.647C18.2968 19.3025 18.8235 18.7758 18.8235 18.126V2.83195C18.8235 2.18212 18.2968 1.65548 17.647 1.65548H2.35298ZM4.11764 16.6556C3.79286 16.6556 3.52945 16.3922 3.52945 16.0673C3.52945 15.7425 3.79285 15.4791 4.11764 15.4791H9.41196C9.73674 15.4791 10.0001 15.7425 10.0001 16.0673C10.0001 16.3922 9.73675 16.6556 9.41196 16.6556H4.11764ZM6.95473 10.3763L6.39319 11.359C6.28842 11.5423 6.09352 11.6554 5.88244 11.6554H4.11764C3.79286 11.6554 3.52945 11.392 3.52945 11.0671C3.52945 10.7423 3.79285 10.4789 4.11764 10.4789H5.54104L6.54815 8.71648C6.79411 8.28595 7.42987 8.33423 7.60788 8.79712L8.67053 11.5598L9.21642 10.7409C9.32552 10.5772 9.50925 10.4789 9.70596 10.4789H15.8824C16.2072 10.4789 16.4706 10.7423 16.4706 11.0671C16.4706 11.392 16.2072 11.6554 15.8824 11.6554H10.0206L9.01878 13.1582C8.75413 13.5552 8.15159 13.4884 7.98027 13.0431L6.95473 10.3763ZM10.7783 4.788L10.2168 5.77086C10.112 5.95418 9.91712 6.06718 9.70603 6.06718H4.11778C3.793 6.06718 3.5296 5.80393 3.5296 5.479C3.5296 5.15407 3.79299 4.89082 4.11778 4.89082H9.3646L10.3717 3.12823C10.6177 2.6977 11.2534 2.74612 11.4314 3.20901L12.4941 5.97171L13.0401 5.15263C13.1492 4.98899 13.3328 4.89077 13.5295 4.89077H15.8825C16.2073 4.89077 16.4707 5.15403 16.4707 5.47895C16.4707 5.80388 16.2073 6.06714 15.8825 6.06714H13.8443L12.8425 7.56993C12.5778 7.96697 11.9753 7.90029 11.8039 7.45484L10.7783 4.788ZM15.5884 16.9495C15.101 16.9495 14.7061 16.5545 14.7061 16.0671C14.7061 15.5798 15.1011 15.1849 15.5884 15.1849C16.0758 15.1849 16.4708 15.5798 16.4708 16.0671C16.4708 16.5545 16.0758 16.9495 15.5884 16.9495V16.9495Z"
+                                                fill="url(#paint0_linear_4353_14197)"></path>
+                                            <defs>
+                                                <linearGradient id="paint0_linear_4353_14197" x1="10" y1="0.479004"
+                                                    x2="10" y2="20.479" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                        <p>{{langData?.common?.Vitals}}</p>
+                                    </button>
+                                    <!-- <button class="btn btn-style-2" (click)="redirectToLabTrend(item)">
+                                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M17.8276 1.84747H3.82764C2.86114 1.84747 2.07764 2.63097 2.07764 3.59747V17.5975C2.07764 18.564 2.86114 19.3475 3.82764 19.3475H17.8276C18.7941 19.3475 19.5776 18.564 19.5776 17.5975V3.59747C19.5776 2.63097 18.7941 1.84747 17.8276 1.84747ZM3.82764 0.597473C2.17078 0.597473 0.827637 1.94062 0.827637 3.59747V17.5975C0.827637 19.2543 2.17078 20.5975 3.82764 20.5975H17.8276C19.4845 20.5975 20.8276 19.2543 20.8276 17.5975V3.59747C20.8276 1.94062 19.4845 0.597473 17.8276 0.597473H3.82764ZM4.43994 9.9729C4.43994 9.42062 4.88766 8.9729 5.43994 8.9729C5.99223 8.9729 6.43994 9.42062 6.43994 9.9729V13.9729C6.43994 14.5252 5.99223 14.9729 5.43994 14.9729C4.88766 14.9729 4.43994 14.5252 4.43994 13.9729V9.9729ZM9.03174 5.9729C8.47945 5.9729 8.03174 6.42062 8.03174 6.9729V13.9729C8.03174 14.5252 8.47945 14.9729 9.03174 14.9729C9.58402 14.9729 10.0317 14.5252 10.0317 13.9729V6.9729C10.0317 6.42062 9.58402 5.9729 9.03174 5.9729ZM11.6235 7.9729C11.6235 7.42062 12.0712 6.9729 12.6235 6.9729C13.1758 6.9729 13.6235 7.42062 13.6235 7.9729V13.9729C13.6235 14.5252 13.1758 14.9729 12.6235 14.9729C12.0712 14.9729 11.6235 14.5252 11.6235 13.9729V7.9729ZM16.2153 8.9729C15.663 8.9729 15.2153 9.42062 15.2153 9.9729V13.9729C15.2153 14.5252 15.663 14.9729 16.2153 14.9729C16.7676 14.9729 17.2153 14.5252 17.2153 13.9729V9.9729C17.2153 9.42062 16.7676 8.9729 16.2153 8.9729Z" fill="url(#paint0_linear_4353_14209)"></path><defs><linearGradient id="paint0_linear_4353_14209" x1="10.8276" y1="0.597473" x2="10.8276" y2="20.5975" gradientUnits="userSpaceOnUse"><stop stop-color="#61BEC5"></stop><stop offset="1" stop-color="#357D83"></stop></linearGradient></defs>
+                                    </svg>
+                                    <p>{{langData?.Ward?.LabResultsTrend}}</p>
+                                </button> -->
+                                    <button class="btn btn-style-1" (click)="redirecttoProgressNotesScreen(item)">
+                                        <svg width="16" height="21" viewBox="0 0 16 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M14.7123 2.81667H10.8208V2.22081C10.8199 2.11995 10.7384 2.03833 10.6375 2.0375H9.53749C9.53749 1.4881 9.24438 0.980559 8.76866 0.706021C8.29308 0.431326 7.70687 0.431326 7.23125 0.706021C6.75554 0.980577 6.46243 1.4881 6.46243 2.0375H5.36238C5.26152 2.03833 5.18004 2.11995 5.17907 2.22081V2.81667H1.28761C1.09215 2.82044 0.906032 2.90136 0.770174 3.04198C0.634291 3.18247 0.559655 3.37123 0.562583 3.56667V19.75C0.559653 19.9455 0.634291 20.1342 0.770174 20.2747C0.906057 20.4153 1.09216 20.4962 1.28761 20.5H14.7127C14.9082 20.4962 15.0943 20.4153 15.2301 20.2747C15.366 20.1342 15.4407 19.9454 15.4377 19.75V3.56667C15.4407 3.37121 15.366 3.18245 15.2301 3.04198C15.0943 2.90136 14.9082 2.82044 14.7127 2.81667H14.7123ZM8.70512 16.4668H2.72043V14.9576H8.70512V16.4668ZM8.70512 13.664H2.72043V12.1549H8.70512V13.664ZM8.70512 10.8612H2.72043V9.35215H8.70512V10.8612ZM8.70512 8.05847L2.72043 8.05861V6.54938H8.70512V8.05847ZM7.27068 2.03735C7.27068 1.77674 7.40977 1.53609 7.63536 1.40577C7.86094 1.27561 8.13886 1.27561 8.36443 1.40577C8.59002 1.53607 8.72912 1.77674 8.72912 2.03735H7.27068ZM11.0903 16.4667C10.9207 16.3454 10.7511 16.224 10.5814 16.1026L10.5841 16.0979L9.85735 15.5687H10.9164C11.3989 14.8578 12.0811 14.3058 12.877 13.9821C12.0312 14.598 11.4049 15.4689 11.0905 16.4668L11.0903 16.4667ZM11.0903 13.664C10.9207 13.5426 10.7511 13.4212 10.5814 13.2999L10.5841 13.2951L9.85735 12.766H10.9164C11.3989 12.0552 12.0811 11.5031 12.877 11.1793C12.0312 11.7953 11.4049 12.6661 11.0905 13.664L11.0903 13.664ZM11.0903 10.8612C10.9207 10.7398 10.7511 10.6185 10.5814 10.4971L10.5841 10.4923L9.85735 9.9632H10.9164C11.3989 9.25241 12.0811 8.70037 12.877 8.37669C12.0312 8.99262 11.4049 9.86331 11.0905 10.8612L11.0903 10.8612ZM11.0903 8.05843C10.9207 7.93706 10.7511 7.81568 10.5814 7.69432L10.5841 7.68958L9.85735 7.16043H10.9164C11.3989 6.44964 12.0811 5.8976 12.877 5.57392C12.0312 6.18985 11.4049 7.06068 11.0905 8.05858L11.0903 8.05843Z"
+                                                fill="url(#paint0_linear_1357_3161)" />
+                                            <defs>
+                                                <linearGradient id="paint0_linear_1357_3161" x1="8.00016" y1="0.5"
+                                                    x2="8.00016" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#808080" />
+                                                    <stop offset="1" stop-color="#4D4D4D" />
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                        <p>{{langData?.Ward?.ProgressNote}}</p>
+                                    </button>
+                                    <button class="btn btn-style-2" (click)="redirectToDrugAdministration(item)">
+                                        <svg width="20" height="21" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M10.3162 10.6641C9.50623 11.5783 9.06272 12.742 9.06272 13.9739C9.06258 15.3094 9.58269 16.565 10.5272 17.5095C11.4715 18.4539 12.7274 18.974 14.0628 18.9738C15.2948 18.974 16.4584 18.5303 17.3729 17.7205L10.3162 10.6641Z"
+                                                fill="url(#paint0_linear_1357_2975)" />
+                                            <path
+                                                d="M14.0627 8.97372C12.8332 8.97358 11.6722 9.41527 10.7585 10.2222L17.814 17.2777C18.621 16.3639 19.0626 15.2032 19.0625 13.9735C19.0626 12.6379 18.5425 11.3823 17.598 10.438C16.6537 9.49352 15.3981 8.9734 14.0626 8.97354L14.0627 8.97372Z"
+                                                fill="url(#paint1_linear_1357_2975)" />
+                                            <path
+                                                d="M4.68757 0.5C2.61985 0.5 0.9375 2.19967 0.9375 4.289V16.711C0.9375 18.8003 2.61985 20.5 4.68757 20.5C6.75528 20.5 8.43763 18.8002 8.43763 16.711V4.289C8.43763 2.19953 6.75528 0.5 4.68757 0.5ZM7.4418 5.12508C7.4418 5.29752 7.302 5.43759 7.12929 5.43759C6.95685 5.43759 6.81678 5.29752 6.81678 5.12508C6.81678 4.95265 6.95685 4.81258 7.12929 4.81258C7.302 4.81258 7.4418 4.95237 7.4418 5.12508ZM6.94707 3.35177C7.11951 3.35177 7.25958 3.49184 7.25958 3.66427C7.25958 3.83671 7.11951 3.97678 6.94707 3.97678C6.77436 3.97678 6.63457 3.83671 6.63457 3.66427C6.63457 3.49184 6.77436 3.35177 6.94707 3.35177ZM6.81677 6.77676C6.98948 6.77676 7.12928 6.91683 7.12928 7.08926C7.12928 7.2617 6.98948 7.40177 6.81677 7.40177C6.64433 7.40177 6.50426 7.2617 6.50426 7.08926C6.50426 6.91683 6.64433 6.77676 6.81677 6.77676ZM6.81677 8.97379C6.98948 8.97379 7.12928 9.11386 7.12928 9.2863C7.12928 9.45873 6.98948 9.59881 6.81677 9.59881C6.64433 9.59881 6.50426 9.45873 6.50426 9.2863C6.50426 9.11373 6.64433 8.97379 6.81677 8.97379ZM5.99643 2.16046C6.16915 2.16046 6.30894 2.30053 6.30894 2.47296C6.30894 2.6454 6.16915 2.78547 5.99643 2.78547C5.824 2.78547 5.68393 2.6454 5.68393 2.47296C5.68393 2.30053 5.824 2.16046 5.99643 2.16046ZM5.99643 5.96874C5.824 5.96874 5.68393 5.82867 5.68393 5.65624C5.68393 5.4838 5.824 5.34373 5.99643 5.34373C6.16915 5.34373 6.30894 5.4838 6.30894 5.65624C6.30894 5.82867 6.16915 5.96874 5.99643 5.96874ZM6.30894 8.1825C6.30894 8.35493 6.16915 8.495 5.99643 8.495C5.824 8.495 5.68393 8.35493 5.68393 8.1825C5.68393 8.01006 5.824 7.86999 5.99643 7.86999C6.16915 7.86999 6.30894 8.00992 6.30894 8.1825ZM5.68393 3.66384C5.85664 3.66384 5.99643 3.80391 5.99643 3.97635C5.99643 4.14878 5.85664 4.28885 5.68393 4.28885C5.51149 4.28885 5.37142 4.14878 5.37142 3.97635C5.37142 3.80391 5.51149 3.66384 5.68393 3.66384ZM5.33236 6.83883C5.50507 6.83883 5.64486 6.9789 5.64486 7.15133C5.64486 7.32377 5.50507 7.46384 5.33236 7.46384C5.15992 7.46384 5.01985 7.32377 5.01985 7.15133C5.01985 6.9789 5.15992 6.83883 5.33236 6.83883ZM3.8089 8.1921C3.98162 8.1921 4.12141 8.33217 4.12141 8.50461C4.12141 8.67704 3.98162 8.81711 3.8089 8.81711C3.63647 8.81711 3.4964 8.67704 3.4964 8.50461C3.4964 8.33203 3.63647 8.1921 3.8089 8.1921ZM3.45733 7.08883C3.45733 6.9164 3.5974 6.77633 3.76984 6.77633C3.94255 6.77633 4.08234 6.9164 4.08234 7.08883C4.08234 7.26127 3.94255 7.40134 3.76984 7.40134C3.5974 7.40134 3.45733 7.26141 3.45733 7.08883ZM4.08234 5.34355C4.08234 5.17112 4.22241 5.03105 4.39485 5.03105C4.56756 5.03105 4.70735 5.17112 4.70735 5.34355C4.70735 5.51599 4.56756 5.65606 4.39485 5.65606C4.22241 5.65606 4.08234 5.51599 4.08234 5.34355ZM5.01986 8.97326C5.19257 8.97326 5.33236 9.11333 5.33236 9.28576C5.33236 9.4582 5.19257 9.59827 5.01986 9.59827C4.84742 9.59827 4.70735 9.4582 4.70735 9.28576C4.70735 9.11319 4.84742 8.97326 5.01986 8.97326ZM4.70735 1.53491C4.88007 1.53491 5.01986 1.67498 5.01986 1.84742C5.01986 2.01985 4.88007 2.15992 4.70735 2.15992C4.53492 2.15992 4.39485 2.01985 4.39485 1.84742C4.39485 1.67498 4.53492 1.53491 4.70735 1.53491ZM4.12141 3.27294C4.29413 3.27294 4.43392 3.41301 4.43392 3.58545C4.43392 3.75788 4.29413 3.89795 4.12141 3.89795C3.94898 3.89795 3.80891 3.75788 3.80891 3.58545C3.80891 3.41301 3.94898 3.27294 4.12141 3.27294ZM3.45733 2.08178C3.63004 2.08178 3.76984 2.22185 3.76984 2.39428C3.76984 2.56672 3.63004 2.70679 3.45733 2.70679C3.2849 2.70679 3.14483 2.56672 3.14483 2.39428C3.14483 2.22185 3.2849 2.08178 3.45733 2.08178ZM3.30108 4.73375C3.30108 4.90619 3.16129 5.04626 2.98857 5.04626C2.81614 5.04626 2.67607 4.90619 2.67607 4.73375C2.67607 4.56132 2.81614 4.42125 2.98857 4.42125C3.16129 4.42125 3.30108 4.56104 3.30108 4.73375ZM2.51981 3.27294C2.69253 3.27294 2.83232 3.41301 2.83232 3.58545C2.83232 3.75788 2.69253 3.89795 2.51981 3.89795C2.34738 3.89795 2.20731 3.75788 2.20731 3.58545C2.20731 3.41301 2.34738 3.27294 2.51981 3.27294ZM2.51981 5.65581C2.69253 5.65581 2.83232 5.79588 2.83232 5.96831C2.83232 6.14075 2.69253 6.28082 2.51981 6.28082C2.34738 6.28082 2.20731 6.14075 2.20731 5.96831C2.20731 5.79588 2.34738 5.65581 2.51981 5.65581ZM2.83232 9.20748C2.83232 9.37991 2.69253 9.51998 2.51981 9.51998C2.34738 9.51998 2.20731 9.37991 2.20731 9.20748C2.20731 9.03504 2.34738 8.89497 2.51981 8.89497C2.69253 8.89497 2.83232 9.0349 2.83232 9.20748ZM2.20731 7.38544C2.38002 7.38544 2.51981 7.52552 2.51981 7.69795C2.51981 7.87039 2.38002 8.01046 2.20731 8.01046C2.03487 8.01046 1.8948 7.87039 1.8948 7.69795C1.8948 7.52552 2.03487 7.38544 2.20731 7.38544ZM7.81277 16.7106C7.81277 18.4554 6.41067 19.8747 4.68771 19.8747C2.96475 19.8747 1.56265 18.4554 1.56265 16.7106V10.4994H7.81277V16.7106Z"
+                                                fill="url(#paint2_linear_1357_2975)" />
+                                            <path
+                                                d="M4.80471 19.6475C4.76746 19.6475 4.72951 19.6425 4.69241 19.6321C3.69267 19.353 2.50069 18.5421 2.50069 16.2646V15.1277C2.50069 15.0027 2.64076 14.9013 2.81319 14.9013C2.98563 14.9013 3.1257 15.0027 3.1257 15.1277V16.2646C3.1257 17.8638 3.74528 18.8823 4.91745 19.2096C5.07816 19.2546 5.15852 19.3856 5.09658 19.5024C5.04858 19.5922 4.93027 19.6475 4.80471 19.6475Z"
+                                                fill="url(#paint3_linear_1357_2975)" />
+                                            <path
+                                                d="M13.1274 3.89349C12.1869 3.03551 11.0544 2.473 10.235 2.473C9.87983 2.473 9.58394 2.58112 9.37926 2.78564C8.60803 3.55673 9.33462 5.27172 10.4869 6.53428L13.1274 3.89349Z"
+                                                fill="url(#paint4_linear_1357_2975)" />
+                                            <path
+                                                d="M14.7638 6.20224C14.5154 5.57052 14.0869 4.90369 13.5695 4.33503L10.9288 6.97583C11.8703 7.83688 13.0058 8.4015 13.827 8.4015C14.1822 8.4015 14.4781 8.29352 14.6827 8.08885C15.0638 7.70799 15.0927 7.03805 14.7638 6.20224Z"
+                                                fill="url(#paint5_linear_1357_2975)" />
+                                            <defs>
+                                                <linearGradient id="paint0_linear_1357_2975" x1="10" y1="0.5" x2="10"
+                                                    y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#808080" />
+                                                    <stop offset="1" stop-color="#4D4D4D" />
+                                                </linearGradient>
+                                                <linearGradient id="paint1_linear_1357_2975" x1="10" y1="0.5" x2="10"
+                                                    y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#808080" />
+                                                    <stop offset="1" stop-color="#4D4D4D" />
+                                                </linearGradient>
+                                                <linearGradient id="paint2_linear_1357_2975" x1="10" y1="0.5" x2="10"
+                                                    y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#808080" />
+                                                    <stop offset="1" stop-color="#4D4D4D" />
+                                                </linearGradient>
+                                                <linearGradient id="paint3_linear_1357_2975" x1="10" y1="0.5" x2="10"
+                                                    y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#808080" />
+                                                    <stop offset="1" stop-color="#4D4D4D" />
+                                                </linearGradient>
+                                                <linearGradient id="paint4_linear_1357_2975" x1="10" y1="0.5" x2="10"
+                                                    y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#808080" />
+                                                    <stop offset="1" stop-color="#4D4D4D" />
+                                                </linearGradient>
+                                                <linearGradient id="paint5_linear_1357_2975" x1="10" y1="0.5" x2="10"
+                                                    y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#808080" />
+                                                    <stop offset="1" stop-color="#4D4D4D" />
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                        <p>{{langData?.Ward?.DrugAdministration}}</p>
+                                    </button>
+                                    <button class="btn btn-style-1" (click)="redirectToSampleCollection(item)">
+                                        <svg width="24" height="21" viewBox="0 0 24 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M22.636 0.5H13.3897C13.0456 0.5 12.7692 0.776613 12.7692 1.12046V2.87555C12.7692 3.2194 13.0457 3.49959 13.3897 3.49959H14.5526V17.0432C14.5526 17.9687 14.9106 18.8372 15.5666 19.4824C16.2118 20.1384 17.0911 20.5 18.0094 20.5C18.1051 20.5 18.2044 20.4964 18.3001 20.4894C20.0764 20.344 21.4697 18.784 21.4697 16.937V3.49945H22.636C22.9799 3.49945 23.2565 3.21942 23.2565 2.87541V1.12049C23.2565 0.776644 22.9801 0.500035 22.636 0.500035L22.636 0.5ZM20.9378 16.9365C20.9378 18.5071 19.7571 19.833 18.2575 19.9572C17.3889 20.028 16.5487 19.7197 15.9424 19.1062C15.3893 18.5603 15.0843 17.8264 15.0843 17.0428V3.49566H20.9381L20.9378 16.9365Z"
+                                                fill="url(#paint0_linear_1357_3105)" />
+                                            <path
+                                                d="M10.6135 0.5H1.36362C1.02336 0.5 0.743164 0.776613 0.743164 1.12046V2.87555C0.743164 3.2194 1.02319 3.49959 1.36362 3.49959H2.52656V17.0432C2.52656 17.9687 2.88815 18.8372 3.54053 19.4824C4.18934 20.1384 5.06863 20.5 5.98689 20.5C6.08262 20.5 6.17836 20.4964 6.27767 20.4894C8.0539 20.344 9.44383 18.784 9.44383 16.937L9.44366 3.49945H10.6136C10.9539 3.49945 11.234 3.21942 11.234 2.87541V1.12049C11.234 0.776644 10.954 0.500035 10.6136 0.500035L10.6135 0.5ZM8.91165 16.9365C8.91165 18.5071 7.73456 19.833 6.23135 19.9572C5.36635 20.028 4.52253 19.7197 3.91622 19.1062C3.36317 18.5603 3.05821 17.8264 3.05821 17.0428V3.49566H8.912L8.91165 16.9365Z"
+                                                fill="url(#paint1_linear_1357_3105)" />
+                                            <path
+                                                d="M7.70275 7.67614V17.0431C7.70275 17.9896 6.93333 18.7591 5.98676 18.7591C5.52584 18.7591 5.09686 18.5818 4.77774 18.2593C4.45146 17.933 4.26715 17.5006 4.26715 17.0431V7.67614C4.26715 7.52716 4.38779 7.41027 4.53301 7.41027H7.43671C7.58568 7.41027 7.70275 7.52734 7.70275 7.67614Z"
+                                                fill="url(#paint2_linear_1357_3105)" />
+                                            <path
+                                                d="M19.7288 7.67614V17.0431C19.7288 17.9896 18.956 18.7591 18.0092 18.7591C17.5519 18.7591 17.1229 18.5818 16.8038 18.2593C16.4741 17.933 16.2932 17.5006 16.2932 17.0431V7.67614C16.2932 7.52716 16.4101 7.41027 16.5591 7.41027H19.4628C19.6081 7.41027 19.7288 7.52734 19.7288 7.67614Z"
+                                                fill="url(#paint3_linear_1357_3105)" />
+                                            <defs>
+                                                <linearGradient id="paint0_linear_1357_3105" x1="11.9998" y1="0.5"
+                                                    x2="11.9998" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5" />
+                                                    <stop offset="1" stop-color="#357D83" />
+                                                </linearGradient>
+                                                <linearGradient id="paint1_linear_1357_3105" x1="11.9998" y1="0.5"
+                                                    x2="11.9998" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5" />
+                                                    <stop offset="1" stop-color="#357D83" />
+                                                </linearGradient>
+                                                <linearGradient id="paint2_linear_1357_3105" x1="11.9998" y1="0.5"
+                                                    x2="11.9998" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5" />
+                                                    <stop offset="1" stop-color="#357D83" />
+                                                </linearGradient>
+                                                <linearGradient id="paint3_linear_1357_3105" x1="11.9998" y1="0.5"
+                                                    x2="11.9998" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5" />
+                                                    <stop offset="1" stop-color="#357D83" />
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                        <p>{{langData?.Ward?.SampleCollection}}</p>
+                                    </button>
+                                    <!-- (click)="navigatetoDischargeReconciliation(item)" -->
+                                    <button class="btn btn-style-2" (click)="redirectToTemplates(item)">
+                                        <svg width="16" height="21" viewBox="0 0 16 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M10.3368 3.88957C10.3368 4.26859 10.0419 4.56332 9.66299 4.56332H4.0204C3.64134 4.56332 3.34658 4.26859 3.34658 3.88957V2.56324C3.34658 2.18421 3.64149 1.88949 4.0204 1.88949H5.07314C5.26259 1.08946 5.97842 0.5 6.8417 0.5C7.68381 0.5 8.42079 1.08946 8.61025 1.88949H9.66299C10.0421 1.88949 10.3368 2.18437 10.3368 2.56324V3.88957ZM7.59959 2.33178C7.59959 1.91076 7.26268 1.57389 6.84162 1.57389C6.42056 1.57389 6.08365 1.91076 6.08365 2.33178C6.08365 2.75279 6.42056 3.08966 6.84162 3.08966C7.26268 3.08966 7.59959 2.75279 7.59959 2.33178Z"
+                                                fill="url(#paint0_linear_1357_2714)"></path>
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M9.68418 8.90002V10.1001C9.68418 10.6264 10.0212 11.0895 10.4632 11.2789V18.7314H0.799142C0.441242 18.7314 0.146484 18.4367 0.146484 18.0788V3.658C0.146484 3.30014 0.441231 3.00541 0.799142 3.00541H2.46239V3.91059C2.46239 4.77377 3.15719 5.46849 4.02047 5.46849H9.64207C10.5054 5.46849 11.2002 4.77377 11.2002 3.91059V3.00541H12.8634C13.2213 3.00541 13.5161 3.30013 13.5161 3.658L13.5162 7.61583H10.9685C10.2527 7.61583 9.68418 8.18428 9.68418 8.90002ZM7.85242 7.61598H3.13617C2.88355 7.61598 2.69395 7.80542 2.69395 8.058C2.69395 8.31074 2.88356 8.50018 3.13617 8.50018L7.85242 8.50032C8.10519 8.50032 8.29465 8.31073 8.29465 8.05815C8.29465 7.80541 8.10503 7.61598 7.85242 7.61598ZM7.91559 10.1632H3.13617C2.88355 10.1632 2.69395 10.3527 2.69395 10.6053C2.69395 10.858 2.88356 11.0474 3.13617 11.0474L7.91559 11.0476C8.16835 11.0476 8.35781 10.858 8.35781 10.6054C8.35781 10.3527 8.1682 10.1632 7.91559 10.1632ZM3.13617 16.1421H8.56828C8.8209 16.1421 9.01036 15.9526 9.01051 15.6999C9.01051 15.4472 8.82089 15.2577 8.56828 15.2577H3.13617C2.88341 15.2577 2.69395 15.4473 2.69395 15.6999C2.69395 15.9526 2.88356 16.1421 3.13617 16.1421ZM3.13617 13.5948H8.56828C8.8209 13.5948 9.01036 13.4054 9.01051 13.1527C9.01051 12.8999 8.82089 12.7105 8.56828 12.7105H3.13617C2.88341 12.7105 2.69395 12.9001 2.69395 13.1527C2.69395 13.4054 2.88356 13.5948 3.13617 13.5948Z"
+                                                fill="url(#paint1_linear_1357_2714)"></path>
+                                            <path
+                                                d="M15.4533 8.47904H10.9897C10.7581 8.47904 10.5896 8.66847 10.5896 8.87907V10.0791C10.5896 10.3107 10.7791 10.4792 10.9897 10.4792H15.4533C15.6849 10.4792 15.8534 10.2897 15.8534 10.0791V8.87907C15.8534 8.66863 15.6639 8.47904 15.4533 8.47904Z"
+                                                fill="url(#paint2_linear_1357_2714)"></path>
+                                            <path
+                                                d="M11.3685 13.0263V11.3843L15.0741 11.3843L15.0742 18.6474C15.0742 19.679 14.2531 20.5 13.2214 20.5C12.2106 20.5 11.4107 19.6999 11.3685 18.7105L12.7582 18.7106C13.0109 18.7106 13.2004 18.521 13.2004 18.2685C13.2004 18.0157 13.0108 17.8263 12.7582 17.8263H11.3685V16.3105L12.7582 16.3107C13.0109 16.3107 13.2004 16.1211 13.2004 15.8685C13.2004 15.6158 13.0108 15.4263 12.7582 15.4263H11.3685V13.9105L12.7582 13.9107C13.0109 13.9107 13.2004 13.7211 13.2004 13.4685C13.2004 13.2158 13.0108 13.0263 12.7582 13.0263H11.3685Z"
+                                                fill="url(#paint3_linear_1357_2714)"></path>
+                                            <defs>
+                                                <linearGradient id="paint0_linear_1357_2714" x1="7.99994" y1="0.5"
+                                                    x2="7.99994" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                                <linearGradient id="paint1_linear_1357_2714" x1="7.99994" y1="0.5"
+                                                    x2="7.99994" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                                <linearGradient id="paint2_linear_1357_2714" x1="7.99994" y1="0.5"
+                                                    x2="7.99994" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                                <linearGradient id="paint3_linear_1357_2714" x1="7.99994" y1="0.5"
+                                                    x2="7.99994" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                        <p>{{langData?.Ward?.EForms}}</p>
+                                    </button>
+                                    <button class="btn btn-style-1" (click)="navigatetoResults(item)">
+                                        <svg width="16" height="21" viewBox="0 0 16 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M10.3368 3.88957C10.3368 4.26859 10.0419 4.56332 9.66299 4.56332H4.0204C3.64134 4.56332 3.34658 4.26859 3.34658 3.88957V2.56324C3.34658 2.18421 3.64149 1.88949 4.0204 1.88949H5.07314C5.26259 1.08946 5.97842 0.5 6.8417 0.5C7.68381 0.5 8.42079 1.08946 8.61025 1.88949H9.66299C10.0421 1.88949 10.3368 2.18437 10.3368 2.56324V3.88957ZM7.59959 2.33178C7.59959 1.91076 7.26268 1.57389 6.84162 1.57389C6.42056 1.57389 6.08365 1.91076 6.08365 2.33178C6.08365 2.75279 6.42056 3.08966 6.84162 3.08966C7.26268 3.08966 7.59959 2.75279 7.59959 2.33178Z"
+                                                fill="url(#paint0_linear_1357_2714)"></path>
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M9.68418 8.90002V10.1001C9.68418 10.6264 10.0212 11.0895 10.4632 11.2789V18.7314H0.799142C0.441242 18.7314 0.146484 18.4367 0.146484 18.0788V3.658C0.146484 3.30014 0.441231 3.00541 0.799142 3.00541H2.46239V3.91059C2.46239 4.77377 3.15719 5.46849 4.02047 5.46849H9.64207C10.5054 5.46849 11.2002 4.77377 11.2002 3.91059V3.00541H12.8634C13.2213 3.00541 13.5161 3.30013 13.5161 3.658L13.5162 7.61583H10.9685C10.2527 7.61583 9.68418 8.18428 9.68418 8.90002ZM7.85242 7.61598H3.13617C2.88355 7.61598 2.69395 7.80542 2.69395 8.058C2.69395 8.31074 2.88356 8.50018 3.13617 8.50018L7.85242 8.50032C8.10519 8.50032 8.29465 8.31073 8.29465 8.05815C8.29465 7.80541 8.10503 7.61598 7.85242 7.61598ZM7.91559 10.1632H3.13617C2.88355 10.1632 2.69395 10.3527 2.69395 10.6053C2.69395 10.858 2.88356 11.0474 3.13617 11.0474L7.91559 11.0476C8.16835 11.0476 8.35781 10.858 8.35781 10.6054C8.35781 10.3527 8.1682 10.1632 7.91559 10.1632ZM3.13617 16.1421H8.56828C8.8209 16.1421 9.01036 15.9526 9.01051 15.6999C9.01051 15.4472 8.82089 15.2577 8.56828 15.2577H3.13617C2.88341 15.2577 2.69395 15.4473 2.69395 15.6999C2.69395 15.9526 2.88356 16.1421 3.13617 16.1421ZM3.13617 13.5948H8.56828C8.8209 13.5948 9.01036 13.4054 9.01051 13.1527C9.01051 12.8999 8.82089 12.7105 8.56828 12.7105H3.13617C2.88341 12.7105 2.69395 12.9001 2.69395 13.1527C2.69395 13.4054 2.88356 13.5948 3.13617 13.5948Z"
+                                                fill="url(#paint1_linear_1357_2714)"></path>
+                                            <path
+                                                d="M15.4533 8.47904H10.9897C10.7581 8.47904 10.5896 8.66847 10.5896 8.87907V10.0791C10.5896 10.3107 10.7791 10.4792 10.9897 10.4792H15.4533C15.6849 10.4792 15.8534 10.2897 15.8534 10.0791V8.87907C15.8534 8.66863 15.6639 8.47904 15.4533 8.47904Z"
+                                                fill="url(#paint2_linear_1357_2714)"></path>
+                                            <path
+                                                d="M11.3685 13.0263V11.3843L15.0741 11.3843L15.0742 18.6474C15.0742 19.679 14.2531 20.5 13.2214 20.5C12.2106 20.5 11.4107 19.6999 11.3685 18.7105L12.7582 18.7106C13.0109 18.7106 13.2004 18.521 13.2004 18.2685C13.2004 18.0157 13.0108 17.8263 12.7582 17.8263H11.3685V16.3105L12.7582 16.3107C13.0109 16.3107 13.2004 16.1211 13.2004 15.8685C13.2004 15.6158 13.0108 15.4263 12.7582 15.4263H11.3685V13.9105L12.7582 13.9107C13.0109 13.9107 13.2004 13.7211 13.2004 13.4685C13.2004 13.2158 13.0108 13.0263 12.7582 13.0263H11.3685Z"
+                                                fill="url(#paint3_linear_1357_2714)"></path>
+                                            <defs>
+                                                <linearGradient id="paint0_linear_1357_2714" x1="7.99994" y1="0.5"
+                                                    x2="7.99994" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                                <linearGradient id="paint1_linear_1357_2714" x1="7.99994" y1="0.5"
+                                                    x2="7.99994" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                                <linearGradient id="paint2_linear_1357_2714" x1="7.99994" y1="0.5"
+                                                    x2="7.99994" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                                <linearGradient id="paint3_linear_1357_2714" x1="7.99994" y1="0.5"
+                                                    x2="7.99994" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                        <p>Results</p>
+                                    </button>
+                                    <button class="btn btn-style-2" (click)="redirectToShiftHandover(item)">
+                                        <svg width="16" height="21" viewBox="0 0 16 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M14.7123 2.81667H10.8208V2.22081C10.8199 2.11995 10.7384 2.03833 10.6375 2.0375H9.53749C9.53749 1.4881 9.24438 0.980559 8.76866 0.706021C8.29308 0.431326 7.70687 0.431326 7.23125 0.706021C6.75554 0.980577 6.46243 1.4881 6.46243 2.0375H5.36238C5.26152 2.03833 5.18004 2.11995 5.17907 2.22081V2.81667H1.28761C1.09215 2.82044 0.906032 2.90136 0.770174 3.04198C0.634291 3.18247 0.559655 3.37123 0.562583 3.56667V19.75C0.559653 19.9455 0.634291 20.1342 0.770174 20.2747C0.906057 20.4153 1.09216 20.4962 1.28761 20.5H14.7127C14.9082 20.4962 15.0943 20.4153 15.2301 20.2747C15.366 20.1342 15.4407 19.9454 15.4377 19.75V3.56667C15.4407 3.37121 15.366 3.18245 15.2301 3.04198C15.0943 2.90136 14.9082 2.82044 14.7127 2.81667H14.7123ZM8.70512 16.4668H2.72043V14.9576H8.70512V16.4668ZM8.70512 13.664H2.72043V12.1549H8.70512V13.664ZM8.70512 10.8612H2.72043V9.35215H8.70512V10.8612ZM8.70512 8.05847L2.72043 8.05861V6.54938H8.70512V8.05847ZM7.27068 2.03735C7.27068 1.77674 7.40977 1.53609 7.63536 1.40577C7.86094 1.27561 8.13886 1.27561 8.36443 1.40577C8.59002 1.53607 8.72912 1.77674 8.72912 2.03735H7.27068ZM11.0903 16.4667C10.9207 16.3454 10.7511 16.224 10.5814 16.1026L10.5841 16.0979L9.85735 15.5687H10.9164C11.3989 14.8578 12.0811 14.3058 12.877 13.9821C12.0312 14.598 11.4049 15.4689 11.0905 16.4668L11.0903 16.4667ZM11.0903 13.664C10.9207 13.5426 10.7511 13.4212 10.5814 13.2999L10.5841 13.2951L9.85735 12.766H10.9164C11.3989 12.0552 12.0811 11.5031 12.877 11.1793C12.0312 11.7953 11.4049 12.6661 11.0905 13.664L11.0903 13.664ZM11.0903 10.8612C10.9207 10.7398 10.7511 10.6185 10.5814 10.4971L10.5841 10.4923L9.85735 9.9632H10.9164C11.3989 9.25241 12.0811 8.70037 12.877 8.37669C12.0312 8.99262 11.4049 9.86331 11.0905 10.8612L11.0903 10.8612ZM11.0903 8.05843C10.9207 7.93706 10.7511 7.81568 10.5814 7.69432L10.5841 7.68958L9.85735 7.16043H10.9164C11.3989 6.44964 12.0811 5.8976 12.877 5.57392C12.0312 6.18985 11.4049 7.06068 11.0905 8.05858L11.0903 8.05843Z"
+                                                fill="url(#paint0_linear_1357_3161)"></path>
+                                            <defs>
+                                                <linearGradient id="paint0_linear_1357_3161" x1="8.00016" y1="0.5"
+                                                    x2="8.00016" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#808080"></stop>
+                                                    <stop offset="1" stop-color="#4D4D4D"></stop>
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                        <p>{{langData?.Ward?.ShiftHandOver}}</p>
+                                    </button>
+                                    <!-- <button class="btn btn-style-2">
+                                    <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M5.71376 6.63276H10.8572C11.1635 6.63276 11.4465 6.46935 11.5996 6.20414C11.7527 5.93893 11.7527 5.61211 11.5996 5.3469C11.4465 5.0817 11.1635 4.91828 10.8572 4.91828H5.71376C5.40741 4.91828 5.12441 5.08169 4.97134 5.3469C4.81826 5.61211 4.81826 5.93894 4.97134 6.20414C5.12441 6.46935 5.40742 6.63276 5.71376 6.63276Z" fill="url(#paint0_linear_3992_13654)"></path><path d="M5.71376 8.34725H14.2862C14.5925 8.34725 14.8755 8.51066 15.0286 8.77587C15.1817 9.04107 15.1817 9.3679 15.0286 9.63311C14.8755 9.89832 14.5925 10.0617 14.2862 10.0617H5.71376C5.40742 10.0617 5.12441 9.89831 4.97134 9.63311C4.81826 9.3679 4.81826 9.04108 4.97134 8.77587C5.12441 8.51066 5.40741 8.34725 5.71376 8.34725Z" fill="url(#paint1_linear_3992_13654)"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M16.8579 0.63208H3.14203C2.45987 0.63208 1.80587 0.903027 1.32346 1.38523C0.841259 1.86762 0.570312 2.52163 0.570312 3.2038V11.7762C0.570312 12.4584 0.841259 13.1124 1.32346 13.5948C1.80585 14.077 2.45987 14.3479 3.14203 14.3479H3.99927V17.7769C3.99985 17.9912 4.0806 18.1977 4.22564 18.3554C4.37087 18.513 4.56987 18.6106 4.78343 18.629C4.99698 18.6472 5.20957 18.5848 5.37949 18.4541L10.6601 14.348H16.8577C17.5399 14.348 18.1939 14.077 18.6763 13.5948C19.1585 13.1124 19.4294 12.4584 19.4294 11.7762V3.20383C19.4294 2.52166 19.1585 1.86766 18.6763 1.38526C18.1939 0.903056 17.5399 0.63211 16.8577 0.63211L16.8579 0.63208ZM17.7151 11.7762C17.7151 12.0035 17.6248 12.2217 17.4641 12.3824C17.3033 12.5431 17.0852 12.6335 16.8579 12.6335H10.3683C10.1791 12.634 9.9952 12.6974 9.84556 12.8135L5.71356 16.0624V13.4907C5.71356 13.2634 5.62324 13.0452 5.46251 12.8845C5.30178 12.7238 5.08364 12.6334 4.85632 12.6334H3.14184C2.91452 12.6334 2.69638 12.5431 2.53565 12.3824C2.37492 12.2217 2.2846 12.0035 2.2846 11.7762V3.20379C2.2846 2.97647 2.37492 2.75833 2.53565 2.5976C2.69638 2.43687 2.91452 2.34655 3.14184 2.34655H16.8577C17.085 2.34655 17.3031 2.43687 17.4639 2.5976C17.6246 2.75833 17.7149 2.97647 17.7149 3.20379L17.7151 11.7762Z" fill="url(#paint2_linear_3992_13654)"></path><defs><linearGradient id="paint0_linear_3992_13654" x1="9.99986" y1="0.63208" x2="9.99986" y2="18.6321" gradientUnits="userSpaceOnUse"><stop stop-color="#61BEC5"></stop><stop offset="1" stop-color="#357D83"></stop></linearGradient><linearGradient id="paint1_linear_3992_13654" x1="9.99986" y1="0.63208" x2="9.99986" y2="18.6321" gradientUnits="userSpaceOnUse"><stop stop-color="#61BEC5"></stop><stop offset="1" stop-color="#357D83"></stop></linearGradient><linearGradient id="paint2_linear_3992_13654" x1="9.99986" y1="0.63208" x2="9.99986" y2="18.6321" gradientUnits="userSpaceOnUse"><stop stop-color="#61BEC5"></stop><stop offset="1" stop-color="#357D83"></stop></linearGradient></defs>
+                                    </svg>
+                                    <p>{{langData?.Ward?.Communications}}</p> 
+                                </button> -->
+
+                                    <!-- <button class="btn btn-style-1" (click)="navigatetoAdmissionReconciliation(item)">
+                                    <svg width="16" height="21" viewBox="0 0 16 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M15.5079 3.29144V19.9878C15.5079 20.2697 15.2776 20.5 14.9957 20.5H1.00392C0.721966 20.5 0.491699 20.2697 0.491699 19.9878V3.29144C0.491699 3.00949 0.721962 2.77922 1.00392 2.77922H3.66366C3.64487 2.85441 3.63547 2.9343 3.63312 3.01419V4.189H2.13642C2.00719 4.189 1.90145 4.29473 1.90145 4.42396V17.107C1.90145 17.1705 1.9273 17.2292 1.96959 17.2738L3.71536 19.0196C3.76 19.0642 3.81874 19.0877 3.88218 19.0877H13.8632C13.9924 19.0877 14.0982 18.982 14.0982 18.8528V4.42366C14.0982 4.29443 13.9924 4.18869 13.8632 4.18869H12.3665V3.01388C12.3665 2.93399 12.3548 2.8541 12.336 2.77892H14.9957C15.2777 2.77892 15.5079 3.00949 15.5079 3.29144Z" fill="url(#paint0_linear_1357_2840)"></path><path d="M11.8426 2.78618C11.7533 2.60526 11.5677 2.48073 11.3539 2.48073H9.81017C9.74438 2.48073 9.68095 2.45253 9.6363 2.40319C9.59166 2.35385 9.57051 2.28806 9.57521 2.22227C9.57991 2.17763 9.58226 2.13064 9.58226 2.0813C9.58226 1.2096 8.87266 0.5 8.00096 0.5C7.12926 0.5 6.41966 1.2096 6.41966 2.0813C6.41966 2.12829 6.42201 2.17763 6.42671 2.22227C6.43376 2.28806 6.41026 2.35385 6.36562 2.40319C6.32097 2.45253 6.25754 2.48073 6.19175 2.48073H4.64804C4.43422 2.48073 4.24861 2.60526 4.15932 2.78618C4.12408 2.85902 4.10293 2.9389 4.10293 3.02584V4.72929H11.8966V3.02584C11.8966 2.9389 11.8778 2.85902 11.8426 2.78618ZM8.00099 2.47603C7.75428 2.47603 7.55455 2.27631 7.55455 2.02959C7.55455 1.78288 7.75426 1.58315 8.00099 1.58315C8.2477 1.58315 8.44743 1.78286 8.44743 2.02959C8.44743 2.27395 8.24537 2.47603 8.00099 2.47603Z" fill="url(#paint1_linear_1357_2840)"></path><path d="M12.3668 4.65899V4.96444C12.3668 5.09367 12.261 5.1994 12.1318 5.1994H3.86807C3.73884 5.1994 3.63311 5.09367 3.63311 4.96444V4.65899H2.37137V16.9756H4.01377V18.6179H13.6283V4.65886L12.3668 4.65899ZM4.90217 7.39629C5.2781 7.02035 5.77623 6.81592 6.30959 6.81592C6.84295 6.81592 7.3434 7.02269 7.71701 7.39629L7.99662 7.67589L8.27622 7.39629C9.05159 6.62091 10.3157 6.62091 11.0934 7.39629C11.4811 7.78397 11.6761 8.29385 11.6761 8.80371C11.6761 9.31357 11.481 9.82342 11.0934 10.2111L8.16576 13.1411C8.11876 13.1881 8.06003 13.2092 7.99894 13.2092C7.93784 13.2092 7.8791 13.1857 7.83211 13.1411L5.25929 10.5683H5.84669C5.87019 10.5683 5.89369 10.5636 5.91483 10.5589C5.97592 10.5401 6.02761 10.4978 6.05815 10.439L6.56801 9.40285L7.12955 10.8479C7.1648 10.9348 7.24704 10.9935 7.34102 10.9982H7.34807C7.4397 10.9982 7.52194 10.9442 7.56188 10.862L7.94487 10.0396L8.13049 10.4367C8.16808 10.5189 8.25267 10.5729 8.34431 10.5729H9.26769V10.103H8.49468L8.15869 9.38636C8.11874 9.30412 8.03651 9.25008 7.94487 9.25008C7.85324 9.25008 7.771 9.30412 7.73341 9.38636L7.37156 10.1641L6.81002 8.73086C6.77713 8.64392 6.69489 8.58518 6.60091 8.58048C6.50692 8.57578 6.41999 8.62748 6.38004 8.71206L5.69867 10.0983H4.79643C4.12915 9.31592 4.16439 8.13407 4.90217 7.39629ZM10.1558 16.729H5.84437V16.259H10.1558V16.729ZM11.9721 15.2511H4.02583V14.7812H11.9721V15.2511Z" fill="url(#paint2_linear_1357_2840)"></path><defs><linearGradient id="paint0_linear_1357_2840" x1="7.99979" y1="0.5" x2="7.99979" y2="20.5" gradientUnits="userSpaceOnUse"><stop stop-color="#808080"></stop><stop offset="1" stop-color="#4D4D4D"></stop> </linearGradient><linearGradient id="paint1_linear_1357_2840" x1="7.99979" y1="0.5" x2="7.99979" y2="20.5" gradientUnits="userSpaceOnUse"><stop stop-color="#808080"></stop><stop offset="1" stop-color="#4D4D4D"></stop> </linearGradient><linearGradient id="paint2_linear_1357_2840" x1="7.99979" y1="0.5" x2="7.99979" y2="20.5" gradientUnits="userSpaceOnUse"><stop stop-color="#808080"></stop><stop offset="1" stop-color="#4D4D4D"></stop> </linearGradient></defs>
+                                    </svg>
+                                    <p> Rx Orders</p>
+                                </button> -->
+                                    <button class="btn btn-style-1" (click)="redirectToNursingDashboard(item)">
+                                        <svg width="20" height="21" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M10.0069 0.500837C8.37902 0.500837 6.74854 0.733786 5.34825 1.19967L6.10402 4.2429C5.30137 5.28256 4.78322 6.76429 4.65054 8.61832C4.72289 9.33372 4.80188 10.3588 5.22462 10.8461C5.39203 11.0252 5.70705 11.0357 5.886 10.868C6.06477 10.7003 6.07531 10.3846 5.90774 10.2055C5.70334 9.71318 5.61201 9.20787 5.5807 8.68386C5.68971 7.23947 6.15479 5.60866 6.91056 4.72344C9.22721 4.03889 10.9482 4.05882 13.2843 4.78168C14.275 5.92304 14.3796 7.8335 14.4181 8.91697C14.3613 9.31587 14.2505 9.83807 14.0837 10.1983C13.9181 10.3745 13.9254 10.6845 14.0988 10.8527C14.2724 11.021 14.5821 11.0179 14.7522 10.8462C15.1662 10.2947 15.2953 9.53179 15.3482 8.88777C15.4573 7.23947 14.9922 5.14275 13.9238 4.12656L14.6505 1.19977C13.1317 0.716177 11.5038 0.483246 10.0068 0.500937L10.0069 0.500837ZM9.76697 1.43265H10.232V2.13148H10.9298V2.59739H10.232V3.29623H9.76697V2.59739H9.06925V2.13148H9.76697V1.43265ZM12.2888 5.60416C10.0108 8.18248 5.22822 6.7804 6.16967 10.0522C6.46653 11.0539 6.99487 12.0547 7.64487 12.826L7.22344 14.0346C7.33943 15.146 8.08092 16.3647 8.56792 17.1943C8.98142 17.8988 9.50376 18.5949 9.99969 19.3858C10.4955 18.5949 11.0173 17.899 11.4315 17.1943C11.9189 16.3647 12.6599 15.146 12.7759 14.0346L12.3616 12.8407C13.0046 12.0729 13.5361 11.0746 13.8368 10.0742C14.3392 8.42259 13.1196 6.78061 12.2889 5.60407L12.2888 5.60416ZM8.37905 13.5398C8.89898 13.9581 9.45538 14.2209 10.0142 14.2242C10.5661 14.2273 11.1154 13.9784 11.6277 13.569L12.1364 15.0541C11.0802 16.6769 8.86946 16.6762 7.84861 15.0541L8.37905 13.5398ZM13.6697 14.3188C13.4741 15.5419 12.7271 16.823 12.2309 17.6678C11.6613 18.6371 10.9769 19.5048 10.4213 20.4998H19.0696C19.0345 19.3693 19.0362 18.8981 18.8006 17.0343C18.5651 16.1024 18.1235 15.6075 17.6524 15.3745C17.2605 15.1806 15.4634 14.8493 13.67 14.3188H13.6697ZM6.33711 14.348C4.76032 14.7976 2.91705 14.999 2.34733 15.3745C1.92669 15.7028 1.74712 16.0952 1.51157 17.0272C1.27895 18.8909 1.04259 19.5912 0.930176 20.5H9.57843C9.02282 19.5048 8.33777 18.6373 7.76888 17.668C7.27702 16.8299 6.54006 15.5624 6.33711 14.3482V14.348Z"
+                                                fill="url(#paint0_linear_1357_3299)" />
+                                            <defs>
+                                                <linearGradient id="paint0_linear_1357_3299" x1="9.99988" y1="0.5"
+                                                    x2="9.99988" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5" />
+                                                    <stop offset="1" stop-color="#357D83" />
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                        <p>{{langData?.Ward?.NursingDashboard}}</p>
+                                    </button>
+                                    <button class="btn btn-style-2" (click)="redirectToEndoScopy(item)">
+                                        <svg width="20" height="21" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M3.71148 3.1151C5.38576 1.44069 7.65694 0.5 10.0249 0.5C12.378 0.513225 14.631 1.4549 16.2936 3.12025C17.9562 4.78555 18.8942 7.03975 18.9035 9.39289V9.90726C18.9071 9.96434 18.9071 10.0216 18.9035 10.0787C18.8928 10.2359 18.8786 10.3929 18.8572 10.5501L18.825 10.7644C18.7965 10.9406 18.7643 11.1156 18.7286 11.2894L18.6536 11.5965C18.6251 11.7215 18.5929 11.8358 18.5572 11.9536C18.3214 12.7413 17.9776 13.4924 17.5357 14.1858C17.4571 14.3036 17.3749 14.4251 17.2928 14.5429L17.0679 14.85L17.025 14.9036L16.9999 14.9358C16.9142 15.0465 16.8249 15.1501 16.7321 15.2572C16.4285 15.6054 16.0977 15.9291 15.7428 16.225L15.4642 16.45C15.1666 16.6839 14.8526 16.8963 14.525 17.0858C14.3856 17.1679 14.2428 17.2465 14.0999 17.3215L13.2963 14.9108C14.5988 14.135 15.5849 12.9239 16.0809 11.4915C16.577 10.0588 16.5508 8.49712 16.0071 7.08211V7.05357C15.8188 6.5743 15.5729 6.11989 15.275 5.69994C15.2651 5.68192 15.2531 5.66518 15.2392 5.65003L15.2072 5.61081C15.1464 5.52519 15.0465 5.39652 15.0143 5.3573C15.005 5.34588 14.9957 5.33417 14.9863 5.32234C14.9633 5.29336 14.9397 5.26366 14.9143 5.23581L14.8107 5.11798C14.789 5.09165 14.7643 5.06524 14.7395 5.03886C14.7274 5.02595 14.7153 5.01305 14.7035 5.00016C14.6857 4.98047 14.6785 4.97333 14.6656 4.9604C14.6527 4.94746 14.6339 4.92873 14.5929 4.88584C14.5108 4.80006 14.4287 4.72146 14.3429 4.64652C14.2643 4.5727 14.1822 4.50128 14.0964 4.43224C13.95 4.29656 13.7965 4.18224 13.6393 4.0751C13.5643 4.02153 13.4857 3.97146 13.4071 3.92506C13.2123 3.79991 13.0095 3.68766 12.8 3.58928L12.5073 3.45695L12.2823 3.36766L12.1251 3.31059C12.0525 3.28424 11.9861 3.26401 11.9117 3.24137L11.8929 3.23565C11.8835 3.23277 11.8741 3.22988 11.8647 3.22701C11.7927 3.20495 11.7228 3.18353 11.6501 3.16773L11.5038 3.13202C11.4843 3.12715 11.4648 3.1215 11.4454 3.11584C11.3934 3.10073 11.3414 3.08562 11.2895 3.08562H11.2037L10.9215 3.03922C10.9061 3.03675 10.8908 3.03421 10.8754 3.03166C10.7799 3.01586 10.6842 3 10.5857 3H9.66782L9.46438 3.01802C9.41953 3.02221 9.37523 3.02915 9.33126 3.03603C9.26314 3.0467 9.19584 3.05724 9.1286 3.05724L8.84639 3.10364H8.76061C8.68918 3.11432 8.61775 3.13218 8.54633 3.15003L8.39996 3.18575C8.34797 3.19705 8.29597 3.21271 8.24487 3.2281C8.21527 3.23701 8.18597 3.24583 8.15714 3.25367C8.07854 3.27503 8.0036 3.30006 7.925 3.3286L7.76779 3.38568L7.54282 3.47497L7.24993 3.60714C7.04043 3.70552 6.83762 3.81776 6.64279 3.94292C6.56419 3.98932 6.48558 4.03922 6.41065 4.09279C6.25218 4.20217 6.10071 4.32159 5.95706 4.44994C5.9129 4.48135 5.87112 4.51595 5.83206 4.55357L5.82416 4.56081C5.69843 4.67609 5.57606 4.78828 5.45706 4.91072C5.41865 4.94569 5.38361 4.98418 5.34863 5.02259L5.34641 5.02503C5.30591 5.06314 5.2702 5.10236 5.23927 5.14286L5.11793 5.27503C5.09815 5.29684 5.09045 5.30657 5.07599 5.32486C5.06433 5.3396 5.04827 5.35989 5.01797 5.39653C4.95004 5.47864 4.88579 5.56425 4.82504 5.65003L4.79284 5.68925C4.77897 5.7044 4.76701 5.7213 4.75712 5.73932C4.45912 6.15912 4.21326 6.61369 4.02496 7.09279V7.12149C3.47935 8.53242 3.4489 10.0906 3.93886 11.5219C4.42866 12.9532 5.40776 14.1658 6.70351 14.9465L5.89992 17.3571C5.75707 17.2822 5.61421 17.2036 5.47486 17.1215C5.14719 16.9319 4.83327 16.7196 4.5356 16.4857L4.25706 16.2607C3.90216 15.9648 3.57148 15.6411 3.26775 15.2929C3.17496 15.1858 3.08568 15.0821 2.9999 14.9715L2.97487 14.9393L2.93198 14.8857L2.70701 14.5786C2.6249 14.4643 2.54279 14.343 2.46418 14.2215C2.02223 13.528 1.67849 12.7769 1.44284 11.9893C1.439 11.9755 1.43519 11.9618 1.43143 11.9483C1.40024 11.8362 1.37185 11.7342 1.34638 11.6322L1.27144 11.3251C1.23573 11.1489 1.20352 10.9739 1.17498 10.8001L1.14278 10.5858C1.14003 10.5656 1.13723 10.5454 1.13442 10.5252C1.1154 10.3882 1.09638 10.2513 1.09638 10.1143C1.09287 10.0572 1.09287 10 1.09638 9.94292V9.42856C1.09638 7.06056 2.03707 4.7895 3.71148 3.1151Z"
+                                                fill="url(#paint0_linear_1343_3117)"></path>
+                                            <path
+                                                d="M10.7391 4.07142C10.7385 3.95966 10.7115 3.84948 10.6605 3.74999C10.6044 3.74999 10.5483 3.74373 10.4917 3.7374C10.4438 3.73205 10.3954 3.72664 10.3463 3.72496C10.275 3.72263 10.2052 3.7234 10.135 3.72418C10.0997 3.72457 10.0641 3.72496 10.0283 3.72496H9.71042C9.60678 3.72496 9.49964 3.72496 9.39616 3.74999C9.34259 3.84885 9.31342 3.95902 9.31055 4.07142C9.31055 4.32668 9.4467 4.56248 9.66769 4.69003C9.88867 4.81758 10.161 4.81758 10.382 4.69003C10.603 4.56248 10.7391 4.32668 10.7391 4.07142Z"
+                                                fill="url(#paint1_linear_1343_3117)"></path>
+                                            <path
+                                                d="M7.88221 13C7.68498 13 7.52506 13.1599 7.52506 13.3571V14.4285H12.5251V13.3571C12.5251 13.2624 12.4874 13.1715 12.4205 13.1046C12.3535 13.0376 12.2626 13 12.1679 13H7.88221Z"
+                                                fill="url(#paint2_linear_1343_3117)"></path>
+                                            <path
+                                                d="M6.81057 14.1502C5.24759 13.0866 4.31153 11.319 4.31058 9.42856C4.31026 8.95999 4.36906 8.49313 4.48561 8.03921C4.73753 8.2476 5.05497 8.36032 5.38198 8.35713C5.83843 8.35285 6.26541 8.13059 6.53087 7.75926C6.79634 7.38775 6.86825 6.91183 6.72427 6.47848C6.58048 6.04526 6.23832 5.70678 5.80338 5.56791C6.55227 4.75049 7.5226 4.16852 8.59627 3.89286C8.59101 3.95232 8.59101 4.01196 8.59627 4.07143C8.59627 4.58175 8.8686 5.05339 9.31056 5.30865C9.75251 5.56375 10.2972 5.56375 10.7391 5.30865C11.1811 5.05343 11.4534 4.58179 11.4534 4.07143C11.4587 4.01196 11.4587 3.95232 11.4534 3.89286C12.5219 4.17106 13.487 4.75285 14.2319 5.56791C13.7955 5.70742 13.4526 6.04783 13.3097 6.4831C13.1669 6.91836 13.2413 7.39587 13.5101 7.76673C13.7791 8.13775 14.2094 8.35729 14.6677 8.35713C14.9947 8.36032 15.3121 8.2476 15.564 8.03921C15.6806 8.49313 15.7394 8.95999 15.7391 9.42856C15.7381 11.3192 14.8021 13.0867 13.2391 14.1502V13.3573C13.2391 13.0732 13.1262 12.8005 12.9253 12.5997C12.7245 12.3988 12.4518 12.2859 12.1677 12.2859H7.88198C7.5979 12.2859 7.32524 12.3988 7.12435 12.5997C6.92345 12.8005 6.81057 13.0732 6.81057 13.3573V14.1502Z"
+                                                fill="url(#paint3_linear_1343_3117)"></path>
+                                            <path
+                                                d="M6.09646 6.92856C6.09646 6.73915 6.0212 6.55739 5.88727 6.42346C5.75335 6.28953 5.57158 6.21428 5.38217 6.21428H5.30006C5.07828 6.53634 4.89141 6.88122 4.74284 7.24281C4.80151 7.36254 4.89255 7.46347 5.00543 7.5341C5.11847 7.60473 5.24889 7.64236 5.38219 7.64284C5.5716 7.64284 5.75336 7.56758 5.88729 7.43365C6.02122 7.29973 6.09646 7.11797 6.09646 6.92856Z"
+                                                fill="url(#paint4_linear_1343_3117)"></path>
+                                            <path
+                                                d="M15.043 7.53714C14.9301 7.60649 14.8002 7.64316 14.6677 7.64285C14.4125 7.64284 14.1767 7.50668 14.0491 7.2857C13.9216 7.06472 13.9216 6.7924 14.0491 6.57142C14.1767 6.35044 14.4125 6.21428 14.6677 6.21428H14.7498C14.9721 6.53856 15.1588 6.88583 15.3071 7.24999C15.2474 7.3683 15.1561 7.46778 15.043 7.53714Z"
+                                                fill="url(#paint5_linear_1343_3117)"></path>
+                                            <path
+                                                d="M17.2784 15.7751C16.4597 16.7174 15.4634 17.4892 14.3464 18.0464L14.6678 18.9571C14.6729 18.9951 14.6729 19.0335 14.6678 19.0714V20.5H17.7357C17.8419 20.5002 17.9426 20.4531 18.0106 20.3715C18.0801 20.2895 18.1089 20.1806 18.0892 20.0749L17.2784 15.7751Z"
+                                                fill="url(#paint6_linear_1343_3117)"></path>
+                                            <path
+                                                d="M1.96085 20.0608L2.77158 15.7751C3.59032 16.7174 4.58665 17.4893 5.70367 18.0465L5.4001 18.9572C5.38894 18.9943 5.38288 19.0327 5.38224 19.0715V20.4857H2.31433C2.20814 20.4858 2.10738 20.4388 2.03945 20.3572C1.96994 20.2752 1.94108 20.1663 1.96085 20.0608Z"
+                                                fill="url(#paint7_linear_1343_3117)"></path>
+                                            <path fill="" rule="evenodd" clip=""
+                                                d="M7.42496 15.1428L6.09635 19.1285V20.5H13.9535V19.1285L12.6249 15.1428H7.42496ZM12.8821 19.0714C12.8821 19.1661 12.8445 19.257 12.7775 19.3239C12.7105 19.3909 12.6197 19.4285 12.525 19.4285H7.52496C7.32774 19.4285 7.16782 19.2686 7.16782 19.0714C7.16782 18.8742 7.32774 18.7143 7.52496 18.7143H12.525C12.6197 18.7143 12.7105 18.7519 12.7775 18.8188C12.8445 18.8858 12.8821 18.9767 12.8821 19.0714Z">
+                                            </path>
+                                            <defs>
+                                                <linearGradient id="paint0_linear_1343_3117" x1="9.99998" y1="0.5"
+                                                    x2="9.99998" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                                <linearGradient id="paint1_linear_1343_3117" x1="9.99998" y1="0.5"
+                                                    x2="9.99998" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                                <linearGradient id="paint2_linear_1343_3117" x1="9.99998" y1="0.5"
+                                                    x2="9.99998" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                                <linearGradient id="paint3_linear_1343_3117" x1="9.99998" y1="0.5"
+                                                    x2="9.99998" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                                <linearGradient id="paint4_linear_1343_3117" x1="9.99998" y1="0.5"
+                                                    x2="9.99998" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                                <linearGradient id="paint5_linear_1343_3117" x1="9.99998" y1="0.5"
+                                                    x2="9.99998" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                                <linearGradient id="paint6_linear_1343_3117" x1="9.99998" y1="0.5"
+                                                    x2="9.99998" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                                <linearGradient id="paint7_linear_1343_3117" x1="9.99998" y1="0.5"
+                                                    x2="9.99998" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                                <linearGradient id="paint8_linear_1343_3117" x1="9.99998" y1="0.5"
+                                                    x2="9.99998" y2="20.5" gradientUnits="userSpaceOnUse">
+                                                    <stop stop-color="#61BEC5"></stop>
+                                                    <stop offset="1" stop-color="#357D83"></stop>
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                        <p>{{langData?.common?.others}}</p>
+                                    </button>
+
+                                </div>
+                                <div
+                                    class="action_overlay bottom gap-4 d-flex align-items-center justify-content-center">
+                                    <svg class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="44"
+                                        height="30" viewBox="0 0 44 30" fill="none">
+                                        <g clip-path="url(#clip0_8579_22771)">
+                                            <g filter="url(#filter0_d_8579_22771)">
+                                                <mask id="path-1-inside-1_8579_22771" fill="white">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M40.7452 30C40.9128 28.9851 41 27.943 41 26.8805C41 16.3871 32.4934 7.88055 22 7.88055C11.5066 7.88055 3 16.3871 3 26.8805C3 27.943 3.0872 28.9851 3.25484 30L40.7452 30Z" />
+                                                </mask>
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M40.7452 30C40.9128 28.9851 41 27.943 41 26.8805C41 16.3871 32.4934 7.88055 22 7.88055C11.5066 7.88055 3 16.3871 3 26.8805C3 27.943 3.0872 28.9851 3.25484 30L40.7452 30Z"
+                                                    fill="url(#paint0_radial_8579_22771)" />
+                                                <path
+                                                    d="M40.7452 30L40.7452 31L41.5935 31L41.7318 30.163L40.7452 30ZM3.25484 30L2.26821 30.163L2.40646 31L3.25484 31L3.25484 30ZM40 26.8805C40 27.8882 39.9173 28.8758 39.7585 29.837L41.7318 30.163C41.9083 29.0944 42 27.9978 42 26.8805L40 26.8805ZM22 8.88055C31.9411 8.88055 40 16.9394 40 26.8805L42 26.8805C42 15.8349 33.0457 6.88055 22 6.88055L22 8.88055ZM4 26.8805C4 16.9394 12.0589 8.88055 22 8.88055L22 6.88055C10.9543 6.88055 2 15.8349 2 26.8805L4 26.8805ZM4.24147 29.837C4.08269 28.8757 4 27.8882 4 26.8805L2 26.8805C2 27.9978 2.09171 29.0944 2.26821 30.163L4.24147 29.837ZM3.25484 31L40.7452 31L40.7452 29L3.25484 29L3.25484 31Z"
+                                                    fill="#368796" mask="url(#path-1-inside-1_8579_22771)" />
+                                            </g>
+                                            <path
+                                                d="M27.6569 19.3175L22.3536 24.6208C22.1583 24.8161 21.8417 24.8161 21.6464 24.6208L16.3431 19.3175"
+                                                stroke="#ECF6F8" stroke-width="2.5" stroke-linecap="round" />
+                                        </g>
+                                        <defs>
+                                            <filter id="filter0_d_8579_22771" x="-2" y="1.88055" width="48"
+                                                height="32.1194" filterUnits="userSpaceOnUse"
+                                                color-interpolation-filters="sRGB">
+                                                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                                <feColorMatrix in="SourceAlpha" type="matrix"
+                                                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                                    result="hardAlpha" />
+                                                <feMorphology radius="1" operator="dilate" in="SourceAlpha"
+                                                    result="effect1_dropShadow_8579_22771" />
+                                                <feOffset dy="-1" />
+                                                <feGaussianBlur stdDeviation="2" />
+                                                <feComposite in2="hardAlpha" operator="out" />
+                                                <feColorMatrix type="matrix"
+                                                    values="0 0 0 0 0.182413 0 0 0 0 0.43006 0 0 0 0 0.47592 0 0 0 0.3 0" />
+                                                <feBlend mode="normal" in2="BackgroundImageFix"
+                                                    result="effect1_dropShadow_8579_22771" />
+                                                <feBlend mode="normal" in="SourceGraphic"
+                                                    in2="effect1_dropShadow_8579_22771" result="shape" />
+                                            </filter>
+                                            <radialGradient id="paint0_radial_8579_22771" cx="0" cy="0" r="1"
+                                                gradientUnits="userSpaceOnUse"
+                                                gradientTransform="translate(22 31.4978) rotate(-90) scale(23.6172 19)">
+                                                <stop stop-color="#64B8C7" />
+                                                <stop offset="1" stop-color="#35818F" />
+                                            </radialGradient>
+                                            <clipPath id="clip0_8579_22771">
+                                                <rect width="44" height="30" fill="white"
+                                                    transform="translate(44 30) rotate(-180)" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="item.BedStatus !== '3'"
+                            class="vacant_bed d-flex align-items-center justify-content-center overflow-hidden">
+                            <span class=""></span>
+                            <div class="vacant_lines d-flex align-items-center flex-column ">
+                                <p [class]="item.Bed.includes('ISO') ? 'iso-color' : 'bed-number'">
+                                    {{item.Shortname}} ({{item.Bed}})
+                                </p>
+                                <p class="mt-2"> {{item.BedStatusName}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal fade viewApproval" id="viewApproval">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 90%;">
+            <div class="modal-content h-100">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{langData?.Ward?.ViewApproval}}</h5>
+                    <div class="ms-auto d-flex align-items-center gap-2">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            (click)="IsApproval = false"></button>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <form [formGroup]="datesForm">
+                                <div class="d-flex align-items-center gap-2 justify-content-end">
+                                    <button class="date_range_calendar p-0 position-relative"
+                                        style="width: 227px;">
+                                        <mat-date-range-input class="btn btn-main-outline" [formGroup]="datesForm"
+                                            [rangePicker]="picker">
+                                            <input matStartDate formControlName="fromdate">
+                                            <input matEndDate formControlName="todate">
+                                        </mat-date-range-input>
+                                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-date-range-picker #picker></mat-date-range-picker>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- <app-summary *ngIf="IsApproval"></app-summary> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal quick_info" data-bs-backdrop="static" id="quick_info" tab-index="-1">
+        <div class="modal-dialog modal-dialog-scrollabel">
+            <div class="modal-content h-100 overflow-auto">
+                <div class="modal-body p-0">
+                    <div class="profile_bg">
+                        <div class="modal-header ps-0">
+                            <!-- <h5 class="modal-title" id="">Menu</h5> -->
+                            <label for="" class="ssn_label bg-primary clr-light" id="lblSSN">{{langData?.common?.SSN}}:
+                                {{selectedPatientSSN}}</label>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="patient-info text-center">
+                            <div class="patient-photo mx-auto">
+                                <svg class="position-relative" xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                    viewBox="0 0 19 20" fill="none">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M4.24204 5.40194C4.24204 2.70966 6.60054 0.519531 9.49993 0.519531C12.3993 0.519531 14.758 2.70961 14.758 5.40195C14.758 5.70065 14.7216 6.00638 14.6439 6.35817C14.719 6.59977 14.7581 6.8699 14.7581 7.14592C14.7581 8.11756 14.2953 8.85552 13.6756 8.88894C12.9937 10.9892 11.3501 12.3771 9.50002 12.3771C7.64999 12.3771 6.00646 10.9891 5.32431 8.88894C4.70462 8.85543 4.24199 8.11756 4.24199 7.14592C4.24199 6.86916 4.28127 6.59844 4.35627 6.3563C4.27831 6.00529 4.24204 5.70009 4.24204 5.40194ZM5.03243 6.73058C5.00643 6.8621 4.99309 7.00236 4.99309 7.14592C4.99309 7.82108 5.27477 8.19217 5.3687 8.19217C5.47081 8.13355 5.60825 8.11475 5.7203 8.15726C5.83146 8.19906 5.92615 8.27998 5.95545 8.38811C6.48108 10.3572 7.90531 11.6796 9.50009 11.6796C11.0949 11.6796 12.5189 10.3572 13.0447 8.38811C13.074 8.27998 13.1567 8.19077 13.2678 8.14885C13.379 8.10705 13.506 8.11744 13.6073 8.17606C13.7366 8.19147 14.007 7.82039 14.007 7.14592C14.007 7.00736 13.9945 6.87187 13.9703 6.74435L13.2866 6.7963C13.276 6.797 13.2656 6.797 13.2558 6.797C13.1085 6.797 12.9734 6.71678 12.9134 6.58916C12.899 6.55983 12.6226 5.97683 12.5332 5.39087C10.9587 5.29596 9.3302 4.58038 8.52052 3.8382C8.22161 4.3216 7.57414 4.7045 6.27539 4.7045H6.21831C6.11381 4.92834 6.06652 5.63222 6.1123 6.32828C6.12651 6.36588 6.13481 6.4057 6.13481 6.4482C6.13481 6.64356 5.95689 6.79979 5.75179 6.79699C5.72852 6.79769 5.70979 6.79629 5.68791 6.79349C5.67573 6.79182 5.36674 6.74943 5.03243 6.73058Z"
+                                        fill="#0885CA" />
+                                    <path
+                                        d="M15.2349 12.1162L13.303 11.4919C13.1618 11.4466 13.0048 11.4835 12.9026 11.5853C11.9554 12.5458 10.7469 13.0745 9.49991 13.0745C8.25296 13.0745 7.04442 12.5457 6.09724 11.586C5.99589 11.4842 5.83883 11.4472 5.69684 11.4926L3.76494 12.1169C1.80362 12.7494 0.486206 14.4702 0.486206 16.3987V18.1984C0.486206 18.3909 0.65446 18.5471 0.86182 18.5471C6.54738 19.8454 12.4526 19.8453 18.1382 18.5471C18.3456 18.5471 18.5138 18.3909 18.5138 18.1984V16.3987C18.5137 14.4702 17.1963 12.7496 15.2349 12.1162Z"
+                                        fill="#0885CA" />
+                                </svg>
+                                <p class="vip_label m-0 fw-bold d-flex align-items-center" *ngIf="selectedPatientIsVip">
+                                    <svg class="me-1" xmlns="http://www.w3.org/2000/svg" width="7" height="7"
+                                        viewBox="0 0 7 7" fill="none">
+                                        <path
+                                            d="M4.1362 0.995956L4.66853 2.06062C4.74026 2.20786 4.93281 2.34755 5.09515 2.37775L6.05788 2.53632C6.67327 2.63825 6.81673 3.08375 6.37501 3.52925L5.62371 4.28055C5.49912 4.40514 5.42739 4.65054 5.46891 4.82798L5.68411 5.75673C5.85401 6.48916 5.46136 6.77609 4.81577 6.391L3.91345 5.85489C3.75111 5.75673 3.47928 5.75673 3.31694 5.85489L2.41462 6.391C1.76903 6.77231 1.37638 6.48916 1.54628 5.75673L1.76148 4.82798C1.79545 4.64676 1.72372 4.40136 1.59913 4.27678L0.847829 3.52547C0.406108 3.08375 0.549573 2.63825 1.16496 2.53254L2.12769 2.37398C2.29003 2.34755 2.48258 2.20408 2.55431 2.05684L3.08664 0.99218C3.37735 0.41832 3.84549 0.41832 4.1362 0.995956Z"
+                                            fill="#286571" />
+                                    </svg>
+                                    {{langData?.common?.vip}}
+                                    <svg class="ms-1" xmlns="http://www.w3.org/2000/svg" width="7" height="7"
+                                        viewBox="0 0 7 7" fill="none">
+                                        <path
+                                            d="M4.1362 0.995956L4.66853 2.06062C4.74026 2.20786 4.93281 2.34755 5.09515 2.37775L6.05788 2.53632C6.67327 2.63825 6.81673 3.08375 6.37501 3.52925L5.62371 4.28055C5.49912 4.40514 5.42739 4.65054 5.46891 4.82798L5.68411 5.75673C5.85401 6.48916 5.46136 6.77609 4.81577 6.391L3.91345 5.85489C3.75111 5.75673 3.47928 5.75673 3.31694 5.85489L2.41462 6.391C1.76903 6.77231 1.37638 6.48916 1.54628 5.75673L1.76148 4.82798C1.79545 4.64676 1.72372 4.40136 1.59913 4.27678L0.847829 3.52547C0.406108 3.08375 0.549573 2.63825 1.16496 2.53254L2.12769 2.37398C2.29003 2.34755 2.48258 2.20408 2.55431 2.05684L3.08664 0.99218C3.37735 0.41832 3.84549 0.41832 4.1362 0.995956Z"
+                                            fill="#286571" />
+                                    </svg>
+                                </p>
+                            </div>
+                            <p class="mt-2 text-center fs-6 clr-primary-600">{{selectedPatientName}}</p>
+                            <p class="my-1">{{selectedPatientGender}} | {{selectedPatientAge}}</p>
+                            <p class="">{{selectedPatientMobile}}</p>
+                            <div class="vt_score mt-1">
+                                <p class="m-0 clr-primary-600 fs-8 px-2">{{langData?.common?.vt_score}}</p>
+                                <span
+                                    class="clr-light fs-7 d-flex align-items-center justify-content-center">{{selectedPatientVTScore}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 p-3">
+                        <div class="measures border-primary-200 rounded-3 p-2">
+                            <div class="text-center w-100 border-end-primary-200">
+                                <img class="mb-2" src="assets/images/icons/height.svg" alt="">
+                                <p class="fs-7 m-0">{{selectedPatientHeight}}</p>
+                                <p class="fs-8 m-0">{{langData?.common?.Height}}</p>
+                            </div>
+                            <div class="text-center w-100 border-end-primary-200">
+                                <img class="mb-2" src="assets/images/icons/weight-bmi.svg" alt="">
+                                <p class="fs-7 m-0">{{selectedPatientWeight}}</p>
+                                <p class="fs-8 m-0">{{langData?.common?.Weight}}</p>
+                            </div>
+                            <div class="text-center w-100">
+                                <img class="mb-2" src="assets/images/icons/blood_type.svg" alt="">
+                                <p class="fs-7 m-0">{{selectedPatientBloodGrp}}</p>
+                                <p class="fs-8 m-0">{{langData?.common?.blood}}</p>
+                            </div>
+                        </div>
+                        <div class="mt-3 p-3 rounded-3 d-flex align-items-center acute">
+                            <div class="d-flex align-items-center w-80">
+                                <span></span>
+                                <p class="m-0 fs-7 ms-2">{{langData?.common?.clinical_conditions}} :
+                                    {{selectedPatientClinicalInfo}}</p>
+                            </div>
+                        </div>
+                        <!-- <div class="mt-3 p-3 rounded-3 d-flex align-items-center panic">
+                        <div class="d-flex align-items-center w-50">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M20 10C20 15.5228 15.5228 20 10 20C4.47717 20 0 15.5228 0 10C0 4.47717 4.47717 0 10 0C15.5228 0 20 4.47717 20 10ZM18.8889 10C18.8889 14.9092 14.9092 18.8889 10 18.8889C5.09078 18.8889 1.11111 14.9092 1.11111 10C1.11111 5.09078 5.09078 1.11111 10 1.11111C14.9092 1.11111 18.8889 5.09078 18.8889 10ZM5.39282 6.27382C5.17588 6.05688 4.8241 6.05688 4.60715 6.27382C4.41732 6.46365 4.3936 6.75671 4.53599 6.97232C4.55632 7.00315 4.58004 7.03237 4.60715 7.05949L5.60321 8.05554L4.60715 9.0516C4.39021 9.26854 4.39021 9.62032 4.60715 9.83726C4.8241 10.0542 5.17588 10.0542 5.39282 9.83726L5.39326 9.83682L6.38888 8.84121L7.38493 9.83726C7.60188 10.0542 7.95365 10.0542 8.1706 9.83726C8.36043 9.64743 8.38415 9.35437 8.24176 9.13876C8.22143 9.10793 8.19771 9.07871 8.1706 9.0516L7.17454 8.05554L8.1706 7.05949C8.38754 6.84254 8.38754 6.49076 8.1706 6.27382C7.95365 6.05688 7.60188 6.05688 7.38493 6.27382L6.38888 7.26988L5.39282 6.27382ZM12.615 6.27382C12.3981 6.05688 12.0463 6.05688 11.8294 6.27382C11.6395 6.46365 11.6158 6.75671 11.7582 6.97232C11.7785 7.00315 11.8023 7.03237 11.8294 7.05949L12.8254 8.05554L11.8294 9.0516C11.6124 9.26854 11.6124 9.62032 11.8294 9.83726C12.0463 10.0542 12.3981 10.0542 12.615 9.83726L13.6111 8.84121L14.6072 9.83726C14.8241 10.0542 15.1759 10.0542 15.3928 9.83726C15.6098 9.62032 15.6098 9.26854 15.3928 9.0516L14.3968 8.05554L15.3928 7.05949C15.6098 6.84254 15.6098 6.49076 15.3928 6.27382C15.1759 6.05688 14.8241 6.05688 14.6072 6.27382L13.6111 7.26988L12.615 6.27382ZM13.8889 14.4444C13.8889 16.2854 12.1478 16.6667 10 16.6667C7.85222 16.6667 6.11111 16.2854 6.11111 14.4444C6.11111 12.6035 7.85222 11.1111 10 11.1111C12.1478 11.1111 13.8889 12.6035 13.8889 14.4444Z" fill="#E63C1A"/>
+                            </svg>
+                            <p class="m-0 fs-7 ms-2">Abnormal</p>
+                        </div>
+                        <div class="d-flex align-items-center w-50">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5 0C12.0061 0 13.4345 0.332967 14.7155 0.929306C14.5381 1.25426 14.3777 1.59107 14.2438 1.93562C13.1059 1.40651 11.8375 1.11111 10.5 1.11111C5.59078 1.11111 1.61111 5.09078 1.61111 10C1.61111 14.9092 5.59078 18.8889 10.5 18.8889C15.4092 18.8889 19.3889 14.9092 19.3889 10C19.3889 9.15 19.2696 8.32783 19.0468 7.54939C19.4083 7.42017 19.7448 7.2395 20.0473 7.01645C20.3415 7.95872 20.5 8.96083 20.5 10C20.5 15.5228 16.0228 20 10.5 20C4.97717 20 0.5 15.5228 0.5 10C0.5 4.47717 4.97717 0 10.5 0ZM19.9444 3.88889C19.9444 5.11617 18.9495 6.11111 17.7222 6.11111C16.4949 6.11111 15.5 5.11617 15.5 3.88889C15.5 1.94444 17.7222 0 17.7222 0C17.7222 0 19.9444 1.94444 19.9444 3.88889ZM6.81967 14.0852C6.65533 14.3714 6.50972 14.6774 6.38511 15C6.16989 15.5571 6.61833 16.1111 7.21556 16.1111H9.04306L7.12233 14.4477L7.84967 13.6078L10.7404 16.1111H13.7841C14.3813 16.1111 14.8298 15.5571 14.6146 15C13.8501 13.0213 12.2945 11.6666 10.4998 11.6666C9.33722 11.6666 8.275 12.2351 7.46317 13.1734L6.59217 12.4268C6.6045 12.3605 6.61094 12.2921 6.61094 12.2222C6.61094 11.6085 6.1135 11.1111 5.49983 11.1111C4.88617 11.1111 4.38872 11.6085 4.38872 12.2222C4.38872 12.8359 4.88617 13.3333 5.49983 13.3333C5.62928 13.3333 5.75361 13.3111 5.86917 13.2705L6.81967 14.0852ZM5.3308 8.75424C4.9513 8.51119 4.67324 8.11813 4.73941 7.7083C4.75263 7.62624 4.80196 7.55441 4.8738 7.51257C4.94558 7.47069 5.03241 7.46324 5.1103 7.49213C6.12046 7.86719 7.24713 7.63457 8.24485 6.68746C8.31363 6.62213 8.41096 6.59646 8.50302 6.61935C8.59507 6.64219 8.66913 6.71046 8.69935 6.80035C8.82808 7.18302 8.71274 7.69941 8.43257 8.12352C8.14257 8.56252 7.65057 8.94657 6.95841 9.04874C6.29263 9.14702 5.7273 9.00819 5.3308 8.75424ZM15.8929 7.7083C15.959 8.11813 15.681 8.51119 15.3015 8.75424C14.905 9.00819 14.3397 9.14702 13.6739 9.04874C12.9817 8.94657 12.4898 8.56252 12.1998 8.12352C11.9195 7.69941 11.8042 7.18302 11.9329 6.80035C11.9632 6.71046 12.0372 6.64219 12.1293 6.61935C12.2213 6.59646 12.3187 6.62213 12.3875 6.68746C13.3852 7.63457 14.5118 7.86719 15.522 7.49213C15.5999 7.46324 15.6867 7.47069 15.7585 7.51257C15.8303 7.55441 15.8797 7.62624 15.8929 7.7083Z" fill="#E63C1A"/>
+                            </svg>
+                            <p class="m-0 fs-7 ms-2">Panic</p>
+                        </div>
+                    </div> -->
+                        <div class="mt-3 p-2 rounded-3 d-flex align-items-center border-primary-200 trimester"
+                            *ngIf="selectedPatientIsPregnancy">
+                            <img class="me-2" src="assets/images/icons/trimester.svg" alt="">
+                            <div class="">
+                                <p class="fs-7 m-0">{{selectedPatientPregnancyTrisemister}}</p>
+                                <!-- <p class="fs-7 m-0">LMP</p> -->
+                            </div>
+                        </div>
+                        <div class="mt-3 vitals rounded-3 border-primary-200">
+                            <div
+                                class="d-flex align-items-center justify-content-between p-2 bg-primary-100 border-bottom-primary-200 header">
+                                <div class="d-flex align-items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" viewBox="0 0 18 16"
+                                        fill="none">
+                                        <path
+                                            d="M5.99664 8.59085L6.67479 4.69893C6.70668 4.51544 6.86538 4.37878 7.05597 4.37058C7.25234 4.36361 7.4177 4.4839 7.46653 4.66349L9.08811 10.6046L10.3898 1.91855C10.4175 1.73298 10.5757 1.59201 10.7682 1.58128C10.9585 1.56808 11.1341 1.69326 11.1831 1.87492L13.0006 8.59158H16.5704C17.4757 7.39721 18 6.21324 18 4.85426C18 2.1736 15.7678 0 13.014 0C11.3649 0 9.90733 0.782515 9 1.98386C8.09222 0.782515 6.63499 0 4.98568 0C2.23232 0 0 2.17357 0 4.85426C0 6.28653 0.432932 7.47576 1.18199 8.58657L5.99664 8.59085Z"
+                                            fill="#368796" />
+                                        <path
+                                            d="M12.6866 9.38093C12.5023 9.38093 12.3411 9.26003 12.2943 9.0868L10.9037 3.94775L9.60377 12.6235C9.57577 12.8091 9.41781 12.9501 9.22557 12.9608C9.21779 12.9613 9.21 12.9616 9.20222 12.9616C9.01941 12.9616 8.85781 12.8418 8.81046 12.668L7.16063 6.62295L6.73738 9.05214C6.70436 9.24199 6.53535 9.38075 6.33758 9.38075H6.33708L1.77344 9.37647C3.42654 11.375 6.07094 13.2396 8.99851 16.0002C11.8027 13.2204 14.2786 11.2401 15.9198 9.38116L12.6866 9.38093Z"
+                                            fill="#368796" />
+                                    </svg>
+                                    <p class="m-0 ms-2 fw-semibold fs-6 clr-primary-600">{{langData?.common?.Vitals}}
+                                    </p>
+                                </div>
+                                <p class="m-0 ms-2 fw-semibold fs-6 clr-primary-600">{{selectedPatientVitalsDate}}</p>
+                            </div>
+                            <div class="vital_block">
+                                <div
+                                    class="text-center p-3 w-100 border-end-primary-200 border-bottom-primary-200 bp-s">
+                                    <img src="assets/images/icons/bp-s.svg" alt="">
+                                    <p class="m-0 fs-6 text-nowrap my-1">{{selectedPatientBPSystolic}}
+                                        {{langData?.Ward?.mmHg}}</p>
+                                    <p class="m-0 fs-7 text-nowrap">{{langData?.common?.BPSystolic}}</p>
+                                </div>
+                                <div
+                                    class="text-center p-3 w-100 border-end-primary-200 border-bottom-primary-200 bp-d">
+                                    <img src="assets/images/icons/bp-d.svg" alt="">
+                                    <p class="m-0 fs-6 text-nowrap my-1">{{selectedPatientBPDiastolic}}
+                                        {{langData?.Ward?.mmHg}}</p>
+                                    <p class="m-0 fs-7 text-nowrap">{{langData?.common?.BPDiastolic}}</p>
+                                </div>
+                                <div class="text-center p-3 w-100 border-bottom-primary-200 temp">
+                                    <img src="assets/images/icons/temp.svg" alt="">
+                                    <p class="m-0 fs-6 text-nowrap my-1">{{selectedPatientTemperature}}
+                                        {{langData?.Ward?.C}}</p>
+                                    <p class="m-0 fs-7 text-nowrap">{{langData?.common?.Temparature}}</p>
+                                </div>
+                                <div
+                                    class="text-center p-3 w-100 border-end-primary-200 border-bottom-primary-200 pulse">
+                                    <img src="assets/images/icons/pulse.svg" alt="">
+                                    <p class="m-0 fs-6 text-nowrap my-1">{{selectedPatientPulse}}</p>
+                                    <p class="m-0 fs-7 text-nowrap">{{langData?.common?.Pulse}}</p>
+                                </div>
+                                <div
+                                    class="text-center p-3 w-100 border-end-primary-200 border-bottom-primary-200 spo2">
+                                    <img src="assets/images/icons/spo2.svg" alt="">
+                                    <p class="m-0 fs-6 text-nowrap my-1">{{selectedPatientSPO2}}</p>
+                                    <p class="m-0 fs-7 text-nowrap">{{langData?.common?.SPO2}}</p>
+                                </div>
+                                <div class="text-center p-3 w-100 border-bottom-primary-200 resp">
+                                    <img src="assets/images/icons/resp.svg" alt="">
+                                    <p class="m-0 fs-6 text-nowrap my-1">{{selectedPatientRespiration}}</p>
+                                    <p class="m-0 fs-7 text-nowrap">{{langData?.common?.Respiration}}</p>
+                                </div>
+                                <div class="text-center p-3 w-100 border-end-primary-200 cons">
+                                    <img src="assets/images/icons/cons.svg" alt="">
+                                    <p class="m-0 fs-6 text-nowrap my-1">{{selectedPatientConsciousness}}</p>
+                                    <p class="m-0 fs-7 text-nowrap">{{langData?.common?.consciousness}}</p>
+                                </div>
+                                <div class="text-center p-3 w-100 border-end-primary-200 o2">
+                                    <img src="assets/images/icons/o2.svg" alt="">
+                                    <p class="m-0 fs-6 text-nowrap my-1">{{selectedPatientO2FlowRate}}
+                                        {{langData?.Ward?.Lmin}}</p>
+                                    <p class="m-0 fs-7 text-nowrap">{{langData?.common?.O2FlowRate}}</p>
+                                </div>
+                                <div class="text-center p-3 w-100">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 allergies rounded-3">
+                            <div class="d-flex align-items-center p-2 header">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"
+                                    fill="none">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9C0 4.02944 4.02944 0 9 0C13.9706 0 18 4.02944 18 9ZM14.6357 14.9314C13.1684 16.326 11.1841 17.1818 9 17.1818C4.48131 17.1818 0.818182 13.5187 0.818182 9C0.818182 6.8682 1.63349 4.92682 2.9693 3.47066C2.98784 3.53491 3.02242 3.5955 3.07305 3.64613L6.69884 7.27191L5.15865 8.82341C5.05292 8.93001 4.99331 9.07389 4.99268 9.22403V12.1943L3.44173 13.7452C3.38809 13.7984 3.34552 13.8617 3.31646 13.9315C3.28741 14.0012 3.27245 14.076 3.27245 14.1516C3.27245 14.2271 3.28741 14.3019 3.31646 14.3717C3.34552 14.4414 3.38809 14.5047 3.44173 14.5579C3.49494 14.6116 3.55823 14.6541 3.62797 14.6832C3.69772 14.7122 3.77252 14.7272 3.84807 14.7272C3.92362 14.7272 3.99842 14.7122 4.06817 14.6832C4.13791 14.6541 4.2012 14.6116 4.25441 14.5579L5.80536 13.007H8.77562C8.92576 13.0063 9.06964 12.9467 9.17624 12.841L10.7277 11.3008L14.25 14.823C14.3546 14.9276 14.5017 14.9637 14.6357 14.9314ZM14.9369 14.6299C14.9691 14.496 14.933 14.349 14.8285 14.2445L11.3084 10.7244L13.8863 8.16526C14.1528 7.89945 14.3642 7.58368 14.5085 7.23603C14.6527 6.88838 14.727 6.51569 14.727 6.1393C14.727 5.76291 14.6527 5.39022 14.5085 5.04257C14.3642 4.69492 14.1528 4.37915 13.8863 4.11334C13.6205 3.84685 13.3047 3.63543 12.9571 3.49117C12.6094 3.34691 12.2367 3.27266 11.8603 3.27266C11.484 3.27266 11.1113 3.34691 10.7636 3.49117C10.416 3.63543 10.1002 3.84685 9.83439 4.11334L7.27526 6.69126L3.65159 3.06758C3.60106 3.01706 3.54061 2.98251 3.47651 2.96394C4.93201 1.63131 6.87104 0.818182 9 0.818182C13.5187 0.818182 17.1818 4.48131 17.1818 9C17.1818 11.1812 16.3283 13.1631 14.9369 14.6299ZM6.13729 9.45867L7.50796 8.08104L8.30695 8.88003L7.44787 9.7391C7.39423 9.7923 7.35166 9.8556 7.3226 9.92534C7.29355 9.99508 7.27859 10.0699 7.27859 10.1454C7.27859 10.221 7.29355 10.2958 7.3226 10.3655C7.35166 10.4353 7.39423 10.4986 7.44787 10.5518C7.50108 10.6054 7.56437 10.648 7.63411 10.677C7.70386 10.7061 7.77866 10.7211 7.85421 10.7211C7.92976 10.7211 8.00456 10.7061 8.07431 10.677C8.14405 10.648 8.20734 10.6054 8.26055 10.5518L9.11962 9.6927L9.9186 10.4917L8.54098 11.8624H6.13729V9.45867ZM8.08504 7.50104L8.88549 8.30149L11.454 5.73296C11.5618 5.62519 11.7079 5.56465 11.8603 5.56465C12.0128 5.56465 12.1589 5.62519 12.2667 5.73296C12.3745 5.84073 12.435 5.98689 12.435 6.1393C12.435 6.2917 12.3745 6.43787 12.2667 6.54564L9.69816 9.11416L10.4986 9.91461L13.0736 7.35259C13.3769 7.02712 13.542 6.59664 13.5342 6.15184C13.5263 5.70704 13.3461 5.28265 13.0316 4.96808C12.717 4.65351 12.2926 4.47332 11.8478 4.46548C11.403 4.45763 10.9725 4.62273 10.6471 4.92601L8.08504 7.50104Z"
+                                        fill="#4155BE" />
+                                </svg>
+                                <p class="m-0 ms-2 fw-semibold fs-6">{{langData?.common?.Allergies}}</p>
+                            </div>
+                            <div class="p-3 allergy_table">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr *ngFor="let al of selectedPatientAllergies;let i=index">
+                                            <td>{{al.Type}}</td>
+                                            <td>{{al.Allergy}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- <p class="m-0 fs-7 mb-1" *ngFor="let al of selectedPatientAllergies;let i=index"> <span>{{al.Type}}</span> -- <span>{{al.Allergy}}</span> </p> -->
+                            </div>
+                        </div>
+                        <div class="mt-3 recent_med rounded-3 border-primary-200">
+                            <div class="d-flex align-items-center p-2 bg-primary-100 border-bottom-primary-200 header rounded-top">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="20" viewBox="0 0 11 20"
+                                    fill="none">
+                                    <path
+                                        d="M4.61598 4.31388C4.25797 3.95592 3.67758 3.95592 3.31958 4.31388L2.02323 5.61023C1.66527 5.96823 1.66527 6.54862 2.02323 6.90663C2.38123 7.26458 2.96162 7.26458 3.31958 6.90663L4.61598 5.61023C4.97393 5.25227 4.97393 4.67188 4.61598 4.31388Z"
+                                        fill="#368796" />
+                                    <path
+                                        d="M7.44458 4.31388C7.80258 3.95592 8.38297 3.95592 8.74098 4.31388C9.09893 4.67188 9.09893 5.25227 8.74098 5.61023L7.44458 6.90663C7.08662 7.26458 6.50623 7.26458 6.14823 6.90663C5.79027 6.54862 5.79027 5.96823 6.14823 5.61023L7.44458 4.31388Z"
+                                        fill="#368796" />
+                                    <path
+                                        d="M4.61598 13.0224C4.25797 12.6644 3.67758 12.6644 3.31958 13.0224L2.02323 14.3187C1.66527 14.6767 1.66527 15.2571 2.02323 15.6151C2.38123 15.9731 2.96162 15.9731 3.31958 15.6151L4.61598 14.3187C4.97393 13.9608 4.97393 13.3804 4.61598 13.0224Z"
+                                        fill="#368796" />
+                                    <path
+                                        d="M7.44458 13.0224C7.80258 12.6644 8.38297 12.6644 8.74098 13.0224C9.09893 13.3804 9.09893 13.9608 8.74098 14.3187L7.44458 15.6151C7.08662 15.9731 6.50623 15.9731 6.14823 15.6151C5.79027 15.2571 5.79027 14.6767 6.14823 14.3187L7.44458 13.0224Z"
+                                        fill="#368796" />
+                                    <path
+                                        d="M3.20829 10.0824C3.20829 10.3355 3.0031 10.5407 2.74996 10.5407C2.49682 10.5407 2.29163 10.3355 2.29163 10.0824C2.29163 9.82922 2.49682 9.62402 2.74996 9.62402C3.0031 9.62402 3.20829 9.82922 3.20829 10.0824Z"
+                                        fill="#368796" />
+                                    <path
+                                        d="M4.58333 10.5407C4.83647 10.5407 5.04167 10.3355 5.04167 10.0824C5.04167 9.82922 4.83647 9.62402 4.58333 9.62402C4.3302 9.62402 4.125 9.82922 4.125 10.0824C4.125 10.3355 4.3302 10.5407 4.58333 10.5407Z"
+                                        fill="#368796" />
+                                    <path
+                                        d="M6.87504 10.0824C6.87504 10.3355 6.66984 10.5407 6.41671 10.5407C6.16357 10.5407 5.95837 10.3355 5.95837 10.0824C5.95837 9.82922 6.16357 9.62402 6.41671 9.62402C6.66984 9.62402 6.87504 9.82922 6.87504 10.0824Z"
+                                        fill="#368796" />
+                                    <path
+                                        d="M8.24996 10.5407C8.5031 10.5407 8.70829 10.3355 8.70829 10.0824C8.70829 9.82922 8.5031 9.62402 8.24996 9.62402C7.99682 9.62402 7.79163 9.82922 7.79163 10.0824C7.79163 10.3355 7.99682 10.5407 8.24996 10.5407Z"
+                                        fill="#368796" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M0 2.7491C0 1.73658 0.820829 0.915771 1.83333 0.915771H9.16667C10.1792 0.915771 11 1.73658 11 2.7491V17.4158C11 18.4283 10.1792 19.2491 9.16667 19.2491H1.83333C0.820829 19.2491 0 18.4283 0 17.4158V2.7491ZM0.916667 2.7491C0.916667 2.24284 1.32706 1.83244 1.83333 1.83244H9.16667C9.67294 1.83244 10.0833 2.24284 10.0833 2.7491V9.62411C9.8302 9.62411 9.625 9.8293 9.625 10.0824C9.625 10.3356 9.8302 10.5408 10.0833 10.5408V17.4158C10.0833 17.922 9.67294 18.3324 9.16667 18.3324H1.83333C1.32706 18.3324 0.916667 17.922 0.916667 17.4158V10.5408C1.1698 10.5408 1.375 10.3356 1.375 10.0824C1.375 9.8293 1.1698 9.62411 0.916667 9.62411V2.7491Z"
+                                        fill="#368796" />
+                                </svg>
+                                <p class="m-0 ms-2 fw-semibold fs-6 clr-primary-600">
+                                    {{langData?.common?.recent_medications}}</p>
+                            </div>
+                            <div class="">
+                                <div class="border-bottom-primary-200 p-3"
+                                    *ngFor="let med of selectedPatientMedications;let i=index">
+                                    <p class="m-0 fs-7">{{langData?.common?.DrugName}}</p>
+                                    <p class="m-0 fs-7 clr-primary-600">{{med.ItemName}}</p>
+                                    <p class="m-0 fs-7 clr-primary-600">{{med.PrescriptionDate}}</p>
+                                </div>
+                                <!-- <div class="border-bottom-primary-200 p-3">
+                                <p class="m-0 fs-7">Drug Name</p>
+                                <p class="m-0 fs-7 clr-primary-600">Escomeprazole (nexium) 40 MG, Tab.
+                                    14�s (b)</p>
+                            </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal emergencywardModal" data-bs-backdrop="static" data-bs-keyboard="false" id="emergencyward"
+        tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width:80%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" translate>Assign Nurse</h5>
+                    <div class="custom_check ms-auto d-flex align-items-center gap-2">
+                        <div class="CommanSearch__form">
+                            <label for="" class="CommonSearch__label">
+                                <img src="assets/images/icons/icon-search.svg" alt="">
+                            </label>
+                            <input class="CommonSearch__input form-control" autofocus type="text" placeholder="Nurse EmpNo." 
+                                (keydown.enter)="onEnterPress($event)" (change)="onFetchNurse($event)">
+                            <button type="reset" class="reset-btn">
+                                <svg width="20" height="20" viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z"
+                                        stroke="currentColor" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="text-center d-flex align-items-center justify-content-center gap-2 border-top">
+                            <button class="btn btn-danger-outline" (click)="clearuser()">Clear</button>
+                            <button class="btn btn-main-outline" (click)="saveBedAssign()">Assign</button>
+                        </div>
+                        <button type="button" class="btn-close ms-2" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="border-primary-200 rounded-2 p-2 mt-2">
+                    <div class="bg-primary-50 p-2">
+                        <div class="row mx-0 g-3">
+                            <div class="col-2">
+                                <label for="" class="form-label clr-primary-600 fs-8 fw-bold">Employee No.</label>
+                                <p>{{ userForm.get('EmpNo').value }}</p>
+                            </div>
+                            <div class="col-3">
+                                <label for="" class="form-label clr-primary-600 fs-8 fw-bold">Employee Name</label>
+                                <p>{{ userForm.get('EmpName').value }}</p>
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="form-label clr-primary-600 fs-8 fw-bold">Department</label>
+                                <p>{{ userForm.get('Department').value }}</p>
+                            </div>
+                            <div class="col-4">
+                                <label for="" class="form-label clr-primary-600 fs-8 fw-bold">Bed Count <span fw-bold>
+                                        ({{NurseBedCount}}) </span></label>
+                                <p class="fw-bold">{{NurseBedDetails}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row mx-0 gy-3">
+                        <div [class]="filterFunction(emrBedsDataList, room.RoomID).length != 0 ? 'col-lg-4 col-md-6' : 'd-none'"
+                            *ngFor="let room of filteredemrBedsDataList; let i = index">
+                            <div class="room_cards_row d-flex flex-column h-100"
+                                *ngIf="filterFunction(emrBedsDataList, room.RoomID).length != 0">
+                                <div class="tagline">
+                                    <h6 class="clr-primary-600 m-0 bg-primary-100 p-2">{{room.Room}}</h6>
+                                </div>
+                                <div class="row mx-0 gx-2 justify-content-start p-2 w-100 h-100">
+
+                                   
+                                    <div class="col-6 position-relative"
+                                        *ngFor="let bed of filterFunction(emrBedsDataList, room.RoomID); let j = index"
+                                        (click)="selectemrBed(bed, j)">
+                                    <div class="room_card_details_hover overflow-hidden" *ngIf="bed.BedStatus=='3'">
+                                        <div [class]="bed.bedClass">
+                                            <div class="d-flex flex-column justify-content-between h-100">
+                                                <p class="m-0 fs-6 p-2 bedNum">{{bed.Bed}}</p>
+                                                <div class="h-100">
+                                                    <div class="docname_hover position-relative px-2 mt-2">
+                                                        <p class="m-0 fs-8 text-start text-truncate clr-primary-600 fw-bold">
+                                                            {{bed.PatientName}}</p>
+                                                        <span
+                                                            class="rounded-1 fs-8 clr-primary-600 fw-bold">{{bed.PatientName}}</span>
+                                                    </div>
+                                                    <div class="d-flex align-items-center p-2 pt-0">
+                                                        <div>
+                                                            <div class="bed-icon mt-2" *ngIf="bed.Gender != ''">
+                                                                <svg *ngIf="bed.Gender === 'Male'" width="30"
+                                                                    height="37" viewBox="0 0 70 37" fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    class="fill-blue">
+                                                                    <path
+                                                                        d="M13.5395 16.1175C16.7615 16.1175 19.3736 13.5054 19.3736 10.2834C19.3736 7.0615 16.7626 4.45281 13.5395 4.45281C10.3216 4.45281 7.70891 7.06221 7.70891 10.2834C7.70891 13.5048 10.3216 16.1175 13.5395 16.1175ZM69.7134 19.2525C69.7134 14.6345 65.967 10.8887 61.349 10.8887H37.7354V27.8352H65.7211V36.0118H69.7125L69.7103 19.2521L69.7134 19.2525ZM19.3728 18.0553H35.3414V10.8892H27.6407C23.4271 10.8898 19.9541 14.007 19.3733 18.0553H19.3728ZM4.27513 0.361816H0.283691V36.0139H4.27513V27.8368H35.3414V20.4509L4.27513 20.4514V0.361816Z" />
+                                                                </svg>
+                                                                <svg *ngIf="bed.Gender === 'Female'" width="30"
+                                                                    height="37" viewBox="0 0 70 37" fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    class="fill-pink">
+                                                                    <path
+                                                                        d="M13.5395 16.1175C16.7615 16.1175 19.3736 13.5054 19.3736 10.2834C19.3736 7.0615 16.7626 4.45281 13.5395 4.45281C10.3216 4.45281 7.70891 7.06221 7.70891 10.2834C7.70891 13.5048 10.3216 16.1175 13.5395 16.1175ZM69.7134 19.2525C69.7134 14.6345 65.967 10.8887 61.349 10.8887H37.7354V27.8352H65.7211V36.0118H69.7125L69.7103 19.2521L69.7134 19.2525ZM19.3728 18.0553H35.3414V10.8892H27.6407C23.4271 10.8898 19.9541 14.007 19.3733 18.0553H19.3728ZM4.27513 0.361816H0.283691V36.0139H4.27513V27.8368H35.3414V20.4509L4.27513 20.4514V0.361816Z" />
+                                                                </svg>
+                                                            </div>
+
+                                                            <div class="bed-icon mt-2" *ngIf="bed.Gender == ''">
+                                                                <svg class="bed_card" width="30" height="37"
+                                                                    viewBox="0 0 70 37" fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                    <!-- <circle cx="25" cy="25.9221" r="25" fill="#DAEEF1"/> -->
+                                                                    <path
+                                                                        d="M13.5395 16.1175C16.7615 16.1175 19.3736 13.5054 19.3736 10.2834C19.3736 7.0615 16.7626 4.45281 13.5395 4.45281C10.3216 4.45281 7.70891 7.06221 7.70891 10.2834C7.70891 13.5048 10.3216 16.1175 13.5395 16.1175ZM69.7134 19.2525C69.7134 14.6345 65.967 10.8887 61.349 10.8887H37.7354V27.8352H65.7211V36.0118H69.7125L69.7103 19.2521L69.7134 19.2525ZM19.3728 18.0553H35.3414V10.8892H27.6407C23.4271 10.8898 19.9541 14.007 19.3733 18.0553H19.3728ZM4.27513 0.361816H0.283691V36.0139H4.27513V27.8368H35.3414V20.4509L4.27513 20.4514V0.361816Z"
+                                                                        fill="#368796" />
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="ms-2">
+                                                            <p class="m-0 fs-8 text-start text-truncate d-flex align-items-center gap-1 clr-primary-600">
+                                                                <span *ngIf="bed.PatientAge!=''"
+                                                                    class="test">{{bed.PatientAge}}
+                                                                    {{bed.PatientAgeUOM}} | </span>
+                                                                <span *ngIf="bed.ShortGender!=null"
+                                                                    class="test1">{{bed.ShortGender}} | </span>
+                                                                <span *ngIf="bed.Nationality!=''">{{bed.Nationality}}
+                                                                </span>
+                                                            </p>
+                                                            <p
+                                                                class="m-0 fs-8 text-start text-truncate d-flex align-items-center gap-1 clr-primary-600">
+                                                                <span class="rounded-3 fs-8 clr-primary-600">SSN:
+                                                                    {{bed.SSN}}</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mt-2 px-2">
+                                                        <div class="docname_hover position-relative">
+                                                            <p class="m-0 fs-8 text-start text-truncate d-flex align-items-center gap-1 clr-primary-600"
+                                                                *ngIf="bed.BedStatus=='3'">
+                                                                <svg style="min-width: 1.2rem; width: 1.2rem;"
+                                                                    width="22" height="24" viewBox="0 0 22 24"
+                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path
+                                                                        d="M17.6253 13.7216C18.0258 14.3835 18.2629 15.1907 18.3101 16.0059C19.0821 16.1811 19.6602 16.8712 19.6602 17.695C19.6602 18.6507 18.8826 19.4283 17.9269 19.4283C16.9711 19.4283 16.1935 18.6507 16.1935 17.695C16.1935 16.8827 16.7559 16.2008 17.5111 16.0139C17.4346 14.9078 16.9367 13.7963 16.1325 13.2827C15.9373 13.2483 15.7391 13.2203 15.5386 13.2019C15.5095 14.4987 13.5885 15.5446 11.2213 15.5446C8.85408 15.5446 6.93274 14.4987 6.90448 13.2019C6.64874 13.2254 6.39728 13.2635 6.15008 13.3134C5.52554 13.7598 5.02074 14.631 4.99301 15.6888C5.14768 15.7784 5.27274 15.9174 5.34928 16.0856C5.91888 16.3544 6.42208 16.9203 6.80741 17.7259C6.87194 17.8616 6.88048 18.0147 6.83301 18.1544C7.06394 18.7488 7.19594 19.3984 7.19594 19.944C7.19594 20.7086 7.19594 21.4315 6.36261 21.6171C6.27248 21.6923 6.15941 21.7334 6.04074 21.7334H5.48394C5.20474 21.7334 4.97754 21.5059 4.97754 21.227L4.97808 21.2072C4.98874 20.9382 5.21408 20.7206 5.48394 20.7206H6.04074C6.09781 20.7206 6.15354 20.7302 6.20741 20.7491C6.24101 20.7395 6.25194 20.7315 6.25194 20.7315C6.31381 20.6216 6.31381 20.164 6.31381 19.9443C6.31381 19.5011 6.20288 18.9659 6.00848 18.4686C5.90768 18.4112 5.82608 18.3246 5.77594 18.2198C5.43834 17.5128 4.97914 17.0563 4.60634 17.0563C4.22501 17.0563 3.74288 17.5499 3.40661 18.284C3.35168 18.4035 3.25541 18.5011 3.13701 18.5592C2.96128 19.0352 2.86474 19.5251 2.86474 19.944C2.86474 20.1286 2.86474 20.6184 2.93514 20.7334C2.93594 20.7334 2.95168 20.743 2.99594 20.7539C3.05354 20.7318 3.11541 20.7203 3.17728 20.7203H3.73514C3.99514 20.7203 4.21248 20.9184 4.23861 21.1755L4.24128 21.207C4.24128 21.5059 4.01408 21.7334 3.73514 21.7334H3.17728C3.06661 21.7334 2.95968 21.6966 2.87168 21.6291C2.55301 21.5691 2.32848 21.4286 2.18634 21.1998C2.01408 20.9232 1.98261 20.56 1.98261 19.944C1.98261 19.4035 2.10741 18.7814 2.33408 18.187C2.30074 18.0598 2.31194 17.927 2.36741 17.8072C2.60341 17.291 2.90368 16.8488 3.23541 16.5291C3.41781 16.3534 3.61381 16.212 3.81888 16.1088C3.89568 15.9288 4.02981 15.7811 4.19328 15.6878C4.20901 14.987 4.40208 14.3219 4.71888 13.763C2.20474 14.8592 0.447144 17.3656 0.447144 20.2838C0.44741 23.8256 3.03541 24 6.42394 24C6.79328 24 7.17248 23.9979 7.55941 23.9979H14.8847C15.2701 23.9979 15.6498 24 16.0197 24C19.4082 24 21.9967 23.8262 21.9967 20.2843C21.9965 17.3275 20.1919 14.7947 17.6253 13.7216Z"
+                                                                        fill="#9b9b9b" />
+                                                                    <path
+                                                                        d="M11.2218 14.1307C14.4975 14.1307 17.1522 9.20507 17.1522 5.93067C17.1522 2.6552 14.4975 0 11.2218 0C7.94656 0 5.29163 2.6552 5.29163 5.93067C5.29163 9.2056 7.94709 14.1307 11.2218 14.1307ZM7.67909 3.2656C8.56469 5.96187 14.6836 4.748 14.6836 4.748C16.446 4.6136 16.3186 7.03653 16.3164 7.0632C15.8508 9.8272 13.7471 13.2019 11.222 13.2019C8.60176 13.2019 6.43456 9.56533 6.08203 6.75093C6.35883 4.36187 7.67909 3.2656 7.67909 3.2656Z"
+                                                                        fill="#9b9b9b" />
+                                                                    <path
+                                                                        d="M17.9268 18.495C18.3687 18.495 18.7268 18.1368 18.7268 17.695C18.7268 17.2532 18.3687 16.895 17.9268 16.895C17.485 16.895 17.1268 17.2532 17.1268 17.695C17.1268 18.1368 17.485 18.495 17.9268 18.495Z"
+                                                                        fill="#9b9b9b" />
+                                                                </svg>
+                                                                {{bed.DoctorName}}
+                                                            </p>
+                                                            <span
+                                                                class="rounded-3 fs-8 clr-primary-600">{{bed.DoctorName}}</span>
+                                                        </div>
+                                                        <p class="m-0 mt-1 fs-8 text-start d-flex align-items-center gap-1"
+                                                            >
+                                                            <svg style="min-width: 1.2rem; width: 1.2rem;" width="22"
+                                                                height="24" viewBox="0 0 25 24" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M24.429 23.4661L23.1541 19.5109C22.7728 18.3305 21.8829 17.408 20.7171 16.9794C17.7114 15.8901 17.3801 15.8185 17.343 15.8063C16.4337 15.5656 15.6048 15.3296 15.4833 14.5585C15.5042 14.5321 15.5248 14.5058 15.5454 14.4787C18.0508 13.3435 19.929 10.8112 19.929 8.54964C19.929 7.56174 19.406 6.58474 18.3309 5.5678C18.2619 5.50606 18.1747 5.46973 18.0803 5.46973H7.1844C7.08998 5.46973 7.0028 5.50606 6.93379 5.5678C5.86238 6.58838 5.33938 7.56174 5.33938 8.54964C5.33938 10.8114 7.21783 13.3404 9.72012 14.4789C9.73549 14.499 9.75156 14.5181 9.76698 14.5379C9.75918 14.5882 9.75415 14.6406 9.74131 14.6876C9.74131 14.6986 9.73404 14.7058 9.73404 14.7167C9.71483 14.7776 9.65335 14.9173 9.63597 14.9346C9.33277 15.474 8.56209 15.6773 7.89264 15.839C7.50765 15.9443 6.38175 16.3438 4.54034 17.023C3.39263 17.4516 2.48828 18.4032 2.11783 19.5654L0.864795 23.5278C0.828461 23.6404 0.850253 23.7603 0.91926 23.8547C0.988267 23.9455 1.09724 24 1.20983 24H1.21345L24.0876 23.9419C24.2038 23.9419 24.3127 23.8838 24.3781 23.7893C24.4471 23.6985 24.4653 23.5751 24.429 23.4661ZM12.4253 6.63923C13.05 7.56538 14.4374 9.18885 16.6529 9.5121C16.573 10.9976 15.9374 12.7482 15.0222 13.9685L15.0204 13.9719L15.0176 13.9745C14.8504 14.2081 14.8576 14.1609 14.8333 14.1973C14.7337 14.2473 12.7136 17.228 10.2415 13.967C10.2398 13.9648 10.2373 13.964 10.2356 13.9619C10.2249 13.949 10.2187 13.9326 10.2062 13.9213C9.29819 12.6828 8.66987 10.9213 8.60814 9.43946C9.35632 9.1489 11.55 8.18645 12.4253 6.63923ZM12.636 19.1404L12.6214 19.5036V19.1404C10.6638 19.1404 8.96042 18.0254 8.43742 16.4419C8.52097 16.4165 8.6045 16.3947 8.68803 16.3729C8.72437 16.3365 9.88522 16.1261 10.3297 15.1816C11.757 16.5363 13.4713 16.54 14.8987 15.1852C15.0876 15.563 15.4751 15.8674 15.8103 16.0351C15.9172 16.142 16.6567 16.3709 16.8164 16.4165C16.8164 16.4165 16.8164 16.4165 16.82 16.4165C16.3006 18.0073 14.6009 19.1368 12.636 19.1404Z"
+                                                                    fill="#9b9b9b" />
+                                                                <path
+                                                                    d="M18.0802 4.74334C18.2037 4.74334 18.3272 4.76513 18.4434 4.8051V2.4879C18.4434 1.93947 18.1892 1.44553 17.757 1.16223C16.6456 0.435839 14.7316 0 12.6323 0C10.5367 0 8.61899 0.435839 7.51125 1.16223C7.07904 1.44554 6.82117 1.93947 6.82117 2.4879V4.80871C6.93739 4.76513 7.06089 4.74334 7.18436 4.74334H18.0802ZM11.5427 2.6368H12.2691V1.91041C12.2691 1.71066 12.4326 1.54722 12.6323 1.54722C12.8357 1.54722 12.9955 1.71066 12.9955 1.91041V2.6368H13.7219C13.9253 2.6368 14.0851 2.80025 14.0851 3C14.0851 3.19975 13.9253 3.3632 13.7219 3.3632H12.9955V4.08959C12.9955 4.28934 12.8357 4.45278 12.6323 4.45278C12.4326 4.45278 12.2691 4.28934 12.2691 4.08959V3.3632H11.5427C11.343 3.3632 11.1795 3.19975 11.1795 3C11.1795 2.80025 11.343 2.6368 11.5427 2.6368Z"
+                                                                    fill="#9b9b9b" />
+                                                            </svg>
+                                                            <span class="clr-primary-600" *ngIf="bed.NurseName!=''">{{bed.NurseName}}</span>
+                                                            <span *ngIf="bed.NurseName==''">Not Assigned</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="bed-info-label"> {{bed?.BedStatusName}} </div>
+
+                                            <svg class="check_img" xmlns="http://www.w3.org/2000/svg" width="20"
+                                                height="20" viewBox="0 0 20 20" fill="none">
+                                                <g opacity="0.24">
+                                                    <circle cx="10" cy="10" r="10" fill="#43BC94" />
+                                                    <path
+                                                        d="M13.4244 5.94153L8.52215 10.6858L6.63665 8.86533C6.53421 8.74984 6.40814 8.65603 6.26637 8.58981C6.1246 8.52358 5.97018 8.48637 5.81281 8.4805C5.65543 8.47463 5.4985 8.50023 5.35186 8.5557C5.20522 8.61117 5.07204 8.69531 4.96067 8.80283C4.84931 8.91035 4.76217 9.03895 4.70472 9.18053C4.64727 9.32211 4.62075 9.47363 4.62683 9.62558C4.63291 9.77753 4.67145 9.92663 4.74004 10.0635C4.80863 10.2004 4.90579 10.3221 5.02541 10.421L7.71081 13.0249C7.81759 13.1271 7.94422 13.208 8.08345 13.2629C8.22267 13.3178 8.37176 13.3457 8.52215 13.3448C8.82193 13.3436 9.10921 13.2287 9.32205 13.0249L15.0357 7.50825C15.1428 7.40568 15.2278 7.28365 15.2858 7.1492C15.3438 7.01476 15.3737 6.87054 15.3737 6.72489C15.3737 6.57924 15.3438 6.43503 15.2858 6.30058C15.2278 6.16613 15.1428 6.0441 15.0357 5.94153C14.8216 5.73604 14.5319 5.6207 14.2301 5.6207C13.9282 5.6207 13.6385 5.73604 13.4244 5.94153Z"
+                                                        fill="white" />
+                                                </g>
+                                            </svg>
+                                            <!-- <span
+                                                [class]="(bed.CTASScore == '2'||bed.CTASScore == '1') ? 'count fs-8' : 'countG fs-8'"
+                                                *ngIf="bed.CTASScore!=''">{{bed.CTASScore}}</span> -->
+                                                <div [class]="(bed.CTASScore == '2'||bed.CTASScore == '1') ? 'count' : 'countG'"
+                                                *ngIf="bed.CTASScore!=''">
+                                               <span>{{bed.CTASScore}}</span>
+                                               <span class="ctas_label">CTAS</span>
+                                           </div>
+                                        </div>                                        
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer d-flex align-items-center gap-2 justify-content-center">
+                    <!-- <button class="btn btn-danger-outline">Cancel</button> -->
+                    
+                    <div class="text-danger" *ngIf="showBedValidation"> Please select Bed & Nurse to assign</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal transferdoctordModal" data-bs-backdrop="static" data-bs-keyboard="false" id="transferdoctor"
+        tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width:60%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" translate>Transfer Doctor</h5>
+                    <div class="custom_check ms-auto d-flex align-items-center gap-2">
+                        <div class="CommanSearch__form">
+                            <label for="" class="CommonSearch__label">
+                                <img src="assets/images/icons/icon-search.svg" alt="">
+                            </label>
+                            <input class="CommonSearch__input form-control" autofocus type="text" placeholder="Employee No." >
+                            <button type="reset" class="reset-btn">
+                                <svg width="20" height="20" viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z"
+                                        stroke="currentColor" fill="none" fill-rule="evenodd" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="text-center d-flex align-items-center justify-content-center gap-2 border-top">
+                            <button class="btn btn-danger-outline">Clear</button>
+                        </div>
+                        <button type="button" class="btn-close ms-2" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex gap-2 flex-wrap">
+                        <div class="doc_card d-flex flex-column align-items-center justify-content-between position-relative p-3 text-center rounded-3 active">
+                            <div class="d-flex align-items-center flex-column">
+                                <img class="doc_img mb-2" src="assets/images/avatar.jpg" alt="">
+                                <p class="mb-1 fs-7 mb-1">Syed Shehbaz Ahmed</p>
+                                <span class="fs-7 mb-1">Internal Medicine</span>
+                            </div>
+                            <svg class="check_img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><g opacity="0.24"><circle cx="10" cy="10" r="10" fill="#43BC94"></circle><path d="M13.4244 5.94153L8.52215 10.6858L6.63665 8.86533C6.53421 8.74984 6.40814 8.65603 6.26637 8.58981C6.1246 8.52358 5.97018 8.48637 5.81281 8.4805C5.65543 8.47463 5.4985 8.50023 5.35186 8.5557C5.20522 8.61117 5.07204 8.69531 4.96067 8.80283C4.84931 8.91035 4.76217 9.03895 4.70472 9.18053C4.64727 9.32211 4.62075 9.47363 4.62683 9.62558C4.63291 9.77753 4.67145 9.92663 4.74004 10.0635C4.80863 10.2004 4.90579 10.3221 5.02541 10.421L7.71081 13.0249C7.81759 13.1271 7.94422 13.208 8.08345 13.2629C8.22267 13.3178 8.37176 13.3457 8.52215 13.3448C8.82193 13.3436 9.10921 13.2287 9.32205 13.0249L15.0357 7.50825C15.1428 7.40568 15.2278 7.28365 15.2858 7.1492C15.3438 7.01476 15.3737 6.87054 15.3737 6.72489C15.3737 6.57924 15.3438 6.43503 15.2858 6.30058C15.2278 6.16613 15.1428 6.0441 15.0357 5.94153C14.8216 5.73604 14.5319 5.6207 14.2301 5.6207C13.9282 5.6207 13.6385 5.73604 13.4244 5.94153Z" fill="white"></path></g></svg>
+                            <button class="btn btn-main-outline w-100">Select</button>
+                        </div>
+                        <div class="doc_card d-flex flex-column align-items-center justify-content-between position-relative p-3 text-center rounded-3">
+                            <div class="d-flex align-items-center flex-column">
+                                <img class="doc_img mb-2" src="assets/images/avatar.jpg" alt="">
+                                <p class="mb-1 fs-7 mb-1">Syed Shehbaz Ahmed Shehbaz Ahmed</p>
+                                <span class="fs-7 mb-1">Internal Medicine</span>
+                            </div>
+                            <svg class="check_img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><g opacity="0.24"><circle cx="10" cy="10" r="10" fill="#43BC94"></circle><path d="M13.4244 5.94153L8.52215 10.6858L6.63665 8.86533C6.53421 8.74984 6.40814 8.65603 6.26637 8.58981C6.1246 8.52358 5.97018 8.48637 5.81281 8.4805C5.65543 8.47463 5.4985 8.50023 5.35186 8.5557C5.20522 8.61117 5.07204 8.69531 4.96067 8.80283C4.84931 8.91035 4.76217 9.03895 4.70472 9.18053C4.64727 9.32211 4.62075 9.47363 4.62683 9.62558C4.63291 9.77753 4.67145 9.92663 4.74004 10.0635C4.80863 10.2004 4.90579 10.3221 5.02541 10.421L7.71081 13.0249C7.81759 13.1271 7.94422 13.208 8.08345 13.2629C8.22267 13.3178 8.37176 13.3457 8.52215 13.3448C8.82193 13.3436 9.10921 13.2287 9.32205 13.0249L15.0357 7.50825C15.1428 7.40568 15.2278 7.28365 15.2858 7.1492C15.3438 7.01476 15.3737 6.87054 15.3737 6.72489C15.3737 6.57924 15.3438 6.43503 15.2858 6.30058C15.2278 6.16613 15.1428 6.0441 15.0357 5.94153C14.8216 5.73604 14.5319 5.6207 14.2301 5.6207C13.9282 5.6207 13.6385 5.73604 13.4244 5.94153Z" fill="white"></path></g></svg>
+                            <button class="btn btn-main-outline w-100">Select</button>
+                        </div>
+                        <div class="doc_card d-flex flex-column align-items-center justify-content-between position-relative p-3 text-center rounded-3">
+                            <div class="d-flex align-items-center flex-column">
+                                <img class="doc_img mb-2" src="assets/images/avatar.jpg" alt="">
+                                <p class="mb-1 fs-7 mb-1">Syed Shehbaz Ahmed</p>
+                                <span class="fs-7 mb-1">Internal Medicine</span>
+                            </div>
+                            <svg class="check_img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><g opacity="0.24"><circle cx="10" cy="10" r="10" fill="#43BC94"></circle><path d="M13.4244 5.94153L8.52215 10.6858L6.63665 8.86533C6.53421 8.74984 6.40814 8.65603 6.26637 8.58981C6.1246 8.52358 5.97018 8.48637 5.81281 8.4805C5.65543 8.47463 5.4985 8.50023 5.35186 8.5557C5.20522 8.61117 5.07204 8.69531 4.96067 8.80283C4.84931 8.91035 4.76217 9.03895 4.70472 9.18053C4.64727 9.32211 4.62075 9.47363 4.62683 9.62558C4.63291 9.77753 4.67145 9.92663 4.74004 10.0635C4.80863 10.2004 4.90579 10.3221 5.02541 10.421L7.71081 13.0249C7.81759 13.1271 7.94422 13.208 8.08345 13.2629C8.22267 13.3178 8.37176 13.3457 8.52215 13.3448C8.82193 13.3436 9.10921 13.2287 9.32205 13.0249L15.0357 7.50825C15.1428 7.40568 15.2278 7.28365 15.2858 7.1492C15.3438 7.01476 15.3737 6.87054 15.3737 6.72489C15.3737 6.57924 15.3438 6.43503 15.2858 6.30058C15.2278 6.16613 15.1428 6.0441 15.0357 5.94153C14.8216 5.73604 14.5319 5.6207 14.2301 5.6207C13.9282 5.6207 13.6385 5.73604 13.4244 5.94153Z" fill="white"></path></g></svg>
+                            <button class="btn btn-main-outline w-100">Select</button>
+                        </div>
+                        <div class="doc_card d-flex flex-column align-items-center justify-content-between position-relative p-3 text-center rounded-3">
+                            <div class="d-flex align-items-center flex-column">
+                                <img class="doc_img mb-2" src="assets/images/avatar.jpg" alt="">
+                                <p class="mb-1 fs-7 mb-1">Syed Shehbaz Ahmed</p>
+                                <span class="fs-7 mb-1">Internal Medicine</span>
+                            </div>
+                            <svg class="check_img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><g opacity="0.24"><circle cx="10" cy="10" r="10" fill="#43BC94"></circle><path d="M13.4244 5.94153L8.52215 10.6858L6.63665 8.86533C6.53421 8.74984 6.40814 8.65603 6.26637 8.58981C6.1246 8.52358 5.97018 8.48637 5.81281 8.4805C5.65543 8.47463 5.4985 8.50023 5.35186 8.5557C5.20522 8.61117 5.07204 8.69531 4.96067 8.80283C4.84931 8.91035 4.76217 9.03895 4.70472 9.18053C4.64727 9.32211 4.62075 9.47363 4.62683 9.62558C4.63291 9.77753 4.67145 9.92663 4.74004 10.0635C4.80863 10.2004 4.90579 10.3221 5.02541 10.421L7.71081 13.0249C7.81759 13.1271 7.94422 13.208 8.08345 13.2629C8.22267 13.3178 8.37176 13.3457 8.52215 13.3448C8.82193 13.3436 9.10921 13.2287 9.32205 13.0249L15.0357 7.50825C15.1428 7.40568 15.2278 7.28365 15.2858 7.1492C15.3438 7.01476 15.3737 6.87054 15.3737 6.72489C15.3737 6.57924 15.3438 6.43503 15.2858 6.30058C15.2278 6.16613 15.1428 6.0441 15.0357 5.94153C14.8216 5.73604 14.5319 5.6207 14.2301 5.6207C13.9282 5.6207 13.6385 5.73604 13.4244 5.94153Z" fill="white"></path></g></svg>
+                            <button class="btn btn-main-outline w-100">Select</button>
+                        </div>
+                        <div class="doc_card d-flex flex-column align-items-center justify-content-between position-relative p-3 text-center rounded-3">
+                            <div class="d-flex align-items-center flex-column">
+                                <img class="doc_img mb-2" src="assets/images/avatar.jpg" alt="">
+                                <p class="mb-1 fs-7 mb-1">Syed Shehbaz Ahmed</p>
+                                <span class="fs-7 mb-1">Internal Medicine</span>
+                            </div>
+                            <svg class="check_img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><g opacity="0.24"><circle cx="10" cy="10" r="10" fill="#43BC94"></circle><path d="M13.4244 5.94153L8.52215 10.6858L6.63665 8.86533C6.53421 8.74984 6.40814 8.65603 6.26637 8.58981C6.1246 8.52358 5.97018 8.48637 5.81281 8.4805C5.65543 8.47463 5.4985 8.50023 5.35186 8.5557C5.20522 8.61117 5.07204 8.69531 4.96067 8.80283C4.84931 8.91035 4.76217 9.03895 4.70472 9.18053C4.64727 9.32211 4.62075 9.47363 4.62683 9.62558C4.63291 9.77753 4.67145 9.92663 4.74004 10.0635C4.80863 10.2004 4.90579 10.3221 5.02541 10.421L7.71081 13.0249C7.81759 13.1271 7.94422 13.208 8.08345 13.2629C8.22267 13.3178 8.37176 13.3457 8.52215 13.3448C8.82193 13.3436 9.10921 13.2287 9.32205 13.0249L15.0357 7.50825C15.1428 7.40568 15.2278 7.28365 15.2858 7.1492C15.3438 7.01476 15.3737 6.87054 15.3737 6.72489C15.3737 6.57924 15.3438 6.43503 15.2858 6.30058C15.2278 6.16613 15.1428 6.0441 15.0357 5.94153C14.8216 5.73604 14.5319 5.6207 14.2301 5.6207C13.9282 5.6207 13.6385 5.73604 13.4244 5.94153Z" fill="white"></path></g></svg>
+                            <button class="btn btn-main-outline w-100">Select</button>
+                        </div>
+                        <div class="doc_card d-flex flex-column align-items-center justify-content-between position-relative p-3 text-center rounded-3">
+                            <div class="d-flex align-items-center flex-column">
+                                <img class="doc_img mb-2" src="assets/images/avatar.jpg" alt="">
+                                <p class="mb-1 fs-7 mb-1">Syed Shehbaz Ahmed</p>
+                                <span class="fs-7 mb-1">Internal Medicine</span>
+                            </div>
+                            <svg class="check_img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><g opacity="0.24"><circle cx="10" cy="10" r="10" fill="#43BC94"></circle><path d="M13.4244 5.94153L8.52215 10.6858L6.63665 8.86533C6.53421 8.74984 6.40814 8.65603 6.26637 8.58981C6.1246 8.52358 5.97018 8.48637 5.81281 8.4805C5.65543 8.47463 5.4985 8.50023 5.35186 8.5557C5.20522 8.61117 5.07204 8.69531 4.96067 8.80283C4.84931 8.91035 4.76217 9.03895 4.70472 9.18053C4.64727 9.32211 4.62075 9.47363 4.62683 9.62558C4.63291 9.77753 4.67145 9.92663 4.74004 10.0635C4.80863 10.2004 4.90579 10.3221 5.02541 10.421L7.71081 13.0249C7.81759 13.1271 7.94422 13.208 8.08345 13.2629C8.22267 13.3178 8.37176 13.3457 8.52215 13.3448C8.82193 13.3436 9.10921 13.2287 9.32205 13.0249L15.0357 7.50825C15.1428 7.40568 15.2278 7.28365 15.2858 7.1492C15.3438 7.01476 15.3737 6.87054 15.3737 6.72489C15.3737 6.57924 15.3438 6.43503 15.2858 6.30058C15.2278 6.16613 15.1428 6.0441 15.0357 5.94153C14.8216 5.73604 14.5319 5.6207 14.2301 5.6207C13.9282 5.6207 13.6385 5.73604 13.4244 5.94153Z" fill="white"></path></g></svg>
+                            <button class="btn btn-main-outline w-100">Select</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer d-flex align-items-center gap-2 justify-content-center">
+                    <button class="btn btn-main-fill">Assign</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="assignNurseMsg" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+            <div class="modal-content">
+                <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+                <div class="modal-body">
+                    <p>Nurse Assigned Successfully</p>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                            (click)="closeAssignBedsPopUp()" data-bs-dismiss="modal">{{langData?.common?.Ok}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal mapDiagnosisMedicationdiv" data-bs-backdrop="static" data-bs-keyboard="false" id="divNursingInstructions" *ngIf="showNurseInst"
+    tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width:85%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" translate>Nursing Instructions</h5>
+                <div class="ms-auto d-flex align-items-center">                    
+                    <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Close" (click)="RelaodBedsBoard()"></button>
+                </div>
+            </div>
+            <div class="m-2">
+                <app-wardheader-summary></app-wardheader-summary>
+            </div>
+            <div class="p-3 modal-body">
+                <div class="border rounded-3 p-1 pt-0 px-2 mb-2" *ngFor="let inst of selectedInstructionsList;let i=index">
+                    <div class="d-flex align-items-center">
+                        <div class="row gx-2 w-100">
+                            <div class="col-3">
+                                <label for="" class="fw-bold form-label clr-primary-600">Instruction</label>
+                                <p>{{inst.Instruction}}</p>
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="fw-bold form-label clr-primary-600">Doctor Name</label>
+                                <p>{{inst.DoctorName}}</p>
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="fw-bold form-label clr-primary-600">Start Date | Time</label>
+                                <p>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 16 17" fill="none">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M14.0289 2.30655H13.3047V2.13813C13.3047 1.36339 12.6816 0.740234 11.9068 0.740234C11.1321 0.740234 10.5089 1.36339 10.5089 2.13813V2.30655H9.41419V2.13813C9.41419 1.36339 8.79103 0.740234 8.0163 0.740234C7.24156 0.740234 6.6184 1.36339 6.6184 2.13813V2.30655H5.52366V2.13813C5.52366 1.36339 4.90051 0.740234 4.12577 0.740234C3.35103 0.740234 2.72788 1.36339 2.72788 2.13813V2.30655H2.00366C1.06051 2.30655 0.302612 3.06445 0.302612 4.0076V15.0392C0.302612 15.9823 1.06051 16.7402 2.00366 16.7402H13.9952C14.9384 16.7402 15.6963 15.9823 15.6963 15.0392V4.02445C15.73 3.08129 14.9721 2.30655 14.0289 2.30655ZM11.4016 2.15497C11.4016 1.86866 11.6373 1.64971 11.9068 1.64971C12.1931 1.64971 12.4121 1.8855 12.4121 2.15497V3.3676C12.4121 3.65392 12.1763 3.87287 11.9068 3.87287C11.6205 3.87287 11.4016 3.63708 11.4016 3.3676V2.15497ZM7.52788 2.15497C7.52788 1.86866 7.76366 1.64971 8.03314 1.64971C8.31945 1.64971 8.5384 1.8855 8.5384 2.15497V3.3676C8.5384 3.65392 8.30261 3.87287 8.03314 3.87287C7.74682 3.87287 7.52788 3.63708 7.52788 3.3676V2.15497ZM3.63735 2.15497C3.63735 1.86866 3.87314 1.64971 4.14261 1.64971C4.42893 1.64971 4.64788 1.8855 4.64788 2.15497V3.3676C4.64788 3.65392 4.41209 3.87287 4.14261 3.87287C3.8563 3.87287 3.63735 3.63708 3.63735 3.3676V2.15497ZM14.8542 15.056C14.8542 15.5108 14.4837 15.8813 14.0289 15.8813H2.03735C1.58261 15.8813 1.21209 15.5108 1.21209 15.056V6.12971H14.8373V15.056H14.8542ZM11.149 14.0623C11.2669 14.1802 11.4016 14.2308 11.5532 14.2308C11.7048 14.2308 11.8395 14.1802 11.9574 14.0623L13.5069 12.5129C13.7258 12.2939 13.7258 11.9234 13.5069 11.7044C13.2879 11.4855 12.9174 11.4855 12.6985 11.7044L11.5532 12.8497L11.1321 12.4287C10.9132 12.2097 10.5427 12.2097 10.3237 12.4287C10.1048 12.6476 10.1048 13.0181 10.3237 13.2371L11.149 14.0623ZM5.10259 10.4581H3.36785C3.13206 10.4581 2.92996 10.256 2.92996 10.0202V8.26866C2.92996 8.03287 3.13206 7.83076 3.36785 7.83076H5.10259C5.33838 7.83076 5.54048 8.03287 5.54048 8.26866V10.0202C5.54048 10.256 5.33838 10.4581 5.10259 10.4581ZM7.1743 10.4581H8.90904C9.14483 10.4581 9.34693 10.256 9.34693 10.0202V8.26866C9.34693 8.03287 9.14483 7.83076 8.90904 7.83076H7.1743C6.93851 7.83076 6.73641 8.03287 6.73641 8.26866V10.0202C6.71956 10.256 6.92167 10.4581 7.1743 10.4581ZM12.6984 10.4581H10.9637C10.7279 10.4581 10.5258 10.256 10.5258 10.0202V8.26866C10.5258 8.03287 10.7279 7.83076 10.9637 7.83076H12.6984C12.9342 7.83076 13.1363 8.03287 13.1363 8.26866V10.0202C13.1363 10.256 12.9342 10.4581 12.6984 10.4581ZM3.36785 14.1971H5.10259C5.33838 14.1971 5.54048 13.995 5.54048 13.7592V12.0076C5.54048 11.7718 5.33838 11.5697 5.10259 11.5697H3.36785C3.13206 11.5697 2.92996 11.7718 2.92996 12.0076V13.7592C2.92996 13.995 3.13206 14.1971 3.36785 14.1971ZM8.90904 14.1971H7.1743C6.92167 14.1971 6.71956 13.995 6.73641 13.7592V12.0076C6.73641 11.7718 6.93851 11.5697 7.1743 11.5697H8.90904C9.14483 11.5697 9.34693 11.7718 9.34693 12.0076V13.7592C9.34693 13.995 9.14483 14.1971 8.90904 14.1971Z"
+                                            fill="#368796" />
+                                    </svg>
+                                    {{inst.StartDate}} 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 16 17" fill="none">
+                                        <path
+                                            d="M10.6374 10.7638H7.64835C7.15604 10.7638 6.76923 10.377 6.76923 9.88467V5.31324C6.76923 4.82093 7.15604 4.43412 7.64835 4.43412C8.14066 4.43412 8.52747 4.82093 8.52747 5.31324V9.00555H10.6374C11.1297 9.00555 11.5165 9.39236 11.5165 9.88467C11.5165 10.377 11.1297 10.7638 10.6374 10.7638Z"
+                                            fill="#368796" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M16 8.98132C16 13.3945 12.4132 16.9813 8 16.9813C3.58681 16.9813 0 13.3945 0 8.98132C0 4.56814 3.58681 0.981323 8 0.981323C12.4132 0.981323 16 4.56814 16 8.98132ZM14.2418 8.98132C14.2418 5.53517 11.4462 2.73956 8 2.73956C4.55385 2.73956 1.75824 5.53517 1.75824 8.98132C1.75824 12.4275 4.55385 15.2231 8 15.2231C11.4462 15.2231 14.2418 12.4275 14.2418 8.98132Z"
+                                            fill="#368796" />
+                                    </svg>
+                                    {{inst.StartDateTime}}
+                                </p>
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="fw-bold form-label clr-primary-600">Acknowledge
+                                    By</label>
+                                <p>{{inst.AcknowledgeByUser}}</p>
+                            </div>
+                            <div class="col-2">
+                                <label for="" class="fw-bold form-label clr-primary-600">Ack. Date
+                                    Time</label>
+                                <p>{{inst.AcknowledgeDatetime}}</p>
+                            </div>
+                            <div class="col-1">
+                                <div class="d-flex align-items-center justify-content-end gap-2">                                   
+                                    <div class="custom_check d-flex align-items-center mt-1" [class.active]="inst.isAcknowledge"
+                                        (click)="validateNurseUser(i, inst)">
+                                        <svg class="check_svg" width="20" height="21" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94" />
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="instructionAckSaveMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Acknowledge successful</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline" (click)="showNursingInstructions(this.selectedPatient)"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,765 @@
+<div>
+    <div class="mt-3 card card-style-1" *ngIf="doctorDetails[0]?.IsDoctor === true">
+        <div class="accordion-item border-0 rounded-4">
+            <div class="card-header card-3d-header d-flex align-items-center justify-content-between"
+                data-bs-toggle="collapse" aria-expanded="true" aria-controls="collapseOne">
+                <h2 class="card-heading"> Medication </h2>
+
+                <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-start ms-2">
+                    <button class="btn fs-7" [class.selected]="GenericBrandtoggleValue === 'Generic'"
+                        (click)="toggleGenericBrand('Generic')" class="btn selected">Generic</button>
+                    <button class="btn fs-7" [class.selected]="GenericBrandtoggleValue === 'Brand'"
+                        (click)="toggleGenericBrand('Brand')">Brand</button>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-end gap-2">
+
+                    <!-- <button class="btn btn-main-outline min-width-unset" (click)="saveAllPrescription()">Save</button> -->
+                </div>
+            </div>
+            <div class="p-2 medicationsForm">
+                <form [formGroup]="medicationsForm" (keydown.enter)="$event.preventDefault()">
+                    <div class="row align-items-center g-2 mb-3">
+                        <div class="col-md-6">
+                            <div class="row mx-0 align-items-center">
+                                <label for="" class="form-label ps-0">Drug Name</label>
+                                <div class="d-flex align-items-center p-0">
+                                    <div class="input-group col ps-0">
+                                        <input type="text"
+                                            [class]="(isMedicationFormSubmitted && this.medicationsForm.get('ItemName')?.value == '') ? 'form-control border-danger-300' : 'form-control'"
+                                            placeholder={{langData?.prescriptions?.drugNameLabel}}
+                                            aria-label="Drug Name" formControlName="ItemName"
+                                            [matAutocomplete]="autoMed"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchItem($event)">
+                                        <mat-autocomplete #autoMed="matAutocomplete">
+                                            <mat-option *ngFor="let item of listOfItems"
+                                                (onSelectionChange)="onItemSelected(item)"
+                                                [value]="item.DisplayName.trim()">
+                                                {{item.DisplayName}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <button class="btn btn-secondary-fill btn-icon" type="button"
+                                            id="button-addon2">
+                                            <img src="assets/images/icons/icon-search.svg" alt="">
+                                        </button>
+                                    </div>
+                                    <!-- <div class="sub_tooltip position-relative">
+                                        <button class="btn btn-icon-3d mx-1"
+                                            (click)="fetchSubstituteItems(this.medicationsForm.get('ItemId')?.value)"><img
+                                                src="assets/images/icons/rx-orders/icon-S.svg"
+                                                alt=""></button>
+                                        <div class="tooltip">
+                                            <p>{{langData?.prescriptions?.Substitute}} </p>
+                                        </div>
+                                    </div> -->
+                                    <div class="validation_err">
+                                        <span class="text-danger"
+                                            *ngIf="isMedicationFormSubmitted && this.medicationsForm.get('ItemName')?.value == ''">
+                                            <p class="m-0" *ngIf="this.medicationsForm.get('ItemName')?.value == ''"
+                                                translate>{{langData?.messages?.DrugNameisrequired}}</p>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="validation_err">
+                                <span class="text-danger">
+                                    <p class="m-0">Drug name is required</p>
+                                </span>
+                            </div> -->
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="d-flex flex-column pe-2">
+                                <label for="" class="form-label">{{langData?.prescriptions?.StrengthDosage}}</label>
+                                <div class="d-flex gx-1 align-items-center">
+                                    <div class="col">
+                                        <div class="d-flex align-items-center">
+                                            <input type="text" appTwoDigitDecimaNumber formControlName="Strength"
+                                                [class]="(isMedicationFormSubmitted && this.medicationsForm.get('Strength')?.value == '') ? 'form-control me-2 border-danger-300' : 'form-control me-2'"
+                                                placeholder="">
+                                            <label id="StrengthUoM" for="StrengthUoM" class="form-label"></label>
+                                        </div>
+                                        <div class="validation_err">
+                                            <span class="text-danger"
+                                                *ngIf="isMedicationFormSubmitted && this.medicationsForm.get('Strength')?.value == ''">
+                                                <p class="m-0" *ngIf="this.medicationsForm.get('Strength')?.value == ''"
+                                                    translate>
+                                                    {{langData?.messages?.Strengthisrequired}}</p>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="d-flex align-items-center">
+                                            <input type="text" formControlName="IssueUOMValue"
+                                                [class]="(isMedicationFormSubmitted && this.medicationsForm.get('Strength')?.value == '') ? 'form-control me-2 border-danger-300' : 'form-control me-2'"
+                                                placeholder="">
+                                            <label id="Dosage" for="Dosage" class="form-label me-2"></label>
+                                        </div>
+                                    </div>
+                                    <div class="sub_tooltip position-relative">
+                                        <button class="btn btn-icon-3d" (click)="openTaperingPopup()"><img
+                                                src="assets/images/icons/rx-orders/icon-note.svg" alt=""></button>
+                                        <div class="tooltip">
+                                            <p>Dose Info</p>
+                                        </div>
+
+                                        <div class="taperingPopup d-none flex-column rounded-2 border-primary-200 p-0"
+                                            id="divTapering">
+                                            <div
+                                                class="bg-primary-50 d-flex align-items-center justify-content-between rounded-top p-2">
+                                                <h5 class="fs-7 clr-primary-600 m-0" translate>
+                                                    Tapering</h5>
+                                                <div class="ms-auto d-flex align-items-center gap-2">
+                                                    <button class="btn btn-main-outline"
+                                                        (click)="saveTapering()">Save</button>
+                                                    <button class="btn btn-danger-outline"
+                                                        (click)="clearTapering()">Clear</button>
+                                                    <button type="button" (click)="closeTapering()" class="btn-close"
+                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                            </div>
+                                            <div class="p-2">
+
+                                                <form [formGroup]="medicationSchedulesForm">
+                                                    <div formArrayName="items">
+                                                        <div class="row mx-0 align-items-start">
+                                                            <table class="table m-0">
+                                                                <thead class="trans_head">
+                                                                    <tr>
+                                                                        <th>Dose</th>
+                                                                        <th>Schedule Time</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let al of medicationScheduleitems.controls;let i=index"
+                                                                        [formGroupName]="i">
+                                                                        <td style="width: 30%;">
+                                                                            <input type="text" formControlName="Dose"
+                                                                                class="form-control">
+                                                                        </td>
+                                                                        <td style="width: 40%;">
+                                                                            <input type="text"
+                                                                                formControlName="ScheduleTime"
+                                                                                class="form-control">
+                                                                        </td>
+
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <label for="" class="form-label">{{langData?.prescriptions?.Route}}</label>
+                            <select
+                                [class]="(isMedicationFormSubmitted && this.medicationsForm.get('AdmRouteId')?.value == '') ? 'form-select pe-4 border-danger-300' : 'form-select pe-4'"
+                                formControlName="AdmRouteId" (change)="onRouteChange($event)">
+                                <option dir="ltr" *ngIf="AdmRoutesList?.length > 1" value="" translate>
+                                    {{langData?.common?.Select}}</option>
+                                <option dir="ltr" *ngFor="let route of AdmRoutesList"
+                                    [value]="this.itemSelected == 'false' ?route.Id : route.RouteID">
+                                    {{this.itemSelected == 'false' ? route.Names : route.RouteName}}
+                                </option>
+                            </select>
+                            <div class="validation_err">
+                                <span class="text-danger"
+                                    *ngIf="isMedicationFormSubmitted && this.medicationsForm.get('AdmRouteId')?.value == ''">
+                                    <p class="m-0" *ngIf="this.medicationsForm.get('AdmRouteId')?.value == ''"
+                                        translate>{{langData?.messages?.Routeisrequired}}</p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-2 rounded bg-primary-50">
+                        <div class="row mx-0 g-2 align-items-end justify-content-between">
+                            <div class="col-lg-2 col-md-6">
+                                <label for="" class="form-label">{{langData?.prescriptions?.frequency}}</label>
+                                <select
+                                    [class]="(isMedicationFormSubmitted && this.medicationsForm.get('FrequencyId')?.value == '') ? 'form-select pe-4 border-danger-300' : 'form-select pe-4'"
+                                    formControlName="FrequencyId" (change)="onFrequencyChange($event)">
+                                    <option dir="ltr" value="" selected translate>
+                                        {{langData?.common?.Select}}</option>
+                                    <option dir="ltr" *ngFor="let freq of drugFrequenciesList"
+                                        [value]="freq.FrequencyID">
+                                        {{freq.Frequency}}
+                                    </option>
+                                </select>
+                                <div class="validation_err">
+                                    <span class="text-danger"
+                                        *ngIf="isMedicationFormSubmitted && this.medicationsForm.get('FrequencyId')?.value == ''">
+                                        <p class="m-0" *ngIf="this.medicationsForm.get('FrequencyId')?.value == ''"
+                                            translate>{{langData?.messages?.Frequencyisrequired}}
+                                        </p>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-6">
+                                <label for="" class="form-label">{{langData?.prescriptions?.ScheduleStartDate}}</label>
+                                <!-- <input type="date" class="form-control"> -->
+                                <div class="d-flex align-items-center">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" formControlName="ScheduleStartDate"
+                                            [matDatepicker]="ScheduleStartDate" (click)="ScheduleStartDate.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="ScheduleStartDate">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #ScheduleStartDate></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="validation_err">
+                                    <span class="text-danger"
+                                        *ngIf="isMedicationFormSubmitted && this.medicationsForm.get('ScheduleStartDate')?.value == ''">
+                                        <p class="m-0"
+                                            *ngIf="this.medicationsForm.get('ScheduleStartDate')?.value == ''"
+                                            translate>
+                                            {{langData?.messages?.ScheduleStartDateisrequired}}
+                                        </p>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-md-6">
+                                <div class="row gx-1 align-items-end">
+                                    <div class="col">
+                                        <label for="" class="form-label">{{langData?.common?.Duration}}</label>
+                                        <input type="text"
+                                            [class]="(isMedicationFormSubmitted && this.medicationsForm.get('DurationValue')?.value == '') ? 'form-control border-danger-300' : 'form-control'"
+                                            appTwoDigitDecimaNumber maxlength="2" formControlName="DurationValue"
+                                            (keyup)="CalculateQuantity();" placeholder="">
+                                        <div class="validation_err">
+                                            <span class="text-danger"
+                                                *ngIf="isMedicationFormSubmitted && this.medicationsForm.get('DurationValue')?.value == ''">
+                                                <p class="m-0"
+                                                    *ngIf="this.medicationsForm.get('DurationValue')?.value == ''"
+                                                    translate>
+                                                    {{langData?.messages?.Durationisrequired}}</p>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-select pe-4" formControlName="DurationId"
+                                            (change)="onDurationChange($event)">
+                                            <option dir="ltr" value="" translate>
+                                                {{langData?.common?.Select}}</option>
+                                            <option dir="ltr" *ngFor="let dur of durationList" [value]="dur.Id">
+                                                {{dur.Names}}
+                                            </option>
+                                        </select>
+                                        <div class="validation_err">
+                                            <span class="text-danger"
+                                                *ngIf="isMedicationFormSubmitted && this.medicationsForm.get('DurationId')?.value == ''">
+                                                <p class="m-0"
+                                                    *ngIf="this.medicationsForm.get('DurationId')?.value == ''"
+                                                    translate>
+                                                    {{langData?.messages?.DurationTypeisrequired}}
+                                                </p>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="" class="form-label">{{langData?.prescriptions?.Qty}}</label>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input type="text"
+                                                [class]="(isMedicationFormSubmitted && this.medicationsForm.get('Quantity')?.value == '') ? 'form-control border-danger-300' : 'form-control'"
+                                                formControlName="Quantity" readonly>
+                                            <label id="QuantityUOM" for="IssueUOM" class="form-label"></label>
+                                        </div>
+                                        <div class="validation_err">
+                                            <span class="text-danger"
+                                                *ngIf="isMedicationFormSubmitted && this.medicationsForm.get('Quantity')?.value == ''">
+                                                <p class="m-0" *ngIf="this.medicationsForm.get('Quantity')?.value == ''"
+                                                    translate>{{langData?.messages?.Qtyisrequired}}
+                                                </p>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <!-- <button class="btn btn-icon-3d ms-2"><img src="assets/images/icons/rx-orders/icon-note.svg" alt=""></button> -->
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <label for="" class="form-label">{{langData?.prescriptions?.QtyInstructions}}</label>
+                                <select class="form-select pe-4" formControlName="medInstructionId"
+                                    (change)="onPresInstrChange($event)">
+                                    <option dir="ltr" value="" selected translate>
+                                        {{langData?.common?.Select}}</option>
+                                    <option dir="ltr" *ngFor="let instr of medicationInstructions" [value]="instr.id">
+                                        {{instr.name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-md-4">
+                                <div class="d-flex flex-column align-items-start">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4">
+                                <label for="" class="form-label"
+                                    *ngIf="isPRN">{{langData?.prescriptions?.PRNReason}}</label>
+                                <!-- <input type="text" class="form-control" *ngIf="isPRN"> -->
+                                <select name="" id="" class="form-select" formControlName="PRNReason" *ngIf="isPRN"
+                                    (change)="onPRNTypeChange($event)">
+                                    <option value="0">Select</option>
+                                    <option value="1">Anxiety</option>
+                                    <option value="2">Chest Pain</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-4 col-md-4">
+                                <div class="d-flex align-items-center gap-2 justify-content-end">
+                                    <div class="cursor-pointer custom_tooltip clear_svg">
+                                        <svg (click)="ClearPrescriptionItems()" width="18" height="21"
+                                            viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M16.647 10.0809V8.97505C16.647 8.195 16.3371 7.4469 15.7856 6.89532C15.234 6.34375 14.4859 6.03387 13.7058 6.03387H10.7647V1.91623C10.7647 1.4482 10.5787 0.999337 10.2478 0.66839C9.91685 0.337443 9.46799 0.15152 8.99996 0.15152C8.53193 0.15152 8.08307 0.337443 7.75213 0.66839C7.42118 0.999337 7.23526 1.4482 7.23526 1.91623V6.03387H4.29408C3.51403 6.03387 2.76593 6.34375 2.21435 6.89532C1.66278 7.4469 1.3529 8.195 1.3529 8.97505V10.0809L0.176433 19.4927C0.163041 19.6581 0.213567 19.8223 0.317609 19.9515C0.374196 20.014 0.443158 20.0641 0.520119 20.0985C0.59708 20.1329 0.680359 20.151 0.764668 20.1515H17.2353C17.3196 20.151 17.4028 20.1329 17.4798 20.0985C17.5568 20.0641 17.6257 20.014 17.6823 19.9515C17.7864 19.8223 17.8369 19.6581 17.8235 19.4927L16.647 10.0809ZM15.7858 18.975L15.4623 17.1103C15.4492 17.0342 15.4212 16.9613 15.3799 16.896C15.3386 16.8307 15.2849 16.7741 15.2217 16.7295C15.1586 16.6849 15.0873 16.6532 15.0119 16.6362C14.9365 16.6192 14.8585 16.6172 14.7823 16.6303C14.6285 16.6569 14.4915 16.7434 14.4015 16.8709C14.3569 16.9341 14.3252 17.0054 14.3082 17.0808C14.2912 17.1562 14.2892 17.2342 14.3023 17.3103L14.5917 18.975H12.7482L11.9341 13.5927C11.9057 13.4431 11.8204 13.3103 11.6962 13.2223C11.5719 13.1343 11.4184 13.0979 11.2679 13.1208C11.1173 13.1436 10.9815 13.224 10.889 13.3449C10.7965 13.4658 10.7544 13.6179 10.7717 13.7692L11.5588 18.975H4.61761L4.88232 16.088C4.88942 16.0107 4.88124 15.9329 4.85825 15.8588C4.83525 15.7847 4.79789 15.7158 4.74829 15.6562C4.6987 15.5965 4.63783 15.5473 4.56919 15.5111C4.50054 15.475 4.42545 15.4527 4.3482 15.4456C4.27095 15.4385 4.19306 15.4467 4.11897 15.4697C4.04488 15.4927 3.97605 15.5301 3.9164 15.5797C3.85675 15.6293 3.80746 15.6901 3.77133 15.7588C3.7352 15.8274 3.71295 15.9025 3.70584 15.9798L3.43055 18.975H1.43526L2.47055 10.7398H15.5411L16.5647 18.975H15.7858Z"
+                                                fill="#EB6247" />
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p>{{langData?.common?.Clear}}</p>
+                                        </div>
+                                        <!-- <button class="btn btn-danger-outline">Clear</button> -->
+                                    </div>
+                                    <div [class]="(this.medicationsForm.get('Remarks')?.value == '' || this.medicationsForm.get('Remarks')?.value == 'undefined') ? 'remark_svg cursor-pointer custom_tooltip' : 'remark_svg cursor-pointer custom_tooltip active'"
+                                        data-bs-toggle="modal" data-bs-target="#medication_remark"
+                                        (click)="medicationRemarksPopup(this.medicationsForm.get('ItemName')?.value , medRem)">
+                                        <svg width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M11.3035 13.0436L13.6501 17.1209H15.6449L13.122 12.897C13.9237 12.7014 14.5155 12.3347 14.8968 11.7969C15.288 11.2494 15.4835 10.6432 15.4835 9.97823C15.4835 9.41114 15.3465 8.8979 15.0729 8.43822C14.8088 7.9787 14.403 7.61212 13.8554 7.33834C13.3177 7.06457 12.6577 6.9276 11.8753 6.9276H8.35541V17.1209H10.0273V13.0436H11.3035ZM11.8753 11.7089H10.0273V8.29156H11.8753C12.5109 8.29156 12.9853 8.44315 13.298 8.74631C13.611 9.03964 13.7674 9.45023 13.7674 9.97823C13.7674 10.5062 13.606 10.9267 13.2834 11.2395C12.9704 11.5526 12.5013 11.7089 11.8753 11.7089Z"
+                                                fill="#B0B4B5" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M23 12.0243C23 18.0995 18.075 23.0243 12 23.0243C5.92499 23.0243 1 18.0995 1 12.0243C1 5.94917 5.92499 1.02432 12 1.02432C18.075 1.02432 23 5.94917 23 12.0243ZM21.7778 12.0243C21.7778 17.4245 17.4 21.8021 12 21.8021C6.59996 21.8021 2.22222 17.4245 2.22222 12.0243C2.22222 6.62414 6.59996 2.24654 12 2.24654C17.4 2.24654 21.7778 6.62414 21.7778 12.0243Z"
+                                                fill="#B0B4B5" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M11.3035 13.0436L13.6501 17.1209H15.6449L13.122 12.897C13.9237 12.7014 14.5155 12.3347 14.8968 11.7969C15.288 11.2494 15.4835 10.6432 15.4835 9.97823C15.4835 9.41114 15.3465 8.8979 15.0729 8.43822C14.8088 7.9787 14.403 7.61212 13.8554 7.33834C13.3177 7.06457 12.6577 6.9276 11.8753 6.9276H8.35541V17.1209H10.0273V13.0436H11.3035ZM11.8753 11.7089H10.0273V8.29156H11.8753C12.5109 8.29156 12.9853 8.44315 13.298 8.74631C13.611 9.03964 13.7674 9.45023 13.7674 9.97823C13.7674 10.5062 13.606 10.9267 13.2834 11.2395C12.9704 11.5526 12.5013 11.7089 11.8753 11.7089Z"
+                                                stroke="#B0B4B5" stroke-width="0.5" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M23 12.0243C23 18.0995 18.075 23.0243 12 23.0243C5.92499 23.0243 1 18.0995 1 12.0243C1 5.94917 5.92499 1.02432 12 1.02432C18.075 1.02432 23 5.94917 23 12.0243ZM21.7778 12.0243C21.7778 17.4245 17.4 21.8021 12 21.8021C6.59996 21.8021 2.22222 17.4245 2.22222 12.0243C2.22222 6.62414 6.59996 2.24654 12 2.24654C17.4 2.24654 21.7778 6.62414 21.7778 12.0243Z"
+                                                stroke="#B0B4B5" stroke-width="0.5" />
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p>{{langData?.Diagnosis?.Remarks}}</p>
+                                        </div>
+                                    </div>
+                                    <!-- <div [class]="this.medicationsForm.get('IsFav')?.value == 1 ? 'fav_svg cursor-pointer custom_tooltip active' : 'fav_svg cursor-pointer custom_tooltip'"
+                                        (click)="saveFavouriteMedications()">
+                                        <svg width="19" height="20" viewBox="0 0 21 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <g opacity="0.6">
+                                                <path
+                                                    d="M8.86291 0.995268C9.50183 -0.299327 11.3479 -0.299325 11.9868 0.99527L13.8589 4.78852C14.1126 5.30261 14.603 5.65893 15.1704 5.74137L19.3565 6.34964C20.7851 6.55724 21.3556 8.31294 20.3218 9.32064L17.2927 12.2733C16.8822 12.6734 16.6949 13.25 16.7918 13.815L17.5068 17.9842C17.7509 19.4071 16.2574 20.4922 14.9796 19.8204L11.2354 17.852C10.728 17.5852 10.1217 17.5852 9.61431 17.852L5.87015 19.8204C4.59231 20.4922 3.09882 19.4071 3.34287 17.9842L4.05794 13.815C4.15485 13.25 3.96752 12.6734 3.557 12.2733L0.527911 9.32064C-0.505885 8.31294 0.0645748 6.55724 1.49325 6.34964L5.67934 5.74137C6.24667 5.65893 6.73711 5.30261 6.99082 4.78852L8.86291 0.995268Z"
+                                                    fill="#B0B4B5" />
+                                            </g>
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p>{{langData?.Diagnosis?.Favourite}}</p>
+                                        </div>
+                                    </div> -->
+                                    <div class="modal fade" id="medication_remark" tabindex="-1"
+                                        aria-labelledby="medicationRemarksLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" style="width: 35%;">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="medicationRemarksLabel">
+                                                        {{langData?.prescriptions?.Remarksfor}}
+                                                        {{remarksForSelectedMedName}}</h5>
+                                                    <div class="d-flex gap-2 align-items-center justify-content-end">
+                                                        <button
+                                                            class="btn btn-danger-outline">{{langData?.common?.Clear}}</button>
+                                                        <button class="btn btn-main-outline" data-bs-dismiss="modal"
+                                                            (click)="saveMedicationRemarks(medRem.value)">{{langData?.common?.Save}}</button>
+                                                        <button type="button" class="btn-close ms-3"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <!-- <label for="" class="form-label">Remarks</label> -->
+                                                    <textarea name="" placeholder="" #medRem
+                                                        class="form-control resize-none mb-2" id="medRem" cols="30"
+                                                        rows="3"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="" *ngIf="!isEditmode">
+                                        <button class="btn btn-main-outline" (click)="AddPrescriptionItemsToTable()">
+                                            <svg class="me-1" width="17" height="16" viewBox="0 0 17 16" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M17.0009 3.55613C17.0009 5.52013 15.4088 7.11225 13.4448 7.11225C11.4808 7.11225 9.88867 5.52013 9.88867 3.55613C9.88867 1.59213 11.4808 0 13.4448 0C15.4088 0 17.0009 1.59213 17.0009 3.55613ZM15.3483 3.99384C15.2934 4.23312 15.0548 4.38248 14.8156 4.32745L11.8748 3.65139C11.6355 3.5964 11.4862 3.35783 11.5412 3.11859C11.5962 2.87935 11.8347 2.72995 12.074 2.78498L15.0147 3.46105C15.254 3.51603 15.4034 3.7546 15.3483 3.99384Z"
+                                                    fill="#368796" />
+                                                <path
+                                                    d="M5.78962 1.44253C5.50179 0.761618 4.53924 0.692936 4.1526 1.32572L1.12869 6.27426C0.779874 6.84511 1.16988 7.57389 1.85018 7.62243L7.12499 7.9988C7.80527 8.04734 8.3002 7.38173 8.04056 6.76745L5.78962 1.44253Z"
+                                                    fill="#368796" />
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M14.0605 13.4951C15.3954 12.8726 15.9731 11.2858 15.3505 9.95075C14.728 8.61578 13.1411 8.03822 11.8062 8.66072L6.97174 10.915C5.63673 11.5376 5.05917 13.1244 5.68167 14.4594C6.30421 15.7944 7.89104 16.372 9.22606 15.7495L14.0605 13.4951ZM11.6413 13.6423L13.6847 12.6894C14.5747 12.2744 14.9598 11.2165 14.5448 10.3265C14.1298 9.43649 13.0719 9.05145 12.1819 9.46645L10.1384 10.4193L11.6413 13.6423Z"
+                                                    fill="#368796" />
+                                            </svg>
+                                            {{langData?.common?.Add}}</button>
+                                    </div>
+                                    <div class="" *ngIf="isEditmode">
+                                        <button class="btn btn-main-outline"
+                                            (click)="EditPrescriptionItemsToTable()">{{langData?.common?.Update}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2 d-flex align-items-center justify-content-end d-none">
+                        </div>
+                    </div>
+
+                    <!-- Table-->
+                    <div class=" mt-3">
+                        <div class="card-3d p-2 m-0 mb-3 d-flex flex-nowrap medication_table_div"
+                            *ngFor="let med of selectedItemsList;let i=index">
+                            <div [class]="med.Class">
+                                <div class="card_item twox">
+                                    <p class="clr-primary-600 mb-1">
+                                        {{langData?.prescriptions?.drugNameLabel}}</p>
+                                    <p class="text-wrap">{{med.ItemName}}</p>
+                                </div>
+                                <div class="card_item">
+                                    <p class="clr-primary-600 mb-1">
+                                        {{langData?.prescriptions?.StrengthDosage}}</p>
+                                    <p>{{med.Strength}} {{med.Dosage}}</p>
+                                </div>
+                                <div class="card_item">
+                                    <p class="clr-primary-600 mb-1">
+                                        {{langData?.prescriptions?.Route}}</p>
+                                    <p *ngIf="!med.displayRouteDropdown" (click)="toggleRouteDropdown(med)">
+                                        {{med.Route}}</p>
+                                    <select class="form-select py-1 fs-8 pe-4 " *ngIf="med.displayRouteDropdown"
+                                        (change)="onRouteRowChange($event, med)">
+                                        <option dir="ltr" *ngFor="let route of AdmRoutesListGridRow"
+                                            [value]="route.RouteID" [selected]="med.AdmRouteId === route.RouteID">
+                                            {{route.RouteName}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="card_item twox">
+                                    <p class="clr-primary-600 mb-1">
+                                        {{langData?.prescriptions?.frequency}}
+                                    </p>
+                                    <p *ngIf="!med.displayDropdown" (click)="toggleDropdown(med)">
+                                        {{med.Frequency}}</p>
+                                    <select class="form-select py-1 fs-8 pe-4 " *ngIf="med.displayDropdown"
+                                        (change)="onFrequencyRowChange($event, med)">
+                                        <option dir="ltr" *ngFor="let freq of drugFrequenciesList"
+                                            [value]="freq.FrequencyID"
+                                            [selected]="med.FrequencyId === freq.FrequencyID">
+                                            {{freq.Frequency}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="card_item twox">
+                                    <p class="clr-primary-600 mb-1 text-nowrap">
+                                        {{langData?.prescriptions?.ScheduleStartDate}}</p>
+                                    <p *ngIf="!med.displayStartDateDropdown"
+                                        (click)="toggledisplayStartDateDropdown(med)">
+                                        {{med.ScheduleStartDate}}</p>
+                                    <mat-form-field appearance="fill" *ngIf="med.displayStartDateDropdown">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" [matDatepicker]="ScheduleStartDateGrid"
+                                            formControlName="ScheduleStartDate" (click)="ScheduleStartDateGrid.open()"
+                                            (dateChange)="onDateRowChange($event, med)">
+                                        <mat-datepicker-toggle matSuffix [for]="ScheduleStartDateGrid">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #ScheduleStartDateGrid></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="card_item med_duration">
+                                    <p class="clr-primary-600 mb-1">{{langData?.common?.Duration}}
+                                    </p>
+                                    <p *ngIf="!med.displayDuration" (click)="toggleDuraion(med)">
+                                        {{med.Duration}}</p>
+                                    <div *ngIf="med.displayDuration">
+                                        <div class="d-flex">
+                                            <div class="">
+                                                <input type="text" class="form-control" appTwoDigitDecimaNumber
+                                                    maxlength="2" [value]="med.DurationValue" placeholder=""
+                                                    (change)="onDurationTextRowChange($event, med)">
+
+                                            </div>
+                                            <div class="">
+                                                <select class="form-select pe-4"
+                                                    (change)="onDurationSelectRowChange($event, med)">
+                                                    <option dir="ltr" *ngFor="let dur of durationList" [value]="dur.Id"
+                                                        [selected]="med.DurationId === dur.Id">
+                                                        {{dur.Names}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card_item">
+                                    <p class="clr-primary-600 mb-1">
+                                        {{langData?.prescriptions?.Qty}}</p>
+                                    <p>{{med.Quantity}} {{med.IssueUoM}}</p>
+                                </div>
+                                <div class="card_item">
+                                    <p class="clr-primary-600 mb-1">
+                                        QOH</p>
+                                    <!-- <p>{{med.QOH}}</p> -->
+                                    <label for="" class="form-label text-nowrap"><span
+                                            [class]="med.QOH == '0' ? 'qoh_animate d-inline-flex' : ''">{{
+                                            med.QOH
+                                            }}</span></label>
+                                </div>
+                                <div class="card_item">
+                                    <p class="clr-primary-600 mb-1">{{langData?.SHO?.Instruction}}
+                                    </p>
+                                    <p>{{med.PresInstr}}</p>
+                                </div>
+                                <div class="card_item">
+                                    <p class="clr-primary-600 mb-1">{{langData?.SHO?.Type}}</p>
+                                    <p>{{med.PresType}}</p>
+                                </div>
+                                <div class="card_item">
+                                    <p class="clr-primary-600 mb-1">
+                                        {{langData?.prescriptions?.PRNReason}}
+                                    </p>
+                                    <p>{{med.PRNType}}</p>
+                                </div>
+                                <div class="card_item twox">
+                                    <p class="clr-primary-600 mb-1">{{langData?.Diagnosis?.Remarks}}
+                                    </p>
+                                    <p>{{med.Remarks}}</p>
+                                </div>
+                                <div class="card_item twox">
+                                    <p class="clr-primary-600 mb-1 text-nowrap">
+                                        {{langData?.prescriptions?.endDate}}</p>
+                                    <p>{{med.EndDate}}</p>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2 align-items-end">
+                                <div class="text-center cursor-pointer custom_tooltip" id="viewMore_toggle"
+                                    (click)="maximizeSelectedDrugItems(med)">
+                                    <svg width="23" height="6" viewBox="0 0 23 6" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="2.5" cy="2.70496" r="2.5" fill="#368796" />
+                                        <circle cx="11.5" cy="2.70496" r="2.5" fill="#368796" />
+                                        <circle cx="20.5" cy="2.70496" r="2.5" fill="#368796" />
+                                    </svg>
+                                    <div class="tooltip">
+                                        <p id="viewMore_toggle_a">
+                                            {{langData?.prescriptions?.ViewMore}}</p>
+                                    </div>
+                                    <!-- <a class="fs-8 btn btn-main-outline text-nowrap btn-sm" id="viewMore_toggle_a" onclick="viewmoreless()">View More</a> -->
+                                </div>
+                                <div class="cursor-pointer custom_tooltip edit_svg" (click)="EditPrescriptionItem(med)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
+                                        fill="none">
+                                        <path
+                                            d="M3.24641 7.75089H10.7338C10.9417 7.75089 11.1076 7.58202 11.1076 7.37647C11.1076 7.17092 10.939 7.00205 10.7338 7.00205H3.24641C3.03843 7.00205 2.87251 7.17092 2.87251 7.37647C2.87251 7.58189 3.04115 7.75089 3.24641 7.75089Z"
+                                            fill="#368796" />
+                                        <path
+                                            d="M10.7338 9.62546H3.24648C3.04122 9.62546 2.87258 9.45375 2.87258 9.24833C2.87258 9.04278 3.0385 8.87391 3.24648 8.87391H10.7365C10.9417 8.87391 11.1077 9.04563 11.1077 9.25105C11.1077 9.45659 10.9417 9.62546 10.7338 9.62546Z"
+                                            fill="#368796" />
+                                        <path
+                                            d="M3.24641 11.5004H6.98919C7.19717 11.5004 7.36308 11.3315 7.36308 11.1259C7.36308 10.9204 7.19445 10.7515 6.98919 10.7515L3.24641 10.7517C3.03843 10.7517 2.87251 10.9205 2.87251 11.1261C2.87251 11.3315 3.04115 11.5004 3.24641 11.5004Z"
+                                            fill="#368796" />
+                                        <path
+                                            d="M6.98919 13.6039H3.24641C3.04115 13.6039 2.87251 13.435 2.87251 13.2296C2.87251 13.024 3.03843 12.8552 3.24641 12.8552L6.98919 12.855C7.19445 12.855 7.36308 13.0239 7.36308 13.2295C7.36308 13.435 7.19717 13.6039 6.98919 13.6039Z"
+                                            fill="#368796" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M18.4324 6.98513C17.6706 6.2223 16.4308 6.2223 15.669 6.98513L14.4856 8.17023L14.4854 2.87497C14.4854 1.84176 13.6448 1.00013 12.6132 1.00013L5.49517 1C5.39681 1 5.30117 1.0394 5.23089 1.10977L1.10962 5.23384C1.03934 5.30421 1 5.39999 1 5.49849V17.1252C1 18.1584 1.84059 19 2.87221 19H12.61C13.6418 19 14.4822 18.1582 14.4822 17.1252L14.4823 13.7048L18.4293 9.75228C18.7975 9.38357 19 8.8908 19 8.37007C19.0027 7.84376 18.8006 7.35384 18.4324 6.98513ZM5.11869 2.27812V3.99822C5.11869 4.61759 4.61548 5.12423 3.99426 5.12423H2.27942L5.11869 2.27812ZM13.735 17.1251C13.735 17.7445 13.2318 18.2511 12.6105 18.2511L2.87242 18.2512C2.25391 18.2512 1.74799 17.7473 1.74799 17.1252V5.87578H3.9941C5.02586 5.87578 5.86631 5.03401 5.86631 4.00094V1.74883H12.6073C13.2258 1.74883 13.7317 2.25274 13.7317 2.87483V8.92158L9.13272 13.53L9.12851 13.5357L9.1243 13.5413C9.09907 13.5694 9.07926 13.6004 9.06244 13.6342C9.06102 13.6385 9.05891 13.6427 9.05681 13.6469C9.05471 13.6511 9.0526 13.6553 9.05118 13.6595C9.04979 13.6622 9.04708 13.6664 9.04708 13.6664C9.04708 13.6664 9.04422 13.6707 9.04277 13.6736L7.92675 17.0263C7.88171 17.1615 7.91549 17.3107 8.0167 17.4092C8.08697 17.4795 8.18262 17.5189 8.28098 17.5189C8.32032 17.5189 8.35967 17.5134 8.39901 17.4992L11.747 16.3817L11.7507 16.3796C11.7541 16.3776 11.7568 16.3761 11.7611 16.3761C11.7653 16.3747 11.7688 16.3726 11.7724 16.3704C11.7759 16.3683 11.7794 16.3662 11.7836 16.3648C11.8201 16.348 11.8539 16.3254 11.882 16.3L11.8836 16.2986L11.8876 16.2958L11.8932 16.2916L13.7318 14.4505L13.7317 17.1248L13.735 17.1251ZM10.9378 15.8668L8.87442 16.5565L9.5632 14.4903L10.9378 15.8668ZM11.6294 15.5008L9.92583 13.7948L14.8174 8.89637L16.521 10.6023L11.6294 15.5008ZM17.9013 9.22012L17.0494 10.0732L15.3458 8.36721L16.1977 7.51416C16.6671 7.04409 17.4318 7.04409 17.9013 7.51416C18.1289 7.74213 18.2526 8.04617 18.2526 8.36721C18.2553 8.6881 18.1289 8.99215 17.9013 9.22012Z"
+                                            fill="#368796" />
+                                        <path
+                                            d="M3.24641 7.75089H10.7338C10.9417 7.75089 11.1076 7.58202 11.1076 7.37647C11.1076 7.17092 10.939 7.00205 10.7338 7.00205H3.24641C3.03843 7.00205 2.87251 7.17092 2.87251 7.37647C2.87251 7.58189 3.04115 7.75089 3.24641 7.75089Z"
+                                            stroke="#368796" stroke-width="0.5" />
+                                        <path
+                                            d="M10.7338 9.62546H3.24648C3.04122 9.62546 2.87258 9.45375 2.87258 9.24833C2.87258 9.04278 3.0385 8.87391 3.24648 8.87391H10.7365C10.9417 8.87391 11.1077 9.04563 11.1077 9.25105C11.1077 9.45659 10.9417 9.62546 10.7338 9.62546Z"
+                                            stroke="#368796" stroke-width="0.5" />
+                                        <path
+                                            d="M3.24641 11.5004H6.98919C7.19717 11.5004 7.36308 11.3315 7.36308 11.1259C7.36308 10.9204 7.19445 10.7515 6.98919 10.7515L3.24641 10.7517C3.03843 10.7517 2.87251 10.9205 2.87251 11.1261C2.87251 11.3315 3.04115 11.5004 3.24641 11.5004Z"
+                                            stroke="#368796" stroke-width="0.5" />
+                                        <path
+                                            d="M6.98919 13.6039H3.24641C3.04115 13.6039 2.87251 13.435 2.87251 13.2296C2.87251 13.024 3.03843 12.8552 3.24641 12.8552L6.98919 12.855C7.19445 12.855 7.36308 13.0239 7.36308 13.2295C7.36308 13.435 7.19717 13.6039 6.98919 13.6039Z"
+                                            stroke="#368796" stroke-width="0.5" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M18.4324 6.98513C17.6706 6.2223 16.4308 6.2223 15.669 6.98513L14.4856 8.17023L14.4854 2.87497C14.4854 1.84176 13.6448 1.00013 12.6132 1.00013L5.49517 1C5.39681 1 5.30117 1.0394 5.23089 1.10977L1.10962 5.23384C1.03934 5.30421 1 5.39999 1 5.49849V17.1252C1 18.1584 1.84059 19 2.87221 19H12.61C13.6418 19 14.4822 18.1582 14.4822 17.1252L14.4823 13.7048L18.4293 9.75228C18.7975 9.38357 19 8.8908 19 8.37007C19.0027 7.84376 18.8006 7.35384 18.4324 6.98513ZM5.11869 2.27812V3.99822C5.11869 4.61759 4.61548 5.12423 3.99426 5.12423H2.27942L5.11869 2.27812ZM13.735 17.1251C13.735 17.7445 13.2318 18.2511 12.6105 18.2511L2.87242 18.2512C2.25391 18.2512 1.74799 17.7473 1.74799 17.1252V5.87578H3.9941C5.02586 5.87578 5.86631 5.03401 5.86631 4.00094V1.74883H12.6073C13.2258 1.74883 13.7317 2.25274 13.7317 2.87483V8.92158L9.13272 13.53L9.12851 13.5357L9.1243 13.5413C9.09907 13.5694 9.07926 13.6004 9.06244 13.6342C9.06102 13.6385 9.05891 13.6427 9.05681 13.6469C9.05471 13.6511 9.0526 13.6553 9.05118 13.6595C9.04979 13.6622 9.04708 13.6664 9.04708 13.6664C9.04708 13.6664 9.04422 13.6707 9.04277 13.6736L7.92675 17.0263C7.88171 17.1615 7.91549 17.3107 8.0167 17.4092C8.08697 17.4795 8.18262 17.5189 8.28098 17.5189C8.32032 17.5189 8.35967 17.5134 8.39901 17.4992L11.747 16.3817L11.7507 16.3796C11.7541 16.3776 11.7568 16.3761 11.7611 16.3761C11.7653 16.3747 11.7688 16.3726 11.7724 16.3704C11.7759 16.3683 11.7794 16.3662 11.7836 16.3648C11.8201 16.348 11.8539 16.3254 11.882 16.3L11.8836 16.2986L11.8876 16.2958L11.8932 16.2916L13.7318 14.4505L13.7317 17.1248L13.735 17.1251ZM10.9378 15.8668L8.87442 16.5565L9.5632 14.4903L10.9378 15.8668ZM11.6294 15.5008L9.92583 13.7948L14.8174 8.89637L16.521 10.6023L11.6294 15.5008ZM17.9013 9.22012L17.0494 10.0732L15.3458 8.36721L16.1977 7.51416C16.6671 7.04409 17.4318 7.04409 17.9013 7.51416C18.1289 7.74213 18.2526 8.04617 18.2526 8.36721C18.2553 8.6881 18.1289 8.99215 17.9013 9.22012Z"
+                                            stroke="#368796" stroke-width="0.5" />
+                                    </svg>
+                                    <div class="tooltip">
+                                        <p>{{langData?.prescriptions?.Edit}}</p>
+                                    </div>
+                                </div>
+                                <div class="cursor-pointer custom_tooltip del_svg"
+                                    (click)="DeletePrescriptionItem(i, med)"
+                                    *ngIf="med.PrescriptionItemStatusNew != '1'">
+                                    <svg width="23" height="22" viewBox="0 0 23 22" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M20.0995 6.16917H20.0261C15.177 5.68334 10.337 5.5 5.5428 5.98584L3.6728 6.16917C3.58184 6.17866 3.48989 6.17003 3.40228 6.14377C3.31467 6.11751 3.23314 6.07414 3.16239 6.01618C3.09164 5.95822 3.03308 5.8868 2.9901 5.80607C2.94712 5.72534 2.92056 5.63689 2.91197 5.54584C2.8753 5.16084 3.1503 4.83084 3.52614 4.79417L5.39614 4.61084C10.2728 4.11584 15.2136 4.30834 20.1636 4.79417C20.5395 4.83084 20.8145 5.17 20.7778 5.54584C20.764 5.71605 20.6864 5.87477 20.5607 5.99032C20.4349 6.10586 20.2702 6.16973 20.0995 6.16917Z"
+                                            fill="#EB6247" />
+                                        <path
+                                            d="M8.64147 5.24333C8.6048 5.24333 8.56813 5.24333 8.5223 5.23416C8.34445 5.20211 8.18627 5.10159 8.08172 4.95419C7.97717 4.80679 7.93459 4.62427 7.96313 4.44583L8.1648 3.24499C8.31147 2.36499 8.51313 1.14583 10.649 1.14583H13.0506C15.1956 1.14583 15.3973 2.41083 15.5348 3.25416L15.7365 4.44583C15.8006 4.82166 15.544 5.17916 15.1773 5.23416C14.8015 5.29833 14.444 5.04166 14.389 4.67499L14.1873 3.48333C14.059 2.68583 14.0315 2.52999 13.0598 2.52999H10.6581C9.68647 2.52999 9.66813 2.65833 9.53063 3.47416L9.3198 4.66583C9.29369 4.82694 9.2111 4.97351 9.08683 5.07931C8.96255 5.18512 8.80468 5.24325 8.64147 5.24333ZM14.7923 20.856H8.9073C5.70813 20.856 5.5798 19.0868 5.47897 17.6568L4.88313 8.42599C4.85563 8.05016 5.14897 7.72016 5.5248 7.69266C5.9098 7.67433 6.23063 7.95849 6.25813 8.33433L6.85397 17.5652C6.9548 18.9585 6.99147 19.481 8.9073 19.481H14.7923C16.7173 19.481 16.754 18.9585 16.8456 17.5652L17.4415 8.33433C17.469 7.95849 17.799 7.67433 18.1748 7.69266C18.5506 7.72016 18.844 8.041 18.8165 8.42599L18.2206 17.6568C18.1198 19.0868 17.9915 20.856 14.7923 20.856Z"
+                                            fill="#EB6247" />
+                                        <path
+                                            d="M13.3714 15.8125H10.3189C9.94311 15.8125 9.63144 15.5008 9.63144 15.125C9.63144 14.7492 9.94311 14.4375 10.3189 14.4375H13.3714C13.7473 14.4375 14.0589 14.7492 14.0589 15.125C14.0589 15.5008 13.7473 15.8125 13.3714 15.8125ZM14.1414 12.1458H9.55811C9.18227 12.1458 8.87061 11.8342 8.87061 11.4583C8.87061 11.0825 9.18227 10.7708 9.55811 10.7708H14.1414C14.5173 10.7708 14.8289 11.0825 14.8289 11.4583C14.8289 11.8342 14.5173 12.1458 14.1414 12.1458Z"
+                                            fill="#EB6247" />
+                                    </svg>
+                                    <div class="tooltip">
+                                        <p>{{langData?.Diagnosis?.Delete}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" data-bs-abackdrop="static" data-bs-keyboard="false" id="cannotPrescribeStatMedMsg"
+    tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>Cannot be prescribe STAT medication</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="savePrescriptionMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p *ngIf="homeMedicationEnable">Home Medication Saved Successfully</p>
+                <p *ngIf="!homeMedicationEnable">Medication Saved Successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="validatePrescriptionMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{langData?.prescriptions?.PleaseeditMedicationdetailsthensave}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="NoQohMsgModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{prescriptionValidationMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        (click)="fetchSubstituteItems(this.medicationsForm.get('ItemId')?.value)"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="prescriptionValidationMsgModalYesNo"
+    tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{prescriptionValidationMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal"
+                        (click)="accept()">{{langData?.common?.yes}}</a>
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal"
+                        (click)="decline()">{{langData?.common?.no}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal favouriteInvestigations" data-bs-abackdrop="static" data-bs-keyboard="false" id="modalSubstituteItems"
+    tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:70%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" translate>{{langData?.prescriptions?.SubstituteItems}}</h5>
+                <div class="ms-auto d-flex align-items-center">
+                    <button class="btn btn-main-outline mx-2"
+                        (click)="loadSubstituteItem()">{{langData?.common?.Select}}</button>
+                    <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+
+            <div class="modal-body p-0">
+                <div class="validation_err" *ngIf="showSubstituteSelectValidationMsg">
+                    <p class="fs-7 m-0 mb-3 text-center">
+                        {{langData?.prescriptions?.Pleaseselectatleastoneitemtoproceed}}</p>
+                </div>
+                <form class="Substitute_table px-3">
+                    <div class="" *ngFor="let sub of substituteItems; let i = index">
+                        <div class="table-cards_left card_item_div mt-3 p-2">
+                            <div class="row mx-0 g-2 w-100">
+                                <div class="col-md-1 d-flex">
+                                    <div class="custom_check d-flex align-items-center gap-2"
+                                        [class.active]="sub.selected" (click)="selectSubstituteItem(sub)">
+                                        <svg width="19" height="19" viewBox="0 0 20 21" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                            <path
+                                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                fill="white" stroke="white" stroke-width="0.25"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="clr-primary-600 text-nowrap">{{langData?.prescriptions?.ItemName}}</p>
+                                    <p class="text-break">{{sub.DisplayName}}</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p class="clr-primary-600 text-nowrap">{{langData?.prescriptions?.GenericName}}</p>
+                                    <p class="text-break">{{sub.GenericName}}</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p class="clr-primary-600 text-nowrap">{{langData?.prescriptions?.GenericQuantity}}
+                                    </p>
+                                    <p class="text-break">{{sub.GenericQuantity}}</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p class="clr-primary-600 text-nowrap">{{langData?.prescriptions?.GenericUOM}}</p>
+                                    <p class="text-break">{{sub.GenericUOMName}}</p>
+                                </div>
+                                <div class="col-md-1">
+                                    <p class="clr-primary-600 text-nowrap">{{langData?.Diagnosis?.Code}}</p>
+                                    <p class="text-break">{{sub.ItemCode}}</p>
+                                </div>
+                                <div class="col-md-1 d-flex align-items-center justify-content-end">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

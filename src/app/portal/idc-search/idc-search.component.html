@@ -1,0 +1,130 @@
+<div
+  class="flex-nowrap d-flex align-items-center justify-content-between border-primary-200 p-2 pt-1 rounded-3"
+>
+  <form class="row align-items-center w-100 mx-0" [formGroup]="diseaseForm">
+    <div class="col-md-5">
+      <label for="" class="form-label">{{langData?.Diagnosis?.ICDName}} </label>
+      <input
+        type="text"
+        class="form-control"
+        #idcName
+        formControlName="searchTerm"
+        (change)="FetchMasterDiseases('name')"
+        placeholder="ICD Name"
+      />
+    </div>
+    <div class="col-md-5">
+      <label for="" class="form-label">{{langData?.Diagnosis?.ICDcode}} </label>
+      <input
+        type="text"
+        class="form-control"
+        formControlName="searchTerm"
+        (change)="FetchMasterDiseases('code')"
+        placeholder="ICD Code"
+      />
+    </div>
+  </form>
+  <div class="d-flex align-items-center gap-2 mt-3 pt-1">
+    <button class="btn btn-danger-outline" (click)="clear()">{{langData?.common?.Clear}}</button>
+
+    <button class="btn btn-main-outline" (click)="onselectedIDC($event)">
+      {{langData?.common?.Select}}
+    </button>
+  </div>
+</div>
+
+<div class="modal alert_confirmation" id="alert_confirmation" style="background: #100f0f40;" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success" style="max-width: 35%;">
+      <div class="modal-content">
+          <!-- <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt=""> -->
+          <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+          <div class="modal-body px-0">
+              <p class="m-0 py-3"> Confirm below ICD(s)</p>
+              <ul>
+                <li *ngFor="let item of confirmData">{{ item.itemCode + ":" + item.ItemName }}</li>
+              </ul>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-danger-outline" data-bs-dismiss="modal">{{langData?.common?.no}} </button>
+              <a href="javascript:void(0)" type="button" class="btn btn-main-outline" (click)="onConfirmIDC()">Yes</a>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- <input type="text" formControlName="searchTerm">
+    <button type="button" class="btn btn-main-fill mx-2" (click)="FetchMasterDiseases()"
+                                                translate >Search</button> -->
+
+<!-- <ngx-treeview
+class="idc_tree_view"
+  [config]="config"
+  [items]="items"
+  (selectedChange)="onSelectedChange($event)"
+  (filterChange)="onFilterChange($event)"
+>
+</ngx-treeview> -->
+
+<ngx-treeview
+  class="idc_tree_view"
+  [config]="config"
+  [items]="items"
+  (selectedChange)="onSelectedChange($event)"
+  (filterChange)="onFilterChange($event)"
+  [itemTemplate]="itemTemplate"
+>
+</ngx-treeview>
+
+<ng-template
+  #itemTemplate
+  let-item="item"
+  let-onCollapseExpand="onCollapseExpand"
+  let-onCheckedChange="onCheckedChange"
+>
+  <div class="form-inline row-item">
+    <i
+      *ngIf="item.children"
+      (click)="onCollapseExpand()"
+      aria-hidden="true"
+      class="fa"
+      [class.fa-caret-right]="item.collapsed"
+      [class.fa-caret-down]="!item.collapsed"
+    ></i>
+
+    <div class="form-check">
+      <input
+        type="checkbox"
+        class="form-check-input"
+        [(ngModel)]="item.checked"
+        (ngModelChange)="onCheckedChange()"
+        [disabled]="item.disabled"
+        [indeterminate]="item.indeterminate"
+      />
+
+      <label
+        class="form-check-label cursor-pointer"
+        title="{{ item.text }}"
+        (click)="item.checked = !item.checked; onCheckedChange()"
+      >
+        {{ item.text }}
+      </label>
+
+      <!-- <label class="form-check-label"> -->
+        <section>
+          <img
+            class="icon icon-w tree-view-all"
+            src="assets/images/icons/toast-success.svg"
+            *ngIf="item.checked && item.internalChecked"
+            (click)="selectChildren(item)"
+          />
+
+          <!-- <img
+            class="icon icon-w tree-view-all"
+            src="assets/img/unchecked.svg"
+            *ngIf="!item.checked || !item.internalChecked"
+            (click)="selectChildren(item)"
+          /> -->
+        </section>
+      <!-- </label> -->
+    </div>
+  </div>
+</ng-template>

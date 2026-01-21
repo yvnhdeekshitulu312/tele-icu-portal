@@ -1,0 +1,270 @@
+<app-suit-header [IsSwitchWard]="true"></app-suit-header>
+<div class="container__wrapper p-0 position-relative" style="background-color: #fff;overflow-x: hidden;">
+    <div class="page-header sticky-top bg-primary-50 shadow-sm justify-content-between">
+        <h2 class="page-heading d-flex align-items-center m-0">
+            Bulk Results Verification
+        </h2>
+        <div class="d-flex align-items-center gap-2">
+            <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                <button class="btn fs-7" [class.selected]="patientType === '3'"
+                    (click)="selectPatientType('3')">ED</button>
+                <button class="btn fs-7" [class.selected]="patientType === '2'"
+                    (click)="selectPatientType('2')">IP</button>
+                <button class="btn fs-7" [class.selected]="patientType === '1'"
+                    (click)="selectPatientType('1')">OP</button>
+            </div>
+            <div class="clinical_toggle toggle__switch switch-sm d-inline-flex align-self-center">
+                <button class="btn fs-7" [class.selected]="dataFilter === 0"
+                    (click)="filterResults(0)">All ({{fetchStatusCount(0)}})</button>
+                <button class="btn fs-7" [class.selected]="dataFilter === 1"
+                    (click)="filterResults(1)">Normal ({{fetchStatusCount(1)}})</button>
+                <button class="btn fs-7" [class.selected]="dataFilter === 2"
+                    (click)="filterResults(2)">Panic ({{fetchStatusCount(2)}})</button>
+                <button class="btn fs-7" [class.selected]="dataFilter === 3"
+                    (click)="filterResults(3)">Abnormal ({{fetchStatusCount(3)}})</button>
+            </div>
+            <div class="filter_Date position-relative">
+                <div class="d-flex align-items-center gap-2 fs-8">
+                    Filters
+                    <svg class="cursor-pointer" width="23" height="23" viewBox="0 0 24 25" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2.75" y="3.27435" width="18.5" height="18.5" rx="3.25" stroke="#368796"
+                            stroke-width="1.5" />
+                        <circle cx="7.85547" cy="8.32605" r="1.375" fill="#368796" stroke="#368796"
+                            stroke-width="1.25" />
+                        <rect x="9.125" y="7.70105" width="7" height="1.25" rx="0.625" fill="#368796" />
+                        <circle cx="16.1445" cy="12.5243" r="1.375" fill="#4357BC" stroke="#4357BC"
+                            stroke-width="1.25" />
+                        <rect x="8.12988" y="11.8993" width="7" height="1.25" rx="0.625" fill="#4357BC" />
+                        <circle cx="7.875" cy="16.7227" r="1.375" fill="#368796" stroke="#368796" stroke-width="1.25" />
+                        <rect x="9.14453" y="16.0977" width="7" height="1.25" rx="0.625" fill="#368796" />
+                    </svg>
+                </div>
+                <div class="filter_dropdow">
+                    <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchDataWithDates('T')">Today</p>
+                    <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchDataWithDates('Y')">Yesterday</p>
+                    <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchDataWithDates('W')">This week </p>
+                    <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchDataWithDates('M')">This Month</p>
+                    <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchDataWithDates('3M')">Three Months
+                    </p>
+                    <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchDataWithDates('6M')">Six Months
+                    </p>
+                    <p class="m-0 p-2 cursor-pointer border-bottom" (click)="fetchDataWithDates('1Y')">This Year</p>
+                </div>
+            </div>
+            <div>
+                <button class="date_range_calendar p-0 position-relative" style="width: 227px;">
+                    <mat-date-range-input class="btn btn-main-outline" [formGroup]="dateForm" [rangePicker]="picker">
+                        <input matStartDate formControlName="FromDate">
+                        <input matEndDate formControlName="ToDate" (dateChange)="onDateChange()">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-2">
+        <div class="row g-2 align-items-end">
+            <div class="col-6">
+                <div class="d-flex align-items-center gap-2 w-100">
+                    <form class="CommanSearch__form m-0 w-100">
+                        <label for="" class="CommonSearch__label d-flex">
+                            <svg width="17" height="18" viewBox="0 0 17 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0.128906 0.825195V6.26178H1.49183V2.18811H5.5655V0.825195H0.128906Z"
+                                    fill="#368796"></path>
+                                <path d="M0.128906 17.1752V11.7386H1.49183V15.8123H5.5655V17.1752H0.128906Z"
+                                    fill="#368796">
+                                </path>
+                                <path d="M15.116 15.8123V11.7386H16.4789V17.1752H11.0423V15.8123H15.116Z"
+                                    fill="#368796">
+                                </path>
+                                <path d="M11.0423 2.18811V0.825195H16.4789V6.26178H15.116V2.18811H11.0423Z"
+                                    fill="#368796">
+                                </path>
+                                <path d="M2.85352 3.55005H5.57867V14.4507H2.85352V3.55005Z" fill="#368796"></path>
+                                <path d="M8.30375 3.55005H6.94116V14.4507H8.30375V3.55005Z" fill="#368796"></path>
+                                <path d="M9.66638 3.55005H11.029V14.4507H9.66638V3.55005Z" fill="#368796"></path>
+                                <path d="M13.7541 3.55005H12.3915V14.4507H13.7541V3.55005Z" fill="#368796"></path>
+                            </svg>
+                        </label>
+                        <input id="Barcode" autofocus="" type="text" placeholder="Sample Number" [(ngModel)]="barcode"
+                            [ngModelOptions]="{standalone: true}" class="CommonSearch__input form-control px-0"
+                            (keydown.enter)="onBarcodeEnterPress($event)">
+                    </form>
+                    <form class="CommanSearch__form m-0 w-100">
+                        <label for="" class="CommonSearch__label d-flex">
+                            <svg width="21" height="20" viewBox="0 0 21 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_438_22896)">
+                                    <path
+                                        d="M9.2959 1.6665C13.4359 1.6665 16.7959 5.0265 16.7959 9.1665C16.7959 13.3065 13.4359 16.6665 9.2959 16.6665C5.1559 16.6665 1.7959 13.3065 1.7959 9.1665C1.7959 5.0265 5.1559 1.6665 9.2959 1.6665ZM9.2959 14.9998C12.5184 14.9998 15.1292 12.389 15.1292 9.1665C15.1292 5.94317 12.5184 3.33317 9.2959 3.33317C6.07256 3.33317 3.46256 5.94317 3.46256 9.1665C3.46256 12.389 6.07256 14.9998 9.2959 14.9998ZM16.3667 15.059L18.7242 17.4157L17.5451 18.5948L15.1884 16.2373L16.3667 15.059Z"
+                                        fill="#368796"></path>
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_438_22896">
+                                        <rect width="20" height="20" fill="white" transform="translate(0.128906)">
+                                        </rect>
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                        </label>
+                        <input type="text" id="NationalId" [(ngModel)]="ssn" [ngModelOptions]="{standalone: true}"
+                            placeholder="SSN" class="CommonSearch__input form-control px-0"
+                            (keydown.enter)="onSSNEnterPress($event)">
+                    </form>
+                </div>
+            </div>
+            <div class="col text-end">
+                <div class="d-flex align-items-center justify-content-end gap-2">
+                    <div class="custom_check d-flex align-items-center gap-2" [class.active]="isSelectAll"
+                        (click)="onSelectAll()">
+                        <svg style="min-width:1rem;" width="16" height="16" viewBox="0 0 20 21" fill="none"
+                            xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                            <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                            <path
+                                d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                fill="white" stroke="white" stroke-width="0.25"></path>
+                        </svg>
+                        <p class="m-0 fs-7">Select All</p>
+                    </div>
+                    <button class="btn btn-main-outline" (click)="onCDRClick()">CDR</button>
+                    <button class="btn btn-danger-outline" (click)="clearSearchCriteria()">Clear</button>
+                    <button class="btn btn-main-outline" (click)="FetchBulkResultsData()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="nobulkprocess d-flex flex-column align-items-center justify-content-center" *ngIf="showNoRecFound">
+        <img src="assets/images/nolaboratory.svg" alt="" class="mb-2">
+        <p class="m-0 fs-6">No Records Found</p>
+    </div>
+    <div class="p-2" *ngIf="!showNoRecFound">
+        <div class="fixed_alter_list bulkresults_opTable rounded border-primary-200">
+            <div class="fixed_alter_header bg-primary-50 rounded-top">
+                <div class="row gx-2 align-items-center p-2 mx-0">
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">Req.no</p>
+                    </div>
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">SSN</p>
+                    </div>
+                    <div class="" style="width: 7%;" *ngIf="patientType !== '2'">
+                        <p class="label m-0">Bill No.</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">Patient Name</p>
+                    </div>
+                    <div class="" style="width: 11%;">
+                        <p class="label m-0">Test Name</p>
+                    </div>
+                    <div class="" style="width: 12%;">
+                        <p class="label m-0">Test Result</p>
+                    </div>
+                    <div class="" style="width: 12%;">
+                        <p class="label m-0">Prev Test Result</p>
+                    </div>
+                    <div class="" style="width: 9%;">
+                        <p class="label m-0">Prev Test Result Date</p>
+                    </div>
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">Accession No.</p>
+                    </div>
+                    <div class="" style="width: 5%;">
+                        <p class="label m-0">Verify</p>
+                    </div>
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">Can be verified</p>
+                    </div>
+                    <div class="" style="width: 6%;">
+                        <p class="label m-0">National ID</p>
+                    </div>
+                </div>
+            </div>
+            <div class="fixed_alter_body">
+                <div class="row gx-2 align-items-center p-2 mx-0 alter_div" [style.background-color]="item.rowColor"
+                    *ngFor="let item of FetchTestOrderSpecimenComponentsDataList">
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">{{item.OrderSlNo}}</p>
+                    </div>
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">{{item.SSN}}</p>
+                    </div>
+                    <div class="" style="width: 7%;" *ngIf="patientType !== '2'">
+                        <p class="label m-0">{{item.BillNo}}</p>
+                    </div>
+                    <div class="" style="width: 10%;">
+                        <p class="label m-0">{{item.PatientName}}</p>
+                    </div>
+                    <div class="" style="width: 11%;">
+                        <p class="label m-0">
+                            {{item.TestName}}
+                        </p>
+                    </div>
+                    <div class="" style="width: 12%;">
+                        <p class="label m-0" [innerHTML]="item.TestResult"></p>
+                    </div>
+                    <div class="" style="width: 12%;">
+                        <p class="label m-0">{{item.PreviousTestResult}}</p>
+                    </div>
+                    <div class="" style="width: 9%;">
+                        <p class="label m-0" [innerHTML]="item.PreviousResultEnterDate"></p>
+                    </div>
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">{{item.SampleNumber}}</p>
+                    </div>
+                    <div class="" style="width: 5%;">
+                        <div class="custom_check d-flex align-items-center gap-1" [class.active]="item.selected"
+                            (click)="item.selected = !item.selected">
+                            <svg width="16" height="16" style="min-width:1rem" viewBox="0 0 20 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                <path
+                                    d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                    fill="white" stroke="white" stroke-width="0.25"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="" style="width: 7%;">
+                        <p class="label m-0">{{item.CanbeVerified.toString() === '0' ? 'No' : 'Yes'}}</p>
+                    </div>
+                    <div class="" style="width: 6%;">
+                        <p class="label m-0">{{item.SSN}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="savemsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-success.svg" alt="">
+            <div class="modal-body">
+                <p>Saved successfully</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">Ok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>{{errorMsg}}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                        data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

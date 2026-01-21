@@ -1,0 +1,1208 @@
+ 
+    <div class="row g-0">
+        <div class="main-content col">
+            <!--Container-->
+            <div class="container-fluid mt-4" >
+                <div class="container__wrapper handoverPage">
+                    <div class="page-header sticky-top justify-content-between">
+                        <h2 class="page-heading">{{langData?.common?.PatientSummary}}</h2>
+                        <form [formGroup]="visitsForm">
+                            <div class="d-flex align-items-center">
+                            <label for="" class="form-label mb-0 px-2">{{langData?.common?.Visits}}</label>
+                            
+                            <select class="form-select pe-4" style="width:450px;" formControlName="visitId"
+                                (change)="onVisitsChange($event)">
+                                <option dir="ltr" value="" selected translate>{{langData?.common?.SelectVisit}}</option>
+                                <option dir="ltr" *ngFor="let visit of PatientVisitsList" [value]="visit.AdmissionID">
+                                    {{visit.VisitDate}} - {{visit.DoctorName}}
+                                </option>
+                            </select>
+
+                            <!-- <button type="button" class="btn btn-main-fill ms-2" (click)="BackToPatients()" translate>Back</button> -->
+                       </div>
+                       <!-- <div class="actions ms-auto pe-2">
+                        
+                    </div> -->
+                    </form>
+                        <!-- <div class="actions col-lg-3 col-md-6 order-lg-3 order-md-2">
+                           <div class="toggle__location d-inline-block ms-3 mt-2 float-end">
+                            <div class="toggle__swithcer">
+                                <button [class]="btnSuwaidi" (click)="changeLocation('2')">{{langData?.common?.Suwaidi}}</button>
+                                <button [class]="btnNuzha" (click)="changeLocation('3')">{{langData?.common?.Nuzha}}</button>
+                            </div>
+                        </div>
+                        </div> -->
+                        
+                    </div>
+
+                    <div class="row px-3 pt-3 pb-3 gx-2 gy-4 mx-0 ">
+                        <!-- Card Patient demographic-->
+                        <div class="col-xl-12 col-lg-12 col-md-12 mb-2 d-none">
+                            <div class="card-3d p-2">
+                                <div class="row g-0">
+                                    <div class="col-xl-2 col-md-3">
+                                        <div class="patient-info h-100 d-flex flex-column align-items-center justify-content-center">
+                                            <div class="patient-photo mb-2">
+                                                <svg style="z-index:1; margin-top:-0.5rem;" width="36" height="33.75" viewBox="0 0 48 46" fill="none" xmlns="http://www.w3.org/2000/svg" >
+                                                    <path d="M23.9998 25.6975C17.7821 25.6975 12.7459 20.0572 12.7459 13.0681C12.7459 6.14031 17.7821 0.5 23.9998 0.5C30.2175 0.5 35.2536 6.20162 35.2536 13.1294C35.2536 20.0572 30.2175 25.6975 23.9998 25.6975Z" fill="#41A5B4"/>
+                                                    <path d="M34.414 25.0267C34.7549 24.951 35.1105 24.9711 35.4401 25.0844H35.4405C43.6478 27.9046 48 34.3422 48 43.6607C48 44.1486 47.8035 44.6165 47.4535 44.9612C47.104 45.3063 46.6295 45.5 46.1346 45.5H1.86538C1.37051 45.5 0.896033 45.3063 0.546471 44.9612C0.196465 44.6165 0 44.1486 0 43.6607C0 34.3421 4.35209 27.9048 12.5595 25.0844C12.8892 24.9711 13.2448 24.951 13.5857 25.0267C13.9261 25.1028 14.2384 25.2713 14.4869 25.5138C16.6008 27.5981 20.145 28.8242 23.9998 28.8242C27.8546 28.8242 31.3989 27.5981 33.5127 25.5138C33.7613 25.2713 34.0735 25.1028 34.414 25.0267Z" fill="#41A5B4"/>
+                                                </svg>                                                                             
+                                            </div>
+                                            <p class="fw-bold mb-2 text-center">{{patientName}}</p>
+                                            <p class="text-center" dir="ltr">{{age}} / {{gender}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-10 col-md-9">
+                                        <div class="card-3d-wrapper h-100 p-3">
+                                            <div class="row gx-2 gy-3">
+                                                <div class="col-md-4 col-lg-4">
+                                                    <p class="label">{{langData?.common?.UHID}}:</p>
+                                                    <p>{{uhid}}</p>
+                                                </div>
+                                                <div class="col-md-8 col-lg-4">
+                                                    <p class="label">{{langData?.common?.PatientName}}:</p>
+                                                    <p>{{patientName}}</p>
+                                                </div>
+                                                <div class="col-md-4 col-lg-4">
+                                                    <p class="label">{{langData?.common?.Age}}:</p>
+                                                    <p>{{age}} / {{gender}}</p>
+                                                </div>
+                                                <div class="col-md-4 col-lg-4">
+                                                    <p class="label">{{langData?.common?.Nationality}}:</p>
+                                                    <p>{{nationality}}</p>
+                                                </div>
+                                                <div class="col-md-4 col-lg-4">
+                                                    <p class="label">{{langData?.common?.MobileNo}}:</p>
+                                                    <p>{{mobileNo}}</p>
+                                                </div>                                                
+                                                <div class="col-md-3 col-lg-4">
+                                                    <p class="label">{{langData?.common?.Payer}}:</p>
+                                                    <p>{{payer}}</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Diagnosis-->
+
+                        <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-2 position-relative h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9" style="height:260px">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items" *ngFor="let diag of PatientDiagnosisList;let i=index">
+                                                <p class="col-1">{{diag.Code}}</p>
+                                                <p class="col-8">{{diag.DiseaseName}}</p>
+                                                <p class="col-3" dir="ltr">{{diag.CreateDate}}</p>
+                                            </div>
+                                            <!-- <div class="row-items">
+                                                <p class="col-1 text-bold">E10.8</p>
+                                                <p class="col-8">Insulin-dependent diabetes mellitus with unspecified complications</p>
+                                                <p class="col-3">13-Sep-2021 3:35:42 PM</p>
+                                            </div>
+                                            <div class="row-items">
+                                                <p class="col-1 text-bold">121.4</p>
+                                                <p class="col-8">Acute subendocardial myocardial infarction</p>
+                                                <p class="col-3">13-Sep-2021 3:35:42 PM</p>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>{{langData?.common?.Diagnosis}}</h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details  overflow-auto" style="height:160px;">
+                                                <!-- <h4>08</h4>
+                                                <p>Diagnosis</p> -->
+                                                
+                                            <button class="btn btn-select btn-tab">
+                                                <h4>{{diagnosisCount}}</h4>
+                                                <p>{{langData?.common?.Diagnosis}}</p>
+                                            </button>
+                                            <!-- <button class="btn btn-tab">
+                                                <h4>0</h4>
+                                                <p>Fall Risk Score</p>
+                                            </button> -->
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex justify-content-right ViewMore">
+                                                <button type="button" class="btn text-end "  (click)="openDiagnosisModal()">
+                                                    {{langData?.common?.ViewMore}}
+                                                    <img alt="" src=" assets/images/viewmore-2.svg" style="width: 1.5rem;">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Assessments-->
+
+                        <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class="card-3d-3 position-relative h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items border-left" *ngFor="let asmt of PatientsAssessmentsList;let i=index">
+                                                <p class="col-3 text-bold">{{asmt.CSTName}}</p>
+                                                <p class="col-9" dir="ltr">{{asmt.Assessmentdate}} {{asmt.Assessmentmoddate}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>{{langData?.common?.Assessments}} </h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details ">                                                 
+                                                <button class="btn btn-tab">
+                                                    <h4>{{assessmentsCount}}</h4>
+                                                    <p style="font-size: 0.7rem;">{{langData?.common?.Assessments}}</p>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-2 position-relative h-100">
+                                <div class="row gx-2">                                    
+                                    <div class="col-md-9" style="height:225px">
+                                        <div class="page-heading">
+                                            <h6 dir="ltr" class="text-start" class="summary_vitals">
+                                                <span dir="ltr">{{langData?.common?.VitalDate}}</span> : <span>{{vitalDate}}</span>
+                                            </h6>
+                                        </div>
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items" *ngFor="let vit of PatientsVitalsList;let i=index">
+                                                <p class="col-8 ">{{vit.Vital}}</p>
+                                                <p class="col-2">{{vit.Value}}</p>
+                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>  {{langData?.common?.Vitals}} </h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details  overflow-auto" style="height:160px;">
+                                                <!-- <h4>08</h4>
+                                                <p>Diagnosis</p> -->
+                                                
+                                                <button class="btn btn-select btn-tab">
+                                                    <h4>{{vitalsCount}}</h4>
+                                                    <p>{{langData?.common?.Vitals}}</p>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex justify-content-right ViewMore">
+                                                <button type="button" class="btn text-end " (click)="GetVitals()">
+                                                    {{langData?.common?.ViewMore}}
+                                                    <img alt="" src=" assets/images/viewmore-2.svg" style="width: 1.5rem;">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-3 position-relative h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9" style="height:260px">
+                                        <div [ngStyle]="{'display':displayActMed}" class="card-3d-wrapper h-100 p-2">
+                                            <div [ngStyle]="{'display':displayActMed}" class="row gx-3 mb-2 border-bottom pb-2" *ngFor="let med of patientActiveMedicationList;let i=index">
+                                                <p class="col-5 text-break">{{med.ItemName}}</p>
+                                                <p class="col-4">{{med.DoseUoM}} {{med.AdmRoute}}</p>
+                                                <p class="col-3"  dir="ltr">{{med.StartFrom}}<br /> {{med.EndDateTime}}</p>
+                                            </div>
+                                        </div>
+                                        <div [ngStyle]="{'display':displayInActMed}" class="card-3d-wrapper h-100 p-2">
+                                            <div  class="row gx-3 mb-2 border-bottom pb-2" *ngFor="let med of patientInActiveMedicationList;let i=index">
+                                                <p class="col-5 text-break">{{med.ItemName}}</p>
+                                                <p class="col-4">{{med.DoseUoM}} {{med.AdmRoute}}</p>
+                                                <p class="col-3"  dir="ltr">{{med.StartFrom}}<br /> {{med.EndDateTime}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>{{langData?.common?.Medications}}</h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details  overflow-auto" style="height:160px;">
+                                                <button [class]="btnActiveMed" (click)="loadActiveMedication()">
+                                                    <h4>{{activeMedicationCount}}</h4>
+                                                    <p style="font-size: 0.7rem;">{{langData?.common?.Active}}</p>
+                                                </button>
+                                                <button [class]="btnInActiveMed" (click)="loadInActiveMedication()">
+                                                    <h4>{{inactiveMedicationCount}}</h4>
+                                                    <p style="font-size: 0.7rem;">{{langData?.common?.InActive}}</p>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex justify-content-right ViewMore">
+                                                <button type="button" class="btn text-end text-nowrap" (click)="openMedicationsModal()">
+                                                    {{langData?.common?.ViewMore}}
+                                                    <img alt="" src=" assets/images/viewmore-2.svg" style="width: 1.5rem;">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Assessments-->
+                        <!-- <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class="card-3d-3 h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items border-left">
+                                                <p class="col-3 text-bold">Cheif Complaint</p>
+                                                <p class="col-9">13-Sep-2021 3:35:42 PM</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>Nursing Instructions </h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2 position-relative">
+                                            <div class="display-details overflow-auto" style="height:160px;">
+                                            
+                                            </div>
+                                            <div class="d-flex justify-content-right ViewMore">
+                                                <button type="button" class="btn text-end ">
+                                                    View more
+                                                    <img alt="" src=" assets/images/viewmore-2.svg" style="width: 1.5rem;">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <!-- <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-2 position-relative h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9" style="height:260px">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items">
+                                                <p class="col-1 text-bold">b97.2</p>
+                                                <p class="col-8">Coronavirus as the cause of diseases classified to other chapters</p>
+                                                <p class="col-3">13-Sep-2021 3:35:42 PM</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>  Latest Vitals Date Time </h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details  overflow-auto" style="height:160px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        
+
+                        <!-- <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-2 position-relative h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9" style="height:260px">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items">
+                                                <p class="col-1 text-bold">b97.2</p>
+                                                <p class="col-8">Coronavirus as the cause of diseases classified to other chapters</p>
+                                                <p class="col-3">13-Sep-2021 3:35:42 PM</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>Care Plan</h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details  overflow-auto" style="height:160px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <!-- <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-2 position-relative h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9" style="height:260px">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items">
+                                                <p class="col-1 text-bold">b97.2</p>
+                                                <p class="col-8">Coronavirus as the cause of diseases classified to other chapters</p>
+                                                <p class="col-3">13-Sep-2021 3:35:42 PM</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>Eforms</h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details  overflow-auto" style="height:160px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-2 position-relative h-100">
+                                <div class="row gx-2">
+									<div class="col-md-9" style="height:260px" [ngStyle]="{'display':displayLab}">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                        <div class="row-items"
+                                            *ngFor="let inv of PatientInvestigationsList;let i=index">
+                                            <p class="col-2">{{inv.ItemCode}}</p>
+                                            <p class="col-8">{{inv.ItemName}}</p>
+                                            <p class="col-3" dir="ltr">{{inv.CreateDate}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9" style="height:260px" [ngStyle]="{'display':displayRad}">
+                                    <div class="card-3d-wrapper h-100 p-2">
+                                        <div class="row-items"
+                                            *ngFor="let inv of PatientRadiologyList;let i=index">
+                                            <p class="col-2">{{inv.ItemCode}}</p>
+                                            <p class="col-8">{{inv.ItemName}}</p>
+                                            <p class="col-3" dir="ltr">{{inv.CreateDate}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>{{langData?.common?.Investigations}}</h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                        <div class="display-details  overflow-auto">
+                                            <button [class]="btnLabCount" (click)="showLab()">
+                                                <h4>{{investigationsCount}}</h4>
+                                                <p>{{langData?.common?.Investigations}}</p>
+                                            </button>
+                                            <button [class]="btnRadCount" (click)="showRad()">
+                                                <h4>{{radiologyCount}}</h4>
+                                                <p>{{langData?.common?.Radiology}}</p>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                        <div>
+                                            <div class="d-flex justify-content-right ViewMore">
+                                                <button type="button" class="btn text-end " (click)="openLabModal()">
+                                                    {{langData?.common?.ViewMore}}
+                                                    <img alt="" src=" assets/images/viewmore-2.svg" style="width: 1.5rem;">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-6 col-lg-12 col-md-12">
+                            <div class=" card-3d-3 position-relative h-100">
+                                <div class="row gx-2">
+                                    <div class="col-md-9" style="height:260px">
+                                        <div class="card-3d-wrapper h-100 p-2">
+                                            <div class="row-items" *ngFor="let inv of PatientProceduresList;let i=index">
+                                                <p class="col-2">{{inv.ItemCode}}</p>
+                                                <p class="col-8">{{inv.ItemName}}</p>
+                                                <p class="col-3" dir="ltr">{{inv.CreateDate}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-3d-heading">
+                                            <h4>{{langData?.common?.Procedures}}</h4>
+                                        </div>
+                                        <div class="card-3d-wrapper mt-2 p-2">
+                                            <div class="display-details  overflow-auto">
+                                                <button class="btn btn-select btn-tab">
+                                                    <h4>{{proceduresCount}}</h4>
+                                                    <p>{{langData?.common?.Procedures}}</p>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div class="d-flex justify-content-right ViewMore">
+                                                <button type="button" class="btn text-end text-nowrap" (click)="openProceduresModal()">
+                                                    {{langData?.common?.ViewMore}}
+                                                    <img alt="" src=" assets/images/viewmore-2.svg" style="width: 1.5rem;">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                
+            </div>
+        </div>
+    </div> 
+
+    <!-- View More Diagnosis Modal -->
+    <div class="modal" data-bs-backdrop="static" tabindex="-1" id="viewMoreDiagnosisDataModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" translate>{{langData?.common?.Diagnosis}}</h5>
+                    <button type="button" #closebutton class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="viewMoreDiagnosisForm" (keydown.enter)="$event.preventDefault()">
+                        <div class="d-flex w-100 align-items-center justify-content-between mb-3">
+                            <div class="d-flex">
+                                <div class="d-flex align-items-center">
+                                    <label for="" class="form-label mb-0 px-2 text-nowrap" translate>{{langData?.common?.FromDate}}</label>
+                                    <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" formControlName="fromdate" [matDatepicker]="fromdate"
+                                            (click)="fromdate.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="fromdate"></mat-datepicker-toggle>
+                                        <mat-datepicker #fromdate></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+    
+                                <div class="d-flex align-items-center">
+                                    <label for="" class="form-label mb-0 px-2 text-nowrap" translate>{{langData?.common?.ToDate}}</label>
+                                    <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" formControlName="todate" [matDatepicker]="todate"
+                                            (click)="todate.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
+                                        <mat-datepicker #todate></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <div class="">
+                                    <button type="button" class="btn btn-main-fill mx-2" translate
+                                        (click)="FetchViewMoreDiagnosisData('search')">{{langData?.common?.Search}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="diagnosisTable_height">
+                        <table class="table customtable" >
+                            <thead>
+                                <tr>
+                                    <th translate>{{langData?.common?.Code}}</th>
+                                    <th translate>{{langData?.common?.Name}}</th>
+                                    <th translate>{{langData?.common?.Type}}</th>
+                                    <th translate>{{langData?.common?.User}}</th>
+                                    <th translate>{{langData?.common?.Date}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let diag of PatientViewMoreSearchDiagnosisList;let i=index">
+                                    <td>{{diag.Code}}</td>
+                                    <td>{{diag.DiseaseName}}</td>
+                                    <td>{{diag.DiagnosisType}}</td>
+                                    <td>{{diag.Username}}</td>
+                                    <td>{{diag.CreateDate}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View More Medications Modal -->
+    <div class="modal" data-bs-backdrop="static" tabindex="-1" id="viewMoreMedicationsDataModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" translate>{{langData?.common?.Medications}}</h5>
+                   <div class="d-flex align-items-center">
+                        <div class="toggle__location d-inline-block">
+                            <div class="toggle__swithcer">
+                                <button [class]="btnActive" (click)="changeMedicationStatus('active')">{{langData?.common?.Active}}</button>
+                                <button [class]="btnInactive" (click)="changeMedicationStatus('inactive')">{{langData?.common?.InActive}}</button>
+                            </div>
+                        </div>
+                        <button type="button" #closebutton class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                   </div>
+                </div>
+                <!-- <div class="actions">
+                    
+                 </div> -->
+                <div class="modal-body">
+                    <form [formGroup]="viewMoreMedicationsForm" (keydown.enter)="$event.preventDefault()">
+                        <div class="d-flex w-100 align-items-center justify-content-between mb-3">
+                            <div class="d-flex">
+                                <div class="d-flex align-items-center">
+                                    <label for="" class="form-label mb-0 px-2 text-nowrap" translate>{{langData?.common?.FromDate}}</label>
+                                    <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" formControlName="medfromdate" [matDatepicker]="medfromdate"
+                                            (click)="medfromdate.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="medfromdate"></mat-datepicker-toggle>
+                                        <mat-datepicker #medfromdate></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+    
+                                <div class="d-flex align-items-center">
+                                    <label for="" class="form-label mb-0 px-2 text-nowrap" translate>{{langData?.common?.ToDate}}</label>
+                                    <mat-form-field appearance="fill">
+                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                        <input matInput class="" formControlName="medtodate" [matDatepicker]="medtodate"
+                                            (click)="medtodate.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="medtodate"></mat-datepicker-toggle>
+                                        <mat-datepicker #medtodate></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <div class="">
+                                    <button type="button" class="btn btn-main-fill mx-2" translate
+                                        (click)="FetchViewMoreMedicationsData('search')">{{langData?.common?.Search}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                   <div class="medicationtable customtable horizontalScroll">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th translate>{{langData?.common?.DrugName}}</th>
+                                <th translate>{{langData?.common?.StrengthDose}}</th>
+                                <th translate>{{langData?.common?.RouteofAdmin}}</th>
+                                <th translate>{{langData?.common?.Frequency}}</th>
+                                <th translate>{{langData?.common?.StartDate}}</th>
+                                <th translate>{{langData?.common?.EndDate}}</th>
+                                <th translate>{{langData?.common?.OrderQty}}</th>
+                                <th translate>{{langData?.common?.Doctor}}</th>
+                                <th translate>{{langData?.common?.Remarks}}</th>
+                                <th translate>{{langData?.common?.PrescribedDate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let med of PatientViewMoreSearchMedicationsList;let i=index">
+                                <td>{{med.ItemName}}</td>
+                                <td>{{med.Strength}} {{med.StrengthUOM}} {{med.Dose}} {{med.DoseUoM}}</td>
+                                <td>{{med.AdmRoute}}</td>
+                                <td>{{med.Frequency}}</td>
+                                <td style="width: 10%;">{{med.StartFrom}}</td>
+                                <td style="width: 10%;">{{med.EndDateTime}}</td>
+                                <td>{{med.Quantity}}</td>
+                                <td>{{med.Doctorname}}</td>
+                                <td>{{med.Remarks}}</td>
+                                <td>{{med.PrescriptionDate}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                   </div>
+                </div>
+                <div class="modal-footer">
+    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal modal-xl" tabindex="-1" id="modalVitals">
+        <div class="modal-dialog modal-dialog-scrollable ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{langData?.common?.Vitals}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div  id="vitals" role="tabpanel"
+                                            aria-labelledby="vitals-tab">
+                                            <div class="row g-2">
+
+                                                <div class="col-lg-12">
+                                                    <div class="card  bg-white p-2">
+                                                        <div class="sub-heading justify-content-center ">
+                                                            <h4> {{langData?.common?.VitalGraph}} </h4>
+                                                        </div>
+                                                        <div id="chart-line"></div>
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <div class="vitaldata_table border rounded-2  bg-white p-2 h-100">
+                                                            <form [formGroup]="tableVitalsForm"
+                                                        (keydown.enter)="$event.preventDefault()">
+                                                            <div
+                                                            class="d-flex w-100 align-items-center justify-content-between my-3">
+                                                            <div class="d-flex g-2 flex-md-nowrap flex-wrap">
+                                                                <div class="d-flex align-items-center mb-1">
+                                                                    <label for="" class="form-label mb-0 px-2 text-nowrap"
+                                                                        translate>{{langData?.common?.FromDate}}</label>
+                                                                    <mat-form-field appearance="fill">
+                                                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                                        <input matInput class="" formControlName="vitalFromDate"
+                                                                            [matDatepicker]="vitalFromDate"
+                                                                            (click)="vitalFromDate.open()">
+                                                                        <mat-datepicker-toggle matSuffix [for]="vitalFromDate">
+                                                                        </mat-datepicker-toggle>
+                                                                        <mat-datepicker #vitalFromDate></mat-datepicker>
+                                                                    </mat-form-field>
+                                                                </div>
+    
+                                                                <div class="d-flex align-items-center mb-1">
+                                                                    <label for="" class="form-label mb-0 px-2 text-nowrap"
+                                                                        translate>{{langData?.common?.ToDate}}</label>
+                                                                    <mat-form-field appearance="fill">
+                                                                        <mat-label translate>dd-MMM-yyyy</mat-label>
+                                                                        <input matInput class="" formControlName="vitalToDate"
+                                                                            [matDatepicker]="vitalToDate"
+                                                                            (click)="vitalToDate.open()">
+                                                                        <mat-datepicker-toggle matSuffix [for]="vitalToDate">
+                                                                        </mat-datepicker-toggle>
+                                                                        <mat-datepicker #vitalToDate></mat-datepicker>
+                                                                    </mat-form-field>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex">
+                                                                <div class="">
+                                                                    <button type="button" class="btn btn-main-fill mx-2"
+                                                                        translate
+                                                                        (click)="FetchVitalParams()">{{langData?.common?.Search}}</button>
+                                                                </div>
+                                                                <!-- <div class="">
+                                                                    <button type="button" class="btn btn-main-outline" translate>Clear</button>
+                                                                </div> -->
+                                                            </div>
+                                                        </div>
+                                                        </form>
+    
+                                                            <table class="table mb-0">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>{{langData?.common?.VitalDate}}</th>
+                                                                        <th>{{langData?.common?.BPSystolic}}</th>
+                                                                        <th>{{langData?.common?.BPDiastolic}}</th>
+                                                                        <th>{{langData?.common?.O2FlowRate}}</th>
+                                                                        <th>{{langData?.common?.Pulse}}</th>
+                                                                        <th>{{langData?.common?.Respiration}}</th>
+                                                                        <th>{{langData?.common?.SPO2}}</th>
+                                                                        <th>{{langData?.common?.Temparature}}</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let vital of tableVitalsList;let i=index">
+                                                                        <td> {{ vital.VisitDate }} </td>
+                                                                        <td> {{ vital.BPSystolic == 'NaN' || vital.BPSystolic == 0 ? '' : vital.BPSystolic }} </td>
+                                                                        <td> {{ vital.BPDiastolic == 'NaN' || vital.BPDiastolic == 0 ? '' : vital.BPDiastolic }} </td>
+                                                                        <td> {{ vital.O2FlowRate == 'NaN' || vital.O2FlowRate == 0 ? '' : vital.O2FlowRate }} </td>
+                                                                        <td> {{ vital.Pulse == 'NaN' || vital.Pulse == 0 ? '' : vital.Pulse }} </td>
+                                                                        <td> {{ vital.Respiration == 'NaN' || vital.Respiration == 0 ? '' : vital.Respiration }} </td>
+                                                                        <td> {{ vital.SPO2 == 'NaN' || vital.SPO2 == 0 ? '' : vital.SPO2 }} </td>
+                                                                        <td> {{ vital.Temparature == 'NaN' || vital.Temparature == 0 ? '' : vital.Temparature }} </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- View More Lab Records Modal -->
+<div class="modal" data-bs-backdrop="static" tabindex="-1" id="viewMoreLabDataModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" translate>{{langData?.common?.LabOrdersReports}}</h5>
+                <button type="button" #closebutton class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="actions">
+                <div class="toggle__location d-inline-block ms-3 mt-2 float-end">
+                    <div class="toggle__swithcer mx-2">
+                        <button [class]="btnLab" (click)="loadLabRadRecords('lab')">{{langData?.common?.Laboratory}}</button>
+                        <button [class]="btnRad" (click)="loadLabRadRecords('rad')">{{langData?.common?.Radiology}}</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-body">
+                <form [formGroup]="viewMoreLabForm" (keydown.enter)="$event.preventDefault()">
+                    <div class="d-flex w-100 align-items-center justify-content-between mb-3">
+                        <div class="d-flex">
+                            <div class="d-flex align-items-center">
+                                <label for="" class="form-label mb-0 px-2 text-nowrap" translate>{{langData?.common?.FromDate}}</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                                    <input matInput class="" formControlName="labfromdate" [matDatepicker]="labfromdate"
+                                        (click)="labfromdate.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="labfromdate"></mat-datepicker-toggle>
+                                    <mat-datepicker #labfromdate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <label for="" class="form-label mb-0 px-2 text-nowrap" translate>{{langData?.common?.ToDate}}</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                                    <input matInput class="" formControlName="labtodate" [matDatepicker]="labtodate"
+                                        (click)="labtodate.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="labtodate"></mat-datepicker-toggle>
+                                    <mat-datepicker #labtodate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="">
+                                <button type="button" class="btn btn-main-fill mx-2" translate
+                                    (click)="FetchViewMoreLabRadData()">{{langData?.common?.Search}}</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div [ngStyle]="{'display':displayLabReports}">
+                    <div class="table-responsive">
+                        <table class="table-cards">
+                            <tbody>
+                                <tr *ngFor="let test of labTestOrders;let i = index">
+                                    <td style="width: 16%;">
+                                        <p class="label">{{langData?.labreports?.specialisation}}</p>
+                                        <p class="value">{{test.specialisation}}</p>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <p class="label">{{langData?.labreports?.doctor}}</p>
+                                        <p class="value">{{test.doctor}}</p>
+                                    </td>
+                                    <td style="width: 21%;">
+                                        <p class="label">{{langData?.labreports?.patient}}</p>
+                                        <p class="value">{{test.PatientName}}</p>
+                                    </td>
+                                    <td style="width: 15%;">
+                                        <p class="label">{{langData?.labreports?.department}}</p>
+                                        <p class="value text-capitalize">Laboratory</p>
+                                    </td>
+                                    <td style="width: 18%;">
+                                        <p class="label">{{langData?.insurancestatus?.date}}</p>
+                                        <p class="value">{{test.OrderDate | date:'dd-MMM-YYYY'}}</p>
+                                    </td>
+                                    <td style="width: 10%;">
+                                        <button class="btn btn-sm ms-auto" (click)="addSelectedReport(test)">
+                                            <div>
+                                                <img src="assets/images/icons/icon-eye.svg" alt="">
+                                            </div>
+                                            <span>{{langData?.common?.view}}</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table-cards">
+                            <tbody>
+                                <tr *ngFor="let test of outsideLabTestOrders;let i = index">
+                                    <td style="width: 16%;">
+                                        <p class="label">{{langData?.labreports?.specialisation}}</p>
+                                        <p class="value">{{test.specialisation}}</p>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <p class="label">{{langData?.labreports?.doctor}}</p>
+                                        <p class="value">{{test.doctor}}</p>
+                                    </td>
+                                    <td style="width: 21%;">
+                                        <p class="label">{{langData?.labreports?.patient}}</p>
+                                        <p class="value">{{test.PatientName}}</p>
+                                    </td>
+                                    <td style="width: 15%;">
+                                        <p class="label">{{langData?.labreports?.department}}</p>
+                                        <p class="value text-capitalize">Laboratory</p>
+                                    </td>
+                                    <td style="width: 18%;">
+                                        <p class="label">{{langData?.insurancestatus?.date}}</p>
+                                        <p class="value">{{test.OrderDate | date:'dd-MMM-YYYY'}}</p>
+                                    </td>
+                                    <td style="width: 10%;">
+                                        <button class="btn btn-sm ms-auto" (click)="addSelectedReport(test)">
+                                            <div>
+                                                <img src="assets/images/icons/icon-eye.svg" alt="">
+                                            </div>
+                                            <span>{{langData?.common?.view}}</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <cdk-accordion class="example-accordion">
+                            <cdk-accordion-item *ngFor="let test of listOfLaborders; let index = index;"
+                                #accordionItem="cdkAccordionItem" class="example-accordion-item card p-3 mb-2"
+                                role="button" tabindex="0" [attr.id]="'accordion-header-' + index"
+                                [attr.aria-expanded]="accordionItem.expanded"
+                                [attr.aria-controls]="'accordion-body-' + index">
+                                <div class="example-accordion-item-header" (click)="accordionItem.toggle()">
+                                    <div class="row mb-3" (click)="GetTestOrderItems(test.PrescriptionID)">
+                                        <div class="col">
+                                            <p class="label">{{langData?.common?.VisitDate}}</p>
+                                            <p class="value">{{test.VisitDate}}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="label">{{langData?.common?.Department}}</p>
+                                            <p class="value">{{test.DoctorDepartment}}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="label">{{langData?.labreports?.doctor}}</p>
+                                            <p class="value">{{test.DoctorName}}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="label">{{langData?.common?.Specialisation}}</p>
+                                            <p class="value">{{test.Specialisation}}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="label">{{langData?.common?.PrecribedDate}}</p>
+                                            <p class="value">{{test.PrecribedDate}}</p>
+                                        </div>
+                                        <div class="position-absolute reports-toggle">
+                                            <span class="example-accordion-item-description">
+                                                <button [ngClass]="togglebtn">
+                                                    <img src="assets/images/icons/icon-arrow-down.svg" alt="">
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="example-accordion-item-body" role="region"
+                                    [style.display]="accordionItem.expanded ? '' : 'none'"
+                                    [attr.id]="'accordion-body-' + index"
+                                    [attr.aria-labelledby]="'accordion-header-' + index">
+                                    <div>
+                                        <div class="ms-5">
+                                            <div class="d-flex pb-1 mb-2 p-2 rounded ng-star-inserted"
+                                                style="border: 1px solid #69bac9; border-left-width: 4px;"
+                                                *ngFor="let test1 of listOfLaborderitemsfiltered;let i = index">
+                                                <div style="margin-right: 8.4rem;">
+                                                    <p class="label">{{langData?.common?.Code}}</p>
+                                                    <p class="value">{{test1.ProcedureCode}}</p>
+                                                </div>
+                                                <div>
+                                                    <p class="label">{{langData?.common?.Name}}</p>
+                                                    <p class="value">{{test1.ProcedureName}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </cdk-accordion-item>
+                        </cdk-accordion>
+                    </div>
+                </div>
+                <div [ngStyle]="{'display':displayRadReports}" class="table-responsive">
+                    <table class="table-cards">
+                        <tbody>
+                            <tr *ngFor="let test of radOrderDetails;let i = index">
+                                <td style="width: 22%;">
+                                    <p class="label">{{langData?.radiologyreports?.test}}</p>
+                                    <p class="value">{{test?.TestName}}</p>
+                                </td>
+                                <td style="width: 24%;">
+                                    <p class="label">{{langData?.radiologyreports?.patient}}</p>
+                                    <p class="value">{{test?.PatientName}}</p>
+                                </td>
+                                <td style="width: 21%;">
+                                    <p class="label">{{langData?.radiologyreports?.department}}</p>
+                                    <p class="value">{{langData?.common?.Radiology}}</p>
+                                </td>
+                                <td style="width: 13%;">
+                                    <p class="label">{{langData?.radiologyreports?.date}}</p>
+                                    <p class="value">{{test?.TestDate | date:'dd-MMM-YYYY'}}</p>
+                                </td>
+                                <td style="width: 10%;">
+                                    <button class="btn btn-sm ms-auto" (click)="addSelectedReport(test)">
+                                        <div>
+                                            <img src="assets/images/icons/icon-eye.svg" alt="">
+                                        </div>
+                                        <span>{{langData?.common?.view}}</span>
+                                    </button>
+                                </td>
+                                <td style="width: 10%;">
+                                    <button class="btn btn-sm ms-auto" (click)="submitPACSForm(test)">
+                                        <div>
+                                            <img src="assets/images/icons/icon-eye.svg" alt="">
+                                        </div>
+                                        <span>{{langData?.common?.PACSView}}</span>
+                                    </button>
+                                    <!-- <input type = "button" class="btn btn-sm ms-auto" onclick="openWindowWithPost()" value = "" > -->
+                                    <!-- <div class="btn btn-sm ms-auto">
+                                    <img src="assets/images/icons/icon-eye.svg" alt="" onclick="openPACS(i)">
+                                </div>  <p>PACS </p> -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <div class="sub-heading">
+                        <h4>External Reports</h4>
+                    </div> -->
+                    <!-- Outside Lab Reports -->
+                    <div class="table-responsive">
+                        <table class="table-cards">
+                            <tbody>
+                                <tr class="border-left" *ngFor="let test of outsideRadTestOrders;let i = index">
+                                    <td style="width: 22%;">
+                                        <p class="label">{{langData?.labreports?.doctor}}</p>
+                                        <p class="value">{{test.PrescribedBy}}</p>
+                                    </td>
+                                    <td style="width: 24%;">
+                                        <p class="label">{{langData?.common?.PrescribedBy}}</p>
+                                        <p class="value text-capitalize">{{test.PrescribedBy}}</p>
+                                    </td>
+                                    <td style="width: 21%;">
+                                        <p class="label">{{langData?.common?.TestName}}</p>
+                                        <p class="value text-capitalize">{{test.TestName}}</p>
+                                    </td>
+                                    <td style="width: 13%;">
+                                        <p class="label">{{langData?.labreports?.date}}</p>
+                                        <p class="value">{{test.TestDate}}</p>
+                                    </td>
+                                    <td style="width: 10%;">
+                                        <button class="btn btn-sm ms-auto" (click)="viewReport(test)">
+                                            <div>
+                                                <img src="assets/images/icons/icon-eye.svg" alt="">
+                                            </div>
+                                            <span>{{langData?.common?.view}}</span>
+                                        </button>
+                                    </td>
+                                    <td style="width: 10%;">
+                                        <!-- <button class="btn btn-sm ms-auto" (click)="submitPACSForm(test)">
+                                        <div>
+                                            <img src="assets/images/icons/icon-eye.svg" alt="">
+                                        </div>
+                                        <span>PACS View</span>
+                                    </button> -->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <cdk-accordion class="example-accordion">
+                            <cdk-accordion-item *ngFor="let test of listOfRadorders; let index = index;"
+                                #accordionItem="cdkAccordionItem" class="example-accordion-item card p-3 mb-2" role="button"
+                                tabindex="0" [attr.id]="'accordion-header-' + index"
+                                [attr.aria-expanded]="accordionItem.expanded"
+                                [attr.aria-controls]="'accordion-body-' + index">
+                                <div class="example-accordion-item-header" (click)="accordionItem.toggle()">
+                                    <div class="row mb-3" (click)="GetTestOrderItems(test.PrescriptionID)">
+                                        <div class="col">
+                                            <p class="label">{{langData?.common?.VisitDate}}</p>
+                                            <p class="value">{{test.VisitDate}}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="label">{{langData?.common?.Department}}</p>
+                                            <p class="value">{{test.DoctorDepartment}}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="label">{{langData?.labreports?.doctor}}</p>
+                                            <p class="value">{{test.DoctorName}}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="label">{{langData?.common?.Specialisation}}</p>
+                                            <p class="value">{{test.Specialisation}}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="label">{{langData?.common?.PrecribedDate}}</p>
+                                            <p class="value">{{test.PrecribedDate}}</p>
+                                        </div>
+                                        <div class="position-absolute reports-toggle">
+                                            <span class="example-accordion-item-description">
+                                                <button [ngClass]="togglebtn">
+                                                    <img src="assets/images/icons/icon-arrow-down.svg" alt="">
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="example-accordion-item-body" role="region"
+                                    [style.display]="accordionItem.expanded ? '' : 'none'"
+                                    [attr.id]="'accordion-body-' + index"
+                                    [attr.aria-labelledby]="'accordion-header-' + index">
+                                    <div>
+                                        <div class="ms-5">
+                                            <div class="d-flex pb-1 mb-2 p-2 rounded ng-star-inserted"
+                                                style="border: 1px solid #69bac9; border-left-width: 4px;"
+                                                *ngFor="let test1 of listOfLaborderitemsfiltered;let i = index">
+                                                <div style="margin-right: 8.4rem;">
+                                                    <p class="label">{{langData?.common?.Code}}</p>
+                                                    <p class="value">{{test1.ProcedureCode}}</p>
+                                                </div>
+                                                <div>
+                                                    <p class="label">{{langData?.common?.Name}}</p>
+                                                    <p class="value">{{test1.ProcedureName}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </cdk-accordion-item>
+                        </cdk-accordion>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" data-bs-backdrop="static" tabindex="-1" id="viewMoreProceduresDataModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" translate>{{langData?.common?.Procedures}}</h5>
+                <button type="button" #closebutton class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="viewMoreProceduresForm" (keydown.enter)="$event.preventDefault()">
+                    <div class="d-flex w-100 align-items-center justify-content-between mb-3">
+                        <div class="d-flex">
+                            <div class="d-flex align-items-center">
+                                <label for="" class="form-label mb-0 px-2 text-nowrap" translate>{{langData?.common?.FromDate}}</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                                    <input matInput class="" formControlName="procfromdate" [matDatepicker]="procfromdate"
+                                        (click)="procfromdate.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="procfromdate"></mat-datepicker-toggle>
+                                    <mat-datepicker #procfromdate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <label for="" class="form-label mb-0 px-2 text-nowrap" translate>{{langData?.common?.ToDate}}</label>
+                                <mat-form-field appearance="fill">
+                                    <mat-label translate>dd-MMM-yyyy</mat-label>
+                                    <input matInput class="" formControlName="proctodate" [matDatepicker]="proctodate"
+                                        (click)="proctodate.open()">
+                                    <mat-datepicker-toggle matSuffix [for]="proctodate"></mat-datepicker-toggle>
+                                    <mat-datepicker #proctodate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="">
+                                <button type="button" class="btn btn-main-fill mx-2" translate
+                                    (click)="FetchViewMoreProceduressData()">{{langData?.common?.Search}}</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="diagnosisTable_height">
+                    <table class="table customtable">
+                        <thead>
+                            <tr>
+                                <th translate>{{langData?.common?.ProcedureName}}</th>
+                                <th translate>{{langData?.common?.Remarks}}</th>
+                                <th translate>{{langData?.common?.ComponentName}}</th>
+                                <th translate>{{langData?.common?.Value}}</th>
+                                <th translate>{{langData?.common?.Link}}</th>
+                                <th translate>{{langData?.common?.PrescribedDate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let diag of PatientProceduresList;let i=index">
+                                <td>{{diag.ItemName}}</td>
+                                <td>{{diag.Remarks}}</td>
+                                <td></td>
+                                <td>{{diag.MinValue}}{{diag.MaxValue}}</td>
+                                <td></td>
+                                <td>{{diag.CreateDate}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="showLabReportsModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{langData?.labreports?.labreport}}</h5>
+                <div class="ms-auto">
+                    <!-- <button class="btn btn-main btn-main-outline mx-4">
+                            <i class="fa fa-envelope" aria-hidden="true"></i> Mail
+                        </button> -->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <!-- <embed [src]="trustedUrl" width="900px" height="2100px" /> -->
+                <iframe height="600" width="100%" [src]="(trustedUrl ? trustedUrl : '') | safeUrl"
+                    frameborder="0"></iframe>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="saveMessage" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" *ngIf="labReportPdfDetails?.Status == 'Success'"
+                src="assets/images/icons/toast-success.svg" alt="">
+            <img class="modal-header-icon" *ngIf="labReportPdfDetails?.Status == 'Fail'"
+                src="assets/images/icons/toast-error.svg" alt="">
+            <div class="modal-body">
+                <!-- <h3>Thank You!</h3> -->
+                <p>
+                    {{labReportPdfDetails?.Message}}
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0)" type="button" class="btn btn-main-outline"
+                    (click)="closeToastr()">{{langData?.common?.ok}}</a>
+                <button type="button" class="btn btn-danger-outline"
+                    (click)="closeToastr()">{{langData?.common?.close}}</button>
+            </div>
+        </div>
+    </div>
+</div>

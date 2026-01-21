@@ -1,0 +1,814 @@
+<div class="page-header justify-content-start sticky-top shadow-sm">
+    <h2 class="page-heading">ER Dashboard</h2>
+</div>
+<div class="container-fluid p-0 analytics_graphs IP_graph emergencyKPI_page">
+    <div class="p-2">
+        <div class="row gx-2 mx-0">
+            <div class="col-2" style="width: 13%;">
+                <div class="left_nav h-100 position-relative top-0 p-1 px-2 rounded" style="overflow: unset !important;">
+                    <div class="sidebar-container rounded">
+                        <form [formGroup]="datesForm" class="d-flex flex-column gap-1">
+                            <label class="form-label m-0">From Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="fromPicker" placeholder="From Date"
+                                    formControlName="fromdate" />
+                                <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #fromPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <label class="form-label m-0">To Date:</label>
+                            <mat-form-field appearance="fill">
+                                <mat-label>dd-MMM-yyyy</mat-label>
+                                <input matInput [matDatepicker]="toPicker" placeholder="To Date"
+                                    formControlName="todate" />
+                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #toPicker></mat-datepicker>
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 my-2">
+                        <button type="button" class="btn btn-main-outline w-100" (click)="fetchERData()">
+                            Fetch
+                        </button>
+                        <button type="button" class="btn btn-outline-danger w-100" (click)="clearAllFilters()">
+                            Clear
+                        </button>
+                    </div>
+                    <h5 class="fs-8">Location</h5>
+                    <div class="d-flex flex-column gap-1">
+                        <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                            <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_9239_2779)">
+                                    <path
+                                        d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                        fill="#368796" />
+                                </g>
+                            </svg>
+                            <input type="text" class="form-control" [matAutocomplete]="roleAuto2" placeholder="Search">
+                            <mat-autocomplete #roleAuto2="matAutocomplete">
+                                <mat-option *ngFor="let item of locations">
+                                    <div (click)="locationOptionClicked($event, item);">
+                                        <mat-checkbox [checked]="item.selected" (change)="toggleLocationSelection(item)"
+                                            (click)="$event.stopPropagation()">
+                                            {{ item.label }}
+                                        </mat-checkbox>
+                                    </div>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                        <div class="">
+                            <label class="form-label m-0">
+                                <input type="checkbox" class="form-check-input me-1"
+                                    [checked]="getSelectAllSpecialisationStatus()"
+                                    (change)="selectAllSpecialisation($any($event.target).checked)">
+                                Specialisation
+                            </label>
+                        </div>
+                        <div class="CommanSearch__form bg-white ps-2" style="height: 1.7rem;">
+                            <svg class="search cursor-pointer" width="20" height="20" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_9239_2779)">
+                                    <path
+                                        d="M11 2.51953C15.968 2.51953 20 6.55153 20 11.5195C20 16.4875 15.968 20.5195 11 20.5195C6.032 20.5195 2 16.4875 2 11.5195C2 6.55153 6.032 2.51953 11 2.51953ZM11 18.5195C14.867 18.5195 18 15.3865 18 11.5195C18 7.65153 14.867 4.51953 11 4.51953C7.132 4.51953 4 7.65153 4 11.5195C4 15.3865 7.132 18.5195 11 18.5195ZM19.485 18.5905L22.314 21.4185L20.899 22.8335L18.071 20.0045L19.485 18.5905Z"
+                                        fill="#368796" />
+                                </g>
+                            </svg>
+                            <input type="text" class="form-control" [matAutocomplete]="roleAuto4" placeholder="Search">
+                            <mat-autocomplete #roleAuto4="matAutocomplete">
+                                <mat-option *ngFor="let item of specialisation">
+                                    <div (click)="specialisationOptionClicked($event, item);">
+                                        <mat-checkbox [checked]="item.selected"
+                                            (change)="toggleSpecialisationSelection(item)"
+                                            (click)="$event.stopPropagation()">
+                                            {{ item.Specialisation }}
+                                        </mat-checkbox>
+                                    </div>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                    <div class="mt-2" style="height: 450px;">
+                        <div class="readmissionCard d-flex flex-column border rounded">
+                            <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                <div class="col text-white text-center py-2 fw-bold"
+                                    style="font-size: 0.9rem;">
+                                Total Patients
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom text-center my-3"
+                                        style="font-size: 1.5rem; font-weight: 700;">
+                                        {{EMRVistData[0]?.TotalOPERVisits | number }}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="readmissionCard d-flex flex-column border rounded mt-1">
+                            <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                <div class="col text-white text-center py-2 fw-bold"
+                                    style="font-size: 0.9rem;">
+                                    ER Visits
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom text-center my-3"
+                                        style="font-size: 1.5rem; font-weight: 700;">
+                                        {{EMRVistData[0]?.TotalERVisits | number}}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="readmissionCard d-flex flex-column border rounded mt-1">
+                            <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                <div class="col text-white text-center py-2 fw-bold"
+                                    style="font-size: 0.9rem;">
+                                    ER Visit Rate
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom text-center my-3"
+                                        style="font-size: 1.5rem; font-weight: 700;">
+                                        {{EMRVistData[0]?.ERVisitsPer | number : '1.2-2'}}%
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2" style="height: 450px;">
+                        <div class="readmissionCard d-flex flex-column border rounded">
+                            <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                <div class="col text-white text-center py-2 fw-bold"
+                                    style="font-size: 0.9rem;">
+                                    Admission
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom text-center my-3"
+                                        style="font-size: 1.5rem; font-weight: 700;">
+                                        {{EMRVistData[0]?.ERAdmissions | number}}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="readmissionCard d-flex flex-column border rounded mt-1">
+                            <div class="readmissionCard_header rounded-top d-flex gap-2">
+                                <div class="col text-white text-center py-2 fw-bold"
+                                    style="font-size: 0.9rem;">
+                                    Admission Rate
+                                </div>
+                            </div>
+                                    <!-- <div *ngFor="let chart of EMRVistDataC" class="mx-auto mb-2"
+                                        style="height: 180px;width: 120px;"> -->
+                                <div *ngFor="let chart of EMRVistDataC" class="bg-white p-2 py-3 pt-0 border rounded text-center">
+                                    <div class="" style="height: 8rem;">
+                                        <apx-chart [series]="chart.chartOptions.series"
+                                            [chart]="chart.chartOptions.chart"
+                                            [labels]="chart.chartOptions.labels"
+                                            [colors]="chart.chartOptions.colors"
+                                            [fill]="chart.chartOptions.fill"
+                                            [stroke]="chart.chartOptions.stroke"
+                                            [legend]="chart.chartOptions.legend"
+                                            [tooltip]="chart.chartOptions.tooltip"
+                                            [dataLabels]="chart.chartOptions.dataLabels"
+                                            [plotOptions]="chart.chartOptions.plotOptions">
+                                        </apx-chart>
+                                    </div>
+                                <!-- <div class="text-center mt-2 font-weight-bold">{{ chart.label }}</div> -->
+                                </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- <h5 class="mt-2 fs-6">Quick Filters</h5> -->
+                    <div class="d-flex flex-column gap-2 pb-3 border-bottom d-none">
+                        <div class="dropdown custom_outline_dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <span class="d-flex align-items-center gap-2 justify-content-between w-100">
+                                    <span>Last 30 days</span>
+                                    <span id="">10</span>
+                                </span>
+
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">10</a></li>
+                                <li><a class="dropdown-item" href="#">25</a></li>
+                                <li><a class="dropdown-item" href="#">50</a></li>
+                                <li><a class="dropdown-item" href="#">100</a></li>
+                            </ul>
+                        </div>
+                        <div class="dropdown custom_outline_dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <span class="d-flex align-items-center gap-2 justify-content-between w-100">
+                                    <span>Cardiology</span>
+                                    <span id="">10</span>
+                                </span>
+
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">10</a></li>
+                                <li><a class="dropdown-item" href="#">25</a></li>
+                                <li><a class="dropdown-item" href="#">50</a></li>
+                                <li><a class="dropdown-item" href="#">100</a></li>
+                            </ul>
+                        </div>
+                        <div class="dropdown custom_outline_dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <span class="d-flex align-items-center gap-2 justify-content-between w-100">
+                                    <span>High Revenue</span>
+                                    <span id="">10</span>
+                                </span>
+
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">10</a></li>
+                                <li><a class="dropdown-item" href="#">25</a></li>
+                                <li><a class="dropdown-item" href="#">50</a></li>
+                                <li><a class="dropdown-item" href="#">100</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="pt-3">
+                        <div class="totalPatients_card bg-white p-2 py-3 rounded text-center">
+                            <h6 class="m-0 fw-bold">Total Patients </h6>
+                            <h3 class="fs-3 fw-bold mt-2">{{EMRVistData[0]?.TotalOPERVisits | number }}</h3>
+                            
+                        </div>
+                        <div class="erVisitRate_card p-2 py-3 rounded text-center mt-2">
+                            <h6 class="m-0 fw-bold">ER Visit Rate </h6>
+                            <h3 class="fs-3 fw-bold mt-2">{{EMRVistData[0]?.ERVisitsPer | number : '1.2-2'}}%</h3>
+                        </div>
+                    </div> -->
+                    <div class="mt-2">
+                        <div *ngFor="let chart of revisitCharts" class="mt-2 bg-white p-2 py-3 border rounded text-center">
+                            <p class="fs-7 fw-semibold">{{chart.label}}</p>
+                            <div style="height: 8rem;">
+                                <apx-chart [series]="chart.chartOptions.series" [chart]="chart.chartOptions.chart"
+                                    [labels]="chart.chartOptions.labels" [colors]="chart.chartOptions.colors"
+                                    [fill]="chart.chartOptions.fill" [stroke]="chart.chartOptions.stroke"
+                                    [legend]="chart.chartOptions.legend" [tooltip]="chart.chartOptions.tooltip"
+                                    [dataLabels]="chart.chartOptions.dataLabels"
+                                    [plotOptions]="chart.chartOptions.plotOptions">
+                                </apx-chart>
+                            </div>
+                        </div>
+                        <div *ngFor="let chart of waitingTimeCharts" class="mt-2 bg-white p-2 py-3 border rounded text-center">
+                            <p class="fs-7 fw-semibold">{{chart.label}}</p>
+                            <div style="height: 8rem;">
+                                <apx-chart [series]="chart.chartOptions.series" [chart]="chart.chartOptions.chart"
+                                    [labels]="chart.chartOptions.labels" [colors]="chart.chartOptions.colors"
+                                    [fill]="chart.chartOptions.fill" [stroke]="chart.chartOptions.stroke"
+                                    [legend]="chart.chartOptions.legend" [tooltip]="chart.chartOptions.tooltip"
+                                    [dataLabels]="chart.chartOptions.dataLabels"
+                                    [plotOptions]="chart.chartOptions.plotOptions">
+                                </apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col d-flex flex-column dashboardHeight height-unset">
+                <div class="d-flex gap-2 mx-0">
+                    <div *ngFor="let chart of ctasCharts" class="card col p-2" style="height: 11rem;">
+                        <apx-chart [series]="chart.chartOptions.series" [chart]="chart.chartOptions.chart"
+                            [labels]="chart.chartOptions.labels" [colors]="chart.chartOptions.colors"
+                            [fill]="chart.chartOptions.fill" [stroke]="chart.chartOptions.stroke"
+                            [legend]="chart.chartOptions.legend" [tooltip]="chart.chartOptions.tooltip"
+                            [dataLabels]="chart.chartOptions.dataLabels" [plotOptions]="chart.chartOptions.plotOptions">
+                        </apx-chart>
+                        <p class="text-center mt-0 fs-6 fw-bold" style="margin-top: -30px !important;">{{ chart.label }}
+                        </p>
+                    </div>
+                </div>
+                <div class="row mx-0 text-center gx-2 mt-2">
+                    <div class="col">
+                        <div class="readmissionCard border rounded overflow-hidden">
+                            <div class="readmissionCard_headerCTAS1 rounded-top d-flex gap-2">
+                                <div class="col text-white py-2 fw-bold" style="font-size: 0.9rem;">
+                                    CTAS 1
+                                </div>
+                                <div class="col text-white py-2 fw-bold" style="font-size: 0.9rem;">
+                                    Seen 5 Min
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom py-3" style="font-size: 1.5rem; font-weight: 700;">
+                                        {{ctasData[1]?.ERVisits}}
+                                    </h4>
+                                </div>
+                                <div class="col" style="background-color: #eff5f7;">
+                                    <h4 class="rounded-bottom py-3" style="font-size: 1.5rem; font-weight: 700;">
+                                        {{ctasData[1]?.Seen15Min}}
+                                    </h4>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="readmissionCard border rounded overflow-hidden">
+                            <div class="readmissionCard_headerCTAS2 rounded-top d-flex gap-2">
+                                <div class="col text-white py-2 fw-bold" style="font-size: 0.9rem;">
+                                    CTAS 2
+                                </div>
+                                <div class="col text-white py-2 fw-bold" style="font-size: 0.9rem;">
+                                    Seen 15 Min
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom py-3" style="font-size: 1.5rem; font-weight: 700;">
+                                        {{ctasData[2]?.ERVisits}}
+                                    </h4>
+                                </div>
+                                <div class="col" style="background-color: #eff5f7;">
+                                    <h4 class="rounded-bottom py-3" style="font-size: 1.5rem; font-weight: 700;">
+                                        {{ctasData[2]?.Seen15Min}}
+                                    </h4>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="readmissionCard border rounded overflow-hidden">
+                            <div class="readmissionCard_headerCTAS3 rounded-top d-flex gap-2">
+                                <div class="col text-white py-2 fw-bold" style="font-size: 0.9rem;color: #352b2b !important;">
+                                   CTAS 3
+                                </div>
+                                <div class="col text-white py-2 fw-bold" style="font-size: 0.9rem;color: #352b2b !important;">
+                                    Seen 30 Min
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom py-3" style="font-size: 1.5rem; font-weight: 700;">
+                                        {{ctasData[3]?.ERVisits}}
+                                    </h4>
+                                </div>
+                                <div class="col" style="background-color: #eff5f7;">
+                                    <h4 class="rounded-bottom py-3" style="font-size: 1.5rem; font-weight: 700;">
+                                        {{ctasData[3]?.Seen30Min}}
+                                    </h4>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="readmissionCard border rounded overflow-hidden">
+                            <div class="readmissionCard_headerCTAS4 rounded-top d-flex gap-2">
+                                <div class="col text-white py-2 fw-bold" style="font-size: 0.9rem;">
+                                    CTAS 4
+                                </div>
+                                <div class="col text-white py-2 fw-bold" style="font-size: 0.9rem;">
+                                    Seen 60 Min
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom py-3" style="font-size: 1.5rem; font-weight: 700;">
+                                        {{ctasData[4]?.ERVisits}}
+                                    </h4>
+                                </div>
+                                <div class="col" style="background-color: #eff5f7;">
+                                    <h4 class="rounded-bottom py-3" style="font-size: 1.5rem; font-weight: 700;">
+                                        {{ctasData[4]?.Seen60Min}}
+                                    </h4>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="readmissionCard border rounded overflow-hidden">
+                            <div class="readmissionCard_headerCTAS5 rounded-top d-flex gap-2" style="border-bottom: 0.5px solid #b9b2b2;">
+                                <div class="col text-white py-2 fw-bold" style="font-size: 0.9rem;color: #352b2b !important;">
+                                    CTAS 5
+                                </div>
+                                <div class="col text-white py-2 fw-bold" style="font-size: 0.9rem;color: #352b2b !important;">
+                                    Seen 120 Min
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="col">
+                                    <h4 class="rounded-bottom py-3" style="font-size: 1.5rem; font-weight: 700;">
+                                        {{ctasData[5]?.ERVisits}}
+                                    </h4>
+                                </div>
+                                <div class="col" style="background-color: #eff5f7;">
+                                    <h4 class="rounded-bottom py-3" style="font-size: 1.5rem; font-weight: 700;">
+                                        {{ctasData[5]?.Seen120Min}}
+                                    </h4>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div class="row g-2 mx-0">
+                        <div class="col-12">
+                            <div class="graph_section border shadow-sm" style="height: 450px;">
+                                <div class="mt-2">
+                                    <apx-chart [series]="series" [chart]="chart" [xaxis]="xaxis" [yaxis]="yaxis"
+                                        [dataLabels]="dataLabels" [plotOptions]="plotOptions" [fill]="fill"
+                                        [title]="title" [tooltip]="tooltip" [stroke]="stroke" [colors]="colors"
+                                        [legend]="legend" [annotations]="annotations" [markers]="markers">
+                                    </apx-chart>
+
+                                    <div *ngIf="series && series.length > 0"
+                                        class="custom_tooltip custom_tooltip_left ms-auto d-none"
+                                        (click)="exportMonthsChart('csv')">
+                                        <svg class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                            aria-hidden="true" focusable="false" data-prefix="fas"
+                                            data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 576 512">
+                                            <path fill="#8967B3"
+                                                d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                            </path>
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p class="m-0">Export</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="graph_section border shadow-sm mt-2" style="height: 450px;">
+                                <div class="mt-2">
+                                    <apx-chart [series]="seriesWard" [chart]="chartWard" [xaxis]="xaxisWard"
+                                        [yaxis]="yaxisWard" [dataLabels]="dataLabelsWard"
+                                        [plotOptions]="plotOptionsWard" [fill]="fillWard" [title]="titleWard"
+                                        [tooltip]="tooltipWard" [stroke]="strokeWard" [colors]="colorsWard"
+                                        [legend]="legendWard">
+                                    </apx-chart>
+                                    <div *ngIf="seriesWard && seriesWard.length > 0"
+                                        class="custom_tooltip custom_tooltip_left ms-auto d-none"
+                                        (click)="exportWardChart('csv')">
+                                        <svg class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                            aria-hidden="true" focusable="false" data-prefix="fas"
+                                            data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 576 512">
+                                            <path fill="#8967B3"
+                                                d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                            </path>
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p class="m-0">Export</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="graph_section border shadow-sm mt-2" style="height: 450px;">
+                                <div class="mt-2">
+                                    <apx-chart [series]="seriesRevisit" [chart]="chartRevisit" [xaxis]="xaxisRevisit"
+                                        [yaxis]="yaxisRevisit" [dataLabels]="dataLabelsRevisit"
+                                        [plotOptions]="plotOptionsRevisit" [fill]="fillRevisit" [title]="titleRevisit"
+                                        [tooltip]="tooltipRevisit" [stroke]="strokeRevisit" [colors]="colorsRevisit"
+                                        [legend]="legendRevisit">
+                                    </apx-chart>
+                                    <div *ngIf="seriesRevisit && seriesRevisit.length > 0"
+                                        class="custom_tooltip custom_tooltip_left ms-auto d-none"
+                                        (click)="exportRevisitChart('csv')">
+                                        <svg class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                            aria-hidden="true" focusable="false" data-prefix="fas"
+                                            data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 576 512">
+                                            <path fill="#8967B3"
+                                                d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                            </path>
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p class="m-0">Export</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="graph_section border shadow-sm mt-2" style="height: 450px;">
+                                <div class="mt-2">
+                                    <apx-chart [series]="erWaitingTimeChart.series" [chart]="erWaitingTimeChart.chart"
+                                        [xaxis]="erWaitingTimeChart.xaxis" [yaxis]="erWaitingTimeChart.yaxis"
+                                        [title]="erWaitingTimeChart.title" [stroke]="erWaitingTimeChart.stroke || {}"
+                                        [fill]="erWaitingTimeChart.fill || {}" [colors]="erWaitingTimeChart.colors"
+                                        [dataLabels]="erWaitingTimeChart.dataLabels"
+                                        [legend]="erWaitingTimeChart.legend" [markers]="erWaitingTimeChart.markers"
+                                        [grid]="erWaitingTimeChart.grid || {}"
+                                        [plotOptions]="erWaitingTimeChart.plotOptions || {}"
+                                        [tooltip]="erWaitingTimeChart.tooltip || {}">
+                                    </apx-chart>
+                                    <div *ngIf="erWaitingTimeChart.series && erWaitingTimeChart.series.length > 0"
+                                        class="custom_tooltip custom_tooltip_left ms-auto d-none"
+                                        (click)="exportWaitingTimeChart('csv')">
+                                        <svg class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                            aria-hidden="true" focusable="false" data-prefix="fas"
+                                            data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 576 512">
+                                            <path fill="#8967B3"
+                                                d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                            </path>
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p class="m-0">Export</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="rounded bg-white d-flex flex-column border shadow-sm h-100">
+                                <div class="d-flex justify-content-between align-items-center p-2" style="height: 3rem;">
+                                    <h6 class="m-0 fw-semibold" style="color: #383A88;">Admission Through ED</h6>
+                                    <div *ngIf="series && series.length > 0"
+                                        class="custom_tooltip custom_tooltip_left ms-auto"
+                                        (click)="exportMonthsChart('csv')">
+                                        <svg width="15" height="15" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                            aria-hidden="true" focusable="false" data-prefix="fas"
+                                            data-icon="file-export" role="img" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 576 512">
+                                            <path fill="#8967B3"
+                                                d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                            </path>
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p class="m-0">Export</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="surgery_records graph_fixed_alter_list rounded rounded-top-0">
+                                    <div>
+                                        <div class="fixed_alter_header rounded-top-0" style="height: 35px;">
+                                            <div class="row gx-2 px-2 py-1 mx-0 align-items-center">
+                                                <div class="col-5">
+                                                    <p class="fw-semibold">Month</p>
+                                                </div>
+                                                <div class="col-4">
+                                                    <p class="fw-semibold">ER Visits</p>
+                                                </div>
+                                                <div class="col-3">
+                                                    <p class="fw-semibold">Admission</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="fixed_alter_body" style="height: 370px;">
+                                            <div class="row gx-2 p-2 mx-0 alter_div"
+                                                *ngFor="let ERAdmission of currentEMRAdmissionData">
+                                                <div class="col-5">
+                                                    <p class="fw-bold">{{ERAdmission?.MonthName}}</p>
+                                                </div>
+                                                <div class="col-4">
+                                                    <p>{{ ERAdmission?.ERVisits | number }}</p>
+                                                </div>
+                                                <div class="col-3">
+                                                    <p>{{ ERAdmission?.ERAdmissionCount | number }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                <!-- <div class="fixed_alter_body" style="height: 577px;">
+                                <div class="row gx-2 p-2 mx-0 alter_div">
+                                    <div class="col-6">
+                                        <p class="">January</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p class="">000</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p class="">8.70</p>
+                                    </div>
+                                </div>
+                                <div class="row gx-2 p-2 mx-0 alter_div">
+                                    <div class="col-6">
+                                        <p class="">February</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p class="">000</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p class="">8.70</p>
+                                    </div>
+                                </div>
+                                <div class="row gx-2 p-2 mx-0 alter_div">
+                                    <div class="col-6">
+                                        <p class="">March</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p class="">000</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p class="">8.70</p>
+                                    </div>
+                                </div>
+                            </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="rounded bg-white d-flex flex-column border shadow-sm h-100">
+                                <div class="d-flex justify-content-between align-items-center p-2" style="height: 3rem;">
+                                    <h6 class="m-0 fw-semibold" style="color: #383A88;">Admission Through ED - Ward Wise</h6>
+                                    <div *ngIf="seriesWard && seriesWard.length > 0"
+                                        class="custom_tooltip custom_tooltip_left ms-auto"
+                                        (click)="exportWardChart('csv')">
+                                        <svg width="15" height="15" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                            aria-hidden="true" focusable="false" data-prefix="fas"
+                                            data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 576 512">
+                                            <path fill="#8967B3"
+                                                d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                            </path>
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p class="m-0">Export</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="surgery_records graph_fixed_alter_list rounded rounded-top-0">
+                                    <div class="fixed_alter_header rounded-top-0" style="height: 35px;">
+                                        <div class="row align-items-center gx-2 px-2 py-1 mx-0">
+                                            <div class="col-5">
+                                                <p class="fw-semibold">Department</p>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="fw-semibold">ER Admission</p>
+                                            </div>
+                                            <div class="col-3">
+                                                <p class="fw-semibold">Total Admission</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fixed_alter_body" style="height: 370px;">
+                                        <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let ward of wardData">
+                                            <div class="col-5">
+                                                <p class="fw-bold">{{ ward.Ward }}</p>
+                                            </div>
+                                            <div class="col-4">
+                                                <p>{{ ward.ERAdmissionCount || 0 }}</p>
+                                            </div>
+                                            <div class="col-3">
+                                                <p>{{ ward.IPAdmissionCount || 0 }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="rounded bg-white d-flex flex-column border shadow-sm h-100">
+                                <div class="d-flex justify-content-between align-items-center p-2" style="height: 3rem;">
+                                    <h6 class="m-0 fw-semibold" style="color: #383A88;">ED Patient Visit</h6>
+                                    <div *ngIf="seriesRevisit && seriesRevisit.length > 0"
+                                        class="custom_tooltip custom_tooltip_left ms-auto"
+                                        (click)="exportRevisitChart('csv')">
+                                        <svg width="15" height="15" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                            aria-hidden="true" focusable="false" data-prefix="fas"
+                                            data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 576 512">
+                                            <path fill="#8967B3"
+                                                d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                            </path>
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p class="m-0">Export</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="surgery_records graph_fixed_alter_list rounded rounded-top-0">
+                                    <div class="fixed_alter_header rounded-top-0"  style="height: 35px;">
+                                        <div class="row align-items-center gx-2 px-2 py-1 mx-0">
+                                            <div class="col-6">
+                                                <p class="fw-semibold">Revisit</p>
+                                            </div>
+                                            <div class="col-2">
+                                                <p class="fw-semibold">24 Hrs</p>
+                                            </div>
+                                            <div class="col-2">
+                                                <p class="fw-semibold">48 Hrs</p>
+                                            </div>
+                                            <div class="col-2">
+                                                <p class="fw-semibold">72 Hrs</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fixed_alter_body"  style="height: 370px;">
+                                        <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of revisitERData">
+
+                                            <div class="col-6">
+                                                <p class="fw-bold">{{ item.MonthName }}</p>
+                                            </div>
+
+                                            <div class="col-2">
+                                                <p class="">{{ item.Revisitwithin24Hours }}</p>
+                                            </div>
+
+                                            <div class="col-2">
+                                                <p class="">{{ item.Revisitwithin48Hours }}</p>
+                                            </div>
+
+                                            <div class="col-2">
+                                                <p class="">{{ item.Revisitwithin72Hours }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="rounded bg-white d-flex flex-column border shadow-sm h-100">
+                                <div class="d-flex justify-content-between align-items-center p-2" style="height: 3rem;">
+                                    <h6 class="m-0 fw-semibold" style="color: #383A88;">ED Waiting Time</h6>
+                                    <div *ngIf="erWaitingTimeChart.series && erWaitingTimeChart.series.length > 0"
+                                        class="custom_tooltip custom_tooltip_left ms-auto"
+                                        (click)="exportWaitingTimeChart('csv')">
+                                        <svg width="15" height="15" class="svg-inline--fa fa-file-export me-1 clr-primary-600 fs-7"
+                                            aria-hidden="true" focusable="false" data-prefix="fas"
+                                            data-icon="file-export" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 576 512">
+                                            <path fill="#8967B3"
+                                                d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z">
+                                            </path>
+                                        </svg>
+                                        <div class="tooltip">
+                                            <p class="m-0">Export</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="surgery_records graph_fixed_alter_list rounded rounded-top-0">
+                                    <div class="fixed_alter_header rounded-top-0" style="height: 35px;">
+                                        <div class="row align-items-center gx-2 px-2 py-1 mx-0">
+                                            <div class="col-6">
+                                                <p class="fw-semibold">Waiting Time</p>
+                                            </div>
+                                            <div class="col-2">
+                                                <p class="fw-semibold">&lt;30 min</p>
+                                            </div>
+                                            <div class="col-2">
+                                                <p class="fw-semibold">30-60 min</p>
+                                            </div>
+                                            <div class="col-2">
+                                                <p class="fw-semibold">60-120 min</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fixed_alter_body"  style="height: 370px;">
+                                        <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let item of erWaitingData">
+
+                                            <div class="col-6">
+                                                <p class="fw-bold">{{ item.MonthName }}</p>
+                                            </div>
+                                            <div class="col-2">
+                                                <!-- <p>{{ item.WaitingTimelessthan30MinPer / 100 | percent:'1.2-2' }}</p> -->
+                                                <p class="fw-bold">{{ item.WaitingTimelessthan30Min }}</p>
+                                            </div>
+                                            <div class="col-2">
+                                                <!-- <p>{{ item.WaitingTime3060MinPer / 100 | percent:'1.2-2' }}</p> -->
+                                                <p class="fw-bold">{{ item.WaitingTime3060Min }}</p>
+                                            </div>
+                                            <div class="col-2">
+                                                <!-- <p>{{ item.WaitingTime60120MinPer / 100 | percent:'1.2-2' }}</p> -->
+                                                <p class="fw-bold">{{ item.WaitingTime60120Min }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 h-100 bg-white rounded">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <div class="modal fade" id="errorMsg" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+            <div class="modal-content">
+                <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+                <div class="modal-body">
+                    <p>{{ errorMsg }}</p>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-main-outline" data-bs-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
