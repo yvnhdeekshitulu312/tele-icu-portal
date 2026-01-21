@@ -38,6 +38,7 @@ import { WoundAssessmentComponent } from './wound-assessment/wound-assessment.co
 import { PatientfoldermlComponent } from '../shared/patientfolderml/patientfolderml.component';
 import { HospitalEventsComponent } from './hospital-events/hospital-events.component';
 import { DischargeCasesComponent } from './discharge-cases/discharge-cases.component';
+import { ICUBedsComponent } from './iccu-beds/icu-beds.component';
 
 const routes: Routes = [
   {
@@ -77,7 +78,8 @@ const routes: Routes = [
       { path: 'care-plan', component: CarePlanComponent, canActivate: [AuthguardGuard]},
       { path: 'wound-assessment', component: WoundAssessmentComponent, canActivate: [AuthguardGuard]},
       { path: 'hospital-events', component: HospitalEventsComponent, canActivate: [AuthguardGuard]},
-      { path: 'discharge-cases', component: DischargeCasesComponent, canActivate: [AuthguardGuard]}
+      { path: 'discharge-cases', component: DischargeCasesComponent, canActivate: [AuthguardGuard]},
+      { path: 'icu-beds', component: ICUBedsComponent, canActivate: [AuthguardGuard]}
     ]
   },
 
