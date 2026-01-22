@@ -107,9 +107,13 @@ export class ICUBedsComponent implements OnInit {
                 const FetchBedsFromWardLabRadDataList = response.FetchBedsFromWardLabRadDataList;
                 this.FetchBedsFromWardDataList = response.FetchBedsFromWardDataList.map((element: any) => {
                     const isFound = FetchBedsFromWardLabRadDataList.filter((a: any) => a.AdmissionID === element.AdmissionID);
+                    const labResults: any[] = isFound.filter((a: any) => a.IsResult == '4');
+                    const radResults: any[] = isFound.filter((a: any) => a.IsResult == '7');
                     return {
                         ...element,
-                        isCritical: isFound.length >= 1
+                        isCritical: isFound.length >= 1,
+                        labResults, 
+                        radResults
                     };
                 });
                 this.totalCount = this.FetchBedsFromWardDataList.length;
