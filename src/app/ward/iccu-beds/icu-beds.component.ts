@@ -5,6 +5,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from "@angular/materia
 import { UtilityService } from "src/app/shared/utility.service";
 import { ConfigService } from 'src/app/services/config.service';
 import { Subscription, timer } from "rxjs";
+import { Router } from "@angular/router";
 
 declare var $: any;
 
@@ -55,7 +56,7 @@ export class ICUBedsComponent implements OnInit {
 
     searchText: any = '';
 
-    constructor(private us: UtilityService, private portalConfig: ConfigService) {
+    constructor(private us: UtilityService, private portalConfig: ConfigService, private router: Router) {
         this.langData = this.portalConfig.getLangData();
     }
 
@@ -162,6 +163,10 @@ export class ICUBedsComponent implements OnInit {
         }
         else
             return false;
+    }
+
+    navigateToDetails(item: any) {
+        this.router.navigate(['/ward/icu-bed-details'])
     }
 }
 

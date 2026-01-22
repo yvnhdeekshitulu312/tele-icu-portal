@@ -47,6 +47,7 @@ import { CarePlanComponent } from './care-plan/care-plan.component';
 import { HospitalEventsComponent } from './hospital-events/hospital-events.component';
 import { DischargeCasesComponent } from './discharge-cases/discharge-cases.component';
 import { ICUBedsComponent } from './iccu-beds/icu-beds.component';
+import { ICUBedDetailsComponent } from './icu-bed-details/icu-bed-details.component';
 
 
 @NgModule({
@@ -84,7 +85,8 @@ import { ICUBedsComponent } from './iccu-beds/icu-beds.component';
     CarePlanComponent,
     HospitalEventsComponent,
     DischargeCasesComponent,
-    ICUBedsComponent
+    ICUBedsComponent,
+    ICUBedDetailsComponent
   ],
   providers: [MatDatepickerModule, DatePipe],
   imports: [

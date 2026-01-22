@@ -88,9 +88,47 @@
     </div>
 </header>
 <div class="container__wrapper">
+    <div class="met-call_wrapper">
+        <div class="" *ngIf="FetchMETCALLWardDataList?.length>0">
+            <div class="met-call-card">
+                <div class="card-heading">
+                    <h3>Met Call</h3>
+                </div>
+                <div class="card-content_wrapper">
+                    <div class="card-content custom_tooltip custom_tooltip_left cursor-pointer"
+                        *ngFor="let items of FetchMETCALLWardDataList; let i = index">
+                        <span *ngIf="items.GenderID === '1'">
+                            <svg width="12" height="17" viewBox="0 0 16 40" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M7.99323 7.08801C9.95049 7.08801 11.5372 5.50135 11.5372 3.544C11.5372 1.58674 9.95049 0 7.99323 0C6.03597 0 4.44923 1.58674 4.44923 3.544C4.44923 5.50127 6.03597 7.08801 7.99323 7.08801Z"
+                                    fill="#1F98DB" />
+                                <path
+                                    d="M15.4784 23.0045C15.4784 23.8954 14.8187 24.618 13.9268 24.6181C13.0386 24.6181 12.4196 23.8954 12.4206 23.0049V15.1144C12.4206 14.8212 11.8917 14.8212 11.8917 15.1144L11.8913 38.2222C11.8913 39.2036 11.0961 39.9992 10.1154 39.9992H10.1116C9.13018 39.9992 8.33528 39.2029 8.33528 38.2222V24.6346C8.33528 24.4378 8.14497 24.2795 7.99597 24.2795C7.84628 24.2795 7.65667 24.4381 7.65667 24.6346L7.65702 38.2231C7.65702 39.2045 6.86074 40.0001 5.87894 40.0001H5.87584C4.89546 40.0001 4.09987 39.2038 4.09987 38.2231V15.1144C4.09987 14.8212 3.58232 14.8212 3.58232 15.1144V23.0045C3.58232 23.8954 2.98047 24.6181 2.09055 24.6181C1.19995 24.6181 0.514816 23.8954 0.514816 23.0045L0.511719 14.2372C0.511719 10.2082 4.08638 8.01454 7.99588 8.01454C11.9016 8.01454 15.4887 10.2083 15.4887 14.2372L15.4784 23.0045Z"
+                                    fill="#1F98DB" />
+                            </svg>
+                        </span>
+                        <span *ngIf="items.GenderID === '2'">
+                            <svg width="12" height="17" viewBox="0 0 20 40" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M9.99926 7.33909C12.0259 7.33909 13.6688 5.69623 13.6688 3.66955C13.6688 1.64295 12.0259 0 9.99926 0C7.97266 0 6.32971 1.64295 6.32971 3.66955C6.32971 5.69614 7.97266 7.33909 9.99926 7.33909ZM18.1329 23.8592C17.4352 24.1118 16.6664 23.7519 16.4141 23.0561L13.9213 14.8358L13.9174 17.6256L17.7559 29.8757H13.5729L13.5732 38.3904C13.5732 39.279 12.8564 39.9998 11.9702 39.9998C11.0851 39.9998 10.369 39.279 10.369 38.3904V30.3233C10.369 30.0757 10.2029 29.8758 9.99912 29.8758C9.79602 29.8758 9.6307 30.0757 9.6307 30.3233L9.63105 38.3904C9.63105 39.279 8.91421 39.9998 8.02915 39.9998C7.14378 39.9998 6.42725 39.279 6.42725 38.3904V29.8757H2.24316L6.0955 17.6256L6.0923 14.8361L3.58573 23.0564C3.33316 23.7523 2.56281 24.1125 1.86552 23.8596C1.16894 23.6044 0.809782 22.8334 1.06419 22.1375C1.06419 22.1375 2.90133 13.6094 4.83069 9.7926C5.27746 8.91006 6.62397 8.31146 7.61236 8.31146H12.3861C13.3745 8.31146 14.7214 8.90966 15.1675 9.79223C17.0975 13.6083 18.9361 22.1372 18.9361 22.1372C19.1894 22.833 18.8317 23.6044 18.1329 23.8592Z"
+                                    fill="#EC519B" />
+                            </svg>
+                        </span>
+                        <h4 class="m-0 text-start">{{items.Bed}}</h4>
+                        <div class="tooltip">
+                            <p class="clr-primary-600 fw-bold">{{items.Bed}}</p>
+                            <p>{{items.VitalCreateDate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="bedboards_height">
         <div class="row mx-0 p-2 g-2">
-            <div class="col-xl-6 col-lg-12 col-md-12" *ngFor="let item of FilteredBedsFromWardDataList; let i = index ">
+            <div class="col-xl-6 col-lg-12 col-md-12 cursor-pointer" *ngFor="let item of FilteredBedsFromWardDataList; let i = index" (click)="navigateToDetails(item)">
                 <div class="bed-board bed-board-occupied" [class.alert-box-anim]="item.isCritical">
                     <div class="row g-0 gradient_bg">
                         <div class="col-3 d-flex flex-column">

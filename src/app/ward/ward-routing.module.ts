@@ -39,6 +39,7 @@ import { PatientfoldermlComponent } from '../shared/patientfolderml/patientfolde
 import { HospitalEventsComponent } from './hospital-events/hospital-events.component';
 import { DischargeCasesComponent } from './discharge-cases/discharge-cases.component';
 import { ICUBedsComponent } from './iccu-beds/icu-beds.component';
+import { ICUBedDetailsComponent } from './icu-bed-details/icu-bed-details.component';
 
 const routes: Routes = [
   {
@@ -75,11 +76,12 @@ const routes: Routes = [
       { path: 'diet-plan', component: DietPlanWorklistComponent, canActivate: [AuthguardGuard], },
       { path: 'medical-emr-events', component: MedicalEmergencyEventsComponent, canActivate: [AuthguardGuard], },
       { path: 'emr-nursing-checklist', component: EmrNursingChecklistComponent, canActivate: [AuthguardGuard], },
-      { path: 'care-plan', component: CarePlanComponent, canActivate: [AuthguardGuard]},
-      { path: 'wound-assessment', component: WoundAssessmentComponent, canActivate: [AuthguardGuard]},
-      { path: 'hospital-events', component: HospitalEventsComponent, canActivate: [AuthguardGuard]},
-      { path: 'discharge-cases', component: DischargeCasesComponent, canActivate: [AuthguardGuard]},
-      { path: 'icu-beds', component: ICUBedsComponent, canActivate: [AuthguardGuard]}
+      { path: 'care-plan', component: CarePlanComponent, canActivate: [AuthguardGuard] },
+      { path: 'wound-assessment', component: WoundAssessmentComponent, canActivate: [AuthguardGuard] },
+      { path: 'hospital-events', component: HospitalEventsComponent, canActivate: [AuthguardGuard] },
+      { path: 'discharge-cases', component: DischargeCasesComponent, canActivate: [AuthguardGuard] },
+      { path: 'icu-beds', component: ICUBedsComponent, canActivate: [AuthguardGuard] },
+      { path: 'icu-bed-details', component: ICUBedDetailsComponent, canActivate: [AuthguardGuard] }
     ]
   },
 
