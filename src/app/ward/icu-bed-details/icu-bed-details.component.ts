@@ -35,9 +35,7 @@ export const MY_FORMATS = {
 })
 export class ICUBedDetailsComponent implements OnInit, OnDestroy{
     doctorDetails: any;
-    location: any;
-    wardID: any;
-    ward: any;
+    wardID: any = '2090';
     langData: any;
 
     selectedICUBed: any = [];
@@ -52,9 +50,6 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy{
 
     ngOnInit(): void {
         this.doctorDetails = JSON.parse(sessionStorage.getItem("doctorDetails") || '{}');
-        this.location = sessionStorage.getItem("locationName");
-        this.ward = JSON.parse(sessionStorage.getItem("facility") || '{}');
-        this.wardID = this.ward.FacilityID;
         this.filteredICUBeds = this.ICUBeds = JSON.parse(sessionStorage.getItem("icubeds") || '{}');
         if (sessionStorage.getItem("icubeddetails")) {
             this.selectedICUBed = JSON.parse(sessionStorage.getItem("icubeddetails") || '{}');

@@ -36,9 +36,7 @@ export const MY_FORMATS = {
 })
 export class ICUBedsComponent implements OnInit {
     doctorDetails: any;
-    location: any;
-    wardID: any;
-    ward: any;
+    wardID: any = '2090';
     langData: any;
     FetchBedsFromWardDataList: any = [];
     FilteredBedsFromWardDataList: any = [];
@@ -61,9 +59,6 @@ export class ICUBedsComponent implements OnInit {
 
     ngOnInit() {
         this.doctorDetails = JSON.parse(sessionStorage.getItem("doctorDetails") || '{}');
-        this.location = sessionStorage.getItem("locationName");
-        this.ward = JSON.parse(sessionStorage.getItem("facility") || '{}');
-        this.wardID = this.ward.FacilityID;
         this.fetchICUBeds();
     }
 

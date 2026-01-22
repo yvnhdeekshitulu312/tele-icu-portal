@@ -433,39 +433,8 @@ export class LoginComponent implements OnInit {
       this.isDefaultPwd = response.SmartDataList[0].IsdefaultPsw === 'False' ? false : true;
       if (this.isDefaultPwd) {
         this.router.navigate(['/login/changepassword'])
-      }
-      else if (response.SmartDataList[0].IsPharmacist) {
-        sessionStorage.setItem("FacilityID", JSON.stringify(response.SmartDataList[0].FacilityId));
-        this.router.navigate(['/pharmacy/cashissue'])
-      }
-      else if (response.SmartDataList[0].IsIPPharmacist) {
-        sessionStorage.setItem("FacilityID", JSON.stringify(response.SmartDataList[0].FacilityId));
-        this.router.navigate(['/pharmacy/IndividualProcessing'])
-      }
-      else if (response.SmartDataList[0].IsDoctor || response.SmartDataList[0].IsRODoctor || response.SmartDataList[0].IsDietitian) {
-        this.router.navigate(['/login/doctor-home'])
-      }
-      else if ((response.SmartDataList[0].IsWardNurse || response.SmartDataList[0].IsERHeadNurse) && !response.SmartDataList[0].IsERNurse) {
-        sessionStorage.setItem("fromLoginToWard", 'true');
-        this.router.navigate(['/ward']);
-      }
-      else if (response.SmartDataList[0].IsERNurse) {
-        this.router.navigate(['/emergency/worklist'])
-      }
-      else if (response.SmartDataList[0].IsORHeadNurse) {
-        this.router.navigate(['/ot/ot-dashboard'])
-      }
-      else if (response.SmartDataList[0].IsAKUNurse) {
-        this.router.navigate(['/dialysis/aku-worklist'])
-      }
-      else if (response.SmartDataList[0].IsEndoscopyNurse) {
-        this.router.navigate(['suit/radiologyworklist'])
-      }
-      else if (response.SmartDataList[0].IsAnesthetia) {
-        this.router.navigate(['/portal/anesthetia-worklist'])
-      }
-      else {
-        this.router.navigate(['/suit'])
+      } else {
+        this.router.navigate(['/ward/icu-beds']);
       }
     }
   }
