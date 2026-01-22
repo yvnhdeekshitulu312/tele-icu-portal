@@ -6,7 +6,8 @@
         </div>
         <div class="header__container gap-3">
             <div class="refresh-section">
-                <h6 class="fw-bold mb-1 fs-7">Last Refresh</h6>
+                <h6 class="fw-bold mb-1 fs-7">Last Refresh <button class="btn btn-primary"
+                        (click)="fetchICUBed()">Refresh</button></h6>
                 <div class="d-flex align-items-center gap-1">
                     <svg width="16" height="16" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_873_6865)">
@@ -15,7 +16,7 @@
                                 fill="#7E8794" />
                         </g>
                     </svg>
-                    <p class="m-0">12-AUG-2022</p>
+                    <p class="m-0">{{ refreshTime | date:'dd-MMM-yyyy'}}</p>
                     <svg width="16" height="16" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_873_6870)">
                             <path
@@ -24,40 +25,11 @@
                             <path d="M6.25 3.5H5.5V6.5L8.125 8.075L8.5 7.46L6.25 6.125V3.5Z" fill="#4A5159" />
                         </g>
                     </svg>
-                    <p class="m-0">10:24:00</p>
+                    <p class="m-0">{{refreshTime | date:'HH:mm:ss'}}</p>
                 </div>
             </div>
-            <div class="">
-                <div class="tele_clinical_toggle clinical_toggle toggle__switch d-inline-flex align-self-center">
-                    <button class="fs-7 btn selected">Suwaidi</button>
-                    <button class="fs-7 btn">Olaya</button>
-                    <button class="fs-7 btn">Nuzha</button>
-                </div>
-            </div>
-            <div class="">
-                <div class="search_input position-relative d-flex align-items-center gap-2 rounded ps-2">
-                    <svg class="position-aboslute start-0" width="20" height="20" viewBox="0 0 13 13" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M5.64102 9.7437C7.9068 9.7437 9.74358 7.90692 9.74358 5.64114C9.74358 3.37535 7.9068 1.53857 5.64102 1.53857C3.37523 1.53857 1.53845 3.37535 1.53845 5.64114C1.53845 7.90692 3.37523 9.7437 5.64102 9.7437Z"
-                            stroke="#94A3B8" stroke-width="1.02564" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M10.7692 10.7691L8.56409 8.56396" stroke="#94A3B8" stroke-width="1.02564"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <input type="text" class="form-control py-2 ps-0 bg-transparent border-0 shadow-0"
-                        placeholder="Search Patient or Bed ID...">
-                </div>
-            </div>
-
-
 
             <div class="ms-auto d-flex align-items-center gap-3">
-                <div
-                    class="tele_clinical_toggle fill_white clinical_toggle toggle__switch d-inline-flex align-self-center pe-4">
-                    <button class="fs-7 btn d-flex align-items-center gap-1 selected all">All <span>98</span> </button>
-                    <button class="fs-7 btn d-flex align-items-center gap-1 critical">Critical <span>99</span> </button>
-                    <button class="fs-7 btn d-flex align-items-center gap-1 normal">Normal <span>98</span> </button>
-                </div>
                 <div class="header_profile d-flex align-items-center gap-2 ps-3">
                     <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="30.7692" height="30.7692" rx="15.3846" fill="#A7CFDB" />
@@ -69,8 +41,8 @@
                             fill="#475569" />
                     </svg>
                     <div class="">
-                        <h6 class="m-0">DR. FAHAD</h6>
-                        <p>Administrtor</p>
+                        <h6 class="m-0">{{doctorDetails && doctorDetails[0].EmployeeName}}</h6>
+                        <p>{{doctorDetails && doctorDetails[0].EmpSpecialisation}}</p>
                     </div>
                 </div>
             </div>
@@ -86,7 +58,7 @@
             <!-- Column 1: Patient List -->
             <div class="sidebar-list">
                 <div class="border-bottom pb-3 bg-light">
-                    <div class="d-flex align-items-center gap-2">
+                    <div class="d-flex align-items-center gap-2 cursor-pointer" (click)="navigateToICUBeds()">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd"
                                 d="M4 19C4.55228 19 5 18.5523 5 18V6C5 5.44771 4.55228 5 4 5C3.44771 5 3 5.44772 3 6V18C3 18.5523 3.44772 19 4 19Z"
@@ -114,7 +86,9 @@
 
                 <div class="d-flex flex-column justify-content-between h-100">
                     <div class="patient-list">
-                        <div class="patient-list-item active pt-3 ps-2 d-flex align-items-center gap-2 px-0">
+                        <div class="patient-list-item pt-3 ps-2 d-flex align-items-center gap-2 px-0"
+                            *ngFor="let item of filteredICUBeds" (click)="onSelectBed(item)"
+                            [class.active]="item.AdmissionID === selectedICUBed.AdmissionID">
                             <div class="bed-icon custom_tooltip custom_tooltip_right">
                                 <svg class="position-relative" width="40" height="40" viewBox="0 0 44 44" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -138,62 +112,12 @@
                                 </svg>
                             </div>
                             <div class="d-flex flex-column">
-                                <h5 class="fs-6 mb-1">Ahmed Al-Rashid</h5>
-                                <p class="mb-1 fs-7">ID: #9928312</p>
-                                <p class="fs-7">ICU Bed No <b>101</b></p>
-                            </div>
-                        </div>
-                        <div class="patient-list-item pt-3 ps-2 d-flex align-items-center gap-2 px-0">
-                            <div class="bed-icon custom_tooltip custom_tooltip_right">
-                                <svg class="position-relative" width="40" height="40" viewBox="0 0 44 44" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <g clip-path="url(#clip0_185_6723)">
-                                        <path
-                                            d="M15.0331 43.9898C15.1322 43.4968 15.209 42.9986 15.3323 42.513C15.8242 40.5792 16.3803 38.659 16.8164 36.7125C17.1166 35.3727 17.1429 33.995 16.79 32.6436C16.472 31.4229 15.7188 30.6687 14.5212 30.161C13.5111 29.7323 12.5547 29.0603 11.7342 28.3199C8.53957 25.4391 6.81849 21.8179 6.79321 17.5025C6.77109 13.7022 8.29731 10.4928 10.9527 7.81427C13.1098 5.63605 15.7578 4.46268 18.786 4.12352C21.4404 3.82544 24.0515 4.04663 26.5425 5.03357C29.8035 6.32596 31.7342 8.74433 32.3293 12.2107C32.3588 12.3824 32.3557 12.5604 32.3536 12.7363C32.3462 13.6685 32.737 14.3858 33.4901 14.9272C34.4728 15.6339 35.4492 16.3491 36.4182 17.0749C37.1777 17.6436 37.2419 18.2767 36.6363 19.0045C36.5467 19.1119 36.4456 19.2109 36.3445 19.3078C35.5366 20.0852 35.5166 20.6476 36.3203 21.4545C36.6131 21.7483 36.7268 22.0296 36.6173 22.4393C36.5783 22.5847 36.6795 22.7995 36.7753 22.9428C36.9691 23.2345 37.0565 23.5274 36.8301 23.816C36.3466 24.4332 36.5194 25.0409 36.7595 25.6929C36.967 26.2564 37.1998 26.8537 37.2072 27.4393C37.2198 28.4568 36.4983 29.0888 35.6472 29.4332C34.6813 29.824 33.6628 30.1463 32.6369 30.3127C31.078 30.5644 29.9647 31.603 29.8267 33.1766C29.7888 33.6127 29.5771 36.8042 29.5276 37.3856C29.4033 38.8518 29.3022 40.319 29.1947 41.7863C29.141 42.5204 29.0915 43.2546 29.0409 43.9876H15.0331V43.9898Z"
-                                            fill="#0AA1F5" />
-                                        <path
-                                            d="M23.0519 44.0003L20.9453 43.9782C20.9769 40.871 21.8891 38.5137 23.6544 36.9696C26.2181 34.7292 29.635 35.1242 29.7772 35.141L29.5665 37.2476C29.5402 37.2445 26.868 36.9453 25.0268 38.5674C23.7418 39.6997 23.0772 41.5272 23.0519 43.9993V44.0003Z"
-                                            fill="white" />
-                                        <path
-                                            d="M34.2787 34.0266L32.9547 33.9203C32.4375 33.8792 31.9825 34.2984 31.9372 34.8566L31.9456 34.7492L30.7628 34.6544C30.6238 34.6428 30.5005 34.7566 30.4889 34.9072L30.4689 35.1516L29.7832 35.0968C29.699 35.0905 29.6252 35.1579 29.6189 35.2485L29.4693 37.117C29.462 37.2076 29.5241 37.2866 29.6073 37.2929L30.293 37.3477L30.273 37.5921C30.2614 37.7427 30.3646 37.8733 30.5037 37.8849L31.6865 37.9797L31.695 37.8722C31.6507 38.4305 32.0331 38.9171 32.5502 38.9582L33.8742 39.0646C34.3429 39.1025 34.7569 38.7222 34.7969 38.2145L35.0539 35.0115C35.095 34.5048 34.7474 34.0635 34.2776 34.0256L34.2787 34.0266Z"
-                                            fill="white" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_185_6723">
-                                            <rect width="30.4139" height="40" fill="white"
-                                                transform="translate(6.79297 4)" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <h5 class="fs-6 mb-1">Ahmed Al-Rashid</h5>
-                                <p class="mb-1 fs-7">ID: #9928312</p>
-                                <p class="fs-7">ICU Bed No <b>101</b></p>
+                                <h5 class="fs-6 mb-1">{{item.PatientName}}</h5>
+                                <p class="mb-1 fs-7">ID: {{item.SSN}}</p>
+                                <p class="fs-7">ICU Bed No <b>{{item.Bed}}</b></p>
                             </div>
                         </div>
                     </div>
-
-                    <button
-                        class="btn btn-secondary-fill fs-6 shadow rounded w-100 d-flex align-items-center justify-content-center gap-2">
-                        <svg width="17" height="17" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_6300_114864)">
-                                <path
-                                    d="M8.98212 11.7893V10.6665C8.98212 10.0709 8.74553 9.49976 8.32439 9.07862C7.90326 8.65749 7.33208 8.4209 6.7365 8.4209H3.36808C2.77251 8.4209 2.20133 8.65749 1.78019 9.07862C1.35906 9.49976 1.12247 10.0709 1.12247 10.6665V11.7893"
-                                    stroke="white" stroke-width="1.12281" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path
-                                    d="M5.05256 6.17531C6.29278 6.17531 7.29817 5.16991 7.29817 3.9297C7.29817 2.68948 6.29278 1.68408 5.05256 1.68408C3.81234 1.68408 2.80695 2.68948 2.80695 3.9297C2.80695 5.16991 3.81234 6.17531 5.05256 6.17531Z"
-                                    stroke="white" stroke-width="1.12281" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path d="M10.6669 4.4917V7.86012" stroke="white" stroke-width="1.12281"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M12.3513 6.17529H8.98291" stroke="white" stroke-width="1.12281"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </g>
-                        </svg>
-                        Add New Patient
-                    </button>
                 </div>
             </div>
 
@@ -230,56 +154,23 @@
                         <div class="col">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
-                                    <h2 class="patient-name mb-1 fs-4">Hajjah Hassan Kaabi</h2>
+                                    <h2 class="patient-name mb-1 fs-4">{{selectedICUBed.PatientName}}</h2>
                                     <div class="patient-meta">
-                                        <span>63 Year(s)</span>
+                                        <span>{{selectedICUBed.FullAge}}</span>
                                         <div class="d-flex align-items-center gap-1">
                                             <span class="dot"></span>
-                                            <span>Female</span>
+                                            <span>{{selectedICUBed.Gender}}</span>
                                         </div>
                                         <div class="d-flex align-items-center gap-1">
                                             <span class="dot"></span>
-                                            <span>Saudi</span>
+                                            <span>{{selectedICUBed.Nationality}}</span>
                                         </div>
                                         <div class="d-flex align-items-center gap-1">
                                             <span class="dot"></span>
-                                            <span class="unit-text">ICCU Unit (ISO)</span>
+                                            <span class="unit-text">{{selectedICUBed.Shortname}}
+                                                ({{selectedICUBed.Bed}})</span>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="ms-auto d-flex gap-3">
-                                    <button class="btn btn-camera">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_6343_50728)">
-                                                <path
-                                                    d="M2 10C2 6.49335 2 4.74003 2.90796 3.55992C3.07418 3.34388 3.25989 3.14579 3.46243 2.96849C4.56878 2 6.21252 2 9.5 2H14.5C17.7875 2 19.4312 2 20.5376 2.96849C20.7401 3.14579 20.9258 3.34388 21.092 3.55992C22 4.74003 22 6.49335 22 10C22 13.5066 22 15.26 21.092 16.4401C20.9258 16.6561 20.7401 16.8542 20.5376 17.0315C19.4312 18 17.7875 18 14.5 18H9.5C6.21252 18 4.56878 18 3.46243 17.0315C3.25989 16.8542 3.07418 16.6561 2.90796 16.4401C2 15.26 2 13.5066 2 10Z"
-                                                    stroke="#94310D" stroke-width="1.5" />
-                                                <path d="M17 22L12.8333 18M7 22L11.1667 18" stroke="#94310D"
-                                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M12 18V23" stroke="#94310D" stroke-width="1.5"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                                <path
-                                                    d="M12 12.5C13.6569 12.5 15 11.1569 15 9.5C15 7.84315 13.6569 6.5 12 6.5C10.3431 6.5 9 7.84315 9 9.5C9 11.1569 10.3431 12.5 12 12.5Z"
-                                                    stroke="#94310D" stroke-width="1.5" />
-                                            </g>
-                                        </svg>
-                                        Open Camera
-                                    </button>
-                                    <button class="btn btn-speak">
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M11.3333 4.66683V7.3335C11.3333 9.17443 9.84092 10.6668 7.99999 10.6668C6.15904 10.6668 4.66666 9.17443 4.66666 7.3335V4.66683C4.66666 2.82588 6.15904 1.3335 7.99999 1.3335C9.84092 1.3335 11.3333 2.82588 11.3333 4.66683Z"
-                                                stroke="#188398" stroke-width="1.5" />
-                                            <path d="M11.3333 4.6665H9.33334M11.3333 7.33317H9.33334" stroke="#188398"
-                                                stroke-width="1.5" stroke-linecap="round" />
-                                            <path
-                                                d="M13.3333 7.3335C13.3333 10.279 10.9455 12.6668 7.99999 12.6668M7.99999 12.6668C5.05447 12.6668 2.66666 10.279 2.66666 7.3335M7.99999 12.6668V14.6668M7.99999 14.6668H9.99999M7.99999 14.6668H5.99999"
-                                                stroke="#188398" stroke-width="1.5" stroke-linecap="round" />
-                                        </svg>
-                                        Speak with Patient
-                                    </button>
                                 </div>
                             </div>
 
@@ -288,36 +179,36 @@
                                 <div class="col-md-3">
                                     <div class="info-card doctor">
                                         <p class="label">DOCTOR</p>
-                                        <div class="value">Dr. Nedal Khalil</div>
-                                        <p class="sub">INTERNAL MEDICINE</p>
+                                        <div class="value">{{selectedICUBed.DoctorName}}</div>
+                                        <p class="sub">{{selectedICUBed.Specialisation}}</p>
                                     </div>
                                 </div>
 
                                 <div class="col-md-3">
                                     <div class="info-card info-pink">
                                         <p class="label">ID NUMBER</p>
-                                        <div class="value">101566225594</div>
+                                        <div class="value">{{selectedICUBed.SSN}}</div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-3">
                                     <div class="info-card doctor">
                                         <p class="label">ADMISSION</p>
-                                        <div class="value">12 Jan 2026</div>
+                                        <div class="value">{{selectedICUBed.AdmitDate.split(' ')[0]}}</div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-3">
                                     <div class="info-card info-yellow">
                                         <p class="label">DAYS ADMITTED</p>
-                                        <div class="value big">111 Days</div>
+                                        <div class="value big">{{selectedICUBed.LengthOfStay}}</div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Tags -->
                             <div class="row gx-3 mt-4">
-                                <div class="col-4">
+                                <div class="col-4" *ngIf="selectedICUBed.IsDNR === '1'">
                                     <div class="tag tag-red w-100">
                                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -335,7 +226,7 @@
                                         Do Not Resuscitate
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-4" *ngIf="selectedICUBed.BedsoreName != ''">
                                     <div class="tag tag-orange w-100">
                                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -354,10 +245,10 @@
                                                     stroke-linejoin="round" />
                                             </g>
                                         </svg>
-                                        Stage-4 Bedsore Warning
+                                        {{selectedICUBed.BedsoreName}} Bedsore Warning
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-4" *ngIf="selectedICUBed.IsAllergy === 1">
                                     <div class="tag tag-outline w-100">
                                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -371,14 +262,33 @@
                                                     stroke-linejoin="round" />
                                             </g>
                                         </svg>
-                                        Allergy: Penicillin
-                                        <span class="arrow ms-auto">
+                                        Allergy
+                                        <span class="arrow ms-auto hoverAllergy cursor-pointer position-relative">
                                             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M5.05267 10.1055L8.42109 6.73707L5.05267 3.36865"
                                                     stroke="#94A3B8" stroke-width="1.12281" stroke-linecap="round"
                                                     stroke-linejoin="round" />
                                             </svg>
+                                            <div class="viewPatientsAllergiesModal" data-bs-backdrop="static"
+                                                tabindex="-1" id="viewAllergies" tabindex="-1">
+                                                <div class="modal-dialog modal-dialog-scrollable modal-l ">
+                                                    <div class="modal-content p-3">
+                                                        <div class="modal-header">
+                                                            <h6 class="modal-title" translate>
+                                                                {{langData?.common?.Allergies}}</h6>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div
+                                                                class="d-flex w-100 align-items-center justify-content-between">
+                                                                <div class="d-flex w-100 mt-2">
+                                                                    <div [innerHtml]="selectedICUBed.AllergyData"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </span>
                                     </div>
                                 </div>
@@ -430,10 +340,10 @@
                                             stroke-linejoin="round" />
                                     </g>
                                 </svg>
-                                <span class="live-badge">Live</span>
+                                <!-- <span class="live-badge">Live</span> -->
                             </div>
                             <p class="vital-title">Heart Rate</p>
-                            <h2 class="vital-value mb-0 text-heart">82 <span>BPM</span></h2>
+                            <h2 class="vital-value mb-0 text-heart">{{selectedICUBed.Pulse}} <span>BPM</span></h2>
                         </div>
                     </div>
 
@@ -461,10 +371,10 @@
                                             stroke-linejoin="round" />
                                     </g>
                                 </svg>
-                                <span class="live-badge">Live</span>
+                                <!-- <span class="live-badge">Live</span> -->
                             </div>
                             <p class="vital-title">SpO2</p>
-                            <h2 class="vital-value mb-0 text-spo">96 <span>%</span></h2>
+                            <h2 class="vital-value mb-0 text-spo">{{selectedICUBed.SPO2}} <span>%</span></h2>
                         </div>
                     </div>
 
@@ -488,10 +398,10 @@
                                             stroke-linejoin="round" />
                                     </g>
                                 </svg>
-                                <span class="live-badge">Live</span>
+                                <!-- <span class="live-badge">Live</span> -->
                             </div>
                             <p class="vital-title">Blood Pressure</p>
-                            <h2 class="vital-value mb-0 text-blood">145/92 <span>MMHG</span></h2>
+                            <h2 class="vital-value mb-0 text-blood">{{selectedICUBed.BP}} <span>MMHG</span></h2>
                         </div>
                     </div>
 
@@ -510,10 +420,11 @@
                                         stroke-linejoin="round" />
                                 </svg>
 
-                                <span class="live-badge">Live</span>
+                                <!-- <span class="live-badge">Live</span> -->
                             </div>
                             <p class="vital-title">Temperature</p>
-                            <h2 class="vital-value mb-0 text-temperature">37.2 <span>°C</span></h2>
+                            <h2 class="vital-value mb-0 text-temperature">{{selectedICUBed.Temperature}} <span>°C</span>
+                            </h2>
                         </div>
                     </div>
 
@@ -694,20 +605,6 @@
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                         Add Clinical Note
-                    </button>
-
-                    <button class="btn btn-refer w-100">
-                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M6.31545 14.7366H3.50843C3.13619 14.7366 2.77921 14.5887 2.516 14.3255C2.25279 14.0623 2.10492 13.7053 2.10492 13.333V3.50849C2.10492 3.13626 2.25279 2.77927 2.516 2.51606C2.77921 2.25285 3.13619 2.10498 3.50843 2.10498H6.31545"
-                                stroke="#188398" stroke-width="1.40351" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                            <path d="M11.2274 11.9297L14.7362 8.42088L11.2274 4.91211" stroke="#188398"
-                                stroke-width="1.40351" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M14.7367 8.4209H6.31561" stroke="#188398" stroke-width="1.40351"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                        Refer Patient
                     </button>
                 </div>
             </div>

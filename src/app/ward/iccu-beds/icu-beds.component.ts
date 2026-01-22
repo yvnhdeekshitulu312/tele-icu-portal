@@ -36,7 +36,6 @@ export const MY_FORMATS = {
 })
 export class ICUBedsComponent implements OnInit {
     doctorDetails: any;
-    hospitalId: any;
     location: any;
     wardID: any;
     ward: any;
@@ -62,7 +61,6 @@ export class ICUBedsComponent implements OnInit {
 
     ngOnInit() {
         this.doctorDetails = JSON.parse(sessionStorage.getItem("doctorDetails") || '{}');
-        this.hospitalId = sessionStorage.getItem("hospitalId");
         this.location = sessionStorage.getItem("locationName");
         this.ward = JSON.parse(sessionStorage.getItem("facility") || '{}');
         this.wardID = this.ward.FacilityID;
@@ -97,7 +95,8 @@ export class ICUBedsComponent implements OnInit {
             ConsultantID: 0,
             Status: 3,
             UserId: this.doctorDetails[0].UserId,
-            HospitalID: this.hospitalType
+            HospitalID: this.hospitalType,
+            AdmissionID: 0
         });
 
         this.us.get(url).subscribe((response: any) => {
@@ -170,10 +169,12 @@ export class ICUBedsComponent implements OnInit {
     }
 
     navigateToDetails(item: any) {
+        sessionStorage.setItem('icubeddetails', JSON.stringify(item))
+        sessionStorage.setItem('icubeds', JSON.stringify(this.FetchBedsFromWardDataList));
         this.router.navigate(['/ward/icu-bed-details'])
     }
 }
 
 const ICUBeds = {
-    'FetchBedsFromWardNPTeleICCU': 'FetchBedsFromWardNPTeleICCU?WardID=${WardID}&ConsultantID=${ConsultantID}&Status=${Status}&UserId=${UserId}&HospitalID=${HospitalID}'
+    'FetchBedsFromWardNPTeleICCU': 'FetchBedsFromWardNPTeleICCU?WardID=${WardID}&AdmissionID=${AdmissionID}&ConsultantID=${ConsultantID}&Status=${Status}&UserId=${UserId}&HospitalID=${HospitalID}'
 }
