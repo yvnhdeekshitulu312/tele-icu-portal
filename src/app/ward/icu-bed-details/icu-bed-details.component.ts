@@ -108,6 +108,7 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
                         radResults
                     };
                 })[0];
+                sessionStorage.setItem("icubeddetails", JSON.stringify(this.selectedICUBed));
             }
         });
     }
@@ -118,6 +119,18 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
 
     onLogout() {
         this.configService.onLogout();
+    }
+
+    getTimeAgo(dateStr: string): string {
+        const parsedDate = new Date(dateStr.replace(/-/g, ' '));
+        const now = new Date();
+
+        const diffMinutes = Math.floor((now.getTime() - parsedDate.getTime()) / 60000);
+
+        if (diffMinutes < 1) return 'JUST NOW';
+        if (diffMinutes < 60) return `${diffMinutes} MIN AGO`;
+
+        return `${Math.floor(diffMinutes / 60)} HRS AGO`;
     }
 }
 
