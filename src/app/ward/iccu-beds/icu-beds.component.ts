@@ -4,6 +4,7 @@ import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from "@angular/material/core";
 import { UtilityService } from "src/app/shared/utility.service";
 import { ConfigService } from 'src/app/services/config.service';
+import { Subscription, timer } from "rxjs";
 
 declare var $: any;
 
@@ -40,7 +41,17 @@ export class ICUBedsComponent implements OnInit {
     ward: any;
     langData: any;
     FetchBedsFromWardDataList: any = [];
+    FilteredBedsFromWardDataList: any = [];
     FetchMETCALLWardDataList: any = [];
+    totalCount: any = 0;
+    criticalCount: any = 0;
+    normalCount: any = 0;
+
+    type: any = 'all';
+    hospitalType: any = '0';
+
+    refreshTime: any = new Date();
+    private refreshSub!: Subscription;
 
     constructor(private us: UtilityService, private portalConfig: ConfigService) {
         this.langData = this.portalConfig.getLangData();
@@ -55,21 +66,67 @@ export class ICUBedsComponent implements OnInit {
         this.fetchICUBeds();
     }
 
+    ngOnDestroy() {
+        if (this.refreshSub) {
+            this.refreshSub.unsubscribe();
+        }
+    }
+
+    filteByHospital(type: any) {
+        this.hospitalType = type;
+        this.fetchICUBeds();
+    }
+
+    startAutoRefresh() {
+        if (this.refreshSub) {
+            this.refreshSub.unsubscribe();
+        }
+
+        this.refreshSub = timer(5 * 60 * 1000)
+            .subscribe(() => {
+                this.fetchICUBeds();
+            });
+    }
+
     fetchICUBeds() {
         const url = this.us.getApiUrl(ICUBeds.FetchBedsFromWardNPTeleICCU, {
             WardID: this.wardID,
             ConsultantID: 0,
             Status: 3,
             UserId: this.doctorDetails[0].UserId,
-            HospitalID: this.hospitalId
+            HospitalID: this.hospitalType
         });
 
         this.us.get(url).subscribe((response: any) => {
             if (response.Code === 200) {
-                this.FetchBedsFromWardDataList = response.FetchBedsFromWardDataList;
+                this.refreshTime = new Date();
+                this.startAutoRefresh();
+                const FetchBedsFromWardLabRadDataList = response.FetchBedsFromWardLabRadDataList;
+                this.FetchBedsFromWardDataList = response.FetchBedsFromWardDataList.map((element: any) => {
+                    const isFound = FetchBedsFromWardLabRadDataList.filter((a: any) => a.AdmissionID === element.AdmissionID);
+                    return {
+                        ...element,
+                        isCritical: isFound.length >= 1
+                    };
+                });
+                this.totalCount = this.FetchBedsFromWardDataList.length;
+                this.criticalCount = this.FetchBedsFromWardDataList.filter((e: any) => e.isCritical).length;
+                this.normalCount = this.FetchBedsFromWardDataList.filter((e: any) => !e.isCritical).length;
                 this.FetchMETCALLWardDataList = response.FetchMETCALLWardDataList;
+                this.filterBeds(this.type);
             }
         });
+    }
+
+    filterBeds(type: any) {
+        this.type = type;
+        if (this.type === 'all') {
+            this.FilteredBedsFromWardDataList = [...this.FetchBedsFromWardDataList];
+        } else if (this.type === 'critical') {
+            this.FilteredBedsFromWardDataList = this.FetchBedsFromWardDataList.filter((e: any) => e.isCritical);
+        } else {
+            this.FilteredBedsFromWardDataList = this.FetchBedsFromWardDataList.filter((e: any) => !e.isCritical);
+        }
     }
 
     findPrecautions(item: any, type: string) {

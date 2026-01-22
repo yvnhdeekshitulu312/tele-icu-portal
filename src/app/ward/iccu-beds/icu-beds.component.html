@@ -6,7 +6,7 @@
         </div>
         <div class="header__container gap-3">
             <div class="refresh-section">
-                <h6 class="fw-bold mb-1 fs-7">Last Refresh</h6>
+                <h6 class="fw-bold mb-1 fs-7">Last Refresh <button class="btn btn-primary" (click)="fetchICUBeds()">Refresh</button></h6>
                 <div class="d-flex align-items-center gap-1">
                     <svg width="16" height="16" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_873_6865)">
@@ -15,7 +15,7 @@
                                 fill="#7E8794" />
                         </g>
                     </svg>
-                    <p class="m-0">12-AUG-2022</p>
+                    <p class="m-0">{{ refreshTime | date:'dd-MMM-yyyy'}}</p>
                     <svg width="16" height="16" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_873_6870)">
                             <path
@@ -24,14 +24,17 @@
                             <path d="M6.25 3.5H5.5V6.5L8.125 8.075L8.5 7.46L6.25 6.125V3.5Z" fill="#4A5159" />
                         </g>
                     </svg>
-                    <p class="m-0">10:24:00</p>
+                    <p class="m-0">{{refreshTime | date:'HH:mm:ss'}}</p>
                 </div>
             </div>
             <div class="">
                 <div class="tele_clinical_toggle clinical_toggle toggle__switch d-inline-flex align-self-center">
-                    <button class="fs-7 btn selected">Suwaidi</button>
-                    <button class="fs-7 btn">Olaya</button>
-                    <button class="fs-7 btn">Nuzha</button>
+                    <button class="fs-7 btn" [class.selected]="hospitalType === '0'"
+                        (click)="filteByHospital('0')">All</button>
+                    <button class="fs-7 btn" [class.selected]="hospitalType === '2'"
+                        (click)="filteByHospital('2')">Suwaidi</button>
+                    <button class="fs-7 btn" [class.selected]="hospitalType === '3'"
+                        (click)="filteByHospital('3')">Nuzha</button>
                 </div>
             </div>
             <div class="">
@@ -54,9 +57,15 @@
             <div class="ms-auto d-flex align-items-center gap-3">
                 <div
                     class="tele_clinical_toggle fill_white clinical_toggle toggle__switch d-inline-flex align-self-center pe-4">
-                    <button class="fs-7 btn d-flex align-items-center gap-1 selected all">All <span>98</span> </button>
-                    <button class="fs-7 btn d-flex align-items-center gap-1 critical">Critical <span>99</span> </button>
-                    <button class="fs-7 btn d-flex align-items-center gap-1 normal">Normal <span>98</span> </button>
+                    <button class="fs-7 btn d-flex align-items-center gap-1 all" [class.selected]="type === 'all'"
+                        (click)="filterBeds('all')">All
+                        <span>{{totalCount}}</span> </button>
+                    <button class="fs-7 btn d-flex align-items-center gap-1 critical"
+                        [class.selected]="type === 'critical'" (click)="filterBeds('critical')">Critical
+                        <span>{{criticalCount}}</span> </button>
+                    <button class="fs-7 btn d-flex align-items-center gap-1 normal" [class.selected]="type === 'normal'"
+                        (click)="filterBeds('normal')">Normal <span>{{normalCount}}</span>
+                    </button>
                 </div>
                 <div class="header_profile d-flex align-items-center gap-2 ps-3">
                     <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -80,8 +89,8 @@
 <div class="container__wrapper">
     <div class="bedboards_height">
         <div class="row mx-0 p-2 g-2">
-            <div class="col-xl-6 col-lg-12 col-md-12" *ngFor="let item of FetchBedsFromWardDataList; let i = index ">
-                <div class="bed-board bed-board-occupied alert-box-anim">
+            <div class="col-xl-6 col-lg-12 col-md-12" *ngFor="let item of FilteredBedsFromWardDataList; let i = index ">
+                <div class="bed-board bed-board-occupied" [class.alert-box-anim]="item.isCritical">
                     <div class="row g-0 gradient_bg">
                         <div class="col-3 d-flex flex-column">
                             <div class="bed-details d-flex flex-column justify-content-between">
@@ -733,7 +742,7 @@
                                                                 stroke-linecap="round" stroke-linejoin="round" />
                                                         </g>
                                                     </svg>
-                                                    <span class="live-badge">Live</span>
+                                                    <!-- <span class="live-badge">Live</span> -->
                                                 </div>
                                                 <p class="vital-title">Heart Rate</p>
                                                 <h2 class="vital-value mb-0 text-heart">{{item.Pulse}} <span>BPM</span>
@@ -765,7 +774,7 @@
                                                                 stroke-linecap="round" stroke-linejoin="round" />
                                                         </g>
                                                     </svg>
-                                                    <span class="live-badge">Live</span>
+                                                    <!-- <span class="live-badge">Live</span> -->
                                                 </div>
                                                 <p class="vital-title">SpO2</p>
                                                 <h2 class="vital-value mb-0 text-spo">{{item.SPO2}} <span>%</span></h2>
@@ -792,7 +801,7 @@
                                                                 stroke-linecap="round" stroke-linejoin="round" />
                                                         </g>
                                                     </svg>
-                                                    <span class="live-badge">Live</span>
+                                                    <!-- <span class="live-badge">Live</span> -->
                                                 </div>
                                                 <p class="vital-title">Blood Pressure</p>
                                                 <h2 class="vital-value mb-0 text-blood">{{item.BP}} <span>MMHG</span>
@@ -815,7 +824,7 @@
                                                             stroke-linecap="round" stroke-linejoin="round" />
                                                     </svg>
 
-                                                    <span class="live-badge">Live</span>
+                                                    <!-- <span class="live-badge">Live</span> -->
                                                 </div>
                                                 <p class="vital-title">Temperature</p>
                                                 <h2 class="vital-value mb-0 text-temperature">{{item.Temperature}}
@@ -827,7 +836,7 @@
                                     </div>
 
                                     <!-- Alerts -->
-                                    <div class="alert-box alert-danger-custom mb-2">
+                                    <div class="alert-box alert-danger-custom mb-2" *ngIf="item.isCritical">
                                         <span class="alert-icon">
                                             <svg width="20" height="20" viewBox="0 0 13 13" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
@@ -839,7 +848,7 @@
                                         CBC Results abnormal
                                     </div>
 
-                                    <div class="alert-box alert-warning-custom">
+                                    <div class="alert-box alert-warning-custom" *ngIf="item.isCritical">
                                         <span class="alert-icon">
                                             <svg width="20" height="20" viewBox="0 0 13 13" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
