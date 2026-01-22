@@ -53,6 +53,8 @@ export class ICUBedsComponent implements OnInit {
     refreshTime: any = new Date();
     private refreshSub!: Subscription;
 
+    searchText: any = '';
+
     constructor(private us: UtilityService, private portalConfig: ConfigService) {
         this.langData = this.portalConfig.getLangData();
     }
@@ -113,20 +115,35 @@ export class ICUBedsComponent implements OnInit {
                 this.criticalCount = this.FetchBedsFromWardDataList.filter((e: any) => e.isCritical).length;
                 this.normalCount = this.FetchBedsFromWardDataList.filter((e: any) => !e.isCritical).length;
                 this.FetchMETCALLWardDataList = response.FetchMETCALLWardDataList;
-                this.filterBeds(this.type);
+                this.filterBeds();
             }
         });
     }
 
-    filterBeds(type: any) {
-        this.type = type;
-        if (this.type === 'all') {
-            this.FilteredBedsFromWardDataList = [...this.FetchBedsFromWardDataList];
-        } else if (this.type === 'critical') {
-            this.FilteredBedsFromWardDataList = this.FetchBedsFromWardDataList.filter((e: any) => e.isCritical);
-        } else {
-            this.FilteredBedsFromWardDataList = this.FetchBedsFromWardDataList.filter((e: any) => !e.isCritical);
+    filterBeds(type?: any) {
+        if (type) {
+            this.type = type;
         }
+
+        let data = [...this.FetchBedsFromWardDataList];
+
+        if (this.type === 'critical') {
+            data = data.filter((e: any) => e.isCritical);
+        } else if (this.type === 'normal') {
+            data = data.filter((e: any) => !e.isCritical);
+        }
+
+        const search = this.searchText?.trim().toLowerCase();
+
+        if (search && search.length > 2) {
+            const search = this.searchText.toLowerCase();
+
+            data = data.filter((x: any) =>
+                x?.SSN?.toString().includes(search) ||
+                x?.PatientName?.toLowerCase().includes(search)
+            );
+        }
+        this.FilteredBedsFromWardDataList = data;
     }
 
     findPrecautions(item: any, type: string) {
