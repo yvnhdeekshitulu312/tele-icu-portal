@@ -53,8 +53,8 @@ export class ICUBedsComponent implements OnInit {
 
     searchText: any = '';
 
-    constructor(private us: UtilityService, private portalConfig: ConfigService, private router: Router) {
-        this.langData = this.portalConfig.getLangData();
+    constructor(private us: UtilityService, private configService: ConfigService, private router: Router) {
+        this.langData = this.configService.getLangData();
     }
 
     ngOnInit() {
@@ -106,7 +106,7 @@ export class ICUBedsComponent implements OnInit {
                     return {
                         ...element,
                         isCritical: isFound.length >= 1,
-                        labResults, 
+                        labResults,
                         radResults
                     };
                 });
@@ -167,6 +167,10 @@ export class ICUBedsComponent implements OnInit {
         sessionStorage.setItem('icubeddetails', JSON.stringify(item))
         sessionStorage.setItem('icubeds', JSON.stringify(this.FetchBedsFromWardDataList));
         this.router.navigate(['/ward/icu-bed-details'])
+    }
+
+    onLogout() {
+        this.configService.onLogout();
     }
 }
 

@@ -5,6 +5,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from "@angular/materia
 import { Router } from "@angular/router";
 import { Subscription, timer } from "rxjs";
 import { UtilityService } from "src/app/shared/utility.service";
+import { ConfigService } from 'src/app/services/config.service';
 
 declare var $: any;
 
@@ -33,7 +34,7 @@ export const MY_FORMATS = {
         DatePipe,
     ],
 })
-export class ICUBedDetailsComponent implements OnInit, OnDestroy{
+export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     doctorDetails: any;
     wardID: any = '2090';
     langData: any;
@@ -44,7 +45,7 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy{
     refreshTime: any = new Date();
     private refreshSub!: Subscription;
 
-    constructor(private router: Router, private us: UtilityService) {
+    constructor(private router: Router, private us: UtilityService, private configService: ConfigService) {
 
     }
 
@@ -113,6 +114,10 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy{
 
     navigateToICUBeds() {
         this.router.navigate(['/ward/icu-beds']);
+    }
+
+    onLogout() {
+        this.configService.onLogout();
     }
 }
 
