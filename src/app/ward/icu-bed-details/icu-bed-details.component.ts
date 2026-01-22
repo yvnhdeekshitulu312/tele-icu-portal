@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from "@angular/material/core";
 import { Router } from "@angular/router";
@@ -33,7 +33,7 @@ export const MY_FORMATS = {
         DatePipe,
     ],
 })
-export class ICUBedDetailsComponent implements OnInit {
+export class ICUBedDetailsComponent implements OnInit, OnDestroy{
     doctorDetails: any;
     location: any;
     wardID: any;
@@ -61,6 +61,12 @@ export class ICUBedDetailsComponent implements OnInit {
             this.fetchICUBed();
         } else {
             this.navigateToICUBeds();
+        }
+    }
+
+    ngOnDestroy() {
+        if (this.refreshSub) {
+            this.refreshSub.unsubscribe();
         }
     }
 
