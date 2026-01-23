@@ -892,7 +892,7 @@
                     </div>
 
                     <!-- Vitals Log -->
-                    <div class="col-6">
+                    <div class="col-6 cursor-pointer" (click)="openVitals()">
                         <div class="qa-tile tile-green">
                             <svg width="27" height="27" viewBox="0 0 27 27" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -901,7 +901,6 @@
                                     stroke="#009689" stroke-width="2.24561" stroke-linecap="round"
                                     stroke-linejoin="round" />
                             </svg>
-
                             <div class="qa-text">Vitals Log</div>
                         </div>
                     </div>
@@ -944,7 +943,7 @@
                     </div>
 
                     <!-- Referrals -->
-                    <div class="col-6" (click)="openReferrals()">
+                    <div class="col-6 cursor-pointer" (click)="openReferrals()">
                         <div class="qa-tile tile-lightblue">
                             <svg width="27" height="27" viewBox="0 0 27 27" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -1098,7 +1097,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -1128,6 +1126,314 @@
                 </app-pdf-viewer>
                 <iframe *ngIf="trustedUrl && IsBiometric" height="600" width="100%"
                     [src]="(trustedUrl ? trustedUrl :'')| safeUrl" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="vitalsModal">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 98%;">
+        <div class="modal-content h-100">
+            <div class="modal-header">
+                <h5 class="modal-title text-nowrap">Vitals</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <app-wardheader-summary></app-wardheader-summary>
+                <div class="row m-1">
+                    <div class="col">
+                        <div class="card-3d h-100">
+                            <div class="page-header py-1 card-3d-header d-flex justify-content-end"
+                                data-bs-toggle="collapse" aria-expanded="true" aria-controls="collapseOne">
+                                <div class="clinical_toggle toggle__switch vital_toggle d-inline-flex align-self-start">
+                                    <button (click)="areaSpline()" id="" class="fs-7 btn "
+                                        [class.selected]="activeButton === 'areaSpline'">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24"
+                                            viewBox="0 0 25 24" fill="none">
+                                            <rect class="fill-trans" width="24" height="24"
+                                                transform="translate(0.820312)" fill="white" />
+                                            <path
+                                                d="M3.25488 19.3588V14.224C3.89638 12.8337 4.66591 11.2705 5.57303 10.0474C6.51823 8.77289 7.51067 8.00607 8.54723 8.00607C8.85694 8.00607 9.19801 8.20305 9.61736 8.68678C9.98291 9.10846 10.3336 9.65865 10.7197 10.2645C10.7704 10.344 10.8217 10.4245 10.8738 10.5058C11.3081 11.1844 11.7896 11.9119 12.3489 12.4679C12.9126 13.0283 13.6074 13.4665 14.4697 13.4665C14.9534 13.4665 15.3849 13.2654 15.7598 12.9785C16.1327 12.6933 16.4779 12.302 16.802 11.8652C17.3406 11.139 17.8722 10.2133 18.4025 9.28974C18.5064 9.10881 18.6102 8.92798 18.7141 8.74875C19.3608 7.63245 20.0131 6.56674 20.7194 5.78749C21.267 5.18333 21.7998 4.80356 22.339 4.67175V19.3588H3.25488Z"
+                                                fill="#fff" fill-opacity="0.2" stroke="#334499" />
+                                        </svg>
+                                        <!-- Areaspline -->
+                                        <span class="rounded-3 clr-primary-600">
+                                            {{langData?.common?.area_spline}}
+                                        </span>
+                                    </button>
+                                    <button (click)="spline()" class="fs-7 btn selected"
+                                        [class.selected]="activeButton === 'spline'">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none">
+                                            <rect class="fill-trans" width="24" height="24" fill="white" />
+                                            <path class="fill-trans"
+                                                d="M2.77344 18.1512C2.77344 13.1199 5.19488 8.81674 8.20803 8.81674C11.2212 8.81674 12.7773 18.9227 16.7843 19.0819C20.3191 19.2223 21.1934 11.6106 21.1934 6.07861"
+                                                stroke="#334499" />
+                                            <rect x="0.828125" y="16.1621" width="4" height="4" rx="2" fill="#334499" />
+                                            <rect x="6.12598" y="6.88721" width="4" height="4" rx="2" fill="#334499" />
+                                            <rect x="14.873" y="16.4473" width="4" height="4" rx="2" fill="#334499" />
+                                            <rect x="19.1719" y="3.83789" width="4" height="4" rx="2" fill="#334499" />
+                                        </svg>
+                                        <!-- Spline -->
+                                        <span class="rounded-3 clr-primary-600">
+                                            {{langData?.common?.spline}}
+                                        </span>
+                                    </button>
+                                    <button (click)="line()" class="fs-7 btn "
+                                        [class.selected]="activeButton === 'line'">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none">
+                                            <rect class="fill-trans" width="24" height="24" fill="white" />
+                                            <rect x="1.99219" y="10" width="4" height="4" rx="2" fill="#334499" />
+                                            <rect x="18.0088" y="10" width="4" height="4" rx="2" fill="#334499" />
+                                            <path d="M3.875 12.0215H20.3545" stroke="#334499" stroke-width="1.5" />
+                                        </svg>
+                                        <!-- Line -->
+                                        <span class="rounded-3 clr-primary-600">
+                                            {{langData?.common?.line}}
+
+                                        </span>
+                                    </button>
+                                    <button (click)="column()" class="fs-7 btn "
+                                        [class.selected]="activeButton === 'column'">
+                                        <svg width="19" height="17" viewBox="0 0 19 17" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M4.17529 4.87445C4.72758 4.87445 5.17529 5.32217 5.17529 5.87445V14.7721C5.17529 15.3244 4.72758 15.7721 4.17529 15.7721C3.62301 15.7721 3.17529 15.3244 3.17529 14.7721V5.87445C3.17529 5.32217 3.62301 4.87445 4.17529 4.87445Z"
+                                                fill="#334499" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M9.17529 0.830383C9.72758 0.830383 10.1753 1.2781 10.1753 1.83038V14.7721C10.1753 15.3244 9.72758 15.7721 9.17529 15.7721C8.62301 15.7721 8.17529 15.3244 8.17529 14.7721V1.83038C8.17529 1.2781 8.62301 0.830383 9.17529 0.830383Z"
+                                                fill="#334499" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M14.1753 8.17755C14.7276 8.17755 15.1753 8.62527 15.1753 9.17755V14.7721C15.1753 15.3244 14.7276 15.7721 14.1753 15.7721C13.623 15.7721 13.1753 15.3244 13.1753 14.7721V9.17755C13.1753 8.62527 13.623 8.17755 14.1753 8.17755Z"
+                                                fill="#334499" />
+                                            <rect class="fill-trans" x="0.175293" y="14.7722" width="18" height="1.5"
+                                                rx="0.75" fill="#334499" />
+                                        </svg>
+                                        <span class="rounded-3 clr-primary-600">
+                                            {{langData?.common?.column}}
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="vital_chart">
+                                <div id="chart-line" #chartLineSpline #chartLineAreaSpline #chartLine #chartColumn>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-4">
+                        <div class="card-3d">
+                            <div class="card-3d-head p-2 border-bottom">
+                                <div class="d-flex align-items-center gap-2 justify-content-end w-max-content ms-auto">
+                                    <button class="date_range_calendar p-0 position-relative" style="width: 227px;">
+                                        <mat-date-range-input class="btn btn-main-outline"
+                                            [formGroup]="tablePatientsForm" [rangePicker]="picker">
+                                            <input matStartDate formControlName="FromDate">
+                                            <input matEndDate formControlName="ToDate" (dateChange)="GetVitalsData()">
+                                        </mat-date-range-input>
+                                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-date-range-picker #picker></mat-date-range-picker>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="fixed_alter_list py-2">
+                                <div class="vitalgraph_Table ipVitalgraph pe-3 horizontalScroll">
+                                    <table class="table border-0">
+                                        <tbody>
+                                            <tr *ngFor="let vitaldate of tableVitalsListFiltered; let i = index">
+                                                <td class="position-relative pe-0">
+                                                    <span class="table-date-heading d-inline-flex"
+                                                        style="position: unset">
+                                                        <span>
+                                                            <svg width="19" height="19" viewBox="0 0 19 19" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M14.9847 2.49861H13.9809V1.7883C13.9809 1.48874 13.821 1.21179 13.5614 1.06201C13.3021 0.912035 12.9822 0.912035 12.7228 1.06201C12.4632 1.21179 12.3033 1.48873 12.3033 1.7883V2.49841L6.10788 2.4986V1.78829C6.10788 1.48873 5.94796 1.21179 5.68838 1.06201C5.42899 0.91203 5.10913 0.91203 4.84976 1.06201C4.59017 1.21179 4.43025 1.48873 4.43025 1.78829V2.4984L3.42647 2.4986C2.61087 2.4986 1.82861 2.82254 1.25191 3.39923C0.675 3.97614 0.351074 4.75839 0.351074 5.574V15.8739C0.351074 16.6895 0.675015 17.4718 1.25191 18.0487C1.82861 18.6254 2.61087 18.9495 3.42647 18.9495H14.9851C15.8007 18.9495 16.5829 18.6254 17.1596 18.0487C17.7365 17.4718 18.0605 16.6895 18.0605 15.8739V5.574C18.0605 4.75839 17.7365 3.97614 17.1596 3.39923C16.5829 2.82252 15.8007 2.4986 14.9851 2.4986L14.9847 2.49861ZM3.42913 4.17625H4.43291V5.44569L4.43272 5.4455C4.43272 5.74506 4.59264 6.02201 4.85222 6.17179C5.1118 6.32176 5.43147 6.32176 5.69104 6.17179C5.95042 6.02201 6.11035 5.74507 6.11035 5.4455V4.17606H12.3033V5.4455C12.3033 5.74506 12.4632 6.02201 12.7228 6.17179C12.9822 6.32176 13.302 6.32176 13.5614 6.17179C13.821 6.02201 13.9809 5.74507 13.9809 5.4455V4.17606H14.9847C15.3554 4.17606 15.711 4.3233 15.9731 4.58561C16.2352 4.84773 16.3826 5.20326 16.3826 5.57402V8.11834H2.02815V5.57402C2.02815 5.20327 2.17559 4.84773 2.43771 4.58561C2.69983 4.3233 3.05536 4.17606 3.42611 4.17606L3.42913 4.17625ZM14.9847 17.2721H3.42613C3.05539 17.2721 2.69985 17.1248 2.43773 16.8627C2.17561 16.6004 2.02817 16.2449 2.02817 15.8741V9.79602H16.3827V15.8741C16.3827 16.2449 16.2352 16.6004 15.9731 16.8627C15.711 17.1248 15.3555 17.2721 14.9847 17.2721H14.9847Z"
+                                                                    fill="#ffffff"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>{{vitaldate.CreateDateNew}}</span>
+                                                    </span>
+
+                                                    <div>
+                                                        <div class="fixed_alter_header bg-primary-50">
+                                                            <div class="row gx-2 p-2 mx-0">
+                                                                <div class="" style="width: 7%;">
+                                                                    <p class="label m-0">{{langData?.common?.Time}}</p>
+                                                                </div>
+                                                                <div class="" style="width: 11%;">
+                                                                    <p class="label m-0">
+                                                                        {{langData?.common?.BPSystolic}}/{{langData?.common?.BPDiastolic}}
+                                                                    </p>
+                                                                </div>
+                                                                <div class="" style="width: 7%;">
+                                                                    <p class="label m-0">Temperature</p>
+                                                                </div>
+                                                                <div class="" style="width: 7%;">
+                                                                    <p class="label m-0">{{langData?.common?.Pulse}}</p>
+                                                                </div>
+                                                                <div class="" style="width: 7%;">
+                                                                    <p class="label m-0">
+                                                                        {{langData?.common?.Respiration}}
+                                                                    </p>
+                                                                </div>
+                                                                <div class="" style="width: 7%;">
+                                                                    <p class="label m-0">{{langData?.common?.SPO2}}</p>
+                                                                </div>
+                                                                <div class="" style="width: 7%;">
+                                                                    <p class="label m-0">
+                                                                        {{langData?.common?.O2FlowRate}}
+                                                                    </p>
+                                                                </div>
+                                                                <div class="" style="width: 7%;">
+                                                                    <p class="label m-0">Ventilated</p>
+                                                                </div>
+                                                                <div class="" style="width: 7%;">
+                                                                    <p class="label m-0">Bipap</p>
+                                                                </div>
+                                                                <div class="" style="width: 7%;">
+                                                                    <p class="label m-0">Cpap</p>
+                                                                </div>
+                                                                <div class="" style="width: 7%;">
+                                                                    <p class="label m-0">{{langData?.common?.Score}}</p>
+                                                                </div>
+                                                                <div class="" style="width: 7%;">
+                                                                    <p class="label m-0">Ward</p>
+                                                                </div>
+
+                                                                <div class="" style="width: 12%;">
+                                                                    <p class="label m-0">Saved By</p>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="">
+                                                            <div class="my-2 table-cards_div p-0 overflow-hidden"
+                                                                *ngFor="let vital of filterFunction(tableVitalsList, vitaldate.CreateDateNew); let i = index">
+                                                                <div class="row p-2 mx-0 gx-2 ">
+                                                                    <div class="" style="width: 7%;">
+                                                                        <p class="m-0">{{vital.Time}}</p>
+                                                                    </div>
+                                                                    <div class="" style="width: 11%;">
+                                                                        <p class="m-0 ">{{vital.BPSystolic}} /
+                                                                            {{vital.BPDiastolic}}</p>
+                                                                    </div>
+                                                                    <div class="" style="width: 7%;">
+                                                                        <p class="m-0">{{vital.Temparature}}</p>
+                                                                    </div>
+                                                                    <div class="" style="width: 7%;">
+                                                                        <p class="m-0">{{vital.Pulse}}</p>
+                                                                    </div>
+                                                                    <div class="" style="width: 7%;">
+                                                                        <p class="m-0">{{vital.Respiration}}</p>
+                                                                    </div>
+                                                                    <div class="" style="width: 7%;">
+                                                                        <p class="m-0">{{vital.SPO2}}</p>
+                                                                    </div>
+                                                                    <div class="" style="width: 7%;">
+                                                                        <p class="m-0">{{vital.O2FlowRate}}</p>
+                                                                    </div>
+                                                                    <div class="" style="width: 7%;">
+                                                                        <p class="m-0">{{vital?.Ventilated}}</p>
+                                                                    </div>
+                                                                    <div class="" style="width: 7%;">
+                                                                        <p class="m-0">{{vital?.Bipap}}</p>
+                                                                    </div>
+                                                                    <div class="" style="width: 7%;">
+                                                                        <p class="m-0">{{vital?.Cpap}}</p>
+                                                                    </div>
+                                                                    <div class="" style="width: 7%;">
+                                                                        <p class="m-0">{{vital?.VitalScore}}</p>
+                                                                    </div>
+                                                                    <div class="" style="width: 7%;">
+                                                                        <p class="m-0">{{vital?.Ward}}</p>
+                                                                    </div>
+                                                                    <div class="" style="width: 12%;">
+                                                                        <p class="m-0">{{vital?.VitalCreatedBy}}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    [ngClass]="vital.FinalRemarks === '1' ? 'bg-primary-50 px-2 py-1 endblock' :  'bg-primary-50 px-2 py-1 endblock d-none'">
+                                                                    <div class="d-flex align-items-start w-100 gx-2">
+                                                                        <div class="d-flex col-3">
+                                                                            <p for="" class="label fw-bold m-0">Remarks:
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="d-flex gap-1 col-2"
+                                                                            *ngIf="vital.BPSysDiastolicRemarks!=''">
+                                                                            <p for="" class="label fw-bold m-0">BP:</p>
+                                                                            <p for=""
+                                                                                class="form-label m-0 text-uppercase">
+                                                                                {{vital.BPSysDiastolicRemarks}}</p>
+                                                                        </div>
+                                                                        <div class="d-flex gap-1 col-3"
+                                                                            *ngIf="vital.TemparatureRemarks!=''">
+                                                                            <p for="" class="label fw-bold m-0">Temp:
+                                                                            </p>
+                                                                            <p for=""
+                                                                                class="form-label m-0 text-uppercase">
+                                                                                {{vital.TemparatureRemarks}}</p>
+                                                                        </div>
+                                                                        <div class="d-flex gap-1 col-3"
+                                                                            *ngIf="vital.PulseRemarks!=''">
+                                                                            <p for="" class="label fw-bold m-0">Pulse:
+                                                                            </p>
+                                                                            <p for=""
+                                                                                class="form-label m-0 text-uppercase">
+                                                                                {{vital.PulseRemarks}}</p>
+                                                                        </div>
+                                                                        <div class="d-flex gap-1 col-3"
+                                                                            *ngIf="vital.RespirationRemarks!=''">
+                                                                            <p for="" class="label fw-bold m-0">
+                                                                                Respiration:</p>
+                                                                            <p for=""
+                                                                                class="form-label m-0 text-uppercase">
+                                                                                {{vital.RespirationRemarks}}</p>
+                                                                        </div>
+                                                                        <div class="d-flex gap-1 col-3"
+                                                                            *ngIf="vital.SPO2Remarks!=''">
+                                                                            <p for="" class="label fw-bold m-0">SPO2:
+                                                                            </p>
+                                                                            <p for=""
+                                                                                class="form-label m-0 text-uppercase">
+                                                                                {{vital.SPO2Remarks}}</p>
+                                                                        </div>
+                                                                        <div class="d-flex gap-1 col-3"
+                                                                            *ngIf="vital.O2FlowRateRemarks!=''">
+                                                                            <p for="" class="label fw-bold m-0">
+                                                                                O2FlowRate:</p>
+                                                                            <p for=""
+                                                                                class="form-label m-0 text-uppercase">
+                                                                                {{vital.O2FlowRateRemarks}}</p>
+                                                                        </div>
+                                                                        <div class="col">
+
+                                                                        </div>
+                                                                        <div class="col">
+
+                                                                        </div>
+                                                                        <div class="col">
+
+                                                                        </div>
+                                                                        <div class="col">
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
