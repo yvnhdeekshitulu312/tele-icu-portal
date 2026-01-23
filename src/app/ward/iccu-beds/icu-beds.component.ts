@@ -54,6 +54,10 @@ export class ICUBedsComponent implements OnInit {
     private refreshSub!: Subscription;
 
     searchText: any = '';
+    activeKey: string = 'all';
+    segments: any[] = [];
+
+
 
     constructor(private us: UtilityService, private configService: ConfigService, private router: Router) {
         this.langData = this.configService.getLangData();
@@ -62,8 +66,12 @@ export class ICUBedsComponent implements OnInit {
     ngOnInit() {
         this.doctorDetails = JSON.parse(sessionStorage.getItem("doctorDetails") || '{}');
         this.fetchICUBeds();
+        this.setActive('all');
     }
 
+    setActive(key: string): void {
+        this.activeKey = key;
+    }
     ngOnDestroy() {
         if (this.refreshSub) {
             this.refreshSub.unsubscribe();
@@ -117,8 +125,14 @@ export class ICUBedsComponent implements OnInit {
                 this.normalCount = this.FetchBedsFromWardDataList.filter((e: any) => !e.isCritical).length;
                 this.maleCount = this.FetchBedsFromWardDataList.filter((x: any) => x.GenderID === '1').length;
                 this.femaleCount = this.FetchBedsFromWardDataList.filter((x: any) => x.GenderID === '2').length;
+                this.segments = [
+                    { key: 'all', label: 'All', count: this.totalCount },
+                    { key: 'critical', label: 'Critical', count: this.criticalCount },
+                    { key: 'normal', label: 'Normal', count: this.normalCount }
+                ];
                 this.FetchMETCALLWardDataList = response.FetchMETCALLWardDataList;
                 this.filterBeds();
+
             }
         });
     }
