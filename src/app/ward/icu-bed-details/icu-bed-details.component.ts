@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { Subscription, timer } from "rxjs";
 import { UtilityService } from "src/app/shared/utility.service";
 import { ConfigService } from 'src/app/services/config.service';
+import { ConfigService as BedConfig } from '../services/config.service';
 
 declare var $: any;
 
@@ -44,8 +45,9 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     filteredICUBeds: any = [];
     refreshTime: any = new Date();
     private refreshSub!: Subscription;
+    FetchDoctorReferralOrdersDataList: any = [];
 
-    constructor(private router: Router, private us: UtilityService, private configService: ConfigService) {
+    constructor(private router: Router, private us: UtilityService, private configService: ConfigService, private config: BedConfig) {
 
     }
 
@@ -64,6 +66,8 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
         if (this.refreshSub) {
             this.refreshSub.unsubscribe();
         }
+        sessionStorage.removeItem('icubeds');
+        sessionStorage.removeItem('icubeddetails');
     }
 
     onSelectBed(item: any) {
@@ -109,6 +113,7 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
                     };
                 })[0];
                 sessionStorage.setItem("icubeddetails", JSON.stringify(this.selectedICUBed));
+                this.fetchDoctorReferals();
             }
         });
     }
@@ -131,6 +136,29 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
         if (diffMinutes < 60) return `${diffMinutes} MIN AGO`;
 
         return `${Math.floor(diffMinutes / 60)} HRS AGO`;
+    }
+
+    fetchDoctorReferals() {
+        this.FetchDoctorReferralOrdersDataList = [];
+        this.config.FetchDoctorReferralOrders(this.selectedICUBed.AdmissionID, this.selectedICUBed.WardID, this.selectedICUBed.HospitalID).subscribe((response: any) => {
+            if (response.Code == 200) {
+                this.FetchDoctorReferralOrdersDataList = response.FetchDoctorReferralOrdersDataList;
+                this.FetchDoctorReferralOrdersDataList.forEach((element: any, index: any) => {
+                    element.isVerified = element?.IsVisited === 'True' ? true : false;
+                    element.VerifiedBy = element.VisitUpdatedByName;
+                    element.VerifiedDate = element.VisitedDate;
+                    element.Comments = element.Comments;
+                });
+            }
+        }, (error) => {
+            console.error('Get Data API error:', error);
+        });
+    }
+
+    openReferrals() {
+        if (this.FetchDoctorReferralOrdersDataList.length > 0) {
+            $('#viewReferal').modal('show');
+        }
     }
 }
 

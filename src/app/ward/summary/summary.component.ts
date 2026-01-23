@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConfigService } from 'src/app/services/config.service';
 import { Router } from '@angular/router';
 import * as Highcharts from 'highcharts';
-import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
-import { PatientfoldermlComponent } from 'src/app/shared/patientfolderml/patientfolderml.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GenericModalBuilder } from 'src/app/shared/generic-modal-builder.service';
 
 declare var $: any;
@@ -20,10 +19,11 @@ export class SummaryComponent implements OnInit {
   showResultsinPopUp = false;
   smartDataList: any;
   patientHigh: any;
+  isdetailShow = true;
 
   constructor(private portalConfig: ConfigService, private router: Router, private modalService: NgbModal, private modalSvc: GenericModalBuilder) {
     this.langData = this.portalConfig.getLangData();
-   }
+  }
 
   ngOnInit(): void {
     this.selectedView = JSON.parse(sessionStorage.getItem("InPatientDetails") || '{}');
@@ -31,7 +31,11 @@ export class SummaryComponent implements OnInit {
     if (!this.selectedView || Object.keys(this.selectedView).length === 0) {
       this.selectedView = JSON.parse(sessionStorage.getItem("selectedView") || '{}');
     }
-    
+
+    if (!this.selectedView || Object.keys(this.selectedView).length === 0) {
+      this.selectedView = JSON.parse(sessionStorage.getItem("icubeddetails") || '{}');
+    }
+
     if (this.selectedView.PatientType == "2") {
       if (this.selectedView.Bed.includes('ISO'))
         this.SelectedViewClass = "m-0 fw-bold alert_animate token iso-color-bg-primary-100";
@@ -40,42 +44,17 @@ export class SummaryComponent implements OnInit {
     } else {
       this.SelectedViewClass = "m-0 fw-bold alert_animate token";
     }
-
   }
-
-  isdetailShow = true;
 
   isdetailShows() {
     this.isdetailShow = true;
-    if(this.isdetailShow = true){
-      $('.patient_card').addClass('maximum')
-    }
-    // else{
-    //   $('.patient_card').removeClass('maximum')
-    // }
   }
+
   isdetailHide() {
     this.isdetailShow = false;
-    if(this.isdetailShow === false){
-      $('.patient_card').removeClass('maximum')
-    }
   }
 
-  navigateBackToRadiologyWorklist() {
-    sessionStorage.removeItem("InPatientDetails");
-    sessionStorage.setItem("FromRadiology", "false");
-    this.router.navigate(['/suit/radiologyworklist']);
-  }
-
-  navigateToResults() {
-    sessionStorage.setItem("FromCaseSheet", "false");
-    //this.router.navigate(['/home/otherresults']);
-    sessionStorage.setItem("selectedView", JSON.stringify(this.selectedView));
-    sessionStorage.setItem("PatientDetails", JSON.stringify(this.selectedView));
-    this.showResultsinPopUp = true;
-    $("#viewResults").modal("show");
-  }
-   getHight() {
+  getHeight() {
     this.portalConfig.getPatientHight(this.selectedView.PatientID).subscribe(res => {
       this.patientHigh = res;
       this.smartDataList = this.patientHigh.SmartDataList;
@@ -83,6 +62,7 @@ export class SummaryComponent implements OnInit {
       this.createHWChartLine();
     })
   }
+
   private createHWChartLine(): void {
     let data: any = {};
 
@@ -160,49 +140,24 @@ export class SummaryComponent implements OnInit {
         trackBorderRadius: 7
       }
     } as any);
-
   }
 
-  openPatientSummary(event: any) {
-      event.stopPropagation();
-      // sessionStorage.setItem("PatientDetails", JSON.stringify(this.selectedView));   
-      // sessionStorage.setItem("selectedView", JSON.stringify(this.selectedView));
-      // sessionStorage.setItem("selectedPatientAdmissionId", this.selectedView.AdmissionID);
-      // sessionStorage.setItem("PatientID", this.selectedView.PatientID);
-      // sessionStorage.setItem("SummaryfromCasesheet", "true");
-      // sessionStorage.setItem("FromPhysioTherapyWorklist", "true");
-
-      sessionStorage.setItem("PatientDetails", JSON.stringify(this.selectedView));
-      sessionStorage.setItem("selectedView", JSON.stringify(this.selectedView));
-      sessionStorage.setItem("selectedPatientAdmissionId", this.selectedView.AdmissionID);
-      sessionStorage.setItem("PatientID", this.selectedView.PatientID);
-  
-      const options: NgbModalOptions = {
-            size: 'xl',
-            windowClass: 'vte_view_modal'
-          };
-      const modalRef = this.modalSvc.openModal(PatientfoldermlComponent, {
-        data: this.selectedView,
-        readonly: true
-      }, options);
-    }
-      getCTASScoreClass() {
-    if(this.selectedView?.CTASScore == '1') {
+  getCTASScoreClass() {
+    if (this.selectedView?.CTASScore == '1') {
       return 'Resuscitation';
     }
-    else if(this.selectedView?.CTASScore == '2') {
+    else if (this.selectedView?.CTASScore == '2') {
       return 'Emergent';
     }
-    else if(this.selectedView?.CTASScore == '3') {
+    else if (this.selectedView?.CTASScore == '3') {
       return 'Urgent';
     }
-    else if(this.selectedView?.CTASScore == '4') {
+    else if (this.selectedView?.CTASScore == '4') {
       return 'LessUrgent';
     }
-    else if(this.selectedView?.CTASScore == '5') {
+    else if (this.selectedView?.CTASScore == '5') {
       return 'NonUrgent';
     }
     return '';
   }
-
 }
