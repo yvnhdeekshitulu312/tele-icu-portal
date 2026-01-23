@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, QueryList, ViewChildren, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, QueryList, ViewChildren, ViewChild, Input, EventEmitter, Output } from '@angular/core';
 import { ConfigService } from 'src/app/ward/services/config.service';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
@@ -45,6 +45,10 @@ export const MY_FORMATS = {
   ]
 })
 export class IcuProgressnotesNewComponent extends BaseComponent implements OnInit {
+  @Input()
+  fromTeleICUBed: boolean = false;
+  @Output()
+  onClose: EventEmitter<any> = new EventEmitter()
 
   IsHome = true;
   IsHeadNurse: any;
@@ -58,7 +62,7 @@ export class IcuProgressnotesNewComponent extends BaseComponent implements OnIni
   FetchPatientICUProgressNoteWorkListDData: any = [];
   FetchPatientICUProgressNoteWorkListDData1: any = [];
   viewDraft: boolean = true;
-  FetchPatientDataEFormsDataList:any=[];
+  FetchPatientDataEFormsDataList: any = [];
   url = '';
   FetchPatientICUProgressNotesDData: any = [];
   list: any = [];
@@ -86,7 +90,7 @@ export class IcuProgressnotesNewComponent extends BaseComponent implements OnIni
   @ViewChild('divAssessment') divAssessment!: ElementRef;
   MedicalHistory: any;
   ReasonForAdm: any;
-  
+
 
   constructor(private fb: FormBuilder, private config: ConfigService, private router: Router, public datepipe: DatePipe
     , private modalService: GenericModalBuilder, private us: UtilityService, private service: IcuProgressnotesService, private modalSvc: NgbModal) {
@@ -98,9 +102,6 @@ export class IcuProgressnotesNewComponent extends BaseComponent implements OnIni
     } else {
       this.IsHome = true;
     }
-
-    this.intialize();
-
   }
 
   search(event: any) {
@@ -129,10 +130,10 @@ export class IcuProgressnotesNewComponent extends BaseComponent implements OnIni
     const hours = this.padZero(now.getHours());
     const minutes = this.padZero(now.getMinutes());
     return `${hours}:${minutes}`;
-}
-padZero(value: number): string {
-  return value < 10 ? '0' + value : value.toString();
-}
+  }
+  padZero(value: number): string {
+    return value < 10 ? '0' + value : value.toString();
+  }
 
   intialize() {
     this.ICUProgressNoteID = 0;
@@ -262,7 +263,7 @@ padZero(value: number): string {
       GlycemicControl: '',
       IsolationStatus: '',
 
-      
+
       issuerows: this.fb.array([
         this.fb.group({
           plan: '',
@@ -317,8 +318,19 @@ padZero(value: number): string {
     this.patientDetails = JSON.parse(sessionStorage.getItem("InPatientDetails") || '{}');
     this.IsHeadNurse = sessionStorage.getItem("IsHeadNurse");
     this.IsDoctor = sessionStorage.getItem("IsDoctorLogin");
+    if (this.fromTeleICUBed) {
+      this.selectedView = JSON.parse(sessionStorage.getItem("icubeddetails") || '{}');
+      this.admissionID = this.selectedView.AdmissionID;
+      this.wardID = this.selectedView.WardID;
+      this.hospitalID = this.selectedView.HospitalID;
+    }
     this.FetchPatientICUProgressNoteWorkList();
     this.fetchPatientDataEforms();
+    this.intialize();
+  }
+
+  onCloseClick() {
+    this.onClose.emit()
   }
 
   navigatetoBedBoard() {
@@ -349,7 +361,7 @@ padZero(value: number): string {
     });
   }
 
-  save(DraftType:any) {
+  save(DraftType: any) {
     const progressNotesData = {
       slot1: this.progressNotes.get('slot1')?.value || false,
       slot2: this.progressNotes.get('slot2')?.value || false
@@ -487,11 +499,11 @@ padZero(value: number): string {
     let issuesAndPlans: any = [];
 
     (this.progressNotes.get('issuerows') as FormArray).value.forEach((item: any, i: any) => {
-      issuesAndPlans.push({ 
-        [`Issue${i + 1}`]: item.issue, 
+      issuesAndPlans.push({
+        [`Issue${i + 1}`]: item.issue,
         [`Plan${i + 1}`]: item.plan,
         [`Measurable${i + 1}`]: item.measurable
-       });
+      });
     });
 
     var payload = {
@@ -533,13 +545,13 @@ padZero(value: number): string {
       "UserID": this.doctorDetails[0].UserId,
       "WorkStationID": this.wardID,
       "HospitalID": this.hospitalID,
-      "VentilatorStatus" : this.ventilatorStatus,
-      "VentilatorStatusDate" : this.progressNotes.get('VentilatorStatusDate')?.value,
-      "Vasopressors" : this.divVasopressors.nativeElement.innerHTML,
-      "Sedation" : this.divSedation.nativeElement.innerHTML,
-      "GlycemicControl" : this.divGlycemicControl.nativeElement.innerHTML,
-      "IsolationStatus" : this.divIsolationStatus.nativeElement.innerHTML,
-      "IsDraft":DraftType==1?true:false
+      "VentilatorStatus": this.ventilatorStatus,
+      "VentilatorStatusDate": this.progressNotes.get('VentilatorStatusDate')?.value,
+      "Vasopressors": this.divVasopressors.nativeElement.innerHTML,
+      "Sedation": this.divSedation.nativeElement.innerHTML,
+      "GlycemicControl": this.divGlycemicControl.nativeElement.innerHTML,
+      "IsolationStatus": this.divIsolationStatus.nativeElement.innerHTML,
+      "IsDraft": DraftType == 1 ? true : false
     };
 
     this.us.post("SavePatientICUProgressNote", payload).subscribe((response) => {
@@ -563,7 +575,7 @@ padZero(value: number): string {
       .subscribe((response: any) => {
         if (response.Code == 200) {
           this.FetchPatientICUProgressNoteWorkListDData = this.FetchPatientICUProgressNoteWorkListDData1 = response.FetchPatientICUProgressNoteWorkListDData;
-          this.FetchPatientICUProgressNoteWorkListDData = this.FetchPatientICUProgressNoteWorkListDData1.filter((x:any) => !x.IsDraft);
+          this.FetchPatientICUProgressNoteWorkListDData = this.FetchPatientICUProgressNoteWorkListDData1.filter((x: any) => !x.IsDraft);
           if (this.FetchPatientICUProgressNoteWorkListDData.length > 0) {
             this.selectedNotes(this.FetchPatientICUProgressNoteWorkListDData[this.FetchPatientICUProgressNoteWorkListDData.length - 1], true);
           }
@@ -576,7 +588,7 @@ padZero(value: number): string {
 
   viewDraftWorklist() {
     this.viewDraft = false;
-    this.FetchPatientICUProgressNoteWorkListDData = this.FetchPatientICUProgressNoteWorkListDData1.filter((x:any) => x.IsDraft);
+    this.FetchPatientICUProgressNoteWorkListDData = this.FetchPatientICUProgressNoteWorkListDData1.filter((x: any) => x.IsDraft);
   }
 
   fetchPatientDataEforms() {
@@ -590,19 +602,19 @@ padZero(value: number): string {
         if (response.Code == 200) {
           this.FetchPatientDataEFormsDataList = response.FetchPatientDataEFormsDataList;
           if (this.FetchPatientDataEFormsDataList.length > 0) {
-            this.MedicalCondition =  response.FetchPatientDataEFormsDataList[0].MedicalHistory;
+            this.MedicalCondition = response.FetchPatientDataEFormsDataList[0].MedicalHistory;
             this.progressNotes.patchValue({
               DateOfAdmissionToHospital: new Date(this.selectedView.AdmitDate),
               DateOfAdmissionToICU: new Date(),
               ReasonForAdmissionToHospital: response.FetchPatientDataEFormsDataList[0].ReasonForAdm,
               ReasonForAdmissionToICU: response.FetchPatientDataEFormsDataList[0].ReasonForAdm,
-             
+
             });
 
 
           }
           //this.patientPlannedProcs = response.FetchPatientProceduresDataEFormsDataList.filter((item: any) => item.ProcedureStatus === '1');
-          if(response.FetchPatientLabRadDataList.length > 0) {
+          if (response.FetchPatientLabRadDataList.length > 0) {
             this.Assessment = response.FetchPatientLabRadDataList?.map((item: any) => "Code :" + item.ProcedureCode + "-" + item.TestName + " (dated :" + item.OrderDate + ")").join('<br/>');
           }
         }
@@ -625,7 +637,7 @@ padZero(value: number): string {
         })
   }
   openRelLabClear() {
-    this.selectedFetchPatientAdmissionLabTestResultsDataList=[];
+    this.selectedFetchPatientAdmissionLabTestResultsDataList = [];
   }
 
   addRow(date: string, type: string, details: string, action: string) {
@@ -639,7 +651,7 @@ padZero(value: number): string {
   }
 
   addIssuePlanRow(row?: any) {
-    if(row) {
+    if (row) {
       const updatedrow = this.fb.group({
         issue: row.issue,
         plan: row.plan,
@@ -652,7 +664,7 @@ padZero(value: number): string {
         plan: '',
         measurable: ''
       });
-     (this.progressNotes.get('issuerows') as FormArray).push(updatedrow);
+      (this.progressNotes.get('issuerows') as FormArray).push(updatedrow);
     }
   }
 
@@ -682,13 +694,13 @@ padZero(value: number): string {
             });
 
             this.ICUProgressNoteID = note.ICUProgressNoteID;
-            
+
             if (isDefaultId) {
               this.ICUProgressNoteID = 0;
             } else {
-              if (note.SavedEmpID.toString() !== this.doctorDetails[0].EmpId.toString() ){
+              if (note.SavedEmpID.toString() !== this.doctorDetails[0].EmpId.toString()) {
                 this.hideSave = true;
-              } 
+              }
             }
             const endorsemenTimeObj = JSON.parse(this.FetchPatientICUProgressNotesDData[0].EndorsemenTime);
             const SystemVitalSigns = JSON.parse(this.FetchPatientICUProgressNotesDData[0].SystemVitalSigns);
@@ -705,14 +717,14 @@ padZero(value: number): string {
             const IssuesAndPlan = JSON.parse(this.FetchPatientICUProgressNotesDData[0].IssuesAndPlan);
 
             this.Vasopressors = this.FetchPatientICUProgressNotesDData[0].Vasopressors;
-            this.Sedation =  this.FetchPatientICUProgressNotesDData[0].Sedation;
+            this.Sedation = this.FetchPatientICUProgressNotesDData[0].Sedation;
             this.GlycemicControl = this.FetchPatientICUProgressNotesDData[0].GlycemicControl;
             this.IsolationStatus = this.FetchPatientICUProgressNotesDData[0].IsolationStatus;
 
             this.selectedFetchPatientAdmissionLabTestResultsDataList = RelevantLabResults;
-            if(this.FetchPatientICUProgressNotesDData.length>0)
-            this.MedicalCondition =  this.FetchPatientICUProgressNotesDData[0].PastMedicalSurgicalHistory;       
-            if(this.FetchPatientICUProgressNotesDData[0].Assessment != "") {
+            if (this.FetchPatientICUProgressNotesDData.length > 0)
+              this.MedicalCondition = this.FetchPatientICUProgressNotesDData[0].PastMedicalSurgicalHistory;
+            if (this.FetchPatientICUProgressNotesDData[0].Assessment != "") {
               this.Assessment = this.FetchPatientICUProgressNotesDData[0].Assessment;
             }
             this.progressNotes.patchValue({
@@ -720,7 +732,7 @@ padZero(value: number): string {
               DateOfAdmissionToICU: new Date(this.FetchPatientICUProgressNotesDData[0].DateOfAdmissionToICU),
               ReasonForAdmissionToHospital: this.FetchPatientICUProgressNotesDData[0].ReasonForAdmissionToHospital,
               ReasonForAdmissionToICU: this.FetchPatientICUProgressNotesDData[0].ReasonForAdmissionToICU,
-             // PastMedicalSurgicalHistory: this.FetchPatientICUProgressNotesDData[0].PastMedicalSurgicalHistory,
+              // PastMedicalSurgicalHistory: this.FetchPatientICUProgressNotesDData[0].PastMedicalSurgicalHistory,
               slot1: endorsemenTimeObj?.slot1,
               slot2: endorsemenTimeObj?.slot2,
               EndorsemenFrom: this.FetchPatientICUProgressNotesDData[0].EndorsemenFrom,
@@ -829,11 +841,11 @@ padZero(value: number): string {
             });
             (this.progressNotes.get('issuerows') as FormArray)?.clear();
             if (IssuesAndPlan.length > 0) {
-              IssuesAndPlan.forEach((item: any, index: any) =>{
+              IssuesAndPlan.forEach((item: any, index: any) => {
                 this.addIssuePlanRow({
-                  plan: item[`Plan${index+1}`] ?? '',
-                  issue: item[`Issue${index+1}`] ?? '',
-                  measurable: item[`Measurable${index+1}`] ?? ''
+                  plan: item[`Plan${index + 1}`] ?? '',
+                  issue: item[`Issue${index + 1}`] ?? '',
+                  measurable: item[`Measurable${index + 1}`] ?? ''
                 });
               });
             } else {
@@ -853,7 +865,7 @@ padZero(value: number): string {
 
   viewWorklist() {
     this.viewDraft = !this.viewDraft;
-    if(this.viewDraft) {
+    if (this.viewDraft) {
       this.FetchPatientICUProgressNoteWorkListDData = this.FetchPatientICUProgressNoteWorkListDData1.filter((x: any) => x.IsDraft);
     }
     else {
@@ -863,8 +875,8 @@ padZero(value: number): string {
   }
 
   clear() {
-    this.Assessment="";
-    this.MedicalCondition="";    
+    this.Assessment = "";
+    this.MedicalCondition = "";
     this.intialize();
     this.fetchPatientDataEforms();
     this.ICUProgressNoteID = 0;
@@ -891,7 +903,7 @@ padZero(value: number): string {
   }
 
   selectedLabTestResult(item: any): void {
-    item.active = !item.active; 
+    item.active = !item.active;
   }
 
   selectLab(): void {
@@ -899,7 +911,7 @@ padZero(value: number): string {
     this.errorMessage = "";
     this.showPreValidation = false;
 
-    if(selected.length === 0) {
+    if (selected.length === 0) {
       this.errorMessage = "Please select atleast one Lab Result";
       this.showPreValidation = true;
       return;
@@ -910,7 +922,7 @@ padZero(value: number): string {
 
   clearLab(): void {
     this.FetchPatientAdmissionLabTestResultsDataList.forEach((item: any) => {
-        item.active = false;
+      item.active = false;
     });
 
     this.selectedFetchPatientAdmissionLabTestResultsDataList = [];

@@ -78,11 +78,17 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     drugDataArray: any[] = [];
     drugs: any[] = [];
 
+    showProgressNotes: boolean = false;
+    IsDoctor: any;
+    IsRODoctor: any;
+
     constructor(private router: Router, private us: UtilityService, private configService: ConfigService, private config: BedConfig, private datepipe: DatePipe, private formbuilder: FormBuilder) {
 
     }
 
     ngOnInit(): void {
+        this.IsDoctor = sessionStorage.getItem("IsDoctorLogin");
+        this.IsRODoctor = sessionStorage.getItem("IsRODoctor");
         this.doctorDetails = JSON.parse(sessionStorage.getItem("doctorDetails") || '{}');
         this.langData = this.configService.getLangData();
         this.filteredICUBeds = this.ICUBeds = JSON.parse(sessionStorage.getItem("icubeds") || '{}');
@@ -105,6 +111,12 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
 
     onSelectBed(item: any) {
         this.selectedICUBed = item;
+        this.showProgressNotes = false;
+        this.fetchICUBed();
+    }
+
+    onRefreshClick() {
+        this.showProgressNotes = false;
         this.fetchICUBed();
     }
 
@@ -146,7 +158,6 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
                     };
                 })[0];
                 sessionStorage.setItem("icubeddetails", JSON.stringify(this.selectedICUBed));
-                this.fetchDoctorReferals();
             }
         });
     }
@@ -189,9 +200,8 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     }
 
     openReferrals() {
-        if (this.FetchDoctorReferralOrdersDataList.length > 0) {
-            $('#viewReferal').modal('show');
-        }
+        this.fetchDoctorReferals();
+        $('#viewReferal').modal('show');
     }
 
     openCaseRecord() {
@@ -887,6 +897,14 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     fetchMedicineForChartlength(date: any, drugName: any) {
         const result = this.drugDataArray?.filter((data: any) => Date.parse(moment(data.FrequencyDate).format('DD-MMM-YYYY')) === Date.parse(date) && data.Drugname === drugName);
         return result.length;
+    }
+
+    openProgressNotes() {
+        this.showProgressNotes = true;
+    }
+
+    onCloseProgressNotes() {
+        this.showProgressNotes = false;
     }
 }
 
