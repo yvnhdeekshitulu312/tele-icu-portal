@@ -82,6 +82,8 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     IsDoctor: any;
     IsRODoctor: any;
 
+    searchText: any = '';
+
     constructor(private router: Router, private us: UtilityService, private configService: ConfigService, private config: BedConfig, private datepipe: DatePipe, private formbuilder: FormBuilder) {
 
     }
@@ -905,6 +907,21 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
 
     onCloseProgressNotes() {
         this.showProgressNotes = false;
+    }
+
+    filterBeds() {
+        let data = [...this.ICUBeds];
+        const search = this.searchText?.trim().toLowerCase();
+
+        if (search && search.length > 2) {
+            const search = this.searchText.toLowerCase();
+
+            data = data.filter((x: any) =>
+                x?.SSN?.toString().includes(search) ||
+                x?.PatientName?.toLowerCase().includes(search)
+            );
+        }
+        this.filteredICUBeds = data;
     }
 }
 
