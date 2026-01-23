@@ -4498,7 +4498,7 @@ table tfoot th {
   /* box-shadow: inset 4px 0px 4px -3px rgba(79, 69, 69, 0.25);
     border-radius: 0px 8px 8px 0px;
     padding: 0.5rem; */
-  height: 23.5rem;
+  /* height: 23.5rem; */
   overflow-y: auto;
   background-image: url(../images/bedboard_BG.svg);
   background-repeat: no-repeat;
@@ -28607,9 +28607,11 @@ ngb-modal-window .content_discharge_sumary {
 
 /* TELE Bed Board */
 .bed-board.bed-board-occupied.alert-box-anim{
-  animation: alertPulse 2s infinite;
-   /* background-color: #fee2e2; */
-  border-color: #ef4444;
+  /* animation: alertPulse 2s infinite;
+  border-color: #ef4444; */
+  
+    animation: pulse 2s infinite;
+
 }
 @keyframes alertPulse {
     0% {
@@ -28726,15 +28728,47 @@ ngb-modal-window .content_discharge_sumary {
   align-items: center;
   gap: 0.375rem;
 }
-.bed-board.bed-board-occupied .alert-danger-custom {
+/* .bed-board.bed-board-occupied .alert-danger-custom {
   border: 1px solid #D31325;
   color: #DD224C;
   background: #FDF6F8;
-}
-.bed-board.bed-board-occupied .alert-warning-custom {
+} */
+/* .bed-board.bed-board-occupied .alert-warning-custom {
   border: 1px solid #FF4F29;
   color: #FF2800;
   background: #FFEDEA;
+} */
+
+.bed-board.bed-board-occupied .alert-danger-custom {
+  background: var(--bg-glass);
+    background: var(--bg-glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgb(198 182 182 / 30%);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.bed-board.bed-board-occupied .alert-warning-custom {
+    /* border: 1px solid #FF4F29 !important; */
+    /* color: #FF2800; */
+    background: var(--bg-glass);
+    background: var(--bg-glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgb(198 182 182 / 30%);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* box-shadow: 0 4px 15px rgba(0,0,0,0.05); */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
 }
 
 .layout-tele-icu {
@@ -29266,3 +29300,79 @@ ngb-modal-window .content_discharge_sumary {
 .quick-actions-card .btn-refer:hover {
   background: #f0f9fd;
 }
+
+/* added for ICU bedsBoard only  */
+.results-container {
+    /* gap: 20px; */
+    padding: 9px;
+    background: linear-gradient(
+250deg, #f5f7fa 0%, #DAEEF1 100%);
+    border-radius: 16px;
+    /* display: grid; */
+    grid-template-columns: 1fr 1fr;
+    height: 8.5rem;
+}
+
+    .section-title {
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-sub);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .result-card {
+        background: var(--bg-glass);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+    }
+
+    .result-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    /* Status-specific styling */
+    .status-abnormal { border-left: 4px solid var(--accent-orange); }
+    .status-panic { border-left: 3px solid #e53e3e !important; animation: pulse 2s infinite; }
+
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.2); }
+        70% { box-shadow: 0 0 0 10px rgba(230, 57, 70, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0); }
+    }
+
+    .info-group { display: flex; flex-direction: column; }
+    
+    .test-name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-main);
+    }
+
+    .status-text {
+        font-size: 0.75rem;
+        font-weight: 700;
+        margin-top: 4px;
+    }
+
+    .text-orange { color: #f18641; }
+    .text-red { color: #e53e3e; }
+
+    .chevron {
+        color: #BDBDBD;
+        font-size: 1.2rem;
+    }
