@@ -9,6 +9,7 @@ import { ConfigService } from 'src/app/services/config.service';
 import { ConfigService as BedConfig } from '../services/config.service';
 import * as Highcharts from 'highcharts';
 import { FormBuilder, FormGroup } from "@angular/forms";
+import moment from "moment";
 
 declare var $: any;
 
@@ -66,6 +67,16 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     @ViewChild('chartLineSpline', { static: true }) chartLineSpline!: ElementRef;
     @ViewChild('chartLine', { static: true }) chartLine!: ElementRef;
     @ViewChild('chartColumn', { static: true }) chartColumn!: ElementRef;
+
+    currentDate: Date = new Date();
+    firstDayOfWeek!: Date;
+    lastDayOfWeek!: Date;
+    currentWeekdate: any;
+    currentWeekDates: any;
+    calendarMedications: any = [];
+    calendarFilteredMedications: any = [];
+    drugDataArray: any[] = [];
+    drugs: any[] = [];
 
     constructor(private router: Router, private us: UtilityService, private configService: ConfigService, private config: BedConfig, private datepipe: DatePipe, private formbuilder: FormBuilder) {
 
@@ -661,6 +672,221 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
 
     filterFunction(vitals: any, visitid: any) {
         return vitals.filter((buttom: any) => buttom.CreateDateNew == visitid);
+    }
+
+
+    openDrugChart() {
+        $("#drugChartModal").modal('show');
+        this.calculateWeekRange();
+    }
+
+    goToPreviousWeek() {
+        this.currentDate.setDate(this.currentDate.getDate() - 7);
+        this.calculateWeekRange();
+    }
+
+    goToNextWeek() {
+        this.currentDate.setDate(this.currentDate.getDate() + 7);
+        this.calculateWeekRange();
+    }
+
+    calculateWeekRange() {
+        let currentDate = new Date(this.currentDate);
+        this.firstDayOfWeek = new Date(currentDate.setDate(currentDate.getDate() - 1));
+        this.lastDayOfWeek = new Date(this.firstDayOfWeek);
+        this.lastDayOfWeek.setDate(this.firstDayOfWeek.getDate() + 6);
+
+        this.currentWeekDates = this.generateDateRange(this.firstDayOfWeek, this.lastDayOfWeek);
+        this.currentWeekdate = this.firstDayOfWeek;
+        this.FetchDrugAdministrationDrugs(moment(this.firstDayOfWeek).format("DD-MMM-YYYY"), moment(this.lastDayOfWeek).format("DD-MMM-YYYY"));
+    }
+
+    generateDateRange(start: Date, end: Date): any {
+        const datesArray = [];
+        const currentDate = this.getDateWithoutTime(new Date(start));
+        const todayDate = this.getDateWithoutTime(new Date());
+
+        while (currentDate <= end) {
+            let value = 1;
+            if (currentDate < todayDate) {
+                value = 1;
+            }
+            else if (currentDate.toISOString().split('T')[0] === todayDate.toISOString().split('T')[0]) {
+                value = 2;
+            }
+            else if (currentDate > todayDate) {
+                value = 3;
+            }
+            datesArray.push({ date: this.datepipe.transform(currentDate, "dd-MMM-yyyy"), value: value, CompletedCount: 0, AllCount: 0 });
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        return datesArray;
+    }
+
+    getDateWithoutTime(inputDate: Date): Date {
+        const year = inputDate.getFullYear();
+        const month = inputDate.getMonth();
+        const day = inputDate.getDate();
+        return new Date(year, month, day);
+    }
+
+    FetchDrugAdministrationDrugs(FromDate: any, ToDate: any) {
+        this.configService.FetchDrugAdministrationDrugs(FromDate, ToDate, this.selectedICUBed.IPID, this.selectedICUBed.HospitalID).subscribe((response: any) => {
+            if (response.Code == 200) {
+                this.calendarMedications = response.FetchDrugAdministrationDrugsDataList;
+                this.calendarFilteredMedications = response.FetchDrugAdministrationDrugsDataList;
+                this.drugDataArray = [];
+                const groupedData = response.FetchDrugAdministrationDrugsDataList.reduce((acc: any, currentValue: any) => {
+                    const key = currentValue.Drugname + currentValue.FrequencyDate;
+                    (acc[key] = acc[key] || []).push(currentValue);
+                    return acc;
+                }, {});
+
+                for (const key in groupedData) {
+                    if (groupedData.hasOwnProperty(key)) {
+                        const group = groupedData[key];
+                        const firstItem = group[0];
+                        var Dose = firstItem.Dose + " " + firstItem.DoseUOMName + " " + firstItem.Frequency + " " + firstItem.AdmRoute + " " + firstItem.duration + " " + firstItem.durationUOM;
+                        var StartDate = "Start Date - " + firstItem.StartFrom;
+                        const drugData: any = {
+                            Drugname: firstItem.Drugname + ';' + Dose + ';' + StartDate + ';' + firstItem.DoseUOMName + ';' + firstItem.Frequency + ';' + firstItem.AdmRoute + ';' + firstItem.duration + ';' + firstItem.durationUOM,
+                            FrequencyDate: firstItem.FrequencyDate,
+                            FrequencyDateTime: group.map((item: any) => {
+                                let minDate = new Date(item.FrequencyDate);
+                                minDate.setDate(minDate.getDate() - 1);
+                                return {
+                                    time: item.FrequencyDateTime,
+                                    isEdit: false,
+                                    wardTaskIntervalID: item.WardTaskIntervalID,
+                                    remarks: '',
+                                    drugName: firstItem.Drugname,
+                                    statusName: item.STATUSName,
+                                    date: new Date(item.FrequencyDate),
+                                    minDate,
+                                    savedRemarks: item.WardTaskRemarks,
+                                    savedUserName: item.FreqTimeModifiedUserName,
+                                    savedDate: item.FreqTimeModifiedDate
+                                }
+                            }),
+                            DoseUOMName: firstItem.DoseUOMName,
+                            Frequency: firstItem.Frequency,
+                            AdmRoute: firstItem.AdmRoute,
+                            duration: firstItem.duration,
+                            durationUOM: firstItem.durationUOM,
+                        };
+                        this.drugDataArray.push(drugData);
+                    }
+                }
+
+                const uniqueDrugNames = new Set(this.drugDataArray.map(item => item.Drugname));
+                this.drugs = Array.from(uniqueDrugNames);
+            }
+        },
+            (err) => { })
+    }
+
+    fetchMedicineForChart(date: any, drugName: any) {
+        const result = this.drugDataArray?.filter((data: any) => Date.parse(moment(data.FrequencyDate).format('DD-MMM-YYYY')) === Date.parse(date) && data.Drugname === drugName);
+        if (result.length > 0) {
+            result[0].FrequencyDateTime.forEach((element: any) => {
+                const value = this.processTime(element, date, drugName.split(';')[0]);
+                let pillName = 'Ppill';
+                if (value === 'C') {
+                    pillName = 'Cpill';
+                } else if (value === 'H') {
+                    pillName = 'Holdpill';
+                } else if (value === 'U') {
+                    pillName = 'UHpill';
+                } else if (value === 'M') {
+                    pillName = 'Mpill';
+                } else if (value === 'F') {
+                    pillName = 'Fpill';
+                }
+                element.timeValue = value;
+                element.pillName = pillName;
+            });
+            return result[0].FrequencyDateTime;
+        }
+        return null;
+    }
+
+    processTime(inputTime: any, inputDate: any, drug: any) {
+        let currentDate = new Date();
+
+        const parts = inputDate.split('-');
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const monthIndex = monthNames.indexOf(parts[1]);
+        const inputDateTime = new Date(parts[2], monthIndex, parts[0], inputTime.time.split(':')[0], inputTime.time.split(':')[1]);
+
+        inputDateTime.setHours(inputDateTime.getHours() - 2);
+
+        const filteredData = this.calendarFilteredMedications.filter((item: any) => item.Drugname === drug && item.FrequencyDate === inputDate && item.FrequencyDateTime === inputTime.time);
+
+        if (filteredData[0]?.STATUSName === 'Completed') {
+            return "C";
+        }
+        if (filteredData[0]?.STATUSName === 'On Hold') {
+            return "H";
+        }
+        if (filteredData[0]?.STATUSName === 'UnHold') {
+            return "U";
+        }
+
+
+        if (new Date(inputDate) > currentDate) {
+            return "F";
+        }
+
+        if (inputDateTime < currentDate) {
+            return "M";
+        } else if (inputDateTime > currentDate) {
+            return "P";
+        }
+        return "N";
+    }
+
+    processTimeForCompletedStatus(inputTime: any, inputDate: any, drug: any, Type: number) {
+        var ReturnContent: string = "";
+        const parts = inputDate.split('-');
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const monthIndex = monthNames.indexOf(parts[1]);
+        const inputDateTime = new Date(parts[2], monthIndex, parts[0], inputTime.time.split(':')[0], inputTime.time.split(':')[1]);
+
+        inputDateTime.setHours(inputDateTime.getHours() - 2);
+
+        const filteredData = this.calendarFilteredMedications.filter((item: any) => item.Drugname === drug && item.FrequencyDate === inputDate && item.FrequencyDateTime === inputTime.time);
+
+        if (filteredData[0]?.STATUSName === 'Completed') {
+            if (Type == 1)
+                ReturnContent = filteredData[0]?.AdminDose;
+            if (Type == 2)
+                ReturnContent = filteredData[0]?.AdministeredDoseUOM;
+            if (Type == 3)
+                ReturnContent = filteredData[0]?.AdministrationDate;
+            if (Type == 4)
+                ReturnContent = filteredData[0]?.AdministeredBy;
+            if (Type == 5)
+                ReturnContent = filteredData[0]?.VerifiedUser;
+            if (Type == 6)
+                ReturnContent = filteredData[0]?.Remarks;
+            if (Type == 7)
+                ReturnContent = filteredData[0]?.DrugAdmReasonSectionName;
+            if (Type == 8)
+                ReturnContent = filteredData[0]?.NotAdministeredReason;
+            if (Type == 9)
+                ReturnContent = filteredData[0]?.AdministerTimeDeviationReason;
+            if (Type == 10)
+                ReturnContent = filteredData[0]?.ManualEntryReason;
+            return ReturnContent;
+        }
+        else {
+            return "";
+        }
+    }
+
+    fetchMedicineForChartlength(date: any, drugName: any) {
+        const result = this.drugDataArray?.filter((data: any) => Date.parse(moment(data.FrequencyDate).format('DD-MMM-YYYY')) === Date.parse(date) && data.Drugname === drugName);
+        return result.length;
     }
 }
 
