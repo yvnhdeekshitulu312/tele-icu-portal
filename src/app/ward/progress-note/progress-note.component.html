@@ -1,5 +1,7 @@
 <app-generic-close *ngIf="isPopup" [title]="'noname'"></app-generic-close>
-<app-header [InputHome]="IsHome" [IsSwitchWard]="false" *ngIf="!isPopup"></app-header>
+<ng-container *ngIf="!fromTeleICUBed">
+    <app-header [InputHome]="IsHome" [IsSwitchWard]="false" *ngIf="!isPopup"></app-header>
+</ng-container>
 <!--Container-->
 <div class="container-fluid p-0 pb-2 main-container">
     <div class="page-header bg-primary-50 sticky-top">
@@ -8,7 +10,8 @@
             modification is allowed after {{doctorDetails[0].ProgressNoteEditHrs}}hrs</h6>
         <div class="actions ms-auto d-flex gap-2">
             <div class="d-flex gap-2" *ngIf="!isPopup">
-                <div class="d-flex align-items-center gap-2 mx-2" *appHasPermission="'AI Generation'">
+                <ng-container *ngIf="!fromTeleICUBed">
+                    <div class="d-flex align-items-center gap-2 mx-2" *appHasPermission="'AI Generation'">
                         <div class="custom_tooltip custom_tooltip_left ">
                             <button type="button" (click)="toggleRecording()" [disabled]="speechState.isProcessing"
                                 class="btn btn-sm  border-0 p-0 bg-transparent" [ngClass]="{
@@ -327,10 +330,14 @@
                             {{ speechState.error }}
                         </small>
                     </div>
-                <button class="btn btn-main-outline" *ngIf="IsDoctor == 'true'" (click)="openNurseInstructions()">Doctor
+                </ng-container>
+                <button class="btn btn-main-outline" *ngIf="!fromTeleICUBed && IsDoctor == 'true'"
+                    (click)="openNurseInstructions()">Doctor
                     Instructions</button>
-                <button class="btn btn-main-fill" (click)="navigatetoBedBoard()">Beds Board</button>
-                <button class="btn btn-main-outline" (click)="openQuickActions()">Quick Actions</button>
+                <button class="btn btn-main-fill" *ngIf="!fromTeleICUBed" (click)="navigatetoBedBoard()">Beds
+                    Board</button>
+                <button class="btn btn-main-outline" *ngIf="!fromTeleICUBed" (click)="openQuickActions()">Quick
+                    Actions</button>
                 <!-- <button class="btn btn-main-outline" (click)="openViewNotesModal()">View Notes</button> -->
                 <button class="btn btn-main-outline" *ngIf="btnSaveEnableLoad" appButtonVisibility
                     (click)="ModifyProgressNotes()">Modify</button>
@@ -338,12 +345,12 @@
                     (click)="DeleteProgressNotes()">Delete</button>
             </div>
             <button class="btn btn-main-outline" (click)="openViewNotesModal()">View Notes</button>
-            <button class="btn btn-main-outline" (click)="viewAllVitals()">View More Vitals</button>
+            <button class="btn btn-main-outline" *ngIf="!fromTeleICUBed" (click)="viewAllVitals()">View More Vitals</button>
             <button class="btn btn-main-outline" (click)="createNewNote()">New Note</button>
             <button class="btn btn-danger-outline" (click)="clearProgressNotes()">Clear</button>
             <button class="btn btn-main-outline" *ngIf="btnSaveEnable" (click)="saveProgressNotes()"
                 appButtonVisibility>Save</button>
-
+            <button class="btn btn-danger-outline" *ngIf="fromTeleICUBed" (click)="onCloseClick()">Close</button>
         </div>
     </div>
     <div class="container-body">
@@ -391,7 +398,7 @@
                                 View More...</p>
                         </div>
                     </div>
-                    
+
                 </div>
                 <div class="row py-1 px-0 gx-1">
                     <div class="col-xl-6 col-lg-12 col-md-12" *ngIf="!NurseAlliged">
@@ -940,7 +947,7 @@
                                                     </svg>
                                                 </span>
                                                 <span>{{patientDetails.PatientType == '2' ? vitaldate.CreateDateNew :
-                                                        vitaldate.VisitDate}}</span>
+                                                    vitaldate.VisitDate}}</span>
                                             </span>
                                             <table class="table mb-0">
                                                 <thead>

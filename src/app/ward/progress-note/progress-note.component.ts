@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, QueryList, ViewChildren, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, QueryList, ViewChildren, ViewChild, Output, Input, EventEmitter } from '@angular/core';
 import { ConfigService } from 'src/app/ward/services/config.service';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
@@ -42,6 +42,11 @@ export const MY_FORMATS = {
   ],
 })
 export class ProgressNoteComponent implements OnInit {
+  @Input()
+  fromTeleICUBed: boolean = false;
+  @Output()
+  onClose: EventEmitter<any> = new EventEmitter()
+
   currentdate: any;
   patientDetails: any;
   doctorDetails: any;
@@ -131,6 +136,11 @@ export class ProgressNoteComponent implements OnInit {
     }
     this.IsHeadNurse = sessionStorage.getItem("IsHeadNurse");
     this.IsDoctor = sessionStorage.getItem("IsDoctorLogin");
+    if (this.fromTeleICUBed) {
+      this.patientDetails = JSON.parse(sessionStorage.getItem("icubeddetails") || '{}');
+      this.hospId = this.patientDetails.HospitalID;
+      this.facility = this.patientDetails.WardID;
+    }
     var wm = new Date();
     var d = new Date();
     wm.setMonth(wm.getMonth() - 1);
@@ -148,6 +158,10 @@ export class ProgressNoteComponent implements OnInit {
     this.fetchProgressNotesDiagnosis();
     this.us.setAlertPatientId(this.patientDetails.PatientID);
     // this.fetchProgressNotesSaved();
+  }
+
+  onCloseClick() {
+    this.onClose.emit()
   }
 
   fetchNotesTypes() {

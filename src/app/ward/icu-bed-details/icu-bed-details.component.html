@@ -59,7 +59,7 @@
 <!--Container-->
 <div class="container__wrapper">
     <main id="view-tele-icu">
-        <div class="layout-tele-icu">
+        <div class="layout-tele-icu" [class.notes-view]="showProgressNotes">
 
             <!-- Column 1: Patient List -->
             <div class="sidebar-list">
@@ -126,6 +126,13 @@
                     </div>
                 </div>
             </div>
+
+            <ng-container *ngIf="showProgressNotes">
+                <app-progress-note *ngIf="IsDoctor !== 'true' && IsRODoctor !== 'true'" [fromTeleICUBed]="true"
+                    (onClose)="onCloseProgressNotes()"></app-progress-note>
+                <app-icu-progressnotes-new *ngIf="IsDoctor === 'true' || IsRODoctor === 'true'" [fromTeleICUBed]="true"
+                    (onClose)="onCloseProgressNotes()"></app-icu-progressnotes-new>                
+            </ng-container>
 
             <ng-container *ngIf="!showProgressNotes">
                 <!-- Column 2 -->
@@ -979,11 +986,6 @@
                     </div>
                 </div>
             </ng-container>
-            <div *ngIf="showProgressNotes">
-                <!-- *ngIf="IsDoctor === 'true' || IsRODoctor === 'true'" -->
-                <app-icu-progressnotes-new [fromTeleICUBed]="true"
-                    (onClose)="onCloseProgressNotes()"></app-icu-progressnotes-new>
-            </div>
         </div>
     </main>
 </div>
