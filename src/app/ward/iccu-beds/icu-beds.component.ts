@@ -44,6 +44,8 @@ export class ICUBedsComponent implements OnInit {
     totalCount: any = 0;
     criticalCount: any = 0;
     normalCount: any = 0;
+    maleCount: any = 0;
+    femaleCount: any = 0;
 
     type: any = 'all';
     hospitalType: any = '0';
@@ -113,6 +115,8 @@ export class ICUBedsComponent implements OnInit {
                 this.totalCount = this.FetchBedsFromWardDataList.length;
                 this.criticalCount = this.FetchBedsFromWardDataList.filter((e: any) => e.isCritical).length;
                 this.normalCount = this.FetchBedsFromWardDataList.filter((e: any) => !e.isCritical).length;
+                this.maleCount = this.FetchBedsFromWardDataList.filter((x: any) => x.GenderID === '1').length;
+                this.femaleCount = this.FetchBedsFromWardDataList.filter((x: any) => x.GenderID === '2').length;
                 this.FetchMETCALLWardDataList = response.FetchMETCALLWardDataList;
                 this.filterBeds();
             }
