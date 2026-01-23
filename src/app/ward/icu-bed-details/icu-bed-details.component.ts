@@ -46,6 +46,9 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     refreshTime: any = new Date();
     private refreshSub!: Subscription;
     FetchDoctorReferralOrdersDataList: any = [];
+    patientCaseRecVisits: any = [];
+    trustedUrl: any;
+    IsBiometric = true;
 
     constructor(private router: Router, private us: UtilityService, private configService: ConfigService, private config: BedConfig) {
 
@@ -53,6 +56,7 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.doctorDetails = JSON.parse(sessionStorage.getItem("doctorDetails") || '{}');
+        this.langData = this.configService.getLangData();
         this.filteredICUBeds = this.ICUBeds = JSON.parse(sessionStorage.getItem("icubeds") || '{}');
         if (sessionStorage.getItem("icubeddetails")) {
             this.selectedICUBed = JSON.parse(sessionStorage.getItem("icubeddetails") || '{}');
@@ -159,6 +163,46 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
         if (this.FetchDoctorReferralOrdersDataList.length > 0) {
             $('#viewReferal').modal('show');
         }
+    }
+
+    openCaseRecord() {
+        this.FetchPatientCaseRecord(this.selectedICUBed.AdmissionID, this.selectedICUBed.PatientID);
+        this.showCareRecordModal();
+        this.fetchPatientVisits();
+    }
+
+    FetchPatientCaseRecord(admissionId: any, patientId: any) {
+        this.configService.FetchPatientCaseRecord(admissionId, patientId, 0, this.doctorDetails[0].UserName, this.doctorDetails[0]?.UserId, this.selectedICUBed.WardID, this.selectedICUBed.HospitalID)
+            .subscribe((response: any) => {
+                if (response.Code == 200) {
+                    this.trustedUrl = response?.FTPPATH;
+                }
+            },
+                (err) => {
+
+                })
+    }
+
+    showCareRecordModal() {
+        $("#caseRecordModal").modal('show');
+    }
+
+    fetchPatientVisits() {
+        this.configService.fetchPatientVisits(this.selectedICUBed.PatientID, this.selectedICUBed.HospitalID)
+            .subscribe((response: any) => {
+                if (response.Code == 200) {
+                    this.patientCaseRecVisits = response.PatientVisitsDataList;
+                }
+            },
+                (err) => {
+
+                })
+    }
+
+    onVisitsChange(event: any) {
+        const admissionID = event.target.value;
+        const patientdata = this.patientCaseRecVisits.find((visit: any) => visit.AdmissionID == admissionID);
+        this.FetchPatientCaseRecord(patientdata.AdmissionID, patientdata.PatientID);
     }
 }
 

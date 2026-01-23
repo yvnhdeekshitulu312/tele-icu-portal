@@ -1255,7 +1255,7 @@ export class ConfigService {
     return this.https.get<any>(this.devApiUrl + 'FetchPatientBMIGrowthChart?Height=' + Height + '&Weight=' + Weight + '&WorkStationID='+WorkStationID+ '&HospitalID='+ HospitalID, this.httpOptions);
   }
   FetchPatientCaseRecord(AdmissionID: any, PatientID: any, EpisodeID: any, UserName:any, UserId: any, WorkStationID: any, HospitalID: any) {
-    return this.https.get<any>(this.devApiUrl + 'FetchPatientCaseRecord?AdmissionID=' + AdmissionID + '&PatientID=' + PatientID + '&EpisodeID='+ EpisodeID + '&UserName= ' + UserName + '&UserId= ' + UserId + '&WorkStationID= ' + WorkStationID + '&HospitalID='+ HospitalID, this.httpOptions);
+    return this.https.get<any>(this.devApiUrl + 'FetchPatientCaseRecord?AdmissionID=' + AdmissionID + '&PatientID=' + PatientID + '&EpisodeID='+ EpisodeID + '&UserName=' + UserName + '&UserId=' + UserId + '&WorkStationID=' + WorkStationID + '&HospitalID='+ HospitalID, this.httpOptions);
   }
   FetchPatientDischargeSummaryPrint(AdmissionID: string, VirtualDischargeID: any, HospitalID: string, WorkStationID: string) {
     return this.https.get<any>(this.devApiUrl + 'FetchPatientDischargeSummaryPrint?AdmissionID='+ AdmissionID +'&VirtualDischargeID=' + VirtualDischargeID + '&WorkStationID='+ WorkStationID +'&HospitalID=' + HospitalID, this.httpOptions);

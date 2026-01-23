@@ -867,7 +867,7 @@
                 <h3 class="quick-title mb-3">Quick Actions</h3>
 
                 <div class="row g-3">
-                    <div class="col-6">
+                    <div class="col-6 cursor-pointer" (click)="openCaseRecord()">
                         <div class="qa-tile tile-blue">
                             <svg width="27" height="27" viewBox="0 0 27 27" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -1090,7 +1090,7 @@
                                         </div>
                                         <div class="d-flex gap-2 align-items-center">
                                             <p class="label fw-bold m-0 text-nowrap">Doctor Visited:</p>
-                                            <p for="" class="form-label m-0 fs-8 fw-bold"  *ngIf="item.isVerified">
+                                            <p for="" class="form-label m-0 fs-8 fw-bold" *ngIf="item.isVerified">
                                                 Updated By : {{item.VerifiedBy}} on ({{item.VerifiedDate}}) </p>
                                         </div>
                                     </div>
@@ -1100,6 +1100,34 @@
                     </div>
 
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="caseRecordModal">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-nowrap">Case Record</h5>
+                <div class="d-flex align-items-center px-5">
+                    <label for="" class="form-label text-nowrap mb-0 me-2">{{langData?.common?.Visits}}</label>
+                    <select class="form-select pe-4" (change)="onVisitsChange($event)">
+                        <option dir="ltr" value="" selected translate>{{langData?.common?.SelectVisit}}</option>
+                        <option dir="ltr" *ngFor="let visit of patientCaseRecVisits" [value]="visit.AdmissionID">
+                            {{visit.VisitDate}} - {{visit.DoctorName}} - {{visit.SpecialisationName}}-
+                            {{visit.PatientTypeName}}
+                        </option>
+                    </select>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="trustedUrl = ''"></button>
+            </div>
+            <div class="modal-body">
+                <app-pdf-viewer *ngIf="trustedUrl && !IsBiometric" [src]="trustedUrl">
+                </app-pdf-viewer>
+                <iframe *ngIf="trustedUrl && IsBiometric" height="600" width="100%"
+                    [src]="(trustedUrl ? trustedUrl :'')| safeUrl" frameborder="0"></iframe>
             </div>
         </div>
     </div>
