@@ -6,6 +6,7 @@ import { UtilityService } from "src/app/shared/utility.service";
 import { ConfigService } from 'src/app/services/config.service';
 import { Subscription, timer } from "rxjs";
 import { Router } from "@angular/router";
+import moment from "moment";
 
 declare var $: any;
 
@@ -46,7 +47,7 @@ export class ICUBedsComponent implements OnInit {
     normalCount: any = 0;
     maleCount: any = 0;
     femaleCount: any = 0;
-
+FetchBedStatusList: any;
     type: any = 'all';
     hospitalType: any = '0';
 
@@ -56,6 +57,10 @@ export class ICUBedsComponent implements OnInit {
     searchText: any = '';
     activeKey: string = 'all';
     segments: any[] = [];
+  interval: any;
+    currentdate: any;
+      currentdateN: any;
+      currentTimeN: Date = new Date();
 
 
 
@@ -64,10 +69,23 @@ export class ICUBedsComponent implements OnInit {
     }
 
     ngOnInit() {
+         this.currentdate = moment(new Date()).format('DD-MMM-YYYY, H:mm');
+            this.currentdateN = moment(new Date()).format('DD-MMM-YYYY');
+             this.startClock();
         this.doctorDetails = JSON.parse(sessionStorage.getItem("doctorDetails") || '{}');
+         this.fetchBedStatus();
         this.fetchICUBeds();
         this.setActive('all');
+
     }
+     startClock(): void {
+    this.interval = setInterval(() => {
+      this.currentTimeN = new Date();
+    }, 1000);
+  }
+    stopClock(): void {
+    clearInterval(this.interval);
+  }
 
     setActive(key: string): void {
         this.activeKey = key;
@@ -92,6 +110,60 @@ export class ICUBedsComponent implements OnInit {
             .subscribe(() => {
                 this.fetchICUBeds();
             });
+    }
+     
+   fetchBedStatus() {
+        const url = this.us.getApiUrl(ICUBeds.FetchBedStatus, {            
+            HospitalID: this.hospitalType           
+        });
+
+        this.us.get(url).subscribe((response: any) => {
+            this.FetchBedStatusList = response.FetchBedStatusDataList;
+        });
+    }
+    
+
+   fetchBedStatusByValue(filteredvalue: any = "") {
+        const url = this.us.getApiUrl(ICUBeds.FetchBedsFromWardNPTeleICCU, {
+            WardID: this.wardID,
+            ConsultantID: 0,
+            Status: filteredvalue,
+            UserId: this.doctorDetails[0].UserId,
+            HospitalID: this.hospitalType,
+            AdmissionID: 0
+        });
+
+        this.us.get(url).subscribe((response: any) => {
+            if (response.Code === 200) {
+                this.refreshTime = new Date();
+                this.startAutoRefresh();
+                const FetchBedsFromWardLabRadDataList = response.FetchBedsFromWardLabRadDataList;
+                this.FetchBedsFromWardDataList = response.FetchBedsFromWardDataList.map((element: any) => {
+                    const isFound = FetchBedsFromWardLabRadDataList.filter((a: any) => a.AdmissionID === element.AdmissionID);
+                    const labResults: any[] = isFound.filter((a: any) => a.IsResult == '4');
+                    const radResults: any[] = isFound.filter((a: any) => a.IsResult == '7');
+                    return {
+                        ...element,
+                        isCritical: isFound.length >= 1,
+                        labResults,
+                        radResults
+                    };
+                });
+                this.totalCount = this.FetchBedsFromWardDataList.length;
+                this.criticalCount = this.FetchBedsFromWardDataList.filter((e: any) => e.isCritical).length;
+                this.normalCount = this.FetchBedsFromWardDataList.filter((e: any) => !e.isCritical).length;
+                this.maleCount = this.FetchBedsFromWardDataList.filter((x: any) => x.GenderID === '1').length;
+                this.femaleCount = this.FetchBedsFromWardDataList.filter((x: any) => x.GenderID === '2').length;
+                this.segments = [
+                    { key: 'all', label: 'All', count: this.totalCount },
+                    { key: 'critical', label: 'Critical', count: this.criticalCount },
+                    { key: 'normal', label: 'Normal', count: this.normalCount }
+                ];
+                this.FetchMETCALLWardDataList = response.FetchMETCALLWardDataList;
+                this.filterBeds();
+
+            }
+        });
     }
 
     fetchICUBeds() {
@@ -193,5 +265,9 @@ export class ICUBedsComponent implements OnInit {
 }
 
 const ICUBeds = {
-    'FetchBedsFromWardNPTeleICCU': 'FetchBedsFromWardNPTeleICCU?WardID=${WardID}&AdmissionID=${AdmissionID}&ConsultantID=${ConsultantID}&Status=${Status}&UserId=${UserId}&HospitalID=${HospitalID}'
+    'FetchBedsFromWardNPTeleICCU': 'FetchBedsFromWardNPTeleICCU?WardID=${WardID}&AdmissionID=${AdmissionID}&ConsultantID=${ConsultantID}&Status=${Status}&UserId=${UserId}&HospitalID=${HospitalID}',
+    'FetchBedStatus': 'FetchBedStatus?HospitalID=${HospitalID}',
+    
+
+
 }

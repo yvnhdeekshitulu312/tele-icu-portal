@@ -83,6 +83,11 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     IsRODoctor: any;
 
     searchText: any = '';
+      activeMedications: any = [];
+  activeMedicationsCount: any = [];
+  viewProgressNotesData: any[] = [];
+   viewProgressNotesData1: any = []
+  viewProgressNotesData2: any = [];
 
     constructor(private router: Router, private us: UtilityService, private configService: ConfigService, private config: BedConfig, private datepipe: DatePipe, private formbuilder: FormBuilder) {
 
@@ -100,6 +105,7 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
         } else {
             this.navigateToICUBeds();
         }
+        this.showActiveMedication();
         this.initializetablePatientsForm();
     }
 
@@ -159,6 +165,11 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
                         radResults
                     };
                 })[0];
+
+ this.viewProgressNotesData = response.FetchMainProgressNoteHHNewDataList;
+                this.viewProgressNotesData1 = response.FetchMainProgressNoteHHNewData1List;
+                 this.viewProgressNotesData2 = response.FetchMainProgressNoteHHNewData2List;
+
                 sessionStorage.setItem("icubeddetails", JSON.stringify(this.selectedICUBed));
             }
         });
@@ -167,6 +178,12 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     navigateToICUBeds() {
         this.router.navigate(['/ward/icu-beds']);
     }
+     filterNotes1(notes: any) {
+    return this.viewProgressNotesData1.filter((x: any) => x.NoteID === notes[0].NoteID);
+  }
+   filterNotes2(notes: any) {
+    return this.viewProgressNotesData2.filter((x: any) => x.NoteID === notes[0].NoteID);
+  }
 
     onLogout() {
         this.configService.onLogout();
@@ -182,6 +199,15 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
         if (diffMinutes < 60) return `${diffMinutes} MIN AGO`;
 
         return `${Math.floor(diffMinutes / 60)} HRS AGO`;
+    }
+    isNewResult(resultDate: string | Date, hours: number = 24): boolean {
+        if (!resultDate) return false;
+
+        const now = new Date().getTime();
+        const resultTime = new Date(resultDate).getTime();
+
+        const diffInHours = (now - resultTime) / (1000 * 60 * 60);
+        return diffInHours <= hours;
     }
 
     fetchDoctorReferals() {
@@ -923,8 +949,28 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
         }
         this.filteredICUBeds = data;
     }
+    showActiveMedication() {   
+    const params = {
+      PatientID: this.selectedICUBed.PatientID,
+      AdmissionID: this.selectedICUBed.AdmissionID,
+      WardID: this.selectedICUBed.WardID,
+      UserID: this.doctorDetails[0].UserId,
+      WorkStationID: this.selectedICUBed.WardID,
+      HospitalID: 3
+    };
+    const url = this.us.getApiUrl(ICUBedDetails.FetchPatientActiveMedication, params);
+    this.us.get(url).subscribe((response: any) => {
+      if (response.Code === 200) {
+        this.activeMedications = response.FetchPatientActiveMedicationDataList;
+        this.activeMedicationsCount = response.FetchPatientActiveMedicationCountDataList[0].PrescriptionCount;
+      }
+    },
+      (err) => {
+      });
+  }
 }
 
 const ICUBedDetails = {
-    'FetchBedsFromWardNPTeleICCU': 'FetchBedsFromWardNPTeleICCU?WardID=${WardID}&AdmissionID=${AdmissionID}&ConsultantID=${ConsultantID}&Status=${Status}&UserId=${UserId}&HospitalID=${HospitalID}'
+    'FetchBedsFromWardNPTeleICCU': 'FetchBedsFromWardNPTeleICCU?WardID=${WardID}&AdmissionID=${AdmissionID}&ConsultantID=${ConsultantID}&Status=${Status}&UserId=${UserId}&HospitalID=${HospitalID}',
+    'FetchPatientActiveMedication': 'FetchPatientActiveMedication?PatientID=${PatientID}&AdmissionID=${AdmissionID}&WardID=${WardID}&UserID=${UserID}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
 }
