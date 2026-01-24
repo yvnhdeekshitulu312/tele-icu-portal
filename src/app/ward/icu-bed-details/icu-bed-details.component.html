@@ -1218,7 +1218,7 @@
                                     <h3 class="clinical-title">Clinical Status</h3>
 
                                     <div class="d-flex gap-2 flex-wrap">
-                                        <div class="status-chip chip-dnr d-none">DNR ACTIVE</div>
+                                        <div class="status-chip chip-dnr" *ngIf="selectedICUBed.IsDNR === '1'">DNR ACTIVE</div>
                                         <div class="status-chip chip-bedsore"> {{selectedICUBed.BedsoreName}} BEDSORE</div>
                                         <div class="status-chip chip-ventilator">{{selectedICUBed.IntubatedName}}</div>
                                     </div>
@@ -1235,22 +1235,22 @@
                                         *ngFor="let notes of filterNotes1(viewProgressNotesData); let i = index">
                                         <div class="p-2 border-end" *ngIf="notes.NoteTypeID=='3'">
                                             <p class="m-0 mb-1 fw-bold">Chief Complaints Subjective</p>
-                                            <p class="m-0" style="word-break: break-word;">
+                                            <p class="m-0 fs-7" style="word-break: break-word;">
                                                 {{notes.ChiefComplaintsSubjective}}</p>
                                             <p class="m-0 mb-1 fw-bold">On Examination</p>
-                                            <p class="m-0" style="word-break: break-word;">{{notes.OnExamination}}
+                                            <p class="m-0 fs-7" style="word-break: break-word;">{{notes.OnExamination}}
                                             </p>
                                             <p class="m-0 mb-1 fw-bold">Assesment Diagnosis</p>
-                                            <p class="m-0" style="word-break: break-word;">
+                                            <p class="m-0 fs-7" style="word-break: break-word;">
                                                 {{notes.AssesmentDiagnosis}}</p>
                                             <p class="m-0 mb-1 fw-bold">Plan Measurable Goals</p>
-                                            <p class="m-0" style="word-break: break-word;">
+                                            <p class="m-0 fs-7" style="word-break: break-word;">
                                                 {{notes.PlanMeasurableGoals}}</p>
                                             <p class="m-0 mb-1 fw-bold">Physician Order Intervention</p>
-                                            <p class="m-0" style="word-break: break-word;">
+                                            <p class="m-0 fs-7" style="word-break: break-word;">
                                                 {{notes.PhysicianOrderIntervention}}</p>
                                             <p class="m-0 mb-1 fw-bold">Addendum</p>
-                                            <p class="m-0" style="word-break: break-word;">{{notes.Addendum}}</p>
+                                            <p class="m-0 fs-7" style="word-break: break-word;">{{notes.Addendum}}</p>
                                         </div>
                                         <div class="col-4 p-2 d-none" *ngIf="notes.NoteTypeID=='3'">
                                             <p class="m-0 m-0 fw-bold">
@@ -1271,7 +1271,7 @@
                                         *ngFor="let notesR of filterNotes2(viewProgressNotesData); let i = index">
                                         <div class="col-8 p-2 border-end" *ngIf="notesR.NoteTypeID != '3'">
                                             <p class="m-0 mb-1 fw-bold">Vitals Nurse Allied HealthCare Notes</p>
-                                            <p class="m-0" style="word-break: break-word;">
+                                            <p class="m-0 fs-7" style="word-break: break-word;">
                                                 {{notesR.VitalsNurseAlliedHealthCareNotes}}</p>
                                         </div>
                                         <div class="col-4 p-2 d-none" *ngIf="notesR.NoteTypeID != '3'">
@@ -1440,15 +1440,13 @@
                                         <div class="drug-name">
                                             {{issued.ItemCode }}-{{issued.ItemName}}
                                             {{issued.Dose}} {{issued.DoseUOM}}
-                                           <span class="badge iv">{{issued.AdmRoute}}</span>
-                                           <span class="badge iv">{{issued.Frequency}}</span>
+                                          
                                         </div>
-                                        <!-- <div class="generic">Antibiotic</div> -->
+                                         <span class="badge iv mx-3">{{issued.AdmRoute}}</span>
+                                           <span class="badge iv">{{issued.Frequency}}</span>
+                                        
                                     </td>
-                                    <!-- <td>{{issued.Dose}} {{issued.DoseUOM}}</td>
-                                    <td><span class="badge iv">{{issued.AdmRoute}}</span></td>
-                                    <td>{{issued.Frequency}}</td>
-                                    <td><span class="badge active">Active</span></td>                                    -->
+                                   
                                 </tr>
 
                               
