@@ -47,8 +47,7 @@ export class ICUBedsComponent implements OnInit {
     normalCount: any = 0;
     maleCount: any = 0;
     femaleCount: any = 0;
-FetchBedStatusList: any;
-    type: any = 'all';
+    FetchBedStatusList: any;
     hospitalType: any = '0';
 
     refreshTime: any = new Date();
@@ -57,39 +56,39 @@ FetchBedStatusList: any;
     searchText: any = '';
     activeKey: string = 'all';
     segments: any[] = [];
-  interval: any;
+    interval: any;
     currentdate: any;
-      currentdateN: any;
-      currentTimeN: Date = new Date();
-
-
+    currentdateN: any;
+    currentTimeN: Date = new Date();
 
     constructor(private us: UtilityService, private configService: ConfigService, private router: Router) {
         this.langData = this.configService.getLangData();
     }
 
     ngOnInit() {
-         this.currentdate = moment(new Date()).format('DD-MMM-YYYY, H:mm');
-            this.currentdateN = moment(new Date()).format('DD-MMM-YYYY');
-             this.startClock();
+        this.currentdate = moment(new Date()).format('DD-MMM-YYYY, H:mm');
+        this.currentdateN = moment(new Date()).format('DD-MMM-YYYY');
+        this.startClock();
         this.doctorDetails = JSON.parse(sessionStorage.getItem("doctorDetails") || '{}');
-         this.fetchBedStatus();
+        this.fetchBedStatus();
         this.fetchICUBeds();
         this.setActive('all');
 
     }
-     startClock(): void {
-    this.interval = setInterval(() => {
-      this.currentTimeN = new Date();
-    }, 1000);
-  }
+    startClock(): void {
+        this.interval = setInterval(() => {
+            this.currentTimeN = new Date();
+        }, 1000);
+    }
     stopClock(): void {
-    clearInterval(this.interval);
-  }
+        clearInterval(this.interval);
+    }
 
     setActive(key: string): void {
         this.activeKey = key;
+        this.filterBeds();
     }
+
     ngOnDestroy() {
         if (this.refreshSub) {
             this.refreshSub.unsubscribe();
@@ -111,19 +110,19 @@ FetchBedStatusList: any;
                 this.fetchICUBeds();
             });
     }
-     
-   fetchBedStatus() {
-        const url = this.us.getApiUrl(ICUBeds.FetchBedStatus, {            
-            HospitalID: this.hospitalType           
+
+    fetchBedStatus() {
+        const url = this.us.getApiUrl(ICUBeds.FetchBedStatus, {
+            HospitalID: this.hospitalType
         });
 
         this.us.get(url).subscribe((response: any) => {
             this.FetchBedStatusList = response.FetchBedStatusDataList;
         });
     }
-    
 
-   fetchBedStatusByValue(filteredvalue: any = "") {
+
+    fetchBedStatusByValue(filteredvalue: any = "") {
         const url = this.us.getApiUrl(ICUBeds.FetchBedsFromWardNPTeleICCU, {
             WardID: this.wardID,
             ConsultantID: 0,
@@ -148,7 +147,7 @@ FetchBedStatusList: any;
                         labResults,
                         radResults
                     };
-                });
+                }).sort((a: any, b: any) => Number(b.isCritical) - Number(a.isCritical));;
                 this.totalCount = this.FetchBedsFromWardDataList.length;
                 this.criticalCount = this.FetchBedsFromWardDataList.filter((e: any) => e.isCritical).length;
                 this.normalCount = this.FetchBedsFromWardDataList.filter((e: any) => !e.isCritical).length;
@@ -191,7 +190,7 @@ FetchBedStatusList: any;
                         labResults,
                         radResults
                     };
-                });
+                }).sort((a: any, b: any) => Number(b.isCritical) - Number(a.isCritical));
                 this.totalCount = this.FetchBedsFromWardDataList.length;
                 this.criticalCount = this.FetchBedsFromWardDataList.filter((e: any) => e.isCritical).length;
                 this.normalCount = this.FetchBedsFromWardDataList.filter((e: any) => !e.isCritical).length;
@@ -204,21 +203,20 @@ FetchBedStatusList: any;
                 ];
                 this.FetchMETCALLWardDataList = response.FetchMETCALLWardDataList;
                 this.filterBeds();
-
             }
         });
     }
 
     filterBeds(type?: any) {
         if (type) {
-            this.type = type;
+            this.activeKey = type;
         }
 
         let data = [...this.FetchBedsFromWardDataList];
 
-        if (this.type === 'critical') {
+        if (this.activeKey === 'critical') {
             data = data.filter((e: any) => e.isCritical);
-        } else if (this.type === 'normal') {
+        } else if (this.activeKey === 'normal') {
             data = data.filter((e: any) => !e.isCritical);
         }
 
@@ -267,7 +265,7 @@ FetchBedStatusList: any;
 const ICUBeds = {
     'FetchBedsFromWardNPTeleICCU': 'FetchBedsFromWardNPTeleICCU?WardID=${WardID}&AdmissionID=${AdmissionID}&ConsultantID=${ConsultantID}&Status=${Status}&UserId=${UserId}&HospitalID=${HospitalID}',
     'FetchBedStatus': 'FetchBedStatus?HospitalID=${HospitalID}',
-    
+
 
 
 }

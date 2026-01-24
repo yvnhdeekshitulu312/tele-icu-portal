@@ -83,11 +83,11 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     IsRODoctor: any;
 
     searchText: any = '';
-      activeMedications: any = [];
-  activeMedicationsCount: any = [];
-  viewProgressNotesData: any[] = [];
-   viewProgressNotesData1: any = []
-  viewProgressNotesData2: any = [];
+    activeMedications: any = [];
+    activeMedicationsCount: any = [];
+    viewProgressNotesData: any[] = [];
+    viewProgressNotesData1: any = []
+    viewProgressNotesData2: any = [];
 
     constructor(private router: Router, private us: UtilityService, private configService: ConfigService, private config: BedConfig, private datepipe: DatePipe, private formbuilder: FormBuilder) {
 
@@ -121,6 +121,7 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
         this.selectedICUBed = item;
         this.showProgressNotes = false;
         this.fetchICUBed();
+        this.showActiveMedication();
     }
 
     onRefreshClick() {
@@ -166,9 +167,9 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
                     };
                 })[0];
 
- this.viewProgressNotesData = response.FetchMainProgressNoteHHNewDataList;
+                this.viewProgressNotesData = response.FetchMainProgressNoteHHNewDataList;
                 this.viewProgressNotesData1 = response.FetchMainProgressNoteHHNewData1List;
-                 this.viewProgressNotesData2 = response.FetchMainProgressNoteHHNewData2List;
+                this.viewProgressNotesData2 = response.FetchMainProgressNoteHHNewData2List;
 
                 sessionStorage.setItem("icubeddetails", JSON.stringify(this.selectedICUBed));
             }
@@ -178,12 +179,13 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     navigateToICUBeds() {
         this.router.navigate(['/ward/icu-beds']);
     }
-     filterNotes1(notes: any) {
-    return this.viewProgressNotesData1.filter((x: any) => x.NoteID === notes[0].NoteID);
-  }
-   filterNotes2(notes: any) {
-    return this.viewProgressNotesData2.filter((x: any) => x.NoteID === notes[0].NoteID);
-  }
+
+    filterNotes1(notes: any) {
+        return this.viewProgressNotesData1.filter((x: any) => x.NoteID === notes[0].NoteID);
+    }
+    filterNotes2(notes: any) {
+        return this.viewProgressNotesData2.filter((x: any) => x.NoteID === notes[0].NoteID);
+    }
 
     onLogout() {
         this.configService.onLogout();
@@ -949,25 +951,26 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
         }
         this.filteredICUBeds = data;
     }
-    showActiveMedication() {   
-    const params = {
-      PatientID: this.selectedICUBed.PatientID,
-      AdmissionID: this.selectedICUBed.AdmissionID,
-      WardID: this.selectedICUBed.WardID,
-      UserID: this.doctorDetails[0].UserId,
-      WorkStationID: this.selectedICUBed.WardID,
-      HospitalID: 3
-    };
-    const url = this.us.getApiUrl(ICUBedDetails.FetchPatientActiveMedication, params);
-    this.us.get(url).subscribe((response: any) => {
-      if (response.Code === 200) {
-        this.activeMedications = response.FetchPatientActiveMedicationDataList;
-        this.activeMedicationsCount = response.FetchPatientActiveMedicationCountDataList[0].PrescriptionCount;
-      }
-    },
-      (err) => {
-      });
-  }
+
+    showActiveMedication() {
+        const params = {
+            PatientID: this.selectedICUBed.PatientID,
+            AdmissionID: this.selectedICUBed.AdmissionID,
+            WardID: this.selectedICUBed.WardID,
+            UserID: this.doctorDetails[0].UserId,
+            WorkStationID: this.selectedICUBed.WardID,
+            HospitalID: 3
+        };
+        const url = this.us.getApiUrl(ICUBedDetails.FetchPatientActiveMedication, params);
+        this.us.get(url).subscribe((response: any) => {
+            if (response.Code === 200) {
+                this.activeMedications = response.FetchPatientActiveMedicationDataList;
+                this.activeMedicationsCount = response.FetchPatientActiveMedicationCountDataList[0]?.PrescriptionCount || 0;
+            }
+        },
+            (err) => {
+            });
+    }
 }
 
 const ICUBedDetails = {
