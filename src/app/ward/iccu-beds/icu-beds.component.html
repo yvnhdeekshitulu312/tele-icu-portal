@@ -258,17 +258,17 @@
                 </li>
             </div> -->
             <div class="d-flex align-items-center gap-2 bed_status" onmouseover="dropdownlab()"
-                        onmouseout="hideDropdown()">
-                        <p class="clr-primaryAllegery fs-8 text-nowrap">{{langData?.Ward?.BedStatus}}</p>
-                        <li class="nav-item bedstatus_li position-relative lab_navlink">
-                            <ul class="dropdown-menu" id="dropdownlab">
-                                <li *ngFor="let d of FetchBedStatusList;let i=index"
-                                    class="dropdown-item cursor-pointer" (click)="fetchBedStatusByValue(d.TaskStatus)">
-                                    {{d.StatusName}}</li>
-                            </ul>
-                        </li>
-                    </div>
-                    
+                onmouseout="hideDropdown()">
+                <p class="clr-primaryAllegery fs-8 text-nowrap">{{langData?.Ward?.BedStatus}}</p>
+                <li class="nav-item bedstatus_li position-relative lab_navlink">
+                    <ul class="dropdown-menu" id="dropdownlab">
+                        <li *ngFor="let d of FetchBedStatusList;let i=index" class="dropdown-item cursor-pointer"
+                            (click)="fetchBedStatusByValue(d.TaskStatus)">
+                            {{d.StatusName}}</li>
+                    </ul>
+                </li>
+            </div>
+
             <div class="d-flex align-items-center gap-2 bed_status">
                 <p class="clr-primaryAllegery fs-8 text-nowrap">Filter By</p>
                 <li class="nav-item bedstatus_li position-relative lab_navlink">
@@ -894,7 +894,8 @@
                                     <!-- Patient Info -->
                                     <div>
 
-                                        <div class="patient-header position-relative d-flex align-items-center pb-1 border-bottom">
+                                        <div
+                                            class="patient-header position-relative d-flex align-items-center pb-1 border-bottom">
                                             <div class="location-icon me-1">
                                                 <svg width="22" height="22" viewBox="0 0 13 13" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
@@ -1092,7 +1093,8 @@
                                                 <p class="mb-1 fw-semibold">Laboratory Results:</p>
                                                 <div class="alert-box mb-1"
                                                     [ngClass]="result.IsPanic ? 'alert-danger-custom status-panic' : 'alert-warning-custom status-abnormal'"
-                                                    *ngFor="let result of item.labResults">
+                                                    *ngFor="let result of item.labResults"
+                                                    (click)="openResults($event, item)">
                                                     <div>
                                                         <p>
                                                             {{result.TestName}}
@@ -1110,8 +1112,8 @@
                                                 <p class="mb-1 fw-semibold">Radiology Results:</p>
                                                 <div class="alert-box"
                                                     [ngClass]="result.IsPanic ? 'alert-danger-custom status-panic' : 'alert-warning-custom status-abnormal'"
-                                                    *ngFor="let result of item.radResults">
-
+                                                    *ngFor="let result of item.radResults"
+                                                    (click)="openResults($event, item)">
                                                     <div>
                                                         <p>
                                                             {{result.TestName}}
@@ -1121,18 +1123,35 @@
                                                             {{result.IsPanic ? 'Panic' :
                                                             'Abnormal'}}</p>
                                                     </div>
-
-
                                                 </div>
                                             </ng-container>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade viewVitals viewResults_modal" id="viewResults" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered my-2" style="max-width: 99%;">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                    <h5 class="modal-title" id="">View Results</h5>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn-close" (click)="closeViewResultsPopup();"
+                        aria-label="Close"></button>
+                </div>
+
+            </div>
+            <div class="modal-body p-0">
+                <app-others-results [fromTeleICUBed]="true" *ngIf="showResultsinPopUp"></app-others-results>
             </div>
         </div>
     </div>

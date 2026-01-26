@@ -32,9 +32,10 @@ export const MY_FORMATS = {
     DatePipe,
   ]
 })
-
-
 export class OthersResultsBannerComponent implements OnInit {
+  @Input()
+  fromTeleICUBed: boolean = false;
+
   tablePatientsForm!: FormGroup;
   visitsForm: any;
   selectedView: any;
@@ -55,12 +56,12 @@ export class OthersResultsBannerComponent implements OnInit {
   @Input() IsLab = true;
 
   constructor(private fb: FormBuilder, public datepipe: DatePipe, private config: ConfigService) {
-    this.visitsForm = this.fb.group({      
+    this.visitsForm = this.fb.group({
       visitId: [0]
     });
 
     this.langData = this.config.getLangData();
-   }
+  }
 
   ngOnInit(): void {
     this.SummaryfromCasesheet = sessionStorage.getItem("SummaryfromCasesheet") || 'false';
@@ -68,10 +69,15 @@ export class OthersResultsBannerComponent implements OnInit {
     const card = sessionStorage.getItem("selectedCard");
     const ivf = sessionStorage.getItem("ivfprocess")
 
-    this.selectedView = view && view !== '{}' ? JSON.parse(view) : card && card !== '{}' ? JSON.parse(card): ivf && ivf !== '{}' ? JSON.parse(ivf) : {};
+    this.selectedView = view && view !== '{}' ? JSON.parse(view) : card && card !== '{}' ? JSON.parse(card) : ivf && ivf !== '{}' ? JSON.parse(ivf) : {};
 
     this.patientDetails = JSON.parse(sessionStorage.getItem("PatientDetails") || '{}');
     this.HospitalID = sessionStorage.getItem("hospitalId");
+
+    if (this.fromTeleICUBed) {
+      this.patientDetails = this.selectedView = JSON.parse(sessionStorage.getItem("icubeddetails") || '{}');
+      this.HospitalID = this.patientDetails.HospitalID;
+    }
     this.PatientID = this.selectedView.PatientID;
     this.initializetablePatientsForm();
     this.fetchPatientVisits();
@@ -81,7 +87,7 @@ export class OthersResultsBannerComponent implements OnInit {
     var wm = new Date();
     var d = new Date();
     wm.setMonth(wm.getMonth() - 8);
-      
+
     this.tablePatientsForm = this.fb.group({
       FromDate: wm,
       ToDate: d,
@@ -90,16 +96,16 @@ export class OthersResultsBannerComponent implements OnInit {
 
   fetchPatientVisits() {
     this.config.fetchPatientVisits(this.PatientID, this.HospitalID)
-    .subscribe((response: any) => {
-      if (response.Code == 200) {
-       this.PatientVisitsList = response.PatientVisitsDataList;
-       this.visitsForm.get('visitId')?.setValue(this.admissionId === '' ? response.PatientVisitsDataList[0].AdmissionID : this.admissionId);
-       this.emitData();
-      } 
-    },
-      (err) => {
+      .subscribe((response: any) => {
+        if (response.Code == 200) {
+          this.PatientVisitsList = response.PatientVisitsDataList;
+          this.visitsForm.get('visitId')?.setValue(this.admissionId === '' ? response.PatientVisitsDataList[0].AdmissionID : this.admissionId);
+          this.emitData();
+        }
+      },
+        (err) => {
 
-      })
+        })
   }
 
   visitchange() {
@@ -107,17 +113,17 @@ export class OthersResultsBannerComponent implements OnInit {
   }
 
   fetchResults() {
-   this.emitData();
+    this.emitData();
   }
 
   emitData() {
     var FromDate = this.datepipe.transform(this.tablePatientsForm.value['FromDate'], "dd-MMM-yyyy")?.toString();
     var ToDate = this.datepipe.transform(this.tablePatientsForm.value['ToDate'], "dd-MMM-yyyy")?.toString();
-    
-    if(FromDate && ToDate && this.visitsForm.get('visitId').value) {
+
+    if (FromDate && ToDate && this.visitsForm.get('visitId').value) {
       this.dataEvent.emit({ visit: this.visitsForm.get('visitId').value, fromdate: FromDate, todate: ToDate, type: '' });
     }
-    
+
   }
 
   filterTestResults(type: string) {

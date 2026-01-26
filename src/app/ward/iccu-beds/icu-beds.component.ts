@@ -61,6 +61,8 @@ export class ICUBedsComponent implements OnInit {
     currentdateN: any;
     currentTimeN: Date = new Date();
 
+    showResultsinPopUp: boolean = false;
+
     constructor(private us: UtilityService, private configService: ConfigService, private router: Router) {
         this.langData = this.configService.getLangData();
     }
@@ -252,7 +254,7 @@ export class ICUBedsComponent implements OnInit {
     }
 
     navigateToDetails(item: any) {
-        sessionStorage.setItem('icubeddetails', JSON.stringify(item))
+        sessionStorage.setItem('icubeddetails', JSON.stringify(item));
         sessionStorage.setItem('icubeds', JSON.stringify(this.FetchBedsFromWardDataList));
         this.router.navigate(['/ward/icu-bed-details'])
     }
@@ -260,12 +262,23 @@ export class ICUBedsComponent implements OnInit {
     onLogout() {
         this.configService.onLogout();
     }
+
+    openResults(event: any, item: any) {
+        event.stopPropagation();
+        sessionStorage.setItem('icubeddetails', JSON.stringify(item));
+        this.showResultsinPopUp = true;
+        $("#viewResults").modal("show");
+    }
+
+    closeViewResultsPopup() {
+        $("#viewResults").modal("hide");
+        setTimeout(() => {
+            this.showResultsinPopUp = false;
+        }, 1000);
+    }
 }
 
 const ICUBeds = {
     'FetchBedsFromWardNPTeleICCU': 'FetchBedsFromWardNPTeleICCU?WardID=${WardID}&AdmissionID=${AdmissionID}&ConsultantID=${ConsultantID}&Status=${Status}&UserId=${UserId}&HospitalID=${HospitalID}',
-    'FetchBedStatus': 'FetchBedStatus?HospitalID=${HospitalID}',
-
-
-
+    'FetchBedStatus': 'FetchBedStatus?HospitalID=${HospitalID}'
 }

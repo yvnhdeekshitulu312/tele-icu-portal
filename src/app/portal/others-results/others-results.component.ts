@@ -51,6 +51,9 @@ export class OthersResultsComponent implements OnInit {
   @ViewChild('chartLine', { static: true }) chartLine!: ElementRef;
   @ViewChild('chartLine', { static: true }) chartColumn!: ElementRef;
   @ViewChild('labTest', { static: true }) labTest!: ElementRef;
+  @Input()
+  fromTeleICUBed: boolean = false;
+
   selectedView: any;
   HospitalID: any;
   PatientID: any;
@@ -120,8 +123,8 @@ export class OthersResultsComponent implements OnInit {
   cardiologyContentHTML: any = '';
   errorMsg: any;
   reportName: any = '';
-  
-  constructor(private fb: FormBuilder, private config: ConfigService, public datepipe: DatePipe, private router: Router, private bedconfig: BedConfig,private sanitizer: DomSanitizer, private us: UtilityService, private service: PatientfolderService) {
+
+  constructor(private fb: FormBuilder, private config: ConfigService, public datepipe: DatePipe, private router: Router, private bedconfig: BedConfig, private sanitizer: DomSanitizer, private us: UtilityService, private service: PatientfolderService) {
     this.langData = this.config.getLangData();
 
     const emergencyValue = sessionStorage.getItem("FromEMR");
@@ -176,10 +179,19 @@ export class OthersResultsComponent implements OnInit {
     const card = sessionStorage.getItem("selectedCard");
     const ivf = sessionStorage.getItem("ivfprocess")
 
-    this.selectedView = view && view !== '{}' ? JSON.parse(view) : card && card !== '{}' ? JSON.parse(card): ivf && ivf !== '{}' ? JSON.parse(ivf) : {};
+    this.selectedView = view && view !== '{}' ? JSON.parse(view) : card && card !== '{}' ? JSON.parse(card) : ivf && ivf !== '{}' ? JSON.parse(ivf) : {};
 
     this.patientDetails = JSON.parse(sessionStorage.getItem("PatientDetails") || '{}');
+
     this.HospitalID = sessionStorage.getItem("hospitalId");
+
+    if (this.fromTeleICUBed) {
+      this.patientDetails = this.selectedView = JSON.parse(sessionStorage.getItem("icubeddetails") || '{}');
+      this.hospId = this.patientDetails.HospitalID;
+      this.facility = this.patientDetails.WardID;
+      this.HospitalID = this.patientDetails.HospitalID;
+    }
+
     this.PatientID = this.selectedView.PatientID;
     this.RegCode = this.patientDetails.RegCode;
     this.initializetablePatientsForm();
@@ -197,7 +209,7 @@ export class OthersResultsComponent implements OnInit {
       this.SelectedViewClass = "m-0 fw-bold alert_animate token";
     }
 
-    if(this.selectedView.PatientType != 1) {
+    if (this.selectedView.PatientType != 1) {
       this.fromDate = this.toDate = this.datepipe.transform(new Date(), "dd-MMM-yyyy")?.toString();
       this.fetchLabOrderResults();
       this.ActiveTab('L');
@@ -226,7 +238,7 @@ export class OthersResultsComponent implements OnInit {
       this.router.navigate(['/home/doctorcasesheet']);
     else if (this.FromRadiology)
       this.router.navigate(['/suit/radiology-resultentry']);
-    else if(this.IsFromPhysiotherapy) {
+    else if (this.IsFromPhysiotherapy) {
       this.router.navigate(['/suit/physiotherapy-resultentry']);
     }
 
@@ -1534,22 +1546,22 @@ export class OthersResultsComponent implements OnInit {
 
   public getLabels(segmentIndex: number, item: any) {
     const count = item.segments.length;
-    if(count === 1) {
-      return { start:true, end: true}
+    if (count === 1) {
+      return { start: true, end: true }
     } else if (count === 2) {
       if (segmentIndex === 0) {
-        return { start: true, end: false}
+        return { start: true, end: false }
       } else {
-        return { start: true, end: true}
+        return { start: true, end: true }
       }
     } else if (count === 3) {
       if (segmentIndex === 2) {
-        return { start: true, end: true}
+        return { start: true, end: true }
       } else {
-        return { start: true, end: false}
+        return { start: true, end: false }
       }
     }
-    return {start: true, end: true};
+    return { start: true, end: true };
   }
 
 
@@ -1580,7 +1592,7 @@ export class OthersResultsComponent implements OnInit {
   }
 
   addSelectedResult(dept: any) {
-    if(dept.specialiseid == '223' && Number(dept.Status) <= 7) {
+    if (dept.specialiseid == '223' && Number(dept.Status) <= 7) {
       this.errorMsg = "Histopathology Results are not Verified";
       $("#errorMsg").modal('show');
       return;
@@ -1695,12 +1707,12 @@ export class OthersResultsComponent implements OnInit {
     $("#saveMessage").modal('hide');
   }
   addSelectedReport(dept: any) {
-    if(dept.Status=='5') {
+    if (dept.Status == '5') {
       this.selectedReport = dept;
       this.radioLogyReportPDF();
     }
     else {
-      this.errorMsg = "Results are not Verified";   
+      this.errorMsg = "Results are not Verified";
       $("#errorMsg").modal('show');
     }
   }
@@ -1712,7 +1724,7 @@ export class OthersResultsComponent implements OnInit {
       "TestOrderId": this.selectedReport.TestOrderId,
       "UserID": this.doctorDetails[0].UserId,
     }
-    this.config.fetchRadReportGroupPDF(this.RegCode, this.selectedReport.TestOrderItemID, this.selectedReport.TestOrderId, this.doctorDetails[0].UserId,this.hospId).subscribe((response) => {
+    this.config.fetchRadReportGroupPDF(this.RegCode, this.selectedReport.TestOrderItemID, this.selectedReport.TestOrderId, this.doctorDetails[0].UserId, this.hospId).subscribe((response) => {
       if (response.Status === "Success") {
         if (this.IsTab === 'C') {
           const content = response.objLabReportNList[0].VALUE;
@@ -1721,12 +1733,12 @@ export class OthersResultsComponent implements OnInit {
           const extractedText = doc.body.innerHTML;
           this.cardiologyContentHTML = this.sanitizer.bypassSecurityTrustHtml(extractedText);
           $('#cardiology_report').modal('show');
-        }else{
+        } else {
           this.radiologyPdfDetails = response;
           this.trustedUrl = response?.FTPPATH
           this.showModal()
         }
-      
+
 
       }
     },
@@ -1822,7 +1834,7 @@ export class OthersResultsComponent implements OnInit {
   FetchLabTestComponentsList: any = [];
 
   openResults(item: any) {
-    if(item.specialiseid == '223' && Number(item.Status) <= 7) {
+    if (item.specialiseid == '223' && Number(item.Status) <= 7) {
       this.errorMsg = "Histopathology Results are not Verified";
       $("#errorMsg").modal('show');
       return;
@@ -1906,7 +1918,7 @@ export class OthersResultsComponent implements OnInit {
   }
 
   addSelectedItemResult(dept: any) {
-    if(dept.specialiseid == '223' && Number(dept.Status) <= 7) {
+    if (dept.specialiseid == '223' && Number(dept.Status) <= 7) {
       this.errorMsg = "Histopathology Results are not Verified";
       $("#errorMsg").modal('show');
       return;
@@ -1953,9 +1965,9 @@ export class OthersResultsComponent implements OnInit {
 
       })
   }
- }
+}
 
 
- export const otherresults = {
+export const otherresults = {
   FetchLabReportGroupPDFN: 'FetchLabReportGroupPDFN?RegCode=${RegCode}&IsNewVisit=${IsNewVisit}&TestOrderId=${TestOrderId}&UserID=${UserID}&HospitalID=${HospitalID}',
- }
+}
