@@ -317,7 +317,8 @@
         <div class="row mx-0 g-2">
             <div class="col-xl-4 col-lg-12 col-md-12 cursor-pointer"
                 *ngFor="let item of FilteredBedsFromWardDataList; let i = index" (click)="navigateToDetails(item)">
-                <div class="bed-board bed-board-occupied" [class.alert-box-anim]="item.isCritical">
+                <!-- <div class="bed-board bed-board-occupied" [class.alert-box-anim]="item.isCritical"> -->
+                <div class="bed-board bed-board-occupied">
                     <div class="row g-0 gradient_bg">
                         <div class="col-3 d-flex flex-column">
                             <div class="bed-details d-flex flex-column justify-content-between">
@@ -413,7 +414,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="" style="padding-bottom: 2.4rem;">
+                                <div class="">
                                     <div class="bed-info mt-4">
 
                                         <div class="fallRisk" *ngIf="item.FallRiskScoreDisplay==1">
@@ -864,11 +865,11 @@
                                             {{item.BedStatusName}}
                                         </div>
                                     </div>
-                                    <p class="dnr_label fs-7 mt-3" *ngIf="item.IsDNR === '1'">
-                                        DNR
-                                    </p>
+                                    <div class="dnr_label fs-7 mt-1">
+                                       <p class="m-0" *ngIf="item.IsDNR === '1'">DNR</p>
+                                    </div>
                                     <p
-                                        [class]="item.Bed.includes('ISO') ? 'iso-color m-0 mb-3' : 'bed-number m-0 mb-3'">
+                                        [class]="item.Bed.includes('ISO') ? 'iso-color m-0 mb-0' : 'bed-number m-0 mb-0'">
                                         {{item.Shortname}} ({{item.Bed}})
                                     </p>
                                     <!-- <div class="bed-tasks-info">
@@ -880,9 +881,9 @@
                                             </div>
                                         </div> -->
                                 </div>
-                                <div class="position-absolute bottom-0 w-100 text-center">
+                                <!-- <div class="position-absolute bottom-0 w-100 text-center">
                                     <a class="btn tele_ehr_btn btn-primary-3d py-2" (click)="openPatientFolder($event, item)">EHR</a>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <div class="col">
@@ -944,7 +945,7 @@
                                             <span class="bed-locationNameSpan fs-8 ms-auto">{{item.HospitalName}}</span>
                                         </div>
 
-                                        <div class="patient-info p-1 mb-3">
+                                        <div class="patient-info p-1 mb-2">
                                             <h3 class="patient-name mb-1">{{item.PatientName}}</h3>
                                             <div class="patient-meta">
                                                 <span>{{item.FullAge}}</span>
@@ -965,10 +966,10 @@
                                         </div>
 
                                         <!-- Vitals Cards -->
-                                        <div class="row gx-2 mb-3">
+                                        <div class="row g-1 mb-2">
 
                                             <!-- Heart Rate -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-6">
                                                 <div class="vital-card">
 
 
@@ -995,7 +996,7 @@
                                             </div>
 
                                             <!-- SpO2 -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-6">
                                                 <div class="vital-card vital-highlight">
 
                                                     <div class="vital-top d-flex gap-2 align-items-center">
@@ -1029,7 +1030,7 @@
                                             </div>
 
                                             <!-- Blood Pressure -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-6">
                                                 <div class="vital-card">
 
                                                     <div class="vital-top d-flex gap-2 align-items-center">
@@ -1059,7 +1060,7 @@
                                             </div>
 
                                             <!-- Temperature -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-6">
                                                 <div class="vital-card">
 
                                                     <div class="vital-top d-flex gap-2 align-items-center">
@@ -1087,44 +1088,47 @@
 
                                         </div>
                                     </div>
-                                    <div class="row gx-2 results-container">
-                                        <div class="col-6" *ngIf="item.labResults.length > 0">
-                                            <ng-container>
-                                                <p class="mb-1 fw-semibold">Laboratory Results:</p>
-                                                <div class="alert-box mb-1 cursor-pointer"
-                                                    [ngClass]="result.IsPanic ? 'alert-danger-custom status-panic' : 'alert-warning-custom status-abnormal'"
-                                                    *ngFor="let result of item.labResults"
-                                                    (click)="openResults($event, item)">
-                                                    <div>
-                                                        <p>
-                                                            {{result.TestName}}
-                                                        </p>
-                                                        <p
-                                                            [ngClass]="result.IsPanic ? 'status-text text-red' : 'status-text text-orange'">
-                                                            {{result.IsPanic ? 'Panic' :
-                                                            'Abnormal'}}</p>
+                                    <div class="results-container">
+                                        <!-- <p class="m-0 fs-6 m-0 fs-5 fw-semibold d-flex align-items-center justify-content-center h-100" >No Results Found</p> -->
+                                        <div class="row gx-2">
+                                            <div class="col-6" *ngIf="item.labResults.length > 0">
+                                                <ng-container>
+                                                    <p class="mb-1 fw-semibold">Laboratory Results:</p>
+                                                    <div class="alert-box mb-1 cursor-pointer"
+                                                        [ngClass]="result.IsPanic ? 'alert-danger-custom status-panic' : 'alert-warning-custom status-abnormal'"
+                                                        *ngFor="let result of item.labResults"
+                                                        (click)="openResults($event, item)">
+                                                        <div>
+                                                            <p>
+                                                                {{result.TestName}}
+                                                            </p>
+                                                            <p
+                                                                [ngClass]="result.IsPanic ? 'status-text text-red' : 'status-text text-orange'">
+                                                                {{result.IsPanic ? 'Panic' :
+                                                                'Abnormal'}}</p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </ng-container>
-                                        </div>
-                                        <div class="col-6" *ngIf="item.radResults.length > 0">
-                                            <ng-container>
-                                                <p class="mb-1 fw-semibold">Radiology Results:</p>
-                                                <div class="alert-box mb-1 cursor-pointer"
-                                                    [ngClass]="result.IsPanic ? 'alert-danger-custom status-panic' : 'alert-warning-custom status-abnormal'"
-                                                    *ngFor="let result of item.radResults"
-                                                    (click)="openResults($event, item)">
-                                                    <div>
-                                                        <p>
-                                                            {{result.TestName}}
-                                                        </p>
-                                                        <p
-                                                            [ngClass]="result.IsPanic ? 'status-text text-red' : 'status-text text-orange'">
-                                                            {{result.IsPanic ? 'Panic' :
-                                                            'Abnormal'}}</p>
+                                                </ng-container>
+                                            </div>
+                                            <div class="col-6" *ngIf="item.radResults.length > 0">
+                                                <ng-container>
+                                                    <p class="mb-1 fw-semibold">Radiology Results:</p>
+                                                    <div class="alert-box mb-1 cursor-pointer"
+                                                        [ngClass]="result.IsPanic ? 'alert-danger-custom status-panic' : 'alert-warning-custom status-abnormal'"
+                                                        *ngFor="let result of item.radResults"
+                                                        (click)="openResults($event, item)">
+                                                        <div>
+                                                            <p>
+                                                                {{result.TestName}}
+                                                            </p>
+                                                            <p
+                                                                [ngClass]="result.IsPanic ? 'status-text text-red' : 'status-text text-orange'">
+                                                                {{result.IsPanic ? 'Panic' :
+                                                                'Abnormal'}}</p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </ng-container>
+                                                </ng-container>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
