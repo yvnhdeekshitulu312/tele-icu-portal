@@ -90,6 +90,7 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     viewProgressNotesData2: any = [];
 
     showResultsinPopUp: boolean = false;
+    showPatientSummaryinPopUp: boolean = false;
 
     constructor(private router: Router, private us: UtilityService, private configService: ConfigService, private config: BedConfig, private datepipe: DatePipe, private formbuilder: FormBuilder) {
 
@@ -984,6 +985,20 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
         $("#viewResults").modal("hide");
         setTimeout(() => {
             this.showResultsinPopUp = false;
+        }, 1000);
+    }
+
+    openPatientFolder() {
+        this.showPatientSummaryinPopUp = true;
+        sessionStorage.setItem("PatientID", this.selectedICUBed.PatientID);
+        sessionStorage.setItem("SummaryfromCasesheet", 'true');
+        $("#pateintFolderPopup").modal("show");
+    }
+
+    closePatientSummaryPopup() {
+        $("#pateintFolderPopup").modal("hide");
+        setTimeout(() => {
+            this.showPatientSummaryinPopUp = false;
         }, 1000);
     }
 }

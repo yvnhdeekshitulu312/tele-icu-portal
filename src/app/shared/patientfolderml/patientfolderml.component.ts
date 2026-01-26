@@ -456,6 +456,9 @@ export class PatientfoldermlComponent extends BaseComponent implements OnInit, O
   @ViewChild('visitInfo') visitInfo!: MatAutocomplete;
   @ViewChild(MatAutocompleteTrigger) visitAutocompleteTrigger!: MatAutocompleteTrigger;
 
+  @Input()
+  fromTeleICUBed: boolean = false;
+
   patinfo: any;
 
   private scrollTimeout: any;
@@ -669,6 +672,12 @@ export class PatientfoldermlComponent extends BaseComponent implements OnInit, O
     this.location = sessionStorage.getItem("locationName");
     this.facility = JSON.parse(sessionStorage.getItem("facility") || '{}');
     this.patientDetails = JSON.parse(sessionStorage.getItem("PatientDetails") || '{}');
+    if (this.fromTeleICUBed) {
+      this.selectedView = this.patientDetails = JSON.parse(sessionStorage.getItem("icubeddetails") || '{}');
+      this.admissionID = this.selectedView.AdmissionID;
+      this.wardID = this.selectedView.WardID;
+      this.hospitalID = this.selectedView.HospitalID;
+    }
     if (this.selectedView.SSN) {
       this.fetchPatientUHIDSSN(this.selectedView.SSN);
     }
@@ -2134,7 +2143,7 @@ export class PatientfoldermlComponent extends BaseComponent implements OnInit, O
   }
 
   addSelectedResult(dept: any) {
-    if(dept.specialiseid == '223' && Number(dept.Status) <= 7) {
+    if (dept.specialiseid == '223' && Number(dept.Status) <= 7) {
       this.errorMsg = "Histopathology Results are not Verified";
       $("#errorMsg").modal('show');
       return;
@@ -2144,7 +2153,7 @@ export class PatientfoldermlComponent extends BaseComponent implements OnInit, O
     this.getLabReportPdf()
   }
   addSelectedItemResult(dept: any) {
-    if(dept.specialiseid == '223' && Number(dept.Status) <= 7) {
+    if (dept.specialiseid == '223' && Number(dept.Status) <= 7) {
       this.errorMsg = "Histopathology Results are not Verified";
       $("#errorMsg").modal('show');
       return;
@@ -2888,72 +2897,72 @@ export class PatientfoldermlComponent extends BaseComponent implements OnInit, O
   }
 
 
-buildSummary(intakedata: any[], outputdata: any[]) {
+  buildSummary(intakedata: any[], outputdata: any[]) {
 
-  const uomMap: any = {};
+    const uomMap: any = {};
 
-  const init = (uom: string) => ({
-    uom,
-    intakeMap: {},
-    outputMap: {},
-    intakeList: [],
-    outputList: [],
-    totalIntake: 0,
-    totalOutput: 0,
-    balance: 0
-  });
+    const init = (uom: string) => ({
+      uom,
+      intakeMap: {},
+      outputMap: {},
+      intakeList: [],
+      outputList: [],
+      totalIntake: 0,
+      totalOutput: 0,
+      balance: 0
+    });
 
-  /* ---------- INTAKE ---------- */
-  intakedata.forEach(i => {
-    if (!i?.UOM) return;
+    /* ---------- INTAKE ---------- */
+    intakedata.forEach(i => {
+      if (!i?.UOM) return;
 
-    uomMap[i.UOM] ??= init(i.UOM);
+      uomMap[i.UOM] ??= init(i.UOM);
 
-    const name = i.IntakeOutput || 'Others';
-    const qty = this.parseQty(i.Quantity);
+      const name = i.IntakeOutput || 'Others';
+      const qty = this.parseQty(i.Quantity);
 
-    uomMap[i.UOM].intakeMap[name] =
-      (uomMap[i.UOM].intakeMap[name] || 0) + qty;
+      uomMap[i.UOM].intakeMap[name] =
+        (uomMap[i.UOM].intakeMap[name] || 0) + qty;
 
-    uomMap[i.UOM].totalIntake += qty;
-  });
+      uomMap[i.UOM].totalIntake += qty;
+    });
 
-  /* ---------- OUTPUT ---------- */
-  outputdata.forEach(o => {
-    if (!o?.UOM) return;
+    /* ---------- OUTPUT ---------- */
+    outputdata.forEach(o => {
+      if (!o?.UOM) return;
 
-    uomMap[o.UOM] ??= init(o.UOM);
+      uomMap[o.UOM] ??= init(o.UOM);
 
-    const name = o.IntakeOutput || 'Others';
-    const qty = this.parseQty(o.Quantity);
+      const name = o.IntakeOutput || 'Others';
+      const qty = this.parseQty(o.Quantity);
 
-    uomMap[o.UOM].outputMap[name] =
-      (uomMap[o.UOM].outputMap[name] || 0) + qty;
+      uomMap[o.UOM].outputMap[name] =
+        (uomMap[o.UOM].outputMap[name] || 0) + qty;
 
-    uomMap[o.UOM].totalOutput += qty;
-  });
+      uomMap[o.UOM].totalOutput += qty;
+    });
 
-  /* ---------- FINALIZE ---------- */
-  Object.values(uomMap).forEach((g: any) => {
+    /* ---------- FINALIZE ---------- */
+    Object.values(uomMap).forEach((g: any) => {
 
-    g.intakeList = Object.keys(g.intakeMap).map(name => ({
-      name,
-      qty: g.intakeMap[name]
-    }));
+      g.intakeList = Object.keys(g.intakeMap).map(name => ({
+        name,
+        qty: g.intakeMap[name]
+      }));
 
-    g.outputList = Object.keys(g.outputMap).map(name => ({
-      name,
-      qty: g.outputMap[name]
-    }));
+      g.outputList = Object.keys(g.outputMap).map(name => ({
+        name,
+        qty: g.outputMap[name]
+      }));
 
-    g.balance = g.totalIntake - g.totalOutput;
+      g.balance = g.totalIntake - g.totalOutput;
 
-    delete g.intakeMap;
-    delete g.outputMap;
-  });
+      delete g.intakeMap;
+      delete g.outputMap;
+    });
 
-  this.summaryData = Object.values(uomMap);
-}
+    this.summaryData = Object.values(uomMap);
+  }
 
 
 
@@ -6988,7 +6997,7 @@ buildSummary(intakedata: any[], outputdata: any[]) {
   }
 
   openResults(item: any) {
-    if(item.specialiseid == '223' && Number(item.Status) <= 7) {
+    if (item.specialiseid == '223' && Number(item.Status) <= 7) {
       this.errorMsg = "Histopathology Results are not Verified";
       $("#errorMsg").modal('show');
       return;
