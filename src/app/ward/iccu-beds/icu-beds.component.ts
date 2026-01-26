@@ -62,6 +62,7 @@ export class ICUBedsComponent implements OnInit {
     currentTimeN: Date = new Date();
 
     showResultsinPopUp: boolean = false;
+    showPatientSummaryinPopUp: boolean = false;
 
     constructor(private us: UtilityService, private configService: ConfigService, private router: Router) {
         this.langData = this.configService.getLangData();
@@ -274,6 +275,22 @@ export class ICUBedsComponent implements OnInit {
         $("#viewResults").modal("hide");
         setTimeout(() => {
             this.showResultsinPopUp = false;
+        }, 1000);
+    }
+
+    openPatientFolder(event: any, item: any) {
+        event.stopPropagation();
+        sessionStorage.setItem('icubeddetails', JSON.stringify(item));
+        sessionStorage.setItem("PatientID", item.PatientID);
+        sessionStorage.setItem("SummaryfromCasesheet", 'true');
+        this.showPatientSummaryinPopUp = true;
+        $("#pateintFolderPopup").modal("show");
+    }
+
+    closePatientSummaryPopup() {
+        $("#pateintFolderPopup").modal("hide");
+        setTimeout(() => {
+            this.showPatientSummaryinPopUp = false;
         }, 1000);
     }
 }
