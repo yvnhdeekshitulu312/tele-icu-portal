@@ -1490,95 +1490,349 @@
             </div>
             <div class="modal-body">
                 <app-wardheader-summary></app-wardheader-summary>
-                <div class="mt-3 border-primary-200 rounded-2">
-                    <div class="fixed_alter_list DoctorReferralOrders_List">
-                        <div class="fixed_alter_header bg-primary-50">
-                            <div class="row gx-2 p-2 px-0 mx-0">
-                                <div class="col-2">
-                                    <p class="label m-0">From Doctor</p>
+                <ul class="nav nav-pills border-0 gap-2 align-items-center" id="" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <div class="clin_imp">
+                            <button
+                                class="btn btn-secondary-outline min-width-unset d-flex align-items-center fs-8 p-0 pe-2"
+                                [class.active]="referralType === 1" (click)="saveReferralConfirmation(1)">
+                                <span class="h-100 d-flex align-items-center p">
+                                    <svg class="ms-1" width="17" height="17" viewBox="0 0 20 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path opacity="0.4"
+                                            d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                            fill="#B4DDE4" />
+                                        <path
+                                            d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                            fill="#fff" />
+                                    </svg>
+                                </span>
+                                <span class="px-2 py-1 d-block">Refer to Social Worker</span>
+                            </button>
+                        </div>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <div class="clin_imp">
+                            <button
+                                class="btn btn-secondary-outline min-width-unset d-flex align-items-center fs-8 p-0 pe-2"
+                                [class.active]="referralType === 2" (click)="saveReferralConfirmation(2)">
+                                <span class="h-100 d-flex align-items-center p">
+                                    <svg class="ms-1" width="17" height="17" viewBox="0 0 20 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path opacity="0.4"
+                                            d="M10 18.3334C14.6025 18.3334 18.3334 14.6025 18.3334 10C18.3334 5.39752 14.6025 1.66669 10 1.66669C5.39752 1.66669 1.66669 5.39752 1.66669 10C1.66669 14.6025 5.39752 18.3334 10 18.3334Z"
+                                            fill="#B4DDE4" />
+                                        <path
+                                            d="M8.81668 12.985C8.65098 12.9849 8.49212 12.9189 8.37502 12.8017L6.01668 10.4433C5.90045 10.3257 5.83527 10.167 5.83527 10.0017C5.83527 9.83631 5.90045 9.67762 6.01668 9.56C6.25835 9.31833 6.65835 9.31833 6.90002 9.56L8.81668 11.4767L13.1 7.19333C13.3417 6.95167 13.7417 6.95167 13.9834 7.19333C14.225 7.435 14.225 7.835 13.9834 8.07667L9.25835 12.8017C9.14125 12.9189 8.98239 12.9849 8.81668 12.985Z"
+                                            fill="#fff" />
+                                    </svg>
+                                </span>
+                                <span class="px-2 py-1 d-block">Refer to Physiotherapist</span>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+                <form [formGroup]="referralForm">
+                    <div class="" id="referral_body">
+                        <div class="p-2 bg-primary-50">
+                            <div class="row g-2 align-items-center">
+                                <div class="w-max-content">
+                                    <label for=""
+                                        class="form-label text-nowrap m-0">{{langData?.Advice?.RefertoLocation}}</label>
+                                    <select name="" class="form-select pe-5" id="" formControlName="Location"
+                                        (change)="locationChange($event)">
+                                        <option value="0">{{langData?.appointment?.select}}</option>
+                                        <option *ngFor="let hl of locationList;let i=index" value="{{hl.HospitalID}}">
+                                            {{hl.Name}}</option>
+                                    </select>
                                 </div>
-                                <div class="col-1">
-                                    <p class="label m-0">From Specialisation</p>
+                                <div class="col-lg-2 col-md-4">
+                                    <label for="" class="form-label">{{langData?.Ward?.Specialization}}</label>
+                                    <div class="input_dropdown position-relative">
+                                        <input type="text" class="form-control" id="Specialization"
+                                            placeholder="Specialization" aria-label="Specialization"
+                                            [matAutocomplete]="autoMed"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchSpecItem($event)">
+                                        <mat-autocomplete #autoMed="matAutocomplete"
+                                            (optionSelected)="onSpecItemSelected($event)">
+                                            <mat-option *ngFor="let item of SpecializationList" [value]="item.name">
+                                                {{item.name}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </div>
                                 </div>
-                                <div class="col-2">
-                                    <p class="label m-0">To Doctor</p>
+                                <div class="col-lg-3 col-md-4 align-items-center justify-content-between">
+                                    <label for="" class="form-label">{{langData?.SHO?.Doctor}}</label>
+                                    <div class="input_dropdown position-relative">
+                                        <input type="text" class="form-control" id="Doctor" placeholder="Doctor"
+                                            aria-label="Doctor" [matAutocomplete]="autoMed1"
+                                            (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown') ? $event.preventDefault() : searchDocItem($event)">
+                                        <mat-autocomplete #autoMed1="matAutocomplete"
+                                            (optionSelected)="onDocItemSelected($event)">
+                                            <mat-option *ngFor="let item of listOfSpecItems"
+                                                [value]="item.EmpNo + '-' + item.Fullname ">
+                                                <div class="border-bottom py-1">
+                                                    <p>{{item.EmpNo}}-{{item.Fullname}}</p>
+                                                    <p class="color-highlight  fs-8 fw-bold">
+                                                        {{item.THourDifferencestring}}</p>
+                                                </div>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </div>
                                 </div>
-                                <div class="col-1">
-                                    <p class="label m-0">To Specialisation</p>
+                                <div class="col-lg-2 col-md-4">
+                                    <label for="" class="form-label">{{langData?.Advice?.Reason}}</label>
+                                    <select name=""
+                                        [class]="referralReason ? 'form-select border-danger-300' : 'form-select'" id=""
+                                        formControlName="Reason" (change)="reasonChange($event)">
+                                        <option value="0">{{langData?.appointment?.select}}</option>
+                                        <option *ngFor="let item of reasonsList; let i = index" value="{{item.id}}">
+                                            {{item.name}}</option>
+                                    </select>
                                 </div>
-                                <div class="col-1">
-                                    <p class="label m-0">Referral Date</p>
+                                <div class="col-lg-1 col-md-4">
+                                    <label for="" class="form-label">{{langData?.Advice?.Priority}}</label>
+                                    <select name=""
+                                        [class]="referralPriority ? 'form-select pe-4 border-danger-300' : 'form-select pe-4'"
+                                        id="" formControlName="Priority" (change)="priorityChange($event)">
+                                        <option value="0">{{langData?.appointment?.select}}</option>
+                                        <option *ngFor="let item of priorityList; let i = index" value="{{item.id}}">
+                                            {{item.name}}</option>
+                                    </select>
                                 </div>
-                                <div class="col-1">
-                                    <p class="label m-0">Priority</p>
-                                </div>
-                                <div class="col-1">
-                                    <p class="label m-0">Reason</p>
-                                </div>
-                                <div class="col-1">
-                                    <p class="label m-0">Co-Management</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="label m-0">Doctor Visited</p>
+                                <div class="col d-flex align-items-end justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <div class="d-flex align-items-center gap-1 mt-4 ms-1">
+                                            <div class="custom_check d-flex align-items-center gap-2"
+                                                [class.active]="Cosession" (click)="cosessionClick()">
+                                                <svg width="16" height="16" viewBox="0 0 20 21" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg" class="check_svg">
+                                                    <circle cx="10" cy="10.5" r="10" fill="#43BC94"></circle>
+                                                    <path
+                                                        d="M9.85969 13.8389C10.1922 13.8374 10.5109 13.7054 10.747 13.4712L10.747 13.4713L10.7496 13.4685L18.7068 5.08439C18.825 4.96682 18.9188 4.8271 18.9829 4.67321C19.0473 4.51873 19.0804 4.35303 19.0804 4.18568C19.0804 4.01832 19.0473 3.85262 18.9829 3.69814C18.9186 3.5437 18.8243 3.40352 18.7055 3.28569C18.468 3.04958 18.1467 2.91704 17.8118 2.91704C17.4769 2.91704 17.1556 3.04958 16.918 3.28569L16.918 3.28564L16.9152 3.28862L9.85639 10.7804L8.06528 8.98932C7.95221 8.85834 7.81352 8.75187 7.65773 8.67649C7.50045 8.6004 7.32913 8.55764 7.15455 8.5509C6.97996 8.54416 6.80586 8.57357 6.64318 8.63731C6.4805 8.70104 6.33274 8.79771 6.2092 8.92126C6.08565 9.04481 5.98898 9.19256 5.92524 9.35524C5.86151 9.51792 5.83209 9.69202 5.83884 9.86661C5.84558 10.0412 5.88834 10.2125 5.96443 10.3698C6.03979 10.5255 6.14622 10.6642 6.27716 10.7773L8.95915 13.4707L8.9597 13.4712C9.07816 13.5887 9.21864 13.6817 9.3731 13.7447C9.52752 13.8078 9.69288 13.8398 9.85969 13.8389ZM9.85969 13.8389C9.85965 13.8389 9.85962 13.8389 9.85959 13.8389L9.85906 13.7139L9.85978 13.8389C9.85975 13.8389 9.85972 13.8389 9.85969 13.8389Z"
+                                                        fill="white" stroke="white" stroke-width="0.25"></path>
+                                                </svg>
+                                                <p class="m-0 fs-8 text-nowrap">{{langData?.Advice?.CoManagement}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end align-items-end mt-2">
+                                        <button class="btn btn-main-outline" *ngIf="!isEdit" (click)="addReferral()">
+                                            {{langData?.common?.Add}}</button>
+                                        <button class="btn btn-main-outline" *ngIf="isEdit"
+                                            (click)="updateReferral()">{{langData?.Advice?.Update}}</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="fixed_alter_body d-flex flex-column gap-1 p-1">
-                            <div class="card card-style-1 rounded"
-                                *ngFor="let item of FetchDoctorReferralOrdersDataList;let i=index">
-                                <div class="row gx-2 mx-0 pt-2 px-0 alter_div align-items-center">
-                                    <div class="col-2">
-                                        <p class="m-0">{{item.FromDoctorName}}</p>
-                                    </div>
-                                    <div class="col-1">
-                                        <p class="m-0">{{item.FromSpecialisation}}</p>
-                                    </div>
-                                    <div class="col-2">
-                                        <p class="m-0">{{item.ReferralDoctorName}}</p>
-                                    </div>
-                                    <div class="col-1">
-                                        <p class="m-0">{{item.ReferralSpecialisation}}</p>
-                                    </div>
-                                    <div class="col-1">
-                                        <p class="m-0">{{item.ReferralDate}}</p>
-                                    </div>
-                                    <div class="col-1">
-                                        <p class="m-0">{{item.PriorityName}}</p>
-                                    </div>
-                                    <div class="col-1">
-                                        <p class="m-0">{{item.Reason}}</p>
-                                    </div>
-                                    <div class="col-1">
-                                        <p class="m-0">{{item?.Cosession === true ? 'Yes' : 'No'}}</p>
-                                    </div>
-                                    <div class="col-2">
-                                        <p class="m-0">{{item.isVerified ? 'Visited' : 'Not Visited'}}</p>
-                                    </div>
-                                    <div
-                                        class="col-12 mt-2 p-2 bg-primary-50 d-flex align-items-center gap-3 rounded-bottom">
-                                        <div class="d-flex gap-2">
-                                            <p class="label fw-bold m-0 text-nowrap">Accept&Reject Date : </p>
-                                            <p class="m-0 text-nowrap">{{item.AcceptRejectDate}}</p>
+                        <div class="p-2 pt-0">
+                            <label for="" class="form-label">{{langData?.Advice?.ReferralRemarks}}</label>
+                            <textarea name=""
+                                [class]="referralRemarks ? 'form-control resize-none border-danger-300' : 'form-control resize-none'"
+                                id="" rows="3" formControlName="Remarks"
+                                placeholder={{langData?.Advice?.ReferralRemarks}}></textarea>
+                        </div>
+                        <div class="mt-2 p-2 pb-0">
+                            <div class="row g-2">
+                                <div class="col-12">
+                                    <div class="border rounded h-100 referral_table">
+                                        <div class="bg-primary-50 p-2 rounded-top">
+                                            <div class="row g-1">
+                                                <div class="col-3">
+                                                    <p class="clr-primary-600 m-0 fw-bold">{{langData?.common?.Doctor}}
+                                                    </p>
+                                                </div>
+                                                <div class="col-3">
+                                                    <p class="clr-primary-600 m-0 fw-bold">
+                                                        {{langData?.Ward?.Specialization}}</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="clr-primary-600 m-0 fw-bold">
+                                                        {{langData?.Advice?.Priority}}</p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="clr-primary-600 m-0 fw-bold">{{langData?.Advice?.Reason}}
+                                                    </p>
+                                                </div>
+                                                <div class="col-2">
+                                                    <p class="clr-primary-600 m-0 fw-bold">
+                                                        {{langData?.Advice?.CoManagement}}</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="d-flex gap-2">
-                                            <p class="label fw-bold m-0 text-nowrap">Refering Doctor Remarks : </p>
-                                            <p class="m-0">{{item.ReferralRemarks}}</p>
-                                        </div>
-                                        <div class="d-flex gap-2">
-                                            <p class="label fw-bold m-0 text-nowrap">Accepting Doctor Remarks: </p>
-                                            <p class="m-0">{{item.AcceptRejectRemarks}}</p>
-                                        </div>
-                                        <div class="d-flex gap-2 align-items-center">
-                                            <p class="label fw-bold m-0 text-nowrap">Doctor Visited:</p>
-                                            <p for="" class="form-label m-0 fs-8 fw-bold" *ngIf="item.isVerified">
-                                                Updated By : {{item.VerifiedBy}} on ({{item.VerifiedDate}}) </p>
+                                        <div class="p-2 d-flex flex-column gap-2 referral_table_body">
+                                            <div class="border-primary-200 rounded"
+                                                *ngFor="let item of referralList; let i = index">
+                                                <div *ngIf="item.BKD === 0">
+                                                    <div class="row gx-1 p-2">
+                                                        <div class="col-3">
+                                                            <p class="">{{item.SpecialisationDoctorName}}</p>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <p class="">{{item.SpecializationName}}</p>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <p class=""
+                                                                [class]="item.Priority != '1' ? 'ASAPRoutine' : ''">
+                                                                {{item.PriorityName}}</p>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <p class="">{{item.ReasonName}}</p>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <p class="">{{item.Cosession === true ? 'Yes' : 'No'}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="referralList_sub p-2">
+                                                        <div class="d-flex align-items-center justify-content-between">
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <div class="d-flex align-items-center gap-1">
+                                                                        <p *ngIf="(selectedICUBed.PatientType === '2'||selectedICUBed.PatientType === '4')"
+                                                                            class="clr-primary-600 m-0 fw-bold">From</p>
+                                                                        <svg *ngIf="(selectedICUBed.PatientType === '2'||selectedICUBed.PatientType === '4')"
+                                                                            width="12" height="6" viewBox="0 0 12 6"
+                                                                            fill="none"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path
+                                                                                d="M0.3125 4.86009H9.61307L5.89288 1.13991"
+                                                                                stroke="#357D83" stroke-width="1.5" />
+                                                                        </svg>
+                                                                        <p *ngIf="(selectedICUBed.PatientType === '2'||selectedICUBed.PatientType === '4')"
+                                                                            class="clr-primary-600 m-0 fw-bold">To: </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <!-- FROM -->
+                                                                    <div class="d-flex align-items-center gap-1">
+                                                                        <svg width="10" height="11" viewBox="0 0 10 11"
+                                                                            fill="none"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path
+                                                                                d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                                                fill="#368796" />
+                                                                        </svg>
+                                                                        <p class="m-0 clr-dark-600 text-nowrap">
+                                                                            {{item.StartDate?.split(' ')[0]}}</p>
+                                                                        <svg class="" width="10" height="11"
+                                                                            viewBox="0 0 10 11" fill="none"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path
+                                                                                d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                                                                fill="#368796" />
+                                                                            <path
+                                                                                d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                                                                fill="#368796" />
+                                                                        </svg>
+                                                                        <p class="m-0 clr-dark-600  text-nowrap">
+                                                                            {{item.StartDate?.split(' ')[1]}}</p>
+                                                                    </div>
+                                                                    <svg width="12" height="6" viewBox="0 0 12 6"
+                                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <path
+                                                                            d="M0.3125 4.86009H9.61307L5.89288 1.13991"
+                                                                            stroke="#357D83" stroke-width="1.5" />
+                                                                    </svg>
+                                                                    <!-- TO -->
+                                                                    <div class="d-flex align-items-center gap-1">
+                                                                        <svg width="10" height="11" viewBox="0 0 10 11"
+                                                                            fill="none"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path
+                                                                                d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                                                                fill="#368796" />
+                                                                        </svg>
+                                                                        <p class="m-0 clr-dark-600 text-nowrap">
+                                                                            {{item.EndDate?.split(' ')[0]}}</p>
+                                                                        <svg class="" width="10" height="11"
+                                                                            viewBox="0 0 10 11" fill="none"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path
+                                                                                d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                                                                fill="#368796" />
+                                                                            <path
+                                                                                d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                                                                fill="#368796" />
+                                                                        </svg>
+                                                                        <p class="m-0 clr-dark-600  text-nowrap">
+                                                                            {{item.EndDate?.split(' ')[1]}}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <p class="clr-primary-600 m-0 fw-bold">
+                                                                        {{langData?.SHO?.Remarks}}:</p>
+                                                                    <div
+                                                                        class="custom_tooltip custom_tooltip_left referal_remarks">
+                                                                        <p class="truncateText">{{item.Remarks}}</p>
+                                                                        <div class="tooltip">
+                                                                            <p class="text-wrap">{{item.Remarks}}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <p class="clr-primary-600 m-0 fw-bold">Status:</p>
+                                                                    <div
+                                                                        class="custom_tooltip custom_tooltip_left referal_remarks">
+                                                                        <p class="">{{item.StatusName}}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <p class="clr-primary-600 m-0 fw-bold">
+                                                                        AcceptRejectDate:</p>
+                                                                    <div
+                                                                        class="custom_tooltip custom_tooltip_left referal_remarks">
+                                                                        <p class="">{{item.AcceptRejectDate}}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <p class="clr-primary-600 m-0 fw-bold">Doctor
+                                                                        Visited:</p>
+                                                                    <div
+                                                                        class="custom_tooltip custom_tooltip_left referal_remarks">
+                                                                        <p class="">
+                                                                            {{item.IsVisited=='True'?'YES':'NO'}}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex gap-2" *ngIf="item.Status === '0'">
+                                                                <div class="custom_tooltip custom_tooltip_left">
+                                                                    <svg class="cursor-pointer"
+                                                                        (click)="editRow(item, i)" width="16"
+                                                                        height="16" viewBox="0 0 20 22" fill="none"
+                                                                        xmlns="http://www.w3.org/2000/svg">
+                                                                        <path
+                                                                            d="M3 17.0029H7.24C7.37161 17.0036 7.50207 16.9784 7.62391 16.9286C7.74574 16.8789 7.85656 16.8055 7.95 16.7129L14.87 9.78287L17.71 7.00287C17.8037 6.90991 17.8781 6.7993 17.9289 6.67745C17.9797 6.55559 18.0058 6.42488 18.0058 6.29287C18.0058 6.16086 17.9797 6.03015 17.9289 5.90829C17.8781 5.78643 17.8037 5.67583 17.71 5.58287L13.47 1.29287C13.377 1.19914 13.2664 1.12475 13.1446 1.07398C13.0227 1.02321 12.892 0.99707 12.76 0.99707C12.628 0.99707 12.4973 1.02321 12.3754 1.07398C12.2536 1.12475 12.143 1.19914 12.05 1.29287L9.23 4.12287L2.29 11.0529C2.19732 11.1463 2.12399 11.2571 2.07423 11.379C2.02446 11.5008 1.99924 11.6313 2 11.7629V16.0029C2 16.2681 2.10536 16.5224 2.29289 16.71C2.48043 16.8975 2.73478 17.0029 3 17.0029ZM12.76 3.41287L15.59 6.24287L14.17 7.66287L11.34 4.83287L12.76 3.41287ZM4 12.1729L9.93 6.24287L12.76 9.07287L6.83 15.0029H4V12.1729ZM19 19.0029H1C0.734784 19.0029 0.48043 19.1082 0.292893 19.2958C0.105357 19.4833 0 19.7377 0 20.0029C0 20.2681 0.105357 20.5224 0.292893 20.71C0.48043 20.8975 0.734784 21.0029 1 21.0029H19C19.2652 21.0029 19.5196 20.8975 19.7071 20.71C19.8946 20.5224 20 20.2681 20 20.0029C20 19.7377 19.8946 19.4833 19.7071 19.2958C19.5196 19.1082 19.2652 19.0029 19 19.0029Z"
+                                                                            fill="#FFAD0E" />
+                                                                    </svg>
+                                                                    <div class="tooltip">
+                                                                        <p class="text-wrap">Edit</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="custom_tooltip custom_tooltip_left">
+                                                                    <svg class="cursor-pointer"
+                                                                        (click)="deleteItem(item)" width="16"
+                                                                        height="16" viewBox="0 0 18 21" fill="none"
+                                                                        xmlns="http://www.w3.org/2000/svg">
+                                                                        <path
+                                                                            d="M7 16.9971C7.26522 16.9971 7.51957 16.8917 7.70711 16.7042C7.89464 16.5166 8 16.2623 8 15.9971V9.99707C8 9.73185 7.89464 9.4775 7.70711 9.28996C7.51957 9.10243 7.26522 8.99707 7 8.99707C6.73478 8.99707 6.48043 9.10243 6.29289 9.28996C6.10536 9.4775 6 9.73185 6 9.99707V15.9971C6 16.2623 6.10536 16.5166 6.29289 16.7042C6.48043 16.8917 6.73478 16.9971 7 16.9971ZM17 4.99707H13V3.99707C13 3.20142 12.6839 2.43836 12.1213 1.87575C11.5587 1.31314 10.7956 0.99707 10 0.99707H8C7.20435 0.99707 6.44129 1.31314 5.87868 1.87575C5.31607 2.43836 5 3.20142 5 3.99707V4.99707H1C0.734784 4.99707 0.48043 5.10243 0.292893 5.28996C0.105357 5.4775 0 5.73185 0 5.99707C0 6.26229 0.105357 6.51664 0.292893 6.70418C0.48043 6.89171 0.734784 6.99707 1 6.99707H2V17.9971C2 18.7927 2.31607 19.5558 2.87868 20.1184C3.44129 20.681 4.20435 20.9971 5 20.9971H13C13.7956 20.9971 14.5587 20.681 15.1213 20.1184C15.6839 19.5558 16 18.7927 16 17.9971V6.99707H17C17.2652 6.99707 17.5196 6.89171 17.7071 6.70418C17.8946 6.51664 18 6.26229 18 5.99707C18 5.73185 17.8946 5.4775 17.7071 5.28996C17.5196 5.10243 17.2652 4.99707 17 4.99707ZM7 3.99707C7 3.73185 7.10536 3.4775 7.29289 3.28996C7.48043 3.10243 7.73478 2.99707 8 2.99707H10C10.2652 2.99707 10.5196 3.10243 10.7071 3.28996C10.8946 3.4775 11 3.73185 11 3.99707V4.99707H7V3.99707ZM14 17.9971C14 18.2623 13.8946 18.5166 13.7071 18.7042C13.5196 18.8917 13.2652 18.9971 13 18.9971H5C4.73478 18.9971 4.48043 18.8917 4.29289 18.7042C4.10536 18.5166 4 18.2623 4 17.9971V6.99707H14V17.9971ZM11 16.9971C11.2652 16.9971 11.5196 16.8917 11.7071 16.7042C11.8946 16.5166 12 16.2623 12 15.9971V9.99707C12 9.73185 11.8946 9.4775 11.7071 9.28996C11.5196 9.10243 11.2652 8.99707 11 8.99707C10.7348 8.99707 10.4804 9.10243 10.2929 9.28996C10.1054 9.4775 10 9.73185 10 9.99707V15.9971C10 16.2623 10.1054 16.5166 10.2929 16.7042C10.4804 16.8917 10.7348 16.9971 11 16.9971Z"
+                                                                            fill="#FF6868" />
+                                                                    </svg>
+                                                                    <div class="tooltip">
+                                                                        <p class="text-wrap">Delete</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>                
             </div>
         </div>
     </div>
@@ -2179,6 +2433,61 @@
             </div>
             <div class="modal-body p-0">
                 <app-patientfolderml [fromTeleICUBed]="true" *ngIf="showPatientSummaryinPopUp"></app-patientfolderml>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorAdviceMsg" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p *ngIf="errorMessages.length === 1">{{errorMessages[0]}}</p>
+                <ul *ngIf="errorMessages.length > 1">
+                    <li *ngFor="let error of errorMessages; let i = index"> {{error}}</li>
+                </ul>
+                <div class="modal-footer">
+                    <a type="button" class="btn btn-main-outline" data-bs-dismiss="modal">{{langData?.common?.ok}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" data-bs-abackdrop="static" data-bs-keyboard="false" id="swPhyDietConfirmationPopup" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-toast modal-toast-success">
+        <div class="modal-content">
+            <img class="modal-header-icon" src="assets/images/icons/toast-info.svg" alt="">
+            <div class="modal-body">
+                <p>Are you sure you want to raise Referral to {{referralType === 1 ? "Social Worker" : referralType ===
+                    2 ? "Physiotherapist" : referralType === 3 ? "Dietician" : "" }}</p>
+                <div class="modal-footer">
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal"
+                        (click)="openRemarks()">Yes</a>
+                    <a href="javascript:void(0)" type="button" class="btn btn-main-outline" data-bs-dismiss="modal"
+                        (click)="cancelReferral()">No</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="referRemarks" tabindex="-1" aria-labelledby="referRemarksLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="width: 35%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="referRemarksLabel">{{langData?.Diagnosis?.Remarks}}</h5>
+                <div class="d-flex gap-2 align-items-center justify-content-end">
+                    <button class="btn btn-main-outline" [disabled]="remarkForm.invalid"
+                        (click)="saveReferral()">{{langData?.common?.Save}}</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        (click)="closeRemarks()"></button>
+                </div>
+            </div>
+            <div class="modal-body" [formGroup]="remarkForm">
+                <textarea name="" placeholder="Enter Remarks" class="form-control resize-none mb-2"
+                    formControlName="remarks" id="" cols="30" rows="3"></textarea>
             </div>
         </div>
     </div>

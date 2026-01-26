@@ -8,8 +8,10 @@ import { UtilityService } from "src/app/shared/utility.service";
 import { ConfigService } from 'src/app/services/config.service';
 import { ConfigService as BedConfig } from '../services/config.service';
 import * as Highcharts from 'highcharts';
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import moment from "moment";
+import { ValidateEmployeeComponent } from "src/app/shared/validate-employee/validate-employee.component";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 declare var $: any;
 
@@ -92,7 +94,31 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     showResultsinPopUp: boolean = false;
     showPatientSummaryinPopUp: boolean = false;
 
-    constructor(private router: Router, private us: UtilityService, private configService: ConfigService, private config: BedConfig, private datepipe: DatePipe, private formbuilder: FormBuilder) {
+    referralForm: any;
+    locationList: any = [];
+    SpecializationList: any = [];
+    SpecializationList1: any = [];
+    editIndex: any;
+    listOfSpecItems: any;
+    listOfSpecItems1: any;
+    isEdit: boolean = false;
+    referralList: any = [];
+    referralRemarks: boolean = false;
+    errorMessages: any = [];
+    referralSpecialization: boolean = false;
+    referralReason: boolean = false;
+    referralPriority: boolean = false;
+    Cosession: boolean = false;
+    priorityList: any = [];
+    reasonsList: any;
+    referralType: number = 0;
+    remarkForm: any;
+    PatientDiagnosisDataList: any = [];
+    FollowUpType: any = 0;
+    FollowUpOn: any = moment(new Date()).format('DD-MMM-YYYY');
+    patientAdviceData: any;
+
+    constructor(private router: Router, private us: UtilityService, private configService: ConfigService, private config: BedConfig, private datepipe: DatePipe, private formbuilder: FormBuilder, private modalSvc: NgbModal) {
 
     }
 
@@ -110,6 +136,10 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
         }
         this.showActiveMedication();
         this.initializetablePatientsForm();
+        this.initializeReferralForm();
+        this.remarkForm = this.formbuilder.group({
+            remarks: ['', [Validators.required]]
+        });
     }
 
     ngOnDestroy() {
@@ -233,7 +263,21 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     }
 
     openReferrals() {
-        this.fetchDoctorReferals();
+        this.isEdit = false;
+        this.Cosession = false;
+        this.referralRemarks = false;
+        this.referralSpecialization = false;
+        this.referralReason = false;
+        this.referralPriority = false;
+        this.referralType = 0;
+
+        this.initializeReferralForm();
+        this.fetchHospitalLocations();
+        this.fetchReferalAdminMasters();
+        this.fetchReferralData();
+        this.fetchPriority();
+        this.fetchReasons();
+        this.fetchDiagnosis();
         $('#viewReferal').modal('show');
     }
 
@@ -1000,6 +1044,580 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.showPatientSummaryinPopUp = false;
         }, 1000);
+    }
+
+    initializeReferralForm() {
+        this.referralForm = this.formbuilder.group({
+            Type: [1, Validators.required],
+            Location: [0, Validators.required],
+            LocationName: ['', Validators.required],
+            DoctorID: ['', Validators.required],
+            DoctorName: ['', Validators.required],
+            Remarks: ['', Validators.required],
+            Specialization: [0, Validators.required],
+            SpecializationName: ['', Validators.required],
+            Reason: [0, Validators.required],
+            ReasonName: ['', Validators.required],
+            Priority: [0, Validators.required],
+            PriorityName: ['', Validators.required],
+            Duration: ['', Validators.required],
+            Cosession: [false, Validators.required],
+            REFERRALORDERID: [0],
+            BKD: [0],
+            SpecialisationDoctorName: ['0', Validators.required],
+            SpecialisationDoctorID: ['', Validators.required],
+            StartDate: [''],
+            EndDate: [''],
+            adviceToPatient: [''],
+            Status: [0],
+            StatusName: ['']
+        });
+    }
+
+    fetchHospitalLocations() {
+        this.configService.fetchFetchHospitalLocations().subscribe((response) => {
+            if (response.Status === "Success") {
+                this.locationList = response.HospitalLocationsDataList;
+                var res = response.HospitalLocationsDataList.filter((h: any) => h.HospitalID == this.selectedICUBed.HospitalID);
+                this.referralForm.get('Location')?.setValue(res[0].HospitalID);
+                this.referralForm.get('LocationName')?.setValue(res[0].Name);
+            }
+        },
+            (err) => {
+
+            })
+    }
+
+    fetchReferalAdminMasters() {
+        this.configService.fetchConsulSpecialisationNew(
+            'distinct SpecialiseID id,Specialisation name,Specialisation2l name2L,SpecializationCode code,blocked,Blocked BitBlocked,HospitalID HospitalID,IsPediatric',
+            'IsConsPri=1 and IsReferral=1 and Blocked=0 and HospitalID=' + this.selectedICUBed.HospitalID,
+            0, 0).subscribe((response) => {
+                this.SpecializationList = this.SpecializationList1 = response.FetchConsulSpecialisationDataList;
+            });
+    }
+
+
+    locationChange(data: any) {
+        const selectedItem = this.locationList.find((value: any) => value.HospitalID === Number(data.target.value));
+        this.referralForm.patchValue({
+            Location: selectedItem.HospitalID,
+            LocationName: selectedItem.Name
+        });
+    }
+
+    searchSpecItem(event: any) {
+        const item = event.target.value;
+        this.SpecializationList = this.SpecializationList1;
+        let arr = this.SpecializationList1.filter((spec: any) => spec.name.toLowerCase().indexOf(item.toLowerCase()) === 0);
+        this.SpecializationList = arr.length ? arr : [{ name: 'No Item found' }];
+    }
+
+    deleteItem(item: any) {
+        item.BKD = 1;
+    }
+
+    editRow(row: any, editIndex: any) {
+        this.editIndex = editIndex;
+        this.referralForm.patchValue({
+            Type: row.Type,
+            Location: row.Location,
+            LocationName: row.LocationName,
+            DoctorID: row.DoctorID,
+            DoctorName: row.DoctorName,
+            Remarks: row.Remarks,
+            Specialization: row.Specialization,
+            SpecializationName: row.SpecializationName,
+            Reason: row.Reason,
+            ReasonName: row.ReasonName,
+            Priority: row.Priority,
+            PriorityName: row.PriorityName,
+            Duration: row.Duration,
+            Cosession: row.Cosession,
+            SpecialisationDoctorID: row.SpecialisationDoctorID,
+            SpecialisationDoctorName: row.SpecialisationDoctorName
+        });
+
+        this.fetchSpecializationDoctorSearch();
+
+        this.doctorType(row.Type);
+        this.isEdit = true;
+    }
+
+    doctorType(type: any) {
+        if (type == 1) {
+            $("#btnInternal").addClass("selected");
+            $("#btnExternal").removeClass("selected");
+        }
+        else {
+            $("#btnInternal").removeClass("selected");
+            $("#btnExternal").addClass("selected");
+        }
+
+        this.referralForm.patchValue({
+            Type: type
+        });
+        this.listOfSpecItems = [];
+    }
+
+    fetchSpecializationDoctorSearch() {
+        this.configService.fetchSpecialisationDoctors('%%%', this.referralForm.get("Specialization").value, this.doctorDetails[0].EmpId, this.selectedICUBed.HospitalID).subscribe((response: any) => {
+            if (response.Code == 200) {
+                this.listOfSpecItems = this.listOfSpecItems1 = response.FetchDoctorDataList;
+                setTimeout(() => {
+                    const selectedItem = this.listOfSpecItems.find((value: any) => Number(value.Empid) === Number(this.referralForm.get("SpecialisationDoctorID").value));
+                    if (selectedItem) {
+                        this.referralForm.patchValue({
+                            SpecialisationDoctorName: selectedItem.EmpNo + ' - ' + selectedItem.Fullname,
+                            SpecialisationDoctorID: selectedItem.Empid
+                        });
+                    }
+                }, 500);
+
+            }
+        }, error => {
+            console.error('Get Data API error:', error);
+        });
+    }
+
+    onSpecItemSelected(event: any) {
+        const item = this.SpecializationList.find((data: any) => data.name === event.option.value);
+        var IsAdult = true;
+        if (this.selectedICUBed.PatientType == '2' || this.selectedICUBed.PatientType === '4') {
+            IsAdult = Number(this.selectedICUBed.AgeValue) >= 14 ? true : false;
+        }
+        else if (this.selectedICUBed.PatientType == '3') {
+            IsAdult = Number(this.selectedICUBed.Age.trim().split(' ')[0]) >= 14 ? true : false;
+        }
+        else {
+            if (this.selectedICUBed.Age.toString().trim().split(' ').length > 1) {
+                const age = this.selectedICUBed.Age?.trim().split(' ')[0];
+                IsAdult = Number(age) >= 14 ? true : false;
+            }
+            else {
+                IsAdult = Number(this.selectedICUBed.Age) >= 14 ? true : false;
+            }
+        }
+        this.referralForm.patchValue({
+            Specialization: item.id,
+            SpecializationName: item.name
+        });
+        this.fetchSpecializationDoctorSearch();
+    }
+
+
+    searchDocItem(event: any) {
+        const item = event.target.value;
+        if (this.referralForm.get("Specialization")?.value !== 0) {
+            this.listOfSpecItems = this.listOfSpecItems1;
+            let arr = this.listOfSpecItems1.filter((doc: any) => doc.Fullname.toLowerCase().indexOf(item.toLowerCase()) === 0);
+            if (arr.length === 0) {
+                arr = this.listOfSpecItems1.filter((proc: any) => proc.EmpNo.toLowerCase().indexOf(item.toLowerCase()) === 0);
+            }
+            this.listOfSpecItems = arr.length ? arr : [{ name: 'No Item found' }];
+        }
+        else {
+            if (item.length > 2) {
+                this.fetchDoctors(item);
+            }
+        }
+    }
+
+    fetchDoctors(item: any) {
+        this.configService.fetchSpecialisationDoctors(item, 0, this.doctorDetails[0].EmpId, this.selectedICUBed.HospitalID).subscribe((response: any) => {
+            if (response.Code == 200) {
+                this.listOfSpecItems = this.listOfSpecItems1 = response.FetchDoctorDataList;
+            }
+        }, error => {
+            console.error('Get Data API error:', error);
+        });
+    }
+
+    fetchReferralData() {
+        this.referralList = [];
+        this.configService.fetchAdviceData(this.selectedICUBed.AdmissionID, this.selectedICUBed.HospitalID).subscribe((response) => {
+            if (response.PatientAdviceDatasList.length > 0) {
+                this.patientAdviceData = response.PatientAdviceDatasList[0];
+            }
+            if (response.PatientAdviceReferalDataList.length > 0) {
+                response.PatientAdviceReferalDataList.forEach((element: any, index: any) => {
+                    const selectedItem = this.locationList.find((value: any) => value.HospitalID === Number(element.LocationID));
+                    let refer = {
+                        "Type": element.IsInternalReferral === true ? 1 : 0,
+                        "Location": selectedItem.HospitalID,
+                        "LocationName": selectedItem.Name,
+                        "SpecialisationDoctorID": element.DoctorID,
+                        "SpecialisationDoctorName": element.DoctorName,
+                        "Remarks": element.Remarks,
+                        "Specialization": element.SpecialiseID,
+                        "SpecializationName": element.Specialisation,
+                        "Reason": element.ReasonID,
+                        "ReasonName": element.ReasonName,
+                        "Priority": element.Priority,
+                        "PriorityName": element.PriorityName,
+                        "Duration": element.duration,
+                        "Cosession": element.CoSession,
+                        "REFERRALORDERID": element.ReferralOrderID,
+                        "BKD": 0,
+                        "StartDate": element.StartDate,
+                        "EndDate": element.EndDate,
+                        "Status": element.Status,
+                        "StatusName": element.StatusName,
+                        "AcceptRejectRemarks": element.AcceptRejectRemarks,
+                        "IsVisited": element.IsVisited,
+                        "IsVisitedUpdatedBy": element.IsVisitedUpdatedBy,
+                        "VisitUpdatedByName": element.VisitUpdatedByName
+                    };
+
+                    this.referralList.push(refer);
+                });
+            }
+        },
+            (err) => {
+
+            })
+
+    }
+
+    addReferral() {
+        this.errorMessages = [];
+        if (!this.referralForm.get("Location").value || this.referralForm.get("Location").value === "0") {
+            this.errorMessages.push("Select Refer to Location")
+        }
+
+        if (!this.referralForm.get("SpecialisationDoctorName").value) {
+            this.errorMessages.push("Add the Specialization Doctor Details")
+        }
+
+        if (!this.referralForm.get("Remarks").value) {
+            this.referralRemarks = true;
+            this.errorMessages.push("Enter Referral Remarks")
+        }
+
+        if (!this.referralForm.get("Specialization").value || this.referralForm.get("Specialization").value === "0") {
+            this.referralSpecialization = true;
+            this.errorMessages.push("Select Specialization")
+        }
+
+        if (!this.referralForm.get("Reason").value || this.referralForm.get("Reason").value === "0") {
+            this.referralReason = true;
+            this.errorMessages.push("Select Reason")
+        }
+
+        if (!this.referralForm.get("Priority").value || this.referralForm.get("Priority").value === "0") {
+            this.referralPriority = true;
+            this.errorMessages.push("Select Priority")
+        }
+
+        if (this.referralForm.get("Duration").value === "0" && this.selectedICUBed.PatientType !== '1') {
+            this.referralRemarks = true;
+            this.errorMessages.push("Duration cant be zero")
+        }
+        const refDocExists = this.referralList.filter((x: any) => x.SpecialisationDoctorID === this.referralForm.get("SpecialisationDoctorID").value);
+        if (refDocExists.length > 0 && (this.selectedICUBed.PatientType === '2' || this.selectedICUBed.PatientType === '4')) {
+            refDocExists.forEach((element: any, index: any) => {
+                const today = new Date();
+                const enddate = new Date(element.EndDate);
+                if (today < enddate) {
+                    this.errorMessages.push("Referral Doctor Already Added");
+                }
+            });
+        }
+        if (this.errorMessages.length > 0) {
+            $("#errorAdviceMsg").modal('show');
+            return;
+        }
+        this.referralForm.patchValue({
+            "Status": '0',
+            "StatusName": "New Request"
+        });
+
+        var res = this.locationList.filter((h: any) => h.HospitalID == this.selectedICUBed.HospitalID);
+        if (this.selectedICUBed.PatientType === '2' || this.selectedICUBed.PatientType === '4') {
+            var enddate = new Date(new Date().setDate(new Date().getDate() + Number(this.referralForm.get("Duration").value)));
+            this.referralForm.patchValue({
+                "StartDate": moment(new Date()).format('DD-MMM-YYYY'),
+                "EndDate": moment(enddate).format('DD-MMM-YYYY')
+
+            });
+        }
+
+        this.referralList.push(this.referralForm.value);
+        this.initializeReferralForm();
+
+        if (this.locationList.length == 1) {
+            this.referralForm.get('Location')?.setValue(this.locationList[0].HospitalID);
+            this.referralForm.get('LocationName')?.setValue(this.locationList[0].Name);
+        }
+
+        this.doctorType(1);
+        this.saveReferral();
+    }
+
+    updateReferral() {
+        this.errorMessages = [];
+        if (!this.referralForm.get("Location").value || this.referralForm.get("Location").value === "0") {
+            this.errorMessages.push("Select Refer to Location")
+        }
+
+        if (!this.referralForm.get("SpecialisationDoctorName").value) {
+            this.errorMessages.push("Add the Specialization Doctor Details")
+        }
+
+        if (!this.referralForm.get("Remarks").value) {
+            this.errorMessages.push("Enter Referral Remarks")
+        }
+
+        if (!this.referralForm.get("Specialization").value || this.referralForm.get("Specialization").value === "0") {
+            this.errorMessages.push("Select Specialization")
+        }
+
+        if (!this.referralForm.get("Reason").value || this.referralForm.get("Reason").value === "0") {
+            this.errorMessages.push("Select Reason")
+        }
+
+        if (!this.referralForm.get("Priority").value || this.referralForm.get("Priority").value === "0") {
+            this.errorMessages.push("Select Priority")
+        }
+
+        if (this.errorMessages.length > 0) {
+            $("#errorAdviceMsg").modal('show');
+            return;
+        }
+
+        this.isEdit = false;
+        var enddate = new Date(new Date().setDate(new Date().getDate() + Number(this.referralForm.get("Duration").value)));
+        this.referralForm.patchValue({
+            "StartDate": moment(new Date()).format('DD-MMM-YYYY'),
+            "EndDate": moment(enddate).format('DD-MMM-YYYY')
+        });
+
+        this.referralList[this.editIndex].Type = this.referralForm.get("Type").value;
+        this.referralList[this.editIndex].Location = this.referralForm.get("Location").value;
+        this.referralList[this.editIndex].LocationName = this.referralForm.get("LocationName").value;
+        this.referralList[this.editIndex].DoctorID = this.referralForm.get("DoctorID").value;
+        this.referralList[this.editIndex].DoctorName = this.referralForm.get("DoctorName").value;
+        this.referralList[this.editIndex].Remarks = this.referralForm.get("Remarks").value;
+        this.referralList[this.editIndex].Specialization = this.referralForm.get("Specialization").value;
+        this.referralList[this.editIndex].SpecializationName = this.referralForm.get("SpecializationName").value;
+        this.referralList[this.editIndex].Reason = this.referralForm.get("Reason").value;
+        this.referralList[this.editIndex].ReasonName = this.referralForm.get("ReasonName").value;
+        this.referralList[this.editIndex].Priority = this.referralForm.get("Priority").value;
+        this.referralList[this.editIndex].PriorityName = this.referralForm.get("PriorityName").value;
+        this.referralList[this.editIndex].Duration = this.referralForm.get("Duration").value;
+        this.referralList[this.editIndex].Cosession = this.referralForm.get("Cosession").value;
+        this.referralList[this.editIndex].SpecialisationDoctorName = this.referralForm.get("SpecialisationDoctorName").value;
+        this.referralList[this.editIndex].SpecialisationDoctorID = this.referralForm.get("SpecialisationDoctorID").value;
+        this.referralList[this.editIndex].StartDate = this.referralForm.get("StartDate").value;
+        this.referralList[this.editIndex].EndDate = this.referralForm.get("EndDate").value;
+
+        this.initializeReferralForm();
+
+        if (this.locationList.length == 1) {
+            this.referralForm.get('Location')?.setValue(this.locationList[0].HospitalID);
+            this.referralForm.get('LocationName')?.setValue(this.locationList[0].Name);
+        }
+
+        this.doctorType(1);
+    }
+
+    cosessionClick() {
+        this.Cosession = !this.Cosession;
+        this.referralForm.patchValue({
+            Cosession: this.Cosession
+        })
+    }
+
+    fetchPriority() {
+        this.configService.fetchPriority().subscribe((response) => {
+            this.priorityList = response.SmartDataList;
+        });
+    }
+
+    priorityChange(data: any) {
+        const selectedItem = this.priorityList.find((value: any) => value.id === Number(data.target.value));
+        this.referralForm.patchValue({
+            Priority: selectedItem.id,
+            PriorityName: selectedItem.name
+        });
+    }
+
+    fetchReasons() {
+        this.configService.fetchAdminMasters(76).subscribe((response) => {
+            this.reasonsList = response.SmartDataList;
+        });
+    }
+
+    reasonChange(data: any) {
+        const selectedItem = this.reasonsList.find((value: any) => value.id === Number(data.target.value));
+        this.referralForm.patchValue({
+            Reason: selectedItem.id,
+            ReasonName: selectedItem.name
+        });
+    }
+
+    onDocItemSelected(event: any) {
+        const empno = event?.option.value.split('-')[0];
+        const item = this.listOfSpecItems.find((x: any) => x.EmpNo.trim() === empno.trim());
+        this.referralForm.patchValue({
+            SpecialisationDoctorName: item.EmpNo + '-' + item.Fullname,
+            SpecialisationDoctorID: item.Empid
+        });
+        if (this.referralForm.get("Specialization")?.value === 0) {
+            $("#Specialization").val(item.specialisation);
+            this.referralForm.patchValue({
+                Specialization: item.specialiseid,
+                SpecializationName: item.specialisation
+            });
+        }
+    }
+
+    saveReferralConfirmation(type: number) {
+        this.referralType = type;
+        $("#swPhyDietConfirmationPopup").modal("show");
+    }
+
+    openRemarks() {
+        this.remarkForm.patchValue({
+            remarks: ''
+        });
+        $("#swPhyDietConfirmationPopup").modal("hide");
+        $("#referRemarks").modal("show");
+    }
+
+    closeRemarks() {
+        this.referralType = 0;
+        $("#referRemarks").modal("hide");
+    }
+
+    cancelReferral() {
+        this.referralType = 0;
+        $("#swPhyDietConfirmationPopup").modal("hide");
+    }
+
+    fetchDiagnosis() {
+        this.configService.fetchAdviceDiagnosis(this.selectedICUBed.AdmissionID, this.selectedICUBed.HospitalID).subscribe((response) => {
+            this.PatientDiagnosisDataList = response.PatientDiagnosisDataList;
+            this.PatientDiagnosisDataList.forEach((element: any, index: any) => {
+                element.selected = true;
+            });
+        },
+            (err) => {
+
+            })
+    }
+
+    saveReferral() {
+        var diagnosis: any[] = [];
+        $("#referRemarks").modal("hide");
+        let remarks = this.remarkForm.get('remarks').value ? this.remarkForm.get('remarks').value : '';
+        this.PatientDiagnosisDataList.forEach((element: any) => {
+            if (element.selected) {
+                diagnosis.push({
+                    "DID": element.DID,
+                    "DISEASENAME": element.DiseaseName,
+                    "CODE": element.Code,
+                    "DTY": element.DiagnosisType,
+                    "UID": this.doctorDetails[0].EmpId,
+                    "ISEXISTING": "1",
+                    "PPID": "0",
+                    "STATUS": element.STATUS,
+                    "DTID": element.DTID,
+                    "DIAGNOSISTYPEID": element.DIAGNOSISTYPEID,
+                    "ISPSD": "0",
+                    "REMARKS": "",
+                    "MNID": element.MonitorID,
+                    "IAD": "1"
+                })
+            }
+        });
+        const refDetailsList = []
+        this.referralList.forEach((element: any, index: any) => {
+            refDetailsList.push({
+                "RTID": element.Reason,
+                "SPID": element.Specialization,
+                "PRTY": element.Priority,
+                "DID": element.SpecialisationDoctorID,
+                "RMKS": element.Remarks,
+                "BKD": element.BKD,
+                "RRMKS": "0",
+                "RID": element.Reason,
+                "DRN": 1,//element.Duration,
+                "IIRF": element.Type,
+                "COSS": element.Cosession === true ? 1 : 0,
+                "RHOSPID": element.Location,
+                "REFERRALORDERID": element.REFERRALORDERID
+            })
+        });
+        if (this.referralType === 1 || this.referralType === 2) {
+            refDetailsList.push({
+                "RTID": 1,
+                "SPID": this.referralType === 1 ? 317 : this.referralType === 2 ? 101 : this.referralType === 2 ? 264 : 0,
+                "PRTY": 1,
+                "DID": "",
+                "RMKS": remarks,
+                "BKD": 0,
+                "RRMKS": remarks,
+                "RID": 1,
+                "DRN": "1",
+                "IIRF": 1,
+                "COSS": 1,
+                "RHOSPID": this.selectedICUBed.hospitalId,
+                "REFERRALORDERID": 0
+            });
+        }
+        let payload = {
+            "intMonitorID": this.patientAdviceData?.MonitorID ?? 0,
+            "PatientID": this.selectedICUBed.PatientID,
+            "DoctorID": this.doctorDetails[0].EmpId,
+            "IPID": this.selectedICUBed.AdmissionID,
+            "SpecialiseID": this.selectedICUBed.SpecialiseID,
+            "PatientType": this.selectedICUBed.PatientType,
+            "BillID": this.selectedICUBed.BillID,
+            "FollowUpType": this.FollowUpType,
+            "Advicee": this.patientAdviceData?.Advice ?? '',
+            "FollowAfter": this.patientAdviceData?.FollowAfter ?? 0,
+            "FollowUpOn": this.FollowUpOn,
+            "DiagDetailsList": diagnosis,
+            "ReasonforAdm": this.patientAdviceData?.ReasonForAdm ?? '',
+            "RefDetailsList": refDetailsList,
+            "LengthOfStay": this.patientAdviceData?.LengthOfStay ? this.patientAdviceData.LengthOfStay : 0,
+            "DietTypeID": this.patientAdviceData?.DietTypeID ? this.patientAdviceData.DietTypeID : 0,
+            "FollowUpRemarks": '',
+            "PrimaryDoctorID": this.doctorDetails[0].EmpId,
+            "AdmissionTypeID": this.patientAdviceData?.AdmissionTypeID ?? 0,
+            "FollowUpCount": '0',
+            "Followupdays": '0',
+            "UserID": this.doctorDetails[0].UserId,
+            "WorkStationID": this.selectedICUBed.WardID,
+            "HospitalID": sessionStorage.getItem('hospitalId'),
+            "BillType": this.selectedICUBed.BillType == 'Insured' ? 'CR' : 'CS',
+            "CompanyID": this.selectedICUBed.CompanyID == "" ? 0 : this.selectedICUBed.CompanyID,
+            "GradeID": this.selectedICUBed.GradeID,
+            "WardID": 0,
+            "PrimaryDoctorSpecialiseID": 0
+        }
+
+        const modalRef = this.modalSvc.open(ValidateEmployeeComponent, {
+            backdrop: 'static'
+        });
+        modalRef.componentInstance.dataChanged.subscribe((data: any) => {
+            if (data.success) {
+                this.configService.saveAdviceReferral(payload).subscribe((response: any) => {
+                    if (response.Status === "Success" || response.Status === "True") {
+                        this.fetchReferralData();
+                        this.referralType = 0;
+                    }
+                },
+                    () => {
+
+                    })
+            }
+            if (!data.success) {
+                this.referralType = 0;
+            }
+            modalRef.close();
+        });
     }
 }
 
