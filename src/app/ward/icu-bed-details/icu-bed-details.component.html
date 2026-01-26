@@ -1026,17 +1026,10 @@
                                     <div class="alert-group">
                                         <div class="group-title">🧪 Laboratory Alerts</div>
                                         <div class="mt-2 mb-2">
-                                            <div class="alert-card" *ngFor="let result of selectedICUBed.labResults"
-                                                [ngClass]="result.IsPanic ? '' : 'warning'">
-                                                <!-- <div class="alert-icon">
-                                                        <svg viewBox="0 0 24 24">
-                                                            <path d="M12 2 1 21h22z" />
-                                                        </svg>
-                                                    </div> -->
+                                            <div class="alert-card cursor-pointer" *ngFor="let result of selectedICUBed.labResults"
+                                                [ngClass]="result.IsPanic ? '' : 'warning'"
+                                                (click)="openResults($event)">
                                                 <div class="alert-content">
-                                                    <!-- <div class="alert-title">Critical Alert</div> -->
-                                                    <!-- <div class="alert-desc"> {{result.TestName}} Results
-                                                            {{result.IsPanic ? 'Panic' : 'Abnormal'}}</div> -->
                                                     <div>
                                                         <p>
                                                             {{result.TestName}}
@@ -1063,8 +1056,9 @@
                                     <div class="alert-group">
                                         <div class="group-title">🩻 Radiology Alerts</div>
                                         <div class="mt-2 mb-2">
-                                            <div class="alert-card" *ngFor="let result of selectedICUBed.radResults"
-                                                [ngClass]="result.IsPanic ? '' : 'warning'">
+                                            <div class="alert-card cursor-pointer" *ngFor="let result of selectedICUBed.radResults"
+                                                [ngClass]="result.IsPanic ? '' : 'warning'"
+                                                (click)="openResults($event)">
                                                 <!-- <div class="alert-icon">
                                                         <svg viewBox="0 0 24 24">
                                                             <path d="M12 4a8 8 0 1 0 8 8 8 8 0 0 0-8-8z" />
@@ -1411,6 +1405,29 @@
                                 </svg>
 
                                 <div class="qa-text text-info">Referrals
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Results -->
+                        <div class="col-6 cursor-pointer" (click)="openResults($event)">
+                            <div class="qa-tile tile-lightblue">
+                                <svg width="27" height="27" viewBox="0 0 27 27" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M17.965 23.5791V21.3335C17.965 20.1424 17.4918 19 16.6495 18.1577C15.8072 17.3155 14.6649 16.8423 13.4737 16.8423H6.73689C5.54575 16.8423 4.40339 17.3155 3.56112 18.1577C2.71885 19 2.24567 20.1424 2.24567 21.3335V23.5791"
+                                        stroke="#0084D1" stroke-width="2.24561" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path
+                                        d="M10.1054 12.3506C12.5858 12.3506 14.5966 10.3398 14.5966 7.85939C14.5966 5.37896 12.5858 3.36816 10.1054 3.36816C7.62493 3.36816 5.61414 5.37896 5.61414 7.85939C5.61414 10.3398 7.62493 12.3506 10.1054 12.3506Z"
+                                        stroke="#0084D1" stroke-width="2.24561" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M21.333 8.98242V15.7193" stroke="#0084D1" stroke-width="2.24561"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M24.7014 12.3506H17.9645" stroke="#0084D1" stroke-width="2.24561"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+
+                                <div class="qa-text text-info">Results
                                 </div>
                             </div>
                         </div>
@@ -2120,6 +2137,26 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade viewVitals viewResults_modal" id="viewResults" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered my-2" style="max-width: 99%;">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                    <h5 class="modal-title" id="">View Results</h5>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn-close" (click)="closeViewResultsPopup();"
+                        aria-label="Close"></button>
+                </div>
+
+            </div>
+            <div class="modal-body p-0">
+                <app-others-results [fromTeleICUBed]="true" *ngIf="showResultsinPopUp"></app-others-results>
             </div>
         </div>
     </div>

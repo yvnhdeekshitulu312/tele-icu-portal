@@ -89,6 +89,8 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     viewProgressNotesData1: any = []
     viewProgressNotesData2: any = [];
 
+    showResultsinPopUp: boolean = false;
+
     constructor(private router: Router, private us: UtilityService, private configService: ConfigService, private config: BedConfig, private datepipe: DatePipe, private formbuilder: FormBuilder) {
 
     }
@@ -970,6 +972,19 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
         },
             (err) => {
             });
+    }
+
+    openResults(event: any) {
+        event.stopPropagation();
+        this.showResultsinPopUp = true;
+        $("#viewResults").modal("show");
+    }
+
+    closeViewResultsPopup() {
+        $("#viewResults").modal("hide");
+        setTimeout(() => {
+            this.showResultsinPopUp = false;
+        }, 1000);
     }
 }
 
