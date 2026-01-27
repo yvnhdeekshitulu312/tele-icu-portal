@@ -854,7 +854,8 @@
                                         <p class="text-nowrap mt-1"><b>Documented On:
                                             </b>{{selectedICUBed.IntubatedDate}}</p>
                                     </div>
-                                    <span *ngIf="selectedICUBed.isCritical" class="critical-badge">CRITICAL</span>
+                                    <!-- <span *ngIf="selectedICUBed.isCritical" class="critical-badge">CRITICAL</span> -->
+                                       <span *ngIf="selectedICUBed.IsDNR === '1'" class="critical-badge">DNR</span>
                                 </div>
                             </div>
 
@@ -1027,7 +1028,7 @@
 
                             <div class="alerts-panel">
                                 <ng-container *ngIf="selectedICUBed.labResults.length > 0">
-                                    <div class="alert-group">
+                                    <div class="">
                                         <div class="group-title">🧪 Laboratory Alerts</div>
                                         <div class="mt-2 mb-2">
                                             <div class="alert-card cursor-pointer"
@@ -1238,9 +1239,9 @@
                                     <h3 class="clinical-title">Clinical Status</h3>
 
                                     <div class="d-flex gap-2 flex-wrap">
-                                        <div class="status-chip chip-dnr" *ngIf="selectedICUBed.IsDNR === '1'">DNR
+                                        <div class="status-chip chip-dnr d-none" *ngIf="selectedICUBed.IsDNR === '1'">DNR
                                             ACTIVE</div>
-                                        <div class="status-chip chip-bedsore" *ngIf="selectedICUBed.BedsoreName">
+                                        <div class="status-chip chip-bedsore d-none" *ngIf="selectedICUBed.BedsoreName">
                                             {{selectedICUBed.BedsoreName}} BEDSORE
                                         </div>
                                         <div class="status-chip chip-ventilator" *ngIf="selectedICUBed.IntubatedName">
