@@ -157,7 +157,14 @@ export class ICUBedsComponent implements OnInit {
                         labResults,
                         radResults
                     };
-                }).sort((a: any, b: any) => Number(b.isCritical) - Number(a.isCritical));;
+                }).sort((a: any, b: any) => {
+                    const getPriority = (item: any) => {
+                        if (item.ISPin == 1) return 3;
+                        if (item.isCritical) return 2;
+                        return 1;
+                    };
+                    return getPriority(b) - getPriority(a);
+                });
                 this.totalCount = this.FetchBedsFromWardDataList.length;
                 this.criticalCount = this.FetchBedsFromWardDataList.filter((e: any) => e.isCritical).length;
                 this.normalCount = this.FetchBedsFromWardDataList.filter((e: any) => !e.isCritical).length;
@@ -176,6 +183,7 @@ export class ICUBedsComponent implements OnInit {
     }
 
     fetchICUBeds() {
+        this.FetchBedsFromWardDataList = [];
         const url = this.us.getApiUrl(ICUBeds.FetchBedsFromWardNPTeleICCU, {
             WardID: this.wardID,
             ConsultantID: 0,
@@ -200,7 +208,15 @@ export class ICUBedsComponent implements OnInit {
                         labResults,
                         radResults
                     };
-                }).sort((a: any, b: any) => Number(b.isCritical) - Number(a.isCritical));
+                }).sort((a: any, b: any) => {
+                    const getPriority = (item: any) => {
+                        if (item.ISPin == 1) return 3;
+                        if (item.isCritical) return 2;
+                        return 1;
+                    };
+
+                    return getPriority(b) - getPriority(a);
+                });
                 this.totalCount = this.FetchBedsFromWardDataList.length;
                 this.criticalCount = this.FetchBedsFromWardDataList.filter((e: any) => e.isCritical).length;
                 this.normalCount = this.FetchBedsFromWardDataList.filter((e: any) => !e.isCritical).length;
@@ -319,10 +335,31 @@ export class ICUBedsComponent implements OnInit {
         sessionStorage.setItem('icubedfacility', this.wardID);
         this.fetchICUBeds();
     }
+
+    onPinClick(event: any, item: any) {
+        event.stopPropagation();
+        this.us.post(ICUBeds.UpdatePatientWardBedPIN, {
+            "AdmissionID": item.AdmissionID,
+            "ISPin": item.ISPin == 0 ? 1 : 0
+        }).subscribe((response: any) => {
+            if (response.Code === 200) {
+                item.ISPin = item.ISPin == 1 ? 0 : 1;
+                this.FilteredBedsFromWardDataList = this.FilteredBedsFromWardDataList.sort((a: any, b: any) => {
+                    const getPriority = (item: any) => {
+                        if (item.ISPin == 1) return 3;
+                        if (item.isCritical) return 2;
+                        return 1;
+                    };
+                    return getPriority(b) - getPriority(a);
+                });
+            }
+        });
+    }
 }
 
 const ICUBeds = {
     'FetchBedsFromWardNPTeleICCU': 'FetchBedsFromWardNPTeleICCU?WardID=${WardID}&AdmissionID=${AdmissionID}&ConsultantID=${ConsultantID}&Status=${Status}&UserId=${UserId}&HospitalID=${HospitalID}',
     'FetchBedStatus': 'FetchBedStatus?HospitalID=${HospitalID}',
-    'FetchUserFacilityTeleICCU': 'FetchUserFacilityTeleICCU?UserId=${UserId}&HospitalID=${HospitalID}'
+    'FetchUserFacilityTeleICCU': 'FetchUserFacilityTeleICCU?UserId=${UserId}&HospitalID=${HospitalID}',
+    'UpdatePatientWardBedPIN': 'UpdatePatientWardBedPIN'
 }
