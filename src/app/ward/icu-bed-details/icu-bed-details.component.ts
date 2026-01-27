@@ -42,7 +42,6 @@ export const MY_FORMATS = {
 })
 export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     doctorDetails: any;
-    wardID: any = '2090';
     langData: any;
 
     selectedICUBed: any = [];
@@ -117,6 +116,7 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     FollowUpType: any = 0;
     FollowUpOn: any = moment(new Date()).format('DD-MMM-YYYY');
     patientAdviceData: any;
+    resultsType: string = '';
 
     constructor(private router: Router, private us: UtilityService, private configService: ConfigService, private config: BedConfig, private datepipe: DatePipe, private formbuilder: FormBuilder, private modalSvc: NgbModal) {
 
@@ -175,7 +175,7 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
 
     fetchICUBed() {
         const url = this.us.getApiUrl(ICUBedDetails.FetchBedsFromWardNPTeleICCU, {
-            WardID: this.wardID,
+            WardID: this.selectedICUBed.WardID,
             ConsultantID: 0,
             Status: 3,
             UserId: this.doctorDetails[0].UserId,
@@ -1019,8 +1019,9 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
             });
     }
 
-    openResults(event: any) {
+    openResults(event: any, type: string) {
         event.stopPropagation();
+        this.resultsType = type;
         this.showResultsinPopUp = true;
         $("#viewResults").modal("show");
     }

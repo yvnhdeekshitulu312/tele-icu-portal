@@ -854,7 +854,8 @@
                                         <p class="text-nowrap mt-1"><b>Documented On:
                                             </b>{{selectedICUBed.IntubatedDate}}</p>
                                     </div>
-                                    <span *ngIf="selectedICUBed.isCritical" class="critical-badge">CRITICAL</span>
+                                    <!-- <span *ngIf="selectedICUBed.isCritical" class="critical-badge">CRITICAL</span> -->
+                                       <span *ngIf="selectedICUBed.IsDNR === '1'" class="critical-badge">DNR</span>
                                 </div>
                             </div>
 
@@ -1042,7 +1043,7 @@
                                             <div class="alert-card cursor-pointer"
                                                 *ngFor="let result of selectedICUBed.labResults"
                                                 [ngClass]="result.IsPanic ? '' : 'warning'"
-                                                (click)="openResults($event)">
+                                                (click)="openResults($event, 'L')">
                                                 <div class="alert-content">
                                                     <div>
                                                         <p>
@@ -1064,7 +1065,7 @@
                                             </div>
                                         </div>
                                         <div class="">
-                                            <a class="view-more d-flex align-items-center justify-content-end gap-2">
+                                            <a class="view-more d-flex align-items-center justify-content-end gap-2" (click)="openResults($event, 'L')">
                                                 View more
                                                 <svg class="mt-1" width="6" height="10" viewBox="0 0 6 10" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
@@ -1099,7 +1100,7 @@
                                             <div class="alert-card cursor-pointer"
                                                 *ngFor="let result of selectedICUBed.radResults"
                                                 [ngClass]="result.IsPanic ? '' : 'warning'"
-                                                (click)="openResults($event)">
+                                                (click)="openResults($event, 'R')">
                                                 <!-- <div class="alert-icon">
                                                         <svg viewBox="0 0 24 24">
                                                             <path d="M12 4a8 8 0 1 0 8 8 8 8 0 0 0-8-8z" />
@@ -1131,7 +1132,7 @@
                                             </div>
                                         </div>
                                         <div class="">
-                                            <a class="view-more d-flex align-items-center justify-content-end gap-2">
+                                            <a class="view-more d-flex align-items-center justify-content-end gap-2" (click)="openResults($event, 'R')">
                                                 View more
                                                 <svg class="mt-1" width="6" height="10" viewBox="0 0 6 10" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
@@ -1263,9 +1264,9 @@
                                     <h3 class="clinical-title">Clinical Status</h3>
 
                                     <div class="d-flex gap-2 flex-wrap">
-                                        <div class="status-chip chip-dnr" *ngIf="selectedICUBed.IsDNR === '1'">DNR
+                                        <div class="status-chip chip-dnr d-none" *ngIf="selectedICUBed.IsDNR === '1'">DNR
                                             ACTIVE</div>
-                                        <div class="status-chip chip-bedsore" *ngIf="selectedICUBed.BedsoreName">
+                                        <div class="status-chip chip-bedsore d-none" *ngIf="selectedICUBed.BedsoreName">
                                             {{selectedICUBed.BedsoreName}} BEDSORE
                                         </div>
                                         <div class="status-chip chip-ventilator" *ngIf="selectedICUBed.IntubatedName">
@@ -1460,7 +1461,7 @@
                             </div>
                         </div>
                         <!-- Results -->
-                        <div class="col-6 cursor-pointer" (click)="openResults($event)">
+                        <div class="col-6 cursor-pointer" (click)="openResults($event, 'L')">
                             <div class="qa-tile tile-lightblue">
                                 <svg width="27" height="27" viewBox="0 0 27 27" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -2536,7 +2537,7 @@
 
             </div>
             <div class="modal-body p-0">
-                <app-others-results [fromTeleICUBed]="true" *ngIf="showResultsinPopUp"></app-others-results>
+                <app-others-results [fromTeleICUBed]="true" [tabType]="resultsType" *ngIf="showResultsinPopUp"></app-others-results>
             </div>
         </div>
     </div>
