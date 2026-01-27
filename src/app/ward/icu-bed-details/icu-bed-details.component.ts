@@ -42,7 +42,6 @@ export const MY_FORMATS = {
 })
 export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     doctorDetails: any;
-    wardID: any = '2090';
     langData: any;
 
     selectedICUBed: any = [];
@@ -176,7 +175,7 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
 
     fetchICUBed() {
         const url = this.us.getApiUrl(ICUBedDetails.FetchBedsFromWardNPTeleICCU, {
-            WardID: this.wardID,
+            WardID: this.selectedICUBed.WardID,
             ConsultantID: 0,
             Status: 3,
             UserId: this.doctorDetails[0].UserId,

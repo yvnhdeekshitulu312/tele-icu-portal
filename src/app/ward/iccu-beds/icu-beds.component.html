@@ -28,40 +28,14 @@
                         placeholder="ID No." [(ngModel)]="searchText" (input)="filterBeds()">
                 </div>
             </div>
-            <!-- <div class="refresh-section">
-                <div class="d-flex align-items-center gap-2 mb-1">
-                    <h6 class="fw-bold fs-7">Last Refresh </h6>
-                    <svg class="cursor-pointer" (click)="fetchICUBeds()" xmlns="http://www.w3.org/2000/svg" width="20"
-                        height="20" viewBox="0 0 24 24" fill="none" role="img" color="#000000">
-                        <path
-                            d="M20.9451 13C20.9814 12.6717 21 12.338 21 12C21 7.02944 16.9706 3 12 3C9.17273 3 6.64996 4.30367 5 6.34267M3.05493 11C3.01863 11.3283 3 11.662 3 12C3 16.9706 7.02944 21 12 21C14.8273 21 17.35 19.6963 19 17.6573"
-                            stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                        <path d="M8 7H7C5.58579 7 4.87868 7 4.43934 6.56066C4 6.12132 4 5.41421 4 4V3" stroke="#000000"
-                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                        <path d="M16 17H17C18.4142 17 19.1213 17 19.5607 17.4393C20 17.8787 20 18.5858 20 20V21"
-                            stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                    </svg>
-                </div>
-                <div class="d-flex align-items-center gap-1">
-                    <svg width="16" height="16" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g clip-path="url(#clip0_873_6865)">
-                            <path
-                                d="M2 1.5H2.5V0.5H3.5V1.5H8.5V0.5H9.5V1.5H10C10.55 1.5 11 1.95 11 2.5V10.5C11 11.05 10.55 11.5 10 11.5H2C1.45 11.5 1 11.05 1 10.5V2.5C1 1.95 1.45 1.5 2 1.5ZM2 10.5H10V4H2V10.5Z"
-                                fill="#7E8794" />
-                        </g>
-                    </svg>
-                    <p class="m-0">{{ refreshTime | date:'dd-MMM-yyyy'}}</p>
-                    <svg width="16" height="16" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g clip-path="url(#clip0_873_6870)">
-                            <path
-                                d="M5.995 1C3.235 1 1 3.24 1 6C1 8.76 3.235 11 5.995 11C8.76 11 11 8.76 11 6C11 3.24 8.76 1 5.995 1ZM6 10C3.79 10 2 8.21 2 6C2 3.79 3.79 2 6 2C8.21 2 10 3.79 10 6C10 8.21 8.21 10 6 10Z"
-                                fill="#4A5159" />
-                            <path d="M6.25 3.5H5.5V6.5L8.125 8.075L8.5 7.46L6.25 6.125V3.5Z" fill="#4A5159" />
-                        </g>
-                    </svg>
-                    <p class="m-0">{{refreshTime | date:'HH:mm:ss'}}</p>
-                </div>
-            </div> -->
+
+            <div>
+                <select class="form-select" [(ngModel)]="wardID" (change)="onFacilityChange()">
+                    <option value="0">Select</option>
+                    <option *ngFor="let option of facilities" [value]="option.FacilityID"> {{option.FacilityName}}
+                    </option>
+                </select>
+            </div>
 
             <div class="refresh-card">
                 <div class="refresh-icon cursor-pointer" (click)="fetchICUBeds()">
@@ -866,7 +840,7 @@
                                         </div>
                                     </div>
                                     <div class="dnr_label fs-7 mt-1">
-                                       <p class="m-0" *ngIf="item.IsDNR === '1'">DNR</p>
+                                        <p class="m-0" *ngIf="item.IsDNR === '1'">DNR</p>
                                     </div>
                                     <p
                                         [class]="item.Bed.includes('ISO') ? 'iso-color m-0 mb-0' : 'bed-number m-0 mb-0'">
@@ -1088,15 +1062,13 @@
 
                                         </div>
                                     </div>
-                                    <div class="results-container"
-                                    [ngClass]="item.IsPanic ? 'status-panic' : ''">
+                                    <div class="results-container" [ngClass]="item.IsPanic ? 'status-panic' : ''">
                                         <!-- <p class="m-0 fs-6 m-0 fs-5 fw-semibold d-flex align-items-center justify-content-center h-100" >No Results Found</p> -->
                                         <div class="row gx-2">
                                             <div class="col-6" *ngIf="item.labResults.length > 0">
                                                 <ng-container>
                                                     <p class="mb-1 fw-semibold">Laboratory Results:</p>
                                                     <div class="alert-box mb-1 cursor-pointer"
-                                                        
                                                         *ngFor="let result of item.labResults"
                                                         (click)="openResults($event, item, 'L')">
                                                         <div>
@@ -1115,7 +1087,6 @@
                                                 <ng-container>
                                                     <p class="mb-1 fw-semibold">Radiology Results:</p>
                                                     <div class="alert-box mb-1 cursor-pointer"
-                                                       
                                                         *ngFor="let result of item.radResults"
                                                         (click)="openResults($event, item, 'R')">
                                                         <div>
@@ -1156,7 +1127,8 @@
 
             </div>
             <div class="modal-body p-0">
-                <app-others-results [fromTeleICUBed]="true" [tabType]="resultsType" *ngIf="showResultsinPopUp"></app-others-results>
+                <app-others-results [fromTeleICUBed]="true" [tabType]="resultsType"
+                    *ngIf="showResultsinPopUp"></app-others-results>
             </div>
         </div>
     </div>

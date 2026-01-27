@@ -37,7 +37,7 @@ export const MY_FORMATS = {
 })
 export class ICUBedsComponent implements OnInit {
     doctorDetails: any;
-    wardID: any = '2090';
+    wardID: any = '0';
     langData: any;
     FetchBedsFromWardDataList: any = [];
     FilteredBedsFromWardDataList: any = [];
@@ -64,6 +64,7 @@ export class ICUBedsComponent implements OnInit {
     showResultsinPopUp: boolean = false;
     showPatientSummaryinPopUp: boolean = false;
     resultsType: string = '';
+    facilities: any = [];
 
     constructor(private us: UtilityService, private configService: ConfigService, private router: Router) {
         this.langData = this.configService.getLangData();
@@ -74,16 +75,21 @@ export class ICUBedsComponent implements OnInit {
         this.currentdateN = moment(new Date()).format('DD-MMM-YYYY');
         this.startClock();
         this.doctorDetails = JSON.parse(sessionStorage.getItem("doctorDetails") || '{}');
+        if (sessionStorage.getItem('icubedfacility')) {
+            this.wardID = sessionStorage.getItem('icubedfacility');
+        }
+        this.fetchFacilities();
         this.fetchBedStatus();
         this.fetchICUBeds();
         this.setActive('all');
-
     }
+
     startClock(): void {
         this.interval = setInterval(() => {
             this.currentTimeN = new Date();
         }, 1000);
     }
+
     stopClock(): void {
         clearInterval(this.interval);
     }
@@ -295,9 +301,28 @@ export class ICUBedsComponent implements OnInit {
             this.showPatientSummaryinPopUp = false;
         }, 1000);
     }
+
+    fetchFacilities() {
+        const url = this.us.getApiUrl(ICUBeds.FetchUserFacilityTeleICCU, {
+            UserId: this.doctorDetails[0].UserId,
+            HospitalID: 0
+        });
+
+        this.us.get(url).subscribe((response: any) => {
+            if (response.Code === 200) {
+                this.facilities = response.FetchUserFacilityDataList;
+            }
+        });
+    }
+
+    onFacilityChange() {
+        sessionStorage.setItem('icubedfacility', this.wardID);
+        this.fetchICUBeds();
+    }
 }
 
 const ICUBeds = {
     'FetchBedsFromWardNPTeleICCU': 'FetchBedsFromWardNPTeleICCU?WardID=${WardID}&AdmissionID=${AdmissionID}&ConsultantID=${ConsultantID}&Status=${Status}&UserId=${UserId}&HospitalID=${HospitalID}',
-    'FetchBedStatus': 'FetchBedStatus?HospitalID=${HospitalID}'
+    'FetchBedStatus': 'FetchBedStatus?HospitalID=${HospitalID}',
+    'FetchUserFacilityTeleICCU': 'FetchUserFacilityTeleICCU?UserId=${UserId}&HospitalID=${HospitalID}'
 }
