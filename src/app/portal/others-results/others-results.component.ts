@@ -53,6 +53,8 @@ export class OthersResultsComponent implements OnInit {
   @ViewChild('labTest', { static: true }) labTest!: ElementRef;
   @Input()
   fromTeleICUBed: boolean = false;
+  @Input()
+  tabType: string = 'L';
 
   selectedView: any;
   HospitalID: any;
@@ -195,10 +197,10 @@ export class OthersResultsComponent implements OnInit {
     this.PatientID = this.selectedView.PatientID;
     this.RegCode = this.patientDetails.RegCode;
     this.initializetablePatientsForm();
-    if (this.patientDetails.PatientType == '2' || this.patientDetails.PatientType == '3') {
-      this.fetchLabByValue();
-      this.ActiveTab('L');
-    }
+    // if (this.patientDetails.PatientType == '2' || this.patientDetails.PatientType == '3') {
+    //   this.fetchLabByValue();
+    //   this.ActiveTab('L');
+    // }
     this.GetVitalsData();
     if (this.selectedView.PatientType == "2") {
       if (this.selectedView.Bed.includes('ISO'))
@@ -211,8 +213,13 @@ export class OthersResultsComponent implements OnInit {
 
     if (this.selectedView.PatientType != 1) {
       this.fromDate = this.toDate = this.datepipe.transform(new Date(), "dd-MMM-yyyy")?.toString();
-      this.fetchLabOrderResults();
-      this.ActiveTab('L');
+      if (this.tabType === 'R') {
+        this.fetchRadOrderResults();
+        this.ActiveTab('R');
+      } else {
+        this.fetchLabOrderResults();
+        this.ActiveTab('L');
+      }
     }
   }
   initializetablePatientsForm() {

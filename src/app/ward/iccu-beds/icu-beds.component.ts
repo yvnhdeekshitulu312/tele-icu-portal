@@ -63,6 +63,7 @@ export class ICUBedsComponent implements OnInit {
 
     showResultsinPopUp: boolean = false;
     showPatientSummaryinPopUp: boolean = false;
+    resultsType: string = '';
 
     constructor(private us: UtilityService, private configService: ConfigService, private router: Router) {
         this.langData = this.configService.getLangData();
@@ -264,9 +265,10 @@ export class ICUBedsComponent implements OnInit {
         this.configService.onLogout();
     }
 
-    openResults(event: any, item: any) {
+    openResults(event: any, item: any, type: string) {
         event.stopPropagation();
         sessionStorage.setItem('icubeddetails', JSON.stringify(item));
+        this.resultsType = type;
         this.showResultsinPopUp = true;
         $("#viewResults").modal("show");
     }
