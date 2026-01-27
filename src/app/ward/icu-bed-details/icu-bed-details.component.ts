@@ -1620,6 +1620,32 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
             modalRef.close();
         });
     }
+
+    getProgressPercent(daysLeft: number, totalDays: number): number {
+    if (!totalDays || totalDays <= 0) return 0;
+
+    // When completed, show full bar
+    if (daysLeft === 0) return 100;
+
+    return Math.min(100, Math.max(0, (daysLeft / totalDays) * 100));
+  }
+
+  getProgressColor(daysLeft: number): string {
+    if (daysLeft === 0) return '#9CA3AF'; // completed
+    if (daysLeft === 1) return '#EF4444'; // last day
+    return '#22C55E'; // normal
+  }
+
+  getDaysLeftText(daysLeft: number): string {
+    if (daysLeft === 0) return 'Completed';
+    if (daysLeft === 1) return '1 day left';
+    return `${daysLeft} days left`;
+  }
+
+  getTooltipText(daysLeft: number): string {
+    if (daysLeft === 1) return 'Last day to complete this medication';
+    return '';
+  }
 }
 
 const ICUBedDetails = {

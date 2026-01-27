@@ -1028,7 +1028,7 @@
 
                             <div class="alerts-panel">
                                 <ng-container *ngIf="selectedICUBed.labResults.length > 0">
-                                    <div class="alert-group">
+                                    <div class="alert-group mt-2">
                                         <div class="group-title">
                                             <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <circle cx="16" cy="16" r="16" fill="#DAEEF1"/>
@@ -1078,7 +1078,7 @@
                                 </ng-container>
                                 <ng-container *ngIf="selectedICUBed.radResults.length > 0">
                                     <!-- RADIOLOGY ALERTS -->
-                                    <div class="alert-group">
+                                    <div class="alert-group mb-2">
                                         <div class="group-title">
                                             <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <circle cx="16" cy="16" r="16" fill="#DAEEF1"/>
@@ -1496,32 +1496,7 @@
                             <span>{{activeMedicationsCount}}</span>
                         </div>
 
-                        <!-- <table class="med-table">
-                            <thead>
-                                <tr>
-
-
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <tr *ngFor="let issued of activeMedications;let i = index">
-                                    <td>
-                                        <div class="drug-name">
-                                            {{issued.ItemCode }}-{{issued.ItemName}}
-                                            {{issued.Dose}} {{issued.DoseUOM}}
-
-                                        </div>
-                                        <span class="badge iv mx-3">{{issued.AdmRoute}}</span>
-                                        <span class="badge iv">{{issued.Frequency}}</span>
-
-                                    </td>
-
-                                </tr>
-
-
-                            </tbody>
-                        </table> -->
+                       
 
                         <div class="p-2 d-flex flex-column gap-2">
                             <div class="border bg-white rounded medication_card position-relative" *ngFor="let issued of activeMedications;let i = index">
@@ -1529,37 +1504,35 @@
                                     <div class="col-9">
                                         <p for="" class="form-label m-0 fw-semibold fs-8">{{issued.ItemCode }}-{{issued.ItemName}}</p>
                                     </div>
-
                                     <div class="col-3 d-flex flex-column">
                                         <label for="" class="form-label text-nowrap m-0 fs-8">Duration</label>
                                         <p class="form-label m-0 fw-semibold fs-8">{{issued.Duration}} days
                                         </p>
                                     </div>
+                                     <div class="progress-wrapper"
+                                    [class.completed-wrapper]="issued.TotalDaysLeft === 0">
 
-                                    <!-- <div class="progress-wrapper completed-wrapper"
-                                        [class.completed-wrapper]="medication.TotalDaysLeft === 0">
-
-                                        <div class="progress-bar tooltip-container">
-                                            <div class="progress-fill" [style.width.%]="getProgressPercent(
-                                            medication.TotalDaysLeft,
-                                            medication.PrescribedTotalDays
-                                        )" [style.background]="getProgressColor(medication.TotalDaysLeft)"
-                                                [class.pulse]="medication.TotalDaysLeft === 1">
-                                            </div>
+                                    <div class="progress-bar tooltip-container">
+                                        <div class="progress-fill" [style.width.%]="getProgressPercent(
+                                        issued.TotalDaysLeft,
+                                        issued.PrescribedTotalDays
+                                    )" [style.background]="getProgressColor(issued.TotalDaysLeft)"
+                                            [class.pulse]="issued.TotalDaysLeft === 1">
                                         </div>
+                                    </div>
 
-                                        <span *ngIf="medication.TotalDaysLeft > 0" class="days-left-text"
-                                            [style.color]="getProgressColor(medication.TotalDaysLeft)"
-                                            [class.pulse-text]="medication.TotalDaysLeft === 1">
-                                            {{ getDaysLeftText(medication.TotalDaysLeft) }}
-                                        </span>
+                                    <!-- DAYS LEFT -->
+                                    <span *ngIf="issued.TotalDaysLeft > 0" class="days-left-text"
+                                        [style.color]="getProgressColor(issued.TotalDaysLeft)"
+                                        [class.pulse-text]="issued.TotalDaysLeft === 1">
+                                        {{ getDaysLeftText(issued.TotalDaysLeft) }}
+                                    </span>
 
-                                        <span *ngIf="medication.TotalDaysLeft === 0" class="completed-text">
-                                            Completed
-                                        </span>
-                                    </div> -->
-
-
+                                    <!-- COMPLETED -->
+                                    <span *ngIf="issued.TotalDaysLeft === 0" class="completed-text">
+                                        Completed
+                                    </span>
+                                </div>
                                 </div>
                                 <div class="p-1 border-top bg-grey-50">
                                     <div class="row gx-2 align-items-start mx-0">
@@ -1584,7 +1557,7 @@
                                     </div>
                                 </div>
 
-                                <span class="view_medication">
+                                <!-- <span class="view_medication">
                                     <svg width="22" height="22" viewBox="0 0 32 32" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path d="M9.28027 22.5345L22.5351 9.27966" stroke="white" stroke-width="2.49525"
@@ -1592,7 +1565,7 @@
                                         <path d="M9.28027 9.27966H22.5351V22.5345" stroke="white" stroke-width="2.49525"
                                             stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
-                                </span>
+                                </span> -->
                             </div>
                         </div>
 
