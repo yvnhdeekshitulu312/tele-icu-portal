@@ -107,7 +107,6 @@ import { ContenteditableModelDirective } from './contenteditableModel.directive'
 import { ReferredToMeComponent } from './referred-to-me/referred-to-me.component';
 import { PhysioReferralWorklistComponent } from './physio-referral-worklist/physio-referral-worklist.component';
 import { FingerprintComponent } from './fingerprint/fingerprint.component';
-import { ZoomComponent } from './zoom/zoom.component';
 import { ChiDischargesummaryComponent } from './chi-dischargesummary/chi-dischargesummary.component';
 import { TranslateLoaderComponent } from '../translate-loader/translate-loader.component';
 import { ClaraModalComponent } from './clara-modal/clara-modal.component';
@@ -206,7 +205,6 @@ import { PatSummaryComponent } from './pat-summary/pat-summary.component';
     ReferredToMeComponent,
     PhysioReferralWorklistComponent,
     FingerprintComponent,
-    ZoomComponent,
     ChiDischargesummaryComponent,
     TranslateLoaderComponent,
     ClaraModalComponent,
@@ -287,7 +285,6 @@ import { PatSummaryComponent } from './pat-summary/pat-summary.component';
     VteSurgicalNewComponent,
     PdfViewerComponent,
     ContenteditableModelDirective,
-    ZoomComponent,
     TranslateLoaderComponent,
     ClaraModalComponent,
     ClaraTriggerComponent
