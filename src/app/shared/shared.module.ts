@@ -287,7 +287,8 @@ import { PatSummaryComponent } from './pat-summary/pat-summary.component';
     ContenteditableModelDirective,
     TranslateLoaderComponent,
     ClaraModalComponent,
-    ClaraTriggerComponent
+    ClaraTriggerComponent,
+    PatSummaryComponent
   ],
   providers: [
     MatDatepickerModule, 

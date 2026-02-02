@@ -91,7 +91,8 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     viewProgressNotesData2: any = [];
 
     showResultsinPopUp: boolean = false;
-    showPatientSummaryinPopUp: boolean = false;
+    showPatientFolderPopUp: boolean = false;
+    showPatientSummaryPopUp: boolean = false;
 
     referralForm: any;
     locationList: any = [];
@@ -1034,16 +1035,28 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     }
 
     openPatientFolder() {
-        this.showPatientSummaryinPopUp = true;
+        this.showPatientFolderPopUp = true;
         sessionStorage.setItem("PatientID", this.selectedICUBed.PatientID);
         sessionStorage.setItem("SummaryfromCasesheet", 'true');
         $("#pateintFolderPopup").modal("show");
     }
 
-    closePatientSummaryPopup() {
+    openPatientSummary() {
+        this.showPatientSummaryPopUp = true;
+        $('#pateintSummaryPopup').modal('show');
+    }
+
+    closePatientFolderPopup() {
         $("#pateintFolderPopup").modal("hide");
         setTimeout(() => {
-            this.showPatientSummaryinPopUp = false;
+            this.showPatientSummaryPopUp = false;
+        }, 1000);
+    }
+
+    closePatientSummaryPopup() {
+        $("#pateintSummaryPopup").modal("hide");
+        setTimeout(() => {
+            this.showPatientSummaryPopUp = false;
         }, 1000);
     }
 
