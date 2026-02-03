@@ -9,6 +9,18 @@ import { PatientAlertsService } from "../patient-alerts/patient-alerts.service";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import * as Highcharts from 'highcharts';
 import { ApexAxisChartSeries, ApexChart, ApexFill, ApexLegend, ApexMarkers, ApexStroke, ApexTooltip, ApexXAxis, ApexYAxis } from "ng-apexcharts";
+import { NgbModalOptions } from "@ng-bootstrap/ng-bootstrap";
+import { OrNursesComponent } from "src/app/ot/or-nurses/or-nurses.component";
+import { GenericModalBuilder } from "../generic-modal-builder.service";
+import { SurgicalSafetyChecklistComponent } from "src/app/ot/surgical-safety-checklist/surgical-safety-checklist.component";
+import { TemplatesLandingComponent } from "src/app/templates/templates-landing/templates-landing.component";
+import { CardiologyAssessmentComponent } from "src/app/portal/cardiology-assessment/cardiology-assessment.component";
+import { AnesthesiaAssessmentComponent } from "src/app/portal/anesthesia-assessment/anesthesia-assessment.component";
+import { MedicalAssessmentComponent } from "src/app/portal/medical-assessment/medical-assessment.component";
+import { MedicalAssessmentPediaComponent } from "src/app/portal/medical-assessment-pedia/medical-assessment-pedia.component";
+import { MedicalAssessmentObstericComponent } from "src/app/portal/medical-assessment-obsteric/medical-assessment-obsteric.component";
+import { MedicalAssessmentSurgicalComponent } from "src/app/portal/medical-assessment-surgical/medical-assessment-surgical.component";
+import { MedicalAssessmentService } from "src/app/portal/medical-assessment/medical-assessment.service";
 
 declare var $: any;
 
@@ -132,7 +144,13 @@ export class PatSummaryComponent extends BaseComponent implements OnInit, OnDest
     facilityId: any;
     selectedVisit: any;
 
-    constructor(private router: Router, private us: UtilityService, private patientService: PatientAlertsService, private formBuilder: FormBuilder, private datePipe: DatePipe) {
+    eformsCount: any = 0;
+    eformsList: any = [];
+    allEFormsList: any = [];
+
+    showEFormsInPopUp: boolean = false;
+
+    constructor(private router: Router, private us: UtilityService, private patientService: PatientAlertsService, private formBuilder: FormBuilder, private datePipe: DatePipe, private modalService: GenericModalBuilder, private medicalAssessmentService: MedicalAssessmentService) {
         super();
     }
 
@@ -285,6 +303,7 @@ export class PatSummaryComponent extends BaseComponent implements OnInit, OnDest
         this.fecthLaboratory();
         this.fetchMedications();
         this.fetchProcedures();
+        this.fetchEForms();
     }
 
     fetchPatientDetails(ssn: string, mobileno: string, patientId: string) {
@@ -464,18 +483,32 @@ export class PatSummaryComponent extends BaseComponent implements OnInit, OnDest
             if (item.PatientType === 'IP') ipMap[item.YearID] = count;
         });
 
+        // this.chartSeries = [
+        //     {
+        //         name: 'ER',
+        //         data: years.map((y: any) => erMap[y] === 0 ? null : erMap[y])
+        //     },
+        //     {
+        //         name: 'OP',
+        //         data: years.map((y: any) => opMap[y] === 0 ? null : opMap[y])
+        //     },
+        //     {
+        //         name: 'IP',
+        //         data: years.map((y: any) => ipMap[y] === 0 ? null : ipMap[y])
+        //     }
+        // ];
         this.chartSeries = [
             {
                 name: 'ER',
-                data: years.map((y: any) => erMap[y] === 0 ? null : erMap[y])
+                data: years.map(y => erMap[y] ?? 0)
             },
             {
                 name: 'OP',
-                data: years.map((y: any) => opMap[y] === 0 ? null : opMap[y])
+                data: years.map(y => opMap[y] ?? 0)
             },
             {
                 name: 'IP',
-                data: years.map((y: any) => ipMap[y] === 0 ? null : ipMap[y])
+                data: years.map(y => ipMap[y] ?? 0)
             }
         ];
 
@@ -495,8 +528,24 @@ export class PatSummaryComponent extends BaseComponent implements OnInit, OnDest
                     }
                 }
             },
+            // dataLabels: {
+            //     enabled: false
+            // },
             dataLabels: {
-                enabled: false
+                enabled: true,
+                offsetY: -18,
+                style: {
+                    fontSize: '9px',
+                    colors: ['#1f2937']
+                },
+                background: {
+                    enabled: true,
+                    borderRadius: 4,
+                    foreColor: '#ca1d1d'
+                },
+                formatter: (val: number) => {
+                    return val > 0 ? val.toString() : '';
+                }
             },
             stroke: {
                 show: true,
@@ -859,6 +908,43 @@ export class PatSummaryComponent extends BaseComponent implements OnInit, OnDest
                 });
     }
 
+    fetchEForms() {
+        let url;
+        if (this.selectedVisit) {
+            url = this.us.getApiUrl(PatSummary.FetchPatienClinicalTemplateDetailsOT, {
+                ClinicalTemplateID: 0,
+                AdmissionID: this.patientdata.AdmissionID,
+                PatientTemplatedetailID: 0,
+                TBL: 1,
+                HospitalID: this.patientdata.HospitalID,
+                UserID: this.doctorDetails[0]?.UserId ?? 0,
+                WorkStationID: this.wardID,
+            });
+        } else {
+            url = this.us.getApiUrl(PatSummary.FetchPatienClinicalTemplateDetailsOTPPNR, {
+                UHID: this.patientdata.RegCode,
+                ClinicalTemplateID: 0,
+                PatientTemplatedetailID: 0,
+                TBL: 1,
+                UserID: this.doctorDetails[0]?.UserId ?? 0,
+                WorkStationID: this.wardID,
+                HospitalID: this.patientdata.HospitalID
+            });
+        }
+
+        this.us.get(url)
+            .subscribe((response: any) => {
+                if (response.Code == 200) {
+                    this.eformsCount = response.FetchPatienClinicalTemplateDetailsNList.length;
+                    this.eformsList = response.FetchPatienClinicalTemplateDetailsNList.slice(0, 5);
+                    this.allEFormsList = response.FetchPatienClinicalTemplateDetailsNList;
+                }
+            },
+                (err) => {
+
+                });
+    }
+
     openDiagnosis() {
         $('#viewMoreDiagnosisModal').modal('show');
         setTimeout(() => {
@@ -897,6 +983,115 @@ export class PatSummaryComponent extends BaseComponent implements OnInit, OnDest
         this.showResultsinPopUp = true;
         this.resultsType = type;
         $('#viewResultsModal').modal('show');
+    }
+
+    openEForms() {
+        this.showEFormsInPopUp = true;
+        $('#viewEFormsModal').modal('show');
+    }
+
+    viewEformTemplate(templ: any) {
+        if (this.fromTeleICUBed) {
+            this.medicalAssessmentService.param.HospitalID = templ.HospitalID;
+        }
+        if (templ.ClinicalTemplateID === '113') {
+            sessionStorage.setItem("selectedView", JSON.stringify(this.selectedView));
+            templ.SurgeryRequestID = templ.AssessmentOrderId;
+            templ.AdmissionID = templ.Admissionid;
+            templ.PatientID = this.selectedView.PatientID;
+            sessionStorage.setItem("otpatient", JSON.stringify(templ));
+            const options: NgbModalOptions = {
+                size: 'xl',
+                windowClass: 'vte_view_modal consentform_Modal'
+            };
+            this.modalService.openModal(OrNursesComponent, {
+                data: templ,
+                readonly: true
+            }, options);
+        }
+        else if (templ.ClinicalTemplateID === '70') {
+            templ.SurgeryRequestID = templ.AssessmentOrderId;
+            templ.AdmissionID = templ.Admissionid;
+            templ.PatientID = this.selectedView.PatientID;
+            sessionStorage.setItem("otpatient", JSON.stringify(templ));
+            const options: NgbModalOptions = {
+                size: 'xl',
+                windowClass: 'vte_view_modal'
+            };
+            this.modalService.openModal(SurgicalSafetyChecklistComponent, {
+                data: templ,
+                readonly: true
+            }, options);
+        }
+        else if (templ.IsNewTemplate === '1') {
+            const options: NgbModalOptions = {
+                size: 'xl',
+                windowClass: 'vte_view_modal'
+            };
+            if (templ.ClinicalTemplateID === '16') {
+                const modalRef = this.modalService.openModal(CardiologyAssessmentComponent, {
+                    data: templ,
+                    readonly: true
+                }, options);
+            }
+            else if (templ.ClinicalTemplateID === '17') {
+                const modalRef = this.modalService.openModal(AnesthesiaAssessmentComponent, {
+                    data: templ,
+                    readonly: true
+                }, options);
+            }
+            else if (templ.ClinicalTemplateID === '2') {
+                const modalRef = this.modalService.openModal(MedicalAssessmentComponent, {
+                    data: templ,
+                    readonly: true
+                }, options);
+            }
+            else if (templ.ClinicalTemplateID === '7') {
+                const modalRef = this.modalService.openModal(MedicalAssessmentPediaComponent, {
+                    data: templ,
+                    readonly: true
+                }, options);
+            }
+            else if (templ.ClinicalTemplateID === '6') {
+                const modalRef = this.modalService.openModal(MedicalAssessmentObstericComponent, {
+                    data: templ,
+                    readonly: true
+                }, options);
+            }
+            else if (templ.ClinicalTemplateID === '8') {
+                const modalRef = this.modalService.openModal(MedicalAssessmentSurgicalComponent, {
+                    data: templ,
+                    readonly: true
+                }, options);
+            } else {
+                const patientdata = this.patientVisits.find((visit: any) => visit.AdmissionID == templ.Admissionid);
+                const url = this.us.getApiUrl(PatSummary.FetchPatientVistitInfoN, {
+                    UHID: patientdata.RegCode,
+                    IsnewVisit: patientdata.IsNewVisit,
+                    Admissionid: patientdata.AdmissionID,
+                    HospitalID: patientdata.HospitalID
+                });
+                this.us.get(url)
+                    .subscribe((response: any) => {
+                        if (response.Code == 200) {
+                            if (response.FetchPatientVistitInfoDataList.length > 0) {
+                                const selectedView = response.FetchPatientVistitInfoDataList[0];
+                                this.modalService.openModal(TemplatesLandingComponent, {
+                                    data: templ,
+                                    readonly: true,
+                                    fromshared: true,
+                                    admissionID: templ.Admissionid,
+                                    selectedView: selectedView
+                                }, options);
+                            }
+                        }
+                    },
+                        (err) => {
+
+                        });
+
+            }
+        }
     }
 
     filterFunction(vitals: any, visitid: any) {
@@ -1346,7 +1541,7 @@ export class PatSummaryComponent extends BaseComponent implements OnInit, OnDest
         } as any);
     }
 
-    private createChartLine(data: any): void {
+    private createChartLineOld(data: any): void {
         const xCategories: string[] = [];
 
         const BPSystolicData: any[] = [];
@@ -1473,7 +1668,7 @@ export class PatSummaryComponent extends BaseComponent implements OnInit, OnDest
                 '#eab308'
             ],
             title: {
-                text: 'Vitals Trend',
+                text: 'Vitals',
                 align: 'center',
                 style: {
                     fontSize: '18px',
@@ -1483,6 +1678,161 @@ export class PatSummaryComponent extends BaseComponent implements OnInit, OnDest
             },
         };
     }
+    private createChartLine(data: any[]): void {
+
+        const xCategories: string[] = [];
+
+        const BPSystolicData: (number | null)[] = [];
+        const BPDiastolicData: (number | null)[] = [];
+        const O2FlowRateData: (number | null)[] = [];
+        const PulseData: (number | null)[] = [];
+        const RespirationData: (number | null)[] = [];
+        const SPO2Data: (number | null)[] = [];
+        const TemperatureData: (number | null)[] = [];
+
+        data.forEach((e: any) => {
+            BPSystolicData.push(e.BPSystolic ? +e.BPSystolic : null);
+            BPDiastolicData.push(e.BPDiastolic ? +e.BPDiastolic : null);
+            O2FlowRateData.push(e.O2FlowRate ? +e.O2FlowRate : null);
+            PulseData.push(e.Pulse ? +e.Pulse : null);
+            RespirationData.push(e.Respiration ? +e.Respiration : null);
+            SPO2Data.push(e.SPO2 ? +e.SPO2 : null);
+            TemperatureData.push(e.Temparature ? +e.Temparature : null);
+
+            xCategories.push(e.VitalSignDate);
+        });
+
+        this.vitalChartOptions = {
+            series: [
+                { name: 'BP-Systolic', data: BPSystolicData },
+                { name: 'BP-Diastolic', data: BPDiastolicData },
+                { name: 'O2 Flow Rate', data: O2FlowRateData },
+                { name: 'Pulse', data: PulseData },
+                { name: 'Respiration', data: RespirationData },
+                { name: 'SPO2', data: SPO2Data },
+                { name: 'Temperature', data: TemperatureData }
+            ],
+
+            chart: {
+                type: 'area',
+                height: 320,
+                toolbar: { show: false },
+                zoom: { enabled: false },
+                dropShadow: {
+                    enabled: true,
+                    blur: 6,
+                    opacity: 0.15
+                },
+                events: {
+                    mounted: (chart: any) => {
+                        ['O2 Flow Rate', 'Pulse', 'Respiration', 'SPO2', 'Temperature']
+                            .forEach(s => chart.toggleSeries(s));
+                    }
+                }
+            },
+
+            stroke: {
+                curve: 'smooth',
+                width: [2.5, 2, 2, 3.5, 2, 2, 2]
+            },
+
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 0.2,
+                    opacityFrom: 0.35,
+                    opacityTo: 0.05,
+                    stops: [0, 90, 100]
+                }
+            },
+
+            markers: {
+                size: 0,
+                hover: { size: 6 }
+            },
+
+            xaxis: {
+                categories: xCategories,
+                labels: { show: false },
+                axisBorder: { show: false }
+            },
+
+            yaxis: {
+                min: 0,
+                labels: {
+                    style: { colors: '#64748b' }
+                }
+            },
+
+            tooltip: {
+                shared: true,
+                intersect: false,
+                x: { format: 'dd-MMM-yyyy HH:mm' }
+            },
+
+            legend: {
+                position: 'bottom',
+                fontSize: '13px'
+            },
+
+            dataLabels: { enabled: false },
+
+            annotations: {
+                yaxis: [
+                    {
+                        y: 180,
+                        y2: 400,
+                        borderColor: 'transparent',
+                        fillColor: '#ef4444',
+                        opacity: 0.08,
+                        //   label: {
+                        //     text: 'High BP',
+                        //     style: {
+                        //       color: '#fff',
+                        //       background: '#ef4444'
+                        //     }
+                        //   }
+                    },
+                    {
+                        y: 0,
+                        y2: 92,
+                        borderColor: 'transparent',
+                        fillColor: '#fb7185',
+                        opacity: 0.06,
+                        //   label: {
+                        //     text: 'Low SPO2',
+                        //     style: {
+                        //       color: '#fff',
+                        //       background: '#fb7185'
+                        //     }
+                        //   }
+                    }
+                ]
+            },
+
+
+            colors: [
+                '#60A5FA', // BP Sys
+                '#334155', // BP Dia
+                '#FDBA74', // O2
+                '#4ADE80', // Pulse
+                '#A5B4FC', // Resp
+                '#FDA4AF', // SPO2
+                '#FDE68A'  // Temp
+            ],
+
+            title: {
+                text: 'Vitals',
+                align: 'center',
+                style: {
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: '#1e293b'
+                }
+            }
+        };
+    }
+
 }
 
 const PatSummary = {
@@ -1505,4 +1855,6 @@ const PatSummary = {
     FetchCardOrderResultsPF: 'FetchCardOrderResultsPFN?fromDate=${fromDate}&ToDate=${ToDate}&UHID=${UHID}&PatientID=${PatientID}&AdmissionID=${AdmissionID}&SearchID=${SearchID}&HospitalID=${HospitalID}',
     FetchPatientOrderedOrPrescribedDrugs_PFN: 'FetchPatientOrderedOrPrescribedDrugs_PFN?UHID=${UHID}&PatientType=${PatientType}&IPID=${IPID}&PatientID=${PatientID}&SearchID=${SearchID}&FromDate=${FromDate}&ToDate=${ToDate}&HospitalID=${HospitalID}',
     FetchPatientAdmissionInvestigationsAndProceduresPFN: 'FetchPatientAdmissionInvestigationsAndProceduresPFN?UHID=${UHID}&Admissionid=${Admissionid}&IsnewVisit=${IsnewVisit}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
+    FetchPatienClinicalTemplateDetailsOTPPNR: 'FetchPatienClinicalTemplateDetailsOTPPNR?UHID=${UHID}&ClinicalTemplateID=${ClinicalTemplateID}&PatientTemplatedetailID=${PatientTemplatedetailID}&TBL=${TBL}&UserID=${UserID}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
+    FetchPatienClinicalTemplateDetailsOT: 'FetchPatienClinicalTemplateDetailsOT?AdmissionID=${AdmissionID}&ClinicalTemplateID=${ClinicalTemplateID}&PatientTemplatedetailID=${PatientTemplatedetailID}&TBL=${TBL}&UserID=${UserID}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
 }

@@ -469,7 +469,7 @@
                 <div class="container-fluid p-0 mt-2">
                     <div class="border rounded-3 shadow-sm bg-white">
                         <div class="row g-3 p-3">
-                            <div class="col-6">
+                            <div class="col-6 glass-cardPSS">
                                 <apx-chart *ngIf="chartOptions" [series]="chartSeries" [chart]="chartOptions.chart"
                                     [plotOptions]="chartOptions.plotOptions" [dataLabels]="chartOptions.dataLabels"
                                     [stroke]="chartOptions.stroke" [xaxis]="chartOptions.xaxis"
@@ -478,13 +478,14 @@
                                     [colors]="chartOptions.colors">
                                 </apx-chart>
                             </div>
-                            <div class="col-6">
+                            <div class="col-6 glass-cardPSS">
                                 <apx-chart *ngIf="vitalChartOptions" [series]="vitalChartOptions.series"
                                     [chart]="vitalChartOptions.chart" [xaxis]="vitalChartOptions.xaxis"
                                     [yaxis]="vitalChartOptions.yaxis" [stroke]="vitalChartOptions.stroke"
                                     [fill]="vitalChartOptions.fill" [markers]="vitalChartOptions.markers"
                                     [tooltip]="vitalChartOptions.tooltip" [legend]="vitalChartOptions.legend"
                                     [grid]="vitalChartOptions.grid" [colors]="vitalChartOptions.colors"
+                                    [annotations]="vitalChartOptions.annotations"
                                     [dataLabels]="vitalChartOptions.dataLabels" [title]="vitalChartOptions.title">
                                 </apx-chart>
                             </div>
@@ -549,7 +550,7 @@
                                             <label for="" class="form-label m-0 clr-primary-600">Sl.No</label>
                                         </div>
                                         <div class="col">
-                                            <label for="" class="form-label m-0 clr-primary-600">Item Name</label>
+                                            <label for="" class="form-label m-0 clr-primary-600">Name</label>
                                         </div>
                                     </div>
                                 </div>
@@ -590,15 +591,20 @@
                             <h5 class="card-heading fs-7"><i class="fa-regular fa-clock"></i> Visits History</h5>
                             <div class="filtersPS">
                                 <div class="filterPS" [class.active]="visitType === 0"
-                                    (click)="visitType = 0;getVisits()">All({{allVisitsCount}})</div>
+                                    (click)="visitType = 0;getVisits()">All <span
+                                        class="fw-semibold">{{allVisitsCount}}</span></div>
                                 <div class="filterPS" [class.active]="visitType === 3"
-                                    (click)="visitType = 3;getVisits()">ED({{ERVisitsCount}})</div>
+                                    (click)="visitType = 3;getVisits()">ED <span
+                                        class="fw-semibold">{{ERVisitsCount}}</span> </div>
                                 <div class="filterPS" [class.active]="visitType === 2"
-                                    (click)="visitType = 2;getVisits()">IP({{IPVisitsCount}})</div>
+                                    (click)="visitType = 2;getVisits()">IP <span
+                                        class="fw-semibold">{{IPVisitsCount}}</span> </div>
                                 <div class="filterPS" [class.active]="visitType === 1"
-                                    (click)="visitType = 1;getVisits()">OP({{OPVisitsCount}})</div>
+                                    (click)="visitType = 1;getVisits()">OP <span
+                                        class="fw-semibold">{{OPVisitsCount}}</span></div>
                                 <div class="filterPS" [class.active]="visitType === 4"
-                                    (click)="visitType = 4;getVisits()">DC({{DayCareVisitsCount}})</div>
+                                    (click)="visitType = 4;getVisits()">DC <span
+                                        class="fw-semibold">{{DayCareVisitsCount}}</span></div>
                             </div>
                             <div class="count-badgePS">{{patientVisits.length}}</div>
                         </div>
@@ -672,13 +678,13 @@
                                                     }}</span>
                                             </div>
                                             <div class="col-6">
-                                                <p class="m-0">{{ item.DoctorName }}
-                                                    <br>
-                                                    <span class="timePS">{{item.SpecialisationName}} |
-                                                        {{item.HospitalName}}|
-                                                        {{item.VisitDate.split(' ')[0]}}
-                                                    </span>
-                                                </p>
+                                                <span class="timePS">{{item.DoctorName }}
+
+                                                </span>
+                                                <span class="timePS">{{item.SpecialisationName}} |
+                                                    {{item.HospitalName}}|
+                                                    {{item.VisitDate.split(' ')[0]}}
+                                                </span>
                                             </div>
                                             <div class="col">
                                                 <ng-container *ngIf="selectedVisit?.AdmissionID === item.AdmissionID">
@@ -697,7 +703,7 @@
                         <div class="rounded-bottom d-flex justify-content-between p-2 border-top bg-grey-50"
                             *ngIf="patientVisits[0]">
                             <p>Latest: {{patientVisits[0].VisitDate.split(' ')[0]}}</p>
-                            <p>{{getFullPatientType(patientVisits[0].PatientType)}}</p>                            
+                            <p>{{getFullPatientType(patientVisits[0].PatientType)}}</p>
                         </div>
                     </div>
                 </div>
@@ -960,11 +966,14 @@
                             </h5>
                             <div class="filtersPS px-1">
                                 <div class="filterPS" [class.active]="reportType === 'laboratory'"
-                                    (click)="reportType = 'laboratory'">Laboratory ({{laboratoryCount}})</div>
+                                    (click)="reportType = 'laboratory'">Laboratory <span
+                                        class="fw-semibold">{{laboratoryCount}}</span></div>
                                 <div class="filterPS" [class.active]="reportType === 'radiology'"
-                                    (click)="reportType = 'radiology'">Imaging ({{radiologyCount}})</div>
+                                    (click)="reportType = 'radiology'">Imaging <span
+                                        class="fw-semibold">{{radiologyCount}}</span></div>
                                 <div class="filterPS" [class.active]="reportType === 'cardiology'"
-                                    (click)="reportType = 'cardiology'">Cardiology ({{cardiologyCount}})</div>
+                                    (click)="reportType = 'cardiology'">Cardiology <span
+                                        class="fw-semibold">{{cardiologyCount}}</span></div>
                             </div>
                             <button class="btn btn-main-outline fs-8 lh-1" (click)="openResults('L')">Results</button>
                         </div>
@@ -1213,7 +1222,64 @@
                             *ngIf="proceduresList.length > 0" (click)="openProcedures()">View More...</p>
                     </div>
                 </div>
-
+                <div class="col-lg-4 col-md-12">
+                    <!-- Procedures (Middle) -->
+                    <div class="card rounded card-style-1">
+                        <div class="card-header justify-content-between rounded-top header-procedures rounded-top py-2 min-height-unset"
+                            style="height: 2.3rem;">
+                            <h5 class="card-heading fs-7 d-flex align-items-center gap-2">
+                                <svg width="18" height="18" viewBox="0 0 18 22" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M9.75 20.25V19.75C9.75 16.9216 9.75 15.5074 10.6287 14.6287C11.5074 13.75 12.9216 13.75 15.75 13.75H16.25M16.75 12.0931V8.75C16.75 4.97876 16.75 3.09315 15.5784 1.92157C14.4069 0.75 12.5212 0.75 8.75 0.75C4.97877 0.75 3.09315 0.75 1.92157 1.92157C0.75 3.09314 0.75 4.97876 0.75 8.75V13.2942C0.75 16.5392 0.75 18.1617 1.63607 19.2607C1.81508 19.4827 2.01731 19.6849 2.23933 19.8639C3.33831 20.75 4.96082 20.75 8.2058 20.75C8.9114 20.75 9.2641 20.75 9.5872 20.636C9.6544 20.6123 9.7202 20.585 9.7845 20.5543C10.0936 20.4064 10.343 20.157 10.8419 19.6581L15.5784 14.9216C16.1565 14.3435 16.4455 14.0545 16.5978 13.6869C16.75 13.3194 16.75 12.9106 16.75 12.0931Z"
+                                        stroke="#008BAE" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                                EForms
+                            </h5>
+                            <div class="count-badgePS">{{eformsCount}}</div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="empty-state" *ngIf="eformsList.length === 0">No Records Found</div>
+                            <div *ngIf="eformsList.length > 0">
+                                <div class="fixed_alter_list rounded-0">
+                                    <div class="fixed_alter_header rounded-0">
+                                        <div class="row gx-3 mx-0 p-2 py-1 align-items-center">
+                                            <div class="col-2">
+                                                <label for="" class="form-label m-0 clr-primary-600">Sl.No</label>
+                                            </div>
+                                            <div class="col">
+                                                <label for="" class="form-label m-0 clr-primary-600">Name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fixed_alter_body" style="height: 20rem;">
+                                        <div class="row gx-3 mx-0 p-2 py-1 align-items-center alter_div cursor-pointer"
+                                            *ngFor="let item of eformsList; let i = index" (click)="viewEformTemplate(item)">
+                                            <div class="col-2">
+                                                <p class="m-0">{{ i + 1 }}</p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="datePS">{{ item.ClinicalTemplateName }}
+                                                    <br>
+                                                    <span class="timePS">{{item.Consultant}} |
+                                                        {{item.HospitalName}}
+                                                    </span>
+                                                    <br>
+                                                    <span class="date-pillPS ms-auto mx-4">
+                                                        {{item.Createdate.split('
+                                                        ')[0]}}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="rounded-bottom border-top bg-grey-50 cursor-pointer p-2 text-end"
+                            *ngIf="eformsList.length > 0" (click)="openEForms()">View More...</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1983,6 +2049,108 @@
             </div>
             <div class="modal-body p-0">
                 <app-others-results [tabType]="resultsType" *ngIf="showResultsinPopUp"></app-others-results>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" data-bs-backdrop="static" id="viewEFormsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered my-2" style="max-width: 90%;">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                    <h5 class="modal-title" id="">View EForms</h5>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="showEFormsInPopUp = false;"
+                        aria-label="Close"></button>
+                </div>
+
+            </div>
+            <div class="modal-body p-0">
+                <div class="fixed_alter_list">
+                    <div class="fixed_alter_header bg-primary-50">
+                        <div class="row gx-2 p-2 mx-0">
+                            <div class="col-1">
+                                <p class="label m-0">Template ID</p>
+                            </div>
+                            <div class="col-3">
+                                <p class="label m-0">Template Name</p>
+                            </div>
+                            <div class="col-3">
+                                <p class="label m-0">Doctor Name</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="label m-0">Created By</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="label m-0">Date</p>
+                            </div>
+                            <div class="col-1">
+                                <p class="label m-0">Action</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fixed_alter_body">
+                        <div class="row gx-2 p-2 mx-0 alter_div" *ngFor="let tem of allEFormsList;let i=index">
+                            <div class="col-1">
+                                <p class="m-0">{{tem.PatientTemplatedetailID}}</p>
+                            </div>
+                            <div class="col-3">
+                                <p class="m-0">{{ tem.ClinicalTemplateName }}</p>
+                            </div>
+                            <div class="col-3">
+                                <p class="m-0">{{ tem.Consultant }}</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="m-0">{{ tem.CreatedBy }}</p>
+                            </div>
+                            <div class="col-2">
+                                <div class="d-flex align-items-center gap-1">
+                                    <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M8.26322 1.3606H7.69641V0.965985C7.69641 0.799562 7.6061 0.645704 7.45953 0.562492C7.31306 0.479173 7.13244 0.479173 6.98598 0.562492C6.8394 0.645704 6.7491 0.799559 6.7491 0.965985V1.36049L3.25071 1.3606V0.965983C3.25071 0.799559 3.16041 0.645701 3.01383 0.56249C2.86736 0.47917 2.68674 0.47917 2.54028 0.56249C2.3937 0.645701 2.3034 0.799557 2.3034 0.965983V1.36049L1.73659 1.3606C1.27604 1.3606 0.834325 1.54056 0.508675 1.86095C0.182912 2.18145 0 2.61604 0 3.06915V8.79133C0 9.24445 0.18292 9.67904 0.508675 9.99954C0.834325 10.3199 1.27604 10.5 1.73659 10.5H8.26341C8.72396 10.5 9.16568 10.3199 9.49133 9.99954C9.81709 9.67904 10 9.24445 10 8.79133V3.06915C10 2.61604 9.81708 2.18145 9.49133 1.86095C9.16568 1.54056 8.72396 1.3606 8.26341 1.3606L8.26322 1.3606ZM1.73809 2.29263H2.3049V2.99787L2.30479 2.99776C2.30479 3.16419 2.39509 3.31805 2.54167 3.40126C2.68825 3.48458 2.86876 3.48458 3.01533 3.40126C3.1618 3.31805 3.2521 3.16419 3.2521 2.99776V2.29252H6.74908V2.99776C6.74908 3.16419 6.83939 3.31805 6.98596 3.40126C7.13243 3.48458 7.31305 3.48458 7.45951 3.40126C7.60609 3.31805 7.69639 3.16419 7.69639 2.99776V2.29252H8.2632C8.47255 2.29252 8.67331 2.37432 8.82132 2.52005C8.96933 2.66567 9.05259 2.86319 9.05259 3.06916V4.48268H0.947001V3.06916C0.947001 2.86319 1.03026 2.66567 1.17827 2.52005C1.32628 2.37432 1.52703 2.29252 1.73639 2.29252L1.73809 2.29263ZM8.26322 9.56809H1.7364C1.52705 9.56809 1.32629 9.48629 1.17828 9.34067C1.03027 9.19494 0.947012 8.99742 0.947012 8.79144V5.41472H9.0526V8.79144C9.0526 8.99742 8.96934 9.19494 8.82133 9.34067C8.67332 9.48629 8.47257 9.56809 8.26321 9.56809H8.26322Z"
+                                            fill="#368796" />
+                                    </svg>
+                                    <p class="m-0 clr-dark-600 text-nowrap">
+                                        {{tem.Createdate?.split('
+                                        ')[0]}}</p>
+                                    <svg class="ms-3" width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M5.00634 10.5C6.2848 10.5 7.56331 10.0066 8.538 9.03255C10.4873 7.08447 10.4873 3.90922 8.538 1.96108C6.58867 0.0129498 3.41139 0.0129949 1.46202 1.96108C-0.487361 3.90917 -0.487316 7.08442 1.46202 9.03255C2.44936 10.0066 3.72785 10.5 5.00634 10.5ZM2.09493 2.59362C2.89243 1.79663 3.9557 1.39187 5.00634 1.39187C6.05698 1.39187 7.10764 1.79672 7.91774 2.59362C9.52537 4.20022 9.52537 6.80614 7.91774 8.41271C6.31012 10.0193 3.70253 10.0193 2.09493 8.41271C0.487305 6.80612 0.487305 4.20019 2.09493 2.59362Z"
+                                            fill="#368796" />
+                                        <path
+                                            d="M3.42405 7.96996C3.53796 7.96996 3.66458 7.91939 3.75315 7.8308L5.39875 6.0471C5.47468 5.97121 5.51265 5.85738 5.51265 5.74347V3.35258C5.51265 3.1122 5.3101 2.90978 5.06957 2.90978C4.82913 2.90978 4.62657 3.1122 4.62657 3.35258V5.57899L3.09496 7.22355C2.93038 7.40064 2.94309 7.67895 3.12031 7.84343C3.20887 7.93193 3.31014 7.96988 3.42406 7.96988L3.42405 7.96996Z"
+                                            fill="#368796" />
+                                    </svg>
+                                    <p class="m-0 clr-dark-600  text-nowrap">
+                                        {{tem.Createdate?.split('
+                                        ')[1]}}</p>
+                                    <p class="ms-2">{{tem.Username}}</p>
+                                </div>
+                            </div>
+                            <div class="col-1">
+                                <div class="custom_tooltip custom_tooltip_left" style="width: 1.8rem"
+                                    (click)="viewEformTemplate(tem)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="17" viewBox="0 0 33 17"
+                                        fill="none">
+                                        <path
+                                            d="M29.8223 5.08352C22.587 -1.67628 11.332 -1.67628 4.09666 5.08352L0.96167 8.01367L4.10173 10.9438C11.3371 17.7036 22.592 17.7036 29.8274 10.9438L32.9624 8.01367L29.8223 5.08352ZM16.9621 14.0137C13.6471 14.0137 10.9619 11.3287 10.9619 8.01349C10.9619 4.69824 13.6469 2.0133 16.9621 2.0133C20.2774 2.0133 22.9623 4.69824 22.9623 8.01349C22.9623 11.3287 20.2774 14.0137 16.9621 14.0137Z"
+                                            fill="#43A9BC" />
+                                        <path
+                                            d="M16.9621 4.01336C16.4021 4.01336 15.8671 4.12846 15.3821 4.33839C15.7323 4.61348 15.9622 5.03335 15.9622 5.51333C15.9622 6.33834 15.2873 7.01326 14.4623 7.01326C13.9823 7.01326 13.5623 6.7833 13.2874 6.43317C13.0772 6.91842 12.9621 7.45336 12.9621 8.01343C12.9621 10.2184 14.7571 12.0135 16.9622 12.0135C18.2522 12.0135 19.3923 11.3984 20.1273 10.4535C19.7422 10.3135 19.4623 9.94842 19.4623 9.51336C19.4623 8.96343 19.9123 8.51338 20.4623 8.51338C20.6223 8.51338 20.7772 8.55344 20.9123 8.62342C20.9422 8.42338 20.9623 8.2185 20.9623 8.01338C20.9623 5.80835 19.1672 4.01336 16.9621 4.01336Z"
+                                            fill="#43A9BC" />
+                                    </svg>
+                                    <div class="tooltip">
+                                        <p class="label text-nowrap m-0 lh-1">View</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
