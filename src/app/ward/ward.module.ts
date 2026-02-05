@@ -48,6 +48,7 @@ import { HospitalEventsComponent } from './hospital-events/hospital-events.compo
 import { DischargeCasesComponent } from './discharge-cases/discharge-cases.component';
 import { ICUBedsComponent } from './iccu-beds/icu-beds.component';
 import { ICUBedDetailsComponent } from './icu-bed-details/icu-bed-details.component';
+import { TransfusionFeedbackComponent } from './transfusion-feedback/transfusion-feedback.component';
 
 
 @NgModule({
@@ -86,7 +87,8 @@ import { ICUBedDetailsComponent } from './icu-bed-details/icu-bed-details.compon
     HospitalEventsComponent,
     DischargeCasesComponent,
     ICUBedsComponent,
-    ICUBedDetailsComponent
+    ICUBedDetailsComponent,
+    TransfusionFeedbackComponent
   ],
   providers: [MatDatepickerModule, DatePipe],
   imports: [

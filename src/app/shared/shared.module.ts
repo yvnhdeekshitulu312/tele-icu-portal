@@ -53,7 +53,6 @@ import { AnesthesiaAssessmentComponent } from '../portal/anesthesia-assessment/a
 import { MedicalAssessmentComponent } from '../portal/medical-assessment/medical-assessment.component';
 import { MedicalAssessmentPediaComponent } from '../portal/medical-assessment-pedia/medical-assessment-pedia.component';
 import { MedicalAssessmentObstericComponent } from '../portal/medical-assessment-obsteric/medical-assessment-obsteric.component';
-import { StatisticsComponent } from '../reports/statistics/statistics.component';
 import { YesNoModalComponent } from './yes-no-modal/yes-no-modal.component';
 import { ErrorMessageComponent } from './error-message/error-message.component';
 import { HomeMedicationComponent } from '../ward/home-medication/home-medication.component';
@@ -97,7 +96,6 @@ import { EditorModule } from 'primeng/editor';
 import { SickLeaveOPDApprovalComponent } from './sick-leave-opd-approval/sick-leave-opd-approval.component';
 import { SickLeaveMedApprovalComponent } from './sick-leave-med-approval/sick-leave-med-approval.component';
 import { TransfusionReactionReportComponent } from '../templates/transfusion-reaction-report/transfusion-reaction-report.component';
-import { TransfusionFeedbackComponent } from '../blood-bank/transfusion-feedback/transfusion-feedback.component';
 import { VteAntenatalComponent } from '../ward/vte-antenatal/vte-antenatal.component';
 import { PendingReportsWorklistComponent } from './pending-reports-worklist/pending-reports-worklist.component';
 import { CoordinatorWorklistComponent } from './coordinator-worklist/coordinator-worklist.component';
@@ -111,7 +109,6 @@ import { ChiDischargesummaryComponent } from './chi-dischargesummary/chi-dischar
 import { TranslateLoaderComponent } from '../translate-loader/translate-loader.component';
 import { ClaraModalComponent } from './clara-modal/clara-modal.component';
 import { ClaraTriggerComponent } from './clara-trigger/clara-trigger.component';
-import { PerformanceDashboardComponent } from '../reports/performance-dashboard/performance-dashboard.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { PatSummaryComponent } from './pat-summary/pat-summary.component';
 
@@ -157,8 +154,6 @@ import { PatSummaryComponent } from './pat-summary/pat-summary.component';
     MedicalAssessmentComponent,
     MedicalAssessmentPediaComponent,
     MedicalAssessmentObstericComponent,
-    StatisticsComponent,
-    PerformanceDashboardComponent,
     YesNoModalComponent,
     ErrorMessageComponent,
     HomeMedicationComponent,
@@ -195,7 +190,6 @@ import { PatSummaryComponent } from './pat-summary/pat-summary.component';
     SickLeaveOPDApprovalComponent,
     SickLeaveMedApprovalComponent,
     TransfusionReactionReportComponent,
-    TransfusionFeedbackComponent,
     VteAntenatalComponent,
     PendingReportsWorklistComponent,
     CoordinatorWorklistComponent,
@@ -250,8 +244,6 @@ import { PatSummaryComponent } from './pat-summary/pat-summary.component';
     MedicalAssessmentComponent,
     MedicalAssessmentPediaComponent,
     MedicalAssessmentObstericComponent,
-    StatisticsComponent,
-    PerformanceDashboardComponent,
     HomeMedicationComponent,
     QuickMedicationComponent,
     PatientBannerComponent,
@@ -280,7 +272,6 @@ import { PatSummaryComponent } from './pat-summary/pat-summary.component';
     EformPeriodComponent,
     EditorModule ,
     TransfusionReactionReportComponent,
-    TransfusionFeedbackComponent,
     VteAntenatalComponent,
     VteSurgicalNewComponent,
     PdfViewerComponent,

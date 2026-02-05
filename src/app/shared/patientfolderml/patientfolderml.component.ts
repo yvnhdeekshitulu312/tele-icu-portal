@@ -49,10 +49,10 @@ import { CarePlanComponent } from 'src/app/ward/care-plan/care-plan.component';
 import { BloodrequestComponent } from 'src/app/ward/bloodrequest/bloodrequest.component';
 import { EmergencyConfigService } from 'src/app/emergency/services/config.service';
 import { PatientAlertsService } from '../patient-alerts/patient-alerts.service';
-import { TransfusionFeedbackComponent } from 'src/app/blood-bank/transfusion-feedback/transfusion-feedback.component';
 import { VteAntenatalComponent } from 'src/app/ward/vte-antenatal/vte-antenatal.component';
 import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { take } from 'rxjs';
+import { TransfusionFeedbackComponent } from 'src/app/ward/transfusion-feedback/transfusion-feedback.component';
 
 declare var $: any;
 declare function openPACS(test: any, hospId: any, patientId: any): any;

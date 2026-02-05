@@ -25,7 +25,6 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { ReportsComponent } from './reports/reports.component';
 import { TemplatesModule } from './templates/templates.module';
 import { SharedModule } from './shared/shared.module';
 
@@ -41,9 +40,7 @@ import { SharedModule } from './shared/shared.module';
     PharmacyComponent,
     AdmissionComponent,
     OtComponent,
-    TemplatesComponent,
-    ReportsComponent
-    // SafePipe
+    TemplatesComponent
   ],
   imports: [
     BrowserModule,
