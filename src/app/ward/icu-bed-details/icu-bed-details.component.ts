@@ -1089,7 +1089,7 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     }
 
     fetchHospitalLocations() {
-        this.configService.fetchFetchHospitalLocations().subscribe((response) => {
+        this.configService.fetchHospitalLocations().subscribe((response) => {
             if (response.Status === "Success") {
                 this.locationList = response.HospitalLocationsDataList;
                 var res = response.HospitalLocationsDataList.filter((h: any) => h.HospitalID == this.selectedICUBed.HospitalID);

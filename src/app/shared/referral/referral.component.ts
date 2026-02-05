@@ -430,7 +430,7 @@ export class ReferralComponent implements OnInit, AfterViewInit {
   }
 
   fetchHospitalLocations() {
-    this.config.fetchFetchHospitalLocations().subscribe((response) => {
+    this.config.fetchHospitalLocations().subscribe((response) => {
       if (response.Status === "Success") {
         this.locationList = response.HospitalLocationsDataList;
         

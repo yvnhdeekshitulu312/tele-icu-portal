@@ -1,7 +1,6 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Patterns } from 'global-constants';
 import * as moment from 'moment';
 import { ConfigService } from '../services/config.service';
 import { LoaderService } from '../services/loader.service';
@@ -96,7 +95,6 @@ export class LoginComponent implements OnInit {
       this.getDate(this.selectedLang.code);
     }
     this.position = 1;
-
   }
 
   ngOnInit(): void {
@@ -112,7 +110,7 @@ export class LoginComponent implements OnInit {
     this.mfaForm = this.fb.group({
       mfaCode: ['', [Validators.required, Validators.pattern(/^\d{4}$/)]]
     })
-    this.FetchFetchHospitalLocations();
+    this.fetchHospitalLocations();
     this.startClock();
     this.getUserLocation();
   }
@@ -126,11 +124,9 @@ export class LoginComponent implements OnInit {
           this.matchLocation(lat, lng);
         },
         (error) => {
-          console.error('Geolocation error:', error);
+          // Geolocation error handled silently
         }
       );
-    } else {
-      console.error('Geolocation is not supported by this browser.');
     }
   }
 
@@ -144,8 +140,8 @@ export class LoginComponent implements OnInit {
     this.loginForm.get('Location')?.setValue(match ? match.id : '');
   }
 
-  FetchFetchHospitalLocations() {
-    this.config.fetchFetchHospitalLocations().subscribe((response) => {
+  fetchHospitalLocations() {
+    this.config.fetchHospitalLocations().subscribe((response) => {
       if (response.Status === "Success") {
         this.locationList = response.HospitalLocationsDataList;
         if (response.HospitalLocationsDataList.length == 1) {
@@ -191,9 +187,6 @@ export class LoginComponent implements OnInit {
         this.getIPforAudit();
         this.rcmLoginDetails();
       }, 2000);
-      //this.config.validateDoctorLogin(this.loginForm.get('UserName').value,this.loginForm.get('Password').value,this.loginForm.get('Location').value).subscribe((response) => {
-      //this.config.validateDoctorLoginHH(this.loginForm.get('UserName').value,this.loginForm.get('Password').value, this.trailCount, this.loginForm.get('Location').value).subscribe((response) => {
-
     }
   }
 
@@ -231,12 +224,6 @@ export class LoginComponent implements OnInit {
   closeToastr() {
     $("#otpMessage").modal('hide');
   }
-  // showOtpFailModal() {
-  //   $("#otpFail").modal('show');
-  // }
-  // closeOtpFailModal() {
-  //   $("#otpFail").modal('hide');
-  // }
   getSelectedLangData(lang: any) {
     this.config.getSelectedLang(lang).subscribe((response: any) => {
       this.loginLangData = response;
@@ -313,11 +300,6 @@ export class LoginComponent implements OnInit {
       (err) => {
 
       });
-    // this.config.getipdetails().subscribe((data) => {
-    //   if(data.ipAddress) {
-
-    //   }
-    // });
   }
 
   openMFAModal() {

@@ -1880,7 +1880,7 @@ export class HomeMedicationComponent extends BaseComponent implements OnInit {
   }
 
   fetchHospitalLocations() {
-    this.config.fetchFetchHospitalLocations().subscribe((response) => {
+    this.config.fetchHospitalLocations().subscribe((response) => {
       if (response.Status === "Success") {
         this.locationList = response.HospitalLocationsDataList;
         const res = response.HospitalLocationsDataList.filter((h: any) => h.HospitalID == this.hospitalID);

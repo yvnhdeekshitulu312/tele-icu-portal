@@ -131,7 +131,7 @@ export class ConfigService {
     
   }
   
-   fetchFetchHospitalLocations() {
+   fetchHospitalLocations() {
     return this.https.get<any>(this.devApiUrl + '/FetchHospitalLocations?type=0&filter=blocked=0&UserId=0&WorkstationId=0', this.httpOptions);
   }
 
