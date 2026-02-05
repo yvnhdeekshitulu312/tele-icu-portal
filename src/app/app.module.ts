@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { HeadersInterceptor } from './services/headers.interceptor';
 import { LoaderComponent } from './loader/loader.component';
 import { LoaderInterceptor } from './services/loader.interceptor';
-import { LoginComponent } from './login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PortalComponent } from './portal/portal.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -30,7 +29,6 @@ import { SharedModule } from './shared/shared.module';
   declarations: [
     AppComponent,
     LoaderComponent,
-    LoginComponent,
     SidebarComponent,
     PortalComponent,
     WardComponent,
