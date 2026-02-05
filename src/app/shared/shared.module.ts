@@ -64,7 +64,6 @@ import { ReferralComponent } from './referral/referral.component';
 import { PatientEformsComponent } from './patient-eforms/patient-eforms.component';
 import { TemplateService } from './template.service';
 import { InPatientDischargeSummaryComponent } from './inpatient-discharge-summary/inpatient-discharge-summary.component';
-import { DoctorappointmentComponent } from '../frontoffice/doctorappointment/doctorappointment.component';
 import { AuditLogDirective } from '../audit-log.directive';
 import { MedicalReportComponent } from './medical-report/medical-report.component';
 import { VoiceTextComponent } from './voice-text/voice-text.component';
@@ -82,11 +81,9 @@ import { ScanDocumentsComponent } from './scan-documents/scan-documents.componen
 import { SignaturePadComponent } from './signature-pad/signature-pad.component';
 import { PediaFallriskAssessmentComponent } from './pedia-fallrisk-assessment/pedia-fallrisk-assessment.component';
 import { TwoDigitNumberOnlyDirective } from '../two-digit-number-only.directive';
-import { FutureAppointmentsWorklistComponent } from '../frontoffice/future-appointments-worklist/future-appointments-worklist.component';
 import { WoundAssessmentComponent } from '../ward/wound-assessment/wound-assessment.component';
 import { HasPermissionDirective } from './has-permission.directive';
 import { FeatureIdService } from './feature-id.service';
-import { DoctorappointmentsComponent } from './doctorappointments/doctorappointments.component';
 import { ButtonVisibilityDirective } from './button-visibility.directive';
 import { PatientfoldermlComponent } from './patientfolderml/patientfolderml.component';
 import { EmrNursingChecklistComponent } from '../templates/emr-nursing-checklist/emr-nursing-checklist.component';
@@ -164,7 +161,6 @@ import { PatSummaryComponent } from './pat-summary/pat-summary.component';
     ReferralComponent,
     PatientEformsComponent,
     InPatientDischargeSummaryComponent,
-    DoctorappointmentComponent,
     AuditLogDirective,
     MedicalReportComponent,
     VoiceTextComponent,
@@ -178,10 +174,8 @@ import { PatSummaryComponent } from './pat-summary/pat-summary.component';
     VitalsComponent,
     ScanDocumentsComponent,
     PediaFallriskAssessmentComponent,
-    FutureAppointmentsWorklistComponent,
     WoundAssessmentComponent,
     HasPermissionDirective,
-    DoctorappointmentsComponent,
     ButtonVisibilityDirective,
     PatientfoldermlComponent,
     EmrNursingChecklistComponent,
@@ -249,7 +243,6 @@ import { PatSummaryComponent } from './pat-summary/pat-summary.component';
     PatientBannerComponent,
     TimeSelectorComponent,
     InPatientDischargeSummaryComponent,
-    DoctorappointmentComponent,
     AuditLogDirective,
     MedicalReportComponent,
     VoiceTextComponent,
@@ -262,7 +255,6 @@ import { PatSummaryComponent } from './pat-summary/pat-summary.component';
     MatCheckboxModule,
     MatSelectModule,
     VitalsComponent,
-    FutureAppointmentsWorklistComponent,
     WoundAssessmentComponent,
     HasPermissionDirective,
     ButtonVisibilityDirective,

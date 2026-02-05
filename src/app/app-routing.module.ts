@@ -10,7 +10,6 @@ const routes: Routes = [
   { path: 'emergency', loadChildren: () => import('./emergency/emergency.module').then(m => m.EmergencyModule), canActivate: [AuthguardGuard] },
   { path: 'pharmacy', loadChildren: () => import('./pharmacy/pharmacy.module').then(m => m.PharmacyModule), canActivate: [AuthguardGuard] },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'frontoffice', loadChildren: () => import('./frontoffice/frontoffice.module').then(m => m.FrontofficeModule), canActivate: [AuthguardGuard] },
   { path: 'admission', loadChildren: () => import('./admission/admission.module').then(m => m.AdmissionModule), canActivate: [AuthguardGuard] },
   { path: 'ot', loadChildren: () => import('./ot/ot.module').then(m => m.OtModule), canActivate: [AuthguardGuard] },
   { path: 'shared', loadChildren: () => import('./shared/shared.module').then(m => m.SharedModule), canActivate: [AuthguardGuard] },

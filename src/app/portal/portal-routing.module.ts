@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomepageComponent } from './homepage/homepage.component';
 import { VideoConsultationComponent } from './video-consultation/video-consultation.component';
-import { DoctorAppointmentsComponent } from './doctor-appointments/doctor-appointments.component';
 import { PatientDetailsComponent } from './patient-details/patient-details.component';
 import { PatientsummaryComponent } from './patientsummary/patientsummary.component';
 import { SummaryComponent } from './summary/summary.component';
@@ -25,7 +24,6 @@ const routes: Routes = [
       { path: '', component: HomepageComponent, canActivate: [AuthguardGuard] },
       { path: 'appointment', loadChildren: () => import('../appointment/appointment.module').then(m => m.AppointmentModule), canActivate: [AuthguardGuard] },
       { path: 'video-consultation', component: VideoConsultationComponent, canActivate: [AuthguardGuard] },
-      { path: 'appointments', component: DoctorAppointmentsComponent, canActivate: [AuthguardGuard] },
       { path: 'patients', component: PatientDetailsComponent, canActivate: [AuthguardGuard] },
       { path: 'patientsummary', component: PatientsummaryComponent, canActivate: [AuthguardGuard] },
       { path: 'summary', component: SummaryComponent, canActivate: [AuthguardGuard] },

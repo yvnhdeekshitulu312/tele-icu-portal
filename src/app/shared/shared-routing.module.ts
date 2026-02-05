@@ -11,7 +11,6 @@ import { InPatientDischargeSummaryComponent } from './inpatient-discharge-summar
 import { MedicalReportComponent } from './medical-report/medical-report.component';
 import { Coding3mWorklistComponent } from './3m-coding-worklist/3m-coding-worklist.component';
 import { ScanDocumentsComponent } from './scan-documents/scan-documents.component';
-import { DoctorappointmentsComponent } from './doctorappointments/doctorappointments.component';
 import { PatientfoldermlComponent } from './patientfolderml/patientfolderml.component';
 import { EformPeriodComponent } from './eform-period/eform-period.component';
 import { SickLeaveOPDApprovalComponent } from './sick-leave-opd-approval/sick-leave-opd-approval.component';
@@ -36,7 +35,6 @@ const routes: Routes = [
       { path: 'medicalReport', component: MedicalReportComponent, canActivate: [AuthguardGuard], canDeactivate: [CanDeactivateGuard] },
       { path: '3mworklist', component: Coding3mWorklistComponent, canActivate: [AuthguardGuard], canDeactivate: [CanDeactivateGuard] },
       { path: 'scanDocuments', component: ScanDocumentsComponent, canActivate: [AuthguardGuard], canDeactivate: [CanDeactivateGuard] },
-      { path: 'doctorappointments', component: DoctorappointmentsComponent, canActivate: [AuthguardGuard], canDeactivate: [CanDeactivateGuard] },
       { path: 'eformperiod', component: EformPeriodComponent, canActivate: [AuthguardGuard], canDeactivate: [CanDeactivateGuard] },
       { path: 'sickLeaveOPDApproval', component: SickLeaveOPDApprovalComponent, canActivate: [AuthguardGuard], canDeactivate: [CanDeactivateGuard] },
       { path: 'sickLeaveMedApproval', component: SickLeaveMedApprovalComponent, canActivate: [AuthguardGuard], canDeactivate: [CanDeactivateGuard] },
