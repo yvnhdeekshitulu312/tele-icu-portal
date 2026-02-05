@@ -7,7 +7,6 @@ const routes: Routes = [
   { path: 'home', loadChildren: () => import('./portal/portal.module').then(m => m.PortalModule), canActivate: [AuthguardGuard] },
   { path: 'ward', loadChildren: () => import('./ward/ward.module').then(m => m.WardModule), canActivate: [AuthguardGuard] },
   { path: 'suit', loadChildren: () => import('./suit/suit.module').then(m => m.SuitModule), canActivate: [AuthguardGuard] },
-  { path: 'pharmacy', loadChildren: () => import('./pharmacy/pharmacy.module').then(m => m.PharmacyModule), canActivate: [AuthguardGuard] },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'ot', loadChildren: () => import('./ot/ot.module').then(m => m.OtModule), canActivate: [AuthguardGuard] },
   { path: 'shared', loadChildren: () => import('./shared/shared.module').then(m => m.SharedModule), canActivate: [AuthguardGuard] },

@@ -16,7 +16,6 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { BnNgIdleService } from 'bn-ng-idle';
 import { WardComponent } from './ward/ward.component';
 import { SuitComponent } from './suit/suit.component';
-import { PharmacyComponent } from './pharmacy/pharmacy.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { OtComponent } from './ot/ot.component';
 import { TemplatesComponent } from './templates/templates.component';
@@ -36,7 +35,6 @@ import { SharedModule } from './shared/shared.module';
     PortalComponent,
     WardComponent,
     SuitComponent,
-    PharmacyComponent,
     OtComponent,
     TemplatesComponent
   ],
