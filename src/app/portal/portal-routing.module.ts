@@ -22,7 +22,6 @@ const routes: Routes = [
   {
     path: '', component: PortalComponent, children: [
       { path: '', component: HomepageComponent, canActivate: [AuthguardGuard] },
-      { path: 'appointment', loadChildren: () => import('../appointment/appointment.module').then(m => m.AppointmentModule), canActivate: [AuthguardGuard] },
       { path: 'video-consultation', component: VideoConsultationComponent, canActivate: [AuthguardGuard] },
       { path: 'patients', component: PatientDetailsComponent, canActivate: [AuthguardGuard] },
       { path: 'patientsummary', component: PatientsummaryComponent, canActivate: [AuthguardGuard] },

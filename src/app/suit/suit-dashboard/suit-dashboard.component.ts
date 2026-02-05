@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { SuitConfigService } from '../services/suitconfig.service';
 import { Router } from '@angular/router';
 import { ConfigService as BedConfig } from 'src/app/ward/services/config.service';
-import { mapUserDetails } from 'src/app/administration/mapuser/mapuser.component';
 import { UtilityService } from 'src/app/shared/utility.service';
 
 declare var $: any;
@@ -371,7 +370,7 @@ export class SuitDashboardComponent implements OnInit {
         Name: event.target.value,
         HospitalID: this.hospitalId
       };
-      const url = this.us.getApiUrl(mapUserDetails.FetchSSUSERSData, params);
+      const url = this.us.getApiUrl(SuitDashboard.FetchSSUSERSData, params);
       this.us.get(url).subscribe((response: any) => {
         if (response.Code === 200) {
           this.usersList = response.FetchSSUSERSDataKList;
@@ -413,4 +412,7 @@ export class SuitDashboardComponent implements OnInit {
 interface Feautures {
   FeatureID: string
   FeatureName: string
+}
+export const SuitDashboard = {
+FetchSSUSERSData: "FetchSSUSERSData?Name=${Name}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}",
 }

@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { CheckboxControlValueAccessor, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { PortalRoutingModule } from './portal-routing.module';
-import { AppointmentComponent } from '../appointment/appointment.component';
-import { HomepageComponent } from './homepage/homepage.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -25,7 +23,6 @@ import { PatientCasesheetComponent } from './patient-casesheet/patient-casesheet
 import { TreePipe } from './prescription/TreePipe';
 import { SelectGroupDirective } from './prescription/SelectGroup';
 import { CheckChildrenDirective } from './prescription/CheckChildren';
-// import { SidebarComponent } from '../sidebar/sidebar.component';
 import { TreeviewModule } from 'ngx-treeview';
 import { IdcSearchComponent } from './idc-search/idc-search.component';
 import { DiagnosisComponent } from './diagnosis/diagnosis.component';
@@ -40,15 +37,9 @@ import { DischargeSummaryComponent } from './portal/discharge-summary/discharge-
 import { QuickOrdersComponent } from './quick-orders/quick-orders.component';
 import { PulmonologyDiseasesComponent } from './pulmonology-diseases/pulmonology-diseases.component';
 import { SickleaveComponent } from './sickleave/sickleave.component';
-// import { InstructionsToNurseComponent } from './instructions-to-nurse/instructions-to-nurse.component';
 import { ViewapprovalrequestComponent } from './viewapprovalrequest/viewapprovalrequest.component';
-// import { MedicalAssessmentComponent } from './medical-assessment/medical-assessment.component';
-// import { MedicalAssessmentObstericComponent } from './medical-assessment-obsteric/medical-assessment-obsteric.component';
-// import { MedicalAssessmentPediaComponent } from './medical-assessment-pedia/medical-assessment-pedia.component';
 import { MedicalAssessmentSurgicalComponent } from './medical-assessment-surgical/medical-assessment-surgical.component';
 import { OtModule } from '../ot/ot.module';
-// import { CardiologyAssessmentComponent } from './cardiology-assessment/cardiology-assessment.component';
-// import { AnesthesiaAssessmentComponent } from './anesthesia-assessment/anesthesia-assessment.component';
 import { PatientAlertsComponent } from './patient-alerts/patient-alerts.component';
 import { MedicalCertificateComponent } from './medical-certificate/medical-certificate.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
@@ -67,9 +58,12 @@ import { OpProgressNotesComponent } from './op-progress-notes/op-progress-notes.
 
 @NgModule({
   declarations: [
-    AppointmentComponent,
-     VideoConsultationComponent, DoctorAppointmentsComponent, PatientDetailsComponent, 
-     PatientsummaryComponent, PrescriptionComponent, PatientCasesheetComponent,
+    VideoConsultationComponent, 
+    DoctorAppointmentsComponent, 
+    PatientDetailsComponent,
+    PatientsummaryComponent, 
+    PrescriptionComponent, 
+    PatientCasesheetComponent,
     TreePipe,
     SelectGroupDirective,
     CheckChildrenDirective,
@@ -85,14 +79,8 @@ import { OpProgressNotesComponent } from './op-progress-notes/op-progress-notes.
     QuickOrdersComponent,
     PulmonologyDiseasesComponent,
     SickleaveComponent,
-    //InstructionsToNurseComponent,
     ViewapprovalrequestComponent,
-    // MedicalAssessmentComponent,
-    // MedicalAssessmentObstericComponent,
-    // MedicalAssessmentPediaComponent,
     MedicalAssessmentSurgicalComponent,
-    // CardiologyAssessmentComponent,
-    // AnesthesiaAssessmentComponent,
     PatientAlertsComponent,
     MedicalCertificateComponent,
     ParentalCareInitialComponent,
@@ -103,7 +91,7 @@ import { OpProgressNotesComponent } from './op-progress-notes/op-progress-notes.
     DoctorRequestsComponent,
     AntibioticComponent,
     AnesthetiaWorklistComponent,
-    OpProgressNotesComponent,    
+    OpProgressNotesComponent,
   ],
   providers: [MatDatepickerModule, DatePipe],
   imports: [
@@ -119,7 +107,7 @@ import { OpProgressNotesComponent } from './op-progress-notes/op-progress-notes.
     MatDialogModule,
     MatToolbarModule,
     MatMomentDateModule,
-	  MatTooltipModule,
+    MatTooltipModule,
     PortalRoutingModule,
     FormsModule,
     SharedModule,
