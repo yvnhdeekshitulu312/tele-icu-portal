@@ -10,7 +10,6 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { map } from 'rxjs';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
-import * as dayjs from 'dayjs';
 import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { SurgicalSafetyChecklistComponent } from '../surgical-safety-checklist/surgical-safety-checklist.component';
 import { GenericModalBuilder } from 'src/app/shared/generic-modal-builder.service';
