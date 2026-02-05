@@ -14,7 +14,6 @@ const routes: Routes = [
   { path: 'ot', loadChildren: () => import('./ot/ot.module').then(m => m.OtModule), canActivate: [AuthguardGuard] },
   { path: 'shared', loadChildren: () => import('./shared/shared.module').then(m => m.SharedModule), canActivate: [AuthguardGuard] },
   { path: 'templates', loadChildren: () => import('./templates/templates.module').then(m => m.TemplatesModule), canActivate: [AuthguardGuard] },
-  { path: 'dialysis', loadChildren: () => import('./dialysis/dialysis.module').then(m => m.DialysisModule), canActivate: [AuthguardGuard] },
   { path: 'administration', loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule), canActivate: [AuthguardGuard] },
   { path: 'portal', loadChildren: () => import('./portal/portal.module').then(m => m.PortalModule) },
   { path: 'rcmnavmod', loadChildren: () => import('./rcmnavmod/rcmnavmod.module').then(m => m.RcmNavModModule) },
