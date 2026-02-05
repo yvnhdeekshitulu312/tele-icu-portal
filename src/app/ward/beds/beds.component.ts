@@ -13,7 +13,6 @@ import { GenericModalBuilder } from 'src/app/shared/generic-modal-builder.servic
 import { ValidateEmployeeComponent } from 'src/app/shared/validate-employee/validate-employee.component';
 import { UtilityService } from 'src/app/shared/utility.service';
 import { cloneDeep } from 'lodash';
-import { patientadmission } from 'src/app/admission/patientadmission/patientadmission.component';
 
 declare var $: any;
 
@@ -2658,4 +2657,10 @@ export const vteriskassessment = {
   FetchFinalSaveVTERiskAssessment: 'FetchFinalSaveVTERiskAssessment?AdmissionID=${AdmissionID}&UserId=${UserId}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
   FetchPatientFinalObgVTEFrom: 'FetchPatientFinalObgVTEFrom?PatientObgVTEID=${PatientObgVTEID}&AdmissionID=${AdmissionID}&UserId=${UserId}&WorkStationID=${WorkStationID}&HospitalID=${HospitalID}',
   FetchPatientAdultBandPrintEMR: 'FetchPatientAdultBandPrintEMR',
+};
+
+export const patientadmission = {
+  FetchPatientAdultBandPrint: 'FetchPatientAdultBandPrint',
+  FetchPatientInfantBandPrint: 'FetchPatientInfantBandPrint',
+  SavePatientBandPrintingHistory: 'SavePatientBandPrintingHistory',
 };

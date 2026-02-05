@@ -18,7 +18,6 @@ import { WardComponent } from './ward/ward.component';
 import { SuitComponent } from './suit/suit.component';
 import { PharmacyComponent } from './pharmacy/pharmacy.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
-import { AdmissionComponent } from './admission/admission.component';
 import { OtComponent } from './ot/ot.component';
 import { TemplatesComponent } from './templates/templates.component';
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -38,7 +37,6 @@ import { SharedModule } from './shared/shared.module';
     WardComponent,
     SuitComponent,
     PharmacyComponent,
-    AdmissionComponent,
     OtComponent,
     TemplatesComponent
   ],
