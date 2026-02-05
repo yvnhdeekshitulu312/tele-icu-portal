@@ -7,7 +7,6 @@ const routes: Routes = [
   { path: 'home', loadChildren: () => import('./portal/portal.module').then(m => m.PortalModule), canActivate: [AuthguardGuard] },
   { path: 'ward', loadChildren: () => import('./ward/ward.module').then(m => m.WardModule), canActivate: [AuthguardGuard] },
   { path: 'suit', loadChildren: () => import('./suit/suit.module').then(m => m.SuitModule), canActivate: [AuthguardGuard] },
-  { path: 'emergency', loadChildren: () => import('./emergency/emergency.module').then(m => m.EmergencyModule), canActivate: [AuthguardGuard] },
   { path: 'pharmacy', loadChildren: () => import('./pharmacy/pharmacy.module').then(m => m.PharmacyModule), canActivate: [AuthguardGuard] },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'admission', loadChildren: () => import('./admission/admission.module').then(m => m.AdmissionModule), canActivate: [AuthguardGuard] },
@@ -16,7 +15,6 @@ const routes: Routes = [
   { path: 'templates', loadChildren: () => import('./templates/templates.module').then(m => m.TemplatesModule), canActivate: [AuthguardGuard] },
   { path: 'administration', loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule), canActivate: [AuthguardGuard] },
   { path: 'portal', loadChildren: () => import('./portal/portal.module').then(m => m.PortalModule) },
-  { path: 'rcmnavmod', loadChildren: () => import('./rcmnavmod/rcmnavmod.module').then(m => m.RcmNavModModule) },
 ];
 
 @NgModule({
