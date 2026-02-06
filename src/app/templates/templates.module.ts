@@ -134,9 +134,11 @@ import { MedicalPhotographyConsentComponent } from './medical-photography-consen
 import { TherapeuticPhlebotomyFormComponent } from './therapeutic-phlebotomy-form/therapeutic-phlebotomy-form.component';
 import { ProcedureNoteDocumentationComponent } from './procedure-note-documentation/procedure-note-documentation.component';
 import { FallsRiskAssessmentAndPreventionFormEndoscopyComponent } from './falls-risk-assessment-and-prevention-form-endoscopy/falls-risk-assessment-and-prevention-form-endoscopy.component';
+import { TemplatesComponent } from './templates.component';
 
 @NgModule({
   declarations: [
+    TemplatesComponent,
     TemplatesLandingComponent,
     AgainstMedicalAdviceComponent,
     CodeBlueDocumentationComponent,
@@ -242,9 +244,9 @@ import { FallsRiskAssessmentAndPreventionFormEndoscopyComponent } from './falls-
     DentalTreatmentConsentComponent,
     IronInjectionAckComponent,
     DeliveryNotesComponent,
-    HemoDialysisGraftComponent, 
-    HemoDialysisCatheterComponent, 
-    SpecimenRejectionComponent, 
+    HemoDialysisGraftComponent,
+    HemoDialysisCatheterComponent,
+    SpecimenRejectionComponent,
     CorrectedFormComponent,
     OtPatientCasesheetComponent,
     RadiologyDepartmentInformedConsentDuringPregnancyComponent,
@@ -274,7 +276,7 @@ import { FallsRiskAssessmentAndPreventionFormEndoscopyComponent } from './falls-
     MatDialogModule,
     MatToolbarModule,
     MatMomentDateModule,
-	  MatTooltipModule,
+    MatTooltipModule,
   ],
   exports: [
     MatDatepickerModule,

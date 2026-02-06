@@ -49,10 +49,12 @@ import { DischargeCasesComponent } from './discharge-cases/discharge-cases.compo
 import { ICUBedsComponent } from './iccu-beds/icu-beds.component';
 import { ICUBedDetailsComponent } from './icu-bed-details/icu-bed-details.component';
 import { TransfusionFeedbackComponent } from './transfusion-feedback/transfusion-feedback.component';
+import { WardComponent } from './ward.component';
 
 
 @NgModule({
   declarations: [
+    WardComponent,
     BedsComponent,
     IpvitalsComponent,
     LabTrendComponent,

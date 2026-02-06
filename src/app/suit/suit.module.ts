@@ -36,6 +36,7 @@ import { ScheduleReportsComponent } from './schedule-reports/schedule-reports.co
 import { RadiologyScheduleReportsComponent } from './radiology-schedule-reports/radiology-schedule-reports.component';
 import { TestComponentsComponent } from './test-components/test-components.component';
 import { TestComponentWordComponent } from './test-component-word/test-component-word.component';
+import { SuitComponent } from './suit.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { TestComponentWordComponent } from './test-component-word/test-component
     ScheduleReportsComponent,
     RadiologyScheduleReportsComponent,
     TestComponentsComponent,
-    TestComponentWordComponent
+    TestComponentWordComponent,
+    SuitComponent
   ],
   imports: [
     CommonModule,

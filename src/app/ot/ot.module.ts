@@ -24,10 +24,12 @@ import { SurgicalSafetyChecklistComponent } from './surgical-safety-checklist/su
 import { OrChargesComponent } from './or-charges/or-charges.component';
 import { DischargeFollowupsComponent } from './discharge-followups/discharge-followups.component';
 import { OrNursesComponent } from './or-nurses/or-nurses.component';
+import { OtComponent } from './ot.component';
 
 
 @NgModule({
   declarations: [
+    OtComponent,
     OtDashboardComponent,
     OtHeaderComponent,
     OtDoctorappointmentComponent,

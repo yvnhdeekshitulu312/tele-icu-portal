@@ -54,10 +54,12 @@ import { AntibioticComponent } from './antibiotic/antibiotic.component';
 import { TemplatesModule } from '../templates/templates.module';
 import { AnesthetiaWorklistComponent } from './anesthetia-worklist/anesthetia-worklist.component';
 import { OpProgressNotesComponent } from './op-progress-notes/op-progress-notes.component';
+import { PortalComponent } from './portal.component';
 
 
 @NgModule({
   declarations: [
+    PortalComponent,
     VideoConsultationComponent, 
     DoctorAppointmentsComponent, 
     PatientDetailsComponent,

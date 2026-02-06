@@ -10,31 +10,17 @@ import { HeadersInterceptor } from './services/headers.interceptor';
 import { LoaderComponent } from './loader/loader.component';
 import { LoaderInterceptor } from './services/loader.interceptor';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PortalComponent } from './portal/portal.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
 import { BnNgIdleService } from 'bn-ng-idle';
-import { WardComponent } from './ward/ward.component';
-import { SuitComponent } from './suit/suit.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
-import { OtComponent } from './ot/ot.component';
-import { TemplatesComponent } from './templates/templates.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { TemplatesModule } from './templates/templates.module';
-import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoaderComponent,
-    SidebarComponent,
-    PortalComponent,
-    WardComponent,
-    SuitComponent,
-    OtComponent,
-    TemplatesComponent
   ],
   imports: [
     BrowserModule,
@@ -48,8 +34,6 @@ import { SharedModule } from './shared/shared.module';
     MatAutocompleteModule,
     MatDatepickerModule,
 	  MatNativeDateModule,
-	  TemplatesModule,
-    SharedModule
   ],
   providers: [
     BnNgIdleService,
