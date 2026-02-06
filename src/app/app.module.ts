@@ -16,6 +16,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { TemplatesModule } from './templates/templates.module';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatAutocompleteModule,
     MatDatepickerModule,
 	  MatNativeDateModule,
+    TemplatesModule
   ],
   providers: [
     BnNgIdleService,
