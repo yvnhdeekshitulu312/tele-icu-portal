@@ -118,6 +118,7 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     FollowUpOn: any = moment(new Date()).format('DD-MMM-YYYY');
     patientAdviceData: any;
     resultsType: string = '';
+    isLeftnavCollapsed = false;
 
     constructor(private router: Router, private us: UtilityService, private configService: ConfigService, private config: BedConfig, private datepipe: DatePipe, private formbuilder: FormBuilder, private modalSvc: NgbModal) {
 
@@ -142,6 +143,10 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
             remarks: ['', [Validators.required]]
         });
     }
+
+toggleSidebar() {
+  this.isLeftnavCollapsed = !this.isLeftnavCollapsed;
+}
 
     ngOnDestroy() {
         if (this.refreshSub) {
