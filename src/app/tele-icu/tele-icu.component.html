@@ -1,0 +1,48 @@
+<!-- tele-icu.component.html -->
+<div class="tele-icu-wrapper">
+
+  <!-- ── Header ─────────────────────────────────────────────── -->
+  <div class="icu-header">
+    <h2>🏥 Tele-ICU Console</h2>
+    <span class="nurse-badge">{{ nurseName }}</span>
+  </div>
+
+  <!-- ── Declined banner ────────────────────────────────────── -->
+  <div class="banner banner--declined" *ngIf="callDeclined">
+    <button class="btn btn--sm" (click)="callDeclined = false">Dismiss</button>
+  </div>
+
+  <!-- ── Call controls ──────────────────────────────────────── -->
+  <div class="call-controls">
+
+    <!-- Not in call -->
+    <ng-container *ngIf="!isInCall">
+      <button
+        class="btn btn--danger"
+        [disabled]="isConnecting"
+        (click)="callDoctor()">
+        {{ isConnecting ? '⏳ Calling…' : '🚨 Call Doctor' }}
+      </button>
+    </ng-container>
+
+    <!-- In call -->
+    <ng-container *ngIf="isInCall">
+      <span class="status status--live">🔴 Live</span>
+      <button class="btn btn--end" (click)="endCall()">📵 End Call</button>
+    </ng-container>
+
+  </div>
+
+  <!-- ── Video tiles ─────────────────────────────────────────── -->
+  <div class="video-grid" *ngIf="isInCall">
+    <div class="video-tile">
+      <p class="tile-label">You (Nurse)</p>
+      <div id="local-player"></div>
+    </div>
+    <div class="video-tile">
+      <p class="tile-label">Doctor</p>
+      <div id="remote-container"></div>
+    </div>
+  </div>
+
+</div>

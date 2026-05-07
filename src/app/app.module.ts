@@ -17,11 +17,13 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { TemplatesModule } from './templates/templates.module';
+import { TeleIcuComponent } from './tele-icu/tele-icu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoaderComponent,
+    TeleIcuComponent,
   ],
   imports: [
     BrowserModule,

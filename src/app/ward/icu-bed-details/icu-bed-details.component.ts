@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import moment from "moment";
 import { ValidateEmployeeComponent } from "src/app/shared/validate-employee/validate-employee.component";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { TeleIcuComponent } from "src/app/tele-icu/tele-icu.component";
 
 declare var $: any;
 
@@ -1663,6 +1664,18 @@ toggleSidebar() {
   getTooltipText(daysLeft: number): string {
     if (daysLeft === 1) return 'Last day to complete this medication';
     return '';
+  }
+
+  callDoctor() {
+     const modalRef = this.modalSvc.open(TeleIcuComponent, {
+            backdrop: 'static'
+        });
+        modalRef.componentInstance.dataChanged.subscribe((data: any) => {
+            if (data.success) {
+            }
+            
+            modalRef.close();
+        });
   }
 }
 
