@@ -95,6 +95,11 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
     showPatientFolderPopUp: boolean = false;
     showPatientSummaryPopUp: boolean = false;
 
+    // Lab Results Modal
+    showLabResultsModal: boolean = false;
+    selectedLabResults: any[] = [];
+    selectedLabPatient: any = null;
+
     referralForm: any;
     locationList: any = [];
     SpecializationList: any = [];
@@ -197,7 +202,9 @@ toggleSidebar() {
                 const FetchBedsFromWardLabRadDataList = response.FetchBedsFromWardLabRadDataList;
                 this.selectedICUBed = response.FetchBedsFromWardDataList.map((element: any) => {
                     const isFound = FetchBedsFromWardLabRadDataList.filter((a: any) => a.AdmissionID === element.AdmissionID);
-                    const labResults: any[] = isFound.filter((a: any) => a.IsResult == '4');
+                    const labResults: any[] = isFound
+                        .filter((a: any) => a.IsResult == '4')
+                        .sort((a: any, b: any) => new Date(b.ResultEnterDate).getTime() - new Date(a.ResultEnterDate).getTime());
                     const radResults: any[] = isFound.filter((a: any) => a.IsResult == '7');
                     return {
                         ...element,
@@ -1665,6 +1672,22 @@ toggleSidebar() {
     if (daysLeft === 1) return 'Last day to complete this medication';
     return '';
   }
+
+openLabResultsModal(event: any, labResults: any[], patient?: any): void {
+        event.stopPropagation();
+        this.selectedLabResults = labResults;
+        this.selectedLabPatient = patient || null;
+        this.showLabResultsModal = true;
+        $("#labResultsAllModal").modal("show");
+    }
+
+    closeLabResultsModal(): void {
+        $("#labResultsAllModal").modal("hide");
+        setTimeout(() => {
+            this.showLabResultsModal = false;
+            this.selectedLabPatient = null;
+        }, 1000);
+    }
 
   callDoctor() {
      const modalRef = this.modalSvc.open(TeleIcuComponent, {

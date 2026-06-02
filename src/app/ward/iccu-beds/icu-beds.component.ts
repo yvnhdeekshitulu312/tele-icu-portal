@@ -122,7 +122,7 @@ export class ICUBedsComponent implements OnInit {
 
         this.refreshSub = timer(5 * 60 * 1000)
             .subscribe(() => {
-                //this.fetchICUBeds();
+                this.fetchICUBeds();
             });
     }
 
@@ -376,6 +376,31 @@ export class ICUBedsComponent implements OnInit {
             this.selectedLabPatient = null;
         }, 1000);
     }
+    getVitalStatus(value: any, type: string): string {
+    let isAbnormal = false;
+
+    switch(type) {
+        case 'pulse':
+            // Normal: 60-100 BPM
+            isAbnormal = value < 60 || value > 100; 
+            break;
+        case 'spo2':
+            // Normal: 95-100%
+            isAbnormal = value < 95; 
+            break;
+        case 'temp':
+            // Normal: 36.1°C - 37.2°C
+            isAbnormal = value < 36 || value > 37.5; 
+            break;
+        case 'bp':
+            // Simple check: looking for high systolic (first number)
+            const systolic = parseInt(value.split('/')[0]);
+            isAbnormal = systolic > 130 || systolic < 90;
+            break;
+    }
+
+    return isAbnormal ? 'status-panicAI' : 'status-normalAI';
+}
 }
 
 const ICUBeds = {
