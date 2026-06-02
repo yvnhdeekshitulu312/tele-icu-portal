@@ -67,26 +67,29 @@ export class TeleIcuComponent implements OnInit, OnDestroy {
   async accept(): Promise<void> {
     if (!this.payload) return;
 
+    // ✅ Step 1: Switch to in-call FIRST so Angular renders the video divs
+    this.step = 'in-call';
+    this.cdr.markForCheck();
+
+    // ✅ Step 2: Wait one animation frame for Angular + browser to paint
+    await new Promise(resolve => setTimeout(resolve, 0));
+
     const uid = Math.floor(Math.random() * 100_000);
 
     try {
-      // Join the same Agora channel the nurse opened
       await this.agora.join(
         this.payload.channelName,
         uid,
-        'local-player-doctor',
+        'local-player-doctor',        // ✅ div now exists in the DOM
         'remote-container-doctor',
         (_uid: number) => `Nurse ${_uid}`,
-        'doctor' 
+        'doctor'
       );
 
-      // Tell the nurse this doctor has joined — nurse UI shows the chip
       await this.signalR.notifyDoctorJoined(
         this.payload.nurseConnectionId,
         this.doctorName
       );
-
-      this.step = 'in-call';
 
     } catch (err) {
       console.error('Doctor failed to join call:', err);

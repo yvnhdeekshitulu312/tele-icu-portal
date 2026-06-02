@@ -12,38 +12,28 @@ import { config } from 'src/environments/environment';
 @Injectable({ providedIn: 'root' })
 export class AgoraService {
 
-  // Each call to createClient() gives an independent client.
-  // We keep one per role so nurse and doctor never share a client.
   private _nurseClient:  IAgoraRTCClient | null = null;
   private _doctorClient: IAgoraRTCClient | null = null;
 
   private localAudioTrack: ILocalAudioTrack | null = null;
-  private localVideoTrack: ILocalVideoTrack | null = null;
+  public  localVideoTrack: ILocalVideoTrack | null = null;
 
-  /** uid → display label for remote tiles */
   remoteUsers: Map<number, string> = new Map();
 
-  private readonly appId  = '8ba10b49e0264094a4d2c968abdc1e35';
-  private readonly BASE   = `${config.videoUrl}`;
+  private readonly appId = '8ba10b49e0264094a4d2c968abdc1e35';
+  private readonly BASE  = `${config.videoUrl}`;
 
-  // The client that is currently in a call (set by join, cleared by leave)
   private activeClient: IAgoraRTCClient | null = null;
 
   constructor(private http: HttpClient) {}
 
-  // ── Token ──────────────────────────────────────────────────────────────────
   private getToken(channelName: string, uid: number) {
     return this.http.get<{ token: string }>(
       `${this.BASE}/api/agora/token?channelName=${channelName}&uid=${uid}`
     );
   }
 
-  // ── Join ───────────────────────────────────────────────────────────────────
-  /**
-   * @param role  'nurse' | 'doctor'  — each role gets its own RTC client so
-   *              the same Angular app can have both sides open without sharing
-   *              a client that is already in connecting/connected state.
-   */
+  // ── Join ──────────────────────────────────────────────────────────────────
   async join(
     channelName:          string,
     uid:                  number,
@@ -53,7 +43,6 @@ export class AgoraService {
     role:                 'nurse' | 'doctor' = 'nurse'
   ): Promise<void> {
 
-    // Pick / create the right client for this role
     let client: IAgoraRTCClient;
     if (role === 'nurse') {
       if (!this._nurseClient) {
@@ -67,50 +56,70 @@ export class AgoraService {
       client = this._doctorClient;
     }
 
-    // Guard: if this client is already connected, leave first
-    if (
-      client.connectionState === 'CONNECTED' ||
-      client.connectionState === 'CONNECTING'
-    ) {
+    if (client.connectionState === 'CONNECTED' || client.connectionState === 'CONNECTING') {
       await this._leaveClient(client);
     }
 
     this.activeClient = client;
 
-    // Fetch token and join
     const { token } = await firstValueFrom(this.getToken(channelName, uid));
     await client.join(this.appId, channelName, token, uid);
 
-    // Local tracks
     this.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
     this.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
 
-    setTimeout(() => {
-      this.localVideoTrack?.play(localPlayerElementId);
-    }, 300);
+    // ✅ KEY FIX: Poll until the DOM element exists, then play
+    this._playWhenReady(localPlayerElementId);
 
     await client.publish([this.localAudioTrack, this.localVideoTrack]);
 
-    // Remote users already in channel
+    // Remote users already in channel when we join
     for (const user of client.remoteUsers) {
-      await this._subscribeAndRender(client, user, 'video', remoteContainerId, getRemoteLabel);
-      await this._subscribeAndRender(client, user, 'audio', remoteContainerId, getRemoteLabel);
+      if (user.hasVideo) {
+        await this._subscribeAndRender(client, user, 'video', remoteContainerId, getRemoteLabel);
+      }
+      if (user.hasAudio) {
+        await this._subscribeAndRender(client, user, 'audio', remoteContainerId, getRemoteLabel);
+      }
     }
 
-    // New remote user joins
+    // New remote user publishes a track
     client.on('user-published', async (user, mediaType) => {
       await this._subscribeAndRender(client, user, mediaType, remoteContainerId, getRemoteLabel);
     });
 
-    // Remote user leaves — remove their tile
-    client.on('user-unpublished', (user) => {
+    // Remote user stops a track
+    client.on('user-unpublished', (user, mediaType) => {
+      if (mediaType === 'video') {
+        const el = document.getElementById(`remote-${user.uid}`);
+        el?.remove();
+        this.remoteUsers.delete(user.uid as number);
+      }
+    });
+
+    // Remote user fully leaves
+    client.on('user-left', (user) => {
       const el = document.getElementById(`remote-${user.uid}`);
       el?.remove();
       this.remoteUsers.delete(user.uid as number);
     });
   }
 
-  // ── Leave (called from component) ─────────────────────────────────────────
+  // ✅ Polls every 100ms (up to 3s) until the element exists, then plays
+  private _playWhenReady(elementId: string, attempts = 0): void {
+    const el = document.getElementById(elementId);
+    if (el) {
+      this.localVideoTrack?.play(elementId);
+      return;
+    }
+    if (attempts < 30) {
+      setTimeout(() => this._playWhenReady(elementId, attempts + 1), 100);
+    } else {
+      console.warn(`[Agora] Local player element never appeared: #${elementId}`);
+    }
+  }
+
+  // ── Leave ─────────────────────────────────────────────────────────────────
   async leave(): Promise<void> {
     if (this.activeClient) {
       await this._leaveClient(this.activeClient);
@@ -118,7 +127,7 @@ export class AgoraService {
     }
   }
 
-  // ── Mute helpers ───────────────────────────────────────────────────────────
+  // ── Mic / Camera ──────────────────────────────────────────────────────────
   async toggleMic(): Promise<boolean> {
     if (!this.localAudioTrack) return false;
     const enabled = !this.localAudioTrack.enabled;
@@ -133,31 +142,21 @@ export class AgoraService {
     return enabled;
   }
 
-  // ── Private helpers ────────────────────────────────────────────────────────
+  // ── Private ───────────────────────────────────────────────────────────────
   private async _leaveClient(client: IAgoraRTCClient): Promise<void> {
+    // ✅ stop() before close() — releases camera light properly
+    this.localAudioTrack?.stop();
     this.localAudioTrack?.close();
+    this.localVideoTrack?.stop();
     this.localVideoTrack?.close();
     this.localAudioTrack = null;
     this.localVideoTrack = null;
     this.remoteUsers.clear();
 
-    // Clean up remote tiles owned by this client
-    const containers = ['remote-container', 'remote-container-doctor'];
-    containers.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = '';
-    });
+    // ✅ Remove ALL dynamically created remote tiles
+    document.querySelectorAll('[id^="remote-"]').forEach(el => el.remove());
 
-    // Also remove dynamic per-patient containers
-    document.querySelectorAll('[id^="remote-container-"]').forEach(el => {
-      (el as HTMLElement).innerHTML = '';
-    });
-
-    try {
-      await client.leave();
-    } catch {
-      // Already disconnected — ignore
-    }
+    try { await client.leave(); } catch { /* already gone */ }
   }
 
   private async _subscribeAndRender(
@@ -174,17 +173,27 @@ export class AgoraService {
       const label = getLabel(uid);
       this.remoteUsers.set(uid, label);
 
-      let wrapper = document.getElementById(`remote-${uid}`);
-      if (!wrapper) {
-        wrapper             = document.createElement('div');
-        wrapper.id          = `remote-${uid}`;
-        wrapper.className   = 'video-tile';
-        wrapper.innerHTML   = `<p class="tile-label">${label}</p>
-                               <div id="remote-video-${uid}" class="video-box"></div>`;
-        document.getElementById(remoteContainerId)?.appendChild(wrapper);
+      const container = document.getElementById(remoteContainerId);
+      if (!container) {
+        console.warn(`[Agora] Remote container not found: #${remoteContainerId}`);
+        return;
       }
 
-      user.videoTrack?.play(`remote-video-${uid}`);
+      let wrapper = document.getElementById(`remote-${uid}`);
+      if (!wrapper) {
+        wrapper           = document.createElement('div');
+        wrapper.id        = `remote-${uid}`;
+        wrapper.className = 'video-tile';
+        wrapper.style.cssText = 'width:100%;height:100%;position:relative;';
+        wrapper.innerHTML = `
+          <p class="tile-label">${label}</p>
+          <div id="remote-video-${uid}" style="width:100%;height:100%;"></div>
+        `;
+        container.appendChild(wrapper);
+      }
+
+      // ✅ Small delay so the appended child is painted before play()
+      setTimeout(() => user.videoTrack?.play(`remote-video-${uid}`), 100);
     }
 
     if (mediaType === 'audio') {
