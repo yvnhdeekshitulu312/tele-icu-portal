@@ -66,6 +66,11 @@ export class ICUBedsComponent implements OnInit {
     resultsType: string = '';
     facilities: any = [];
 
+    // Lab Results Modal — Feature 1
+    selectedLabResults: any[] = [];
+    showLabResultsModal: boolean = false;
+    selectedLabPatient: any = null;
+
     constructor(private us: UtilityService, private configService: ConfigService, private router: Router) {
         this.langData = this.configService.getLangData();
     }
@@ -117,7 +122,7 @@ export class ICUBedsComponent implements OnInit {
 
         this.refreshSub = timer(5 * 60 * 1000)
             .subscribe(() => {
-                this.fetchICUBeds();
+                //this.fetchICUBeds();
             });
     }
 
@@ -354,6 +359,22 @@ export class ICUBedsComponent implements OnInit {
                 });
             }
         });
+    }
+
+    openLabResultsModal(event: any, labResults: any[], patient?: any): void {
+        event.stopPropagation();
+        this.selectedLabResults = labResults;
+        this.selectedLabPatient = patient || null;
+        this.showLabResultsModal = true;
+        $("#labResultsAllModal").modal("show");
+    }
+
+    closeLabResultsModal(): void {
+        $("#labResultsAllModal").modal("hide");
+        setTimeout(() => {
+            this.showLabResultsModal = false;
+            this.selectedLabPatient = null;
+        }, 1000);
     }
 }
 
