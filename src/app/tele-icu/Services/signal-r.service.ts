@@ -2,78 +2,89 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { Subject } from 'rxjs';
+import { config } from 'src/environments/environment';
+
+export interface IncomingCallPayload {
+  channelName:       string;
+  callerName:        string;
+  patientSsn:        string;
+  nurseConnectionId: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class SignalRService implements OnDestroy {
 
   private hub = new signalR.HubConnectionBuilder()
-    .withUrl('https://localhost:7217/hubs/call')
+    .withUrl(`${config.videoUrl}`+ '/hubs/call')
     .withAutomaticReconnect()
     .build();
 
-  // ── Streams ────────────────────────────────────────────────────────────────
-  incomingCall$ = new Subject<{
-    channelName:       string;
-    callerName:        string;
-    nurseConnectionId: string;   // ← added for decline fix
-  }>();
+  // Streams consumed by nurse and doctor components
+  incomingCall$ = new Subject<IncomingCallPayload>();
   callDeclined$ = new Subject<void>();
+  doctorJoined$ = new Subject<{ doctorName: string }>();
 
-  // ── Connection ID ──────────────────────────────────────────────────────────
-  get connectionId(): string {
-    return this.hub.connectionId ?? '';
-  }
+  get connectionId(): string { return this.hub.connectionId ?? ''; }
 
-  // ── Connect ────────────────────────────────────────────────────────────────
-  async connect(): Promise<void> {
-    if (this.hub.state === signalR.HubConnectionState.Connected) return;
+  // ── connect(userId) ────────────────────────────────────────────────────
+  // Call this once from ngOnInit on BOTH nurse and doctor components.
+  // userId must be the same integer your hospital API uses for this user
+  // (the same value you pass as doctorId in the CallStartRequest).
+  async connect(userId: number): Promise<void> {
+    if (this.hub.state === signalR.HubConnectionState.Connected) {
+      // Already connected — just re-register in case userId changed
+      await this.hub.invoke('RegisterUser', userId);
+      return;
+    }
+
+    // Register handlers BEFORE starting so no events are missed
+    this.registerHandlers();
 
     await this.hub.start();
-    this.registerHandlers();
+
+    // Register this user's connectionId in the backend ConnectionStore
+    await this.hub.invoke('RegisterUser', userId);
+
+    // Re-register after every automatic reconnect (connectionId changes)
+    this.hub.onreconnected(async () => {
+      await this.hub.invoke('RegisterUser', userId);
+    });
   }
 
-  // ── Hub methods ────────────────────────────────────────────────────────────
+  // ── Hub invocations ────────────────────────────────────────────────────
 
-  notifyDoctor(
-    doctorConnectionId: string,
-    channelName:        string,
-    callerName:         string
-  ): Promise<void> {
-    return this.hub.invoke('NotifyDoctor', doctorConnectionId, channelName, callerName);
+  /** Doctor tells nurse "I joined the call" */
+  notifyDoctorJoined(nurseConnectionId: string, doctorName: string): Promise<void> {
+    return this.hub.invoke('NotifyDoctorJoined', nurseConnectionId, doctorName);
   }
 
+  /** Doctor declines the call */
   declineCall(nurseConnectionId: string): Promise<void> {
     return this.hub.invoke('DeclineCall', nurseConnectionId);
   }
 
-  // ── Cleanup ────────────────────────────────────────────────────────────────
+  // leaveChannel is Agora-only cleanup; no hub method needed
+  leaveChannel(_channelName: string): Promise<void> {
+    return Promise.resolve();
+  }
+
   async ngOnDestroy(): Promise<void> {
     await this.hub.stop();
   }
 
-  // ── Private ────────────────────────────────────────────────────────────────
+  // ── Private ────────────────────────────────────────────────────────────
   private registerHandlers(): void {
-    // Guard: don't double-register on reconnect
     this.hub.off('IncomingCall');
     this.hub.off('CallDeclined');
+    this.hub.off('DoctorJoined');
 
-    this.hub.on('IncomingCall', (data: {
-      channelName:       string;
-      callerName:        string;
-      nurseConnectionId: string;
-    }) => {
-      this.incomingCall$.next(data);
-    });
+    this.hub.on('IncomingCall', (data: IncomingCallPayload) =>
+      this.incomingCall$.next(data));
 
-    this.hub.on('CallDeclined', () => {
-      this.callDeclined$.next();
-    });
+    this.hub.on('CallDeclined', () =>
+      this.callDeclined$.next());
 
-    // Re-register handlers after an automatic reconnect
-    this.hub.onreconnected(() => {
-      this.hub.off('IncomingCall');
-      this.hub.off('CallDeclined');
-      this.registerHandlers();
-    });
+    this.hub.on('DoctorJoined', (data: { doctorName: string }) =>
+      this.doctorJoined$.next(data));
   }
 }

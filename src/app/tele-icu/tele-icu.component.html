@@ -1,48 +1,83 @@
-<!-- tele-icu.component.html -->
-<div class="tele-icu-wrapper">
+<!-- incoming-call.component.html  (DOCTOR side) -->
 
-  <!-- ── Header ─────────────────────────────────────────────── -->
-  <div class="icu-header">
-    <h2>🏥 Tele-ICU Console</h2>
-    <span class="nurse-badge">{{ nurseName }}</span>
+<!-- ══ RINGING ══════════════════════════════════════════════════════════════ -->
+<ng-container *ngIf="step === 'ringing' && payload">
+  <div class="incoming-overlay">
+    <div class="incoming-card rounded-4 p-4 text-center shadow">
+
+      <!-- Animated ring -->
+      <div class="calling-ring mb-3">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+        <div class="calling-icon-wrap">
+          <svg width="44" height="44" viewBox="0 0 64 64" fill="none">
+            <rect width="64" height="64" rx="32" fill="#5987BA"/>
+            <path d="M46.4 46L44.8 41.1C44.3 39.6 43.2 38.5 41.8 38L37.6 36.5
+                     C36.5 36.2 35.4 35.9 35.3 35C35.4 34.9 35.4 34.9 35.4 34.9
+                     C38.5 33.4 40.8 30.3 40.8 27.5C40.8 26.3 40.2 25.1 38.8 23.8
+                     C38.7 23.7 38.6 23.7 38.5 23.7H25C24.9 23.7 24.8 23.7 24.7 23.8
+                     C23.4 25.1 22.7 26.3 22.7 27.5C22.7 30.3 25.1 33.4 28.2 34.9
+                     C28.2 34.9 28.2 35 28.2 35.1C28.1 35.4 27.6 36.1 25.9 36.5
+                     C21.7 38 19.2 38.5 18.7 41.2L17.2 46.1
+                     C17.1 46.2 17.2 46.4 17.2 46.5C17.3 46.6 17.5 46.7 17.6 46.7
+                     H46C46.1 46.7 46.2 46.6 46.3 46.4C46.4 46.3 46.4 46.1 46.4 46Z"
+                  fill="white"/>
+          </svg>
+        </div>
+      </div>
+
+      <h5 class="fw-semibold mb-1">Incoming Tele-ICU Call</h5>
+      <p class="text-muted small mb-0">From</p>
+      <p class="fw-semibold mb-1">{{ payload.callerName }}</p>
+      <p class="text-muted small mb-4">Patient: {{ payload.patientSsn }}</p>
+
+      <div class="d-flex gap-3 justify-content-center">
+        <button class="btn btn-success px-4 rounded-3" (click)="accept()">
+          ✅ Accept
+        </button>
+        <button class="btn btn-danger px-4 rounded-3" (click)="decline()">
+          ❌ Decline
+        </button>
+      </div>
+
+    </div>
+  </div>
+</ng-container>
+
+
+<!-- ══ IN CALL ══════════════════════════════════════════════════════════════ -->
+<ng-container *ngIf="step === 'in-call'">
+
+  <div class="incall-header d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <span class="live-badge me-2">🔴 Live</span>
+      <span class="fw-semibold">{{ payload?.callerName }}</span>
+      <span class="text-muted small ms-2">{{ payload?.patientSsn }}</span>
+    </div>
   </div>
 
-  <!-- ── Declined banner ────────────────────────────────────── -->
-  <div class="banner banner--declined" *ngIf="callDeclined">
-    <button class="btn btn--sm" (click)="callDeclined = false">Dismiss</button>
-  </div>
-
-  <!-- ── Call controls ──────────────────────────────────────── -->
-  <div class="call-controls">
-
-    <!-- Not in call -->
-    <ng-container *ngIf="!isInCall">
-      <button
-        class="btn btn--danger"
-        [disabled]="isConnecting"
-        (click)="callDoctor()">
-        {{ isConnecting ? '⏳ Calling…' : '🚨 Call Doctor' }}
-      </button>
-    </ng-container>
-
-    <!-- In call -->
-    <ng-container *ngIf="isInCall">
-      <span class="status status--live">🔴 Live</span>
-      <button class="btn btn--end" (click)="endCall()">📵 End Call</button>
-    </ng-container>
-
-  </div>
-
-  <!-- ── Video tiles ─────────────────────────────────────────── -->
-  <div class="video-grid" *ngIf="isInCall">
+  <div class="video-grid mb-3">
     <div class="video-tile">
-      <p class="tile-label">You (Nurse)</p>
-      <div id="local-player"></div>
+      <p class="tile-label">You (Doctor)</p>
+      <div id="local-player-doctor" class="video-box"></div>
     </div>
     <div class="video-tile">
-      <p class="tile-label">Doctor</p>
-      <div id="remote-container"></div>
+      <p class="tile-label">Nurse</p>
+      <div id="remote-container-doctor" class="remote-container"></div>
     </div>
   </div>
 
-</div>
+  <div class="d-flex align-items-center justify-content-center gap-3">
+    <button class="ctrl-btn" (click)="toggleMic()" [class.ctrl-btn--off]="!micEnabled">
+      {{ micEnabled ? '🎙️' : '🔇' }}
+    </button>
+    <button class="ctrl-btn" (click)="toggleCam()" [class.ctrl-btn--off]="!camEnabled">
+      {{ camEnabled ? '📷' : '📷❌' }}
+    </button>
+    <button class="btn btn-danger rounded-3 px-4 py-2 fw-semibold" (click)="endCall()">
+      📵 End Call
+    </button>
+  </div>
+
+</ng-container>

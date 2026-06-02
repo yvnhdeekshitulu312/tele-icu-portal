@@ -89,8 +89,9 @@ export const config = {
    n8nurl: 'https://his.alhammadi.med.sa/n8n/webhook/voice-agent',
   //reportAgentUrl: 'https://his.alhammadi.med.sa/n8n/webhook/report-agent',
   reportAgentUrl: 'https://his.alhammadi.med.sa/n8n/webhook/report-redis-DB',
-   miniAgent: 'https://his.alhammadi.med.sa/n8n/webhook/mini-agent'
-  //n8nurl: 'http://10.134.134.10:5678/webhook/voice-agent'
+   miniAgent: 'https://his.alhammadi.med.sa/n8n/webhook/mini-agent',
+  //n8nurl: 'http://10.134.134.10:5678/webhook/voice-agent',
+  videoUrl: 'http://10.134.134.10/VideoConf'
 };
 
 

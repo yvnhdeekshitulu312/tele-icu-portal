@@ -1,87 +1,176 @@
-/* tele-icu.component.scss */
-.tele-icu-wrapper {
-  font-family: sans-serif;
-  max-width: 720px;
-  margin: 2rem auto;
-  padding: 1.5rem;
+// incoming-call.component.scss  (Doctor side)
+
+// ── Overlay — sits on top of the doctor's dashboard ───────────────────────
+.incoming-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  background: rgba(10, 20, 40, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: fade-in 0.2s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+// ── Card ───────────────────────────────────────────────────────────────────
+.incoming-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 360px;
+  border: 1.5px solid #d0dff0;
+  animation: slide-up 0.25s ease;
+
+  @media (max-width: 400px) {
+    margin: 0 16px;
+  }
+}
+
+@keyframes slide-up {
+  from { transform: translateY(24px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+// ── Animated ringing ring (reused from nurse side) ─────────────────────────
+.calling-ring {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(89, 135, 186, 0.35);
+  animation: pulse-ring 2s ease-out infinite;
+
+  &.ring-1 { width: 110px; height: 110px; animation-delay: 0s; }
+  &.ring-2 { width: 84px;  height: 84px;  animation-delay: 0.4s; }
+  &.ring-3 { width: 62px;  height: 62px;  animation-delay: 0.8s; }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(0.85); opacity: 0.8; }
+  70%  { transform: scale(1.1);  opacity: 0.15; }
+  100% { transform: scale(1.1);  opacity: 0; }
+}
+
+.calling-icon-wrap {
+  position: relative;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ── In-call header ─────────────────────────────────────────────────────────
+.incall-header {
+  padding: 10px 14px;
+  background: #f0f5fb;
   border-radius: 12px;
-  background: #f8fafc;
-  box-shadow: 0 4px 20px rgba(0,0,0,.08);
+  border: 1px solid #d0dff0;
 }
 
-.icu-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.25rem;
-}
-.nurse-badge {
-  background: #e0f2fe;
-  color: #0369a1;
-  padding: .3rem .75rem;
-  border-radius: 999px;
-  font-size: .85rem;
-  font-weight: 600;
-}
-
-/* banners */
-.banner {
-  padding: .75rem 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-}
-.banner--declined { background: #fee2e2; color: #b91c1c; }
-
-/* buttons */
-.btn {
-  padding: .6rem 1.4rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: opacity .15s;
-  &:disabled { opacity: .5; cursor: not-allowed; }
-}
-.btn--danger { background: #ef4444; color: #fff; }
-.btn--end    { background: #374151; color: #fff; }
-.btn--sm     { padding: .3rem .8rem; font-size: .8rem; background: #fff; border: 1px solid currentColor; }
-
-/* status pill */
-.status--live {
-  background: #dcfce7;
-  color: #15803d;
-  padding: .35rem .85rem;
-  border-radius: 999px;
+.live-badge {
+  font-size: 0.75rem;
   font-weight: 700;
-  font-size: .9rem;
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
 }
 
-.call-controls {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-/* video */
+// ── Video grid ─────────────────────────────────────────────────────────────
 .video-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 12px;
+
+  @media (max-width: 540px) {
+    grid-template-columns: 1fr;
+  }
 }
+
 .video-tile {
-  background: #1e293b;
-  border-radius: 10px;
+  background: #0f1923;
+  border-radius: 12px;
   overflow: hidden;
-  #local-player, #remote-container { width: 100%; height: 200px; }
+  position: relative;
+  min-height: 200px;
+
+  .tile-label {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    z-index: 2;
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.45);
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
 }
-.tile-label {
-  color: #94a3b8;
-  font-size: .8rem;
-  text-align: center;
-  padding: .4rem 0 0;
-  margin: 0;
+
+.video-box {
+  width: 100%;
+  height: 200px;
+  background: #1a2535;
+
+  video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+  }
+}
+
+.remote-container {
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+
+  .video-tile {
+    flex: 1 1 calc(50% - 4px);
+    min-width: 120px;
+  }
+}
+
+// ── Control buttons ────────────────────────────────────────────────────────
+.ctrl-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid #d0dff0;
+  background: #f0f5fb;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+
+  &:hover { background: #dceaf7; border-color: #5987BA; }
+
+  &--off {
+    background: #fee2e2;
+    border-color: #fca5a5;
+  }
 }

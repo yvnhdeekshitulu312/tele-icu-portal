@@ -1,108 +1,126 @@
-// tele-icu.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { firstValueFrom, Subscription } from 'rxjs';
-import { SignalRService } from './Services/signal-r.service';
+// incoming-call.component.ts  (DOCTOR side — receives and joins the call)
+//
+// Place this component in the doctor's dashboard shell so it is always
+// mounted and listening while the doctor is logged in.
+// Example:  <app-incoming-call></app-incoming-call>
+//
+import {
+  Component, OnInit, OnDestroy,
+  ChangeDetectionStrategy, ChangeDetectorRef
+} from '@angular/core';
+import { Subscription } from 'rxjs';
 import { AgoraService } from './Services/agora.service';
+import { IncomingCallPayload, SignalRService } from './Services/signal-r.service';
 
 @Component({
-  selector: 'app-tele-icu',
-  templateUrl: './tele-icu.component.html',
-  styleUrls: ['./tele-icu.component.scss']
+  selector:        'app-tele-icu',
+  templateUrl:     './tele-icu.component.html',
+  styleUrls:       ['./tele-icu.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TeleIcuComponent implements OnInit, OnDestroy {
 
-  // ── Identities ────────────────────────────────────────────────────────────
-  nurseId   = 'nurse-001';
-  nurseName = 'Nurse Priya';
-  doctorId  = 'doctor-001';
+  step: 'idle' | 'ringing' | 'in-call' = 'idle';
+  payload: IncomingCallPayload | null   = null;
 
-  // ── Call state ────────────────────────────────────────────────────────────
-  isInCall     = false;
-  isConnecting = false;
-  callDeclined = false;
-  channelName  = '';
-  localUid     = 0;
+  micEnabled = true;
+  camEnabled = true;
 
-  // ── Subscriptions ─────────────────────────────────────────────────────────
-  private subs = new Subscription();
+  // Doctor's display name — read from the same sessionStorage key your app uses
+  private doctorName = 'Doctor';
+  private doctorId   = 0;
+  private subs       = new Subscription();
 
   constructor(
     public  agora:   AgoraService,
     private signalR: SignalRService,
-    private http:    HttpClient
-  ) {}
+    private cdr:     ChangeDetectorRef
+  ) {
+    const details    = JSON.parse(sessionStorage.getItem('doctorDetails') || '[]');
+    this.doctorName  = details[0]?.EmployeeName ?? 'Doctor';
+    // DoctorID must be the same integer the nurse UI puts in doctorIds[]
+    this.doctorId    = details[0]?.EmpId ?? 0;
+  }
 
-  // ── Lifecycle ─────────────────────────────────────────────────────────────
-  async ngOnInit() {
-    await this.signalR.connect();
+  ngOnInit(): void {
+    // Connect to SignalR hub and register this doctor's userId.
+    // The backend ConnectionStore maps doctorId → connectionId so the
+    // nurse's POST /api/call/start can find and ring this doctor.
+    this.signalR.connect(this.doctorId);
 
-    // Register nurse's SignalR connectionId with the backend
-    await firstValueFrom(
-      this.http.post('https://localhost:7217/api/users/register-connection', {
-        userId:       this.nurseId,
-        connectionId: this.signalR.connectionId
-      })
-    );
-
-    // Doctor declined → tear down
+    // Listen for incoming calls from the nurse
     this.subs.add(
-      this.signalR.callDeclined$.subscribe(() => this.onCallDeclined())
+      this.signalR.incomingCall$.subscribe(payload => {
+        this.payload = payload;
+        this.step    = 'ringing';
+        this.cdr.markForCheck();
+      })
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subs.unsubscribe();
     this.agora.leave();
   }
 
-  // ── Actions ───────────────────────────────────────────────────────────────
+  // ── Doctor accepts ───────────────────────────────────────────────────────
+  async accept(): Promise<void> {
+    if (!this.payload) return;
 
-  async callDoctor() {
-    if (this.isConnecting || this.isInCall) return;
-
-    this.isConnecting = true;
-    this.callDeclined = false;
+    const uid = Math.floor(Math.random() * 100_000);
 
     try {
-      // Backend creates channel and notifies doctor via SignalR.
-      // We send nurseConnectionId so the doctor can fire DeclineCall back to US.
-      const res = await firstValueFrom(
-        this.http.post<{ channelName: string }>(
-          'https://localhost:7217/api/call/start',
-          {
-            doctorUserId:     this.doctorId,
-            nurseName:        this.nurseName,
-            nurseConnectionId: this.signalR.connectionId   // ← decline-fix payload
-          }
-        )
+      // Join the same Agora channel the nurse opened
+      await this.agora.join(
+        this.payload.channelName,
+        uid,
+        'local-player-doctor',
+        'remote-container-doctor',
+        (_uid: number) => `Nurse ${_uid}`,
+        'doctor' 
       );
 
-      this.channelName = res.channelName;
-      this.localUid    = Math.floor(Math.random() * 100_000);
+      // Tell the nurse this doctor has joined — nurse UI shows the chip
+      await this.signalR.notifyDoctorJoined(
+        this.payload.nurseConnectionId,
+        this.doctorName
+      );
 
-      await this.agora.join(this.channelName, this.localUid);
-      this.isInCall = true;
+      this.step = 'in-call';
+
     } catch (err) {
-      console.error('Failed to start call:', err);
-    } finally {
-      this.isConnecting = false;
+      console.error('Doctor failed to join call:', err);
+      this.step = 'idle';
     }
+
+    this.cdr.markForCheck();
   }
 
-  async endCall() {
+  // ── Doctor declines ──────────────────────────────────────────────────────
+  async decline(): Promise<void> {
+    if (this.payload) {
+      await this.signalR.declineCall(this.payload.nurseConnectionId);
+    }
+    this.payload = null;
+    this.step    = 'idle';
+    this.cdr.markForCheck();
+  }
+
+  // ── End call ─────────────────────────────────────────────────────────────
+  async endCall(): Promise<void> {
     await this.agora.leave();
-    this.isInCall    = false;
-    this.channelName = '';
+    this.payload = null;
+    this.step    = 'idle';
+    this.cdr.markForCheck();
   }
 
-  // ── Internal ──────────────────────────────────────────────────────────────
+  async toggleMic(): Promise<void> {
+    this.micEnabled = await this.agora.toggleMic();
+    this.cdr.markForCheck();
+  }
 
-  private onCallDeclined() {
-    this.agora.leave();
-    this.isInCall     = false;
-    this.isConnecting = false;
-    this.callDeclined = true;       // drives UI banner
-    this.channelName  = '';
+  async toggleCam(): Promise<void> {
+    this.camEnabled = await this.agora.toggleCamera();
+    this.cdr.markForCheck();
   }
 }
