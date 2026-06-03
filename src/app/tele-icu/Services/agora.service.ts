@@ -7,7 +7,7 @@ import AgoraRTC, {
 } from 'agora-rtc-sdk-ng';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { config } from 'src/environments/environment';
+import { config, environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AgoraService {
@@ -23,26 +23,31 @@ export class AgoraService {
   private readonly appId = '8ba10b49e0264094a4d2c968abdc1e35';
   private readonly BASE  = `${config.videoUrl}`;
 
-  private activeClient: IAgoraRTCClient | null = null;
+  private activeClient:          IAgoraRTCClient | null = null;
+  private activeLocalPlayerId:   string | null = null;   // ✅ FIX 1: remember it for re-play
+  private activeRemoteContainer: string | null = null;   // ✅ FIX 1: remember it for re-play
+  private activeGetLabel:        ((uid: number) => string) | null = null;
 
   constructor(private http: HttpClient) {}
 
+  // ── Token ──────────────────────────────────────────────────────────────────
   private getToken(channelName: string, uid: number) {
     return this.http.get<{ token: string }>(
       `${this.BASE}/api/agora/token?channelName=${channelName}&uid=${uid}`
     );
   }
 
-  // ── Join ──────────────────────────────────────────────────────────────────
+  // ── Join ───────────────────────────────────────────────────────────────────
   async join(
-    channelName:          string,
-    uid:                  number,
+    channelName: string,
+    uid: number,
     localPlayerElementId: string,
-    remoteContainerId:    string,
-    getRemoteLabel:       (uid: number) => string = (u) => `User ${u}`,
-    role:                 'nurse' | 'doctor' = 'nurse'
+    remoteContainerId: string,
+    getRemoteLabel: (uid: number) => string = (u) => `User ${u}`,
+    role: 'nurse' | 'doctor' = 'nurse'
   ): Promise<void> {
 
+    // Pick / create the right client for this role
     let client: IAgoraRTCClient;
     if (role === 'nurse') {
       if (!this._nurseClient) {
@@ -56,24 +61,31 @@ export class AgoraService {
       client = this._doctorClient;
     }
 
-    if (client.connectionState === 'CONNECTED' || client.connectionState === 'CONNECTING') {
+    if (
+      client.connectionState === 'CONNECTED' ||
+      client.connectionState === 'CONNECTING'
+    ) {
       await this._leaveClient(client);
     }
 
     this.activeClient = client;
+    this.activeLocalPlayerId = localPlayerElementId;   // ✅ FIX 1
+    this.activeRemoteContainer = remoteContainerId;       // ✅ FIX 1
+    this.activeGetLabel = getRemoteLabel;          // ✅ FIX 1
 
-    const { token } = await firstValueFrom(this.getToken(channelName, uid));
-    await client.join(this.appId, channelName, token, uid);
+    const { token: agoraToken  } = await firstValueFrom(this.getToken(channelName, uid));
+    await client.join(this.appId, channelName, agoraToken, uid);
 
+    // Local tracks
     this.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
     this.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
 
-    // ✅ KEY FIX: Poll until the DOM element exists, then play
-    this._playWhenReady(localPlayerElementId);
+    // ✅ FIX 2: Retry playing local video until the DOM element exists
+    this._playLocalVideoWhenReady(localPlayerElementId);
 
     await client.publish([this.localAudioTrack, this.localVideoTrack]);
 
-    // Remote users already in channel when we join
+    // ✅ FIX 3: Subscribe to remote users already in the channel
     for (const user of client.remoteUsers) {
       if (user.hasVideo) {
         await this._subscribeAndRender(client, user, 'video', remoteContainerId, getRemoteLabel);
@@ -83,51 +95,104 @@ export class AgoraService {
       }
     }
 
-    // New remote user publishes a track
+    // ✅ STEP 1: Attach ALL listeners FIRST, before anything else
     client.on('user-published', async (user, mediaType) => {
-      await this._subscribeAndRender(client, user, mediaType, remoteContainerId, getRemoteLabel);
+      await client.subscribe(user, mediaType);
+
+      if (mediaType === 'video') {
+        const container = document.getElementById(remoteContainerId);
+        if (!container) {
+          console.warn('Remote container not found:', remoteContainerId);
+          return;
+        }
+        let wrapper = document.getElementById(`remote-${user.uid}`);
+        if (!wrapper) {
+          wrapper = document.createElement('div');
+          wrapper.id = `remote-${user.uid}`;
+          wrapper.className = 'video-tile';
+          wrapper.style.cssText = 'width:100%;height:100%;position:relative;';
+          wrapper.innerHTML = `
+          <p class="tile-label">${getRemoteLabel(user.uid as number)}</p>
+          <div id="remote-video-${user.uid}" style="width:100%;height:100%;"></div>
+        `;
+          container.appendChild(wrapper);
+        }
+        setTimeout(() => {
+          user.videoTrack?.play(`remote-video-${user.uid}`);
+        }, 100);
+      }
+
+      if (mediaType === 'audio') {
+        user.audioTrack?.play();
+      }
     });
 
-    // Remote user stops a track
     client.on('user-unpublished', (user, mediaType) => {
       if (mediaType === 'video') {
-        const el = document.getElementById(`remote-${user.uid}`);
-        el?.remove();
+        document.getElementById(`remote-${user.uid}`)?.remove();
         this.remoteUsers.delete(user.uid as number);
       }
     });
 
-    // Remote user fully leaves
     client.on('user-left', (user) => {
-      const el = document.getElementById(`remote-${user.uid}`);
-      el?.remove();
+      document.getElementById(`remote-${user.uid}`)?.remove();
       this.remoteUsers.delete(user.uid as number);
     });
+
+    // ✅ STEP 2: Get token and join
+    const { token } = await firstValueFrom(this.getToken(channelName, uid));
+    await client.join(this.appId, channelName, token, uid);
+
+    // ✅ STEP 3: Create local tracks
+    this.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+    this.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
+    this._playLocalVideoWhenReady(localPlayerElementId);
+
+    // ✅ STEP 4: Handle users already in channel (joined before us)
+    for (const user of client.remoteUsers) {
+      if (user.hasVideo) {
+        await this._subscribeAndRender(client, user, 'video', remoteContainerId, getRemoteLabel);
+      }
+      if (user.hasAudio) {
+        await this._subscribeAndRender(client, user, 'audio', remoteContainerId, getRemoteLabel);
+      }
+    }
+
+    // ✅ STEP 5: Publish last
+    await client.publish([this.localAudioTrack, this.localVideoTrack]);
   }
 
-  // ✅ Polls every 100ms (up to 3s) until the element exists, then plays
-  private _playWhenReady(elementId: string, attempts = 0): void {
+  // ✅ FIX 2: Polls until the local player div exists, then plays
+  private _playLocalVideoWhenReady(elementId: string, attempts = 0): void {
     const el = document.getElementById(elementId);
     if (el) {
       this.localVideoTrack?.play(elementId);
       return;
     }
-    if (attempts < 30) {
-      setTimeout(() => this._playWhenReady(elementId, attempts + 1), 100);
+    if (attempts < 20) { // give up after 2 seconds
+      setTimeout(() => this._playLocalVideoWhenReady(elementId, attempts + 1), 100);
     } else {
-      console.warn(`[Agora] Local player element never appeared: #${elementId}`);
+      console.warn('Local player element never appeared:', elementId);
     }
   }
 
-  // ── Leave ─────────────────────────────────────────────────────────────────
+  // ── Leave ──────────────────────────────────────────────────────────────────
   async leave(): Promise<void> {
     if (this.activeClient) {
       await this._leaveClient(this.activeClient);
       this.activeClient = null;
     }
+
+    this.activeLocalPlayerId   = null;
+    this.activeRemoteContainer = null;
+    this.activeGetLabel        = null;
+
+    this.localVideoTrack?.stop();
+    this.localVideoTrack?.close();
+    this.localVideoTrack = null;
   }
 
-  // ── Mic / Camera ──────────────────────────────────────────────────────────
+  // ── Mute helpers ───────────────────────────────────────────────────────────
   async toggleMic(): Promise<boolean> {
     if (!this.localAudioTrack) return false;
     const enabled = !this.localAudioTrack.enabled;
@@ -142,9 +207,9 @@ export class AgoraService {
     return enabled;
   }
 
-  // ── Private ───────────────────────────────────────────────────────────────
+  // ── Private helpers ────────────────────────────────────────────────────────
   private async _leaveClient(client: IAgoraRTCClient): Promise<void> {
-    // ✅ stop() before close() — releases camera light properly
+    // ✅ FIX 9: Stop tracks before closing (stop = pause, close = release camera)
     this.localAudioTrack?.stop();
     this.localAudioTrack?.close();
     this.localVideoTrack?.stop();
@@ -153,10 +218,14 @@ export class AgoraService {
     this.localVideoTrack = null;
     this.remoteUsers.clear();
 
-    // ✅ Remove ALL dynamically created remote tiles
+    // Clean up all remote video tiles
     document.querySelectorAll('[id^="remote-"]').forEach(el => el.remove());
 
-    try { await client.leave(); } catch { /* already gone */ }
+    try {
+      await client.leave();
+    } catch {
+      // Already disconnected — ignore
+    }
   }
 
   private async _subscribeAndRender(
@@ -169,16 +238,11 @@ export class AgoraService {
     await client.subscribe(user, mediaType);
 
     if (mediaType === 'video') {
-      const uid   = user.uid as number;
-      const label = getLabel(uid);
+      const uid     = user.uid as number;
+      const label   = getLabel(uid);
       this.remoteUsers.set(uid, label);
 
       const container = document.getElementById(remoteContainerId);
-      if (!container) {
-        console.warn(`[Agora] Remote container not found: #${remoteContainerId}`);
-        return;
-      }
-
       let wrapper = document.getElementById(`remote-${uid}`);
       if (!wrapper) {
         wrapper           = document.createElement('div');
@@ -189,11 +253,12 @@ export class AgoraService {
           <p class="tile-label">${label}</p>
           <div id="remote-video-${uid}" style="width:100%;height:100%;"></div>
         `;
-        container.appendChild(wrapper);
+        container?.appendChild(wrapper);
       }
 
-      // ✅ Small delay so the appended child is painted before play()
-      setTimeout(() => user.videoTrack?.play(`remote-video-${uid}`), 100);
+      setTimeout(() => {
+        user.videoTrack?.play(`remote-video-${uid}`);
+      }, 100);
     }
 
     if (mediaType === 'audio') {
