@@ -72,7 +72,7 @@ export class TeleIcuComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
 
     // ✅ Step 2: Wait one animation frame for Angular + browser to paint
-    await new Promise(resolve => setTimeout(resolve, 0));
+    // await new Promise(resolve => setTimeout(resolve, 0));
 
     const uid = Math.floor(Math.random() * 100_000);
 
