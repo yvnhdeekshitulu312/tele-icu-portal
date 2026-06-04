@@ -16,48 +16,45 @@ export const environment = {
   ]
 };
 
-// export const config = { 
+// export const config = {
 //   apiurl: 'http://172.18.17.219/DoctorPortalAPIUATTest/API/',
 //   rcmapiurl: 'http://172.18.17.219/rcmapidev/',
 //   nphiesapiurl: 'http://172.18.17.219/HIE/nphies/tempEligibilityCheck',
 //   hijapiurl: 'http://172.18.17.219/DEVAPI/API/',
 //   rcmuiurl: 'http://172.18.17.219/RCMAPPUIDEV/',
-//   nphiesApprovalapiurl: 'https://his.alhammadi.med.sa/SW-Approvals/hie/nphies/' ,
+//   nphiesApprovalapiurl: 'https://his.alhammadi.med.sa/SW-Approvals/hie/nphies/',
 //   reportsapi: 'https://his.alhammadi.med.sa/ClinicalsAPIKPI/API',
 //   chatgptapiurl: 'http://172.18.17.219/DoctorPortalAPIUATTest/API/translate',
 //   n8nurl: 'http://10.134.134.10:5678/webhook/voice-agent',
 //   reportAgentUrl: 'http://10.134.134.10:5678/webhook/report-redis-DB',
-//   miniAgent: 'http://10.134.134.10:5678/webhook/mini-agent'
-// };
-
-// export const config = { 
-//   apiurl: 'http://172.18.17.219/DoctorPortalAPILIVE/API/',
-//   rcmapiurl: 'http://172.18.17.219/rcmapidev/',
-//   nphiesapiurl: 'http://172.18.17.219/HIE/nphies/tempEligibilityCheck',
-//   hijapiurl: 'http://172.18.17.219/DEVAPI/API/',
-//   rcmuiurl: 'http://172.18.17.219/RCMAPPUIDEV/',
-//   nphiesApprovalapiurl: 'https://his.alhammadi.med.sa/SW-Approvals/hie/nphies/' ,
-//   reportsapi: 'https://his.alhammadi.med.sa/ClinicalsAPIKPI/API',
-//   chatgptapiurl: 'http://172.18.17.219:8000/translate'
+//   miniAgent: 'http://10.134.134.10:5678/webhook/mini-agent',
+//   webhookUrl: 'https://his.alhammadi.med.sa/n8n/webhook/',
+// typeBasedAgent: 'http://his.alhammadi.med.sa/webhook/type-agent',
+// labreporturl: "https://his.alhammadi.med.sa/LabReport/api/pdf/generatereport",
 // };
 
 //cloud
 
 //For Cloud Build
-// export const config = {
-//   apiurl: 'https://his.alhammadi.med.sa/ClinicalsAPI/API/',
-//   rcmapiurl: 'https://his.alhammadi.med.sa/RCMAPI/',
-//   nphiesapiurl: 'http://his.alhammadi.med.sa/SW-Approvals/hie/nphies/EligibilityCheck',
-//   hijapiurl: 'http://172.18.17.219/DEVAPI/API/',
-//   rcmuiurl: 'https://his.alhammadi.med.sa/rcm/',
-//   nphiesApprovalapiurl: 'https://his.alhammadi.med.sa/SW-Approvals/hie/nphies/' ,
-//   reportsapi: 'https://his.alhammadi.med.sa/ClinicalsAPIKPI/API/',
-//   chatgptapiurl: 'https://his.alhammadi.med.sa/ClinicalsAPI/API/translate',
-//    n8nurl: 'https://his.alhammadi.med.sa/n8n/webhook/voice-agent',
-//   reportAgentUrl: 'http://his.alhammadi.med.sa/webhook/report-redis-DB',
-//    miniAgent: 'http://his.alhammadi.med.sa/webhook/mini-agent'
-// };
-  
+export const config = {
+  apiurl: 'https://his.alhammadi.med.sa/ClinicalsAPI/API/',
+  rcmapiurl: 'https://his.alhammadi.med.sa/RCMAPI/',
+  nphiesapiurl: 'http://his.alhammadi.med.sa/SW-Approvals/hie/nphies/EligibilityCheck',
+  hijapiurl: 'http://172.18.17.219/DEVAPI/API/',
+  rcmuiurl: 'https://his.alhammadi.med.sa/rcm/',
+  nphiesApprovalapiurl: 'https://his.alhammadi.med.sa/SW-Approvals/hie/nphies/',
+  reportsapi: 'https://his.alhammadi.med.sa/ClinicalsAPIKPI/API/',
+  chatgptapiurl: 'https://his.alhammadi.med.sa/ClinicalsAPI/API/translate',
+  n8nurl: 'https://his.alhammadi.med.sa/n8n/webhook/voice-agent',
+  reportAgentUrl: 'http://his.alhammadi.med.sa/webhook/report-redis-DB',
+  miniAgent: 'http://his.alhammadi.med.sa/webhook/mini-agent',
+  nphiesCSapiurl: 'https://his.alhammadi.med.sa/Approvals',
+  webhookUrl: 'https://his.alhammadi.med.sa/n8n/webhook/',
+typeBasedAgent: 'http://his.alhammadi.med.sa/webhook/type-agent',
+labreporturl: "https://his.alhammadi.med.sa/LabReport/api/pdf/generatereport",
+videoUrl: 'http://10.134.134.10/VideoConf'
+};
+
 
 // //For Cloud Build TESTING
 // export const config = {
@@ -66,55 +63,38 @@ export const environment = {
 //   nphiesapiurl: 'http://10.132.23.200/hie/nphies/EligibilityCheck',
 //   hijapiurl: 'http://172.18.17.219/DEVAPI/API/',
 //   rcmuiurl: 'http://his.alhammadi.med.sa/Rcm/',
-//   nphiesApprovalapiurl: 'https://his.alhammadi.med.sa/SW-Approvals/hie/nphies/' ,
-//   reportsapi: 'https://his.alhammadi.med.sa/ClinicalsAPIKPIT/API/', 
-//    chatgptapiurl: 'https://his.alhammadi.med.sa/ClinicalsAPiT/API/translate',
-//     n8nurl: 'https://his.alhammadi.med.sa/n8n/webhook/voice-agent',
+//   nphiesApprovalapiurl: 'https://his.alhammadi.med.sa/SW-Approvals/hie/nphies/',
+//   reportsapi: 'https://his.alhammadi.med.sa/ClinicalsAPIKPIT/API/',
+//   chatgptapiurl: 'https://his.alhammadi.med.sa/ClinicalsAPiT/API/translate',
+//   n8nurl: 'https://his.alhammadi.med.sa/n8n/webhook/voice-agent',
 //   reportAgentUrl: 'https://his.alhammadi.med.sa/n8n/webhook/report-redis-DB',
-//    miniAgent: 'https://his.alhammadi.med.sa/n8n/webhook/mini-agent'
+//   miniAgent: 'https://his.alhammadi.med.sa/n8n/webhook/mini-agent',
+//   nphiesCSapiurl: 'https://his.alhammadi.med.sa/Approvals',
+//   webhookUrl: 'https://his.alhammadi.med.sa/n8n/webhook/',
+// typeBasedAgent: 'http://his.alhammadi.med.sa/webhook/type-agent',
+// labreporturl: "https://his.alhammadi.med.sa/LabReport/api/pdf/generatereport",
 // };
 
 
 
 //For Cloud Build Dev
-export const config = {
-  apiurl: 'https://his.alhammadi.med.sa/ClinicalsAPIDev/API/',
-  rcmapiurl: 'https://his.alhammadi.med.sa/rcmapit/',
-  nphiesapiurl: 'http://10.132.23.200/hie/nphies/EligibilityCheck',
-  hijapiurl: 'http://172.18.17.219/DEVAPI/API/',
-  rcmuiurl: 'http://his.alhammadi.med.sa/Rcm/',
-  nphiesApprovalapiurl: 'https://his.alhammadi.med.sa/SW-Approvals/hie/nphies/',
-  reportsapi: 'https://his.alhammadi.med.sa/ClinicalsAPIKPIT/API/',
-  chatgptapiurl: 'https://his.alhammadi.med.sa/ClinicalsAPIDev/API/translate',
-   n8nurl: 'https://his.alhammadi.med.sa/n8n/webhook/voice-agent',
-  //reportAgentUrl: 'https://his.alhammadi.med.sa/n8n/webhook/report-agent',
-  reportAgentUrl: 'https://his.alhammadi.med.sa/n8n/webhook/report-redis-DB',
-   miniAgent: 'https://his.alhammadi.med.sa/n8n/webhook/mini-agent',
-  //n8nurl: 'http://10.134.134.10:5678/webhook/voice-agent',
-  videoUrl: 'http://10.134.134.10/VideoConf'
-};
-
-
-
-// //For Cloud Build Dev build
 // export const config = {
-//   apiurl: 'http://his.alhammadi.med.sa:54380/ClinicalsAPIDev/API/',
-//   rcmapiurl: 'http://his.alhammadi.med.sa:54380/RCMAPIDev/',
+//   apiurl: 'https://his.alhammadi.med.sa/ClinicalsAPIDev/API/',
+//   rcmapiurl: 'https://his.alhammadi.med.sa/rcmapit/',
 //   nphiesapiurl: 'http://10.132.23.200/hie/nphies/EligibilityCheck',
 //   hijapiurl: 'http://172.18.17.219/DEVAPI/API/',
 //   rcmuiurl: 'http://his.alhammadi.med.sa/Rcm/',
-//   nphiesApprovalapiurl: 'https://his.alhammadi.med.sa/SW-Approvals/hie/nphies/' 
-// };
-
-
-
-// export const config = { 
-//   apiurl: 'http://172.18.17.219/DoctorPortalAPIUAT/API/',
-//   rcmapiurl: 'http://172.18.17.219/rcmapi/',
-//   nphiesapiurl: 'http://172.18.17.219/HIE/nphies/tempEligibilityCheck',
-//   hijapiurl: 'http://172.18.17.219/DEVAPI/API/',
-//   rcmuiurl: 'http://172.18.17.219/RCMAPPUIDEV/',
-//   nphiesApprovalapiurl: 'https://his.alhammadi.med.sa/SW-Approvals/hie/nphies/' 
+//   nphiesApprovalapiurl: 'https://his.alhammadi.med.sa/SW-Approvals/hie/nphies/',
+//   reportsapi: 'https://his.alhammadi.med.sa/ClinicalsAPIKPIT/API/',
+//   chatgptapiurl: 'https://his.alhammadi.med.sa/ClinicalsAPIDev/API/translate',
+//   n8nurl: 'https://his.alhammadi.med.sa/n8n/webhook/voice-agent',
+//   reportAgentUrl: 'https://his.alhammadi.med.sa/n8n/webhook/report-redis-DB',
+//   miniAgent: 'https://his.alhammadi.med.sa/n8n/webhook/mini-agent',
+//   nphiesCSapiurl: 'https://his.alhammadi.med.sa/Approvals',
+//    //typeBasedAgent: 'http://10.134.134.10:5678/webhook/type-agent',
+//   webhookUrl: 'https://his.alhammadi.med.sa/n8n/webhook/',
+//   typeBasedAgent: 'http://his.alhammadi.med.sa/webhook/type-agent',
+//  labreporturl: "https://his.alhammadi.med.sa/LabReport/api/pdf/generatereport",
 // };
 
 /*
