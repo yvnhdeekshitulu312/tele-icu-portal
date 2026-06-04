@@ -1,6 +1,4 @@
-// incoming-call.component.scss  (Doctor side)
-
-// ── Overlay — sits on top of the doctor's dashboard ───────────────────────
+// ── Overlay ────────────────────────────────────────────────────────────────
 .incoming-overlay {
   position: fixed;
   inset: 0;
@@ -37,7 +35,7 @@
   to   { transform: translateY(0);    opacity: 1; }
 }
 
-// ── Animated ringing ring (reused from nurse side) ─────────────────────────
+// ── Ringing animation ──────────────────────────────────────────────────────
 .calling-ring {
   position: relative;
   width: 110px;
@@ -100,18 +98,22 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+  // ✅ FIX: explicit height so children can use height:100%
+  height: 360px;
 
   @media (max-width: 540px) {
     grid-template-columns: 1fr;
+    height: auto;
   }
 }
 
 .video-tile {
   background: #0f1923;
   border-radius: 12px;
-  overflow: hidden;
+  // ✅ FIX: removed overflow:hidden — clips Agora's injected video elements
+  // ✅ FIX: height:100% to fill the grid row
   position: relative;
-  min-height: 500px;
+  height: 100%;
 
   .tile-label {
     position: absolute;
@@ -128,28 +130,79 @@
   }
 }
 
+// ── Local video box ────────────────────────────────────────────────────────
 .video-box {
   width: 100%;
-  height: 200px;
+  height: 100%;
   background: #1a2535;
+  position: relative;
+
+  // ✅ FIX: Agora injects a <div> wrapper before the <video>.
+  // Every level in that chain needs width/height: 100%
+  > div {
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+  }
 
   video {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 }
 
+// ── Remote container (nurse video, seen by doctor) ─────────────────────────
 .remote-container {
   width: 100%;
-  min-height: 200px;
-  display: flex;
-  flex-wrap: wrap;
+  // ✅ FIX: must be 100% to fill the .video-tile parent
+  height: 100%;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;  // doctor only ever sees 1 nurse
   gap: 4px;
 
-  .video-tile {
-    flex: 1 1 calc(50% - 4px);
-    min-width: 120px;
+  // Each remote tile injected by AgoraService: #remote-doctor-{uid}
+  > div {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 160px;
+    background: #0f1923;
+    border-radius: 8px;
+    overflow: hidden;
+
+    // Inner video-div: #remote-video-doctor-{uid}
+    > div {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      top: 0;
+      left: 0;
+
+      // Agora's own injected wrapper div
+      > div {
+        width: 100% !important;
+        height: 100% !important;
+        position: absolute !important;
+        top: 0;
+        left: 0;
+      }
+    }
+
+    video {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
   }
 }
 
