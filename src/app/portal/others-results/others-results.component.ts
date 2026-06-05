@@ -297,11 +297,11 @@ export class OthersResultsComponent implements OnInit {
             }
             if (element.IsPanic == "True") {
               element.RowColor = "background-color:red;padding:0.36rem;";
-              element.RowColorW = "color:white";
+              element.RowColorW = "color:white !important";
             }
             else if (element.IsAbnormal == "True") {
               element.RowColor = "background-color:orange;padding:0.36rem;"
-              element.RowColorW = "color:white";
+              element.RowColorW = "color:white !important";
             }
             element.SampleStatus = parseInt(element.Status);
           });
