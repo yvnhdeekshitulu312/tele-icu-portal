@@ -1,4 +1,3 @@
-// signalr.service.ts
 import { Injectable, OnDestroy } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { Subject } from 'rxjs';

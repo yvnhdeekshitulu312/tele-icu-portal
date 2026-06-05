@@ -1,4 +1,3 @@
-// agora.service.ts
 import { Injectable } from '@angular/core';
 import AgoraRTC, {
   IAgoraRTCClient,
@@ -68,7 +67,6 @@ export class AgoraService {
     this.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
     this.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
 
-    // ✅ KEY FIX: Poll until the DOM element exists, then play
     this._playWhenReady(localPlayerElementId);
 
     await client.publish([this.localAudioTrack, this.localVideoTrack]);

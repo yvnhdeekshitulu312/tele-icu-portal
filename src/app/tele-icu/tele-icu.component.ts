@@ -1,9 +1,3 @@
-// incoming-call.component.ts  (DOCTOR side — receives and joins the call)
-//
-// Place this component in the doctor's dashboard shell so it is always
-// mounted and listening while the doctor is logged in.
-// Example:  <app-incoming-call></app-incoming-call>
-//
 import {
   Component, OnInit, OnDestroy,
   ChangeDetectionStrategy, ChangeDetectorRef
@@ -26,7 +20,6 @@ export class TeleIcuComponent implements OnInit, OnDestroy {
   micEnabled = true;
   camEnabled = true;
 
-  // Doctor's display name — read from the same sessionStorage key your app uses
   private doctorName = 'Doctor';
   private doctorId   = 0;
   private subs       = new Subscription();
@@ -38,7 +31,6 @@ export class TeleIcuComponent implements OnInit, OnDestroy {
   ) {
     const details    = JSON.parse(sessionStorage.getItem('doctorDetails') || '[]');
     this.doctorName  = details[0]?.EmployeeName ?? 'Doctor';
-    // DoctorID must be the same integer the nurse UI puts in doctorIds[]
     this.doctorId    = details[0]?.EmpId ?? 0;
   }
 
@@ -80,7 +72,7 @@ export class TeleIcuComponent implements OnInit, OnDestroy {
       await this.agora.join(
         this.payload.channelName,
         uid,
-        'local-player-doctor',        // ✅ div now exists in the DOM
+        'local-player-doctor',  
         'remote-container-doctor',
         (_uid: number) => `Nurse ${_uid}`,
         'doctor'
