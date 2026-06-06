@@ -3088,3 +3088,156 @@
         </div>
     </div>
 </div>
+
+<!-- Lab Results All Modal — reuses icu-beds pattern -->
+<div class="modal fade" id="labResultsAllModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width:540px;">
+        <div class="modal-content" style="border:none;border-radius:16px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.2);">
+
+            <!-- Header -->
+            <div class="modal-header px-4 py-3" style="background:linear-gradient(135deg,#188398 0%,#0d6475 100%);border:none;">
+                <div class="d-flex align-items-center gap-2">
+                    <div style="width:36px;height:36px;background:rgba(255,255,255,0.18);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 12h6M9 16h4" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h5 class="modal-title mb-0 text-white fw-bold" style="font-size:1rem;">Laboratory Results</h5>
+                        <p class="mb-0 text-white" style="font-size:0.72rem;opacity:0.8;" *ngIf="showLabResultsModal">
+                            {{selectedLabResults.length}} total results &nbsp;·&nbsp; Latest first
+                        </p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white ms-auto" (click)="closeLabResultsModal()" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-0" *ngIf="showLabResultsModal" style="max-height:72vh;overflow-y:auto;background:#f5f7fa;">
+
+                <!-- Patient Demographic Card -->
+                <div class="px-4 pt-3 pb-2" *ngIf="selectedLabPatient">
+                    <div style="background:#fff;border-radius:12px;padding:14px 16px;box-shadow:0 2px 12px rgba(0,0,0,0.07);border:1px solid #e8edf2;">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#188398,#0d6475);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1rem;flex-shrink:0;">
+                                    {{selectedLabPatient.PatientName?.charAt(0) || 'P'}}
+                                </div>
+                                <div>
+                                    <p class="mb-0 fw-bold" style="font-size:0.9rem;color:#1e293b;">{{selectedLabPatient.PatientName}}</p>
+                                    <p class="mb-0" style="font-size:0.72rem;color:#64748b;">MRN: {{selectedLabPatient.SSN}}</p>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column align-items-end gap-1">
+                                <span style="padding:3px 10px;border-radius:20px;font-size:0.65rem;font-weight:700;letter-spacing:0.04em;"
+                                    [ngStyle]="selectedLabPatient.isCritical
+                                        ? {'background':'#fee2e2','color':'#dc2626'}
+                                        : {'background':'#dcfce7','color':'#16a34a'}">
+                                    {{selectedLabPatient.isCritical ? 'CRITICAL' : 'STABLE'}}
+                                </span>
+                                <span style="font-size:0.68rem;color:#94a3b8;font-weight:500;">Bed: {{selectedLabPatient.Bed}}</span>
+                            </div>
+                        </div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+                            <div style="background:#f8fafc;border-radius:8px;padding:8px 10px;border:1px solid #e9eef4;">
+                                <p style="font-size:0.6rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin:0 0 2px;">Age / Gender</p>
+                                <p style="font-size:0.78rem;color:#334155;font-weight:600;margin:0;">{{selectedLabPatient.FullAge}} · {{selectedLabPatient.Gender}}</p>
+                            </div>
+                            <div style="background:#f8fafc;border-radius:8px;padding:8px 10px;border:1px solid #e9eef4;">
+                                <p style="font-size:0.6rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin:0 0 2px;">Nationality</p>
+                                <p style="font-size:0.78rem;color:#334155;font-weight:600;margin:0;">{{selectedLabPatient.Nationality || '—'}}</p>
+                            </div>
+                            <div style="background:#f8fafc;border-radius:8px;padding:8px 10px;border:1px solid #e9eef4;">
+                                <p style="font-size:0.6rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin:0 0 2px;">Hospital</p>
+                                <p style="font-size:0.78rem;color:#334155;font-weight:600;margin:0;">{{selectedLabPatient.HospitalName || '—'}}</p>
+                            </div>
+                            <div style="background:#f8fafc;border-radius:8px;padding:8px 10px;border:1px solid #e9eef4;">
+                                <p style="font-size:0.6rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin:0 0 2px;">Admission Date</p>
+                                <p style="font-size:0.78rem;color:#334155;font-weight:600;margin:0;">{{selectedLabPatient.AdmitDate || '—'}}</p>
+                            </div>
+                            <div style="background:#f8fafc;border-radius:8px;padding:8px 10px;border:1px solid #e9eef4;">
+                                <p style="font-size:0.6rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin:0 0 2px;">Doctor</p>
+                                <p style="font-size:0.78rem;color:#334155;font-weight:600;margin:0;">{{selectedLabPatient.DoctorName || '—'}}</p>
+                            </div>
+                            <div style="background:#f8fafc;border-radius:8px;padding:8px 10px;border:1px solid #e9eef4;">
+                                <p style="font-size:0.6rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin:0 0 2px;">Ward / Bed</p>
+                                <p style="font-size:0.78rem;color:#334155;font-weight:600;margin:0;">{{selectedLabPatient.Shortname}} ({{selectedLabPatient.Bed}})</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section label -->
+                <div class="px-4 pt-3 pb-1 d-flex align-items-center gap-2">
+                    <div style="width:3px;height:16px;background:linear-gradient(#188398,#0d6475);border-radius:2px;"></div>
+                    <p class="mb-0 fw-bold" style="font-size:0.8rem;color:#334155;">All Lab Results</p>
+                    <span style="padding:2px 8px;background:rgba(24,131,152,0.1);color:#188398;border-radius:20px;font-size:0.68rem;font-weight:700;">
+                        {{selectedLabResults.length}}
+                    </span>
+                </div>
+
+                <!-- Result rows -->
+                <div class="px-3 pb-3">
+                    <div style="background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e8edf2;">
+                        <div class="d-flex align-items-start gap-3 px-3 py-3"
+                            *ngFor="let result of selectedLabResults; let i = index; let last = last"
+                            [style.border-bottom]="last ? 'none' : '1px solid #f0f4f8'">
+
+                            <!-- index pill -->
+                            <div style="width:24px;height:24px;background:rgba(24,131,152,0.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.62rem;font-weight:800;color:#188398;flex-shrink:0;margin-top:2px;">
+                                {{i + 1}}
+                            </div>
+
+                            <div style="flex:1;min-width:0;">
+                                <!-- name + badge + time -->
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <p class="mb-0 fw-bold" style="font-size:0.82rem;color:#1e293b;">{{result.TestName}}</p>
+                                    <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-2">
+                                        <span style="padding:2px 8px;border-radius:20px;font-size:0.65rem;font-weight:700;background:#f1f5f9;color:#64748b;">
+                                            {{getTimeAgo(result.ResultEnterDate)}}
+                                        </span>
+                                        <span style="padding:3px 9px;border-radius:20px;font-size:0.65rem;font-weight:700;"
+                                            [ngStyle]="result.IsPanic
+                                                ? {'background':'#fee2e2','color':'#dc2626'}
+                                                : {'background':'#fff7ed','color':'#ea580c'}">
+                                            {{result.IsPanic ? 'Panic' : 'Abnormal'}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- 2×2 field grid -->
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+                                    <div style="background:#f8fafc;border-radius:7px;padding:6px 10px;border:1px solid #e9eef4;">
+                                        <p style="font-size:0.58rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin:0 0 2px;">Specialisation</p>
+                                        <p style="font-size:0.75rem;color:#334155;font-weight:600;margin:0;">{{result.Specialisation || '—'}}</p>
+                                    </div>
+                                    <div style="background:#f8fafc;border-radius:7px;padding:6px 10px;border:1px solid #e9eef4;">
+                                        <p style="font-size:0.58rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin:0 0 2px;">Test Code</p>
+                                        <p style="font-size:0.75rem;color:#334155;font-weight:600;margin:0;">{{result.TestCode || '—'}}</p>
+                                    </div>
+                                    <div style="background:#f8fafc;border-radius:7px;padding:6px 10px;border:1px solid #e9eef4;">
+                                        <p style="font-size:0.58rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin:0 0 2px;">Order Date</p>
+                                        <p style="font-size:0.75rem;color:#334155;font-weight:600;margin:0;">{{result.OrderDate || '—'}}</p>
+                                    </div>
+                                    <div style="background:#f8fafc;border-radius:7px;padding:6px 10px;border:1px solid #e9eef4;">
+                                        <p style="font-size:0.58rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin:0 0 2px;">Result Entry Date</p>
+                                        <p style="font-size:0.75rem;color:#334155;font-weight:600;margin:0;">{{result.ResultEnterDate || '—'}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /modal-body -->
+
+            <!-- Footer -->
+            <div class="d-flex align-items-center justify-content-between px-4 py-2" style="border-top:1px solid #e8edf2;background:#fafbfc;">
+                <span style="font-size:0.75rem;color:#94a3b8;" *ngIf="showLabResultsModal">
+                    Showing all <strong style="color:#334155;">{{selectedLabResults.length}}</strong> results &nbsp;·&nbsp; sorted latest first
+                </span>
+                <button style="background:linear-gradient(135deg,#188398 0%,#0d6475 100%);color:#fff;border:none;border-radius:9px;padding:7px 22px;font-size:0.8rem;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(24,131,152,0.3);"
+                    (click)="closeLabResultsModal()">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
