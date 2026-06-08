@@ -12,7 +12,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import moment from "moment";
 import { ValidateEmployeeComponent } from "src/app/shared/validate-employee/validate-employee.component";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { TeleIcuComponent } from "src/app/tele-icu/tele-icu.component";
+import { DoctorCallComponent } from "src/app/doctor-call/doctor-call.component";
 
 declare var $: any;
 
@@ -150,9 +150,9 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
         });
     }
 
-toggleSidebar() {
-  this.isLeftnavCollapsed = !this.isLeftnavCollapsed;
-}
+    toggleSidebar() {
+        this.isLeftnavCollapsed = !this.isLeftnavCollapsed;
+    }
 
     ngOnDestroy() {
         if (this.refreshSub) {
@@ -1648,32 +1648,32 @@ toggleSidebar() {
     }
 
     getProgressPercent(daysLeft: number, totalDays: number): number {
-    if (!totalDays || totalDays <= 0) return 0;
+        if (!totalDays || totalDays <= 0) return 0;
 
-    // When completed, show full bar
-    if (daysLeft === 0) return 100;
+        // When completed, show full bar
+        if (daysLeft === 0) return 100;
 
-    return Math.min(100, Math.max(0, (daysLeft / totalDays) * 100));
-  }
+        return Math.min(100, Math.max(0, (daysLeft / totalDays) * 100));
+    }
 
-  getProgressColor(daysLeft: number): string {
-    if (daysLeft === 0) return '#9CA3AF'; // completed
-    if (daysLeft === 1) return '#EF4444'; // last day
-    return '#22C55E'; // normal
-  }
+    getProgressColor(daysLeft: number): string {
+        if (daysLeft === 0) return '#9CA3AF'; // completed
+        if (daysLeft === 1) return '#EF4444'; // last day
+        return '#22C55E'; // normal
+    }
 
-  getDaysLeftText(daysLeft: number): string {
-    if (daysLeft === 0) return 'Completed';
-    if (daysLeft === 1) return '1 day left';
-    return `${daysLeft} days left`;
-  }
+    getDaysLeftText(daysLeft: number): string {
+        if (daysLeft === 0) return 'Completed';
+        if (daysLeft === 1) return '1 day left';
+        return `${daysLeft} days left`;
+    }
 
-  getTooltipText(daysLeft: number): string {
-    if (daysLeft === 1) return 'Last day to complete this medication';
-    return '';
-  }
+    getTooltipText(daysLeft: number): string {
+        if (daysLeft === 1) return 'Last day to complete this medication';
+        return '';
+    }
 
-openLabResultsModal(event: any, labResults: any[], patient?: any): void {
+    openLabResultsModal(event: any, labResults: any[], patient?: any): void {
         event.stopPropagation();
         this.selectedLabResults = labResults;
         this.selectedLabPatient = patient || null;
@@ -1689,17 +1689,41 @@ openLabResultsModal(event: any, labResults: any[], patient?: any): void {
         }, 1000);
     }
 
-  callDoctor() {
-     const modalRef = this.modalSvc.open(TeleIcuComponent, {
-            backdrop: 'static'
+    callDoctor() {
+        this.selectedICUBed = JSON.parse(sessionStorage.getItem("icubeddetails") || '{}');
+
+        const modalRef = this.modalSvc.open(DoctorCallComponent, {
+            backdrop: 'static',
+            size: 'xl'
         });
-        modalRef.componentInstance.dataChanged.subscribe((data: any) => {
-            if (data.success) {
+
+        const patient: any = {
+            id: this.selectedICUBed.PatientID,
+            SSN: this.selectedICUBed.SSN,
+            name: this.selectedICUBed.PatientName,
+            Age: parseInt(this.selectedICUBed.AgeValue, 10),
+            Gender: this.selectedICUBed.Gender,
+            Nationality: this.selectedICUBed.Nationality,
+            ward: this.selectedICUBed.Ward,
+            bed: this.selectedICUBed.Bed,
+            diagnosis: this.selectedICUBed.Specialisation,
+        };
+
+        const data: any = {
+            patient,
+            nurseId: this.doctorDetails[0]?.EmpId ?? 0,
+            nurseName: this.doctorDetails[0]?.EmployeeName ?? 'Nurse',
+        };
+
+        modalRef.componentInstance.data = data;
+
+        modalRef.componentInstance.dataChanged.subscribe((result: any) => {
+            if (result.success) {
+                // handle success
             }
-            
             modalRef.close();
         });
-  }
+    }
 }
 
 const ICUBedDetails = {

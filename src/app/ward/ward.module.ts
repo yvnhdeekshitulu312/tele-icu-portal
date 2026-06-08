@@ -50,7 +50,6 @@ import { ICUBedsComponent } from './iccu-beds/icu-beds.component';
 import { ICUBedDetailsComponent } from './icu-bed-details/icu-bed-details.component';
 import { TransfusionFeedbackComponent } from './transfusion-feedback/transfusion-feedback.component';
 import { WardComponent } from './ward.component';
-import { TeleIcuComponent } from '../tele-icu/tele-icu.component';
 
 
 @NgModule({
@@ -91,8 +90,7 @@ import { TeleIcuComponent } from '../tele-icu/tele-icu.component';
     DischargeCasesComponent,
     ICUBedsComponent,
     ICUBedDetailsComponent,
-    TransfusionFeedbackComponent,
-    TeleIcuComponent
+    TransfusionFeedbackComponent
   ],
   providers: [MatDatepickerModule, DatePipe],
   imports: [

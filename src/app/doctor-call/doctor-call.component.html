@@ -1,0 +1,194 @@
+<!-- ══ STEP 1: SELECT DOCTORS ══════════════════════════════════ -->
+<div [hidden]="step !== 'select'">
+
+  <div class="row align-items-center g-4">
+    <div class="col-lg-5 text-center">
+      <img src="assets/images/videoDoc_icon.png" alt="Tele ICU" class="tele-img">
+    </div>
+    <div class="col-lg-7">
+      <h2 class="fw-semibold teleTitle mb-1">Tele-ICU</h2>
+      <h2 class="fw-semibold teleTitleSub mb-2">Video Call</h2>
+      <p class="teleSubText mb-4">Select the doctor(s) you want to call.</p>
+      <div class="teleInfoCard rounded-4 p-3 d-flex align-items-center gap-3">
+        <svg width="55" height="55" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="61.5603" height="61.5603" rx="30.7801" fill="#5987BA" />
+          <rect x="1" y="1" width="61.5603" height="61.5603" rx="30.7801" stroke="#BED0E4" stroke-width="2" />
+          <path
+            d="M46.3852 45.9941L44.8049 41.091C44.3321 39.6277 43.2291 38.4841 41.7838 37.9528C38.0578 36.6025 37.647 36.5137 37.6011 36.4986C36.4739 36.2002 35.4464 35.9077 35.2957 34.9517C35.3216 34.919 35.3472 34.8864 35.3727 34.8528C38.4786 33.4456 40.8068 30.3064 40.8068 27.5029C40.8068 26.2782 40.1585 25.0671 38.8257 23.8064C38.7402 23.7299 38.6321 23.6848 38.5151 23.6848H25.008C24.891 23.6848 24.7829 23.7299 24.6973 23.8064C23.3692 25.0716 22.7208 26.2782 22.7208 27.5029C22.7208 30.3067 25.0494 33.4418 28.1514 34.8531C28.1705 34.878 28.1904 34.9017 28.2095 34.9262C28.1998 34.9886 28.1936 35.0535 28.1777 35.1118C28.1777 35.1254 28.1687 35.1344 28.1687 35.1479C28.1448 35.2233 28.0686 35.3965 28.0471 35.418C27.6712 36.0866 26.7159 36.3387 25.886 36.5391C25.4087 36.6697 24.013 37.1649 21.7303 38.0069C20.3075 38.5381 19.1864 39.7178 18.7272 41.1585L17.1739 46.0706C17.1289 46.2102 17.1559 46.3588 17.2414 46.4758C17.327 46.5884 17.462 46.6559 17.6016 46.6559H17.6061L45.962 46.5839C46.1061 46.5839 46.2411 46.5118 46.3222 46.3948C46.4077 46.2822 46.4302 46.1291 46.3852 45.9941Z"
+            fill="white" />
+        </svg>
+        <div>
+          <div class="initiated fw-medium">Initiated by</div>
+          <div class="fw-semibold teleDark">{{ nurseName }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PATIENT CARD -->
+  <div class="patientCard rounded-4 mt-4 p-2">
+    <div class="d-flex align-items-center gap-3">
+      <div class="patientIcon rounded-circle d-flex align-items-center justify-content-center">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"
+            fill="#5987BA" />
+        </svg>
+      </div>
+      <div class="flex-grow-1">
+        <div class="patientName fw-bold">{{ patient.name }}</div>
+        <div class="patientMeta mt-1">
+          {{ patient.Age }} Year(s)
+          <span *ngIf="patient.Gender"> • {{ patient.Gender }}</span>
+          <span *ngIf="patient.Nationality"> • {{ patient.Nationality }}</span>
+          <span> • </span><b>{{ patient.ward }} (Bed {{ patient.bed }})</b>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCTOR SELECTION -->
+  <div class="doctor-select-section mt-3">
+    <div class="d-flex align-items-center justify-content-between mb-2">
+      <span class="doctor-select-label">Select Doctor(s)</span>
+      <!-- <div class="d-flex gap-2">
+        <button class="btn-link-sm" (click)="selectAll()">Select All</button>
+        <span class="text-muted">|</span>
+        <button class="btn-link-sm" (click)="clearAll()">Clear</button>
+      </div> -->
+    </div>
+
+    <div class="doctor-loading text-center py-3" *ngIf="loadingDoctors">
+      <span class="spinner-border spinner-border-sm text-primary me-2"></span>
+      Loading available doctors…
+    </div>
+
+    <div class="input-group">
+      <input type="text" class="form-control" [matAutocomplete]="employeeauto" [formControl]="searchControl"
+        placeholder="Search doctor by name" (keyup)="($event.key === 'ArrowUp' || $event.key === 'ArrowDown')
+      ? $event.preventDefault()
+      : searchEmployee($event)">
+
+      <mat-autocomplete #employeeauto="matAutocomplete">
+        <mat-option *ngFor="let doc of onlineDoctors" [value]="''" (onSelectionChange)="toggleDoctor(doc)">
+          <span [class.fw-bold]="isSelected(doc.ID)">
+            {{ isSelected(doc.ID) ? '✓ ' : '' }}{{ doc.Name }}
+          </span>
+        </mat-option>
+      </mat-autocomplete>
+
+      <button type="button" class="btn btn-secondary-fill btn-icon">
+        <img src="assets/images/icons/icon-search.svg" alt="">
+      </button>
+    </div>
+
+    <div class="selected-chips mt-2" *ngIf="selectedDoctorsList.length > 0">
+      <span class="doctor-chip" *ngFor="let doc of selectedDoctorsList">
+        👨‍⚕️ {{ doc.Name }}
+        <button type="button" class="chip-remove" (click)="removeDoctor(doc.ID)">✕</button>
+      </span>
+    </div>
+
+    <!-- <div class="doctor-list" *ngIf="!loadingDoctors && onlineDoctors.length > 0">
+      <div
+        class="doctor-item"
+        *ngFor="let doc of onlineDoctors"
+        [class.doctor-item--selected]="isSelected(doc.doctorId)"
+        (click)="toggleDoctor(doc.doctorId)">
+        <div class="doctor-avatar" [class.doctor-avatar--selected]="isSelected(doc.doctorId)">
+        </div>
+        <div class="flex-grow-1">
+          <div class="doctor-name">{{ doc.doctorName }}</div>
+          <div class="doctor-spec text-muted small" *ngIf="doc.specialty">{{ doc.specialty }}</div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="online-dot"></span>
+          <div class="check-box" [class.check-box--active]="isSelected(doc.doctorId)">
+            <svg *ngIf="isSelected(doc.doctorId)" width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+
+  <!-- CALL BUTTON -->
+  <div class="border-top pt-3 mt-3">
+    <button class="btn teleCallBtn w-100 rounded-3 py-3" [disabled]="selectedCount === 0" (click)="startCall()">
+      <svg class="me-2" width="24" height="24" viewBox="0 0 28 28" fill="none">
+        <path
+          d="M20.2783 10.5746C20.2663 9.55355 20.2312 8.671 20.1303 7.91997C20.6306 7.39916 21.0978 7.05701 21.5192 6.80239C22.3084 6.3256 23.3086 5.92635 24.3349 6.43512C25.3454 6.93598 25.6584 7.96252 25.7887 8.88357C25.9197 9.80951 25.9197 11.0555 25.9195 12.5522V14.4977C25.9197 15.9944 25.9197 17.2404 25.7887 18.1663C25.6584 19.0873 25.3454 20.1139 24.3349 20.6148C23.3086 21.1235 22.3084 20.7242 21.5192 20.2475C21.0978 19.9928 20.6306 19.6507 20.1143 19.2448C20.2312 18.3792 20.2663 17.4965 20.2783 16.4753C21.3576 17.3647 22.103 17.9669 22.6846 18.3183C22.9905 18.503 23.1751 18.5697 23.2758 18.5897C23.3609 18.5693 23.3849 18.5224 23.4388 18.4169C23.5053 18.2162 23.557 17.8506 23.6629 17.102C23.6656 16.018 23.6656 14.4061V12.6437C23.6656 11.0319 23.6629 9.9479 23.557 9.19926C23.5053 8.83368 23.4388 8.63296 23.3849 8.52756C23.3609 8.48057 23.1751 8.48013 22.9905 8.54684C22.6846 8.73159 22.103 9.08299 21.3576 9.68523 20.2783 10.5746Z"
+          fill="white" />
+        <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M10.0609 3.38086H11.3502C13.1405 3.38083 14.598 3.3808 15.7472 3.53532C16.9463 3.69653 17.9775 4.04429 18.7994 4.86621C19.6213 5.68814 19.969 6.71926 20.1302 7.91832C20.2848 9.06766 20.2847 10.525 20.2847 12.3154V14.7316C20.2847 16.5219 20.2848 17.9792 20.1302 19.1286C19.969 20.3277 19.6213 21.3588 18.7994 22.1807C17.9775 23.0026 16.9463 23.3504 15.7472 23.5115C14.5979 23.6662 13.1406 23.666 11.3502 23.666H10.061C8.27061 23.666 6.81326 23.6662 5.66393 23.5115C4.46487 23.3504 3.43375 23.0026 2.61182 22.1807C1.78989 21.3588 1.44214 20.3277 1.28093 19.1286C1.12641 17.9793 1.12643 16.5219 1.12647 14.7317V12.3152C1.12643 10.525 1.12641 9.06763 1.28093 7.91832C1.44214 6.71926 1.78989 5.68814 2.61182 4.86621C3.43375 4.04429 4.46487 3.69653 5.66393 3.53532C6.81324 3.3808 8.27061 3.38083 10.0609 3.38086ZM12.9595 12.3965C13.8931 12.3965 14.6499 11.6396 14.6499 10.7061C14.6499 9.77246 13.8931 9.01564 12.9595 9.01564C12.0259 9.01564 11.2691 9.77246 11.2691 10.7061C11.2691 11.6396 12.0259 12.3965 12.9595 12.3965Z"
+          fill="white" />
+      </svg>
+      Start Video Call
+      <span class="badge bg-white text-primary ms-2" *ngIf="selectedCount > 0">{{ selectedCount }}</span>
+    </button>
+  </div>
+
+</div>
+
+
+<!-- ══ STEP 2: CALLING ══════════════════════════════════════════ -->
+<div [hidden]="step !== 'calling'" class="calling-screen text-center py-5">
+  <div class="calling-screen text-center py-5">
+    <div class="calling-ring mb-4">
+      <div class="ring ring-1"></div>
+      <div class="ring ring-2"></div>
+      <div class="ring ring-3"></div>
+      <div class="calling-icon-wrap">
+        <svg width="52" height="52" viewBox="0 0 64 64" fill="none">
+          <rect width="64" height="64" rx="32" fill="#5987BA" />
+          <path
+            d="M46.3852 45.9941L44.8049 41.091C44.3321 39.6277 43.2291 38.4841 41.7838 37.9528C38.0578 36.6025 37.647 36.5137 37.6011 36.4986C36.4739 36.2002 35.4464 35.9077 35.2957 34.9517C35.3216 34.919 35.3472 34.8864 35.3727 34.8528C38.4786 33.4456 40.8068 30.3064 40.8068 27.5029C40.8068 26.2782 40.1585 25.0671 38.8257 23.8064C38.7402 23.7299 38.6321 23.6848 38.5151 23.6848H25.008C24.891 23.6848 24.7829 23.7299 24.6973 23.8064C23.3692 25.0716 22.7208 26.2782 22.7208 27.5029C22.7208 30.3067 25.0494 33.4418 28.1514 34.8531C28.2095 34.9262 28.1998 34.9886 28.1777 35.1118C28.1448 35.2233 28.0686 35.3965 28.0471 35.418C27.6712 36.0866 26.7159 36.3387 25.886 36.5391C25.4087 36.6697 24.013 37.1649 21.7303 38.0069C20.3075 38.5381 19.1864 39.7178 18.7272 41.1585L17.1739 46.0706C17.1289 46.2102 17.1559 46.3588 17.2414 46.4758C17.327 46.5884 17.462 46.6559 17.6016 46.6559H17.6061L45.962 46.5839C46.1061 46.5839 46.2411 46.5118 46.3222 46.3948C46.4077 46.2822 46.4302 46.1291 46.3852 45.9941Z"
+            fill="white" />
+        </svg>
+      </div>
+    </div>
+    <h5 class="fw-semibold mb-1">Calling Doctors…</h5>
+    <p class="text-muted small mb-1">{{ selectedCount }} doctor(s) notified</p>
+    <p class="fw-semibold mb-4">{{ patient?.name }}</p>
+    <button class="btn btn-outline-danger rounded-3 px-4" (click)="endCall()">Cancel</button>
+  </div>
+</div>
+
+
+<!-- ══ STEP 3: IN CALL ══════════════════════════════════════════ -->
+<div [hidden]="step !== 'in-call'">
+  <div class="incall-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+    <div>
+      <span class="live-badge me-2">🔴 Live</span>
+      <span class="fw-semibold">{{ patient?.name }}</span>
+      <span class="text-muted small ms-2">{{ patient?.ward }} · Bed {{ patient?.bed }}</span>
+    </div>
+    <div class="d-flex flex-wrap gap-1" *ngIf="joinedDoctors.length">
+      <span class="joined-chip" *ngFor="let d of joinedDoctors">👨‍⚕️ {{ d }}</span>
+    </div>
+  </div>
+
+  <div class="video-grid mb-3">
+    <div class="video-tile">
+      <p class="tile-label">You (Nurse)</p>
+      <div [id]="'local-player-' + patient.SSN" class="video-box"></div>
+    </div>
+    <div class="video-tile">
+      <p class="tile-label">Doctors</p>
+      <div [id]="'remote-container-' + patient.SSN" class="remote-container"></div>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center justify-content-center gap-3">
+    <button class="ctrl-btn" (click)="toggleMic()" [class.ctrl-btn--off]="!micEnabled">{{ micEnabled ? '🎙️' : '🔇'
+      }}</button>
+    <button class="ctrl-btn" (click)="toggleCam()" [class.ctrl-btn--off]="!camEnabled">{{ camEnabled ? '📷' : '📷❌'
+      }}</button>
+    <button class="btn btn-danger rounded-3 px-4 py-2 fw-semibold" (click)="endCall()">📵 End Call</button>
+  </div>
+</div>
+
+<div class="text-center py-4" *ngIf="!patient && step === 'select'">
+  <span class="spinner-border text-primary"></span>
+</div>

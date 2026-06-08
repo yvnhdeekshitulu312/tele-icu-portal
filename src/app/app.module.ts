@@ -17,11 +17,15 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { TemplatesModule } from './templates/templates.module';
+import { DoctorCallComponent } from './doctor-call/doctor-call.component';
+import { TeleIcuComponent } from './tele-icu/tele-icu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoaderComponent
+    LoaderComponent,
+    DoctorCallComponent,
+    TeleIcuComponent
   ],
   imports: [
     BrowserModule,
