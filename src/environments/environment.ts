@@ -4,6 +4,7 @@
 
 export const environment = {
   secugenLicense: '66m+NfkKoRQiGOIv5EOOEOPbrHb5snFoFZKFv6F7AAs=',
+  agoraLicense: '8ba10b49e0264094a4d2c968abdc1e35',
   production: false,
   paginationsize: 10,
   loaderExclude: [

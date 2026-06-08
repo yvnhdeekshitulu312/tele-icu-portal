@@ -6,7 +6,7 @@ import AgoraRTC, {
 } from 'agora-rtc-sdk-ng';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { config } from 'src/environments/environment';
+import { config, environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AgoraService {
@@ -19,7 +19,7 @@ export class AgoraService {
 
   remoteUsers: Map<number, string> = new Map();
 
-  private readonly appId = '8ba10b49e0264094a4d2c968abdc1e35';
+  private readonly appId = environment.agoraLicense;
   private readonly BASE  = `${config.videoUrl}`;
 
   private activeClient: IAgoraRTCClient | null = null;
