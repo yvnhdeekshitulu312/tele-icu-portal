@@ -12,9 +12,9 @@ import { SignalRService } from '../tele-icu/Services/signal-r.service';
 import { DoctorCallService } from './doctor-call.service';
 
 export interface Patient {
-  id: string; SSN: string; name: string; Age: number;
+  id: string; SSN: string; PatientName: string; Age: number;
   Gender: string; Nationality?: string;
-  ward: string; bed: string; diagnosis: string;
+  ward: string; Bed: string; diagnosis: string;
 }
 
 interface ApiDoctor {

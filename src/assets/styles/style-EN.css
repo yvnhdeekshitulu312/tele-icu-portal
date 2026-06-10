@@ -925,7 +925,7 @@ button {
 .form-select:focus {
   color: #4A4E4F;
   background-color: #fff;
-  border-color: #69BAC9;
+  border-color: #0078E5;
   outline: 0;
   box-shadow: 0 0 0 0.25rem rgba(218, 238, 241, 0.54);
 }
@@ -30356,18 +30356,9 @@ ngb-modal-window .content_discharge_sumary {
   100% { filter: drop-shadow(0 0 0 rgba(74,222,128,0)); }
 }
 
-.startVideoCall .modal-content{
-  border-radius: 1.85rem !important;
-}
-.startVideoCall .btn-close{
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 50%;
-  border: 1px solid #BBD4F1;
-  background-color: #fff;
-  opacity: 1;
-  font-size: 0.9rem;
-  color: #8B9EA2
+
+.startVideoCall .modal-dialog{
+  max-width: 47rem;
 }
 .startVideoCall .teleTitle{
   font-size:1.6rem;
@@ -30446,35 +30437,45 @@ ngb-modal-window .content_discharge_sumary {
 .startVideoCall .patientMeta span{
   margin:0 0.4rem;
 }
+.startVideoCall .doctor-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #e8f0fa;
+  color: #5987ba;
+  border: 1px solid #bed0e4;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+.startVideoCall .chip-remove {
+    background: none;
+    border: none;
+    color: #5987ba;
+    font-size: 0.75rem;
+    padding: 0;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.7;
+}
+.startVideoCall .chip-remove:hover {
+  opacity: 1; 
+}
 
 /* button */
 .startVideoCall .teleCallBtn{
   background: linear-gradient(90deg, #005CD1 0%, #0078E6 100%);
   color:#fff;
-  font-size:1.4rem;
-  border:none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-}
-/* If vital is within normal range */
-.status-normalAI {
-    color: #10B981; /* Healthy Green */
-    font-weight: bold;
+font-size: 1.2rem;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    font-weight: 600;
 }
 
-/* If vital is abnormal/panic */
-.status-panicAI {
-    color: #EF4444; /* Alert Red */
-    font-weight: 800;
-    animation: pulse-red 2s infinite; /* Optional: adds a soft pulse effect */
-}
-@keyframes pulse-red {
-    0% { opacity: 1; }
-    50% { opacity: 0.7; }
-    100% { opacity: 1; }
-}
 
 /* ------------------------- */
 .icuIncomingModal{
@@ -30487,10 +30488,20 @@ ngb-modal-window .content_discharge_sumary {
   border-radius: 1rem;
   padding: 0.8rem;
   z-index: 99;
-  animation: slideIn .35s ease;
+  animation: bounceUpDown 1s ease infinite;
+}
+@keyframes bounceUpDown {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
 }
 
-@keyframes slideIn{
+/* @keyframes slideIn{
   from{
     transform:translateX(100px) translateY(50px);
     opacity:0;
@@ -30499,7 +30510,7 @@ ngb-modal-window .content_discharge_sumary {
     transform:translateX(0) translateY(0);
     opacity:1;
   }
-}
+} */
 .icuIncomingModal .incomingTitle{
   font-size: 1.2rem;
   line-height: 1;
@@ -30578,13 +30589,26 @@ ngb-modal-window .content_discharge_sumary {
 
 /* ---------------- */
 
-.teleIcuModal {
-    background: rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(3px);
-}
 
-.teleIcuModal .modal-dialog {
-    max-width: 1200px;
+/* ---------------- */
+
+.teleIcuModal {
+  background: #615e61c2;
+  backdrop-filter: blur(3px);
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  animation: fade-in 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+.teleIcuModal .modal-body{
+  max-width: 80rem;
+  margin: 0 auto;
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .teleIcuModal .tele-title {
@@ -30701,6 +30725,54 @@ ngb-modal-window .content_discharge_sumary {
     padding: 0.675rem 2rem !important;
     box-shadow: 0px 8px 12px -6px #FF304F38;
 
+}
+.teleIcuModal .video-box {
+ width: 100%;
+ height: 100%;
+ background: #1a2535;
+ position: relative;
+}
+.remote-container {
+ width: 100%;
+ height: 100%;
+ position: relative;
+ display: grid;
+ grid-template-columns: 1fr;
+ gap: 4px;
+
+ > div {
+   position: relative;
+   width: 100%;
+   height: 100%;
+   min-height: 160px;
+   background: #0f1923;
+   overflow: hidden;
+
+   > div {
+     width: 100% !important;
+     height: 100% !important;
+     position: absolute !important;
+     top: 0;
+     left: 0;
+
+     > div {
+       width: 100% !important;
+       height: 100% !important;
+       position: absolute !important;
+       top: 0;
+       left: 0;
+     }
+   }
+
+   video {
+     width: 100% !important;
+     height: 100% !important;
+     object-fit: cover;
+     position: absolute;
+     top: 0;
+     left: 0;
+   }
+ }
 }
 /* ------------------------- */
 .teleVideoModal {

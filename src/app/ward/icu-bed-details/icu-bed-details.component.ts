@@ -1694,7 +1694,8 @@ export class ICUBedDetailsComponent implements OnInit, OnDestroy {
 
         const modalRef = this.modalSvc.open(DoctorCallComponent, {
             backdrop: 'static',
-            size: 'xl'
+            size: 'xl',
+            windowClass: 'startVideoCall'
         });
 
         const patient: any = {
